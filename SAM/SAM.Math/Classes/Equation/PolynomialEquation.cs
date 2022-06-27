@@ -49,7 +49,7 @@ namespace SAM.Math
 
             double result = 0;
             for (int i = 1; i < count; i++)
-                result += System.Math.Pow(value, count - i) * coefficients[i];
+                result += System.Math.Pow(value, i) * coefficients[i];
 
             result += coefficients[0];
 
