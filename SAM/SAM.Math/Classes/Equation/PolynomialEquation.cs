@@ -154,7 +154,7 @@ namespace SAM.Math
                 if (coefficients == null)
                     return -1;
 
-                return coefficients.Length;
+                return coefficients.Length - 1;
             }
         }
     }
