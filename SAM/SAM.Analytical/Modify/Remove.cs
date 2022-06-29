@@ -157,19 +157,28 @@ namespace SAM.Analytical
                     }
                 }
 
-                Space space = tuples[0].Item1;
-                tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));
-                tuples.RemoveAt(0);
-
-                foreach(Space space_Temp in tuples.ConvertAll(x => x.Item1))
+                if(tuples != null && tuples.Count != 0)
                 {
-                    adjacencyCluster.RemoveObject<Space>(space_Temp.Guid);
+                    Space space = tuples[0].Item1;
+                    tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));
+                    tuples.RemoveAt(0);
+
+                    foreach (Space space_Temp in tuples.ConvertAll(x => x.Item1))
+                    {
+                        adjacencyCluster.RemoveObject<Space>(space_Temp.Guid);
+                    }
+
+                    if (dictionary != null)
+                    {
+                        foreach (Panel panel_Temp in dictionary.Values)
+                        {
+                            adjacencyCluster.AddRelation(space, panel_Temp);
+                        }
+                    }
+
                 }
 
-                foreach(Panel panel_Temp in dictionary.Values)
-                {
-                    adjacencyCluster.AddRelation(space, panel_Temp);
-                }
+
 
             }
 
