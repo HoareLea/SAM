@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,10 +51,12 @@ namespace SAM.Analytical.Grasshopper
 
             int index = -1;
 
-            index = inputParamManager.AddTextParameter("_supplyUnitName_", "_supplyUnitName", "Supply Unit Name", GH_ParamAccess.item, "AHU1S");
+            index = inputParamManager.AddTextParameter("_supplyUnitName_", "_supplyUnitName", "Supply Unit Name", GH_ParamAccess.item, "AHU1");
+            //index = inputParamManager.AddTextParameter("_supplyUnitName_", "_supplyUnitName", "Supply Unit Name", GH_ParamAccess.item, "AHU1S");
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddTextParameter("_exhaustUnitName_", "_exhaustUnitName_", "Exhaust Unit Name", GH_ParamAccess.item, "AHU1E");
+            index = inputParamManager.AddTextParameter("_exhaustUnitName_", "_exhaustUnitName_", "Exhaust Unit Name", GH_ParamAccess.item, "AHU1");
+            //index = inputParamManager.AddTextParameter("_exhaustUnitName_", "_exhaustUnitName_", "Exhaust Unit Name", GH_ParamAccess.item, "AHU1E");
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddTextParameter("_ventilationRiserName_", "_ventilationRiserName_", "Ventilation Riser Name", GH_ParamAccess.item, "RV1");
