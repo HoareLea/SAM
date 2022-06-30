@@ -51,6 +51,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
+    <Compile Include="Classes\AirHandlingUnit.cs" />
     <Compile Include="Classes\New\AirPartition.cs" />
     <Compile Include="Classes\New\OpeningTypeLibrary.cs" />
     <Compile Include="Classes\New\BuildingModel.cs" />
@@ -73,13 +74,13 @@
     <Compile Include="Classes\New\WallType.cs" />
     <Compile Include="Classes\New\Window.cs" />
     <Compile Include="Classes\New\WindowType.cs" />
-    <Compile Include="Classes\SimulationResult\AnalyticalModelSimulationResult.cs" />
-    <Compile Include="Classes\SimulationResult\PanelSimulationResult.cs" />
-    <Compile Include="Classes\SimulationResult\AdjacencyClusterSimulationResult.cs" />
-    <Compile Include="Classes\SimulationResult\ZoneSimulationResult.cs" />
+    <Compile Include="Classes\Result\AnalyticalModelSimulationResult.cs" />
+    <Compile Include="Classes\Result\PanelSimulationResult.cs" />
+    <Compile Include="Classes\Result\AdjacencyClusterSimulationResult.cs" />
+    <Compile Include="Classes\Result\ZoneSimulationResult.cs" />
     <Compile Include="Classes\DesignDay.cs" />
     <Compile Include="Classes\Zone.cs" />
-    <Compile Include="Classes\SimulationResult\SpaceSimulationResult.cs" />
+    <Compile Include="Classes\Result\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
     <Compile Include="Classes\System\HeatingSystemType.cs" />
     <Compile Include="Classes\System\VentilationSystem.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Convert\ToSystem\String.cs" />
     <Compile Include="Convert\ToSystem\DateTime.cs" />
     <Compile Include="Create\Aperture.cs" />
+    <Compile Include="Create\AirHandlingUnit.cs" />
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
@@ -149,6 +151,7 @@
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\AirHandlingUnitParameter.cs" />
     <Compile Include="Enums\Parameter\New\ArchitecturalModelParameter.cs" />
     <Compile Include="Enums\Parameter\New\HostPartitionParameter.cs" />
     <Compile Include="Enums\Parameter\New\OpeningTypeParameter.cs" />
@@ -160,6 +163,7 @@
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\BoundaryType.cs" />
     <Compile Include="Enums\MechanicalSystemCategory.cs" />
+    <Compile Include="Enums\VentilationType.cs" />
     <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
     <Compile Include="Enums\HeatFlowDirection.cs" />
@@ -195,6 +199,7 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
+    <Compile Include="Interfaces\IAnalyticalEquipment.cs" />
     <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
     <Compile Include="Interfaces\New\IHostPartition.cs" />
     <Compile Include="Interfaces\New\IOpening.cs" />
@@ -202,6 +207,8 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\VentilationSystems.cs" />
+    <Compile Include="Query\Spaces.cs" />
     <Compile Include="Query\SpecificHeatTransferGain.cs" />
     <Compile Include="Query\Systems.cs" />
     <Compile Include="Query\MissingMaterialsNames.cs" />

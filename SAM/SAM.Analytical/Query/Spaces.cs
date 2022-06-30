@@ -14,9 +14,6 @@ namespace SAM.Analytical
                 return null;
             }
 
-
-
-
             List<VentilationSystem> ventilationSystems = adjacencyCluster.VentilationSystems(ventilationUnitName, out List<VentilationSystem> ventilationSystems_Supply, out List<VentilationSystem> ventilationSystems_Exhaust);
             if(ventilationSystems == null || ventilationSystems.Count == 0)
             {
