@@ -172,6 +172,11 @@ namespace SAM.Weather
             }
         }
 
+        public List<double> GetValues(WeatherDataType weatherDataType)
+        {
+            return this[weatherDataType]?.ToList();
+        }
+
         public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)

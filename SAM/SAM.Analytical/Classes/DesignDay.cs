@@ -10,6 +10,8 @@ namespace SAM.Analytical
         private byte day;
         private string description;
 
+        private LoadType loadType = LoadType.Undefined;
+
         public DesignDay(DesignDay designDay)
             : base(designDay)
         {
@@ -20,7 +22,24 @@ namespace SAM.Analytical
                 year = designDay.year;
                 month = designDay.month;
                 day = designDay.day;
+                loadType = designDay.loadType;
             }
+        }
+
+        public DesignDay(DesignDay designDay, LoadType loadType)
+            : base(designDay)
+        {
+            if (designDay != null)
+            {
+                name = designDay.name;
+                description = designDay.description;
+                year = designDay.year;
+                month = designDay.month;
+                day = designDay.day;
+
+            }
+
+            this.loadType = loadType;
         }
 
         public DesignDay(JObject jObject)
@@ -151,6 +170,11 @@ namespace SAM.Analytical
                 day = System.Convert.ToByte(jObject.Value<int>("Day"));
             }
 
+            if (jObject.ContainsKey("LoadType"))
+            {
+                loadType = Core.Query.Enum<LoadType>(jObject.Value<string>("LoadType"));
+            }
+
             return true;
         }
 
@@ -173,6 +197,11 @@ namespace SAM.Analytical
             jObject.Add("Year", System.Convert.ToInt32(year));
             jObject.Add("Month", System.Convert.ToInt32(month));
             jObject.Add("Day", System.Convert.ToInt32(day));
+
+            if(loadType != LoadType.Undefined)
+            {
+                jObject.Add("LoadType", loadType.ToString());
+            }
 
             return jObject;
         }

@@ -47,7 +47,8 @@ namespace SAM.Analytical
                 typeof(Core.ISAMInstance).IsAssignableFrom(type) ||
                 typeof(Core.ISAMType).IsAssignableFrom(type) ||
                 typeof(Core.Result).IsAssignableFrom(type) ||
-                typeof(IAnalyticalEquipment).IsAssignableFrom(type);
+                typeof(IAnalyticalEquipment).IsAssignableFrom(type) ||
+                typeof(DesignDay).IsAssignableFrom(type);
         }
 
         public override Core.RelationCluster Clone()
