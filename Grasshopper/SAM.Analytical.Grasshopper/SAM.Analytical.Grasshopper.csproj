@@ -100,6 +100,7 @@
     <Compile Include="Component\SAMAnalyticalDesignDays.cs" />
     <Compile Include="Component\SAMAnalyticalGetExternalMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalGetPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalModifySpaces.cs" />
     <Compile Include="Component\SAMAnalyticalPaths.cs" />
     <Compile Include="Component\SAMAnalyticalSetAdiabatic.cs" />
     <Compile Include="Component\SAMAnalyticalDuplicateConstructionByPanelType.cs" />
