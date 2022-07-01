@@ -95,5 +95,50 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public static double CalculatedSupplyAirFlow(this AdjacencyCluster adjacencyCluster, Space space)
+        {
+            if (adjacencyCluster == null || space == null)
+            {
+                return double.NaN;
+            }
+
+            double result = space.CalculatedSupplyAirFlow();
+            if (double.IsNaN(result))
+            {
+                return double.NaN;
+            }
+
+            List<VentilationSystem> ventilationSystems = adjacencyCluster.GetRelatedObjects<VentilationSystem>(space);
+            if (ventilationSystems != null && ventilationSystems.Count != 0)
+            {
+                VentilationSystem ventilationSystem = ventilationSystems.Find(x => x.Type != null);
+                VentilationSystemType ventilationSystemType = ventilationSystem.Type as VentilationSystemType;
+                if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.AirSupplyMethod, out string airSupplyMethodString) && !string.IsNullOrWhiteSpace(airSupplyMethodString))
+                {
+                    AirSupplyMethod airSupplyMethod = Core.Query.Enum<AirSupplyMethod>(airSupplyMethodString);
+                    switch (airSupplyMethod)
+                    {
+                        case AirSupplyMethod.Outside:
+                            return result;
+
+                        case AirSupplyMethod.Total:
+                            if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad))
+                            {
+                                if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.TemperatureDifference, out double temperatureDifference))
+                                {
+                                    double supplyAirFlow_Load = System.Math.Max(designCoolingLoad, designHeatingLoad) / 1.2 / 1.005 / temperatureDifference / 1000;
+
+                                    return System.Math.Max(result, supplyAirFlow_Load);
+                                }
+                            }
+
+                            break;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
