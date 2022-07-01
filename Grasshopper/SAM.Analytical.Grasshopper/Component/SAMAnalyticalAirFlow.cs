@@ -59,8 +59,8 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            double exhaustAirflow = Analytical.Query.ExhaustAirFlow(space);
-            double supplyAirflow = Analytical.Query.SupplyAirFlow(space);
+            double exhaustAirflow = Analytical.Query.CalculatedExhaustAirFlow(space);
+            double supplyAirflow = Analytical.Query.CalculatedSupplyAirFlow(space);
 
             dataAccess.SetData(0, supplyAirflow);
             dataAccess.SetData(1, exhaustAirflow);

@@ -2,7 +2,7 @@
 {
     public static partial class Query
     {
-        public static double CalculatedOutsideSupplyAirflow(this AdjacencyCluster adjacencyCluster, Zone zone)
+        public static double CalculatedOutsideSupplyAirFlow(this AdjacencyCluster adjacencyCluster, Zone zone)
         {
             if (adjacencyCluster == null || zone == null)
                 return double.NaN;

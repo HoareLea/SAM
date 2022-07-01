@@ -27,8 +27,8 @@ namespace SAM.Analytical
         //[ParameterProperties("Heating Zone Name", "Heating Zone Name"), ParameterValue(Core.ParameterType.String)] HeatingZoneName,
         //[ParameterProperties("Cooling Zone Name", "Cooling Zone Name"), ParameterValue(Core.ParameterType.String)] CoolingZoneName,
 
-        [ParameterProperties("Outside Supply Airflow", "Outside Supply Airflow [m3/s]"), DoubleParameterValue(0)] OutsideSupplyAirFlow,
-        [ParameterProperties("Supply Airflow", "Supply Airflow [m3/s]"), DoubleParameterValue(0)] SupplyAirFlow,
-        [ParameterProperties("Exhaust Airflow", "Exhaust Airflow [m3/s]"), DoubleParameterValue(0)] ExhaustAirFlow,
+        [ParameterProperties("Outside Supply Air Flow", "Outside Supply Air Flow [m3/s]"), DoubleParameterValue(0)] OutsideSupplyAirFlow,
+        [ParameterProperties("Supply Air Flow", "Supply Air Flow [m3/s]"), DoubleParameterValue(0)] SupplyAirFlow,
+        [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), DoubleParameterValue(0)] ExhaustAirFlow,
     }
 }

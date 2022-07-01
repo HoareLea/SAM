@@ -424,13 +424,13 @@ namespace SAM.Analytical.Grasshopper
                     @string = null;
 
                 names_SupplyUnit.Add(@string);
-                supplyAirFlows.Add(Analytical.Query.SupplyAirFlow(space));
+                supplyAirFlows.Add(Analytical.Query.CalculatedSupplyAirFlow(space));
                    
                 if (ventilationSystem == null || !ventilationSystem.TryGetValue(VentilationSystemParameter.ExhaustUnitName, out @string))
                     @string = null;
 
                 names_ExhaustUnit.Add(@string);
-                exhaustAirFlows.Add(Analytical.Query.ExhaustAirFlow(space));
+                exhaustAirFlows.Add(Analytical.Query.CalculatedExhaustAirFlow(space));
             }
 
             int index;
