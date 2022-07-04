@@ -209,8 +209,8 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Query\NextId.cs" />
     <Compile Include="Query\AirSupplyMethod.cs" />
-    <Compile Include="Query\HeatingDesignHumidity.cs" />
-    <Compile Include="Query\CoolingDesignHumidity.cs" />
+    <Compile Include="Query\HeatingDesignRelativeHumidity.cs" />
+    <Compile Include="Query\CoolingDesignRelativeHumidity.cs" />
     <Compile Include="Query\VentilationSystems.cs" />
     <Compile Include="Query\Spaces.cs" />
     <Compile Include="Query\SpecificHeatTransferGain.cs" />
