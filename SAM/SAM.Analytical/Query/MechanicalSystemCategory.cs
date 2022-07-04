@@ -26,5 +26,30 @@
 
             return Analytical.MechanicalSystemCategory.Other;
         }
+
+        public static MechanicalSystemCategory MechanicalSystemCategory(this MechanicalSystemType mechanicalSystemType)
+        {
+            if (mechanicalSystemType == null)
+            {
+                return Analytical.MechanicalSystemCategory.Undefined;
+            }
+
+            if (mechanicalSystemType is CoolingSystemType)
+            {
+                return Analytical.MechanicalSystemCategory.Cooling;
+            }
+
+            if (mechanicalSystemType is VentilationSystemType)
+            {
+                return Analytical.MechanicalSystemCategory.Ventilation;
+            }
+
+            if (mechanicalSystemType is HeatingSystemType)
+            {
+                return Analytical.MechanicalSystemCategory.Heating;
+            }
+
+            return Analytical.MechanicalSystemCategory.Other;
+        }
     }
 }

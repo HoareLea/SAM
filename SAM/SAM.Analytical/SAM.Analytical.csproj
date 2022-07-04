@@ -207,6 +207,7 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Query\NextId.cs" />
     <Compile Include="Query\AirSupplyMethod.cs" />
     <Compile Include="Query\HeatingDesignHumidity.cs" />
     <Compile Include="Query\CoolingDesignHumidity.cs" />

@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -106,12 +106,12 @@ namespace SAM.Analytical.Grasshopper
             string supplyUnitName = null;
             dataAccess.GetData(3, ref supplyUnitName);
             if(string.IsNullOrEmpty(supplyUnitName))
-                supplyUnitName = "AHU1S";
+                supplyUnitName = "AHU1";
 
             string exhaustUnitName = null;
             dataAccess.GetData(4, ref exhaustUnitName);
             if (string.IsNullOrEmpty(exhaustUnitName))
-                exhaustUnitName = "AHU1E";
+                exhaustUnitName = "AHU1";
 
             string ventilationRiserName = null;
             dataAccess.GetData(5, ref ventilationRiserName);

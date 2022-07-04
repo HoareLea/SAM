@@ -84,9 +84,6 @@ namespace SAM.Analytical
             }
 
             List<MechanicalSystem> result = new List<MechanicalSystem>();
-            int index;
-
-            index = 1;
             foreach(KeyValuePair<System.Guid, List<Space>> keyValuePair in dictionary_Ventilation)
             {
                 VentilationSystemType ventilationSystemType = dictionary_MechanicalSystemType[keyValuePair.Key] as VentilationSystemType;
@@ -111,7 +108,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                MechanicalSystem mechanicalSystem = adjacencyCluster.AddVentilationSystem(ventilationSystemType, index, keyValuePair.Value, supplyUnitName_Temp, exhaustUnitName_Temp);
+                MechanicalSystem mechanicalSystem = adjacencyCluster.AddVentilationSystem(ventilationSystemType, keyValuePair.Value, supplyUnitName_Temp, exhaustUnitName_Temp);
                 if (mechanicalSystem == null)
                     continue;
 
@@ -128,10 +125,8 @@ namespace SAM.Analytical
                 }
 
                 result.Add(mechanicalSystem);
-                index++;
             }
 
-            index = 1;
             foreach (KeyValuePair<System.Guid, List<Space>> keyValuePair in dictionary_Cooling)
             {
                 MechanicalSystemType mechanicalSystemType = dictionary_MechanicalSystemType[keyValuePair.Key];
@@ -140,7 +135,7 @@ namespace SAM.Analytical
 
                 string name = mechanicalSystemType.Name;
 
-                MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(mechanicalSystemType, index, keyValuePair.Value);
+                MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(mechanicalSystemType, keyValuePair.Value);
                 if (mechanicalSystem == null)
                     continue;
 
@@ -157,10 +152,8 @@ namespace SAM.Analytical
                 }
 
                 result.Add(mechanicalSystem);
-                index++;
             }
 
-            index = 1;
             foreach (KeyValuePair<System.Guid, List<Space>> keyValuePair in dictionary_Heating)
             {
                 MechanicalSystemType mechanicalSystemType = dictionary_MechanicalSystemType[keyValuePair.Key];
@@ -169,7 +162,7 @@ namespace SAM.Analytical
 
                 string name = mechanicalSystemType.Name;
 
-                MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(mechanicalSystemType, index, keyValuePair.Value);
+                MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(mechanicalSystemType, keyValuePair.Value);
                 if (mechanicalSystem == null)
                     continue;
 
@@ -186,7 +179,6 @@ namespace SAM.Analytical
                 }
 
                 result.Add(mechanicalSystem);
-                index++;
             }
 
             return result;
