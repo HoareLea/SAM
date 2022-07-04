@@ -109,33 +109,23 @@ namespace SAM.Analytical
                 return double.NaN;
             }
 
-            List<VentilationSystem> ventilationSystems = adjacencyCluster.GetRelatedObjects<VentilationSystem>(space);
-            if (ventilationSystems != null && ventilationSystems.Count != 0)
+            AirSupplyMethod airSupplyMethod = AirSupplyMethod(adjacencyCluster, space, out VentilationSystemType ventilationSystemType);
+            switch (airSupplyMethod)
             {
-                VentilationSystem ventilationSystem = ventilationSystems.Find(x => x.Type != null);
-                VentilationSystemType ventilationSystemType = ventilationSystem.Type as VentilationSystemType;
-                if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.AirSupplyMethod, out string airSupplyMethodString) && !string.IsNullOrWhiteSpace(airSupplyMethodString))
-                {
-                    AirSupplyMethod airSupplyMethod = Core.Query.Enum<AirSupplyMethod>(airSupplyMethodString);
-                    switch (airSupplyMethod)
+                case Analytical.AirSupplyMethod.Outside:
+                    return result;
+
+                case Analytical.AirSupplyMethod.Total:
+                    if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad))
                     {
-                        case AirSupplyMethod.Outside:
-                            return result;
+                        if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.TemperatureDifference, out double temperatureDifference))
+                        {
+                            double supplyAirFlow_Load = System.Math.Max(designCoolingLoad, designHeatingLoad) / 1.2 / 1.005 / temperatureDifference / 1000;
 
-                        case AirSupplyMethod.Total:
-                            if (space.TryGetValue(SpaceParameter.DesignHeatingLoad, out double designHeatingLoad) && space.TryGetValue(SpaceParameter.DesignCoolingLoad, out double designCoolingLoad))
-                            {
-                                if (ventilationSystemType.TryGetValue(VentilationSystemTypeParameter.TemperatureDifference, out double temperatureDifference))
-                                {
-                                    double supplyAirFlow_Load = System.Math.Max(designCoolingLoad, designHeatingLoad) / 1.2 / 1.005 / temperatureDifference / 1000;
-
-                                    return System.Math.Max(result, supplyAirFlow_Load);
-                                }
-                            }
-
-                            break;
+                            return System.Math.Max(result, supplyAirFlow_Load);
+                        }
                     }
-                }
+                    break;
             }
 
             return result;
