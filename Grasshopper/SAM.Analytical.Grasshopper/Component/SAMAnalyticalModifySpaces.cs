@@ -218,6 +218,8 @@ namespace SAM.Analytical.Grasshopper
                             continue;
                         }
 
+                        space = new Space(space);
+
                         if (!double.IsNaN(occupancy))
                         {
                             space.SetValue(SpaceParameter.Occupancy, occupancy);
