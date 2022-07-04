@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -160,6 +161,52 @@ namespace SAM.Analytical.Grasshopper
                     if (mechanicalSystem != null)
                     {
                         mechanicalSystems.Add(mechanicalSystem);
+                    }
+                }
+
+                if(!string.IsNullOrWhiteSpace(supplyUnitName) || !string.IsNullOrWhiteSpace(exhaustUnitName))
+                {
+                    VentilationSystem ventilationSystem = null;
+                    foreach(Space space in spaces)
+                    {
+                        List<VentilationSystem> ventilationSystems = adjacencyCluster.GetRelatedObjects<VentilationSystem>(space);
+                        if(ventilationSystems != null && ventilationSystems.Count != 0)
+                        {
+                            foreach(VentilationSystem ventilationSystem_Temp in ventilationSystems)
+                            {
+                                if(ventilationSystem_Temp != null)
+                                {
+                                    ventilationSystem = ventilationSystem_Temp;
+                                    break;
+                                }
+                            }
+
+                            if(ventilationSystem != null)
+                            {
+                                break;
+                            }
+                        }
+
+                    }
+
+                    if(ventilationSystem != null)
+                    {
+                        ventilationSystem = adjacencyCluster.AddMechanicalSystem(systemTypeLibrary?.GetSystemTypes<VentilationSystemType>().FirstOrDefault(), spaces) as VentilationSystem;
+                    }
+
+                    if(ventilationSystem != null)
+                    {
+                        if(!string.IsNullOrWhiteSpace(supplyUnitName))
+                        {
+                            ventilationSystem.SetValue(VentilationSystemParameter.SupplyUnitName, supplyUnitName);
+                        }
+
+                        if (!string.IsNullOrWhiteSpace(exhaustUnitName))
+                        {
+                            ventilationSystem.SetValue(VentilationSystemParameter.ExhaustUnitName, exhaustUnitName);
+                        }
+
+                        adjacencyCluster.AddObject(ventilationSystem);
                     }
                 }
             }
