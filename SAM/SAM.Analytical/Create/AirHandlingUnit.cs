@@ -11,7 +11,7 @@
 
             AirHandlingUnit result = new AirHandlingUnit(name);
             result.SetValue(AirHandlingUnitParameter.CoolingCoilFluidReturnTemperature, 12);
-            result.SetValue(AirHandlingUnitParameter.CoolingCoilFluidSupplyTemperature, 6);
+            result.SetValue(AirHandlingUnitParameter.CoolingCoilFluidFlowTemperature, 6);
             result.SetValue(AirHandlingUnitParameter.CoolingCoilOffTemperature, 24);
             result.SetValue(AirHandlingUnitParameter.CoolingCoilOnTemperature, 21);
             result.SetValue(AirHandlingUnitParameter.SummerSupplyTemperature, 23);

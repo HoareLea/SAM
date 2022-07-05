@@ -13,9 +13,9 @@ namespace SAM.Analytical
         [ParameterProperties("Heat Recovery Latent Efficiency", "Heat Recovery Latent Efficiency [%]"), DoubleParameterValue(0, 100)] HeatRecoveryLatentEfficiency,
         [ParameterProperties("Cooling Coil On Temperature", "Cooling Coil On Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilOnTemperature,
         [ParameterProperties("Cooling Coil Off Temperature", "Cooling Coil Off Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilOffTemperature,
-        [ParameterProperties("Cooling Coil Fluid Supply Temperature", "Cooling Coil Fluid Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidSupplyTemperature,
+        [ParameterProperties("Cooling Coil Fluid Flow Temperature", "Cooling Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidFlowTemperature,
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
-        [ParameterProperties("Heating Coil Fluid Supply Temperature", "Heating Coil Fluid Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidSupplyTemperature,
+        [ParameterProperties("Heating Coil Fluid Flow Temperature", "Heating Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidFlowTemperature,
         [ParameterProperties("Heating Coil Fluid Return Temperature", "Heating Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidReturnTemperature,
     }
 }
