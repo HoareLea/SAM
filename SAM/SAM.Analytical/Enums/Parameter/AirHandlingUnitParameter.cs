@@ -19,5 +19,9 @@ namespace SAM.Analytical
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
         [ParameterProperties("Heating Coil Fluid Flow Temperature", "Heating Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidFlowTemperature,
         [ParameterProperties("Heating Coil Fluid Return Temperature", "Heating Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidReturnTemperature,
+        [ParameterProperties("Winter Heat Recovery Dry Bulb Temperature", "Winter Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatRecoveryDryBulbTemperature,
+        [ParameterProperties("Winter Heat Recovery Relative Humidity", "Winter Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] WinterHeatRecoveryRelativeHumidity,
+        [ParameterProperties("Summer Heat Recovery Dry Bulb Temperature", "Summer Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] SummerHeatRecoveryDryBulbTemperature,
+        [ParameterProperties("Summer Heat Recovery Relative Humidity", "Summer Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] SummerHeatRecoveryRelativeHumidity,
     }
 }
