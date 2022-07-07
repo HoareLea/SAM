@@ -15,8 +15,10 @@
             result.SetValue(AirHandlingUnitParameter.CoolingCoilOffTemperature, 24);
             result.SetValue(AirHandlingUnitParameter.CoolingCoilOnTemperature, 21);
             result.SetValue(AirHandlingUnitParameter.SummerSupplyTemperature, 23);
-            result.SetValue(AirHandlingUnitParameter.HeatRecoverySensibleEfficiency, 0.75);
-            result.SetValue(AirHandlingUnitParameter.HeatRecoveryLatentEfficiency, 0);
+            result.SetValue(AirHandlingUnitParameter.SummerHeatRecoverySensibleEfficiency, 75);
+            result.SetValue(AirHandlingUnitParameter.SummerHeatRecoveryLatentEfficiency, 0);
+            result.SetValue(AirHandlingUnitParameter.WinterHeatRecoverySensibleEfficiency, 75);
+            result.SetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, 0);
 
             return result;
         }
