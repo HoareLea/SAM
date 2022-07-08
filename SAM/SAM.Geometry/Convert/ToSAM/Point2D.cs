@@ -23,5 +23,15 @@ namespace SAM.Geometry
 
             return new Point2D(Core.Query.Round(point.X, tolerance), Core.Query.Round(point.Y, tolerance));
         }
+
+        public static Point2D ToSAM(this System.Numerics.Complex complex)
+        {
+            if(complex == null)
+            {
+                return null;
+            }
+
+            return new Point2D(complex.Real, complex.Imaginary);
+        }
     }
 }

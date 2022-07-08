@@ -88,6 +88,7 @@
     <Compile Include="Planar\Query\Edges.cs" />
     <Compile Include="Planar\Query\Reduce.cs" />
     <Compile Include="Planar\Query\SelfIntersectionFace2Ds.cs" />
+    <Compile Include="Query\Intersections.cs" />
     <Compile Include="Samples\Query\Sample.cs" />
     <Compile Include="Spatial\Classes\Ellipse3D.cs" />
     <Compile Include="Spatial\Classes\LinkedFace3D.cs" />
