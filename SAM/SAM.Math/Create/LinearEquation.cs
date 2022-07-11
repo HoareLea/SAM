@@ -13,12 +13,9 @@
             double b = double.NaN;
 
             double x = x_2 - x_1;
-            if(x != 0)
-            {
-                a = (y_2 - y_1) / x;
-            }
+            a = x != 0 ? (y_2 - y_1) / x : 0;
 
-            if(!double.IsNaN(a))
+            if (!double.IsNaN(a))
             {
                 double ax = a * x_1;
                 double y = y_1;

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Math;
 using System;
 
 namespace SAM.Geometry.Planar
@@ -105,6 +106,33 @@ namespace SAM.Geometry.Planar
                 return null;
 
             return new Line2D(segment2D[0], segment2D.Direction);
+        }
+
+        public static implicit operator Line2D(LinearEquation linearEquation)
+        {
+            if (linearEquation == null)
+            {
+                return null;
+            }
+
+            double x_1 = 0;
+            double y_1 = linearEquation.Evaluate(x_1);
+            if(double.IsNaN(y_1))
+            {
+                return null;
+            }
+
+            double x_2 = 1;
+            double y_2 = linearEquation.Evaluate(x_2);
+            if (double.IsNaN(y_2))
+            {
+                return null;
+            }
+
+            Point2D point_1 = new Point2D(x_1, y_1);
+            Point2D point_2 = new Point2D(x_2, y_2);
+
+            return new Line2D(point_1, new Vector2D(point_1, point_2));
         }
     }
 }
