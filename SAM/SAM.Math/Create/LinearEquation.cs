@@ -13,23 +13,31 @@
             double b = double.NaN;
 
             double x = x_2 - x_1;
-            a = x != 0 ? (y_2 - y_1) / x : 0;
-
-            if (!double.IsNaN(a))
+            if(x == 0)
             {
-                double ax = a * x_1;
-                double y = y_1;
-                if(ax == 0)
-                {
-                    ax = a * x_2;
-                    y = y_2;
-                }
-
-                if(ax != 0)
-                {
-                    b = y / ax;
-                }
+                return null;
             }
+
+            a = (y_2 - y_1) / x;
+            if (double.IsNaN(a))
+            {
+                return null;
+            }
+
+            double ax = a * x_1;
+            double y = y_1;
+            if (ax == 0)
+            {
+                ax = a * x_2;
+                y = y_2;
+            }
+
+            if (ax == 0)
+            {
+                return null;
+            }
+
+            b = y / ax;
 
             return new LinearEquation(a, b);
         }
