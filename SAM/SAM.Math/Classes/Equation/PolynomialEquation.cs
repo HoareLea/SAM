@@ -10,7 +10,7 @@ namespace SAM.Math
     /// <summary>
     /// Equation in format a(n)*x^(n) + a(n-1)*x^(n-1) + a(n-2)*x^(n-2) + [...] + a(1)*x +a(0) = 0
     /// </summary>
-    public class PolynomialEquation : IJSAMObject
+    public class PolynomialEquation : IEquation
     {
         private double[] coefficients;
         
@@ -156,6 +156,14 @@ namespace SAM.Math
 
                 return coefficients.Length - 1;
             }
+        }
+
+        public static implicit operator PolynomialEquation(LinearEquation linearEquation)
+        {
+            if (linearEquation == null)
+                return null;
+
+            return new PolynomialEquation(linearEquation.Coefficients);
         }
     }
 }

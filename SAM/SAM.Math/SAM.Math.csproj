@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Constant.cs" />
+    <Compile Include="Classes\Equation\LinearEquation.cs" />
     <Compile Include="Classes\Interpolation\BilinearInterpolation.cs" />
     <Compile Include="Classes\Interpolation\LinearInterpolation.cs" />
     <Compile Include="Classes\Matrix\Matrix.cs" />
@@ -57,11 +58,13 @@
     <Compile Include="Convert\ToMathNet\Matrix.cs" />
     <Compile Include="Convert\ToSAM\PolynomialEquation.cs" />
     <Compile Include="Convert\ToSAM\Matrix.cs" />
+    <Compile Include="Create\LinearEquation.cs" />
     <Compile Include="Create\PolynomialEquation.cs" />
     <Compile Include="Create\Matrix.cs" />
     <Compile Include="Create\Matrix2D.cs" />
     <Compile Include="Create\Matrix4D.cs" />
     <Compile Include="Create\Matrix3D.cs" />
+    <Compile Include="Interfaces\IEquation.cs" />
     <Compile Include="Interfaces\ISquareMatrix.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Max.cs" />
