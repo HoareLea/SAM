@@ -37,7 +37,7 @@
                 return null;
             }
 
-            b = y / ax;
+            b = y - ax;
 
             return new LinearEquation(a, b);
         }
