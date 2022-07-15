@@ -58,6 +58,7 @@
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
+    <Compile Include="Classes\GooAirHandlingUnit.cs" />
     <Compile Include="Classes\GooProfileLibrary.cs" />
     <Compile Include="Classes\GooProfile.cs" />
     <Compile Include="Classes\GooDegreeOfActivityLibrary.cs" />
