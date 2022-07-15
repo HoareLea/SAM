@@ -19,6 +19,7 @@
             result.SetValue(AirHandlingUnitParameter.SummerHeatRecoveryLatentEfficiency, 0);
             result.SetValue(AirHandlingUnitParameter.WinterHeatRecoverySensibleEfficiency, 75);
             result.SetValue(AirHandlingUnitParameter.WinterHeatRecoveryLatentEfficiency, 0);
+            result.SetValue(AirHandlingUnitParameter.SummerHeatingCoil, false);
 
             return result;
         }

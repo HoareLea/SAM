@@ -24,5 +24,6 @@ namespace SAM.Analytical
         [ParameterProperties("Winter Heat Recovery Relative Humidity", "Winter Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] WinterHeatRecoveryRelativeHumidity,
         [ParameterProperties("Summer Heat Recovery Dry Bulb Temperature", "Summer Heat Recovery Dry Bulb Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] SummerHeatRecoveryDryBulbTemperature,
         [ParameterProperties("Summer Heat Recovery Relative Humidity", "Summer Heat Recovery Relative Humidity [%]"), DoubleParameterValue(0, 100)] SummerHeatRecoveryRelativeHumidity,
+        [ParameterProperties("Summer Heating Coil", "Summer Heating Coil"), ParameterValue(Core.ParameterType.Boolean)] SummerHeatingCoil,
     }
 }
