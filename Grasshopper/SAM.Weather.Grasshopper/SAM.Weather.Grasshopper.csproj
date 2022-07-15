@@ -53,6 +53,7 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\GooWeatherObject.cs" />
     <Compile Include="Classes\GooWeatherYear.cs" />
     <Compile Include="Classes\GooWeatherData.cs" />
     <Compile Include="Component\SAMWeatherDesignWeatherDay.cs" />
