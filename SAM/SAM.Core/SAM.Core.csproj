@@ -195,6 +195,7 @@
     <Compile Include="Query\Max.cs" />
     <Compile Include="Query\Count.cs" />
     <Compile Include="Query\TemplatesDirectory.cs" />
+    <Compile Include="Query\UserSAMTemporaryDirectory.cs" />
     <Compile Include="Query\UserSAMDirectory.cs" />
     <Compile Include="Query\UserDocumentsDirectory.cs" />
     <Compile Include="Query\Search.cs" />
