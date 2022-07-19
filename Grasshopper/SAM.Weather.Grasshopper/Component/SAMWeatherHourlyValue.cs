@@ -2,6 +2,7 @@
 using SAM.Weather.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Linq;
 
 namespace SAM.Weather.Grasshopper
 {
@@ -15,7 +16,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,7 +38,7 @@ namespace SAM.Weather.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooWeatherYearParam(), "_weatherYear", "_weatherYear", "SAM WeatherYear", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooWeatherObjectParam(), "_weatherObject", "_weatherObject", "SAM WeatherObject", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_weatherDataType", "_weatherDataType", "Weather Data Type", GH_ParamAccess.item);
             inputParamManager.AddIntegerParameter("_index", "_index", "Hour Index", GH_ParamAccess.item);
         }
@@ -58,8 +59,8 @@ namespace SAM.Weather.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            WeatherYear weatherYear = null;
-            if (!dataAccess.GetData(0, ref weatherYear) || weatherYear == null)
+            IWeatherObject weatherObject = null;
+            if (!dataAccess.GetData(0, ref weatherObject) || weatherObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -80,9 +81,29 @@ namespace SAM.Weather.Grasshopper
             }
 
             double result = double.NaN;
-            if(!weatherYear.TryGetValue(weatherDataType, index, out result))
+
+            if (weatherObject is WeatherYear)
             {
-                result = double.NaN;
+                if (!((WeatherYear)weatherObject).TryGetValue(weatherDataType, index, out result))
+                {
+                    result = double.NaN;
+                }
+            }
+            else if (weatherObject is WeatherDay)
+            {
+                if (!((WeatherDay)weatherObject).TryGetValue(weatherDataType, index, out result))
+                {
+                    result = double.NaN;
+                }
+            }
+            else if (weatherObject is WeatherData)
+            {
+                WeatherYear weatherYear = ((WeatherData)weatherObject).WeatherYears?.FirstOrDefault();
+
+                if (weatherYear == null || !weatherYear.TryGetValue(weatherDataType, index, out result))
+                {
+                    result = double.NaN;
+                }
             }
 
             dataAccess.SetData(0, result);

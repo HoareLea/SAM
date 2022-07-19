@@ -509,6 +509,11 @@ namespace SAM.Analytical
             return jObject;
         }
 
+        public List<IAnalyticalEquipment> GetEquipment()
+        {
+            return adjacencyCluster?.GetObjects<IAnalyticalEquipment>();;
+        }
+
         public void Transform(Geometry.Spatial.Transform3D transform3D)
         {
             if (adjacencyCluster != null)

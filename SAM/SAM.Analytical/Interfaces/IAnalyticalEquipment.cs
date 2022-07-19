@@ -1,7 +1,7 @@
 ﻿
 namespace SAM.Analytical
 {
-    interface IAnalyticalEquipment :IAnalyticalObject
+    public interface IAnalyticalEquipment :IAnalyticalObject
     {
     }
 }
