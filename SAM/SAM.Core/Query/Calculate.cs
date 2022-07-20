@@ -99,6 +99,51 @@ namespace SAM.Core
             return Calculate(func, value, start, stop, out int count, out double calculationValue, maxCount, tolerance);
         }
 
+        /// <summary>
+        /// Calculates value for given function. Returns double.NaN when function is null or reach maxCount and not meet given tolerance.
+        /// </summary>
+        /// <param name="func">Function</param>
+        /// <param name="value">value</param>
+        /// <param name="min">Minimal value of range</param>
+        /// <param name="max">Maximal value of range</param>
+        /// <param name="maxCount">Maximal number of iterate until result doesnt reach tollerance</param>
+        /// <param name="tolerance">tollerance</param>
+        /// <returns></returns>
+        public static double Calculate_BinarySearch(this Func<double, double> func, double value, double min, double max, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
+        {
+            if (func == null)
+            {
+                return double.NaN;
+            }
+
+            int count = 0;
+            double mid = (max + min) / 2;
+
+            double value_Temp;
+            do
+            {
+                value_Temp = func.Invoke(mid);
+                if (value_Temp > value)
+                {
+                    min = mid;
+                }
+                else
+                {
+                    max = mid;
+                }
+                mid = (min + max) / 2;
+
+                count++;
+                if (count > maxCount)
+                {
+                    return double.NaN;
+                }
+            }
+            while (Math.Abs(value_Temp - value) > tolerance);
+
+            return mid;
+        }
+
         public static double Calculate_ByMaxStep(this Func<double, double> func, double value, double start, double maxStep, out int count, out double calculationValue, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
         {
             calculationValue = double.NaN;
