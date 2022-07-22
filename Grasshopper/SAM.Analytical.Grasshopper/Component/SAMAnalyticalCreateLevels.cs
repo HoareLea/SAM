@@ -4,7 +4,6 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Geometry.Spatial;
-using Grasshopper.Kernel.Types;
 using SAM.Architectural.Grasshopper;
 using SAM.Architectural;
 using System.Linq;

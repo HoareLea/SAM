@@ -1,5 +1,4 @@
-﻿using Rhino;
-using Rhino.Geometry;
+﻿using Rhino.Geometry;
 using Rhino.Geometry.Collections;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;

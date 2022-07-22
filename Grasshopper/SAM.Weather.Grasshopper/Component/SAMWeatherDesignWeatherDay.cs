@@ -1,10 +1,4 @@
-﻿using Grasshopper.Kernel;
-using SAM.Weather.Grasshopper.Properties;
-using SAM.Core.Grasshopper;
-using System;
-using System.Collections.Generic;
-
-namespace SAM.Weather.Grasshopper
+﻿namespace SAM.Weather.Grasshopper
 {
     //public class SAMWeatherDesignWeatherDay : GH_SAMComponent
     //{

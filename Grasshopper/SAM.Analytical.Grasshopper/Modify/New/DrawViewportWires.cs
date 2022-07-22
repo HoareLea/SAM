@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
-using SAM.Geometry.Grasshopper;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper

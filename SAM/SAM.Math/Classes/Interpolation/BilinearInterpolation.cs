@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using System.Collections.Generic;
 
 namespace SAM.Math
 {

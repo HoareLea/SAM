@@ -1,8 +1,6 @@
 ﻿using SAM.Core;
 using System.Collections.Generic;
 
-using SAM.Architectural;
-
 namespace SAM.Analytical
 {
     public static partial class Query

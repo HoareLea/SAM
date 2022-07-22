@@ -3,7 +3,6 @@ using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
 using System;
 using System.Collections.Generic;
 

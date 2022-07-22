@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
 using SAM.Geometry.Spatial;
 using System.Collections;
 using System.Collections.Generic;

@@ -12,6 +12,18 @@ namespace SAM.Analytical
 
         }
 
+        public AirHandlingUnit(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public AirHandlingUnit(AirHandlingUnit airHandlingUnit)
+            : base(airHandlingUnit)
+        {
+
+        }
+
         public AirHandlingUnit(Guid guid, string name)
             : base(guid, name)
         {

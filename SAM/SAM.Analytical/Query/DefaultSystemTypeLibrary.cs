@@ -1,5 +1,4 @@
 ﻿using SAM.Core;
-using System.Linq;
 
 namespace SAM.Analytical
 {
