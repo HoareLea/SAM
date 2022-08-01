@@ -106,10 +106,11 @@ namespace SAM.Core
         /// <param name="value">value</param>
         /// <param name="min">Minimal value of range</param>
         /// <param name="max">Maximal value of range</param>
+        /// <param name="increasing">Monotonicity of the function, true means increasing function, false means descending function</param>
         /// <param name="maxCount">Maximal number of iterate until result doesnt reach tollerance</param>
         /// <param name="tolerance">tollerance</param>
         /// <returns></returns>
-        public static double Calculate_BinarySearch(this Func<double, double> func, double value, double min, double max, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
+        public static double Calculate_BinarySearch(this Func<double, double> func, double value, double min, double max, bool increasing = true, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
         {
             if (func == null)
             {
@@ -117,21 +118,35 @@ namespace SAM.Core
             }
 
             int count = 0;
-            double mid = (max + min) / 2;
 
             double value_Temp;
+            double mid;
             do
             {
+                mid = (min + max) / 2;
                 value_Temp = func.Invoke(mid);
                 if (value_Temp > value)
                 {
-                    min = mid;
+                    if (increasing)
+                    {
+                        min = mid;
+                    }
+                    else
+                    {
+                        max = mid;
+                    }
                 }
                 else
                 {
-                    max = mid;
+                    if (increasing)
+                    {
+                        max = mid;
+                    }
+                    else
+                    {
+                        min = mid;
+                    }
                 }
-                mid = (min + max) / 2;
 
                 count++;
                 if (count > maxCount)
