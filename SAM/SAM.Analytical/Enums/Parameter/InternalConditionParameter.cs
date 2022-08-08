@@ -57,5 +57,7 @@ namespace SAM.Analytical
         [ParameterProperties("Lighting View Coefficient", "Lighting View Coefficient [0-1]"), DoubleParameterValue(0, 1)] LightingViewCoefficient,
         [ParameterProperties("Occupancy View Coefficient", "Occupancy View Coefficient [0-1]"), DoubleParameterValue(0, 1)] OccupancyViewCoefficient,
         [ParameterProperties("Equipment View Coefficient", "Equipment View Coefficient [0-1]"), DoubleParameterValue(0, 1)] EquipmentViewCoefficient,
+
+        [ParameterProperties("NCM Data", "National Calculation Method (NCM) Data"), SAMObjectParameterValue(typeof(NCMData))] NCMData,
     }
 }

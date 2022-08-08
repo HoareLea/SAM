@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
     <Compile Include="Classes\ApertureConstruction.cs" />
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
@@ -147,6 +148,8 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\LightingPhotoelectricControls.cs" />
+    <Compile Include="Enums\LightingOccupancyControls.cs" />
     <Compile Include="Enums\New\HostPartitionCategory.cs" />
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
