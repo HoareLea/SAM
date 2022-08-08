@@ -14,7 +14,7 @@ namespace SAM.Analytical
         
         public LightingPhotoelectricControls LightingPhotoelectricControls { get; set; }
         
-        public string Country { get; set; }
+        public NCMCountry Country { get; set; }
         
         public bool LightingPhotoelectricBackSpaceSensor { get; set; }
         
@@ -62,7 +62,7 @@ namespace SAM.Analytical
 
             if (jObject.ContainsKey("Type"))
             {
-                Country = jObject.Value<string>("Type");
+                Type = jObject.Value<string>("Type");
             }
 
             if (jObject.ContainsKey("LightingOccupancyControls"))
@@ -79,7 +79,8 @@ namespace SAM.Analytical
 
             if (jObject.ContainsKey("Country"))
             {
-                Country = jObject.Value<string>("Country");
+                string Country_String = jObject.Value<string>("Country");
+                Country = Core.Query.Enum<NCMCountry>(Country_String);
             }
 
             if (jObject.ContainsKey("LightingPhotoelectricBackSpaceSensor"))
@@ -135,9 +136,9 @@ namespace SAM.Analytical
                 jObject.Add("LightingPhotoelectricControls", LightingPhotoelectricControls.ToString());
             }
 
-            if (Country != null)
+            if (Country != NCMCountry.Undefined)
             {
-                jObject.Add("Country", Country);
+                jObject.Add("Country", Country.ToString());
             }
 
             jObject.Add("LightingPhotoelectricBackSpaceSensor", LightingPhotoelectricBackSpaceSensor);

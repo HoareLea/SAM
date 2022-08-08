@@ -148,6 +148,7 @@
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\ApertureType.cs" />
+    <Compile Include="Enums\NCMCountry.cs" />
     <Compile Include="Enums\LightingPhotoelectricControls.cs" />
     <Compile Include="Enums\LightingOccupancyControls.cs" />
     <Compile Include="Enums\New\HostPartitionCategory.cs" />
