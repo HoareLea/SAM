@@ -8,28 +8,33 @@ namespace SAM.Analytical
     /// </summary>
     public class NCMData : IJSAMObject
     {
-        public string Type { get; set; }
-        
-        public LightingOccupancyControls LightingOccupancyControls { get; set; }
-        
-        public LightingPhotoelectricControls LightingPhotoelectricControls { get; set; }
-        
-        public NCMCountry Country { get; set; }
-        
-        public bool LightingPhotoelectricBackSpaceSensor { get; set; }
-        
-        public bool LightingPhotoelectricControlsTimeSwitch { get; set; }
-        
-        public bool LightingDaylightFactorMethod { get; set; }
-        
-        public bool IsMainsGasAvailable { get; set; }
+        public string Type { get; set; } = "Unoccupied and Unconditioned";
+
+        public LightingOccupancyControls LightingOccupancyControls { get; set; } = LightingOccupancyControls.None;
+
+        public LightingPhotoelectricControls LightingPhotoelectricControls { get; set; } = LightingPhotoelectricControls.None;
+
+        public NCMCountry Country { get; set; } = NCMCountry.England;
+
+        public bool LightingPhotoelectricBackSpaceSensor { get; set; } = false;
+
+        public bool LightingPhotoelectricControlsTimeSwitch { get; set; } = false;
+
+        public bool LightingDaylightFactorMethod { get; set; } = false;
+
+        public bool IsMainsGasAvailable { get; set; } = false;
 
         /// <summary>
         /// Lighting Photoelectric Parasitic Power [W]
         /// </summary>
-        public double LightingPhotoelectricParasiticPower { get; set; }
+        public double LightingPhotoelectricParasiticPower { get; set; } = 0.1;
 
-        public double AirPermeability { get; set; }
+        public double AirPermeability { get; set; } = 0;
+
+        public NCMData()
+        {
+
+        }
 
         public NCMData(JObject jObject)
         {
