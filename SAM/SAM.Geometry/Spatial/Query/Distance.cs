@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -95,6 +96,95 @@ namespace SAM.Geometry.Spatial
                 {
                     result = distance;
                 }
+            }
+
+            return result;
+        }
+
+        public static double Distance(this Plane plane, Shell shell, double tolerance = SAM.Core.Tolerance.Distance)
+        {
+            if (plane == null || shell == null)
+            {
+                return double.NaN;
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            double result = double.MaxValue;
+            foreach (Face3D face3D in face3Ds)
+            {
+                IClosedPlanar3D closedPlanar3D = face3D?.GetExternalEdge3D();
+                if (closedPlanar3D == null)
+                {
+                    continue;
+                }
+
+                ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                if (segmentable3D == null)
+                {
+                    throw new System.NotImplementedException();
+                }
+
+                List<Segment3D> segment3Ds = segmentable3D.GetSegments();
+                if (segment3Ds == null || segment3Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (Segment3D segment3D in segment3Ds)
+                {
+                    PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(plane, segment3D, tolerance);
+                    if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
+                    {
+                        return 0;
+                    }
+
+                    double distance = System.Math.Min(plane.Distance(segment3D.GetStart()), plane.Distance(segment3D.GetEnd()));
+                    if (distance < result)
+                    {
+                        result = distance;
+                    }
+
+                }
+            }
+
+            if (result == double.MaxValue)
+            {
+                return double.NaN;
+            }
+
+            return result;
+        }
+
+        public static double Distance(this Plane plane, IEnumerable<Shell> shells, double tolerance = SAM.Core.Tolerance.Distance)
+        {
+            if (plane == null || shells == null || shells.Count() == 0)
+            {
+                return double.NaN;
+            }
+
+            double result = double.MaxValue;
+            foreach (Shell shell in shells)
+            {
+                double distance = Distance(plane, shell, tolerance);
+                if (double.IsNaN(distance))
+                {
+                    continue;
+                }
+
+                if (distance < result)
+                {
+                    result = distance;
+                }
+            }
+
+            if (result == double.MaxValue)
+            {
+                return double.NaN;
             }
 
             return result;
