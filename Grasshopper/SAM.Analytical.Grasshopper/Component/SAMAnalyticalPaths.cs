@@ -243,6 +243,9 @@ namespace SAM.Analytical.Grasshopper
                 var param = Params.Input[index] as GH_PersistentParam<GH_String>;
                 param.PersistentData.ClearData();
                 param.PersistentData.Append(new GH_String(System.IO.Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.UserProfile), "SAMSimulation")));
+
+                Params.OnParametersChanged();
+                ExpireSolution(true);
             }
         }
     }
