@@ -103,6 +103,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "ManualOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -239,6 +240,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Lecture",
+                  "SystemType": "DisplacementVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellOnOff",
                   "Country": "England",
@@ -375,6 +377,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C1_Bedroom",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -511,6 +514,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_CommunalArea",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_Dimmed",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -631,6 +635,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "B1_CarPark",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -775,6 +780,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Changing",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -919,6 +925,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Changing",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -1051,6 +1058,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Circulation",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_Dimmed",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -1187,6 +1195,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_HighDensIT",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -1327,6 +1336,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -1467,6 +1477,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Toilet",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -1599,6 +1610,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Circulation",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_Dimmed",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -1739,6 +1751,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -1879,6 +1892,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -2019,6 +2033,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Toilet",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -2155,6 +2170,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_CommunalArea",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -2287,6 +2303,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Circulation",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_Dimmed",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -2431,6 +2448,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Tea",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -2571,6 +2589,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Plant",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -2707,6 +2726,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -2843,6 +2863,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -2979,6 +3000,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "ManualOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -3115,6 +3137,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "ManualOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -3251,6 +3274,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_EatDrink",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -3391,6 +3415,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -3523,6 +3548,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Store",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -3659,6 +3685,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -3799,6 +3826,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Store",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -3935,6 +3963,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_CommunalArea",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -4071,6 +4100,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4215,6 +4245,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "B1_FoodPrep",
+                  "SystemType": "CAV",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4359,6 +4390,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Tea",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4475,6 +4507,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4599,6 +4632,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4739,6 +4773,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Plant",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -4875,6 +4910,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5011,6 +5047,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "ManualOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -5127,6 +5164,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5263,6 +5301,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "PhotocellDimming",
                   "Country": "England",
@@ -5379,6 +5418,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5495,6 +5535,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5611,6 +5652,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5727,6 +5769,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5843,6 +5886,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -5959,6 +6003,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6103,6 +6148,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_FoodPrep",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6235,6 +6281,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Circulation",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6367,6 +6414,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Store",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6483,6 +6531,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6623,6 +6672,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Toilet",
+                  "SystemType": "ExtractOnly",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6739,6 +6789,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6879,6 +6930,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Store",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -6995,6 +7047,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "Unoccupied and Unconditioned",
+                  "SystemType": "NaturalVentilation",
                   "LightingOccupancyControls": "None",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -7131,6 +7184,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_DrySptHall",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",
@@ -7267,6 +7321,7 @@
                 "Value": {
                   "_type": "SAM.Analytical.NCMData,SAM.Analytical",
                   "Type": "C2_Uni_Office",
+                  "SystemType": "MechanicalVentilation",
                   "LightingOccupancyControls": "AutoOn_AutoOff",
                   "LightingPhotoelectricControls": "None",
                   "Country": "England",

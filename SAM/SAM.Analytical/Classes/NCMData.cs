@@ -10,6 +10,8 @@ namespace SAM.Analytical
     {
         public string Type { get; set; } = "Unoccupied and Unconditioned";
 
+        public NCMSystemType SystemType { get; set; } = NCMSystemType.NaturalVentilation;
+
         public LightingOccupancyControls LightingOccupancyControls { get; set; } = LightingOccupancyControls.None;
 
         public LightingPhotoelectricControls LightingPhotoelectricControls { get; set; } = LightingPhotoelectricControls.None;
@@ -55,6 +57,7 @@ namespace SAM.Analytical
                 LightingPhotoelectricParasiticPower = nCMData.LightingPhotoelectricParasiticPower;
                 AirPermeability = nCMData.AirPermeability;
                 Type = nCMData.Type;
+                SystemType = nCMData.SystemType;
             }
         }
 
@@ -70,16 +73,22 @@ namespace SAM.Analytical
                 Type = jObject.Value<string>("Type");
             }
 
+            if (jObject.ContainsKey("SystemType"))
+            {
+                string systemType_String = jObject.Value<string>("SystemType");
+                SystemType = Core.Query.Enum<NCMSystemType>(systemType_String);
+            }
+
             if (jObject.ContainsKey("LightingOccupancyControls"))
             {
-                string LightingOccupancyControls_String = jObject.Value<string>("LightingOccupancyControls");
-                LightingOccupancyControls = Core.Query.Enum<LightingOccupancyControls>(LightingOccupancyControls_String);
+                string lightingOccupancyControls_String = jObject.Value<string>("LightingOccupancyControls");
+                LightingOccupancyControls = Core.Query.Enum<LightingOccupancyControls>(lightingOccupancyControls_String);
             }
 
             if (jObject.ContainsKey("LightingPhotoelectricControls"))
             {
-                string LightingPhotoelectricControls_String = jObject.Value<string>("LightingPhotoelectricControls");
-                LightingPhotoelectricControls = Core.Query.Enum<LightingPhotoelectricControls>(LightingPhotoelectricControls_String);
+                string lightingPhotoelectricControls_String = jObject.Value<string>("LightingPhotoelectricControls");
+                LightingPhotoelectricControls = Core.Query.Enum<LightingPhotoelectricControls>(lightingPhotoelectricControls_String);
             }
 
             if (jObject.ContainsKey("Country"))
@@ -129,6 +138,11 @@ namespace SAM.Analytical
             if (Type != null)
             {
                 jObject.Add("Type", Type);
+            }
+
+            if (SystemType != NCMSystemType.Undefined)
+            {
+                jObject.Add("SystemType", SystemType.ToString());
             }
 
             if (LightingOccupancyControls != LightingOccupancyControls.Undefined)
