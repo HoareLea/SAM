@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace SAM.Core
 {
@@ -27,6 +28,26 @@ namespace SAM.Core
             }
 
             return (T)value;
+        }
+
+        public static T Value<T>(this XAttribute xAttribute)
+        {
+            if (!TryGetValue(xAttribute, out T result))
+            {
+                return default(T);
+            }
+
+            return result;
+        }
+
+        public static T Value<T>(this XAttribute xAttribute, T defaultValue)
+        {
+            if(!TryGetValue(xAttribute, out T result))
+            {
+                return defaultValue;
+            }
+
+            return result;
         }
     }
 }

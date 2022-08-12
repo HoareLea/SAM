@@ -12,7 +12,7 @@ namespace SAM.Geometry
                 return null;
             }
 
-            return SAM.Math.Create.LinearEquation(point2D_1.X, point2D_1.Y, point2D_2.X, point2D_2.Y);
+            return Math.Create.LinearEquation(point2D_1.X, point2D_1.Y, point2D_2.X, point2D_2.Y);
 
         }
     }

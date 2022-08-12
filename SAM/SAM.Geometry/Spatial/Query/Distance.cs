@@ -101,7 +101,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static double Distance(this Plane plane, Shell shell, double tolerance = SAM.Core.Tolerance.Distance)
+        public static double Distance(this Plane plane, Shell shell, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || shell == null)
             {
@@ -160,7 +160,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static double Distance(this Plane plane, IEnumerable<Shell> shells, double tolerance = SAM.Core.Tolerance.Distance)
+        public static double Distance(this Plane plane, IEnumerable<Shell> shells, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null || shells == null || shells.Count() == 0)
             {

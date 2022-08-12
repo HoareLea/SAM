@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace SAM.Core
 {
@@ -129,6 +130,85 @@ namespace SAM.Core
             if(typeof(T).IsAssignableFrom(object_value.GetType()))
             {
                 value = (T)object_value;
+                return true;
+            }
+
+            return false;
+        }
+
+        public static bool TryGetValue<T>(XAttribute xAttribute, out T value)
+        {
+            value = default(T);
+
+            if(xAttribute == null)
+            {
+                return false;
+            }
+
+            if (typeof(T) == typeof(double))
+            {
+                if (string.IsNullOrWhiteSpace(xAttribute.Value))
+                {
+                    return false;
+                }
+
+                if (!TryConvert(xAttribute.Value, out value))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (typeof(T) == typeof(string))
+            {
+                if (!TryConvert(xAttribute?.Value, out value))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (typeof(T) == typeof(bool))
+            {
+                if (string.IsNullOrWhiteSpace(xAttribute.Value))
+                {
+                    return false;
+                }
+
+                if (!TryConvert(xAttribute.Value, out value))
+                {
+                    return false;
+                }
+
+                string value_Temp = xAttribute.Value.Trim().ToUpper();
+                if (value_Temp != "TRUE" && value_Temp != "FALSE")
+                {
+                    return false;
+                }
+
+                value = (T)(object)(value_Temp == "TRUE");
+                return true;
+            }
+
+            if (typeof(T) == typeof(int))
+            {
+                if (string.IsNullOrWhiteSpace(xAttribute.Value))
+                {
+                    return false;
+                }
+
+                if (!TryConvert(xAttribute?.Value, out value))
+                {
+                    return false;
+                }
+
+                return true;
+            }
+
+            if (TryConvert(xAttribute?.Value, out value))
+            {
                 return true;
             }
 

@@ -87,7 +87,7 @@ namespace SAM.Analytical
 
                         if (apertureConstruction_New != null)
                         {
-                            IEnumerable<IMaterial> materials_Temp = Query.Materials(apertureConstruction_New, materialLibrary);
+                            IEnumerable<IMaterial> materials_Temp = Materials(apertureConstruction_New, materialLibrary);
                             if (materials_Temp != null)
                             {
                                 foreach (IMaterial material in materials_Temp)
