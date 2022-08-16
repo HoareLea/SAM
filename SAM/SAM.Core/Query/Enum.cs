@@ -41,5 +41,25 @@ namespace SAM.Core
 
             return Enum<T>("Undefined");
         }
+
+        public static T? Enum<T>(int? index) where T : Enum
+        {
+            if (index == null || !index.HasValue)
+            {
+                return default(T);
+            }
+
+            if (!typeof(T).IsEnum)
+            {
+                return default(T);
+            }
+
+            if (!System.Enum.IsDefined(typeof(T), index))
+            {
+                return default(T);
+            }
+
+            return (T)System.Enum.ToObject(typeof(T), index);
+        }
     }
 }
