@@ -1,5 +1,6 @@
 ﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Precision;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -220,11 +221,23 @@ namespace SAM.Geometry.Planar
                     {
                         geometry = polygon_1.Intersection(polygon_2);
                     }
-                    catch(System.Exception exception)
+                    catch(System.Exception exception_1)
                     {
-                        polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
-                        polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
-                        geometry = polygon_1.Intersection(polygon_2);
+
+                        try
+                        {
+                            polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
+                            polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
+                            geometry = polygon_1.Intersection(polygon_2);
+                        }
+                        catch (System.Exception exception_2)
+                        {
+                            GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
+                            NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);
+                            NetTopologySuite.Geometries.Geometry geometry_2 = geometryPrecisionReducer.Reduce(polygon_2);
+
+                            geometry = geometry_1.Intersection(geometry_2);
+                        }
                     }
 
                     if (geometry == null || geometry.IsEmpty)
