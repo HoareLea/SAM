@@ -60,9 +60,16 @@ namespace SAM.Core
             else if (type_Temp == typeof(bool))
             {
                 if (@object == null)
+                {
                     return false;
+                }
 
-                if(@object is JValue)
+                if (@object is Type)
+                {
+                    return false;
+                }
+
+                if (@object is JValue)
                 {
                     @object = ((JValue)@object).Value;
                 }
@@ -89,7 +96,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(int))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -119,7 +133,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(double))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if(@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -140,7 +161,7 @@ namespace SAM.Core
                         return true;
                     }
                 }
-                else if (IsNumeric(@object))
+                else if (IsNumeric(@object) && !(@object is Type))
                 {
                     result = System.Convert.ToDouble(@object);
                     return true;
@@ -167,7 +188,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(uint))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -197,7 +225,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(short))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -222,7 +257,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(byte))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -246,7 +288,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(int))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -271,7 +320,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(long))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -296,7 +352,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(Guid))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -315,7 +378,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(DateTime))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
@@ -344,7 +414,14 @@ namespace SAM.Core
             else if (type_Temp == typeof(System.Drawing.Color))
             {
                 if (@object == null)
+                {
                     return false;
+                }
+
+                if (@object is Type)
+                {
+                    return false;
+                }
 
                 if (@object is JValue)
                 {
