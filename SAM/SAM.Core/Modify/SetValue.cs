@@ -2,11 +2,40 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Xml.Linq;
 
 namespace SAM.Core
 {
     public static partial class Modify
     {
+        public static bool SetValue<T>(XAttribute xAttribute, T value)
+        {
+            if(xAttribute == null)
+            {
+                return false;
+            }
+
+            string @string = string.Empty;
+            if(value == null)
+            {
+                xAttribute.SetValue(@string);
+            }
+
+            xAttribute.SetValue(value);
+            return true;
+        }
+
+        public static bool SetValue<T>(XElement xElement, string attributeName, T value)
+        {
+            if(xElement == null || string.IsNullOrWhiteSpace(attributeName))
+            {
+                return false;
+            }
+
+            xElement.SetAttributeValue(attributeName, value);
+            return true;
+        }
+
         public static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, string name, string value)
         {
             return SetValue(parameterizedSAMObject, null, name, value as object);
