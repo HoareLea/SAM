@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -84,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (sAMObject is Panel)
-            {                
+            {
                 Panel panel = Create.Panel((Panel)sAMObject);
 
                 ApertureConstruction apertureConstruction_Temp = apertureConstruction;
@@ -117,10 +117,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            List<Tuple<Panel, Aperture>> tuples_Result = null;
+
             List<Panel> panels = adjacencyCluster.GetPanels();
             if (panels != null)
             {
-                List<Tuple<Panel, Aperture>> tuples_Result = new List<Tuple<Panel, Aperture>>();
+                tuples_Result = new List<Tuple<Panel, Aperture>>();
 
                 foreach (Panel panel in panels)
                 {
@@ -140,20 +142,20 @@ namespace SAM.Analytical.Grasshopper
                     apertures.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, x)));
                     adjacencyCluster.AddObject(panel_New);
                 }
-
-                if(analyticalModel != null)
-                {
-                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                    dataAccess.SetData(0, analyticalModel_Result);
-                }
-                else
-                {
-                    dataAccess.SetData(0, adjacencyCluster);
-                }
-                
-                dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
-                dataAccess.SetData(2, tuples_Result != null && tuples_Result.Count > 0);
             }
+
+            if (analyticalModel != null)
+            {
+                AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                dataAccess.SetData(0, analyticalModel_Result);
+            }
+            else
+            {
+                dataAccess.SetData(0, adjacencyCluster);
+            }
+
+            dataAccess.SetDataList(1, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
+            dataAccess.SetData(2, tuples_Result != null && tuples_Result.Count > 0);
         }
     }
 }

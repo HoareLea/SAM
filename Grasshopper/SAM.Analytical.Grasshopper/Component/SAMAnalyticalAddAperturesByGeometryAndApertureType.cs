@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry incl Rhino geometry", GH_ParamAccess.list);
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 
             int index = inputParamManager.AddTextParameter("_apertureType_", "_apertureType_", "SAM Analytical ApertureType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
             outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
         }
 
@@ -108,13 +108,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);
-            if (closedPlanar3Ds == null || closedPlanar3Ds.Count() == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
-            if(geometry3Ds.Count != closedPlanar3Ds.Count)
+            if(geometry3Ds != null && closedPlanar3Ds != null && geometry3Ds.Count != closedPlanar3Ds.Count)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Some of the geometries could not be converted");
             }
@@ -155,17 +150,16 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Aperture> apertures = new List<Aperture>();
 
-                foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                if(closedPlanar3Ds != null)
                 {
-                    ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
+                    foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                    {
+                        ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
 
-                    //Aperture aperture = panel.AddAperture(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
-                    //if (aperture != null)
-                    //    apertures.Add(aperture);
-
-                    List<Aperture> apertures_Temp = panel.AddApertures(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
-                    if (apertures_Temp != null)
-                        apertures.AddRange(apertures_Temp);
+                        List<Aperture> apertures_Temp = panel.AddApertures(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
+                        if (apertures_Temp != null)
+                            apertures.AddRange(apertures_Temp);
+                    }
                 }
 
                 dataAccess.SetData(0, panel);
@@ -191,6 +185,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            List<Tuple<Panel, Aperture>> tuples_Result = null;
+
             List<Panel> panels = adjacencyCluster.GetPanels();
             if (panels != null)
             {
@@ -203,7 +199,7 @@ namespace SAM.Analytical.Grasshopper
                     tuples.Add(new Tuple<BoundingBox3D, IClosedPlanar3D>(closedPlanar3D.GetBoundingBox(maxDistance), closedPlanar3D));
                 }
 
-                List<Tuple<Panel, Aperture>> tuples_Result = new List<Tuple<Panel, Aperture>>();
+                tuples_Result = new List<Tuple<Panel, Aperture>>();
                 for(int i=0; i < panels.Count; i++)
                 {
                     Panel panel = panels[i];
@@ -227,12 +223,6 @@ namespace SAM.Analytical.Grasshopper
                         if(panel_Temp == null)
                             panel_Temp = Create.Panel(panel);
 
-                        //Aperture aperture = panel_Temp.AddAperture(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
-                        //if (aperture == null)
-                        //    continue;
-
-                        //tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, aperture));
-
                         List<Aperture> apertures_Temp = panel_Temp.AddApertures(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
                         if (apertures_Temp == null)
                             continue;
@@ -243,19 +233,19 @@ namespace SAM.Analytical.Grasshopper
                     if(panel_Temp != null)
                         adjacencyCluster.AddObject(panel_Temp);
                 }
-
-                if(analyticalModel != null)
-                {
-                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                    dataAccess.SetData(0, analyticalModel_Result);
-                }
-                else
-                {
-                    dataAccess.SetData(0, adjacencyCluster);
-                }
-                
-                dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
             }
+
+            if (analyticalModel != null)
+            {
+                AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                dataAccess.SetData(0, analyticalModel_Result);
+            }
+            else
+            {
+                dataAccess.SetData(0, adjacencyCluster);
+            }
+
+            dataAccess.SetDataList(1, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
         }
     }
 }
