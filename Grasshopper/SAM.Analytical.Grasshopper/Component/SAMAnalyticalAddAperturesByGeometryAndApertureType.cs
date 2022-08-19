@@ -43,10 +43,14 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry incl Rhino geometry", GH_ParamAccess.list);
+            int index = -1;
+
+            index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometry", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 
-            int index = inputParamManager.AddTextParameter("_apertureType_", "_apertureType_", "SAM Analytical ApertureType", GH_ParamAccess.item);
+            index = inputParamManager.AddTextParameter("_apertureType_", "_apertureType_", "SAM Analytical ApertureType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
@@ -72,11 +76,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<object> objects = new List<object>();
-            if (!dataAccess.GetDataList(0, objects))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetDataList(0, objects);
 
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             foreach (object @object in objects)
