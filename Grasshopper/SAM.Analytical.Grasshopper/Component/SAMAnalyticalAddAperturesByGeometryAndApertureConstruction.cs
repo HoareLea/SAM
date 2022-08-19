@@ -43,10 +43,14 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("_geometry", "_geometry", "Geometry incl Rhino geometry", GH_ParamAccess.list);
+            int index = -1;
+
+            index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometries", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
+
             inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 
-            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
@@ -72,39 +76,38 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<object> objects = new List<object>();
-            if (!dataAccess.GetDataList(0, objects))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetDataList(0, objects);
 
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
-            foreach (object @object in objects)
+            if(objects != null)
             {
-                List<ISAMGeometry3D> geometry3Ds_Temp = null;
-                if (@object is IGH_GeometricGoo)
+                foreach (object @object in objects)
                 {
-                    geometry3Ds_Temp = ((IGH_GeometricGoo)@object).ToSAM(true).Cast<ISAMGeometry3D>().ToList();
-                }
-                else if (@object is GH_ObjectWrapper)
-                {
-                    GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
-                    if (objectWrapper_Temp.Value is ISAMGeometry3D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
-                    else if (objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, objectWrapper_Temp.Value as dynamic) };
-                }
-                else if (@object is IGH_Goo)
-                {
-                    Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
-                    if (sAMGeometry is ISAMGeometry3D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
-                    else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, sAMGeometry as dynamic) };
-                }
+                    List<ISAMGeometry3D> geometry3Ds_Temp = null;
+                    if (@object is IGH_GeometricGoo)
+                    {
+                        geometry3Ds_Temp = ((IGH_GeometricGoo)@object).ToSAM(true).Cast<ISAMGeometry3D>().ToList();
+                    }
+                    else if (@object is GH_ObjectWrapper)
+                    {
+                        GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
+                        if (objectWrapper_Temp.Value is ISAMGeometry3D)
+                            geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
+                        else if (objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
+                            geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, objectWrapper_Temp.Value as dynamic) };
+                    }
+                    else if (@object is IGH_Goo)
+                    {
+                        Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
+                        if (sAMGeometry is ISAMGeometry3D)
+                            geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
+                        else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
+                            geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, sAMGeometry as dynamic) };
+                    }
 
-                if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
-                    geometry3Ds.AddRange(geometry3Ds_Temp);
+                    if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
+                        geometry3Ds.AddRange(geometry3Ds_Temp);
+                }
             }
 
             List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);

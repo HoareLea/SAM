@@ -39,10 +39,13 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_ratio", "_ratio", "Ratio", GH_ParamAccess.item);
+            int index = -1;
 
-            int index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
+            index = inputParamManager.AddNumberParameter("_ratio_", "_ratio_", "Ratio", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
         }
 
@@ -72,8 +75,7 @@ namespace SAM.Analytical.Grasshopper
             double ratio = double.NaN;
             if (!dataAccess.GetData(1, ref ratio))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                ratio = double.NaN;
             }
 
             SAMObject sAMObject = null;
@@ -87,14 +89,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 Panel panel = Create.Panel((Panel)sAMObject);
 
-                ApertureConstruction apertureConstruction_Temp = apertureConstruction;
-                if (apertureConstruction_Temp == null)
-                    apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+                List<Aperture> apertures = null;
 
-                List<Aperture> apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
+                if (!double.IsNaN(ratio))
+                {
+                    ApertureConstruction apertureConstruction_Temp = apertureConstruction;
+                    if (apertureConstruction_Temp == null)
+                        apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+
+                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
+                }
 
                 dataAccess.SetData(0, panel);
-                dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
+                dataAccess.SetDataList(1, apertures?.ConvertAll(x => new GooAperture(x)));
                 dataAccess.SetData(2, apertures != null && apertures.Count != 0);
                 return;
             }
@@ -120,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
             List<Tuple<Panel, Aperture>> tuples_Result = null;
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if (panels != null)
+            if (panels != null && !double.IsNaN(ratio))
             {
                 tuples_Result = new List<Tuple<Panel, Aperture>>();
 
