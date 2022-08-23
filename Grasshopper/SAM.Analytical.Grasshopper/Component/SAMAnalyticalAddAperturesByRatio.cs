@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddBooleanParameter("_subdivide_", "_subdivide_", "Subdivide", GH_ParamAccess.item, true);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddNumberParameter("_apertureHeight_", "_apertureHeight_", "Default aperture Height", GH_ParamAccess.item, 3);
+            index = inputParamManager.AddNumberParameter("_apertureHeight_", "_apertureHeight_", "Default aperture Height", GH_ParamAccess.item, 2);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddNumberParameter("_sillHeight_", "_sillHeight_", "Default sill Height", GH_ParamAccess.item, 0.8);
@@ -111,11 +111,11 @@ namespace SAM.Analytical.Grasshopper
                 subdivide = true;
             }
 
-            double apertureHeight = 3;
+            double apertureHeight = 2;
             index = Params.IndexOfInputParam("_apertureHeight_");
             if (index == -1 || !dataAccess.GetData(index, ref apertureHeight))
             {
-                apertureHeight = 3;
+                apertureHeight = 2;
             }
 
             double sillHeight = 0.8;

@@ -381,19 +381,13 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
-                                List<Point3D> point3Ds_Temp = polyline3D.GetPoints();
-                                if (point3Ds_Temp.Count > 2)
-                                {
-                                    point3Ds_Temp.RemoveAt(0);
-                                    point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
-                                }
-
-                                if (point3Ds_Temp.Count == 0)
+                                List<Segment3D> segment3Ds = polyline3D.GetSegments();
+                                if (segment3Ds == null || segment3Ds.Count == 0)
                                 {
                                     continue;
                                 }
 
-                                point3Ds.AddRange(point3Ds_Temp);
+                                segment3Ds.ForEach(x => point3Ds.Add(x.Mid()));
                             }
                             else
                             {
