@@ -241,6 +241,228 @@ namespace SAM.Analytical
             //return null;
         }
 
+        public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, bool subdivide, double height, double sillHeight, double separation, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panel == null || apertureConstruction == null)
+                return null;
+
+            Face3D face3D = panel.GetFace3D(false);
+            if (face3D == null)
+                return null;
+
+            double area = face3D.GetArea();
+            double area_Target = area * ratio;
+            if (area_Target < tolerance_Area)
+                return null;
+
+            if(!face3D.Rectangular(tolerance_Area))
+            {
+                return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
+            }
+
+            List<Face3D> face3Ds_Offset = face3D.Offset(0.01, true, true, tolerance);
+            if (face3Ds_Offset == null || face3Ds_Offset.Count == 0)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
+            BoundingBox3D boundingBox3D_Offset = new BoundingBox3D(face3Ds_Offset.ConvertAll(x => x.GetBoundingBox()));
+
+            double elevation_Bottom = System.Math.Min(boundingBox3D.Min.Z + sillHeight, boundingBox3D_Offset.Max.Z);
+            double elevation_Top = System.Math.Min(elevation_Bottom + height, boundingBox3D_Offset.Max.Z);
+            if(elevation_Top == elevation_Bottom)
+            {
+                return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
+            }
+
+            List<Face3D> face3Ds_Aperture = null;
+
+            List<Face3D> face3Ds_Temp = face3Ds_Offset.Between(elevation_Top, elevation_Bottom, tolerance);
+
+            area = face3Ds_Temp.ConvertAll(x => x.GetArea()).Sum();
+            if (area < area_Target)
+            {
+                //TODO: Move top and bottom elevations
+                double elevation_Top_Temp = boundingBox3D_Offset.Max.Z;
+                face3Ds_Temp = face3Ds_Offset.Between(elevation_Top_Temp, elevation_Bottom, tolerance);
+                area = face3Ds_Temp.ConvertAll(x => x.GetArea()).Sum();
+                if (area > area_Target)
+                {
+                    //TODO: Move top elevation
+
+                    Func<double, double> func = new Func<double, double>((double x) =>
+                    {
+                        if (face3Ds_Offset == null || face3Ds_Offset.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        face3Ds_Temp = face3Ds_Offset.Between(x, elevation_Bottom, tolerance);
+                        if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        return face3Ds_Temp.ConvertAll(y => y.GetArea()).Sum();
+                    });
+
+                    elevation_Top = Core.Query.Calculate(func, area_Target, elevation_Top, elevation_Top_Temp, tolerance: tolerance_Area);
+                    face3Ds_Aperture = face3Ds_Offset.Between(elevation_Top, elevation_Bottom, tolerance);
+
+                }
+                else
+                {
+                    //TODO: Move bottom elevation
+                    elevation_Top = elevation_Top_Temp;
+                    double elevation_Bottom_Temp = boundingBox3D_Offset.Min.Z;
+
+                    Func<double, double> func = new Func<double, double>((double x) =>
+                    {
+                        if (face3Ds_Offset == null || face3Ds_Offset.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        face3Ds_Temp = face3Ds_Offset.Between(elevation_Top, x, tolerance);
+                        if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
+                        {
+                            return 0;
+                        }
+
+                        return face3Ds_Temp.ConvertAll(y => y.GetArea()).Sum();
+                    });
+
+                    elevation_Bottom = Core.Query.Calculate(func, area_Target, elevation_Top, elevation_Bottom_Temp, tolerance: tolerance_Area);
+                    face3Ds_Aperture = face3Ds_Offset.Between(elevation_Top, elevation_Bottom, tolerance);
+                }
+            }
+            else
+            {
+                Plane plane = Geometry.Spatial.Create.Plane((elevation_Top + elevation_Bottom) / 2);
+
+                foreach (Face3D face3D_Offset in face3Ds_Offset)
+                {
+                    PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(plane, face3D_Offset, tolerance_Distance: tolerance);
+                    if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    {
+                        continue;
+                    }
+
+                    List<ISegmentable3D> segmentable3Ds = planarIntersectionResult.GetGeometry3Ds<ISegmentable3D>();
+                    if (segmentable3Ds == null || segmentable3Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    Plane plane_Face3D = face3D_Offset.GetPlane();
+                    Vector3D vector3D_Up = plane_Face3D.Project(Vector3D.WorldZ);
+                    Vector3D vector3D_Side = vector3D_Up.CrossProduct(plane_Face3D.Normal);
+
+                    List<Point3D> point3Ds = new List<Point3D>();
+
+                    foreach (ISegmentable3D segmentable3D in segmentable3Ds)
+                    {
+                        if (segmentable3D == null)
+                        {
+                            continue;
+                        }
+
+                        foreach (Segment3D segment3D in segmentable3Ds)
+                        {
+                            if(subdivide)
+                            {
+                                //TODO: Implement segment3D split here
+                                Polyline3D polyline3D = Geometry.Spatial.Query.Split(segment3D, separation, Geometry.AlignmentPoint.Mid, tolerance);
+                                if (polyline3D == null)
+                                {
+                                    continue;
+                                }
+
+                                List<Point3D> point3Ds_Temp = polyline3D.GetPoints();
+                                if (point3Ds_Temp.Count > 2)
+                                {
+                                    point3Ds_Temp.RemoveAt(0);
+                                    point3Ds_Temp.RemoveAt(point3Ds.Count - 1);
+                                }
+
+                                if (point3Ds.Count == 0)
+                                {
+                                    continue;
+                                }
+
+                                point3Ds.AddRange(point3Ds_Temp);
+                            }
+                            else
+                            {
+
+                                point3Ds.Add(segment3D.Mid());
+                            }
+                        }
+                    }
+
+                    if(point3Ds == null || point3Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    double width = (area_Target / point3Ds.Count) / height;
+
+                    foreach(Point3D point3D in point3Ds)
+                    {
+                        Point2D point2D = plane_Face3D.Convert(point3D);
+                        Vector2D vector2D_Up = plane_Face3D.Convert(vector3D_Up) * height;
+                        Vector2D vector2D_Side = plane_Face3D.Convert(vector3D_Side) * width;
+
+                        Vector2D vector2D = null;
+
+                        vector2D = (vector2D_Up / 2).GetNegated();
+                        point2D = point2D.GetMoved(vector2D);
+
+                        vector2D = (vector2D_Side / 2).GetNegated();
+                        point2D = point2D.GetMoved(vector2D);
+
+                        List<Point2D> point2Ds = new List<Point2D>();
+                        point2Ds.Add(point2D);
+
+                        point2D = point2D.GetMoved(vector2D_Up);
+                        point2Ds.Add(point2D);
+
+                        point2D = point2D.GetMoved(vector2D_Side);
+                        point2Ds.Add(point2D);
+
+                        point2D = point2D.GetMoved(vector2D_Up.GetNegated());
+                        point2Ds.Add(point2D);
+
+                        Polygon2D polygon2D = new Polygon2D(point2Ds);
+
+                        Polygon3D polygon3D = plane_Face3D.Convert(polygon2D);
+
+                        face3Ds_Aperture.Add(new Face3D(polygon3D));
+                    }
+                }
+            }
+
+            if(face3Ds_Aperture == null || face3Ds_Aperture.Count == 0)
+            {
+                return null;
+            }
+
+            List<Aperture> result = new List<Aperture>();
+            foreach(Face3D face3D_Aperture in face3Ds_Aperture)
+            {
+                List<Aperture> apertures = panel.AddApertures(apertureConstruction, face3D_Aperture, false, tolerance_Area, tolerance, tolerance);
+                if(apertures == null)
+                {
+                    continue;
+                }
+
+                result.AddRange(apertures);
+            }
+
+            return result;
+        }
+
         public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panel == null || apertureConstruction == null || ratio > 1 || ratio <= 0)

@@ -7,17 +7,17 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByRatio : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByRatio_Old : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("12e7038b-df21-44dd-aebd-d47a13147ead");
+        public override Guid ComponentGuid => new Guid("6afa8baf-7cc3-4993-a6ec-43e5b674ff00");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddAperturesByRatio()
+        public SAMAnalyticalAddAperturesByRatio_Old()
           : base("SAMAnalytical.AddAperturesByRatio", "SAMAnalytical.AddAperturesByRatio",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
               "SAM", "Analytical")
@@ -42,20 +42,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
-
             index = inputParamManager.AddNumberParameter("_ratio_", "_ratio_", "Ratio", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddBooleanParameter("_subdivide_", "_subdivide_", "Subdivide", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddNumberParameter("_apertureHeight_", "_apertureHeight_", "Default aperture Height", GH_ParamAccess.item, 3);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddNumberParameter("_sillHeight_", "_sillHeight_", "Default sill Height", GH_ParamAccess.item, 0.8);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddNumberParameter("_horizontalSeparation_", "_horizontalSeparation_", "Horizontal Separation", GH_ParamAccess.item, 3);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);

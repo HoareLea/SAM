@@ -592,5 +592,75 @@ namespace SAM.Geometry.Planar
             return result;
 
         }
+
+        public static Polyline2D Split(this Segment2D segment2D, double distance, AlignmentPoint alignmentPoint = AlignmentPoint.Start, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment2D == null || double.IsNaN(distance) || alignmentPoint == AlignmentPoint.Undefined || distance <= tolerance)
+            {
+                return null;
+            }
+
+            double length = segment2D.GetLength();
+            if (length < distance)
+            {
+                return new Polyline2D(segment2D.GetPoints(), false);
+            }
+
+            Point2D point2D_Start = alignmentPoint == AlignmentPoint.End ? segment2D.GetEnd() : segment2D.GetStart();
+
+            Vector2D vector2D = segment2D.Direction;
+            Vector2D vector2D_Temp = null;
+
+            List<Point2D> point2Ds = new List<Point2D>();
+
+            if (alignmentPoint == AlignmentPoint.End)
+            {
+                vector2D.Negate();
+            }
+            else if (alignmentPoint == AlignmentPoint.Mid)
+            {
+                vector2D_Temp = vector2D * ((length % distance) / 2);
+                if (vector2D_Temp.Length > tolerance)
+                {
+                    point2D_Start = point2D_Start.GetMoved(vector2D_Temp) as Point2D;
+                    point2Ds.Add(point2D_Start);
+                }
+            }
+
+            vector2D = vector2D * distance;
+
+            int count = System.Convert.ToInt32(System.Math.Floor(length / distance));
+            vector2D_Temp = new Vector2D(vector2D);
+
+            for (int i = 0; i < count; i++)
+            {
+                point2Ds.Add(point2D_Start.GetMoved(vector2D_Temp) as Point2D);
+                vector2D_Temp += vector2D;
+            }
+
+            if (point2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            if (alignmentPoint == AlignmentPoint.End)
+            {
+                point2Ds.Reverse();
+            }
+
+            if (!AlmostSimilar(point2Ds.First(), segment2D.GetStart(), tolerance))
+            {
+                point2Ds.Insert(0, segment2D.GetStart());
+            }
+
+            if (!AlmostSimilar(point2Ds.Last(), segment2D.GetEnd(), tolerance))
+            {
+                point2Ds.Add(segment2D.GetEnd());
+            }
+
+            return new Polyline2D(point2Ds, false);
+
+
+        }
     }
 }

@@ -398,5 +398,75 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static Polyline3D Split(this Segment3D segment3D, double distance, AlignmentPoint alignmentPoint = AlignmentPoint.Start, double tolerance = Core.Tolerance.Distance)
+        {
+            if(segment3D == null || double.IsNaN(distance) || alignmentPoint == AlignmentPoint.Undefined || distance <= tolerance)
+            {
+                return null;
+            }
+
+            double length = segment3D.GetLength();
+            if(length < distance)
+            {
+                return new Polyline3D(segment3D.GetPoints(), false);
+            }
+
+            Point3D point3D_Start = alignmentPoint == AlignmentPoint.End ? segment3D.GetEnd() : segment3D.GetStart();
+
+            Vector3D vector3D = segment3D.Direction;
+            Vector3D vector3D_Temp = null;
+
+            List <Point3D> point3Ds = new List<Point3D>();
+
+            if (alignmentPoint == AlignmentPoint.End)
+            {
+                vector3D.Negate();
+            }
+            else if(alignmentPoint == AlignmentPoint.Mid)
+            {
+                vector3D_Temp = vector3D * ((length % distance) / 2);
+                if(vector3D_Temp.Length > tolerance)
+                {
+                    point3D_Start = point3D_Start.GetMoved(vector3D_Temp) as Point3D;
+                    point3Ds.Add(point3D_Start);
+                }
+            }
+
+            vector3D = vector3D * distance;
+
+            int count = System.Convert.ToInt32(System.Math.Floor(length / distance));
+            vector3D_Temp = new Vector3D(vector3D);
+
+            for (int i = 0; i < count; i++)
+            {
+                point3Ds.Add(point3D_Start.GetMoved(vector3D_Temp) as Point3D);
+                vector3D_Temp += vector3D;
+            }
+
+            if(point3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            if (alignmentPoint == AlignmentPoint.End)
+            {
+                point3Ds.Reverse();
+            }
+
+            if (!AlmostSimilar( point3Ds.First(), segment3D.GetStart(), tolerance))
+            {
+                point3Ds.Insert(0, segment3D.GetStart());
+            }
+
+            if (!AlmostSimilar(point3Ds.Last(), segment3D.GetEnd(), tolerance))
+            {
+                point3Ds.Add(segment3D.GetEnd());
+            }
+
+            return new Polyline3D(point3Ds, false);
+
+
+        }
     }
 }

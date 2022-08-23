@@ -34,7 +34,11 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            Face3D face3D = face3DObject.Face3D;
+            return Above(plane, face3DObject.Face3D, tolerance);
+        }
+
+        public static bool Above(this Plane plane, Face3D face3D, double tolerance)
+        {
             if (face3D == null)
             {
                 return false;
