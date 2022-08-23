@@ -260,7 +260,7 @@ namespace SAM.Analytical
                 return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
             }
 
-            List<Face3D> face3Ds_Offset = face3D.Offset(0.01, true, true, tolerance);
+            List<Face3D> face3Ds_Offset = face3D.Offset(-0.01, true, true, tolerance);
             if (face3Ds_Offset == null || face3Ds_Offset.Count == 0)
             {
                 return null;
@@ -386,6 +386,8 @@ namespace SAM.Analytical
                                 {
                                     continue;
                                 }
+
+                                segment3Ds.RemoveAll(x => x.GetLength() + tolerance < separation);
 
                                 segment3Ds.ForEach(x => point3Ds.Add(x.Mid()));
                             }
