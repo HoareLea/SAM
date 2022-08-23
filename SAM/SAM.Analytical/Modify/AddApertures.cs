@@ -374,8 +374,12 @@ namespace SAM.Analytical
                         {
                             if (subdivide)
                             {
+                                double length = segment3D.GetLength();
+
+                                double separation_Temp = length / Core.Query.Round(length / separation, 1);
+
                                 //TODO: Implement segment3D split here
-                                Polyline3D polyline3D = Geometry.Spatial.Query.Split(segment3D, separation, Geometry.AlignmentPoint.Mid, tolerance);
+                                Polyline3D polyline3D = Geometry.Spatial.Query.Split(segment3D, separation_Temp, Geometry.AlignmentPoint.Mid, tolerance);
                                 if (polyline3D == null)
                                 {
                                     continue;
