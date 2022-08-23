@@ -80,19 +80,61 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(2, false);
+            int index_Successful = Params.IndexOfOutputParam("successful");
+            if(index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            int index = -1;
+
 
             ApertureConstruction apertureConstruction = null;
-            dataAccess.GetData(2, ref apertureConstruction);
+
+            index = Params.IndexOfInputParam("_apertureConstruction_");
+            if(index != -1)
+            {
+                dataAccess.GetData(index, ref apertureConstruction);
+            }
 
             double ratio = double.NaN;
-            if (!dataAccess.GetData(1, ref ratio))
+            index = Params.IndexOfInputParam("_ratio_");
+            if (index == -1 || !dataAccess.GetData(index, ref ratio))
             {
                 ratio = double.NaN;
             }
 
+            bool subdivide = true;
+            index = Params.IndexOfInputParam("_subdivide_");
+            if (index == -1 || !dataAccess.GetData(index, ref subdivide))
+            {
+                subdivide = true;
+            }
+
+            double apertureHeight = 3;
+            index = Params.IndexOfInputParam("_apertureHeight_");
+            if (index == -1 || !dataAccess.GetData(index, ref apertureHeight))
+            {
+                apertureHeight = 3;
+            }
+
+            double sillHeight = 0.8;
+            index = Params.IndexOfInputParam("_sillHeight_");
+            if (index == -1 || !dataAccess.GetData(index, ref sillHeight))
+            {
+                sillHeight = 0.8;
+            }
+
+            double horizontalSeparation = 3;
+            index = Params.IndexOfInputParam("_horizontalSeparation_");
+            if (index == -1 || !dataAccess.GetData(index, ref horizontalSeparation))
+            {
+                horizontalSeparation = 3;
+            }
+
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
+            index = Params.IndexOfInputParam("_analyticalObject");
+            if (!dataAccess.GetData(index, ref sAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -110,12 +152,26 @@ namespace SAM.Analytical.Grasshopper
                     if (apertureConstruction_Temp == null)
                         apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
 
-                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
+                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation);
                 }
 
-                dataAccess.SetData(0, panel);
-                dataAccess.SetDataList(1, apertures?.ConvertAll(x => new GooAperture(x)));
-                dataAccess.SetData(2, apertures != null && apertures.Count != 0);
+                index = Params.IndexOfOutputParam("analyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, panel);
+                }
+
+                index = Params.IndexOfOutputParam("apertures");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, apertures?.ConvertAll(x => new GooAperture(x)));
+                }
+
+                if(index_Successful != -1)
+                {
+                    dataAccess.SetData(index_Successful, apertures != null && apertures.Count != 0);
+                }
+
                 return;
             }
 
@@ -155,7 +211,7 @@ namespace SAM.Analytical.Grasshopper
                     if (apertureConstruction_Temp == null)
                         apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
 
-                    List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio);
+                    List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation);
                     if (apertures == null)
                         continue;
 
@@ -164,18 +220,32 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if (analyticalModel != null)
+            index = Params.IndexOfOutputParam("analyticalObject");
+            if(index != -1)
             {
-                AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                dataAccess.SetData(0, analyticalModel_Result);
-            }
-            else
-            {
-                dataAccess.SetData(0, adjacencyCluster);
+                if (analyticalModel != null)
+                {
+                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    dataAccess.SetData(index, analyticalModel_Result);
+                }
+                else
+                {
+                    dataAccess.SetData(index, adjacencyCluster);
+                }
             }
 
-            dataAccess.SetDataList(1, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
-            dataAccess.SetData(2, tuples_Result != null && tuples_Result.Count > 0);
+
+            index = Params.IndexOfOutputParam("apertures");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
+            }
+
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, tuples_Result != null && tuples_Result.Count > 0);
+            }
         }
     }
 }

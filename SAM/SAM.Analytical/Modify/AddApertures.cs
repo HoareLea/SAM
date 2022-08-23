@@ -339,6 +339,8 @@ namespace SAM.Analytical
             }
             else
             {
+                face3Ds_Aperture = new List<Face3D>();
+
                 Plane plane = Geometry.Spatial.Create.Plane((elevation_Top + elevation_Bottom) / 2);
 
                 foreach (Face3D face3D_Offset in face3Ds_Offset)
@@ -383,10 +385,10 @@ namespace SAM.Analytical
                                 if (point3Ds_Temp.Count > 2)
                                 {
                                     point3Ds_Temp.RemoveAt(0);
-                                    point3Ds_Temp.RemoveAt(point3Ds.Count - 1);
+                                    point3Ds_Temp.RemoveAt(point3Ds_Temp.Count - 1);
                                 }
 
-                                if (point3Ds.Count == 0)
+                                if (point3Ds_Temp.Count == 0)
                                 {
                                     continue;
                                 }

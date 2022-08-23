@@ -308,7 +308,7 @@ namespace SAM.Geometry.Spatial
             List<Face3D> result = new List<Face3D>() { face3D };
             foreach (Plane plane in planes)
             {
-                for (int i = result.Count; i >= 0; i--)
+                for (int i = result.Count - 1; i >= 0; i--)
                 {
                     List<Face3D> face3Ds = result[i].Cut(plane, tolerance);
                     if(face3Ds == null || face3Ds.Count  < 2)
