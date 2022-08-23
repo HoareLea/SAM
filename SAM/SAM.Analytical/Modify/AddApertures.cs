@@ -464,7 +464,7 @@ namespace SAM.Analytical
                                 return double.NaN;
                             }
 
-                            return polygon2Ds_Width.ConvertAll(y => y.GetArea()).Sum();
+                            return polygon2Ds.ConvertAll(y => y.GetArea()).Sum();
 
                         });
 
