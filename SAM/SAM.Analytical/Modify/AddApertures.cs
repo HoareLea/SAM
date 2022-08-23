@@ -372,7 +372,7 @@ namespace SAM.Analytical
 
                         foreach (Segment3D segment3D in segmentable3Ds)
                         {
-                            if(subdivide)
+                            if (subdivide)
                             {
                                 //TODO: Implement segment3D split here
                                 Polyline3D polyline3D = Geometry.Spatial.Query.Split(segment3D, separation, Geometry.AlignmentPoint.Mid, tolerance);
@@ -399,45 +399,80 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(point3Ds == null || point3Ds.Count == 0)
+                    if (point3Ds == null || point3Ds.Count == 0)
                     {
                         continue;
                     }
 
                     double width = (area_Target / point3Ds.Count) / height;
 
-                    foreach(Point3D point3D in point3Ds)
+                    Func<double, List<Polygon2D>> getPolygon2Ds = new Func<double, List<Polygon2D>>((double x) =>
                     {
-                        Point2D point2D = plane_Face3D.Convert(point3D);
-                        Vector2D vector2D_Up = plane_Face3D.Convert(vector3D_Up) * height;
-                        Vector2D vector2D_Side = plane_Face3D.Convert(vector3D_Side) * width;
+                        if (point3Ds == null)
+                        {
+                            return null;
+                        }
 
-                        Vector2D vector2D = null;
+                        List<Polygon2D> polygon2Ds = new List<Polygon2D>();
 
-                        vector2D = (vector2D_Up / 2).GetNegated();
-                        point2D = point2D.GetMoved(vector2D);
+                        foreach (Point3D point3D in point3Ds)
+                        {
+                            Point2D point2D = plane_Face3D.Convert(point3D);
+                            Vector2D vector2D_Up = plane_Face3D.Convert(vector3D_Up) * height;
+                            Vector2D vector2D_Side = plane_Face3D.Convert(vector3D_Side) * x;
 
-                        vector2D = (vector2D_Side / 2).GetNegated();
-                        point2D = point2D.GetMoved(vector2D);
+                            Vector2D vector2D = null;
 
-                        List<Point2D> point2Ds = new List<Point2D>();
-                        point2Ds.Add(point2D);
+                            vector2D = (vector2D_Up / 2).GetNegated();
+                            point2D = point2D.GetMoved(vector2D);
 
-                        point2D = point2D.GetMoved(vector2D_Up);
-                        point2Ds.Add(point2D);
+                            vector2D = (vector2D_Side / 2).GetNegated();
+                            point2D = point2D.GetMoved(vector2D);
 
-                        point2D = point2D.GetMoved(vector2D_Side);
-                        point2Ds.Add(point2D);
+                            List<Point2D> point2Ds = new List<Point2D>();
+                            point2Ds.Add(point2D);
 
-                        point2D = point2D.GetMoved(vector2D_Up.GetNegated());
-                        point2Ds.Add(point2D);
+                            point2D = point2D.GetMoved(vector2D_Up);
+                            point2Ds.Add(point2D);
 
-                        Polygon2D polygon2D = new Polygon2D(point2Ds);
+                            point2D = point2D.GetMoved(vector2D_Side);
+                            point2Ds.Add(point2D);
 
-                        Polygon3D polygon3D = plane_Face3D.Convert(polygon2D);
+                            point2D = point2D.GetMoved(vector2D_Up.GetNegated());
+                            point2Ds.Add(point2D);
 
-                        face3Ds_Aperture.Add(new Face3D(polygon3D));
+                            polygon2Ds.Add(new Polygon2D(point2Ds));
+                        }
+
+                        return Geometry.Planar.Query.Union(polygon2Ds, tolerance);
+                    });
+
+                    List<Polygon2D> polygon2Ds_Width = getPolygon2Ds.Invoke(width);
+                    if (polygon2Ds_Width == null)
+                    {
+                        continue;
                     }
+
+                    area = polygon2Ds_Width.ConvertAll(x => x.GetArea()).Sum();
+                    if (!Core.Query.AlmostEqual(area, area_Target, tolerance_Area))
+                    {
+                        Func<double, double> getArea = new Func<double, double>((double x) =>
+                        {
+                            List<Polygon2D> polygon2Ds = getPolygon2Ds.Invoke(x);
+                            if(polygon2Ds == null || polygon2Ds.Count == 0)
+                            {
+                                return double.NaN;
+                            }
+
+                            return polygon2Ds_Width.ConvertAll(y => y.GetArea()).Sum();
+
+                        });
+
+                        width = Core.Query.Calculate(getArea, area_Target, width, area_Target / height);
+                        polygon2Ds_Width = getPolygon2Ds.Invoke(width);
+                    }
+
+                    face3Ds_Aperture.AddRange(polygon2Ds_Width.ConvertAll(x => new Face3D(plane_Face3D.Convert(x))));
                 }
             }
 
