@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalAddAirPanels()
           : base("SAMAnalytical.AddAirPanels", "SAMAnalytical.AddAirPanels",
-              "Add Air Panels to Analytical Model or AdjacencyCluster",
+              "Add Air Panels to Analytical Model or AdjacencyCluster \nThis will split a model/cluster by plane and divide spaces and air Panel will be added into location of split",
               "SAM", "Analytical")
         {
         }
