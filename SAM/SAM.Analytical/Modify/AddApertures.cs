@@ -241,7 +241,7 @@ namespace SAM.Analytical
             //return null;
         }
 
-        public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, bool subdivide, double height, double sillHeight, double separation, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, bool subdivide, double height, double sillHeight, double separation, double offset = 0.01, bool keepSeparationDistance = false, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panel == null || apertureConstruction == null)
                 return null;
@@ -260,7 +260,7 @@ namespace SAM.Analytical
                 return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
             }
 
-            List<Face3D> face3Ds_Offset = face3D.Offset(-0.01, true, true, tolerance);
+            List<Face3D> face3Ds_Offset = face3D.Offset(-offset, true, true, tolerance);
             if (face3Ds_Offset == null || face3Ds_Offset.Count == 0)
             {
                 return null;
@@ -374,11 +374,16 @@ namespace SAM.Analytical
                         {
                             if (subdivide)
                             {
-                                double length = segment3D.GetLength();
+                                double separation_Temp = separation;
 
-                                double separation_Temp = length / Core.Query.Round(length / separation, 1);
+                                if(!keepSeparationDistance)
+                                {
+                                    double length = segment3D.GetLength();
 
-                                //TODO: Implement segment3D split here
+                                    separation_Temp = length / Core.Query.Round(length / separation, 1);
+                                }
+
+                                //Segment3D split
                                 Polyline3D polyline3D = Geometry.Spatial.Query.Split(segment3D, separation_Temp, Geometry.AlignmentPoint.Mid, tolerance);
                                 if (polyline3D == null)
                                 {

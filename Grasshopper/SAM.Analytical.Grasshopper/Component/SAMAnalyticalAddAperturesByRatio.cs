@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByRatio : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByRatio : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,39 +37,66 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
+                GooAnalyticalObjectParam analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_ratio_", "_ratio_", "Ratio", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-            index = inputParamManager.AddBooleanParameter("_subdivide_", "_subdivide_", "Subdivide", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_ratio_", NickName = "_ratio_", Description = "Ratio", Access = GH_ParamAccess.item, Optional = true};
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_apertureHeight_", "_apertureHeight_", "Default aperture Height", GH_ParamAccess.item, 2);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
 
-            index = inputParamManager.AddNumberParameter("_sillHeight_", "_sillHeight_", "Default sill Height", GH_ParamAccess.item, 0.8);
-            inputParamManager[index].Optional = true;
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_subdivide_", NickName = "_subdivide_", Description = "Subdivide", Access = GH_ParamAccess.item, Optional = true };
+                boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_horizontalSeparation_", "_horizontalSeparation_", "Horizontal Separation", GH_ParamAccess.item, 3);
-            inputParamManager[index].Optional = true;
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_apertureHeight_", NickName = "_apertureHeight_", Description = "Default aperture Height", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(2);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooApertureConstructionParam(), "_apertureConstruction_", "_apertureConstruction_", "SAM Analytical Aperture Construction", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sillHeight_", NickName = "_sillHeight_", Description = "Default sill Height", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(0.8);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_horizontalSeparation_", NickName = "_horizontalSeparation_", Description = "Horizontal Separation", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(3);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                GooApertureConstructionParam apertureConstructionParam = new GooApertureConstructionParam() { Name = "_apertureConstruction_", NickName = "_apertureConstruction_", Description = "SAM Analytical Aperture Construction", Access = GH_ParamAccess.item, Optional = true};
+                result.Add(new GH_SAMParam(apertureConstructionParam, ParamVisibility.Binding));
+
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_keepSeparationDistance_", NickName = "_keepSeparationDistance_", Description = "Keep horizontal separation distance between apertures", Access = GH_ParamAccess.item, Optional = true };
+                boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "Minimal Ofsset between wall and apertures", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(0.1);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analyticalObject", "analyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooApertureParam(), "apertures", "apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("successful", "successful", "Successful", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analyticalObject", NickName = "analyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -132,6 +159,20 @@ namespace SAM.Analytical.Grasshopper
                 horizontalSeparation = 3;
             }
 
+            double offset = 0.1;
+            index = Params.IndexOfInputParam("_offset_");
+            if (index == -1 || !dataAccess.GetData(index, ref offset))
+            {
+                offset = 0.1;
+            }
+
+            bool keepSeparationDistance = false;
+            index = Params.IndexOfInputParam("_keepSeparationDistance_");
+            if (index == -1 || !dataAccess.GetData(index, ref keepSeparationDistance))
+            {
+                keepSeparationDistance = false;
+            }
+
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analyticalObject");
             if (!dataAccess.GetData(index, ref sAMObject))
@@ -152,7 +193,7 @@ namespace SAM.Analytical.Grasshopper
                     if (apertureConstruction_Temp == null)
                         apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
 
-                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation);
+                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
                 }
 
                 index = Params.IndexOfOutputParam("analyticalObject");
@@ -211,7 +252,7 @@ namespace SAM.Analytical.Grasshopper
                     if (apertureConstruction_Temp == null)
                         apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
 
-                    List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation);
+                    List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
                     if (apertures == null)
                         continue;
 
