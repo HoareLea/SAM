@@ -341,7 +341,14 @@ namespace SAM.Analytical
             {
                 face3Ds_Aperture = new List<Face3D>();
 
-                Plane plane = Geometry.Spatial.Create.Plane((elevation_Top + elevation_Bottom) / 2);
+                double elevation = (elevation_Top + elevation_Bottom) / 2;
+
+                if(elevation + (height / 2) > boundingBox3D_Offset.Max.Z)
+                {
+                    elevation = boundingBox3D_Offset.Max.Z - (height / 2);
+                }
+
+                Plane plane = Geometry.Spatial.Create.Plane(elevation);
 
                 foreach (Face3D face3D_Offset in face3Ds_Offset)
                 {
