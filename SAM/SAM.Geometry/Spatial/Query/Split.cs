@@ -78,6 +78,72 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static List<Shell> Split(this Shell shell, IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(shell == null || face3Ds == null)
+            {
+                return null;
+            }
+
+            List<Shell> result = new List<Shell>();
+            if (face3Ds.Count() == 0)
+            {
+                result.Add(new Shell(shell));
+                return result;
+            }
+
+            List<Face3D> face3Ds_Shell = shell.Face3Ds;
+            if(face3Ds_Shell == null || face3Ds_Shell.Count == 0)
+            {
+                result.Add(new Shell(shell));
+                return result;
+            }
+
+            List<Face3D> face3Ds_External = new List<Face3D>();
+            foreach (Face3D face3D in face3Ds_Shell)
+            {
+                List<Face3D> face3Ds_Temp = face3D.Split(face3Ds, tolerance_Snap, tolerance_Angle, tolerance_Distance);
+                if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
+                {
+                    face3Ds_External.Add(face3D);
+                }
+                else
+                {
+                    face3Ds_External.AddRange(face3Ds_Temp);
+                }
+            }
+
+            if (face3Ds_External == null || face3Ds_External.Count == 0)
+            {
+                result.Add(new Shell(shell));
+                return result;
+            }
+
+            List<Face3D> face3Ds_Internal = new List<Face3D>();
+            foreach (Face3D face3D in face3Ds)
+            {
+                List<Face3D> face3Ds_Temp = face3D.Split(face3D, tolerance_Angle, tolerance_Distance);
+                if(face3Ds_Temp == null)
+                {
+                    continue;
+                }
+
+                foreach(Face3D face3D_Temp in face3Ds_Temp)
+                {
+                    Point3D centroid = face3D_Temp.GetCentroid();
+
+                    if (!shell.Inside(centroid, tolerance_Snap, tolerance_Distance) || shell.On(centroid, tolerance_Snap))
+                    {
+                        continue;
+                    }
+
+                    face3Ds_Internal.Add(face3D_Temp);
+                }
+            }
+
+            throw new NotImplementedException();
+        }
+
         public static List<Face3D> Split(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             List<Planar.ISegmentable2D> segmentable2Ds = new List<Planar.ISegmentable2D>();

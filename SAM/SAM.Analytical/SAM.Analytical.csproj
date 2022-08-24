@@ -212,6 +212,8 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\MergeSpaces.cs" />
+    <Compile Include="Query\AdjacentSpaces.cs" />
     <Compile Include="Query\CalculatedOccupancyLatentGain.cs" />
     <Compile Include="Query\DefaultInternalConditionLibrary.cs" />
     <Compile Include="Query\NextId.cs" />

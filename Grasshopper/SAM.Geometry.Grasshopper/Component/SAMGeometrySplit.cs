@@ -8,6 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
+    [Obsolete("Obsolete since 2022.08.24")]
     public class SAMGeometrySplit : GH_SAMComponent
     {
         /// <summary>
@@ -25,13 +26,15 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
+        public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.hidden;
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometrySplit()
           : base("SAMGeometry.Split", "SAMGeometry.Split",
               "Split Geometry or Segment2Ds",
-              "SAM", "Geometry")
+              "SAM WIP", "Geometry")
         {
         }
 
