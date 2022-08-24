@@ -396,7 +396,7 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
-                                segment3Ds.RemoveAll(x => x.GetLength() + tolerance < separation);
+                                segment3Ds.RemoveAll(x => x.GetLength() + tolerance < separation_Temp);
 
                                 segment3Ds.ForEach(x => point3Ds.Add(x.Mid()));
                             }

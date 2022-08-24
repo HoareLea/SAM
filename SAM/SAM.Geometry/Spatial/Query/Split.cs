@@ -425,11 +425,15 @@ namespace SAM.Geometry.Spatial
             }
             else if(alignmentPoint == AlignmentPoint.Mid)
             {
-                vector3D_Temp = vector3D * ((length % distance) / 2);
-                if(vector3D_Temp.Length > tolerance)
+                double distance_Temp = length % distance;
+                if(!Core.Query.AlmostEqual(distance_Temp, 0, tolerance) && !Core.Query.AlmostEqual(distance_Temp, distance, tolerance))
                 {
-                    point3D_Start = point3D_Start.GetMoved(vector3D_Temp) as Point3D;
-                    point3Ds.Add(point3D_Start);
+                    vector3D_Temp = vector3D * (distance_Temp / 2);
+                    if (vector3D_Temp.Length > tolerance)
+                    {
+                        point3D_Start = point3D_Start.GetMoved(vector3D_Temp) as Point3D;
+                        point3Ds.Add(point3D_Start);
+                    }
                 }
             }
 
