@@ -303,6 +303,11 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
+            if(!shell.IsValid())
+            {
+                return new List<Shell>() { new Shell(shell)};
+            }
+
             ShellData shellData_Before = new ShellData(shell);
             List<Face3DData> face3DDatas_Before = new List<Face3DData>(face3DDatas);
 
@@ -399,6 +404,28 @@ namespace SAM.Geometry.Spatial
 
                 result.Add(shell_New);
             }
+
+            double volume_Before = shell.Volume(Tolerance_Snap, Tolerance_Distance);
+            double volume_After = result.ConvertAll(x => x.Volume(Tolerance_Snap, Tolerance_Distance)).Sum();
+            if(System.Math.Abs(volume_Before - volume_After) < Tolerance_Snap)
+            {
+                return result;
+            }
+
+            List<Shell> shells_Difference = shell.Difference(result);
+            if(shells_Difference == null || shells_Difference.Count == 0)
+            {
+                return result;
+            }
+
+            for(int i = shells_Difference.Count - 1; i >= 0; i--)
+            {
+                Shell shell_Difference = shells_Difference[i];
+
+
+            }
+
+            throw new NotImplementedException();
 
             return result;
         }
@@ -538,7 +565,5 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-
-
     }
 }

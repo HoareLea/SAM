@@ -6,6 +6,15 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Difference of two shells
+        /// </summary>
+        /// <param name="shell_1">Shell to be substracted from</param>
+        /// <param name="shell_2">Shell will be substracted</param>
+        /// <param name="silverSpacing">Silver Spacing</param>
+        /// <param name="tolerance_Angle">Angle tolerance</param>
+        /// <param name="tolerance_Distance">Distance Tolerance</param>
+        /// <returns>Shells</returns>
         public static List<Shell> Difference(this Shell shell_1, Shell shell_2, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (shell_1 == null || shell_2 == null)
@@ -102,6 +111,45 @@ namespace SAM.Geometry.Spatial
                         result.Add(shell);
                         face3Ds.RemoveAll(x => face3Ds_Shell.Contains(x));
                     }
+                }
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Shells difference (shells substracted from shell)
+        /// </summary>
+        /// <param name="shell">Shell to be substracted from</param>
+        /// <param name="shells">Shells will be substracted</param>
+        /// <param name="silverSpacing">Silver Spacing</param>
+        /// <param name="tolerance_Angle">Angle tolerance</param>
+        /// <param name="tolerance_Distance">Distance Tolerance</param>
+        /// <returns>Shells</returns>
+        public static List<Shell> Difference(this Shell shell, IEnumerable<Shell> shells, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(shell == null || shells == null)
+            {
+                return null;
+            }
+
+            List<Shell> result = new List<Shell>() { shell };
+            foreach(Shell shell_Temp in shells)
+            {
+                List<Shell> result_New = new List<Shell>();
+                foreach(Shell shell_Result in result)
+                {
+                    List<Shell> shells_Difference = Difference(shell_Temp, shell_Result, silverSpacing, tolerance_Angle, tolerance_Distance);
+                    if(shells_Difference != null && shells_Difference.Count != 0)
+                    {
+                        result_New.AddRange(shells_Difference);
+                    }
+                }
+
+                result = result_New;
+                if(result == null || result.Count == 0)
+                {
+                    break;
                 }
             }
 
