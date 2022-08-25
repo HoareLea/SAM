@@ -85,63 +85,72 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<Shell> result = new List<Shell>();
-            if (face3Ds.Count() == 0)
+            ShellSplitter shellSplitter = new ShellSplitter();
+            shellSplitter.Tolerance_Snap = tolerance_Snap;
+            shellSplitter.Tolerance_Angle = tolerance_Angle;
+            shellSplitter.Tolerance_Distance = tolerance_Distance;
+
+            shellSplitter.Add(shell);
+            foreach(Face3D face3D in face3Ds)
             {
-                result.Add(new Shell(shell));
-                return result;
+                shellSplitter.Add(face3D);
             }
 
-            List<Face3D> face3Ds_Shell = shell.Face3Ds;
-            if(face3Ds_Shell == null || face3Ds_Shell.Count == 0)
+
+            return shellSplitter.Split();
+        }
+
+        public static List<Shell> Split(this IEnumerable<Shell> shells, IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if (shells == null || face3Ds == null)
             {
-                result.Add(new Shell(shell));
-                return result;
+                return null;
             }
 
-            List<Face3D> face3Ds_External = new List<Face3D>();
-            foreach (Face3D face3D in face3Ds_Shell)
+            ShellSplitter shellSplitter = new ShellSplitter();
+            shellSplitter.Tolerance_Snap = tolerance_Snap;
+            shellSplitter.Tolerance_Angle = tolerance_Angle;
+            shellSplitter.Tolerance_Distance = tolerance_Distance;
+
+            foreach (Shell shell in shells)
             {
-                List<Face3D> face3Ds_Temp = face3D.Split(face3Ds, tolerance_Snap, tolerance_Angle, tolerance_Distance);
-                if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
+                shellSplitter.Add(shell);
+            }
+
+            foreach (Face3D face3D in face3Ds)
+            {
+                shellSplitter.Add(face3D);
+            }
+
+            return shellSplitter.Split();
+        }
+
+        public static List<Face3D> Split(this IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(face3Ds == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+
+            foreach(Face3D face3D in face3Ds)
+            {
+                List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
+                face3Ds_Temp.Remove(face3D);
+
+                List<Face3D> face3Ds_Split = Split(face3D, face3Ds_Temp, tolerance_Snap, tolerance_Angle, tolerance_Distance);
+                if(face3Ds_Split == null || face3Ds_Split.Count == 0)
                 {
-                    face3Ds_External.Add(face3D);
+                    result.Add(face3D);
                 }
                 else
                 {
-                    face3Ds_External.AddRange(face3Ds_Temp);
+                    result.AddRange(face3Ds_Split);
                 }
             }
 
-            if (face3Ds_External == null || face3Ds_External.Count == 0)
-            {
-                result.Add(new Shell(shell));
-                return result;
-            }
-
-            List<Face3D> face3Ds_Internal = new List<Face3D>();
-            foreach (Face3D face3D in face3Ds)
-            {
-                List<Face3D> face3Ds_Temp = face3D.Split(face3D, tolerance_Angle, tolerance_Distance);
-                if(face3Ds_Temp == null)
-                {
-                    continue;
-                }
-
-                foreach(Face3D face3D_Temp in face3Ds_Temp)
-                {
-                    Point3D centroid = face3D_Temp.GetCentroid();
-
-                    if (!shell.Inside(centroid, tolerance_Snap, tolerance_Distance) || shell.On(centroid, tolerance_Snap))
-                    {
-                        continue;
-                    }
-
-                    face3Ds_Internal.Add(face3D_Temp);
-                }
-            }
-
-            throw new NotImplementedException();
+            return result;
         }
 
         public static List<Face3D> Split(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
