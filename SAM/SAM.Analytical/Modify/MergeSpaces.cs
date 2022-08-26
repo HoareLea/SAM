@@ -60,15 +60,7 @@ namespace SAM.Analytical
                 adjacencyCluster.AddRelation(space_1, panel);
             }
 
-            if(space_1.TryGetValue(SpaceParameter.Volume, out double volume))
-            {
-                space_1.SetValue(SpaceParameter.Volume, space_1.Volume(adjacencyCluster));
-            }
-
-            if (space_1.TryGetValue(SpaceParameter.Area, out double area))
-            {
-                space_1.SetValue(SpaceParameter.Area, space_1.CalculatedArea(adjacencyCluster));
-            }
+            adjacencyCluster.UpdateAreaAndVolume(space_1);
 
             adjacencyCluster.AddObject(space_1);
 

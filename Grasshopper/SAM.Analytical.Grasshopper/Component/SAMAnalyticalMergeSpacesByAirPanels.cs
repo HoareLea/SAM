@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergeSpaces : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalMergeSpacesByAirPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,9 +30,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalMergeSpaces()
-          : base("SAMAnalytical.MergeSpaces", "SAMAnalytical.MergeSpaces",
-              "Merge Analytical Spaces",
+        public SAMAnalyticalMergeSpacesByAirPanels()
+          : base("SAMAnalytical.MergeSpacesByAirPanels", "SAMAnalytical.MergeSpacesByAirPanels",
+              "Merge Analytical Spaces By Air Panels. Removes air panels and combines spaces",
               "SAM WIP", "Analytical")
         {
         }

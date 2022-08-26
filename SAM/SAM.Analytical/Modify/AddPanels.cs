@@ -132,6 +132,8 @@ namespace SAM.Analytical
                             adjacencyCluster.AddRelation(space_Panel, panel);
                         }
                     }
+
+                    adjacencyCluster.UpdateAreaAndVolume(space_Shell);
                 }
 
                 result.AddRange(panels_New);

@@ -214,6 +214,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddPanels.cs" />
     <Compile Include="Modify\MergeSpaces.cs" />
+    <Compile Include="Modify\UpdateAreaAndVolume.cs" />
     <Compile Include="Query\AdjacentSpaces.cs" />
     <Compile Include="Query\CalculatedOccupancyLatentGain.cs" />
     <Compile Include="Query\DefaultInternalConditionLibrary.cs" />

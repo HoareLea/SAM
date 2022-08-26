@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,9 +41,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            inputParamManager.AddGenericParameter("_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
             
-            index = inputParamManager.AddGenericParameter("_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
         }
 
@@ -52,8 +52,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
-            outputParamManager.AddTextParameter("Guids", "Guids", "Guids of Removed Elements", GH_ParamAccess.list);
+            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analyticalObject", "analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+            outputParamManager.AddTextParameter("guids", "guids", "Guids of Removed Elements", GH_ParamAccess.list);
         }
 
         /// <summary>
