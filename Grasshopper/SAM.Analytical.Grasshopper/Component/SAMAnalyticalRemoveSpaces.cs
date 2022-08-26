@@ -63,6 +63,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -97,14 +98,13 @@ namespace SAM.Analytical.Grasshopper
             AnalyticalModel analyticalModel = null;
             if (sAMObject_Temp is AdjacencyCluster)
             {
-                adjacencyCluster = (AdjacencyCluster)sAMObject_Temp;
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject_Temp);
             }
             else if (sAMObject_Temp is AnalyticalModel)
             {
                 analyticalModel = (AnalyticalModel)sAMObject_Temp;
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
             }
-                
 
             if(adjacencyCluster == null)
             {
@@ -185,6 +185,22 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("spaces");
             if (index != -1)
                 dataAccess.SetDataList(index, result?.ConvertAll(x => new GooSpace(x)));
+
+            index = Params.IndexOfOutputParam("analytical");
+            if (index != -1)
+            {
+                if (sAMObject_Temp is AdjacencyCluster)
+                {
+                    sAMObject_Temp = adjacencyCluster;
+                }
+                else if (sAMObject_Temp is AnalyticalModel)
+                {
+                    sAMObject_Temp = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                }
+
+                dataAccess.SetData(index, sAMObject_Temp);
+            }
+
         }
     }
 }
