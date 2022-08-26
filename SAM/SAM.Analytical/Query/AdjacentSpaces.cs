@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<Space> AdjacenSpaces(this AdjacencyCluster adjacencyCluster, Space space)
+        public static List<Space> AdjacentSpaces(this AdjacencyCluster adjacencyCluster, Space space)
         {
             if(adjacencyCluster == null || space == null)
             {
