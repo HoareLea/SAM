@@ -10,7 +10,7 @@ namespace SAM.Analytical
         public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, List<Guid> spaceGuids, out List<Panel> panels, IEnumerable<Guid> panelGuids = null)
         {
             panels = null;
-            if(adjacencyCluster == null || spaceGuids == null)
+            if (adjacencyCluster == null || spaceGuids == null)
             {
                 return null;
             }
@@ -39,11 +39,42 @@ namespace SAM.Analytical
                 foreach (Space space_Adjacent in spaces_Adjacent)
                 {
                     List<Panel> panels_Temp = adjacencyCluster.GetPanels(Core.LogicalOperator.And, space, space_Adjacent);
-                    if(panelGuids != null)
+                    if (panels_Temp == null || panels_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    if (panelGuids != null)
+                    {
+                        Panel panel_Temp = panels_Temp.Find(x => panelGuids.Contains(x.Guid));
+                        if (panel_Temp == null)
+                        {
+                            continue;
+                        }
+                    }
+
+                    for (int i = panels_Temp.Count - 1; i >= 0; i--)
+                    {
+                        Panel panel = panels_Temp[i];
+                        if (panel.PanelType == PanelType.Air)
+                        {
+                            panels_Temp.RemoveAt(i);
+                            adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                            continue;
+                        }
+
+                        panel = Create.Panel(panel, PanelType.Shade);
+                        adjacencyCluster.AddObject(panel);
+                        adjacencyCluster.RemoveRelation(panel, space);
+                        adjacencyCluster.RemoveRelation(panel, space_Adjacent);
+                        panels_Temp[i] = panel;
+                    }
+
+                    if (panelGuids != null)
                     {
                         panels_Temp.RemoveAll(x => !panelGuids.Contains(x.Guid));
                     }
-                    
+
                     if (panels_Temp == null || panels_Temp.Count == 0)
                     {
                         continue;
