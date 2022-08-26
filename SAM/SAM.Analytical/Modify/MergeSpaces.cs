@@ -46,32 +46,6 @@ namespace SAM.Analytical
 
                     if (panelGuids != null)
                     {
-                        Panel panel_Temp = panels_Temp.Find(x => panelGuids.Contains(x.Guid));
-                        if (panel_Temp == null)
-                        {
-                            continue;
-                        }
-                    }
-
-                    for (int i = panels_Temp.Count - 1; i >= 0; i--)
-                    {
-                        Panel panel = panels_Temp[i];
-                        if (panel.PanelType == PanelType.Air)
-                        {
-                            panels_Temp.RemoveAt(i);
-                            adjacencyCluster.RemoveObject<Panel>(panel.Guid);
-                            continue;
-                        }
-
-                        panel = Create.Panel(panel, PanelType.Shade);
-                        adjacencyCluster.AddObject(panel);
-                        adjacencyCluster.RemoveRelation(panel, space);
-                        adjacencyCluster.RemoveRelation(panel, space_Adjacent);
-                        panels_Temp[i] = panel;
-                    }
-
-                    if (panelGuids != null)
-                    {
                         panels_Temp.RemoveAll(x => !panelGuids.Contains(x.Guid));
                     }
 
@@ -143,11 +117,22 @@ namespace SAM.Analytical
             {
                 panels_Adjacent = panels_Adjacent.ConvertAll(x => Create.Panel(x, PanelType.Shade));
 
-                foreach (Panel panel in panels_Adjacent)
+                for (int i = panels_Adjacent.Count - 1; i >= 0; i--)
                 {
-                    adjacencyCluster.AddObject(panels_Adjacent);
-                }
+                    Panel panel = panels_Adjacent[i];
+                    if (panel.PanelType == PanelType.Air)
+                    {
+                        panels_Adjacent.RemoveAt(i);
+                        adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                        continue;
+                    }
 
+                    panel = Create.Panel(panel, PanelType.Shade);
+                    adjacencyCluster.AddObject(panel);
+                    adjacencyCluster.RemoveRelation(panel, space_1);
+                    adjacencyCluster.RemoveRelation(panel, space_2);
+                    panels_Adjacent[i] = panel;
+                }
             }
 
             foreach(Panel panel in panels_2)
