@@ -370,7 +370,8 @@ namespace SAM.Geometry.Spatial
 
             List<Face3DData> face3DDatas_After = face3Ds_After.ConvertAll(x => new Face3DData(x));
 
-            List<Segment3DData> segment3DDatas_Shell_Difference = GetDifference(shellData_Before, shellData_After);
+            //List<Segment3DData> segment3DDatas_Shell_Difference = GetDifference(shellData_Before, shellData_After);
+            List<Segment3DData> segment3DDatas_After = GetSegment3DDatas(face3DDatas_After, Tolerance_Distance);
 
             List<Face3DData> face3DDatas_Shell_After = shellData_After.Face3DDatas;
 
@@ -380,7 +381,7 @@ namespace SAM.Geometry.Spatial
                 Face3DData face3DData = face3DDatas_Shell_After[0];
                 face3DDatas_Shell_After.RemoveAt(0);
 
-                List<Face3DData> face3DDatas_Temp = GetFace3DDatas(face3DData, face3DDatas_Shell_After, segment3DDatas_Shell_Difference, Tolerance_Distance);
+                List<Face3DData> face3DDatas_Temp = GetFace3DDatas(face3DData, face3DDatas_Shell_After, segment3DDatas_After, Tolerance_Distance);
                 if(face3DDatas_Temp == null || face3DDatas_Temp.Count == 0)
                 {
                     continue;
@@ -418,80 +419,29 @@ namespace SAM.Geometry.Spatial
                 return result;
             }
 
-            for(int i = shells_Difference.Count - 1; i >= 0; i--)
+            foreach(Shell shell_Difference in shells_Difference)
             {
-                Shell shell_Difference = shells_Difference[i];
+                if(shell_Difference == null || !shell_Difference.IsValid())
+                {
+                    continue;
+                }
 
+                double volume = shell_Difference.Volume(Tolerance_Snap, Tolerance_Distance);
+                if (double.IsNaN(volume) || volume < Tolerance_Snap)
+                {
+                    continue;
+                }
 
+                List<Shell> shells_Split = Split(shell_Difference, face3DDatas);
+                if(shells_Split == null || shells_Split.Count == 0)
+                {
+                    continue;
+                }
+
+                shells_Split.ForEach(x => result.Add(x));
             }
-
-            throw new NotImplementedException();
 
             return result;
-        }
-
-        private static List<Segment3DData> GetDifference(List<Face3DData> face3DDatas_Before, List<Face3DData> face3DDatas_After, double tolerance = Core.Tolerance.Distance)
-        {
-            if(face3DDatas_Before == null || face3DDatas_After == null)
-            {
-                return null;
-            }
-
-            List<Segment3DData> segment3DDatas_Before = new List<Segment3DData>();
-            foreach (Face3DData face3DData in face3DDatas_Before)
-            {
-                if (face3DData == null)
-                {
-                    continue;
-                }
-
-                foreach (Segment3DData segment3DData in face3DData.Segment3DDatas)
-                {
-                    if (segment3DData == null)
-                    {
-                        continue;
-                    }
-
-                    if (segment3DDatas_Before.Find(x => segment3DData.Similar(x, tolerance)) == null)
-                    {
-                        segment3DDatas_Before.Add(segment3DData);
-                    }
-                }
-            }
-
-            List<Segment3DData> segment3DDatas_After = new List<Segment3DData>();
-            foreach (Face3DData face3DData in face3DDatas_After)
-            {
-                if (face3DData == null)
-                {
-                    continue;
-                }
-
-                foreach (Segment3DData segment3DData in face3DData.Segment3DDatas)
-                {
-                    if (segment3DData == null)
-                    {
-                        continue;
-                    }
-
-                    if (segment3DDatas_After.Find(x => segment3DData.Similar(x, tolerance)) == null)
-                    {
-                        segment3DDatas_After.Add(segment3DData);
-                    }
-                }
-            }
-
-            foreach (Segment3DData segment3DData_Before in segment3DDatas_Before)
-            {
-                segment3DDatas_After.RemoveAll(x => x.On(segment3DData_Before, tolerance));
-            }
-
-            return segment3DDatas_After;
-        }
-
-        private static List<Segment3DData> GetDifference(ShellData shellData_Before, ShellData shellData_After)
-        {
-            return GetDifference(shellData_Before?.Face3DDatas, shellData_After.Face3DDatas);
         }
 
         private static List<Face3DData> GetFace3DDatas(Face3DData face3DData, List<Face3DData> face3DDatas, List<Segment3DData> segment3DDatas_ToBeExcluded, double tolerance = Core.Tolerance.Distance)
@@ -559,6 +509,43 @@ namespace SAM.Geometry.Spatial
                         {
                             face3DDatas.Remove(face3DData_Temp);
                         }
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private static List<Segment3DData> GetSegment3DDatas(IEnumerable<Face3DData> face3DDatas, double tolerance = Core.Tolerance.Distance)
+        {
+            if(face3DDatas == null)
+            {
+                return null;
+            }
+
+            List<Segment3DData> result = new List<Segment3DData>();
+            if (face3DDatas.Count() == 0)
+            {
+                return result;
+            }
+
+            foreach (Face3DData face3DData in face3DDatas)
+            {
+                if (face3DData == null)
+                {
+                    continue;
+                }
+
+                foreach (Segment3DData segment3DData in face3DData.Segment3DDatas)
+                {
+                    if (segment3DData == null)
+                    {
+                        continue;
+                    }
+
+                    if (result.Find(x => segment3DData.Similar(x, tolerance)) == null)
+                    {
+                        result.Add(segment3DData);
                     }
                 }
             }

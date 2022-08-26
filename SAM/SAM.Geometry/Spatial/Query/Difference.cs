@@ -139,7 +139,7 @@ namespace SAM.Geometry.Spatial
                 List<Shell> result_New = new List<Shell>();
                 foreach(Shell shell_Result in result)
                 {
-                    List<Shell> shells_Difference = Difference(shell_Temp, shell_Result, silverSpacing, tolerance_Angle, tolerance_Distance);
+                    List<Shell> shells_Difference = Difference(shell_Result, shell_Temp, silverSpacing, tolerance_Angle, tolerance_Distance);
                     if(shells_Difference != null && shells_Difference.Count != 0)
                     {
                         result_New.AddRange(shells_Difference);
