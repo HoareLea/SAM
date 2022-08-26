@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -68,6 +68,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -112,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
                 spaces = adjacencyCluster.GetSpaces();
             }
 
-            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid));
+            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(out List<Panel> panels, spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid));
 
             if (sAMObject is AdjacencyCluster)
             {
@@ -129,7 +130,11 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("spaces");
             if (index != -1)
-                dataAccess.SetDataList(index, spaces_Result.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataList(index, spaces_Result?.ConvertAll(x => new GooSpace(x)));
+
+            index = Params.IndexOfOutputParam("panels");
+            if (index != -1)
+                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

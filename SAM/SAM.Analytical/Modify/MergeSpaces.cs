@@ -67,8 +67,10 @@ namespace SAM.Analytical
             return space_1;
         }
 
-        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, IEnumerable<Guid> spaceGuids = null)
+        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, out List<Panel> panels, IEnumerable<Guid> spaceGuids = null)
         {
+            panels = null;
+
             if(adjacencyCluster == null)
             {
                 return null;
@@ -84,6 +86,7 @@ namespace SAM.Analytical
                 return null;
             }
 
+            panels = new List<Panel>();
 
             HashSet<Guid> guids = new HashSet<Guid>();
             foreach (Guid guid in spaceGuids)
@@ -94,7 +97,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<Space> spaces_Adjacent = Analytical.Query.AdjacenSpaces(adjacencyCluster, space);
+                List<Space> spaces_Adjacent = Query.AdjacenSpaces(adjacencyCluster, space);
                 if (spaces_Adjacent == null || spaces_Adjacent.Count == 0)
                 {
                     continue;
@@ -102,11 +105,13 @@ namespace SAM.Analytical
 
                 spaces_Adjacent.RemoveAll(x => !spaceGuids.Contains(x.Guid));
 
+
+
                 foreach (Space space_Adjacent in spaces_Adjacent)
                 {
-                    List<Panel> panels = adjacencyCluster.GetPanels(Core.LogicalOperator.And, space, space_Adjacent);
-                    panels.RemoveAll(x => x.PanelType != PanelType.Air);
-                    if (panels == null || panels.Count == 0)
+                    List<Panel> panels_Temp = adjacencyCluster.GetPanels(Core.LogicalOperator.And, space, space_Adjacent);
+                    panels_Temp.RemoveAll(x => x.PanelType != PanelType.Air);
+                    if (panels_Temp == null || panels_Temp.Count == 0)
                     {
                         continue;
                     }
@@ -119,7 +124,9 @@ namespace SAM.Analytical
                         space_1 = space_Adjacent;
                     }
 
-                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panels.ConvertAll(x => x.Guid));
+                    panels.AddRange(panels_Temp);
+
+                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panels_Temp.ConvertAll(x => x.Guid));
                     if (space_New != null)
                     {
                         guids.Add(space_New.Guid);
