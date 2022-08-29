@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point { Name = "_points", NickName = "_points", Description = "Points", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point { Name = "points_", NickName = "points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean { Name = "_removeExtPanels_", NickName = "_removeExtPanels_", Description = "Remove External Panels", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
@@ -116,22 +116,16 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_points");
-            if(index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
 
             List<GH_Point> points = new List<GH_Point>();
-            if (!dataAccess.GetDataList(index, points))
+            index = Params.IndexOfInputParam("points_");
+            if(index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetDataList(index, points);
             }
 
             bool removePanels = true;
-            index = Params.IndexOfInputParam("_removeExtPanels");
+            index = Params.IndexOfInputParam("_removeExtPanels_");
             if(index != -1)
             {
                 dataAccess.GetData(index, ref removePanels);
@@ -140,60 +134,63 @@ namespace SAM.Analytical.Grasshopper
             Dictionary<Space, Shell> dictionary = adjacencyCluster?.ShellDictionary();
 
             List<Space> result = new List<Space>();
-            foreach (GH_Point point in points)
+            if(points != null)
             {
-                Point3D point3D = Geometry.Grasshopper.Convert.ToSAM(point);
-                if(point3D == null)
+                foreach (GH_Point point in points)
                 {
-                    continue;
-                }
-
-                foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary)
-                {
-                    if (keyValuePair.Value.InRange(point3D) || keyValuePair.Value.Inside(point3D))
+                    Point3D point3D = Geometry.Grasshopper.Convert.ToSAM(point);
+                    if (point3D == null)
                     {
+                        continue;
+                    }
 
-                        Space space = keyValuePair.Key;
-
-                        List<Panel> panels = adjacencyCluster.GetPanels(space);
-                        
-                        result.Add(space);
-                        dictionary.Remove(space);
-                        adjacencyCluster.RemoveObject<Space>(space.Guid);
-
-                        foreach(Panel panel in panels)
+                    foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary)
+                    {
+                        if (keyValuePair.Value.InRange(point3D) || keyValuePair.Value.Inside(point3D))
                         {
-                            Panel panel_Temp = null;
-                            if (adjacencyCluster.Shade(panel))
+
+                            Space space = keyValuePair.Key;
+
+                            List<Panel> panels = adjacencyCluster.GetPanels(space);
+
+                            result.Add(space);
+                            dictionary.Remove(space);
+                            adjacencyCluster.RemoveObject<Space>(space.Guid);
+
+                            foreach (Panel panel in panels)
                             {
-                                if(removePanels)
+                                Panel panel_Temp = null;
+                                if (adjacencyCluster.Shade(panel))
                                 {
-                                    adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                                    if (removePanels)
+                                    {
+                                        adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                                    }
+                                    else
+                                    {
+                                        panel_Temp = Create.Panel(panel, PanelType.Shade);
+                                    }
                                 }
-                                else
+                                else if (adjacencyCluster.External(panel))
                                 {
-                                    panel_Temp = Create.Panel(panel, PanelType.Shade);
+                                    if (panel.PanelType == PanelType.WallInternal)
+                                    {
+                                        panel_Temp = Create.Panel(panel, PanelType.WallExternal);
+                                    }
+                                    if (panel.PanelType == PanelType.FloorInternal)
+                                    {
+                                        panel_Temp = Create.Panel(panel, PanelType.FloorExposed);
+                                    }
                                 }
-                            }
-                            else if(adjacencyCluster.External(panel))
-                            {
-                                if(panel.PanelType == PanelType.WallInternal)
+
+                                if (panel_Temp != null)
                                 {
-                                    panel_Temp = Create.Panel(panel, PanelType.WallExternal);
-                                }
-                                if (panel.PanelType == PanelType.FloorInternal)
-                                {
-                                    panel_Temp = Create.Panel(panel, PanelType.FloorExposed);
+                                    adjacencyCluster.AddObject(panel_Temp);
                                 }
                             }
 
-                            if(panel_Temp != null)
-                            {
-                                adjacencyCluster.AddObject(panel_Temp);
-                            }
+                            break;
                         }
-
-                        break;
                     }
                 }
             }
