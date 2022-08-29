@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSplitPanelsByGeometries : GH_SAMComponent
+    public class SAMAnalyticalSplitPanelsByGeometries : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,22 +39,27 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analytical", "_analytical", "SAM Analytical Object such as AdjacencyCluster or Analytical Model", GH_ParamAccess.item);
-            inputParamManager.AddGeometryParameter("_geometries", "_geometries", "Geometries", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Geometry() { Name = "_geometries", NickName = "_geometries", Description = "Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analytical", "analytical", "SAM Analytical Object", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooPanelParam(), "panels", "panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             IAnalyticalObject analyticalObject = null;
-            if (!dataAccess.GetData(0, ref analyticalObject) || analyticalObject == null)
+            if (!dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -86,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
             if(index != -1)
             {
                 List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-                dataAccess.GetDataList(1, objectWrappers);
+                dataAccess.GetDataList(index, objectWrappers);
                 if(objectWrappers != null)
                 {
                     foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
@@ -112,24 +117,48 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            AdjacencyCluster adjacencyCluster = null;
+            if (analyticalObject is AnalyticalModel)
+            {
+                adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
+            }
+            else if (analyticalObject is AdjacencyCluster)
+            {
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
+            }
+
             List<Panel> panels = null;
 
-            if(geometry3Ds != null)
+            if(adjacencyCluster != null)
             {
-                if(analyticalObject is AnalyticalModel)
+                HashSet<Guid> panelGuids = null;
+                index = Params.IndexOfInputParam("spaces_");
+                if (index != -1)
                 {
-                    AdjacencyCluster adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
-                    panels = adjacencyCluster.SplitPanels(geometry3Ds);
-
-                    analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
+                    List<Space> spaces = new List<Space>();
+                    dataAccess.GetDataList(index, spaces);
+                    if(spaces != null)
+                    {
+                        panelGuids = new HashSet<Guid>();
+                        foreach (Space space in spaces)
+                        {
+                            adjacencyCluster.GetPanels(space)?.ForEach(x => panelGuids.Add(x.Guid));
+                        }
+                    }
                 }
-                else if(analyticalObject is AdjacencyCluster)
+                if(geometry3Ds != null)
                 {
-                    AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
                     panels = adjacencyCluster.SplitPanels(geometry3Ds);
-
-                    analyticalObject = adjacencyCluster;
                 }
+            }
+
+            if (analyticalObject is AnalyticalModel)
+            {
+                analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
+            }
+            else if (analyticalObject is AdjacencyCluster)
+            {
+                analyticalObject = adjacencyCluster;
             }
 
             index = Params.IndexOfOutputParam("analytical");
