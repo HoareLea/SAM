@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Geometry() { Name = "_geometries", NickName = "_geometries", Description = "Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometries", NickName = "_geometries", Description = "Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -96,6 +96,12 @@ namespace SAM.Analytical.Grasshopper
                 {
                     foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
                     {
+                        if(objectWrapper.Value is IFace3DObject)
+                        {
+                            geometry3Ds.Add(((IFace3DObject)objectWrapper.Value).Face3D);
+                            continue;
+                        }
+                        
                         if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds) && face3Ds != null)
                         {
                             face3Ds.ForEach(x => geometry3Ds.Add(x));
@@ -136,8 +142,7 @@ namespace SAM.Analytical.Grasshopper
                 if (index != -1)
                 {
                     List<Space> spaces = new List<Space>();
-                    dataAccess.GetDataList(index, spaces);
-                    if(spaces != null)
+                    if(dataAccess.GetDataList(index, spaces) && spaces != null)
                     {
                         panelGuids = new HashSet<Guid>();
                         foreach (Space space in spaces)
@@ -148,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 if(geometry3Ds != null)
                 {
-                    panels = adjacencyCluster.SplitPanels(geometry3Ds);
+                    panels = adjacencyCluster.SplitPanels(geometry3Ds, panelGuids);
                 }
             }
 

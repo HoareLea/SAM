@@ -115,7 +115,7 @@ namespace SAM.Analytical
             panels_Adjacent.RemoveAll(x => panelGuids_ToBeRemoved.Contains(x.Guid));
             if(panels_Adjacent.Count != 0)
             {
-                panels_Adjacent = panels_Adjacent.ConvertAll(x => Create.Panel(x, PanelType.Shade));
+                //panels_Adjacent = panels_Adjacent.ConvertAll(x => Create.Panel(x, PanelType.Shade));
 
                 for (int i = panels_Adjacent.Count - 1; i >= 0; i--)
                 {
@@ -135,8 +135,14 @@ namespace SAM.Analytical
                 }
             }
 
-            foreach(Panel panel in panels_2)
+            foreach (Panel panel in panels_2)
             {
+                Panel panel_Temp = panels_Adjacent.Find(x => x.Guid == panel.Guid);
+                if(panel_Temp != null)
+                {
+                    continue;
+                }
+
                 adjacencyCluster.AddRelation(space_1, panel);
             }
 
