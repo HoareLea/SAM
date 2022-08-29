@@ -581,11 +581,33 @@ namespace SAM.Geometry.Spatial
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                     continue;
 
-                List<ISegmentable2D> segmentable2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<ISegmentable2D>();
-                if (segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
-                    continue;
+                List<Face2D> face2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<Face2D>();
+                if(face2Ds_Temp != null && face2Ds_Temp.Count != 0)
+                {
+                    foreach(Face2D face2D_Temp in face2Ds_Temp)
+                    {
+                        List<IClosed2D> closed2Ds = face2D_Temp.Edge2Ds;
+                        if(closed2Ds != null && closed2Ds.Count != 0)
+                        {
+                            foreach(IClosed2D closed2D in closed2Ds)
+                            {
+                                ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+                                if(segmentable2D == null)
+                                {
+                                    throw new NotImplementedException();
+                                }
 
-                segmentable2Ds.AddRange(segmentable2Ds_Temp);
+                                segmentable2Ds.Add(segmentable2D);
+                            }
+                        }
+                    }
+                }
+
+                List<ISegmentable2D> segmentable2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<ISegmentable2D>();
+                if (segmentable2Ds_Temp != null && segmentable2Ds_Temp.Count != 0)
+                {
+                    segmentable2Ds.AddRange(segmentable2Ds_Temp);
+                }
             }
 
             List<Face2D> face2Ds = plane.Convert(face3D)?.Cut(segmentable2Ds, tolerance_Distance);
