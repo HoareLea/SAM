@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -546,6 +547,50 @@ namespace SAM.Geometry.Spatial
             return new Polyline3D(point3Ds, false);
 
 
+        }
+
+        public static List<Face3D> Split<T>(this Face3D face3D, IEnumerable<T> geometry3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T: ISAMGeometry3D
+        {
+            if(face3D == null || geometry3Ds == null)
+            {
+                return null;
+            }
+
+            Plane plane = face3D.GetPlane();
+            if (plane == null)
+                return null;
+
+            List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
+            foreach (T geometry3D in geometry3Ds)
+            {
+                PlanarIntersectionResult planarIntersectionResult = null;
+
+                if (geometry3D is Face3D)
+                {
+                    planarIntersectionResult = Create.PlanarIntersectionResult(face3D, geometry3D as Face3D, tolerance_Angle, tolerance_Distance);
+                }
+                else if(geometry3D is ISegmentable3D)
+                {
+                    planarIntersectionResult = Create.PlanarIntersectionResult(plane, geometry3D as ISegmentable3D, tolerance_Angle, tolerance_Distance);
+                }
+                else if(geometry3D is Plane)
+                {
+                    planarIntersectionResult = Create.PlanarIntersectionResult(face3D, geometry3D as Plane, tolerance_Angle, tolerance_Distance);
+                }
+
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                    continue;
+
+                List<ISegmentable2D> segmentable2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<ISegmentable2D>();
+                if (segmentable2Ds_Temp == null || segmentable2Ds_Temp.Count == 0)
+                    continue;
+
+                segmentable2Ds.AddRange(segmentable2Ds_Temp);
+            }
+
+            List<Face2D> face2Ds = plane.Convert(face3D)?.Cut(segmentable2Ds, tolerance_Distance);
+
+            return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
     }
 }

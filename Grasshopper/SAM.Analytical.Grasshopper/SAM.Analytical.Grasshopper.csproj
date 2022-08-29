@@ -116,7 +116,8 @@
     <Compile Include="Component\SAMAnalyticalSetSystemTypeNames.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
     <Compile Include="Component\SAMAnalyticalSetLocation.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanels.cs" />
+    <Compile Include="Component\SAMAnalyticalSplitPanelsByGeometries.cs" />
+    <Compile Include="Component\SAMAnalyticalSplitPanelsByElevations.cs" />
     <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
     <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
     <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />
@@ -324,7 +325,7 @@
     <Compile Include="Query\New\DisplayMaterial.cs" />
     <Compile Include="Query\TryConvertToPanelGeometries.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanel.cs" />
+    <Compile Include="Component\SAMAnalyticalSplitPanelByElevations.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj">

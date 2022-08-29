@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSplitPanel : GH_SAMComponent
+    public class SAMAnalyticalSplitPanelByElevations : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,10 +29,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalSplitPanel()
-          : base("SAMAnalytical.SplitPanel", "SAMAnalytical.SplitPanel",
+        public SAMAnalyticalSplitPanelByElevations()
+          : base("SAMAnalytical.SplitPanelByElevations", "SAMAnalytical.SplitPanelByElevations",
               "Split SAM Analytical Panel by Elevation or Plane, *aperture will be splited as well",
-              "SAM", "Analytical")
+              "SAM WIP", "Analytical")
         {
         }
 
