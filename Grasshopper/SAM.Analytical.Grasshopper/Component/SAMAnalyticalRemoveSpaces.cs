@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point { Name = "_points", NickName = "_points", Description = "Points", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean { Name = "_removeExtPanels_", NickName = "_removeExtPanels_", Description = "Remove External Panels", Access = GH_ParamAccess.item, Optional = true };
+                boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -126,6 +130,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool removePanels = true;
+            index = Params.IndexOfInputParam("_removeExtPanels");
+            if(index != -1)
+            {
+                dataAccess.GetData(index, ref removePanels);
+            }
+
             Dictionary<Space, Shell> dictionary = adjacencyCluster?.ShellDictionary();
 
             List<Space> result = new List<Space>();
@@ -146,17 +157,23 @@ namespace SAM.Analytical.Grasshopper
 
                         List<Panel> panels = adjacencyCluster.GetPanels(space);
                         
-                        result.Add(keyValuePair.Key);
-                        dictionary.Remove(keyValuePair.Key);
-                        adjacencyCluster.RemoveObject<Space>(keyValuePair.Key.Guid);
+                        result.Add(space);
+                        dictionary.Remove(space);
+                        adjacencyCluster.RemoveObject<Space>(space.Guid);
 
                         foreach(Panel panel in panels)
                         {
                             Panel panel_Temp = null;
                             if (adjacencyCluster.Shade(panel))
                             {
-                                panel_Temp = Create.Panel(panel, PanelType.Shade);
-
+                                if(removePanels)
+                                {
+                                    adjacencyCluster.RemoveObject<Panel>(panel.Guid);
+                                }
+                                else
+                                {
+                                    panel_Temp = Create.Panel(panel, PanelType.Shade);
+                                }
                             }
                             else if(adjacencyCluster.External(panel))
                             {
@@ -179,7 +196,6 @@ namespace SAM.Analytical.Grasshopper
                         break;
                     }
                 }
-
             }
 
             index = Params.IndexOfOutputParam("spaces");
