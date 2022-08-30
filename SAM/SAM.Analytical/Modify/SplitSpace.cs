@@ -105,13 +105,23 @@ namespace SAM.Analytical
 
                 foreach(Polygon2D polygon2D_Offset in polygon2Ds_Offset)
                 {
-                    if(polygon2D_Offset == null)
+                    if(polygon2D_Offset == null || !polygon2D_Offset.IsValid())
                     {
                         continue;
                     }
 
                     foreach (Segment2D segment2D in polygon2D_Offset.GetSegments())
                     {
+                        if(segment2D == null)
+                        {
+                            continue;
+                        }
+
+                        if(segment2D.GetLength() < tolerance_Distance)
+                        {
+                            continue;
+                        }
+
                         Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
                         if (point3D == null)
                         {

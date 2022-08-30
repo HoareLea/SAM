@@ -397,6 +397,10 @@ namespace SAM.Geometry.Spatial
 
                 Shell shell_New = new Shell(face3Ds_Temp);
                 shell_New = shell_New.RemoveInvalidFace3Ds(Tolerance_Snap);
+                if(shell_New == null || !shell_New.IsValid())
+                {
+                    continue;
+                }
 
                 if(!shell_New.IsClosed(Tolerance_Snap))
                 {
