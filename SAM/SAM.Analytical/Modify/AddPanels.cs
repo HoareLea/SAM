@@ -87,7 +87,7 @@ namespace SAM.Analytical
                     string name = space.Name;
                     if(name != null)
                     {
-                        name += string.Format(" {0}", i + 1);
+                        name += string.Format("_{0}", i + 1);
                     }
 
                     Space space_Shell = new Space(Guid.NewGuid(), space, name, point3D);
