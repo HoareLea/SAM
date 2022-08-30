@@ -7,17 +7,17 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergeSpacesByAirPanels : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalMergeSpacesByZones : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("db0cc435-6057-47bd-af3e-eb0825070d96");
+        public override Guid ComponentGuid => new Guid("e2541b6f-aadd-48c1-aed5-16e7e67c3171");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.0";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +29,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalMergeSpacesByAirPanels()
-          : base("SAMAnalytical.MergeSpacesByAirPanels", "SAMAnalytical.MergeSpacesByAirPanels",
-              "Merge Analytical Spaces By Air Panels. Removes air panels and combines spaces",
+        public SAMAnalyticalMergeSpacesByZones()
+          : base("SAMAnalytical.MergeSpacesByZones", "SAMAnalytical.MergeSpacesByZones",
+              "Merge Analytical Spaces By Zones. Removes air panels and combines spaces",
               "SAM WIP", "Analytical")
         {
         }
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "_zones_", NickName = "_zones_", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
 
@@ -100,19 +100,57 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
 
-            index = Params.IndexOfInputParam("_spaces_");
-            List<Space> spaces = new List<Space>();
+            index = Params.IndexOfInputParam("_zones_");
+            List<Group> groups = new List<Group>();
             if (index != -1)
             {
-                dataAccess.GetDataList(index, spaces);
+                dataAccess.GetDataList(index, groups);
             }
 
-            if (spaces == null || spaces.Count == 0)
+            if (groups == null || groups.Count == 0)
             {
-                spaces = adjacencyCluster.GetSpaces();
+                groups = adjacencyCluster.GetObjects<Group>();
             }
 
-            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(out List<Panel> panels, spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid));
+            List<Panel> panels_Result = null;
+            List<Space> spaces_Result = null;
+
+            if(groups != null)
+            {
+
+                panels_Result = null;
+                spaces_Result = null;
+
+                foreach (Group group in groups)
+                {
+                    List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(group);
+                    if(spaces != null && spaces.Count > 1)
+                    {
+                        List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
+                        if(spaces_Merge != null)
+                        {
+                            foreach(Space space_Merge in spaces_Merge)
+                            {
+                                if(spaces_Result.Find(x => x.Guid == space_Merge.Guid) == null)
+                                {
+                                    spaces_Result.Add(space_Merge);
+                                }
+                            }
+                        }
+
+                        if (panels_Merge != null)
+                        {
+                            foreach (Panel panel_Merge in panels_Merge)
+                            {
+                                if (panels_Result.Find(x => x.Guid == panel_Merge.Guid) == null)
+                                {
+                                    panels_Result.Add(panel_Merge);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
 
             if (sAMObject is AdjacencyCluster)
             {
@@ -133,7 +171,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)
-                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
+                dataAccess.SetDataList(index, panels_Result?.ConvertAll(x => new GooPanel(x)));
         }
     }
 }

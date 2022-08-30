@@ -1,11 +1,4 @@
-﻿using Grasshopper.Kernel;
-using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
-using SAM.Core.Grasshopper;
-using System;
-using System.Collections.Generic;
-
-namespace SAM.Analytical.Grasshopper
+﻿namespace SAM.Analytical.Grasshopper
 {
     //public class SAMAnalyticalAddAperturesByRatio_Old : GH_SAMComponent
     //{

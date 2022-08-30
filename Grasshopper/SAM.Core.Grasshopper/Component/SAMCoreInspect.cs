@@ -387,9 +387,13 @@ namespace SAM.Core.Grasshopper
                     {
                         dataAccess.SetData(i, new GH_Time((DateTime)result));
                     }
-                    else
+                    else if(result != null)
                     {
                         dataAccess.SetData(i, new GooObject(result));
+                    }
+                    else
+                    {
+                        dataAccess.SetData(i, null);
                     }
                 }
 

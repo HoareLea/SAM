@@ -2,7 +2,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -115,7 +114,7 @@ namespace SAM.Analytical
                             spaces_Panel = adjacencyCluster.GetSpaces(panel);
                             spaces_Panel?.RemoveAll(x => x != null && x.Guid == space.Guid);
 
-                            panel = Create.Panel(Guid.NewGuid(), panel, new PlanarBoundary3D(face3D_Shell));
+                            panel = Create.Panel(Guid.NewGuid(), panel, face3D_Shell, null, true);
                         }
 
                         if(spaces_Panel == null)
