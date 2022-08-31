@@ -371,7 +371,7 @@ namespace SAM.Geometry.Spatial
             List<Face3DData> face3DDatas_After = face3Ds_After.ConvertAll(x => new Face3DData(x));
 
             //List<Segment3DData> segment3DDatas_Shell_Difference = GetDifference(shellData_Before, shellData_After);
-            List<Segment3DData> segment3DDatas_After = GetSegment3DDatas(face3DDatas_After, Tolerance_Distance);
+            List<Segment3DData> segment3DDatas_After = GetSegment3DDatas(face3DDatas_After, Tolerance_Snap);
 
             List<Face3DData> face3DDatas_Shell_After = shellData_After.Face3DDatas;
 
@@ -381,7 +381,7 @@ namespace SAM.Geometry.Spatial
                 Face3DData face3DData = face3DDatas_Shell_After[0];
                 face3DDatas_Shell_After.RemoveAt(0);
 
-                List<Face3DData> face3DDatas_Temp = GetFace3DDatas(face3DData, face3DDatas_Shell_After, segment3DDatas_After, Tolerance_Distance);
+                List<Face3DData> face3DDatas_Temp = GetFace3DDatas(face3DData, face3DDatas_Shell_After, segment3DDatas_After, Tolerance_Snap);
                 if(face3DDatas_Temp == null || face3DDatas_Temp.Count == 0)
                 {
                     continue;
