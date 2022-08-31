@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Space> SplitSpace(this AdjacencyCluster adjacencyCluster, Guid spaceGuid, Func<Panel, double> func, double offset = 0.1, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Space> SplitSpace(this AdjacencyCluster adjacencyCluster, Guid spaceGuid, Func<Panel, double> func, double elevationOffset = 0.1, double minSectionOffset = 1, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if(adjacencyCluster == null || spaceGuid == Guid.Empty)
             {
@@ -30,7 +30,7 @@ namespace SAM.Analytical
 
             Plane plane_Top = Geometry.Spatial.Create.Plane(boundingBox3D.Max.Z);
 
-            Plane plane_Offset = Geometry.Spatial.Create.Plane(boundingBox3D.Min.Z + offset);
+            Plane plane_Offset = Geometry.Spatial.Create.Plane(boundingBox3D.Min.Z + elevationOffset);
 
             Plane plane_Bottom = Geometry.Spatial.Create.Plane(boundingBox3D.Min.Z);
 
@@ -106,6 +106,12 @@ namespace SAM.Analytical
                 foreach(Polygon2D polygon2D_Offset in polygon2Ds_Offset)
                 {
                     if(polygon2D_Offset == null || !polygon2D_Offset.IsValid())
+                    {
+                        continue;
+                    }
+
+                    List<Polygon2D> polygon2Ds_Temp = polygon2D_Offset.Offset(-minSectionOffset, tolerance_Distance);
+                    if(polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
                     {
                         continue;
                     }

@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,8 +45,14 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "Offset", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "Offset", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(6.0);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_minOffset_", NickName = "_minOffset_", Description = "Minimal Offset", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(1.0);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
@@ -105,6 +111,17 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            double minOffset = 6.0;
+            index = Params.IndexOfInputParam("_minOffset_");
+            if (index != -1)
+            {
+                double minOffset_Temp = double.NaN;
+                if (dataAccess.GetData(index, ref minOffset_Temp) && !double.IsNaN(minOffset_Temp))
+                {
+                    minOffset = minOffset_Temp;
+                }
+            }
+
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("spaces_");
             if(index != -1)
@@ -153,7 +170,7 @@ namespace SAM.Analytical.Grasshopper
                     });
 
 
-                    List<Space> spaces_Split = adjacencyCluster.SplitSpace(space.Guid, func);
+                    List<Space> spaces_Split = adjacencyCluster.SplitSpace(space.Guid, func, minOffset);
                     if(spaces_Split == null || spaces_Split.Count < 2)
                     {
                         continue;
