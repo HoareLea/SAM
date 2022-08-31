@@ -57,6 +57,8 @@ namespace SAM.Analytical.Grasshopper
 
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
 
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "panels_", NickName = "panels_", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -134,7 +136,19 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(spaces == null)
+            List<Panel> panels = null;
+            index = Params.IndexOfInputParam("panels_");
+            if (index != -1)
+            {
+                List<Panel> panels_Temp = new List<Panel>();
+
+                if (dataAccess.GetDataList(index, panels_Temp) && panels_Temp != null && panels_Temp.Count != 0)
+                {
+                    panels = panels_Temp;
+                }
+            }
+
+            if (spaces == null)
             {
                 spaces = adjacencyCluster.GetSpaces();
             }
@@ -152,6 +166,11 @@ namespace SAM.Analytical.Grasshopper
                         if(panel == null)
                         {
                             return 0;
+                        }
+
+                        if(panels != null)
+                        {
+                            return panels.Find(x => x.Guid == panel.Guid) != null ? offset : 0;
                         }
 
                         if(!adjacencyCluster.External(panel))
