@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
 
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "panels_", NickName = "panels_", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels_", NickName = "panels_", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -189,7 +189,7 @@ namespace SAM.Analytical.Grasshopper
                     });
 
 
-                    List<Space> spaces_Split = adjacencyCluster.SplitSpace(space.Guid, func, minOffset);
+                    List<Space> spaces_Split = adjacencyCluster.SplitSpace(space.Guid, func, minSectionOffset: minOffset / 2);
                     if(spaces_Split == null || spaces_Split.Count < 2)
                     {
                         continue;
