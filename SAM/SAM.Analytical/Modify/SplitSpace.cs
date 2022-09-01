@@ -198,44 +198,62 @@ namespace SAM.Analytical
                         continue;
                     }
 
+                    List<bool> obtuseAngles = polygon2D_Offset.ObtuseAngles();
+                    List<Point2D> point2Ds = polygon2D_Offset.GetPoints();
+
+                    Dictionary<Point2D, List<Face3D>> dictionary = new Dictionary<Point2D, List<Face3D>>();
                     for (int i = 0; i < segment2Ds.Count; i++)
                     {
                         Segment2D segment2D_1 = segment2Ds[i];
                         Segment2D segment2D_2 = Core.Query.Next(segment2Ds, i);
 
-                        Vector2D vector2D_1 = Geometry.Planar.Query.TraceFirst(segment2D_1[1], segment2D_1.Direction, polygon2D);
+                        Point2D point2D = segment2D_1[1];
+                        Point2D point2D_Previous = segment2D_1[0];
+                        Point2D point2D_Next = segment2D_2[1];
+
+                        Vector2D vector2D_1 = point2D_Previous.Vector(point2D);
+                        Vector2D vector2D_2 = point2D_Next.Vector(point2D);
+
+                        bool obtuseAngle = obtuseAngles[point2Ds.IndexOf(point2D)];
+                        if (!obtuseAngle)
+                        {
+                            vector2D_1.Negate();
+                            vector2D_2.Negate();
+                        }
+
+                        vector2D_1 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_1, polygon2D);
                         if (vector2D_1 == null)
                         {
                             continue;
                         }
 
-                        Vector2D vector2D_2 = Geometry.Planar.Query.TraceFirst(segment2D_2[0], segment2D_2.Direction.GetNegated(), polygon2D);
+                        vector2D_2 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_2, polygon2D);
                         if (vector2D_2 == null)
                         {
                             continue;
                         }
 
-                        Point2D point2D_1 = segment2D_1[1].GetMoved(vector2D_1);
-                        Point2D point2D_2 = segment2D_2[0].GetMoved(vector2D_2);
+                        Point2D point2D_1 = point2D.GetMoved(vector2D_1);
+                        Point2D point2D_2 = point2D.GetMoved(vector2D_2);
 
-                        Point2D point2D = null;
+                        Point2D point2D_Polygon2D = null;
                         double distance = double.MaxValue;
-                        foreach (Point2D point2D_Polygon2D in polygon2D)
+                        foreach (Point2D point2D_Temp in polygon2D)
                         {
-                            double distance_Temp = point2D_1.Distance(point2D_Polygon2D) + point2D_2.Distance(point2D_Polygon2D);
+                            double distance_Temp = point2D_1.Distance(point2D_Temp) + point2D_2.Distance(point2D_Temp);
                             if (distance_Temp < distance)
                             {
-                                point2D = point2D_Polygon2D;
+                                point2D_Polygon2D = point2D_Temp;
                                 distance = distance_Temp;
                             }
                         }
 
-                        if (point2D == null)
+                        if (point2D_Polygon2D == null)
                         {
                             continue;
                         }
 
-                        Segment2D segment2D = new Segment2D(segment2D_1[1], point2D);
+                        Segment2D segment2D = new Segment2D(point2D, point2D_Polygon2D);
                         if (segment2D == null || !segment2D.IsValid() || segment2D.GetLength() < tolerance_Snap)
                         {
                             continue;
@@ -252,41 +270,28 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        face3Ds_New.Add(face3D_New);
+                        if(!dictionary.TryGetValue(point2D_Polygon2D, out List<Face3D> face3Ds_Temp))
+                        {
+                            face3Ds_Temp = new List<Face3D>();
+                            dictionary[point2D_Polygon2D] = face3Ds_Temp;
+                        }
 
+                        face3Ds_Temp.Add(face3D_New);
                     }
 
-                    //foreach(Point2D point2D in polygon2D_Offset.GetPoints())
-                    //{
-                    //    int index = polygon2D.IndexOfClosestPoint2D(point2D);
-                    //    if(index == -1)
-                    //    {
-                    //        continue;
-                    //    }
+                    if(dictionary != null && dictionary.Count != 0)
+                    {
+                        foreach(KeyValuePair<Point2D, List<Face3D>> keyValuePair in dictionary)
+                        {
+                            if (keyValuePair.Value.Count > 1)
+                            {
+                                keyValuePair.Value.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+                            }
 
-                    //    Point2D point2D_Polygon = polygon2D.Points[index];
-                    //    if(point2D_Polygon.AlmostEquals(point2D, tolerance_Snap))
-                    //    {
-                    //        continue;
-                    //    }
-
-                    //    if(polygon2D.On(point2D_Polygon.Mid(point2D), tolerance_Snap))
-                    //    {
-                    //        continue;
-                    //    }
-
-                    //    Segment2D segment2D = new Segment2D(point2D, point2D_Polygon);
-
-                    //    Face3D face3D_New = createFace3D.Invoke(segment2D);
-                    //    if (face3D_New == null)
-                    //    {
-                    //        continue;
-                    //    }
-
-                    //    face3Ds_New.Add(face3D_New);
-                    //}
+                            face3Ds_New.Add(keyValuePair.Value[0]);
+                        }
+                    }
                 }
-
             }
 
             if(face3Ds_New == null || face3Ds_New.Count == 0)
