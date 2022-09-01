@@ -159,6 +159,7 @@ namespace SAM.Analytical.Grasshopper
             if(index != -1)
             {
                 List<Level> levels = elevations_Min.ToList().ConvertAll(x => Architectural.Create.Level(x));
+                levels.Sort((x, y) => x.Elevation.CompareTo(y.Elevation));
                 dataAccess.SetDataList(index, levels?.ConvertAll(x => new GooLevel(x)));
             }
 
