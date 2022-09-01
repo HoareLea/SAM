@@ -192,26 +192,59 @@ namespace SAM.Analytical
                 //Create additional new face3Ds
                 foreach (Polygon2D polygon2D_Offset in polygon2Ds_Offset)
                 {
-                    foreach(Point2D point2D in polygon2D_Offset.GetPoints())
+                    List<Segment2D> segment2Ds = polygon2D_Offset.GetSegments();
+                    if(segment2Ds == null || segment2Ds.Count == 0)
                     {
-                        int index = polygon2D.IndexOfClosestPoint2D(point2D);
-                        if(index == -1)
+                        continue;
+                    }
+
+                    for (int i = 0; i < segment2Ds.Count; i++)
+                    {
+                        Segment2D segment2D_1 = segment2Ds[i];
+                        Segment2D segment2D_2 = Core.Query.Next(segment2Ds, i);
+
+                        Vector2D vector2D_1 = Geometry.Planar.Query.TraceFirst(segment2D_1[1], segment2D_1.Direction, polygon2D);
+                        if (vector2D_1 == null)
                         {
                             continue;
                         }
 
-                        Point2D point2D_Polygon = polygon2D.Points[index];
-                        if(point2D_Polygon.AlmostEquals(point2D, tolerance_Snap))
+                        Vector2D vector2D_2 = Geometry.Planar.Query.TraceFirst(segment2D_2[0], segment2D_2.Direction.GetNegated(), polygon2D);
+                        if (vector2D_2 == null)
                         {
                             continue;
                         }
 
-                        if(polygon2D.On(point2D_Polygon.Mid(point2D), tolerance_Snap))
+                        Point2D point2D_1 = segment2D_1[1].GetMoved(vector2D_1);
+                        Point2D point2D_2 = segment2D_2[0].GetMoved(vector2D_2);
+
+                        Point2D point2D = null;
+                        double distance = double.MaxValue;
+                        foreach (Point2D point2D_Polygon2D in polygon2D)
+                        {
+                            double distance_Temp = point2D_1.Distance(point2D_Polygon2D) + point2D_2.Distance(point2D_Polygon2D);
+                            if (distance_Temp < distance)
+                            {
+                                point2D = point2D_Polygon2D;
+                                distance = distance_Temp;
+                            }
+                        }
+
+                        if (point2D == null)
                         {
                             continue;
                         }
 
-                        Segment2D segment2D = new Segment2D(point2D, point2D_Polygon);
+                        Segment2D segment2D = new Segment2D(segment2D_1[1], point2D);
+                        if (segment2D == null || !segment2D.IsValid() || segment2D.GetLength() < tolerance_Snap)
+                        {
+                            continue;
+                        }
+
+                        if (polygon2D.On(segment2D.Mid(), tolerance_Snap))
+                        {
+                            continue;
+                        }
 
                         Face3D face3D_New = createFace3D.Invoke(segment2D);
                         if (face3D_New == null)
@@ -220,7 +253,38 @@ namespace SAM.Analytical
                         }
 
                         face3Ds_New.Add(face3D_New);
+
                     }
+
+                    //foreach(Point2D point2D in polygon2D_Offset.GetPoints())
+                    //{
+                    //    int index = polygon2D.IndexOfClosestPoint2D(point2D);
+                    //    if(index == -1)
+                    //    {
+                    //        continue;
+                    //    }
+
+                    //    Point2D point2D_Polygon = polygon2D.Points[index];
+                    //    if(point2D_Polygon.AlmostEquals(point2D, tolerance_Snap))
+                    //    {
+                    //        continue;
+                    //    }
+
+                    //    if(polygon2D.On(point2D_Polygon.Mid(point2D), tolerance_Snap))
+                    //    {
+                    //        continue;
+                    //    }
+
+                    //    Segment2D segment2D = new Segment2D(point2D, point2D_Polygon);
+
+                    //    Face3D face3D_New = createFace3D.Invoke(segment2D);
+                    //    if (face3D_New == null)
+                    //    {
+                    //        continue;
+                    //    }
+
+                    //    face3Ds_New.Add(face3D_New);
+                    //}
                 }
 
             }

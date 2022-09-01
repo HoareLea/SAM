@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -24,6 +25,31 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public static T Previous<T>(this IEnumerable<T> values, int index)
+        {
+            if (values == null || index < 0)
+            {
+                return default(T);
+            }
+
+            int count = values.Count();
+            if (count == 0)
+            {
+                return default(T);
+            }
+
+
+            int index_Temp = index;
+            while (index_Temp >= count)
+            {
+                index_Temp -= count;
+            }
+
+            index_Temp = index_Temp == 0 ? count - 1 : index_Temp - 1;
+
+            return values.ElementAt(index_Temp);
         }
     }
 }

@@ -159,6 +159,13 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        /// <summary>
+        /// Trims given segmentable2D by given parameter
+        /// </summary>
+        /// <param name="segmentable2D">Segmentable2D to be trimmed</param>
+        /// <param name="parameter">parameter value from 0 to 1 (where 0 start 1 is end point)</param>
+        /// <param name="inverted">if inverted then 1 is start 0 is end</param>
+        /// <returns>ISegmentable2D</returns>
         public static ISegmentable2D Trim(ISegmentable2D segmentable2D, double parameter, bool inverted = false)
         {
             if (segmentable2D == null || parameter < 0 || parameter > 1)
