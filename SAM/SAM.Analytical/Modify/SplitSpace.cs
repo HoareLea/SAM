@@ -214,7 +214,13 @@ namespace SAM.Analytical
                         Vector2D vector2D_1 = point2D_Previous.Vector(point2D);
                         Vector2D vector2D_2 = point2D_Next.Vector(point2D);
 
-                        bool obtuseAngle = obtuseAngles[point2Ds.IndexOf(point2D)];
+                        int index = point2Ds.FindIndex(x => point2D.AlmostEquals(x, tolerance_Distance));
+                        if(index == -1)
+                        {
+                            continue;
+                        }
+
+                        bool obtuseAngle = obtuseAngles[index];
                         if (!obtuseAngle)
                         {
                             vector2D_1.Negate();
