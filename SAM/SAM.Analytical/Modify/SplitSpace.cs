@@ -96,26 +96,65 @@ namespace SAM.Analytical
                     offsets.Add(offset_Panel);
                 }
 
+                //Offset polygon2D
                 List<Polygon2D> polygon2Ds_Offset = polygon2D.Offset(offsets, true, true, true, tolerance_Distance);
                 if(polygon2Ds_Offset == null || polygon2Ds_Offset.Count == 0)
                 {
                     continue;
                 }
 
-
-                foreach(Polygon2D polygon2D_Offset in polygon2Ds_Offset)
+                //Remove unwanted polygon2Ds
+                for(int i = polygon2Ds_Offset.Count - 1; i >= 0; i--)
                 {
-                    if(polygon2D_Offset == null || !polygon2D_Offset.IsValid())
+                    Polygon2D polygon2D_Offset = polygon2Ds_Offset[i];
+
+                    if (polygon2D_Offset == null || !polygon2D_Offset.IsValid())
                     {
+                        polygon2Ds_Offset.RemoveAt(i);
                         continue;
                     }
 
                     List<Polygon2D> polygon2Ds_Temp = polygon2D_Offset.Offset(-minSectionOffset, tolerance_Distance);
-                    if(polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
+                    if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
                     {
+                        polygon2Ds_Offset.RemoveAt(i);
                         continue;
                     }
 
+                }
+
+                Func<Segment2D, Face3D> createFace3D = new Func<Segment2D, Face3D>((Segment2D segment2D) =>
+                {
+                    if(segment2D == null)
+                    {
+                        return null;
+                    }
+
+                    Segment3D segment3D = plane_Face3D.Convert(segment2D);
+                    if(segment3D == null)
+                    {
+                        return null;
+                    }
+
+
+                    Segment3D segment3D_Top = plane_Top.Project(segment3D);
+                    if(segment3D_Top == null || !segment3D_Top.IsValid() || segment3D_Top.GetLength() < tolerance_Snap)
+                    {
+                        return null;
+                    }
+
+                    Segment3D segment3D_Bottom = plane_Bottom.Project(segment3D);
+                    if (segment3D_Bottom == null || !segment3D_Bottom.IsValid() || segment3D_Bottom.GetLength() < tolerance_Snap)
+                    {
+                        return null;
+                    }
+
+                    return new Face3D(new Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0] }, tolerance_Distance));
+                });
+                
+                //Create new face3Ds
+                foreach(Polygon2D polygon2D_Offset in polygon2Ds_Offset)
+                {
                     foreach (Segment2D segment2D in polygon2D_Offset.GetSegments())
                     {
                         if(segment2D == null)
@@ -140,12 +179,46 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        Segment3D segment3D = plane_Face3D.Convert(segment2D);
+                        Face3D face3D_New = createFace3D.Invoke(segment2D);
+                        if(face3D_New == null)
+                        {
+                            continue;
+                        }
 
-                        Segment3D segment3D_Top = plane_Top.Project(segment3D);
-                        Segment3D segment3D_Bottom = plane_Bottom.Project(segment3D);
+                        face3Ds_New.Add(face3D_New);
+                    }
+                }
 
-                        Face3D face3D_New = new Face3D(new Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0]}, tolerance_Distance));
+                //Create additional new face3Ds
+                foreach (Polygon2D polygon2D_Offset in polygon2Ds_Offset)
+                {
+                    foreach(Point2D point2D in polygon2D_Offset.GetPoints())
+                    {
+                        int index = polygon2D.IndexOfClosestPoint2D(point2D);
+                        if(index == -1)
+                        {
+                            continue;
+                        }
+
+                        Point2D point2D_Polygon = polygon2D.Points[index];
+                        if(point2D_Polygon.AlmostEquals(point2D, tolerance_Snap))
+                        {
+                            continue;
+                        }
+
+                        if(polygon2D.On(point2D_Polygon.Mid(point2D), tolerance_Snap))
+                        {
+                            continue;
+                        }
+
+                        Segment2D segment2D = new Segment2D(point2D, point2D_Polygon);
+
+                        Face3D face3D_New = createFace3D.Invoke(segment2D);
+                        if (face3D_New == null)
+                        {
+                            continue;
+                        }
+
                         face3Ds_New.Add(face3D_New);
                     }
                 }
