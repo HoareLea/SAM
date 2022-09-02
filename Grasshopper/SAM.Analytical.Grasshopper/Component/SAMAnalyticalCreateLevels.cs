@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,6 +46,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_ignoreShades_", NickName = "_ignoreShades_", Description = "Ignore Shade Panels", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(true);
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -97,16 +102,26 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref tolerance);
             }
 
+            index = Params.IndexOfInputParam("_ignoreShades_");
+            bool ignoreShades = true;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref ignoreShades);
+            }
+
             HashSet<double> elevations_Min = new HashSet<double>();
             HashSet<double> elevations_Max = new HashSet<double>();
             foreach (IAnalyticalObject analyticalObject in analyticalObjects)
             {
-                if(analyticalObject is Panel)
+                if (analyticalObject is Panel)
                 {
                     Panel panel = (Panel)analyticalObject;
 
-                    elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
-                    elevations_Max.Add(panel.MaxElevation());
+                    if (!ignoreShades || panel.PanelType != PanelType.Shade)
+                    {
+                        elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
+                        elevations_Max.Add(panel.MaxElevation());
+                    }
 
                     continue;
                 }
@@ -126,10 +141,15 @@ namespace SAM.Analytical.Grasshopper
                     AdjacencyCluster adjacencyCluster = (AdjacencyCluster)analyticalObject;
 
                     List<Panel> panels = adjacencyCluster.GetPanels();
-                    if(panels != null)
+                    if (panels != null)
                     {
-                        foreach(Panel panel in panels)
+                        foreach (Panel panel in panels)
                         {
+                            if (ignoreShades && panel.PanelType == PanelType.Shade)
+                            {
+                                continue;
+                            }
+
                             elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
                             elevations_Max.Add(panel.MaxElevation());
                         }
@@ -146,6 +166,11 @@ namespace SAM.Analytical.Grasshopper
                     {
                         foreach (Panel panel in panels)
                         {
+                            if (ignoreShades && panel.PanelType == PanelType.Shade)
+                            {
+                                continue;
+                            }
+
                             elevations_Min.Add(Core.Query.Round(panel.MinElevation(), tolerance));
                             elevations_Max.Add(panel.MaxElevation());
                         }
