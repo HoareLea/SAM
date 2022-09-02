@@ -271,7 +271,9 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<Face3DData> face3DDatas = face3Ds.ConvertAll(x => new Face3DData(x));
+            List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Distance);
+
+            List<Face3DData> face3DDatas = face3D_Temp.ConvertAll(x => new Face3DData(x));
 
             List<List<Shell>> shells_Result = Enumerable.Repeat<List<Shell>>(null, shells.Count).ToList();
 

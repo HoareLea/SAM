@@ -121,6 +121,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
+                    polygon2Ds_Offset[i] = Geometry.Planar.Query.SimplifyByAngle(polygon2D_Offset, tolerance_Angle);
                 }
 
                 Func<Segment2D, Face3D> createFace3D = new Func<Segment2D, Face3D>((Segment2D segment2D) =>
@@ -189,6 +190,8 @@ namespace SAM.Analytical
                     }
                 }
 
+                Polygon2D polygon2D_Simplify = Geometry.Planar.Query.SimplifyByAngle(polygon2D, tolerance_Angle);
+
                 //Create additional new face3Ds
                 foreach (Polygon2D polygon2D_Offset in polygon2Ds_Offset)
                 {
@@ -227,13 +230,13 @@ namespace SAM.Analytical
                             vector2D_2.Negate();
                         }
 
-                        vector2D_1 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_1, polygon2D);
+                        vector2D_1 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_1, polygon2D_Simplify);
                         if (vector2D_1 == null)
                         {
                             continue;
                         }
 
-                        vector2D_2 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_2, polygon2D);
+                        vector2D_2 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_2, polygon2D_Simplify);
                         if (vector2D_2 == null)
                         {
                             continue;
@@ -244,7 +247,7 @@ namespace SAM.Analytical
 
                         Point2D point2D_Polygon2D = null;
                         double distance = double.MaxValue;
-                        foreach (Point2D point2D_Temp in polygon2D)
+                        foreach (Point2D point2D_Temp in polygon2D_Simplify)
                         {
                             double distance_Temp = point2D_1.Distance(point2D_Temp) + point2D_2.Distance(point2D_Temp);
                             if (distance_Temp < distance)
@@ -265,7 +268,7 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        if (polygon2D.On(segment2D.Mid(), tolerance_Snap))
+                        if (polygon2D_Simplify.On(segment2D.Mid(), tolerance_Snap))
                         {
                             continue;
                         }
