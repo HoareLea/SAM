@@ -250,6 +250,8 @@ namespace SAM.Analytical
                         Point2D point2D_1 = point2D.GetMoved(vector2D_1);
                         Point2D point2D_2 = point2D.GetMoved(vector2D_2);
 
+                        Segment2D segment2D_Temp = new Segment2D(point2D_1, point2D_2);
+
                         Point2D point2D_Polygon2D = null;
                         double distance = double.MaxValue;
                         foreach (Point2D point2D_Temp in polygon2D_Simplify)
@@ -259,7 +261,14 @@ namespace SAM.Analytical
                                 continue;
                             }
 
-                            double distance_Temp = point2D_1.Distance(point2D_Temp) + point2D_2.Distance(point2D_Temp) + point2D.Distance(point2D_Temp);
+                            Vector2D vector2D = new Vector2D(point2D, point2D_Temp);
+                            vector2D = Geometry.Planar.Query.TraceFirst(point2D, vector2D, segment2D_Temp);
+                            if (vector2D == null)
+                            {
+                                continue;
+                            }
+
+                            double distance_Temp = point2D.Distance(point2D_Temp);
                             if (distance_Temp < distance)
                             {
                                 point2D_Polygon2D = point2D_Temp;

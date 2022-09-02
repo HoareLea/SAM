@@ -49,14 +49,14 @@ namespace SAM.Geometry.Spatial
                 segment3DDatas = GetSegment3Ds(face3D).ConvertAll(x => new Segment3DData(x));
             }
 
-            public Segment3DData FindSimiar(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
+            public bool HasOverlay(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
             {
                 if(segment3DData == null)
                 {
-                    return null;
+                    return false;
                 }
 
-                return segment3DDatas?.Find(x => segment3DData.Similar(x, tolerance));
+                return segment3DDatas?.Find(x => segment3DData.Overlay(x, tolerance)) != null;
             }
             
             public List<Segment3DData> Segment3DDatas
@@ -148,7 +148,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            public bool Similar(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
+            public bool Overlay(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
             {
                 if (segment3DData == null)
                 {
@@ -160,22 +160,7 @@ namespace SAM.Geometry.Spatial
                     return false;
                 }
 
-                return segment3DData.mid.AlmostEquals(mid, tolerance);
-            }
-
-            public bool On(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
-            {
-                if (segment3DData == null)
-                {
-                    return false;
-                }
-
-                if (segment3DData.segment3D == null || mid == null)
-                {
-                    return false;
-                }
-
-                return segment3DData.segment3D.On(mid, tolerance);
+                return segment3D.On(segment3DData.mid, tolerance) || segment3DData.segment3D.On(mid, tolerance);
             }
 
             public List<Face3DData> GetFace3DDatas(IEnumerable<Face3DData> face3DDatas, double tolerance = Core.Tolerance.Distance)
@@ -193,7 +178,7 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    if (face3DData.FindSimiar(this, tolerance) != null)
+                    if (face3DData.HasOverlay(this, tolerance))
                     {
                         result.Add(face3DData);
                     }
@@ -472,7 +457,7 @@ namespace SAM.Geometry.Spatial
 
             foreach(Segment3DData segment3DData in segment3DDatas)
             {
-                if(segment3DDatas_ToBeExcluded != null && segment3DDatas_ToBeExcluded.Find(x => segment3DData.Similar(x, tolerance)) != null)
+                if(segment3DDatas_ToBeExcluded != null && segment3DDatas_ToBeExcluded.Find(x => segment3DData.Overlay(x, tolerance)) != null)
                 {
                     continue;
                 }
@@ -549,7 +534,7 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    if (result.Find(x => segment3DData.Similar(x, tolerance)) == null)
+                    if (result.Find(x => segment3DData.Overlay(x, tolerance)) == null)
                     {
                         result.Add(segment3DData);
                     }
