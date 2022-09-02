@@ -492,17 +492,19 @@ namespace SAM.Geometry.Planar
                 bool remove = false;
                 foreach (Point2D point2D in point2Ds)
                 {
-                    List<double> distances = segment2Ds.ConvertAll(x => x.Distance(point2D));
-                    double distance_Min = distances.Min();
-                    List<int> indexes = distances.IndexesOf(distance_Min);
-
-                    double offset = offsets[indexes.First()];
-                    if(indexes.Count > 1)
-                        offset = indexes.ConvertAll(x => offsets[x]).Min();
-
-                    if (distance_Min < offset - tolerance)
+                    for (int j = 0; j < segment2Ds.Count; j++)
                     {
-                        remove = true;
+                        double distance = segment2Ds[j].Distance(point2D);
+                        double offset = offsets[j];
+                        if(distance < offset - tolerance)
+                        {
+                            remove = true;
+                            break;
+                        }
+                    }
+
+                    if (remove)
+                    {
                         break;
                     }
                 }
