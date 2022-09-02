@@ -204,13 +204,18 @@ namespace SAM.Analytical
                     List<bool> obtuseAngles = polygon2D_Offset.ObtuseAngles();
                     List<Point2D> point2Ds = polygon2D_Offset.GetPoints();
 
-                    Dictionary<Point2D, List<Face3D>> dictionary = new Dictionary<Point2D, List<Face3D>>();
+                    List<Tuple<Point2D, List<Face3D>>> tuples = new List<Tuple<Point2D, List<Face3D>>>();
                     for (int i = 0; i < segment2Ds.Count; i++)
                     {
                         Segment2D segment2D_1 = segment2Ds[i];
                         Segment2D segment2D_2 = Core.Query.Next(segment2Ds, i);
 
                         Point2D point2D = segment2D_1[1];
+                        if(polygon2D.On(point2D, tolerance_Snap))
+                        {
+                            continue;
+                        }
+
                         Point2D point2D_Previous = segment2D_1[0];
                         Point2D point2D_Next = segment2D_2[1];
 
@@ -249,7 +254,12 @@ namespace SAM.Analytical
                         double distance = double.MaxValue;
                         foreach (Point2D point2D_Temp in polygon2D_Simplify)
                         {
-                            double distance_Temp = point2D_1.Distance(point2D_Temp) + point2D_2.Distance(point2D_Temp);
+                            if(polygon2D_Offset.On(point2D_Temp, tolerance_Snap))
+                            {
+                                continue;
+                            }
+
+                            double distance_Temp = point2D_1.Distance(point2D_Temp) + point2D_2.Distance(point2D_Temp) + point2D.Distance(point2D_Temp);
                             if (distance_Temp < distance)
                             {
                                 point2D_Polygon2D = point2D_Temp;
@@ -279,25 +289,26 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        if(!dictionary.TryGetValue(point2D_Polygon2D, out List<Face3D> face3Ds_Temp))
+                        List<Face3D> face3Ds_Temp = tuples.Find(x => x.Item1.AlmostEquals(point2D_Polygon2D, tolerance_Snap))?.Item2;
+                        if(face3Ds_Temp == null)
                         {
                             face3Ds_Temp = new List<Face3D>();
-                            dictionary[point2D_Polygon2D] = face3Ds_Temp;
+                            tuples.Add(new Tuple<Point2D, List<Face3D>>(point2D_Polygon2D, face3Ds_Temp) );
                         }
 
                         face3Ds_Temp.Add(face3D_New);
                     }
 
-                    if(dictionary != null && dictionary.Count != 0)
+                    if(tuples != null && tuples.Count != 0)
                     {
-                        foreach(KeyValuePair<Point2D, List<Face3D>> keyValuePair in dictionary)
+                        foreach(Tuple<Point2D, List<Face3D>> tuple in tuples)
                         {
-                            if (keyValuePair.Value.Count > 1)
+                            if (tuple.Item2.Count > 1)
                             {
-                                keyValuePair.Value.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+                                tuple.Item2.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
                             }
 
-                            face3Ds_New.Add(keyValuePair.Value[0]);
+                            face3Ds_New.Add(tuple.Item2[0]);
                         }
                     }
                 }
