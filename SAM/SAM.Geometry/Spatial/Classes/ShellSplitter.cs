@@ -257,6 +257,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Distance);
+            face3D_Temp.SplitEdges(Tolerance_Distance);
 
             List<Face3DData> face3DDatas = face3D_Temp.ConvertAll(x => new Face3DData(x));
 
@@ -295,10 +296,12 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>() { new Shell(shell)};
             }
 
-            ShellData shellData_Before = new ShellData(shell);
+            Shell shell_Temp = new Shell(shell);
+
+            ShellData shellData_Before = new ShellData(shell_Temp);
             List<Face3DData> face3DDatas_Before = new List<Face3DData>(face3DDatas);
 
-            List<Face3D> face3Ds_Shell_Before = shell.Face3Ds;
+            List<Face3D> face3Ds_Shell_Before = shell_Temp.Face3Ds;
             if(face3Ds_Shell_Before == null || face3Ds_Shell_Before.Count == 0)
             {
                 return null;
@@ -307,7 +310,16 @@ namespace SAM.Geometry.Spatial
             List<Face3D> face3Ds = face3DDatas_Before.ConvertAll(x => x.Face3D);
             if(face3Ds == null || face3Ds.Count == 0)
             {
-                return new List<Shell>() { new Shell(shell) };
+                return new List<Shell>() { new Shell(shell_Temp) };
+            }
+
+            for(int i=0; i < face3Ds.Count; i++)
+            {
+                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell }, Tolerance_Snap, Tolerance_Distance);
+                if(face3D != null)
+                {
+                    face3Ds[i] = face3D;
+                }
             }
 
             List<Face3D> face3Ds_Shell_After = new List<Face3D>();
@@ -326,6 +338,7 @@ namespace SAM.Geometry.Spatial
             }
 
             Shell shell_After = new Shell(face3Ds_Shell_After);
+            shell_After.SplitEdges(Tolerance_Distance);
 
             ShellData shellData_After = new ShellData(shell_After);
 
@@ -347,7 +360,7 @@ namespace SAM.Geometry.Spatial
             {
                 Point3D centroid = face3Ds_After[i].GetInternalPoint3D();
 
-                if (!shell.Inside(centroid, Tolerance_Snap, Tolerance_Distance) || shell.On(centroid, Tolerance_Snap))
+                if (!shell_Temp.Inside(centroid, Tolerance_Snap, Tolerance_Distance) || shell_Temp.On(centroid, Tolerance_Snap))
                 {
                     face3Ds_After.RemoveAt(i);
                 }
@@ -397,14 +410,14 @@ namespace SAM.Geometry.Spatial
                 result.Add(shell_New);
             }
 
-            double volume_Before = shell.Volume(Tolerance_Snap, Tolerance_Distance);
+            double volume_Before = shell_Temp.Volume(Tolerance_Snap, Tolerance_Distance);
             double volume_After = result.ConvertAll(x => x.Volume(Tolerance_Snap, Tolerance_Distance)).Sum();
             if(System.Math.Abs(volume_Before - volume_After) < Tolerance_Snap)
             {
                 return result;
             }
 
-            List<Shell> shells_Difference = shell.Difference(result);
+            List<Shell> shells_Difference = shell_Temp.Difference(result);
             if(shells_Difference == null || shells_Difference.Count == 0)
             {
                 return result;

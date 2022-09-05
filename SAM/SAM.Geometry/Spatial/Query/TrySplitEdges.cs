@@ -138,12 +138,12 @@ namespace SAM.Geometry.Spatial
                 for (int i = 0; i < internalEdges.Count; i++)
                 {
                     IClosedPlanar3D internalEdge = internalEdges[i];
-                    if (externalEdge == null)
+                    if (internalEdge == null)
                     {
                         continue;
                     }
 
-                    ISegmentable3D internalEdge_Segmentable3D = externalEdge as ISegmentable3D;
+                    ISegmentable3D internalEdge_Segmentable3D = internalEdge as ISegmentable3D;
                     if (internalEdge_Segmentable3D == null)
                     {
                         throw new System.NotImplementedException();
@@ -208,6 +208,69 @@ namespace SAM.Geometry.Spatial
 
             result = new Face3D(face3D_Split);
             return false;
+        }
+
+        public static bool TrySplitEdges(this Face3D face3D_Split, IEnumerable<Face3D> face3Ds_Splitting, out Face3D result, double tolerance = Core.Tolerance.Distance)
+        {
+            result = null;
+
+            if(face3D_Split == null || face3Ds_Splitting == null)
+            {
+                return false;
+            }
+
+
+            result = new Face3D(face3D_Split);
+            bool @bool = false;
+            foreach(Face3D face3D_Splitting in face3Ds_Splitting)
+            {
+                if(TrySplitEdges(result, face3D_Splitting, out Face3D face3D, tolerance) && face3D != null)
+                {
+                    result = face3D;
+                    @bool = true;
+                }
+            }
+
+            if(!@bool)
+            {
+                result = null;
+            }
+
+            return @bool;
+        }
+
+        public static bool TrySplitEdges(this Face3D face3D_Split, Shell shell_Splitting, out Face3D result, double tolerance = Core.Tolerance.Distance)
+        {
+            return TrySplitEdges(face3D_Split, shell_Splitting?.Face3Ds, out result, tolerance);
+        }
+
+        public static bool TrySplitEdges(this Shell shell_Split, IEnumerable<Face3D> face3Ds_Splitting, out Shell result, double tolerance = Core.Tolerance.Distance)
+        {
+            result = null;
+
+            if(shell_Split == null || face3Ds_Splitting == null)
+            {
+                return false;
+            }
+
+            List<Face3D> face3Ds = shell_Split.Face3Ds;
+            bool @bool = false;
+            for(int i=0; i < face3Ds.Count; i++)
+            {
+                if(TrySplitEdges(face3Ds[i], face3Ds_Splitting, out Face3D face3D, tolerance))
+                {
+                    face3Ds[i] = face3D;
+                    @bool = true;
+                }
+            }
+
+            if (@bool)
+            {
+                result = new Shell(face3Ds);
+            }
+
+            return @bool;
+
         }
     }
 }

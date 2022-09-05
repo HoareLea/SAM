@@ -224,6 +224,7 @@
     <Compile Include="Spatial\Interfaces\IFace3DObject.cs" />
     <Compile Include="Spatial\Interfaces\ISAMGeometry3DObject.cs" />
     <Compile Include="Spatial\Modify\InsertClosest.cs" />
+    <Compile Include="Spatial\Modify\SplitEdges.cs" />
     <Compile Include="Spatial\Modify\SplitFace3Ds.cs" />
     <Compile Include="Spatial\Modify\FillFace3Ds.cs" />
     <Compile Include="Spatial\Modify\SplitCoplanarFace3Ds.cs" />
