@@ -56,7 +56,7 @@ namespace SAM.Geometry.Spatial
                     return false;
                 }
 
-                return segment3DDatas?.Find(x => segment3DData.Overlay(x, tolerance)) != null;
+                return segment3DDatas?.FindAll(x => x != null && Core.Query.Round(x.Segment3D.GetLength(), tolerance) > tolerance).Find(x => segment3DData.Overlay(x, tolerance)) != null;
             }
             
             public List<Segment3DData> Segment3DDatas
@@ -256,7 +256,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Distance);
+            List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Snap);
             face3D_Temp.SplitEdges(Tolerance_Distance);
 
             List<Face3DData> face3DDatas = face3D_Temp.ConvertAll(x => new Face3DData(x));
