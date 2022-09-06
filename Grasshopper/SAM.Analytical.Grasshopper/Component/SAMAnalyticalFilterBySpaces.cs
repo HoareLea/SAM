@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analytical", "_analytical", "SAM Analytical AdjacencyCluster or AnalyticalModel", GH_ParamAccess.item);
             inputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Geometry Spaces", GH_ParamAccess.list);
         }
 
@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analytical", "analytical", "SAM Analytical AdjacencyCluster or AnalyticalModel", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -58,11 +58,21 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            AdjacencyCluster adjacencyCluster = null;
-            if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            IAnalyticalObject analyticalObject = null;
+            if(!dataAccess.GetData(0, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            AdjacencyCluster adjacencyCluster = null;
+            if(analyticalObject is AdjacencyCluster)
+            {
+                adjacencyCluster = (AdjacencyCluster)analyticalObject;
+            }
+            else if(analyticalObject is AnalyticalModel)
+            {
+                adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
             }
 
             List<Space> spaces = new List<Space>();
@@ -72,7 +82,20 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster.Filter(spaces)));
+            if(adjacencyCluster != null)
+            {
+                adjacencyCluster = adjacencyCluster.Filter(spaces);
+                if(analyticalObject is AdjacencyCluster)
+                {
+                    analyticalObject = adjacencyCluster;
+                }
+                else if(analyticalObject is AnalyticalModel)
+                {
+                    analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
+                }
+            }
+
+            dataAccess.SetData(0, new GooAnalyticalObject(analyticalObject));
         }
     }
 }
