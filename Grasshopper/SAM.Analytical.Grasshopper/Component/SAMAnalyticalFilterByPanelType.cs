@@ -119,7 +119,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 index = Params.IndexOfOutputParam(keyValuePair.Key.ToString());
                 if (index != -1)
-                    dataAccess.SetData(index, keyValuePair.Value);
+                {
+                    dataAccess.SetDataList(index, keyValuePair.Value);
+                }
             }
         }
     }

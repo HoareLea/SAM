@@ -444,7 +444,9 @@ namespace SAM.Geometry.Planar
 
             List<Segment2D> segment2Ds = polygon2D?.GetSegments();
             if (segment2Ds == null || segment2Ds.Count == 0)
+            {
                 return null;
+            }
 
             List<Segment2D> segment2Ds_Offset = new List<Segment2D>();
             for (int i = 0; i < segment2Ds.Count; i++)
@@ -455,39 +457,41 @@ namespace SAM.Geometry.Planar
                 segment2D_Offset = segment2D_Offset.Join(polygon2D, tolerance);
 
                 if (segment2D_Offset != null && segment2D_Offset.GetLength() >= tolerance)
+                {
                     segment2Ds_Offset.Add(segment2D_Offset);
+                }
             }
 
             segment2Ds_Offset = Split(segment2Ds_Offset, tolerance);
-
             segment2Ds_Offset.RemoveAll(x => !polygon2D.Inside(x.Mid()) && !polygon2D.On(x.Mid()));
-
-            //segment2Ds_Offset.RemoveAll(x => polygon2D.On(x[0]) || polygon2D.On(x[1]));
 
             for (int i = 0; i < segment2Ds.Count; i++)
             {
                 if (offsets[i] - Tolerance.MacroDistance < 0)
+                {
                     continue;
+                }
 
                 Segment2D segment2D = segment2Ds[i];
-                //segment2Ds_Offset.RemoveAll(x => segment2D.Distance(x) < offsets[i] - Core.Tolerance.MacroDistance);
-
                 segment2Ds_Offset.RemoveAll(x => segment2D.On(x[0]) || segment2D.On(x[1]));
             }
 
-            List<Polygon2D> polygon2Ds_Temp = Create.Polygon2Ds(segment2Ds_Offset, tolerance);//new PointGraph2D(segment2Ds_Offset, false, tolerance).GetPolygon2Ds();
+            List<Polygon2D> polygon2Ds_Temp = Create.Polygon2Ds(segment2Ds_Offset, tolerance);
             if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
+            {
                 return null;
+            }
 
             List<Polygon2D> polygon2Ds = new List<Polygon2D>();
             for (int i = 0; i < polygon2Ds_Temp.Count; i++)
             {
                 Polygon2D polygon2D_Temp = polygon2Ds_Temp[i];
 
-                //2020.08.02 START
                 List<Point2D> point2Ds = polygon2D_Temp.Points;
                 if (point2Ds == null || point2Ds.Count < 3)
+                {
                     continue;
+                }
 
                 bool remove = false;
                 foreach (Point2D point2D in point2Ds)
@@ -496,8 +500,30 @@ namespace SAM.Geometry.Planar
                     {
                         double distance = segment2Ds[j].Distance(point2D);
                         double offset = offsets[j];
-                        if(distance < offset - tolerance)
+                        if (distance < offset - tolerance)
                         {
+                            //START ADDED 2022.09.06
+                            List<Point2D> point2Ds_Closest = segment2Ds.ConvertAll(x => x.Closest(point2D));
+                            Point2D point2D_Project = point2Ds_Closest[j];
+                            List<int> indexes = new List<int>();
+                            for (int k = 0; k < point2Ds_Closest.Count; k++)
+                            {
+                                if(point2Ds_Closest[k].AlmostEquals(point2D_Project, tolerance))
+                                {
+                                    indexes.Add(k);
+                                }
+                            }
+
+                            if(indexes.Count > 1)
+                            {
+                                offset = indexes.ConvertAll(x => offsets[x]).Min();
+                                if (distance >= offset - tolerance)
+                                {
+                                    continue;
+                                }
+                            }
+                            //END ADDED 2022.09.06
+
                             remove = true;
                             break;
                         }
@@ -510,8 +536,9 @@ namespace SAM.Geometry.Planar
                 }
 
                 if (remove)
+                {
                     continue;
-                //2020.08.02 END
+                }
 
                 List<Segment2D> segment2Ds_Temp = IntersectionSegment2Ds(polygon2D, polygon2D_Temp, false, tolerance);
                 if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
@@ -533,14 +560,18 @@ namespace SAM.Geometry.Planar
                 }
 
                 if (remove)
+                {
                     continue;
+                }
 
                 polygon2Ds.Add(polygon2D_Temp);
             }
 
-            polygon2Ds = ExternalPolygon2Ds(polygon2Ds, tolerance);//new PointGraph2D(polygon2Ds, false, tolerance).GetPolygon2Ds_External();
+            polygon2Ds = ExternalPolygon2Ds(polygon2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
+            {
                 return null;
+            }
 
             for (int i = 0; i < polygon2Ds.Count; i++)
             {
@@ -551,7 +582,9 @@ namespace SAM.Geometry.Planar
                 }
 
                 if (orient)
+                {
                     polygon2Ds[i].SetOrientation(orientation);
+                }
             }
 
             return polygon2Ds;

@@ -184,10 +184,10 @@ namespace SAM.Geometry.Planar
             double m = (end.Y - start.Y) / (end.X - start.X);
             double b = start.Y - (m * start.X);
 
-            double X = (m * point2D.Y + point2D.X - m * b) / (m * m + 1);
-            double Y = (m * m * point2D.Y + m * point2D.X + b) / (m * m + 1);
+            double x = (m * point2D.Y + point2D.X - m * b) / (m * m + 1);
+            double y = (m * m * point2D.Y + m * point2D.X + b) / (m * m + 1);
 
-            return new Point2D(X, Y);
+            return new Point2D(x, y);
         }
 
         public Segment2D Project(ISegmentable2D segmentable2D)
