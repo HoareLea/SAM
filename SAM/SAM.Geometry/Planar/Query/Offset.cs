@@ -315,52 +315,76 @@ namespace SAM.Geometry.Planar
             lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
             if(lineString.IsClosed)
             {
-                double offste_Abs = System.Math.Abs(offset);
+                double offset_Abs = System.Math.Abs(offset);
 
                 for (int i = lineStrings.Count - 1; i >= 0; i--)
                 {
                     double distance = lineStrings[i].Distance(lineString);
-                    if (distance < offste_Abs - tolerance)
+                    if (distance < offset_Abs - tolerance)
                     {
                         lineStrings.RemoveAt(i);
                     }
                 }
             }
 
-            Polygonizer polygonizer = new Polygonizer(true);
-            polygonizer.Add(lineStrings.ToArray());
-
-            IEnumerable<NetTopologySuite.Geometries.Geometry> geometries = polygonizer.GetPolygons();
-            if(geometries == null)
-            {
-                return null;
-            }
-
             List<Polygon2D> result = new List<Polygon2D>();
-            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+
+            List<Segment2D> segment2Ds = lineStrings.ConvertAll(x => x.ToSAM())?.Segment2Ds();
+            List<Polygon> polygons =  segment2Ds.ToNTS_Polygons(tolerance);
+            if(polygons != null && polygons.Count > 0)
             {
-                ISAMGeometry2D sAMGeometry2D = geometry_Temp?.ToSAM(tolerance);
-                if(sAMGeometry2D == null)
-                {
-                    continue;
-                }
+                //Polygon2Ds by SAM -> Added 2022.09.07
 
-                if(sAMGeometry2D is Polygon2D)
+                foreach (Polygon polygon in polygons)
                 {
-                    result.Add((Polygon2D)sAMGeometry2D);
-                    continue;
-                }
-
-                if(sAMGeometry2D is Face2D)
-                {
-                    List<IClosed2D> edge2Ds = ((Face2D)sAMGeometry2D).Edge2Ds;
-                    if(edge2Ds != null)
+                    List<Polygon2D> polygon2Ds_Temp =  polygon?.ToSAM_Polygon2Ds(tolerance);
+                    if(polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
                     {
-                        foreach(IClosed2D edge2D in edge2Ds)
-                        { 
-                            if(edge2D is ISegmentable2D)
+                        continue;
+                    }
+
+                    result.AddRange(polygon2Ds_Temp);
+                }
+            }
+            else
+            {
+                //Polygon2Ds by Polygonizer
+                
+                Polygonizer polygonizer = new Polygonizer(true);
+                polygonizer.Add(lineStrings.ToArray());
+
+                IEnumerable<NetTopologySuite.Geometries.Geometry> geometries = polygonizer.GetPolygons();
+                if (geometries == null)
+                {
+                    return null;
+                }
+
+
+                foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+                {
+                    ISAMGeometry2D sAMGeometry2D = geometry_Temp?.ToSAM(tolerance);
+                    if (sAMGeometry2D == null)
+                    {
+                        continue;
+                    }
+
+                    if (sAMGeometry2D is Polygon2D)
+                    {
+                        result.Add((Polygon2D)sAMGeometry2D);
+                        continue;
+                    }
+
+                    if (sAMGeometry2D is Face2D)
+                    {
+                        List<IClosed2D> edge2Ds = ((Face2D)sAMGeometry2D).Edge2Ds;
+                        if (edge2Ds != null)
+                        {
+                            foreach (IClosed2D edge2D in edge2Ds)
                             {
-                                result.Add(new Polygon2D(((ISegmentable2D)edge2D).GetPoints()));
+                                if (edge2D is ISegmentable2D)
+                                {
+                                    result.Add(new Polygon2D(((ISegmentable2D)edge2D).GetPoints()));
+                                }
                             }
                         }
                     }

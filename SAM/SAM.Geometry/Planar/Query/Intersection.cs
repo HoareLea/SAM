@@ -315,34 +315,89 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
-                if (geometry == null || !geometry.IsValid || geometry.IsEmpty)
+                try
                 {
-                    continue;
-                }
-
-                if(geometry is LineString)
-                {
-                    List<Segment2D> segment2Ds_Temp = ((LineString)geometry).ToSAM()?.GetSegments();
-                    if(segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                    //NTS Method
+                    NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(lineString);
+                    if (geometry == null || !geometry.IsValid || geometry.IsEmpty)
                     {
-                        result.AddRange(segment2Ds_Temp);
+                        continue;
                     }
-                }
-                else if(geometry is MultiLineString)
-                {
-                    List<Polyline2D> polyline2Ds = ((MultiLineString)geometry).ToSAM();
-                    if(polyline2Ds != null && polyline2Ds.Count != 0)
+
+                    if (geometry is LineString)
                     {
-                        foreach(Polyline2D polyline2D in polyline2Ds)
+                        List<Segment2D> segment2Ds_Temp = ((LineString)geometry).ToSAM()?.GetSegments();
+                        if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
                         {
-                            List<Segment2D> segment2Ds_Temp = polyline2D?.GetSegments();
-                            if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                            result.AddRange(segment2Ds_Temp);
+                        }
+                    }
+                    else if (geometry is MultiLineString)
+                    {
+                        List<Polyline2D> polyline2Ds = ((MultiLineString)geometry).ToSAM();
+                        if (polyline2Ds != null && polyline2Ds.Count != 0)
+                        {
+                            foreach (Polyline2D polyline2D in polyline2Ds)
                             {
-                                result.AddRange(segment2Ds_Temp);
+                                List<Segment2D> segment2Ds_Temp = polyline2D?.GetSegments();
+                                if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                                {
+                                    result.AddRange(segment2Ds_Temp);
+                                }
                             }
                         }
                     }
+                }
+                catch
+                {
+                    //SAM Method
+
+                    List<IClosed2D> closed2Ds = face2D.Edge2Ds;
+                    if(closed2Ds == null || closed2Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    List<Point2D> point2Ds = new List<Point2D>();
+                    foreach (IClosed2D closed2D in closed2Ds)
+                    {
+                        if(closed2D == null)
+                        {
+                            continue;
+                        }
+
+                        ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+                        if(segmentable2D == null)
+                        {
+                            throw new System.NotImplementedException();
+                        }
+
+                        List<Point2D> point2Ds_Intersections = Intersections(segment2D, segmentable2D);
+                        if(point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        point2Ds_Intersections.ForEach(x => Modify.Add(point2Ds, x, tolerance));
+                    }
+
+                    Modify.Add(point2Ds, segment2D[0], tolerance);
+                    Modify.Add(point2Ds, segment2D[1], tolerance);
+
+                    point2Ds.SortByDistance(segment2D[0]);
+
+                    for(int i =0; i < point2Ds.Count - 1; i++)
+                    {
+                        Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
+
+                        Point2D point2D_Mid = segment2D_Temp.Mid();
+
+                        if(face2D.Inside(point2D_Mid, tolerance) || face2D.On(point2D_Mid, tolerance))
+                        {
+                            result.Add(segment2D_Temp);
+                        }
+                    }
+
                 }
             }
 
