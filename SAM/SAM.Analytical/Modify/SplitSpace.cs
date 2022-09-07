@@ -46,6 +46,8 @@ namespace SAM.Analytical
                 return null;
             }
 
+            List<Face3D> face3Ds_Shell = shell.Face3Ds;
+
             List<Face3D> face3Ds_New = new List<Face3D>();
             foreach (Face3D face3D in face3Ds)
             {
@@ -156,6 +158,7 @@ namespace SAM.Analytical
                 //Create new face3Ds
                 foreach(Polygon2D polygon2D_Offset in polygon2Ds_Offset)
                 {
+                    List<Face3D> face3Ds_Polygon2D = new List<Face3D>();
                     foreach (Segment2D segment2D in polygon2D_Offset.GetSegments())
                     {
                         if(segment2D == null)
@@ -186,7 +189,11 @@ namespace SAM.Analytical
                             continue;
                         }
 
+                        face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
+                        face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
+
                         face3Ds_New.Add(face3D_New);
+                        face3Ds_Polygon2D.Add(face3D_New);
                     }
                 }
 
@@ -317,10 +324,14 @@ namespace SAM.Analytical
                                 tuple.Item2.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
                             }
 
-                            face3Ds_New.Add(tuple.Item2[0]);
+                            Face3D face3D_New = tuple.Item2[0];
+                            face3D_New = face3D_New.Snap(face3Ds_New, tolerance_Snap, tolerance_Distance);
+                            face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
+                            face3Ds_New.Add(face3D_New);
                         }
                     }
                 }
+
             }
 
             if(face3Ds_New == null || face3Ds_New.Count == 0)
