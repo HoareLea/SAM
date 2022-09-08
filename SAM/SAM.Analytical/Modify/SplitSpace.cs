@@ -432,59 +432,48 @@ namespace SAM.Analytical
 
                 Polygon2D polygon2D = new Polygon2D(segmentable2D.GetPoints());
 
-                List<double> offsets = new List<double>();
-                foreach (Segment2D segment2D in polygon2D.GetSegments())
+                List<Vector2D> vector2Ds = polygon2D.InternalVector2Ds();
+                List<Segment2D> segment2Ds = polygon2D.GetSegments();
+
+                List<Tuple<Vector2D, List<Tuple<Segment2D, Polygon2D>>>> tuples = new List<Tuple<Vector2D, List<Tuple<Segment2D,  Polygon2D>>>>();
+                for(int i =0; i < segment2Ds.Count; i++)
                 {
+                    Segment2D segment2D = segment2Ds[i];
+                    Vector2D vector2D = vector2Ds[i];
+
                     Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
                     if (point3D == null)
                     {
-                        offsets.Add(0);
                         continue;
                     }
 
                     Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
                     if (panel == null)
                     {
-                        offsets.Add(0);
                         continue;
                     }
 
                     double offset_Panel = func.Invoke(panel);
-                    if (double.IsNaN(offset_Panel))
+                    if (double.IsNaN(offset_Panel) || Core.Query.AlmostEqual(offset_Panel, tolerance_Snap))
                     {
-                        offsets.Add(0);
                         continue;
                     }
 
-                    offsets.Add(offset_Panel);
+                    Polygon2D polygon2D_Panel = new Polygon2D(new Point2D[] { segment2D[0], segment2D[1], segment2D[1].GetMoved(vector2D * offset_Panel), segment2D[0].GetMoved(vector2D * offset_Panel) });
+
+                    Tuple<Vector2D, List<Tuple<Segment2D, Polygon2D>>> tuple = tuples.Find(x => x.Item1.AlmostEqual(vector2D, tolerance_Angle));
+                    if(tuple == null)
+                    {
+                        tuple = new Tuple<Vector2D, List<Tuple<Segment2D, Polygon2D>>>(vector2D, new List<Tuple<Segment2D, Polygon2D>>());
+                        tuples.Add(tuple);
+                    }
+
+                    tuple.Item2.Add(new Tuple<Segment2D, Polygon2D>(segment2D, polygon2D_Panel));
                 }
 
-                //Offset polygon2D
-                List<Polygon2D> polygon2Ds_Offset = polygon2D.Offset(offsets, true, true, true, tolerance_Distance);
-                if (polygon2Ds_Offset == null || polygon2Ds_Offset.Count == 0)
+                if(tuples == null || tuples.Count == 0)
                 {
                     continue;
-                }
-
-                //Remove unwanted polygon2Ds
-                for (int i = polygon2Ds_Offset.Count - 1; i >= 0; i--)
-                {
-                    Polygon2D polygon2D_Offset = polygon2Ds_Offset[i];
-
-                    if (polygon2D_Offset == null || !polygon2D_Offset.IsValid())
-                    {
-                        polygon2Ds_Offset.RemoveAt(i);
-                        continue;
-                    }
-
-                    List<Polygon2D> polygon2Ds_Temp = polygon2D_Offset.Offset(-minSectionOffset, tolerance_Distance);
-                    if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
-                    {
-                        polygon2Ds_Offset.RemoveAt(i);
-                        continue;
-                    }
-
-                    polygon2Ds_Offset[i] = Geometry.Planar.Query.SimplifyByAngle(polygon2D_Offset, tolerance_Angle);
                 }
 
                 Func<Segment2D, Face3D> createFace3D = new Func<Segment2D, Face3D>((Segment2D segment2D) =>
@@ -516,183 +505,53 @@ namespace SAM.Analytical
                     return new Face3D(new Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0] }, tolerance_Distance));
                 });
 
-                //Create new face3Ds
-                foreach (Polygon2D polygon2D_Offset in polygon2Ds_Offset)
+                foreach (Tuple<Vector2D, List<Tuple<Segment2D, Polygon2D>>> tuple in tuples)
                 {
+                    List<Polygon2D> polygon2Ds = tuple.Item2.ConvertAll(x => x.Item2);
+                    polygon2Ds = polygon2Ds.Union(tolerance_Distance);
+
                     List<Face3D> face3Ds_Polygon2D = new List<Face3D>();
-                    foreach (Segment2D segment2D in polygon2D_Offset.GetSegments())
+
+                    foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                     {
-                        if (segment2D == null)
+                        foreach (Segment2D segment2D in polygon2D_Temp.GetSegments())
                         {
-                            continue;
-                        }
-
-                        if (segment2D.GetLength() < tolerance_Distance)
-                        {
-                            continue;
-                        }
-
-                        Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
-                        if (point3D == null)
-                        {
-                            continue;
-                        }
-
-                        Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
-                        if (panel != null)
-                        {
-                            continue;
-                        }
-
-                        Face3D face3D_New = createFace3D.Invoke(segment2D);
-                        if (face3D_New == null)
-                        {
-                            continue;
-                        }
-
-                        face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
-                        face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
-
-                        face3Ds_New.Add(face3D_New);
-                        face3Ds_Polygon2D.Add(face3D_New);
-                    }
-                }
-
-                Polygon2D polygon2D_Simplify = Geometry.Planar.Query.SimplifyByAngle(polygon2D, tolerance_Angle);
-
-                //Create additional new face3Ds
-                foreach (Polygon2D polygon2D_Offset in polygon2Ds_Offset)
-                {
-                    List<Segment2D> segment2Ds = polygon2D_Offset.GetSegments();
-                    if (segment2Ds == null || segment2Ds.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    List<bool> obtuseAngles = polygon2D_Offset.ObtuseAngles();
-                    List<Point2D> point2Ds = polygon2D_Offset.GetPoints();
-
-                    List<Tuple<Point2D, List<Face3D>>> tuples = new List<Tuple<Point2D, List<Face3D>>>();
-                    for (int i = 0; i < segment2Ds.Count; i++)
-                    {
-                        Segment2D segment2D_1 = segment2Ds[i];
-                        Segment2D segment2D_2 = Core.Query.Next(segment2Ds, i);
-
-                        Point2D point2D = segment2D_1[1];
-                        if (polygon2D.On(point2D, tolerance_Snap))
-                        {
-                            continue;
-                        }
-
-                        Point2D point2D_Previous = segment2D_1[0];
-                        Point2D point2D_Next = segment2D_2[1];
-
-                        Vector2D vector2D_1 = point2D_Previous.Vector(point2D);
-                        Vector2D vector2D_2 = point2D_Next.Vector(point2D);
-
-                        int index = point2Ds.FindIndex(x => point2D.AlmostEquals(x, tolerance_Distance));
-                        if (index == -1)
-                        {
-                            continue;
-                        }
-
-                        bool obtuseAngle = obtuseAngles[index];
-                        if (!obtuseAngle)
-                        {
-                            vector2D_1.Negate();
-                            vector2D_2.Negate();
-                        }
-
-                        vector2D_1 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_1, polygon2D_Simplify);
-                        if (vector2D_1 == null)
-                        {
-                            continue;
-                        }
-
-                        vector2D_2 = Geometry.Planar.Query.TraceFirst(point2D, vector2D_2, polygon2D_Simplify);
-                        if (vector2D_2 == null)
-                        {
-                            continue;
-                        }
-
-                        Point2D point2D_1 = point2D.GetMoved(vector2D_1);
-                        Point2D point2D_2 = point2D.GetMoved(vector2D_2);
-
-                        Segment2D segment2D_Temp = new Segment2D(point2D_1, point2D_2);
-
-                        Point2D point2D_Polygon2D = null;
-                        double distance = double.MaxValue;
-                        foreach (Point2D point2D_Temp in polygon2D_Simplify)
-                        {
-                            if (polygon2D_Offset.On(point2D_Temp, tolerance_Snap))
+                            if (segment2D == null)
                             {
                                 continue;
                             }
 
-                            Vector2D vector2D = new Vector2D(point2D, point2D_Temp);
-                            vector2D = Geometry.Planar.Query.TraceFirst(point2D, vector2D, segment2D_Temp);
-                            if (vector2D == null)
+                            if (segment2D.GetLength() < tolerance_Distance)
                             {
                                 continue;
                             }
 
-                            double distance_Temp = point2D.Distance(point2D_Temp);
-                            if (distance_Temp < distance)
+                            Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
+                            if (point3D == null)
                             {
-                                point2D_Polygon2D = point2D_Temp;
-                                distance = distance_Temp;
-                            }
-                        }
-
-                        if (point2D_Polygon2D == null)
-                        {
-                            continue;
-                        }
-
-                        Segment2D segment2D = new Segment2D(point2D, point2D_Polygon2D);
-                        if (segment2D == null || !segment2D.IsValid() || segment2D.GetLength() < tolerance_Snap)
-                        {
-                            continue;
-                        }
-
-                        if (polygon2D_Simplify.On(segment2D.Mid(), tolerance_Snap))
-                        {
-                            continue;
-                        }
-
-                        Face3D face3D_New = createFace3D.Invoke(segment2D);
-                        if (face3D_New == null)
-                        {
-                            continue;
-                        }
-
-                        List<Face3D> face3Ds_Temp = tuples.Find(x => x.Item1.AlmostEquals(point2D_Polygon2D, tolerance_Snap))?.Item2;
-                        if (face3Ds_Temp == null)
-                        {
-                            face3Ds_Temp = new List<Face3D>();
-                            tuples.Add(new Tuple<Point2D, List<Face3D>>(point2D_Polygon2D, face3Ds_Temp));
-                        }
-
-                        face3Ds_Temp.Add(face3D_New);
-                    }
-
-                    if (tuples != null && tuples.Count != 0)
-                    {
-                        foreach (Tuple<Point2D, List<Face3D>> tuple in tuples)
-                        {
-                            if (tuple.Item2.Count > 1)
-                            {
-                                tuple.Item2.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+                                continue;
                             }
 
-                            Face3D face3D_New = tuple.Item2[0];
-                            face3D_New = face3D_New.Snap(face3Ds_New, tolerance_Snap, tolerance_Distance);
+                            Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                            if (panel != null)
+                            {
+                                continue;
+                            }
+
+                            Face3D face3D_New = createFace3D.Invoke(segment2D);
+                            if (face3D_New == null)
+                            {
+                                continue;
+                            }
+
+                            face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
                             face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
+
                             face3Ds_New.Add(face3D_New);
+                            face3Ds_Polygon2D.Add(face3D_New);
                         }
                     }
                 }
-
             }
 
             if (face3Ds_New == null || face3Ds_New.Count == 0)

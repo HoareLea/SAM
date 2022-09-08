@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreatePerimeterZones_2()
-          : base("SAMAnalytical.CreatePerimeterZones", "SAMAnalytical.CreatePerimeterZones",
+          : base("SAMAnalytical.CreatePerimeterZones_2", "SAMAnalytical.CreatePerimeterZones_2",
               "Creae Perimeter Zones in Analytical Model or AdjacencyCluster",
               "SAM WIP", "Analytical")
         {

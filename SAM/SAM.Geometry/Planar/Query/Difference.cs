@@ -187,6 +187,13 @@ namespace SAM.Geometry.Planar
             return Difference(face2D, new Face2D(polygon2D), tolerance);
         }
 
+        /// <summary>
+        /// Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
+        /// </summary>
+        /// <param name="polygon2D_1"></param>
+        /// <param name="polygon2D_2"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
         public static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             return Difference(polygon2D_1, new Polygon2D[] { polygon2D_2 }, tolerance);
