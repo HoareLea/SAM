@@ -512,44 +512,68 @@ namespace SAM.Analytical
 
                     List<Face3D> face3Ds_Polygon2D = new List<Face3D>();
 
+                    List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
                     foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                     {
-                        foreach (Segment2D segment2D in polygon2D_Temp.GetSegments())
+                        List<Polygon2D> polygon2Ds_Difference = polygon2D.Difference(polygon2D_Temp);
+                        if(polygon2Ds_Difference == null || polygon2Ds_Difference.Count == 0)
                         {
-                            if (segment2D == null)
-                            {
-                                continue;
-                            }
-
-                            if (segment2D.GetLength() < tolerance_Distance)
-                            {
-                                continue;
-                            }
-
-                            Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
-                            if (point3D == null)
-                            {
-                                continue;
-                            }
-
-                            Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
-                            if (panel != null)
-                            {
-                                continue;
-                            }
-
-                            Face3D face3D_New = createFace3D.Invoke(segment2D);
-                            if (face3D_New == null)
-                            {
-                                continue;
-                            }
-
-                            face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
-                            face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
-
-                            face3Ds_New.Add(face3D_New);
-                            face3Ds_Polygon2D.Add(face3D_New);
+                            segment2Ds_Temp.AddRange(polygon2D_Temp.GetSegments());
+                            continue;
                         }
+
+                        List<Polygon2D> polygon2Ds_Union = new List<Polygon2D>() { polygon2D_Temp};
+                        foreach(Polygon2D polygon2D_Difference in polygon2Ds_Difference)
+                        {
+                            List<Polygon2D> polygon2Ds_Offset = polygon2D_Difference.Offset(-minSectionOffset, tolerance_Distance);
+                            if(polygon2Ds_Offset != null && polygon2Ds_Offset.Count > 0)
+                            {
+                                continue;
+                            }
+
+                            polygon2Ds_Union.Add(polygon2D_Difference);
+                        }
+
+                        polygon2Ds_Union = polygon2Ds_Union.Union(tolerance_Distance);
+                        Polygon2D polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
+                        segment2Ds_Temp.AddRange(polygon2D_Union.GetSegments());
+                    }
+
+                    foreach (Segment2D segment2D in segment2Ds_Temp)
+                    {
+                        if (segment2D == null)
+                        {
+                            continue;
+                        }
+
+                        if (segment2D.GetLength() < tolerance_Distance)
+                        {
+                            continue;
+                        }
+
+                        Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
+                        if (point3D == null)
+                        {
+                            continue;
+                        }
+
+                        Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                        if (panel != null)
+                        {
+                            continue;
+                        }
+
+                        Face3D face3D_New = createFace3D.Invoke(segment2D);
+                        if (face3D_New == null)
+                        {
+                            continue;
+                        }
+
+                        face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
+                        face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
+
+                        face3Ds_New.Add(face3D_New);
+                        face3Ds_Polygon2D.Add(face3D_New);
                     }
                 }
             }
