@@ -325,7 +325,7 @@ namespace SAM.Geometry.Spatial
             List<Face3D> face3Ds_Shell_After = new List<Face3D>();
             foreach (Face3D face3D_Shell in face3Ds_Shell_Before)
             {
-                List<Face3D> face3Ds_Temp = face3D_Shell.Split(face3Ds, Tolerance_Snap, Tolerance_Angle, Tolerance_Distance);
+                List<Face3D> face3Ds_Temp = face3D_Shell.Split(face3Ds, Tolerance_Snap, Tolerance_Angle, Tolerance_Snap);
                 if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
                 {
                     face3Ds_Shell_After.Add(face3D_Shell);
@@ -338,9 +338,19 @@ namespace SAM.Geometry.Spatial
             }
 
             Shell shell_After = new Shell(face3Ds_Shell_After);
+            for (int i = 0; i < face3Ds.Count; i++)
+            {
+                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell_After }, Tolerance_Snap, Tolerance_Distance);
+                if (face3D != null)
+                {
+                    face3Ds[i] = face3D;
+                }
+            }
+
             shell_After.SplitEdges(Tolerance_Distance);
 
             ShellData shellData_After = new ShellData(shell_After);
+
 
             List<Face3D> face3Ds_After = new List<Face3D>();
             foreach (Face3D face3D in face3Ds)
