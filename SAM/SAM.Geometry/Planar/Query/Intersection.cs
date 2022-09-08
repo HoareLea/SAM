@@ -284,7 +284,7 @@ namespace SAM.Geometry.Planar
             return result.FindAll(x => x is T).ConvertAll(x => (T)x);
         }
 
-        public static List<Segment2D> Intersection(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<T> Intersection<T>(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
             if(face2D == null || segment2D == null)
             {
@@ -306,7 +306,7 @@ namespace SAM.Geometry.Planar
                 face2Ds = new List<Face2D>() { face2D };
             }
 
-            List<Segment2D> result = new List<Segment2D>();
+            List<T> result = new List<T>();
             foreach(Face2D face2D_Temp in face2Ds)
             {
                 Polygon polygon = face2D_Temp?.ToNTS(tolerance);
@@ -324,26 +324,51 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
-                    if (geometry is LineString)
+                    List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
+
+                    if(geometry is GeometryCollection)
                     {
-                        List<Segment2D> segment2Ds_Temp = ((LineString)geometry).ToSAM()?.GetSegments();
-                        if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                        foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
                         {
-                            result.AddRange(segment2Ds_Temp);
+                            geometries.Add(geometry_Temp);
                         }
                     }
-                    else if (geometry is MultiLineString)
+                    else
                     {
-                        List<Polyline2D> polyline2Ds = ((MultiLineString)geometry).ToSAM();
-                        if (polyline2Ds != null && polyline2Ds.Count != 0)
+                        geometries.Add(geometry);
+                    }
+
+                    foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+                    {
+                        if (geometry_Temp is LineString)
                         {
-                            foreach (Polyline2D polyline2D in polyline2Ds)
+                            List<Segment2D> segment2Ds_Temp = ((LineString)geometry_Temp).ToSAM()?.GetSegments();
+                            if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
                             {
-                                List<Segment2D> segment2Ds_Temp = polyline2D?.GetSegments();
-                                if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                                segment2Ds_Temp.FindAll(x => x is T).ForEach(x => result.Add((T)(object)x));
+                            }
+                        }
+                        else if (geometry_Temp is MultiLineString)
+                        {
+                            List<Polyline2D> polyline2Ds = ((MultiLineString)geometry_Temp).ToSAM();
+                            if (polyline2Ds != null && polyline2Ds.Count != 0)
+                            {
+                                foreach (Polyline2D polyline2D in polyline2Ds)
                                 {
-                                    result.AddRange(segment2Ds_Temp);
+                                    List<Segment2D> segment2Ds_Temp = polyline2D?.GetSegments();
+                                    if (segment2Ds_Temp != null && segment2Ds_Temp.Count != 0)
+                                    {
+                                        segment2Ds_Temp.FindAll(x => x is T).ForEach(x => result.Add((T)(object)x));
+                                    }
                                 }
+                            }
+                        }
+                        else if (geometry_Temp is Point)
+                        {
+                            Point2D point2D = ((Point)geometry_Temp).ToSAM();
+                            if(point2D is T)
+                            {
+                                result.Add((T)(object)point2D);
                             }
                         }
                     }
@@ -386,18 +411,54 @@ namespace SAM.Geometry.Planar
 
                     point2Ds.SortByDistance(segment2D[0]);
 
+                    List<bool> values = new List<bool>();
                     for(int i =0; i < point2Ds.Count - 1; i++)
                     {
                         Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
 
                         Point2D point2D_Mid = segment2D_Temp.Mid();
 
+                        bool value = false;
                         if(face2D.Inside(point2D_Mid, tolerance) || face2D.On(point2D_Mid, tolerance))
                         {
-                            result.Add(segment2D_Temp);
+                            if(segment2D_Temp is T)
+                            {
+                                result.Add((T)(object)segment2D_Temp);
+                            }
+                            value = true;
+                        }
+
+                        values.Add(value);
+                    }
+
+                    if(face2D.On(point2Ds[0], tolerance) && !values[0])
+                    {
+                        if (point2Ds[0] is T)
+                        {
+                            result.Add((T)(object)point2Ds[0]);
                         }
                     }
 
+                    int count = point2Ds.Count - 1;
+
+                    if (face2D.On(point2Ds[count], tolerance) && !values[count])
+                    {
+                        if (point2Ds[count] is T)
+                        {
+                            result.Add((T)(object)point2Ds[count]);
+                        }
+                    }
+
+                    for(int i = 1; i < point2Ds.Count - 1; i++)
+                    {
+                        if(!values[i - 1] && !values[i])
+                        {
+                            if (point2Ds[count] is T)
+                            {
+                                result.Add((T)(object)point2Ds[count]);
+                            }
+                        }
+                    }
                 }
             }
 

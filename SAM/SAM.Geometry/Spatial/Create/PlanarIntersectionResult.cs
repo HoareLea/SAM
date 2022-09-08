@@ -98,9 +98,9 @@ namespace SAM.Geometry.Spatial
                 Face2D face2D = plane.Convert(face3D);
                 foreach (Segment2D segment2D in segment2Ds)
                 {
-                    List<Segment2D> segment2Ds_Intersection = Planar.Query.Intersection(face2D, segment2D, tolerance);
-                    if (segment2Ds_Intersection != null && segment2Ds_Intersection.Count != 0)
-                        geometry3Ds.AddRange(segment2Ds_Intersection.ConvertAll(x => plane.Convert(x)));
+                    List<ISAMGeometry2D> geometry2Ds_Intersection = Planar.Query.Intersection<ISAMGeometry2D>(face2D, segment2D, tolerance);
+                    if (geometry2Ds_Intersection != null && geometry2Ds_Intersection.Count != 0)
+                        geometry3Ds.AddRange(geometry2Ds_Intersection.ConvertAll(x => plane.Convert(x)));
                 }
             }
 
