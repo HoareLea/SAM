@@ -454,7 +454,7 @@ namespace SAM.Analytical
                     }
 
                     double offset_Panel = func.Invoke(panel);
-                    if (double.IsNaN(offset_Panel) || Core.Query.AlmostEqual(offset_Panel, tolerance_Snap))
+                    if (double.IsNaN(offset_Panel) || Core.Query.AlmostEqual(offset_Panel, tolerance_Distance, tolerance_Snap))
                     {
                         continue;
                     }
