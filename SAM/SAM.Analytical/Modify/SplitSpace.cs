@@ -550,7 +550,11 @@ namespace SAM.Analytical
                         segment2Ds_Temp.AddRange(polygon2D_Union.GetSegments());
                     }
 
-                    foreach (Segment2D segment2D in segment2Ds_Temp)
+                    List<Segment2D> segment2Ds_Split = polygon2D.GetSegments();
+                    segment2Ds_Split.AddRange(segment2Ds_Temp);
+                    segment2Ds_Split = Geometry.Planar.Query.Split(segment2Ds_Split, tolerance_Distance);
+
+                    foreach (Segment2D segment2D in segment2Ds_Split)
                     {
                         if (segment2D == null)
                         {
@@ -562,7 +566,18 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        Point3D point3D = plane_Face3D.Convert(segment2D.Mid());
+                        Point2D point2D = segment2D.Mid();
+                        if (point2D == null)
+                        {
+                            continue;
+                        }
+
+                        if (polygon2D.On(point2D, tolerance_Distance))
+                        {
+                            continue;
+                        }
+
+                        Point3D point3D = plane_Face3D.Convert(point2D);
                         if (point3D == null)
                         {
                             continue;
