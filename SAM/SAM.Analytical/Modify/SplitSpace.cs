@@ -535,7 +535,18 @@ namespace SAM.Analytical
                         }
 
                         polygon2Ds_Union = polygon2Ds_Union.Union(tolerance_Distance);
+                        if (polygon2Ds_Union == null || polygon2Ds_Union.Count == 0)
+                        {
+                            segment2Ds_Temp.AddRange(polygon2D_Temp.GetSegments());
+                            continue;
+                        }
+
                         Polygon2D polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
+                        if (polygon2D_Union == null)
+                        {
+                            continue;
+                        }
+
                         segment2Ds_Temp.AddRange(polygon2D_Union.GetSegments());
                     }
 

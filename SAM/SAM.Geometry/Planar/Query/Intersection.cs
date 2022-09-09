@@ -439,9 +439,9 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    int count = point2Ds.Count - 2;
+                    int count = point2Ds.Count - 1;
 
-                    if (face2D.On(point2Ds[count], tolerance) && !values[count])
+                    if (face2D.On(point2Ds[count], tolerance) && !values[count - 1])
                     {
                         if (point2Ds[count] is T)
                         {
