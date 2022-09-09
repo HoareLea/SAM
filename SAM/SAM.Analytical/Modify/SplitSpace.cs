@@ -98,6 +98,11 @@ namespace SAM.Analytical
                     offsets.Add(offset_Panel);
                 }
 
+                if(offsets.FindIndex(x => x > 0) == -1)
+                {
+                    continue;
+                }
+
                 //Offset polygon2D
                 List<Polygon2D> polygon2Ds_Offset = polygon2D.Offset(offsets, true, true, true, tolerance_Distance);
                 if(polygon2Ds_Offset == null || polygon2Ds_Offset.Count == 0)
