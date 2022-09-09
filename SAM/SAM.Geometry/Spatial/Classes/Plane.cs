@@ -207,6 +207,11 @@ namespace SAM.Geometry.Spatial
 
         public bool On(Point3D point3D, double tolerance = Tolerance.Distance)
         {
+            if(point3D == null)
+            {
+                return false;
+            }
+
             return System.Math.Abs((normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z))) < tolerance;
         }
 

@@ -96,7 +96,11 @@ namespace SAM.Analytical
                     List<Face3D> face3Ds_Shell = shell_Split.Face3Ds;
                     foreach(Face3D face3D_Shell in face3Ds_Shell)
                     {
-                        Point3D point3D_Face3D = face3D_Shell.GetInternalPoint3D(tolerance_Distance);
+                        Point3D point3D_Face3D = face3D_Shell?.GetInternalPoint3D(tolerance_Distance);
+                        if(point3D_Face3D == null)
+                        {
+                            continue;
+                        }
 
                         Panel panel = panels.Find(x => x.Face3D.On(point3D_Face3D, tolerance_Snap));
                         List<Space> spaces_Panel = null;

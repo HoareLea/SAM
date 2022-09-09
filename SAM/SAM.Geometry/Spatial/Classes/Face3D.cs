@@ -173,8 +173,10 @@ namespace SAM.Geometry.Spatial
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
-            if (!plane.On(point3D, tolerance))
+            if(plane == null || point3D == null || !plane.On(point3D, tolerance))
+            {
                 return false;
+            }
 
             Point2D point2D = plane.Convert(point3D);
 

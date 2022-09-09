@@ -296,6 +296,8 @@ namespace SAM.Geometry.Spatial
                 return new List<Shell>() { new Shell(shell)};
             }
 
+            double snapFactor = 10;
+
             Shell shell_Temp = new Shell(shell);
 
             ShellData shellData_Before = new ShellData(shell_Temp);
@@ -315,7 +317,7 @@ namespace SAM.Geometry.Spatial
 
             for(int i=0; i < face3Ds.Count; i++)
             {
-                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell }, Tolerance_Snap, Tolerance_Distance);
+                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell }, Tolerance_Snap * snapFactor, Tolerance_Distance);
                 if(face3D != null)
                 {
                     face3Ds[i] = face3D;
@@ -338,9 +340,10 @@ namespace SAM.Geometry.Spatial
             }
 
             Shell shell_After = new Shell(face3Ds_Shell_After);
+            shell_After = shell_After.Snap(shell, Tolerance_Snap * snapFactor, Tolerance_Distance);
             for (int i = 0; i < face3Ds.Count; i++)
             {
-                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell_After }, Tolerance_Snap, Tolerance_Distance);
+                Face3D face3D = face3Ds[i].Snap(new Shell[] { shell_After }, Tolerance_Snap * snapFactor, Tolerance_Distance);
                 if (face3D != null)
                 {
                     face3Ds[i] = face3D;
@@ -407,14 +410,14 @@ namespace SAM.Geometry.Spatial
                 {
                     Face3D face3D = null;
 
-                    face3D = face3Ds_Temp[i].Snap(new Shell[] { shell_After }, Tolerance_Snap, Tolerance_Distance);
+                    face3D = face3Ds_Temp[i].Snap(new Shell[] { shell_After }, Tolerance_Snap * snapFactor, Tolerance_Distance);
                     if (face3D != null)
                     {
                         face3Ds_Temp[i] = face3D;
                     }
 
                     List<Face3D> face3Ds_Snapping = new List<Face3D>(face3Ds_Temp);
-                    face3Ds_Snapping.Remove(face3D);
+                    face3Ds_Snapping.RemoveAt(i);
                     face3D = face3Ds_Temp[i].Snap(face3Ds_Snapping, Tolerance_Snap, Tolerance_Distance);
                     if (face3D != null)
                     {
