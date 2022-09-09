@@ -257,7 +257,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Snap);
-            face3D_Temp.SplitEdges(Tolerance_Distance);
+            face3D_Temp.SplitEdges(Tolerance_Snap);
 
             List<Face3DData> face3DDatas = face3D_Temp.ConvertAll(x => new Face3DData(x));
 
@@ -347,7 +347,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            shell_After.SplitEdges(Tolerance_Distance);
+            shell_After.SplitEdges(Tolerance_Snap);
 
             ShellData shellData_After = new ShellData(shell_After);
 
@@ -376,8 +376,6 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            face3Ds_After = face3Ds_After.Split(Tolerance_Snap, Tolerance_Angle, Tolerance_Distance);
-
             List<Face3DData> face3DDatas_After = face3Ds_After.ConvertAll(x => new Face3DData(x));
 
             //List<Segment3DData> segment3DDatas_Shell_Difference = GetDifference(shellData_Before, shellData_After);
@@ -404,6 +402,28 @@ namespace SAM.Geometry.Spatial
                 {
                     face3Ds_Temp.AddRange(face3Ds_After);
                 }
+
+                for (int i = 0; i < face3Ds_Temp.Count; i++)
+                {
+                    Face3D face3D = null;
+
+                    face3D = face3Ds_Temp[i].Snap(new Shell[] { shell_After }, Tolerance_Snap, Tolerance_Distance);
+                    if (face3D != null)
+                    {
+                        face3Ds_Temp[i] = face3D;
+                    }
+
+                    List<Face3D> face3Ds_Snapping = new List<Face3D>(face3Ds_Temp);
+                    face3Ds_Snapping.Remove(face3D);
+                    face3D = face3Ds_Temp[i].Snap(face3Ds_Snapping, Tolerance_Snap, Tolerance_Distance);
+                    if (face3D != null)
+                    {
+                        face3Ds_Temp[i] = face3D;
+                    }
+                }
+
+                face3Ds_Temp = face3Ds_Temp.Split(Tolerance_Snap, Tolerance_Angle, Tolerance_Distance);
+                face3Ds_Temp.SplitEdges(Tolerance_Snap);
 
                 Shell shell_New = new Shell(face3Ds_Temp);
                 shell_New = shell_New.RemoveInvalidFace3Ds(Tolerance_Snap);

@@ -439,7 +439,7 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    int count = point2Ds.Count - 1;
+                    int count = point2Ds.Count - 2;
 
                     if (face2D.On(point2Ds[count], tolerance) && !values[count])
                     {
