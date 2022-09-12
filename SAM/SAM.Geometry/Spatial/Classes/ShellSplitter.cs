@@ -443,8 +443,14 @@ namespace SAM.Geometry.Spatial
                 result.Add(shell_New);
             }
 
-            double volume_Before = shell_Temp.Volume(Tolerance_Snap, Tolerance_Distance);
-            double volume_After = result.ConvertAll(x => x.Volume(Tolerance_Snap, Tolerance_Distance)).Sum();
+            if(result == null || result.Count == 0)
+            {
+                return new List<Shell>() { shell };
+            }
+
+            double volume_Before = Core.Query.Round(shell_Temp.Volume(Tolerance_Snap, Tolerance_Distance));
+            double volume_After = result.ConvertAll(x => Core.Query.Round(x.Volume(Tolerance_Snap, Tolerance_Distance), Tolerance_Snap)).Sum();
+
             if(System.Math.Abs(volume_Before - volume_After) < Tolerance_Snap)
             {
                 return result;

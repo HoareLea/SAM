@@ -100,7 +100,7 @@ namespace SAM.Geometry.Spatial
             while(face3Ds.Count >= 3)
             {
                 Face3D face3D = face3Ds[0];
-                List<Face3D> face3Ds_Shell = face3D?.ConnectedFace3Ds(face3Ds, tolerance_Angle, tolerance_Distance);
+                List<Face3D> face3Ds_Shell = face3D?.ConnectedFace3Ds(face3Ds, tolerance_Angle, silverSpacing);
                 face3Ds.RemoveAt(0);
                 
                 if(face3Ds_Shell != null && face3Ds_Shell.Count > 2)
