@@ -119,18 +119,6 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<Panel> panels = null;
-            index = Params.IndexOfInputParam("panels_");
-            if (index != -1)
-            {
-                List<Panel> panels_Temp = new List<Panel>();
-
-                if (dataAccess.GetDataList(index, panels_Temp) && panels_Temp != null && panels_Temp.Count != 0)
-                {
-                    panels = panels_Temp;
-                }
-            }
-
             if (spaces == null)
             {
                 spaces = adjacencyCluster.GetSpaces();
@@ -146,8 +134,8 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Space space in spaces)
                 {
-                    List<Panel> panels_Space = adjacencyCluster?.GetPanels(space);
-                    if(panels_Space == null || panels_Space.Count == 0)
+                    List<Panel> panels = adjacencyCluster?.GetPanels(space);
+                    if(panels == null || panels.Count == 0)
                     {
                         continue;
                     }
@@ -155,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
                     bool isPerimeter = false;
                     foreach(Panel panel in panels)
                     {
-                        if(!adjacencyCluster.External(panel))
+                        if(!adjacencyCluster.ExposedToSun(panel))
                         {
                             continue;
                         }
@@ -188,13 +176,13 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("in");
             if (index != -1)
             {
-                dataAccess.SetData(index, @in?.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataList(index, @in?.ConvertAll(x => new GooSpace(x)));
             }
 
             index = Params.IndexOfOutputParam("out");
             if (index != -1)
             {
-                dataAccess.SetData(index, @out?.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataList(index, @out?.ConvertAll(x => new GooSpace(x)));
             }
         }
     }
