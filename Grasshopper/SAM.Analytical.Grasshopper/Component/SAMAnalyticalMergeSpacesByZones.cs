@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -101,29 +102,29 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_zones_");
-            List<Group> groups = new List<Group>();
+            List<Zone> zones = new List<Zone>();
             if (index != -1)
             {
-                dataAccess.GetDataList(index, groups);
+                dataAccess.GetDataList(index, zones);
             }
 
-            if (groups == null || groups.Count == 0)
+            if (zones == null || zones.Count == 0)
             {
-                groups = adjacencyCluster.GetObjects<Group>();
+                zones = adjacencyCluster.GetObjects<Zone>();
             }
 
             List<Panel> panels_Result = null;
             List<Space> spaces_Result = null;
 
-            if(groups != null)
+            if(zones != null)
             {
 
-                panels_Result = null;
-                spaces_Result = null;
+                panels_Result = new List<Panel>();
+                spaces_Result = new List<Space>();
 
-                foreach (Group group in groups)
+                foreach (Zone zone in zones)
                 {
-                    List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(group);
+                    List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone);
                     if(spaces != null && spaces.Count > 1)
                     {
                         List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));

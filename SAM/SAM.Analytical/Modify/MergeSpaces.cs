@@ -76,7 +76,7 @@ namespace SAM.Analytical
             return guids.ToList().ConvertAll(x => adjacencyCluster.GetObject<Space>(x)).FindAll(x => x != null);
         }
 
-        public static Space MergeSpaces(this AdjacencyCluster adjacencyCluster, Guid spaceGuid_1, Guid spaceGuid_2, IEnumerable<Guid> panelGuids = null)
+        public static Space MergeSpaces(this AdjacencyCluster adjacencyCluster, Guid spaceGuid_1, Guid spaceGuid_2, IEnumerable<Guid> panelGuids = null, string nameSeparator = "_")
         {
             if (adjacencyCluster == null)
             {
@@ -93,6 +93,34 @@ namespace SAM.Analytical
             if (space_2 == null)
             {
                 return null;
+            }
+
+            if (!string.IsNullOrEmpty(nameSeparator))
+            {
+                string name_1 = space_1.Name;
+                string name_2 = space_2.Name;
+                if (!string.IsNullOrWhiteSpace(name_1) && !string.IsNullOrWhiteSpace(name_2))
+                {
+                    string prefix_1 = name_1;
+                    string prefix_2 = name_2;
+
+                    int index_1 = name_1.LastIndexOf(nameSeparator);
+                    if (index_1 > 0)
+                    {
+                        prefix_1 = name_1.Substring(0, index_1);
+                    }
+
+                    int index_2 = name_2.LastIndexOf(nameSeparator);
+                    if (index_2 > 0)
+                    {
+                        prefix_2 = name_2.Substring(0, index_2);
+                    }
+
+                    if(prefix_2.StartsWith(prefix_1))
+                    {
+                        space_1 = new Space(space_1, prefix_1, space_1.Location);
+                    }
+                }
             }
 
             List<Panel> panels_Adjacent = adjacencyCluster.GetPanels(Core.LogicalOperator.And, space_1, space_2);
@@ -202,7 +230,7 @@ namespace SAM.Analytical
 
                     Space space_1 = space;
                     Space space_2 = space_Adjacent;
-                    if (space_1.Volume(adjacencyCluster) < space_2.Volume(adjacencyCluster))
+                    if (space_1.Volume(adjacencyCluster) > space_2.Volume(adjacencyCluster))
                     {
                         space_2 = space;
                         space_1 = space_Adjacent;
