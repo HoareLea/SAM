@@ -127,40 +127,14 @@ namespace SAM.Analytical.Grasshopper
             List<Space> @in = null;
             List<Space> @out = null;
 
-            if (spaces != null)
+            if (spaces != null && adjacencyCluster != null)
             {
                 @in = new List<Space>();
                 @out = new List<Space>();
 
                 foreach (Space space in spaces)
                 {
-                    List<Panel> panels = adjacencyCluster?.GetPanels(space);
-                    if(panels == null || panels.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    bool isPerimeter = false;
-                    foreach(Panel panel in panels)
-                    {
-                        if(!adjacencyCluster.ExposedToSun(panel))
-                        {
-                            continue;
-                        }
-
-                        if(apertureCheck)
-                        {
-                            List<Aperture> apertures = panel.Apertures;
-
-                            if (apertures == null || apertures.Count == 0)
-                            {
-                                continue;
-                            }
-                        }
-
-                        isPerimeter = true;
-                        break;
-                    }
+                    bool isPerimeter = adjacencyCluster.IsPerimeter(space, apertureCheck);
 
                     if(isPerimeter)
                     {
