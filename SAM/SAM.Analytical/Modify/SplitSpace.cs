@@ -373,7 +373,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Space> SplitSpace_2(this AdjacencyCluster adjacencyCluster, Guid spaceGuid, Func<Panel, double> func, double elevationOffset = 0.1, double minSectionOffset = 1, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
+        public static List<Space> SplitSpace_2(this AdjacencyCluster adjacencyCluster, Guid spaceGuid, Func<Panel, double> func, double elevationOffset = 0.1, double minSectionOffset = 1, double adjustmentOffset = 1, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
             if (adjacencyCluster == null || spaceGuid == Guid.Empty)
             {
@@ -616,7 +616,7 @@ namespace SAM.Analytical
                             polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
                         }
 
-                        polygon2D_Union = adjustPolygon2D.Invoke(face2D, polygon2D_Union, minSectionOffset);
+                        polygon2D_Union = adjustPolygon2D.Invoke(face2D, polygon2D_Union, adjustmentOffset);
 
                         if (polygon2D_Union == null)
                         {

@@ -189,7 +189,7 @@ namespace SAM.Analytical.Grasshopper
                     });
 
 
-                    List<Space> spaces_Split = adjacencyCluster.SplitSpace_2(space.Guid, func, minSectionOffset: minOffset / 2);
+                    List<Space> spaces_Split = adjacencyCluster.SplitSpace_2(space.Guid, func, minSectionOffset: minOffset / 2, adjustmentOffset: minOffset);
                     if(spaces_Split == null || spaces_Split.Count < 2)
                     {
                         continue;
