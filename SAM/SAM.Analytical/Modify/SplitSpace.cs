@@ -414,6 +414,70 @@ namespace SAM.Analytical
 
             List<Face3D> face3Ds_Shell = shell.Face3Ds;
 
+            Func<Face2D, Polygon2D, double, Polygon2D> adjustPolygon2D = new Func<Face2D, Polygon2D, double, Polygon2D>((Face2D face2D, Polygon2D polygon2D, double offset) => 
+            {
+                List<ISegmentable2D> segmentable2Ds = face2D.Edge2Ds?.ConvertAll(x => x as ISegmentable2D)?.FindAll(x => x != null);
+                if(segmentable2Ds == null || segmentable2Ds.Count == 0)
+                {
+                    return null;
+                }
+
+                List<Point2D> point2Ds = polygon2D.Points;
+                if(point2Ds == null || point2Ds.Count == 0)
+                {
+                    return null;
+                }
+
+                for(int i =0; i < point2Ds.Count; i++)
+                {
+                    Point2D point2D = point2Ds[i];
+
+                    List<Segment2D> segment2Ds = polygon2D.ClosestSegment2Ds(point2D, tolerance_Distance);
+                    if (segment2Ds == null || segment2Ds.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    Point2D point2D_Intersection = null;
+                    double distance = double.MaxValue;
+                    foreach (Segment2D segment2D in segment2Ds)
+                    {
+                        List<Point2D> point2Ds_Segment2D = segment2D.GetPoints();
+                        point2Ds_Segment2D.SortByDistance(point2D);
+
+                        Segment2D segment2D_Temp = new Segment2D(point2Ds_Segment2D[1], point2Ds_Segment2D[0]);
+                        Vector2D vector2D = Geometry.Planar.Query.TraceFirst(segment2D_Temp[1], segment2D_Temp.Direction, segmentable2Ds);
+                        if (vector2D == null)
+                        {
+                            continue;
+                        }
+
+                        double length = vector2D.Length;
+                        if (length > offset)
+                        {
+                            continue;
+                        }
+
+                        if (length > distance)
+                        {
+                            continue;
+                        }
+
+                        distance = length;
+                        point2D_Intersection = segment2D_Temp[1].GetMoved(vector2D);
+                    }
+
+                    if (point2D_Intersection == null)
+                    {
+                        continue;
+                    }
+
+                    point2Ds[i] = point2D_Intersection;
+                }
+                
+                return new Polygon2D(point2Ds);
+            });
+
             List<Face3D> face3Ds_New = new List<Face3D>();
             foreach (Face3D face3D in face3Ds)
             {
@@ -539,14 +603,16 @@ namespace SAM.Analytical
                             polygon2Ds_Union.Add(polygon2D_Difference);
                         }
 
+                        Polygon2D polygon2D_Union = polygon2D_Temp;
+
                         polygon2Ds_Union = polygon2Ds_Union.Union(tolerance_Distance);
-                        if (polygon2Ds_Union == null || polygon2Ds_Union.Count == 0)
+                        if (polygon2Ds_Union != null && polygon2Ds_Union.Count != 0)
                         {
-                            segment2Ds_Temp.AddRange(polygon2D_Temp.GetSegments());
-                            continue;
+                            polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
                         }
 
-                        Polygon2D polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
+                        polygon2D_Union = adjustPolygon2D?.Invoke(face2D, polygon2D_Union, minSectionOffset);
+
                         if (polygon2D_Union == null)
                         {
                             continue;
