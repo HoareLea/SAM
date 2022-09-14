@@ -432,6 +432,11 @@ namespace SAM.Analytical
                 {
                     Point2D point2D = point2Ds[i];
 
+                    if(segmentable2Ds.On(point2D, tolerance_Distance))
+                    {
+                        continue;
+                    }
+
                     List<Segment2D> segment2Ds = polygon2D.ClosestSegment2Ds(point2D, tolerance_Distance);
                     if (segment2Ds == null || segment2Ds.Count == 0)
                     {
@@ -611,7 +616,7 @@ namespace SAM.Analytical
                             polygon2D_Union = polygon2Ds_Union.Find(x => x.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)));
                         }
 
-                        polygon2D_Union = adjustPolygon2D?.Invoke(face2D, polygon2D_Union, minSectionOffset);
+                        polygon2D_Union = adjustPolygon2D.Invoke(face2D, polygon2D_Union, minSectionOffset);
 
                         if (polygon2D_Union == null)
                         {
