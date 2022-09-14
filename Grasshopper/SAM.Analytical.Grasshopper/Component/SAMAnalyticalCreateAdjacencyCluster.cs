@@ -35,8 +35,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyCluster()
           : base("SAMAnalytical.CreateAdjacencyCluster", "SAMAnalytical.CreateAdjacencyCluster",
-              "Create AdjacencyCluster, Use only Top Floors or Roof shape ONLY this will generate Walls and close Spaces. For 3D shapes use 'Create.SAMAdjacencyCluster' from Topologic",
-              "SAM", "Analytical")
+              "Create AdjacencyCluster, Use only Top Floors or Roof shape ONLY this will generate Walls and close Spaces. For 3D shapes use 'Create.SAMAdjacencyCluster' from Topologic \n " 
+                + "---->   ------\n        |\n        |    First Floor\n---->   ------\n        |\n        |   Ground Floor\n        -------\n\nSECTION"
+                , "SAM", "Analytical")
         {
         }
 
