@@ -449,9 +449,19 @@ namespace SAM.Geometry.Spatial
             }
 
             double volume_Before = Core.Query.Round(shell_Temp.Volume(Tolerance_Snap, Tolerance_Distance));
-            double volume_After = result.ConvertAll(x => Core.Query.Round(x.Volume(Tolerance_Snap, Tolerance_Distance), Tolerance_Snap)).Sum();
+            if(volume_Before < Tolerance_Snap)
+            {
+                return result;
+            }
 
-            if(System.Math.Abs(volume_Before - volume_After) < Tolerance_Snap)
+            double volume_After = result.ConvertAll(x => Core.Query.Round(x.Volume(Tolerance_Snap, Tolerance_Distance), Tolerance_Snap)).Sum();
+            if (volume_After < Tolerance_Snap)
+            {
+                return result;
+            }
+
+
+            if (volume_After < Tolerance_Snap || volume_Before < Tolerance_Snap || System.Math.Abs(volume_Before - volume_After) < Tolerance_Snap)
             {
                 return result;
             }

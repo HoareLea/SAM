@@ -579,20 +579,20 @@ namespace SAM.Analytical
                     return new Face3D(new Polygon3D(new Point3D[] { segment3D_Bottom[0], segment3D_Bottom[1], segment3D_Top[1], segment3D_Top[0] }, tolerance_Distance));
                 });
 
+                List<Polygon2D> polygon2Ds = new List<Polygon2D>();
                 foreach (Tuple<Vector2D, List<Tuple<Segment2D, Polygon2D>>> tuple in tuples)
                 {
-                    List<Polygon2D> polygon2Ds = tuple.Item2.ConvertAll(x => x.Item2);
-                    polygon2Ds = polygon2Ds.Union(tolerance_Distance);
+                    List<Polygon2D> polygon2Ds_Temp = tuple.Item2.ConvertAll(x => x.Item2);
+                    polygon2Ds_Temp = polygon2Ds_Temp.Union(tolerance_Distance);
 
                     List<Face3D> face3Ds_Polygon2D = new List<Face3D>();
 
-                    List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-                    foreach (Polygon2D polygon2D_Temp in polygon2Ds)
+                    foreach (Polygon2D polygon2D_Temp in polygon2Ds_Temp)
                     {
                         List<Polygon2D> polygon2Ds_Difference = polygon2D.Difference(polygon2D_Temp);
                         if(polygon2Ds_Difference == null || polygon2Ds_Difference.Count == 0)
                         {
-                            segment2Ds_Temp.AddRange(polygon2D_Temp.GetSegments());
+                            polygon2Ds.Add(polygon2D_Temp);
                             continue;
                         }
 
@@ -623,60 +623,124 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        segment2Ds_Temp.AddRange(polygon2D_Union.GetSegments());
+                        polygon2Ds.Add(polygon2D_Union);
                     }
+                }
 
-                    List<Segment2D> segment2Ds_Split = polygon2D.GetSegments();
-                    segment2Ds_Split.AddRange(segment2Ds_Temp);
-                    segment2Ds_Split = Geometry.Planar.Query.Split(segment2Ds_Split, tolerance_Distance);
+                polygon2Ds = Geometry.Planar.Create.Polygon2Ds(polygon2Ds.Split(tolerance_Distance), tolerance_Distance);
 
-                    foreach (Segment2D segment2D in segment2Ds_Split)
+                //START
+                List<Polygon2D> polygon2Ds_Min = new List<Polygon2D>();
+                for(int i = polygon2Ds.Count - 1; i >=0; i--)
+                {
+                    Polygon2D polygon2D_Temp = polygon2Ds[i];
+                    if (polygon2D_Temp == null || !polygon2D.Inside(polygon2D_Temp.InternalPoint2D(tolerance_Distance)))
                     {
-                        if (segment2D == null)
-                        {
-                            continue;
-                        }
-
-                        if (segment2D.GetLength() < tolerance_Distance)
-                        {
-                            continue;
-                        }
-
-                        Point2D point2D = segment2D.Mid();
-                        if (point2D == null)
-                        {
-                            continue;
-                        }
-
-                        if (polygon2D.On(point2D, tolerance_Distance))
-                        {
-                            continue;
-                        }
-
-                        Point3D point3D = plane_Face3D.Convert(point2D);
-                        if (point3D == null)
-                        {
-                            continue;
-                        }
-
-                        Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
-                        if (panel != null)
-                        {
-                            continue;
-                        }
-
-                        Face3D face3D_New = createFace3D.Invoke(segment2D);
-                        if (face3D_New == null)
-                        {
-                            continue;
-                        }
-
-                        face3D_New = face3D_New.Snap(face3Ds_Polygon2D, tolerance_Snap, tolerance_Distance);
-                        face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
-
-                        face3Ds_New.Add(face3D_New);
-                        face3Ds_Polygon2D.Add(face3D_New);
+                        polygon2Ds.RemoveAt(i);
+                        continue;
                     }
+
+                    Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D(polygon2D_Temp);
+                    if (rectangle2D == null)
+                    {
+                        continue;
+                    }
+
+                    if (System.Math.Min(rectangle2D.Height, rectangle2D.Width) > adjustmentOffset)
+                    {
+                        continue;
+                    }
+
+                    polygon2Ds_Min.Add(polygon2D_Temp);
+                    polygon2Ds.RemoveAt(i);
+                }
+
+                polygon2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+
+                foreach(Polygon2D polygon2D_Min in polygon2Ds_Min)
+                {
+                    bool merged = false;
+                    for(int i=0; i < polygon2Ds.Count; i++)
+                    {
+                        List<Polygon2D> polygon2Ds_Union = polygon2D_Min.Union(polygon2Ds[i], tolerance_Distance);
+                        if(polygon2Ds_Union != null && polygon2Ds_Union.Count == 1)
+                        {
+                            merged = true;
+                            polygon2Ds[i] = polygon2Ds_Union[0];
+                            break;
+                        }
+                    }
+
+                    if(!merged)
+                    {
+                        polygon2Ds.Add(polygon2D_Min);
+                    }
+                }
+
+                //END
+
+                List<Segment2D> segment2Ds_Split = polygon2D.GetSegments();
+                polygon2Ds.ForEach(x => segment2Ds_Split.AddRange(x.Segment2Ds(true)));
+
+                segment2Ds_Split = Geometry.Planar.Query.Split(segment2Ds_Split, tolerance_Distance);
+
+                foreach (Segment2D segment2D in segment2Ds_Split)
+                {
+                    if (segment2D == null)
+                    {
+                        continue;
+                    }
+
+                    if (segment2D.GetLength() < tolerance_Distance)
+                    {
+                        continue;
+                    }
+
+                    Point2D point2D = segment2D.Mid();
+                    if (point2D == null)
+                    {
+                        continue;
+                    }
+
+                    if (polygon2D.On(point2D, tolerance_Snap) || !polygon2D.Inside(point2D, tolerance_Snap))
+                    {
+                        continue;
+                    }
+
+                    Point3D point3D = plane_Face3D.Convert(point2D);
+                    if (point3D == null)
+                    {
+                        continue;
+                    }
+
+                    Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                    if (panel != null)
+                    {
+                        continue;
+                    }
+
+                    Point2D point2D_1 = segment2D[0];
+                    if(Core.Query.Round(polygon2D.Distance(point2D_1), tolerance_Snap) <= tolerance_Snap)
+                    {
+                        point2D_1 = Geometry.Planar.Query.Snap(polygon2D, point2D_1);
+                    }
+
+                    Point2D point2D_2 = segment2D[1];
+                    if (Core.Query.Round(polygon2D.Distance(point2D_2), tolerance_Snap) <= tolerance_Snap)
+                    {
+                        point2D_2 = Geometry.Planar.Query.Snap(polygon2D, point2D_2);
+                    }
+
+                    Face3D face3D_New = createFace3D.Invoke(new Segment2D(point2D_1, point2D_2));
+                    if (face3D_New == null)
+                    {
+                        continue;
+                    }
+
+                    face3D_New = face3D_New.Snap(face3Ds_New, tolerance_Snap, tolerance_Distance);
+                    face3D_New = face3D_New.Snap(face3Ds_Shell, tolerance_Snap, tolerance_Distance);
+
+                    face3Ds_New.Add(face3D_New);
                 }
             }
 
@@ -684,6 +748,8 @@ namespace SAM.Analytical
             {
                 return null;
             }
+
+            face3Ds_New.ConvertAll(x => Geometry.Spatial.Query.Snap(x, shell.Face3Ds, tolerance_Snap, tolerance_Distance));
 
             List<Panel> panels_Result = adjacencyCluster.AddPanels(face3Ds_New, null, new Space[] { space }, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
             if (panels_Result == null)
