@@ -655,16 +655,49 @@ namespace SAM.Analytical
                 List<Panel> panels = result.GetPanels();
                 if(panels != null)
                 {
-                    foreach(Panel panel in panels)
+                    for (int i=0; i < panels.Count;i++)
                     {
-                        if(!result.External(panel))
+                        Panel panel = panels[i];
+
+                        if (panel == null)
                         {
                             continue;
                         }
 
-                        if(!Internal(panel))
+                        PanelType panelType = panel.PanelType;
+                        if (panelType == PanelType.Air)
                         {
-                            continue;
+                            if (!result.External(panel))
+                            {
+                                continue;
+                            }
+
+                            if (Internal(panel))
+                            {
+                                continue;
+                            }
+
+                            panelType = Query.PanelType(panel.Normal);
+                            if (panelType == PanelType.Undefined)
+                            {
+                                continue;
+                            }
+
+                            Construction construction = Query.DefaultConstruction(panelType);
+                            panel = new Panel(panel, construction);
+                            panel = new Panel(panel, panelType);
+                        }
+                        else
+                        {
+                            if (!result.External(panel))
+                            {
+                                continue;
+                            }
+
+                            if (!Internal(panel))
+                            {
+                                continue;
+                            }
                         }
 
                         panel.SetValue(PanelParameter.Adiabatic, true);
