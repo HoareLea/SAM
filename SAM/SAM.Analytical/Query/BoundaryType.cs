@@ -48,19 +48,6 @@ namespace SAM.Analytical
                 return Analytical.BoundaryType.Linked;
             }
 
-            if(panel.PanelType == Analytical.PanelType.Air)
-            {
-                if(spaces == null || spaces.Count == 0)
-                {
-                    return Analytical.BoundaryType.Shade;
-                }
-                
-                if(spaces.Count == 1)
-                {
-                    return Analytical.BoundaryType.Adiabatic;
-                }
-            }
-
             if(panel.PanelType == Analytical.PanelType.Shade || panel.PanelType == Analytical.PanelType.SolarPanel)
             {
                 return Analytical.BoundaryType.Shade;
