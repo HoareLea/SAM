@@ -97,6 +97,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalFilterByBoundaryType.cs" />
     <Compile Include="Component\SAMAnalyticalPerimeterSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePerimeterZones_2.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePerimeterZones.cs" />
