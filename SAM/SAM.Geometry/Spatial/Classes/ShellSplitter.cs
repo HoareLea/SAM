@@ -256,10 +256,50 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Snap);
-            face3D_Temp.SplitEdges(Tolerance_Snap);
+            //List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Snap);
 
-            List<Face3DData> face3DDatas = face3D_Temp.ConvertAll(x => new Face3DData(x));
+            List<Face3D> face3Ds_Cut = Query.Cut(face3Ds);
+            if(face3Ds_Cut == null)
+            {
+                return null;
+            }
+
+            face3Ds_Cut.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+
+            List<Face3D> face3Ds_Temp = new List<Face3D>();
+            while(face3Ds_Cut.Count != 0)
+            {
+                Face3D face3D = face3Ds_Cut[0];
+                face3Ds_Cut.Remove(face3D);
+                face3Ds_Temp.Add(face3D);
+
+                Point3D point3D = face3D.GetInternalPoint3D(Tolerance_Distance);
+                if(point3D == null)
+                {
+                    continue;
+                }
+
+                face3Ds_Cut.RemoveAll(x => x.InRange(point3D, Tolerance_Distance));
+            }
+
+            face3Ds_Temp.Reverse();
+
+            for(int i=0; i < face3Ds_Temp.Count; i++)
+            {
+                Face3D face3D = face3Ds_Temp[i];
+
+                List<Face3D> face3Ds_Snapping = new List<Face3D>(face3Ds_Temp);
+                face3Ds_Snapping.Remove(face3D);
+
+                face3Ds_Snapping.Reverse();
+
+                Face3D face3D_New = face3D.Snap(face3Ds_Snapping, Tolerance_Snap, Tolerance_Distance);
+                face3Ds_Temp[i] = face3D_New == null ? face3D : face3D_New;
+            }
+
+            face3Ds_Temp.SplitEdges(Tolerance_Snap);
+
+            List<Face3DData> face3DDatas = face3Ds_Temp.ConvertAll(x => new Face3DData(x));
 
             List<List<Shell>> shells_Result = Enumerable.Repeat<List<Shell>>(null, shells.Count).ToList();
 
