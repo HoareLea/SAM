@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,7 +47,11 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_apertureCheck_", NickName = "_apertureCheck_", Description = "Panel has to have aperture to be recognized as external", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_apertureCheck_", NickName = "_apertureCheck_", Description = "If True, only Periemeter Spaces will be selected that have Panels exposed to Sun AND containing aperture.", Access = GH_ParamAccess.item, Optional = true };
+                boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
+
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_wallsOnly_", NickName = "_apertureCheck_", Description = "If True, only Periemeter Spaces will be selected that have Panels Wall exposed to Sun. If False also spaces with Roof, ExposedFloor will be selected", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
@@ -107,6 +111,22 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            List<PanelGroup> panelGroups = null;
+            index = Params.IndexOfInputParam("_wallsOnly_");
+            if (index != -1)
+            {
+                bool wallsOnly = true;
+                if (!dataAccess.GetData(index, ref wallsOnly))
+                {
+                    wallsOnly = true;
+                }
+
+                if(wallsOnly)
+                {
+                    panelGroups = new List<PanelGroup>() { PanelGroup.Wall };
+                }
+            }
+
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("spaces_");
             if(index != -1)
@@ -134,7 +154,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Space space in spaces)
                 {
-                    bool isPerimeter = adjacencyCluster.IsPerimeter(space, apertureCheck);
+                    bool isPerimeter = adjacencyCluster.IsPerimeter(space, apertureCheck, panelGroups);
 
                     if(isPerimeter)
                     {

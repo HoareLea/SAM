@@ -1,10 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static bool IsPerimeter(this AdjacencyCluster adjacencyCluster, Space space, bool apertureCheck = true)
+        public static bool IsPerimeter(this AdjacencyCluster adjacencyCluster, Space space, bool apertureCheck = true, IEnumerable<PanelGroup> panelGroups = null)
         {
             if(adjacencyCluster == null || space == null)
             {
@@ -30,6 +31,11 @@ namespace SAM.Analytical
                     continue;
                 }
 
+                if(panelGroups != null && !panelGroups.Contains(panel.PanelGroup))
+                {
+                    continue;
+                }
+                
                 if (apertureCheck)
                 {
                     List<Aperture> apertures = panel.Apertures;
