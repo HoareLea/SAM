@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
 
             List<Space> spaces = null;
-            index = Params.IndexOfInputParam("_spaces_");
+            index = Params.IndexOfInputParam("_spaces");
             if(index != -1)
             {
                 spaces = new List<Space>();
