@@ -684,6 +684,12 @@ namespace SAM.Analytical
                             }
 
                             Construction construction = Query.DefaultConstruction(panelType);
+                            PanelType panelType_Construction = construction.PanelType();
+                            if(panelType_Construction != PanelType.Undefined)
+                            {
+                                panelType = panelType_Construction;
+                            }
+
                             panel = new Panel(panel, construction);
                             panel = new Panel(panel, panelType);
                         }
