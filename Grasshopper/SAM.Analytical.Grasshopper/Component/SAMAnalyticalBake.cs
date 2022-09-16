@@ -96,9 +96,14 @@ namespace SAM.Analytical.Grasshopper
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
-            foreach (PanelBakeMethod @enum in Enum.GetValues(typeof(PanelBakeMethod)))
+            foreach (PanelBakeMethod panelBakeMethod_Temp in Enum.GetValues(typeof(PanelBakeMethod)))
             {
-                Menu_AppendItem(menu, @enum.ToString(), Menu_Changed, true, @enum.Equals(panelBakeMethod)).Tag = @enum;
+                if(panelBakeMethod_Temp == PanelBakeMethod.Undefinded)
+                {
+                    continue;
+                }
+
+                Menu_AppendItem(menu, panelBakeMethod_Temp.ToString(), Menu_Changed, true, panelBakeMethod_Temp.Equals(panelBakeMethod)).Tag = panelBakeMethod_Temp;
             }
 
             base.AppendAdditionalComponentMenuItems(menu);
