@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
 
                 if(panels != null)
                 {
-                    panels = adjacencyCluster.SplitPanels(panels, panelGuids);
+                    result = adjacencyCluster.SplitPanels(panels, panelGuids);
                 }
             }
 
