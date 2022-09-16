@@ -143,7 +143,7 @@ namespace SAM.Analytical
                     }
 
                     Guid guid = panel_Old.Guid;
-                    if(adjacencyCluster.Contains<Panel>(guid))
+                    if (adjacencyCluster.Contains<Panel>(guid))
                     {
                         guid = Guid.NewGuid();
                     }
@@ -165,6 +165,8 @@ namespace SAM.Analytical
                         }
                     }
                 }
+
+                adjacencyCluster.RemoveObject<Panel>(panel.Guid);
             }
 
             return result;
