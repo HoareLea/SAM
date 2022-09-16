@@ -97,6 +97,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalBake.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByBoundaryType.cs" />
     <Compile Include="Component\SAMAnalyticalPerimeterSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePerimeterZones_2.cs" />
@@ -309,6 +310,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
     <Compile Include="Convert\ToGrasshopper\New\GH_Mesh.cs" />
     <Compile Include="Classes\GooDegreeOfActivity.cs" />
+    <Compile Include="Enums\PanelBakeMethod.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
     <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />

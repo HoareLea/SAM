@@ -80,7 +80,9 @@
   <ItemGroup>
     <None Include="Resources\SAM_Architectural.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Enums\" />
+  </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj">
       <Project>{3d10ac53-e2e3-405a-967b-be00f3ca9bc8}</Project>
