@@ -985,6 +985,11 @@ namespace SAM.Core
             return dictionary_Objects.ContainsKey(type.FullName);
         }
 
+        public bool Contains<T>(Guid guid)
+        {
+            return  GetObject(typeof(T), guid) != null;
+        }
+
         public virtual bool IsValid(Type type)
         {
             return type != null;
