@@ -98,7 +98,7 @@ namespace SAM.Analytical.Grasshopper
         {
             foreach (PanelBakeMethod panelBakeMethod_Temp in Enum.GetValues(typeof(PanelBakeMethod)))
             {
-                if(panelBakeMethod_Temp == PanelBakeMethod.Undefinded)
+                if(panelBakeMethod_Temp == PanelBakeMethod.Undefined)
                 {
                     continue;
                 }
