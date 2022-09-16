@@ -223,7 +223,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref infiltration);
 
             string name = null;
-            index = Params.IndexOfInputParam("name_");
+            index = Params.IndexOfInputParam("ICname_");
             if(index != -1)
                 dataAccess.GetData(index, ref name);
 
