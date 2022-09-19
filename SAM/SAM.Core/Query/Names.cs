@@ -59,18 +59,24 @@ namespace SAM.Core
         private static List<string> Names_Property(this object @object, bool includeStatic = false)
         {
             if (@object == null)
+            {
                 return null;
+            }
 
             List<string> result = new List<string>();
             System.Reflection.PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
             foreach (System.Reflection.PropertyInfo propertyInfo in propertyInfos)
             {
                 System.Reflection.MethodInfo methodInfo = propertyInfo?.GetMethod;
-                if (methodInfo == null)
+                if (methodInfo == null || methodInfo.ContainsGenericParameters)
+                {
                     continue;
+                }
 
                 if (!includeStatic && methodInfo.IsStatic)
+                {
                     continue;
+                }
 
                 result.Add(propertyInfo.Name);
             }
@@ -81,17 +87,28 @@ namespace SAM.Core
         private static List<string> Names_Method(this object @object, bool includeStatic = false)
         {
             if (@object == null)
+            {
                 return null;
+            }
 
             List<string> result = new List<string>();
             System.Reflection.MethodInfo[] methodInfos = @object.GetType().GetMethods();
             foreach (System.Reflection.MethodInfo methodInfo in methodInfos)
             {
                 if (!includeStatic && methodInfo.IsStatic)
+                {
                     continue;
+                }
 
                 if (methodInfo.ReturnType == typeof(void))
+                {
                     continue;
+                }
+
+                if(methodInfo.ContainsGenericParameters)
+                {
+                    continue;
+                }
 
                 object[] parameters = new object[] { };
 
@@ -99,11 +116,16 @@ namespace SAM.Core
                 if (parameterInfos != null && parameterInfos.Length > 0)
                 {
                     if (!parameterInfos.ToList().TrueForAll(x => x.IsOptional))
+                    {
                         continue;
+                    }
+
 
                     parameters = new object[parameterInfos.Length];
                     for (int i = 0; i < parameters.Length; i++)
+                    {
                         parameters[i] = System.Type.Missing;
+                    }
                 }
 
                 result.Add(methodInfo.Name);

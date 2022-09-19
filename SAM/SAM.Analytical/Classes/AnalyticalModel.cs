@@ -388,9 +388,19 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetMechanicalSystems<T>()?.ConvertAll(x => Core.Query.Clone(x));
         }
 
+        public List<MechanicalSystem> GetMechanicalSystems()
+        {
+            return GetMechanicalSystems<MechanicalSystem>();
+        }
+
         public List<T> GetMechanicalSystemTypes<T>() where T : MechanicalSystemType
         {
             return adjacencyCluster?.GetMechanicalSystemTypes<T>()?.ConvertAll(x => Core.Query.Clone(x));
+        }
+
+        public List<MechanicalSystemType> GetMechanicalSystemTypes()
+        {
+            return GetMechanicalSystemTypes<MechanicalSystemType>();
         }
 
         public List<Zone> GetZones()

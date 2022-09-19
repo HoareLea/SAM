@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -121,6 +122,36 @@ namespace SAM.Analytical
                             space.SetValue(SpaceParameter.VentilationRiserName, ventilationRiserName);
                             adjacencyCluster.AddObject(space);
                         }
+                    }
+                }
+
+                //Add Supply Air Handling Unit
+                if (!string.IsNullOrWhiteSpace(supplyUnitName_Temp))
+                {
+                    AirHandlingUnit airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == supplyUnitName_Temp)?.FirstOrDefault();
+                    if (airHandlingUnit == null)
+                    {
+                        airHandlingUnit = Create.AirHandlingUnit(supplyUnitName_Temp);
+                    }
+
+                    if (airHandlingUnit != null)
+                    {
+                        adjacencyCluster.AddObject(airHandlingUnit);
+                    }
+                }
+
+                //Add Exhaust Air Handling Unit
+                if (!string.IsNullOrWhiteSpace(exhaustUnitName_Temp))
+                {
+                    AirHandlingUnit airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == exhaustUnitName_Temp)?.FirstOrDefault();
+                    if (airHandlingUnit == null)
+                    {
+                        airHandlingUnit = Create.AirHandlingUnit(exhaustUnitName_Temp);
+                    }
+
+                    if (airHandlingUnit != null)
+                    {
+                        adjacencyCluster.AddObject(airHandlingUnit);
                     }
                 }
 

@@ -348,6 +348,16 @@ namespace SAM.Analytical
             return GetObjects<T>();
         }
 
+        public List<MechanicalSystem> GetMechanicalSystems()
+        {
+            return GetObjects<MechanicalSystem>();
+        }
+
+        public List<MechanicalSystemType> GetMechanicalSystemTypes()
+        {
+            return GetMechanicalSystemTypes<MechanicalSystemType>();
+        }
+
         public List<T> GetMechanicalSystemTypes<T>() where T: MechanicalSystemType
         {
             Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
