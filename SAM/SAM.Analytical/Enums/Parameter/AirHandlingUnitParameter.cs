@@ -15,6 +15,7 @@ namespace SAM.Analytical
         [ParameterProperties("Summer Heat Recovery Latent Efficiency", "Summer Heat Recovery Latent Efficiency [%]"), DoubleParameterValue(0, 100)] SummerHeatRecoveryLatentEfficiency,
         [ParameterProperties("Cooling Coil Fluid Flow Temperature", "Cooling Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidFlowTemperature,
         [ParameterProperties("Cooling Coil Fluid Return Temperature", "Cooling Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] CoolingCoilFluidReturnTemperature,
+        [ParameterProperties("Cooling Coil Performance", "Cooling Coil Performance [%]"), DoubleParameterValue(0, 100)] CoolingCoilPerformance,
         [ParameterProperties("Heating Coil Fluid Flow Temperature", "Heating Coil Fluid Flow Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidFlowTemperature,
         [ParameterProperties("Heating Coil Fluid Return Temperature", "Heating Coil Fluid Return Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] HeatingCoilFluidReturnTemperature,
         [ParameterProperties("Winter Heating Coil Supply Temperature", "Winter Heating Coil Supply Temperature [°C]"), ParameterValue(Core.ParameterType.Double)] WinterHeatingCoilSupplyTemperature,
