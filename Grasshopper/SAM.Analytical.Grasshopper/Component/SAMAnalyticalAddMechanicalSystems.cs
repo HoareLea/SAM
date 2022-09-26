@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical", GH_ParamAccess.item);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analytical", "_analytical", "SAM Analytical", GH_ParamAccess.item);
 
             GooSystemTypeLibraryParam gooSystemTypeLibraryParam = new GooSystemTypeLibraryParam();
             gooSystemTypeLibraryParam.Optional = true;
@@ -86,8 +86,8 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            SAMObject sAMObject = null;
-            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            IAnalyticalObject analyticalObject = null;
+            if(!dataAccess.GetData(0, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -129,26 +129,34 @@ namespace SAM.Analytical.Grasshopper
                 coolingRiserName = "RC1";
 
             List<MechanicalSystem> mechanicalSystems = null;
-            if (sAMObject is AnalyticalModel)
+
+            AdjacencyCluster adjacencyCluster = null;
+            if (analyticalObject is AnalyticalModel)
             {
-                AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                if(adjacencyCluster != null)
-                {
-                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
-                    if (mechanicalSystems != null && mechanicalSystems.Count > 0)
-                        sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
-                }
+                adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
             }
-            else if (sAMObject is AdjacencyCluster)
+            else if (analyticalObject is AdjacencyCluster)
             {
-                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
-                if (mechanicalSystems != null && mechanicalSystems.Count > 0)
-                    sAMObject = adjacencyCluster;
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
 
-            dataAccess.SetData(0, sAMObject);
+            if (adjacencyCluster != null)
+            {
+                mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
+                if (mechanicalSystems != null && mechanicalSystems.Count > 0)
+                {
+                    if (analyticalObject is AnalyticalModel)
+                    {
+                        analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
+                    }
+                    else if (analyticalObject is AdjacencyCluster)
+                    {
+                        analyticalObject = adjacencyCluster;
+                    }
+                }
+            }
+
+            dataAccess.SetData(0, analyticalObject);
             dataAccess.SetDataList(1, mechanicalSystems);
         }
     }
