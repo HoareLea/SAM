@@ -54,6 +54,7 @@
     <Compile Include="Convert\ToSI.cs" />
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Classes\Factor.cs" />
+    <Compile Include="Query\Description.cs" />
     <Compile Include="Query\Abbreviation.cs" />
     <Compile Include="Query\UnitType.cs" />
     <Compile Include="Query\UnitTypes.cs" />

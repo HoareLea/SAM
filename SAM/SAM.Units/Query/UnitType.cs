@@ -1,4 +1,7 @@
-﻿namespace SAM.Units
+﻿using System;
+using System.Collections.Generic;
+
+namespace SAM.Units
 {
     public static partial class Query
     {
@@ -48,6 +51,48 @@
                     }
                     break;
             }
+
+            return Units.UnitType.Undefined;
+        }
+
+        public static UnitType UnitType(this string text)
+        {
+            if (string.IsNullOrWhiteSpace(text))
+                return Units.UnitType.Undefined;
+
+            Array array = Enum.GetValues(typeof(UnitType));
+            if (array == null || array.Length == 0)
+                return Units.UnitType.Undefined;
+
+            foreach (UnitType unitType in array)
+                if (unitType.ToString().Equals(text))
+                    return unitType;
+
+            List<string> texts = new List<string>();
+            string text_Temp = null;
+
+            foreach (UnitType unitType in array)
+            {
+                text_Temp = unitType.Abbreviation();
+                texts.Add(text_Temp);
+                if (text_Temp.Equals(text))
+                    return unitType;
+
+                text_Temp = unitType.Description();
+                texts.Add(text_Temp);
+                if (text_Temp.Equals(text))
+                    return unitType;
+            }
+
+            text_Temp = text.ToUpper().Replace(" ", string.Empty);
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (texts[i].ToUpper().Replace(" ", string.Empty).Equals(text_Temp))
+                    return (UnitType)array.GetValue(i);
+            }
+
+            if (text.Equals("Undefined"))
+                return default;
 
             return Units.UnitType.Undefined;
         }
