@@ -124,45 +124,49 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.GetDataList(index, objectWrappers);
                 }
 
-                if(objectWrappers == null || objectWrappers.Count == 0)
+                List<AirHandlingUnit> airHandlingUnits = null;
+                if (objectWrappers != null && objectWrappers.Count != 0)
+                {
+                    airHandlingUnits = new List<AirHandlingUnit>();
+                    foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
+                    {
+                        object @object = objectWrapper.Value;
+                        if (@object is IGH_Goo)
+                        {
+                            @object = (@object as dynamic).Value;
+                        }
+
+                        AirHandlingUnit airHandlingUnit = null;
+                        if (@object is string)
+                        {
+                            string name = (string)@object;
+                            airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == name)?.FirstOrDefault();
+                        }
+                        else if (@object is AirHandlingUnit)
+                        {
+                            airHandlingUnit = adjacencyCluster?.GetObject<AirHandlingUnit>(((AirHandlingUnit)@object).Guid);
+                            if (airHandlingUnit == null)
+                            {
+                                airHandlingUnit = (AirHandlingUnit)@object;
+                            }
+                        }
+
+                        if (airHandlingUnit != null)
+                        {
+                            airHandlingUnits.Add(airHandlingUnit);
+                        }
+                    }
+                }
+
+                if (airHandlingUnits == null)
+                {
+                    airHandlingUnits = adjacencyCluster.GetObjects<AirHandlingUnit>();
+                }
+
+                if(airHandlingUnits == null || airHandlingUnits.Count == 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
-                }
-
-                List<AirHandlingUnit> airHandlingUnits = new List<AirHandlingUnit>();
-                foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
-                {
-                    object @object = objectWrapper.Value;
-                    if (@object is IGH_Goo)
-                    {
-                        @object = (@object as dynamic).Value;
-                    }
-
-                    AirHandlingUnit airHandlingUnit = null;
-                    if (@object is string)
-                    {
-                        string name = (string)@object;
-                        airHandlingUnit = adjacencyCluster?.GetObjects((AirHandlingUnit x) => x.Name == name)?.FirstOrDefault();
-                    }
-                    else if (@object is AirHandlingUnit)
-                    {
-                        airHandlingUnit = adjacencyCluster?.GetObject<AirHandlingUnit>(((AirHandlingUnit)@object).Guid);
-                        if (airHandlingUnit == null)
-                        {
-                            airHandlingUnit = (AirHandlingUnit)@object;
-                        }
-                    }
-
-                    if(airHandlingUnit != null)
-                    {
-                        airHandlingUnits.Add(airHandlingUnit);
-                    }
-                }
-
-                if (airHandlingUnits == null || airHandlingUnits.Count == 0)
-                {
-                    airHandlingUnits = adjacencyCluster.GetObjects<AirHandlingUnit>();
                 }
 
                 if (airHandlingUnits != null && airHandlingUnits.Count != 0)
