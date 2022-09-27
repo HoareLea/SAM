@@ -14,16 +14,16 @@ namespace SAM.Units
 
                     if(unitStyles == null || unitStyles.Length == 0)
                     {
-                        result.Add(UnitType.Celsius);
-                        result.Add(UnitType.Fahrenheit);
+                        result.Add(Units.UnitType.Celsius);
+                        result.Add(Units.UnitType.Fahrenheit);
                     }
                     else if(unitStyles.Contains(UnitStyle.SI))
                     {
-                        result.Add(UnitType.Celsius);
+                        result.Add(Units.UnitType.Celsius);
                     }
                     else if(unitStyles.Contains(UnitStyle.Imperial))
                     {
-                        result.Add(UnitType.Fahrenheit);
+                        result.Add(Units.UnitType.Fahrenheit);
                     }
 
                     return result;
@@ -32,13 +32,13 @@ namespace SAM.Units
 
                     if (unitStyles == null || unitStyles.Length == 0)
                     {
-                        result.Add(UnitType.KilogramPerKilogram);
-                        result.Add(UnitType.GramPerKilogram);
+                        result.Add(Units.UnitType.KilogramPerKilogram);
+                        result.Add(Units.UnitType.GramPerKilogram);
                     }
                     else if (unitStyles.Contains(UnitStyle.SI))
                     {
-                        result.Add(UnitType.KilogramPerKilogram);
-                        result.Add(UnitType.GramPerKilogram);
+                        result.Add(Units.UnitType.KilogramPerKilogram);
+                        result.Add(Units.UnitType.GramPerKilogram);
                     }
                     else if (unitStyles.Contains(UnitStyle.Imperial))
                     {
@@ -51,11 +51,11 @@ namespace SAM.Units
 
                     if (unitStyles == null || unitStyles.Length == 0)
                     {
-                        result.Add(UnitType.KilogramPerCubicMeter);
+                        result.Add(Units.UnitType.KilogramPerCubicMeter);
                     }
                     else if (unitStyles.Contains(UnitStyle.SI))
                     {
-                        result.Add(UnitType.KilogramPerCubicMeter);
+                        result.Add(Units.UnitType.KilogramPerCubicMeter);
                     }
                     else if (unitStyles.Contains(UnitStyle.Imperial))
                     {
@@ -68,13 +68,13 @@ namespace SAM.Units
 
                     if (unitStyles == null || unitStyles.Length == 0)
                     {
-                        result.Add(UnitType.CubicMeterPerKilogram);
-                        result.Add(UnitType.CubicMeterPerGram);
+                        result.Add(Units.UnitType.CubicMeterPerKilogram);
+                        result.Add(Units.UnitType.CubicMeterPerGram);
                     }
                     else if (unitStyles.Contains(UnitStyle.SI))
                     {
-                        result.Add(UnitType.CubicMeterPerKilogram);
-                        result.Add(UnitType.CubicMeterPerGram);
+                        result.Add(Units.UnitType.CubicMeterPerKilogram);
+                        result.Add(Units.UnitType.CubicMeterPerGram);
                     }
                     else if (unitStyles.Contains(UnitStyle.Imperial))
                     {
@@ -87,17 +87,39 @@ namespace SAM.Units
 
                     if (unitStyles == null || unitStyles.Length == 0)
                     {
-                        result.Add(UnitType.CubicMeterPerSecond);
-                        result.Add(UnitType.CubicMeterPerHour);
+                        result.Add(Units.UnitType.CubicMeterPerSecond);
+                        result.Add(Units.UnitType.CubicMeterPerHour);
                     }
                     else if (unitStyles.Contains(UnitStyle.SI))
                     {
-                        result.Add(UnitType.CubicMeterPerSecond);
-                        result.Add(UnitType.CubicMeterPerHour);
+                        result.Add(Units.UnitType.CubicMeterPerSecond);
+                        result.Add(Units.UnitType.CubicMeterPerHour);
                     }
                     else if (unitStyles.Contains(UnitStyle.Imperial))
                     {
 
+                    }
+
+                    return result;
+
+
+                case UnitCategory.Pressure:
+
+                    if (unitStyles == null || unitStyles.Length == 0)
+                    {
+                        result.Add(Units.UnitType.Pascal);
+                        result.Add(Units.UnitType.Kilopascal);
+                        result.Add(Units.UnitType.Bar);
+                        result.Add(Units.UnitType.PoundPerSquareInch);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.SI))
+                    {
+                        result.Add(Units.UnitType.Pascal);
+                        result.Add(Units.UnitType.Kilopascal);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
+                    {
+                        result.Add(Units.UnitType.PoundPerSquareInch);
                     }
 
                     return result;

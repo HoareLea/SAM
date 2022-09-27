@@ -39,6 +39,14 @@
                             return Units.UnitType.Undefined;
                     }
                     break;
+
+                case UnitStyle.Imperial:
+                    switch (unitCategory)
+                    {
+                        case UnitCategory.Pressure:
+                            return Units.UnitType.PoundPerSquareInch;
+                    }
+                    break;
             }
 
             return Units.UnitType.Undefined;

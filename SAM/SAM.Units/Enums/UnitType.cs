@@ -23,5 +23,6 @@ namespace SAM.Units
         [Abbreviation("Pa")] [Description("Pascal")] Pascal,
         [Abbreviation("kPa")] [Description("Kilopascal")] Kilopascal,
         [Abbreviation("Ba")] [Description("Bar")] Bar,
+        [Abbreviation("psi")] [Description("Pound Per Square Inch")] PoundPerSquareInch,
     }
 }

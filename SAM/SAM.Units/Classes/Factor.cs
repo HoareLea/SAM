@@ -10,6 +10,9 @@
 
         public const double CelsisToKelvin = 273.15;
         public const double KelvinToCelsius = -CelsisToKelvin;
+
+        public const double PoundsPerInchToPascal = 6894.75728;
+        public const double PascalToPoundsPerInch = 1 / PoundsPerInchToPascal;
     }
 
 }

@@ -147,6 +147,9 @@
 
                         case UnitType.Pascal:
                             return value;
+
+                        case UnitType.PoundPerSquareInch:
+                            return value * Factor.PascalToPoundsPerInch;
                     }
                     break;
 
@@ -161,6 +164,9 @@
 
                         case UnitType.Pascal:
                             return value * 1000;
+
+                        case UnitType.PoundPerSquareInch:
+                            return ByUnitType(value, from, UnitType.Pascal) * Factor.PascalToPoundsPerInch;
                     }
                     break;
 
@@ -175,6 +181,26 @@
 
                         case UnitType.Pascal:
                             return value * 100000;
+
+                        case UnitType.PoundPerSquareInch:
+                            return ByUnitType(value, from, UnitType.Pascal) * Factor.PascalToPoundsPerInch;
+                    }
+                    break;
+
+                case UnitType.PoundPerSquareInch:
+                    switch (to)
+                    {
+                        case UnitType.Bar:
+                            return ByUnitType(ByUnitType(value, from, UnitType.Pascal), UnitType.Pascal, UnitType.Bar);
+
+                        case UnitType.Kilopascal:
+                            return ByUnitType(ByUnitType(value, from, UnitType.Pascal), UnitType.Pascal, UnitType.Kilopascal);
+
+                        case UnitType.Pascal:
+                            return value * Factor.PoundsPerInchToPascal;
+
+                        case UnitType.PoundPerSquareInch:
+                            return value;
                     }
                     break;
             }

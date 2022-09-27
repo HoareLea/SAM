@@ -53,6 +53,9 @@
 
                 case UnitType.Pascal:
                     return value;
+
+                case UnitType.PoundPerSquareInch:
+                    return ByUnitType(value, from, UnitType.Pascal);
             }
 
             return double.NaN;

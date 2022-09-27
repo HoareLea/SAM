@@ -26,6 +26,18 @@
 
                 case UnitType.Unitless:
                     return value;
+
+                case UnitType.PoundPerSquareInch:
+                    return value;
+
+                case UnitType.Pascal:
+                    return ByUnitType(value, from, UnitType.PoundPerSquareInch);
+
+                case UnitType.Kilopascal:
+                    return ByUnitType(value, from, UnitType.PoundPerSquareInch);
+
+                case UnitType.Bar:
+                    return ByUnitType(value, from, UnitType.PoundPerSquareInch);
             }
 
             return double.NaN;
