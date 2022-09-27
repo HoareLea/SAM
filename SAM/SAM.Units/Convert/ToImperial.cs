@@ -20,6 +20,12 @@
 
                 case UnitType.Celsius:
                     return ByUnitType(value, from, UnitType.Fahrenheit);
+
+                case UnitType.Percent:
+                    return ByUnitType(value, from, UnitType.Unitless);
+
+                case UnitType.Unitless:
+                    return value;
             }
 
             return double.NaN;

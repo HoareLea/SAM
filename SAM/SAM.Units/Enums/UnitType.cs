@@ -1,12 +1,27 @@
-﻿namespace SAM.Units
+﻿using System.ComponentModel;
+
+namespace SAM.Units
 {
+    [Description("UnitType")]
     public enum UnitType
     {
-        Unknown,
-        Meter,
-        Feet,
-        Celsius,
-        Kelvin,
-        Fahrenheit
+        [Abbreviation("")] [Description("Undefined")] Undefined,
+        [Abbreviation("m")] [Description("Meter")] Meter,
+        [Abbreviation("ft")] [Description("Feet")] Feet,
+        [Abbreviation("°C")] [Description("Celsius")] Celsius,
+        [Abbreviation("K")] [Description("Kelvin")] Kelvin,
+        [Abbreviation("F")] [Description("Fahrenheit")] Fahrenheit,
+        [Abbreviation("kg/kg")] [Description("Kilogram Per Kilogram")] KilogramPerKilogram,
+        [Abbreviation("g/kg")] [Description("Gram Per Kilogram")] GramPerKilogram,
+        [Abbreviation("%")] [Description("Percent")] Percent,
+        [Abbreviation("-")] [Description("Unitless")] Unitless,
+        [Abbreviation("kg/m3")] [Description("Kilogram Per Cubic Meter")] KilogramPerCubicMeter,
+        [Abbreviation("m3/kg")] [Description("Cubic Meter Per Kilogram")] CubicMeterPerKilogram,
+        [Abbreviation("m3/g")] [Description("Cubic Meter Per gram")] CubicMeterPerGram,
+        [Abbreviation("m3/h")] [Description("Cubic Meter Per Hour")] CubicMeterPerHour,
+        [Abbreviation("m3/s")] [Description("Cubic Meter Per Second")] CubicMeterPerSecond,
+        [Abbreviation("Pa")] [Description("Pascal")] Pascal,
+        [Abbreviation("kPa")] [Description("Kilopascal")] Kilopascal,
+        [Abbreviation("Ba")] [Description("Bar")] Bar,
     }
 }

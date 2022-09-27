@@ -20,6 +20,39 @@
 
                 case UnitType.Kelvin:
                     return value;
+
+                case UnitType.KilogramPerKilogram:
+                    return value;
+
+                case UnitType.GramPerKilogram:
+                    return ByUnitType(value, from, UnitType.KilogramPerKilogram);
+
+                case UnitType.Percent:
+                    return ByUnitType(value, from, UnitType.Unitless);
+
+                case UnitType.Unitless:
+                    return value;
+
+                case UnitType.CubicMeterPerSecond:
+                    return value;
+
+                case UnitType.CubicMeterPerHour:
+                    return ByUnitType(value, from, UnitType.CubicMeterPerSecond);
+
+                case UnitType.CubicMeterPerGram:
+                    return ByUnitType(value, from, UnitType.CubicMeterPerKilogram);
+
+                case UnitType.CubicMeterPerKilogram:
+                    return value;
+
+                case UnitType.Bar:
+                    return ByUnitType(value, from, UnitType.Pascal);
+
+                case UnitType.Kilopascal:
+                    return ByUnitType(value, from, UnitType.Pascal);
+
+                case UnitType.Pascal:
+                    return value;
             }
 
             return double.NaN;

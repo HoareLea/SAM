@@ -69,6 +69,138 @@
                             return value;
                     }
                     break;
+
+                case UnitType.KilogramPerKilogram:
+                    switch(to)
+                    {
+                        case UnitType.GramPerKilogram:
+                            return value * 1000;
+
+                        case UnitType.KilogramPerKilogram:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.GramPerKilogram:
+                    switch(to)
+                    {
+                        case UnitType.KilogramPerKilogram:
+                            return value / 1000;
+
+                        case UnitType.GramPerKilogram:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.Percent:
+                    switch(to)
+                    {
+                        case UnitType.Unitless:
+                            return value / 100;
+
+                        case UnitType.Percent:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.Unitless:
+                    switch(to)
+                    {
+                        case UnitType.Unitless:
+                            return value;
+
+                        case UnitType.Percent:
+                            return value * 100;
+                    }
+                    break;
+
+                case UnitType.CubicMeterPerHour:
+                    switch (to)
+                    {
+                        case UnitType.CubicMeterPerHour:
+                            return value;
+
+                        case UnitType.CubicMeterPerSecond:
+                            return value / 3600;
+                    }
+                    break;
+
+                case UnitType.CubicMeterPerSecond:
+                    switch (to)
+                    {
+                        case UnitType.CubicMeterPerSecond:
+                            return value;
+
+                        case UnitType.CubicMeterPerHour:
+                            return value * 3600;
+                    }
+                    break;
+
+                case UnitType.Pascal:
+                    switch (to)
+                    {
+                        case UnitType.Bar:
+                            return value / 100000;
+
+                        case UnitType.Kilopascal:
+                            return value / 1000;
+
+                        case UnitType.Pascal:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.Kilopascal:
+                    switch (to)
+                    {
+                        case UnitType.Bar:
+                            return value / 100;
+
+                        case UnitType.Kilopascal:
+                            return value;
+
+                        case UnitType.Pascal:
+                            return value * 1000;
+                    }
+                    break;
+
+                case UnitType.Bar:
+                    switch (to)
+                    {
+                        case UnitType.Bar:
+                            return value;
+
+                        case UnitType.Kilopascal:
+                            return value * 100;
+
+                        case UnitType.Pascal:
+                            return value * 100000;
+                    }
+                    break;
+            }
+
+            return double.NaN;
+        }
+
+        public static double ByUnitType(double value, UnitType from, UnitStyle unitStyle)
+        {
+            if(double.IsNaN(value))
+            {
+                return double.NaN;
+            }
+
+            if(from == UnitType.Undefined || unitStyle == UnitStyle.Undefined)
+            {
+                return value;
+            }
+
+            switch(unitStyle)
+            {
+                case UnitStyle.Imperial:
+                    return ToImperial(value, from);
+
+                case UnitStyle.SI:
+                    return ToSI(value, from);
             }
 
             return double.NaN;

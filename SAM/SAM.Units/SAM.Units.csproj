@@ -43,7 +43,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Attributes\Abbreviation.cs" />
     <Compile Include="Convert\ByUnitType.cs" />
+    <Compile Include="Enums\UnitStyle.cs" />
+    <Compile Include="Enums\UnitCategory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Convert\ToImperial.cs" />
     <Compile Include="Convert\ToDegrees.cs" />
@@ -51,9 +54,10 @@
     <Compile Include="Convert\ToSI.cs" />
     <Compile Include="Enums\UnitType.cs" />
     <Compile Include="Classes\Factor.cs" />
+    <Compile Include="Query\Abbreviation.cs" />
+    <Compile Include="Query\UnitType.cs" />
+    <Compile Include="Query\UnitTypes.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Query\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
