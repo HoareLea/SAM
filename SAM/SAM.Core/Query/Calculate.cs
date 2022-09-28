@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -244,6 +246,127 @@ namespace SAM.Core
         public static double Calculate_ByMaxStep(this Func<double, double> func, double value, double start, double maxStep, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
         {
             return Calculate_ByMaxStep(func, value, start, maxStep, out int count, out double calculationValue, maxCount, tolerance);
+        }
+
+        public static double Calculate_ByDivision(this Func<double, double> func, double value, double min, double max, int maxDivisions = 100, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
+        {
+            if(func == null || double.IsNaN(min) || double.IsNaN(max))
+            {
+                return double.NaN;
+            }
+
+            if (AlmostEqual(min, max, tolerance))
+            {
+                double value_Temp = func.Invoke((min + max) / 2);
+                if(AlmostEqual(value_Temp, value, tolerance))
+                {
+                    return value_Temp;
+                }
+            }
+
+            Func<double, double, int, List<double>> divide = new Func<double, double, int, List<double>>((double min_Temp, double max_Temp, int count) =>
+            {
+                if (double.IsNaN(min_Temp) || double.IsNaN(max_Temp) || count <= -1)
+                {
+                    return null;
+                }
+
+                if(count == 0)
+                {
+                    return new List<double> {min_Temp, max_Temp };
+                }
+
+                double value = (max_Temp - min_Temp) / count;
+
+                List<double> result_Temp = new List<double>();
+                for (int i = 0; i <= count; i++)
+                {
+                    result_Temp.Add(min_Temp + (i * value));
+                }
+
+                return result_Temp;
+            });
+
+
+            Func<SortedSet<double>, double, Tuple<double, double>> getMinAndMax = new Func<SortedSet<double>, double, Tuple<double, double>>((SortedSet<double> values, double value) => 
+            { 
+                if(values == null || values.Count == 0)
+                {
+                    return null;
+                }
+
+                if(values.Count == 1)
+                {
+                    if(!AlmostEqual(values.First(), value, tolerance))
+                    {
+                        return null;
+                    }
+
+                    return new Tuple<double, double>(values.First(), values.First());
+                }
+
+                if(values.First() > value)
+                {
+                    return new Tuple<double, double> (double.NaN, values.First());
+                }
+
+                if (values.Last() < value)
+                {
+                    return new Tuple<double, double>(values.Last(), double.NaN);
+                }
+
+                for (int i =0; i < values.Count; i++)
+                {
+                    if(values.ElementAt(i) > value)
+                    {
+                        return new Tuple<double, double>(values.ElementAt(i - 1), values.ElementAt(i));
+                    }
+                }
+
+                return null; 
+            });
+
+            Tuple<double, double> tuple = null;
+            for (int i = 2; i <= maxDivisions; i++)
+            {
+                List<double> values = divide.Invoke(min, max, i);
+                if(values == null || values.Count == 0)
+                {
+                    continue;
+                }
+
+                List<Tuple<double, double>> tuples = values.ConvertAll(x => new Tuple<double, double>(x, func.Invoke(x)));
+                tuples.RemoveAll(x => double.IsNaN(x.Item2));
+
+                SortedSet<double> sortedSet = new SortedSet<double>(tuples.ConvertAll(x => x.Item2));
+                tuple = getMinAndMax(sortedSet, value);
+                if(tuple == null)
+                {
+                    continue;
+                }
+
+                if (AlmostEqual(tuple.Item1, value, tolerance))
+                {
+                    return tuples.Find(x => x.Item2 == tuple.Item1).Item1;
+                }
+
+                if (AlmostEqual(tuple.Item2, value, tolerance))
+                {
+                    return tuples.Find(x => x.Item2 == tuple.Item2).Item1;
+                }
+
+                if (!double.IsNaN(tuple.Item1) && !double.IsNaN(tuple.Item2))
+                {
+                    break;
+                }
+            }
+
+            if(tuple == null || maxCount == 0)
+            {
+                return double.NaN;
+            }
+
+            return Calculate_ByDivision(func, value, tuple.Item1, tuple.Item2, maxDivisions, maxCount - 1, tolerance);
         }
     }
 }
