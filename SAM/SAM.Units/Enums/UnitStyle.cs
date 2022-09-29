@@ -1,9 +1,11 @@
-﻿namespace SAM.Units
+﻿using System.ComponentModel;
+
+namespace SAM.Units
 {
     public enum UnitStyle
     {
-        Undefined,
-        Imperial,
-        SI
+        [Description("Undefined")] Undefined,
+        [Description("Imperial")] Imperial,
+        [Description("SI")] SI
     }
 }

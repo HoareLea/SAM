@@ -123,6 +123,26 @@ namespace SAM.Units
                     }
 
                     return result;
+
+                case UnitCategory.Efficiency:
+
+                    if (unitStyles == null || unitStyles.Length == 0)
+                    {
+                        result.Add(Units.UnitType.Unitless);
+                        result.Add(Units.UnitType.Percent);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.SI))
+                    {
+                        result.Add(Units.UnitType.Unitless);
+                        result.Add(Units.UnitType.Percent);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
+                    {
+                        result.Add(Units.UnitType.Unitless);
+                        result.Add(Units.UnitType.Percent);
+                    }
+
+                    return result;
             }
 
             return null;

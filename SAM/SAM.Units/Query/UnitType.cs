@@ -38,6 +38,9 @@ namespace SAM.Units
                         case UnitCategory.Temperature:
                             return Units.UnitType.Celsius;
 
+                        case UnitCategory.Efficiency:
+                            return Units.UnitType.Unitless;
+
                         case UnitCategory.Undefined:
                             return Units.UnitType.Undefined;
                     }
