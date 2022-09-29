@@ -25,7 +25,8 @@ namespace SAM.Weather
             }
 
             double dryBulbTemperature_Min = double.MaxValue;
-            double windSpeed= double.MaxValue;
+            double windSpeed = double.MaxValue;
+            double relativeHumidity = double.MaxValue;
             WeatherDay weatherDay_DryBulbTemperature = null;
 
             for(int i=0; i < weatherDays.Count(); i++)
@@ -45,6 +46,7 @@ namespace SAM.Weather
                         dayIndex = i;
 
                         weatherDay.TryGetValue(WeatherDataType.WindSpeed, j, out windSpeed);
+                        weatherDay.TryGetValue(WeatherDataType.RelativeHumidity, j, out relativeHumidity);
                     }
                 }
             }
@@ -63,7 +65,7 @@ namespace SAM.Weather
                 result[WeatherDataType.GlobalSolarRadiation, i] = 0;
                 result[WeatherDataType.DiffuseSolarRadiation, i] = 0;
                 result[WeatherDataType.CloudCover, i] = 0;
-                result[WeatherDataType.RelativeHumidity, i] = 0;
+                result[WeatherDataType.RelativeHumidity, i] = relativeHumidity;
                 result[WeatherDataType.WindDirection, i] = 0;
             }
 
