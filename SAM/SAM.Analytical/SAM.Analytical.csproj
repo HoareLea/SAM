@@ -434,7 +434,7 @@
     <Compile Include="Query\CalculatedOccupancy.cs" />
     <Compile Include="Query\CoolingDesignTemperature.cs" />
     <Compile Include="Query\HeatingDesignTemperature.cs" />
-    <Compile Include="Query\CalculatedExhaustAirflow.cs" />
+    <Compile Include="Query\CalculatedExhaustAirFlow.cs" />
     <Compile Include="Query\CalculatedSupplyAirFlow.cs" />
     <Compile Include="Query\EmitterTypes.cs" />
     <Compile Include="Query\EmitterCategory.cs" />
