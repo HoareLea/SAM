@@ -12,6 +12,7 @@ namespace SAM.Units
         [Description("Pressure")] Pressure,
         [Description("Air Flow")] AirFlow,
         [Description("Relative Humidity")] RelativeHumidity,
-        [Description("Efficiency")] Efficiency
+        [Description("Efficiency")] Efficiency,
+        [Description("Enthalpy")] Enthaply,
     }
 }

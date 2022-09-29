@@ -56,6 +56,12 @@
 
                 case UnitType.PoundPerSquareInch:
                     return ByUnitType(value, from, UnitType.Pascal);
+
+                case UnitType.Kilojule:
+                    return ByUnitType(value, from, UnitType.Jule);
+
+                case UnitType.Jule:
+                    return value;
             }
 
             return double.NaN;

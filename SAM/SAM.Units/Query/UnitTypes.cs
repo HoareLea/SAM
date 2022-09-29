@@ -143,6 +143,25 @@ namespace SAM.Units
                     }
 
                     return result;
+
+                case UnitCategory.Enthaply:
+
+                    if (unitStyles == null || unitStyles.Length == 0)
+                    {
+                        result.Add(Units.UnitType.Jule);
+                        result.Add(Units.UnitType.Kilojule);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.SI))
+                    {
+                        result.Add(Units.UnitType.Jule);
+                        result.Add(Units.UnitType.Kilojule);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
+                    {
+
+                    }
+
+                    return result;
             }
 
             return null;

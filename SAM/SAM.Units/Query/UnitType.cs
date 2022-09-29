@@ -43,6 +43,9 @@ namespace SAM.Units
 
                         case UnitCategory.Undefined:
                             return Units.UnitType.Undefined;
+
+                        case UnitCategory.Enthaply:
+                            return Units.UnitType.Jule;
                     }
                     break;
 

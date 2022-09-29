@@ -4,6 +4,12 @@
     {
         public static double ByUnitType(double value, UnitType from, UnitType to)
         {
+            if(from == to)
+            {
+                return value;
+            }
+            
+            
             switch (from)
             {
                 case UnitType.Meter:
@@ -11,9 +17,6 @@
                     {
                         case UnitType.Feet:
                             return value * Factor.MetersToFeet;
-
-                        case UnitType.Meter:
-                            return value;
                     }
                     break;
 
@@ -22,9 +25,6 @@
                     {
                         case UnitType.Meter:
                             return value * Factor.FeetToMeters;
-
-                        case UnitType.Feet:
-                            return value;
                     }
                     break;
 
@@ -36,9 +36,6 @@
 
                         case UnitType.Fahrenheit:
                             return ByUnitType(ByUnitType(value, from, UnitType.Celsius), UnitType.Celsius, to);
-
-                        case UnitType.Kelvin:
-                            return value;
                     }
                     break;
 
@@ -50,9 +47,6 @@
 
                         case UnitType.Fahrenheit:
                             return (1.8 * value) + 32;
-
-                        case UnitType.Celsius:
-                            return value;
                     }
                     break;
 
@@ -64,9 +58,6 @@
 
                         case UnitType.Celsius:
                             return (value - 32) / 18;
-
-                        case UnitType.Fahrenheit:
-                            return value;
                     }
                     break;
 
@@ -75,9 +66,6 @@
                     {
                         case UnitType.GramPerKilogram:
                             return value * 1000;
-
-                        case UnitType.KilogramPerKilogram:
-                            return value;
                     }
                     break;
 
@@ -86,9 +74,6 @@
                     {
                         case UnitType.KilogramPerKilogram:
                             return value / 1000;
-
-                        case UnitType.GramPerKilogram:
-                            return value;
                     }
                     break;
 
@@ -97,18 +82,12 @@
                     {
                         case UnitType.Unitless:
                             return value / 100;
-
-                        case UnitType.Percent:
-                            return value;
                     }
                     break;
 
                 case UnitType.Unitless:
                     switch(to)
                     {
-                        case UnitType.Unitless:
-                            return value;
-
                         case UnitType.Percent:
                             return value * 100;
                     }
@@ -117,9 +96,6 @@
                 case UnitType.CubicMeterPerHour:
                     switch (to)
                     {
-                        case UnitType.CubicMeterPerHour:
-                            return value;
-
                         case UnitType.CubicMeterPerSecond:
                             return value / 3600;
                     }
@@ -128,9 +104,6 @@
                 case UnitType.CubicMeterPerSecond:
                     switch (to)
                     {
-                        case UnitType.CubicMeterPerSecond:
-                            return value;
-
                         case UnitType.CubicMeterPerHour:
                             return value * 3600;
                     }
@@ -145,9 +118,6 @@
                         case UnitType.Kilopascal:
                             return value / 1000;
 
-                        case UnitType.Pascal:
-                            return value;
-
                         case UnitType.PoundPerSquareInch:
                             return value * Factor.PascalToPoundsPerInch;
                     }
@@ -158,9 +128,6 @@
                     {
                         case UnitType.Bar:
                             return value / 100;
-
-                        case UnitType.Kilopascal:
-                            return value;
 
                         case UnitType.Pascal:
                             return value * 1000;
@@ -173,9 +140,6 @@
                 case UnitType.Bar:
                     switch (to)
                     {
-                        case UnitType.Bar:
-                            return value;
-
                         case UnitType.Kilopascal:
                             return value * 100;
 
@@ -198,9 +162,22 @@
 
                         case UnitType.Pascal:
                             return value * Factor.PoundsPerInchToPascal;
+                    }
+                    break;
 
-                        case UnitType.PoundPerSquareInch:
-                            return value;
+                case UnitType.Jule:
+                    switch (to)
+                    {
+                        case UnitType.Kilojule:
+                            return value / 1000;
+                    }
+                    break;
+
+                case UnitType.Kilojule:
+                    switch (to)
+                    {
+                        case UnitType.Jule:
+                            return value * 1000;
                     }
                     break;
             }
