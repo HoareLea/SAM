@@ -260,7 +260,7 @@ namespace SAM.Core
                 double value_Temp = func.Invoke((min + max) / 2);
                 if(AlmostEqual(value_Temp, value, tolerance))
                 {
-                    return value_Temp;
+                    return (min + max) / 2;
                 }
             }
 
@@ -339,24 +339,25 @@ namespace SAM.Core
                 tuples.RemoveAll(x => double.IsNaN(x.Item2));
 
                 SortedSet<double> sortedSet = new SortedSet<double>(tuples.ConvertAll(x => x.Item2));
-                tuple = getMinAndMax(sortedSet, value);
-                if(tuple == null)
+                Tuple<double, double> tuple_Temp = getMinAndMax(sortedSet, value);
+                if(tuple_Temp == null)
                 {
                     continue;
                 }
 
-                if (AlmostEqual(tuple.Item1, value, tolerance))
+                if (AlmostEqual(tuple_Temp.Item1, value, tolerance))
                 {
-                    return tuples.Find(x => x.Item2 == tuple.Item1).Item1;
+                    return tuples.Find(x => x.Item2 == tuple_Temp.Item1).Item1;
                 }
 
-                if (AlmostEqual(tuple.Item2, value, tolerance))
+                if (AlmostEqual(tuple_Temp.Item2, value, tolerance))
                 {
-                    return tuples.Find(x => x.Item2 == tuple.Item2).Item1;
+                    return tuples.Find(x => x.Item2 == tuple_Temp.Item2).Item1;
                 }
 
-                if (!double.IsNaN(tuple.Item1) && !double.IsNaN(tuple.Item2))
+                if (!double.IsNaN(tuple_Temp.Item1) && !double.IsNaN(tuple_Temp.Item2))
                 {
+                    tuple = new Tuple<double, double>(tuples.Find(x => x.Item2 == tuple_Temp.Item1).Item1, tuples.Find(x => x.Item2 == tuple_Temp.Item2).Item1);
                     break;
                 }
             }
