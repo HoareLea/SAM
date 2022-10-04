@@ -45,6 +45,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(gooWeatherData, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayTemp_", NickName = "heatingDesignDayTemp_", Description = "Heating DesignDay Temperature", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayRelativeHumidity_", NickName = "heatingDesignDayRelativeHumidity_", Description = "Heating DesignDay Relative Humidity [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayWindspeed_", NickName = "heatingDesignDayWindspeed_", Description = "Heating DesignDay Windspeed", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -113,6 +114,19 @@ namespace SAM.Analytical.Grasshopper
                             for(int i=0; i < 24; i++)
                             {
                                 designDay[WeatherDataType.DryBulbTemperature, i] = temperature;
+                            }
+                        }
+                    }
+
+                    index = Params.IndexOfInputParam("heatingDesignDayRelativeHumidity_");
+                    if (index != -1)
+                    {
+                        double relativeHumidity = double.NaN;
+                        if (dataAccess.GetData(index, ref relativeHumidity) && !double.IsNaN(relativeHumidity))
+                        {
+                            for (int i = 0; i < 24; i++)
+                            {
+                                designDay[WeatherDataType.RelativeHumidity, i] = relativeHumidity;
                             }
                         }
                     }
