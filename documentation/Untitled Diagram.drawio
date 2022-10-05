@@ -1,1 +1,52 @@
-<mxfile host="app.diagrams.net" modified="2022-10-05T09:06:13.418Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" etag="starY08-q2jw0KXeQcDs" version="20.4.0" type="github"><diagram id="Jl_ORfJ8K7z92nkEh947" name="Page-1">zZZNj5swEIZ/DdL20ApMIJtjPrbJoWmlsto9e7EDVo0HGaeE/PqOg0nCJkjtYSukHMavZ8aeZzwRXrgsDmtNy3wLjEuP+OzghSuPkGBCiGd/PmtaZTqbtEKmBXNOFyERR+5E36l7wXjVczQA0oiyL6agFE9NT6NaQ91324Hsn1rSjN8ISUrlrfoqmMlb9ZFML/qGiyzvTg7iWbtT0M7ZVVLllEF9JYVPXrjUAKa1isOSSwuv49LGfR3YPV9Mc2X+JmD98wgv08TU2xLge5o//tg8f3ZZflO5dwUn8y0KwRdMFktMvHjTaGXWelhzKLjRzSdXkWk6TBr2inF7ko+OdS4MT0qa2t0aHwZquSkkrgI0d6BM4mK7C3Bt+GGwsuDMCx+auwS6dAEOedM9HUe8vjQsiJyWXzUrdhp1byQ7Z75gRMOR/Aeq5JbqvjJUKPqGRRN/rqhsjMBXhotuZh6Q/C1YpGL69KgUmUI7RTpco2DZ2Vxzt1EIxmz4QvNKHE9Htm0pQShzqjVaeNHK5tobqNqZs6kro+EXX4IEzLtSoGyWnZDyvWQb6MLiD2goid939KahZHanoeFHNTQcGBNyd0y+AWXV2GZkOrYhmQwwDe8y3bzM8Rg/aSrDi7HBDcOxwY0G4E7uwl0iDw1ybFgns7FhjQewRnexrkQmzOk//rkWamRw4+j/wcXl5TvntHf1tRg+/QE=</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-10-05T09:23:38.700Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/106.0.0.0 Safari/537.36" etag="jugruDRMqK6dILrVHe7D" version="20.4.0" type="github">
+  <diagram id="Jl_ORfJ8K7z92nkEh947" name="Page-1">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="827" pageHeight="1169" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="GRzoV7StwMpooNch8OHT-1" value="SAM 1.0&lt;br&gt;(Geometry)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="19" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GRzoV7StwMpooNch8OHT-2" value="Sustainable Analytical Model (SAM)" style="text;html=1;align=center;verticalAlign=middle;resizable=0;points=[];autosize=1;strokeColor=none;fillColor=none;fontSize=16;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="269" y="10" width="290" height="30" as="geometry" />
+        </mxCell>
+        <mxCell id="GRzoV7StwMpooNch8OHT-3" value="SAM 2.0&lt;br&gt;(Loads)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="179" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GRzoV7StwMpooNch8OHT-4" value="SAM 3.0&lt;br&gt;(HVAC Systems)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="339" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GRzoV7StwMpooNch8OHT-5" value="SAM 4.0&lt;br&gt;(Controls)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="499" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="GRzoV7StwMpooNch8OHT-6" value="SAM 5.0&lt;br&gt;(Digital Twin)" style="rounded=0;whiteSpace=wrap;html=1;fontStyle=1" parent="1" vertex="1">
+          <mxGeometry x="659" y="100" width="150" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-3" value="4 methods to create model geometry" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="19" y="170" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-4" value="Conversion geometry to Analytical Model" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="18" y="230" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-5" value="SAM_GEM (Conversion Analytical Model to *.gem file)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="18" y="290" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-6" value="SAM_Solver (Geometry solving toolkit)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="18" y="350" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-7" value="SAM_Topologic (Geometry solving toolkit)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="18" y="410" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-8" value="Rhino, Revit 2020, Revit 2021, Revit 2022 (Data converter toolkits)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="19" y="470" width="151" height="50" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-9" value="Assumptions databases (*.json):&lt;br&gt;1. Materials&lt;br&gt;2. Constructions&lt;br&gt;3. Gains&lt;br&gt;4. Thermostats&lt;br&gt;5. Loads&lt;br&gt;6. Profiles (yearly, hourly)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="179" y="170" width="151" height="170" as="geometry" />
+        </mxCell>
+        <mxCell id="IezBzxtzGipqMu-QNy4q-10" value="SAM_Tas (Analytical Model conversion in/out)&lt;br&gt;(*.inp, *.idf)" style="rounded=0;whiteSpace=wrap;html=1;" vertex="1" parent="1">
+          <mxGeometry x="179" y="350" width="151" height="50" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
