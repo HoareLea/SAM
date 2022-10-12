@@ -234,6 +234,19 @@ namespace SAM.Analytical
             }
         }
 
+        public override void Move(Vector3D vector3D)
+        {
+            base.Move(vector3D);
+            if (openings != null)
+            {
+                foreach (IOpening opening in openings)
+                {
+                    opening.Move(vector3D);
+                }
+            }
+
+        }
+
         public List<Face3D> GetFace3Ds(bool cutOpenings = false, double tolerance = Tolerance.Distance)
         {
             Face3D face3D = Face3D;

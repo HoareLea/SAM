@@ -58,7 +58,7 @@ namespace SAM.Analytical
             face3D = face3D?.Transform(transform3D);
         }
 
-        public void Move(Vector3D vector3D)
+        public virtual void Move(Vector3D vector3D)
         {
             face3D = face3D?.GetMoved(vector3D) as Face3D;
         }
