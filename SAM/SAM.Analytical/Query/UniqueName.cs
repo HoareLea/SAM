@@ -2,14 +2,14 @@
 {
     public static partial class Query
     {
-        public static string UniqueName(this Panel panel, AdjacencyCluster adjacencyCluster)
+        public static string UniqueName(this AdjacencyCluster adjacencyCluster, Panel panel)
         {
             if(panel == null || adjacencyCluster == null)
             {
                 return null;
             }
 
-            int index = adjacencyCluster.UniqueIndex(panel);
+            int index = adjacencyCluster.GetIndex(panel);
             if(index == -1)
             {
                 return null;
@@ -21,9 +21,31 @@
                 return index.ToString();
             }
 
-            return string.Format("{0} {1}", name, index);
+            return UniqueName(panel, index);
         }
-        
+
+        public static string UniqueName(this AdjacencyCluster adjacencyCluster, Aperture aperture)
+        {
+            if (aperture == null || adjacencyCluster == null)
+            {
+                return null;
+            }
+
+            int index = adjacencyCluster.GetIndex(aperture);
+            if (index == -1)
+            {
+                return null;
+            }
+
+            string name = aperture.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                return index.ToString();
+            }
+
+            return UniqueName(aperture, index);
+        }
+
         public static string UniqueName(this Panel panel, int id = -1)
         {
             if (panel == null)
@@ -37,7 +59,7 @@
                     return null;
             }
 
-            return UniqueName(panel.PanelType, name, id);
+            return UniqueName(panel.PanelType, name, panel.Guid, id);
         }
 
         public static string UniqueName(this Aperture aperture, int id = -1)
@@ -59,7 +81,7 @@
             if (apertureConstruction != null)
                 apertureType = apertureConstruction.ApertureType;
 
-            return UniqueName(apertureType, name, id);
+            return UniqueName(apertureType, name, aperture.Guid, id);
         }
 
         public static string UniqueName(this Construction construction, int id = -1)
@@ -71,7 +93,7 @@
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            return UniqueName(construction.PanelType(), name, id);
+            return UniqueName(construction.PanelType(), name, construction.Guid, id);
         }
 
         public static string UniqueName(this ApertureConstruction apertureCondtruction, int id = -1)
@@ -83,95 +105,60 @@
             if (string.IsNullOrEmpty(name))
                 return null;
 
-            return UniqueName(apertureCondtruction.ApertureType, name, id);
+            return UniqueName(apertureCondtruction.ApertureType, name, apertureCondtruction.Guid, id);
         }
 
-        public static string UniqueName(this PanelType panelType, string name, int id = -1)
+        public static string UniqueName(this PanelType panelType, string name, System.Guid? guid = null, int id = -1)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
-            string prefix = null;
-            switch (panelType)
+            return UniqueName(UniqueNamePrefix(panelType), name, guid, id);
+        }
+
+        public static string UniqueName(this ApertureType apertureType, string name, System.Guid? guid = null, int id = -1)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+                return null;
+
+            return UniqueName(UniqueNamePrefix(apertureType), name, guid, id);
+        }
+
+        public static string UniqueName(string prefix, string name, System.Guid? guid = null, int id = -1)
+        {
+            if (string.IsNullOrWhiteSpace(name))
             {
-                case Analytical.PanelType.Ceiling:
-                    prefix = "Compound Ceiling";
-                    break;
-                case Analytical.PanelType.CurtainWall:
-                    prefix = "Curtain Wall";
-                    break;
-                case Analytical.PanelType.Floor:
-                case Analytical.PanelType.FloorExposed:
-                case Analytical.PanelType.FloorInternal:
-                case Analytical.PanelType.FloorRaised:
-                case Analytical.PanelType.SlabOnGrade:
-                case Analytical.PanelType.UndergroundSlab:
-                case Analytical.PanelType.UndergroundCeiling:
-                    prefix = "Floor";
-                    break;
-                case Analytical.PanelType.Roof:
-                case Analytical.PanelType.Shade:
-                case Analytical.PanelType.SolarPanel:
-                    prefix = "Basic Roof";
-                    break;
-                case Analytical.PanelType.UndergroundWall:
-                case Analytical.PanelType.Wall:
-                case Analytical.PanelType.WallExternal:
-                case Analytical.PanelType.WallInternal:
-                    prefix = "Basic Wall";
-                    break;
-                case Analytical.PanelType.Air:
-                    prefix = "Air";
-                    break;
-                default:
-                    prefix = "Undefined";
-                    break;
-            }
-
-            return UniqueName(prefix, name, id);
-        }
-
-        public static string UniqueName(this ApertureType apertureType, string name, int id = -1)
-        {
-            if (string.IsNullOrWhiteSpace(name))
                 return null;
-
-            string prefix = null;
-            switch (apertureType)
-            {
-                case Analytical.ApertureType.Window:
-                    prefix = "Windows";
-                    break;
-                case Analytical.ApertureType.Door:
-                    prefix = "Doors";
-                    break;
-                case Analytical.ApertureType.Undefined:
-                    prefix = "Undefined";
-                    break;
             }
-
-            return UniqueName(prefix, name, id);
-        }
-
-        private static string UniqueName(string prefix, string name, int id = -1)
-        {
-            if (string.IsNullOrWhiteSpace(name))
-                return null;
 
             string result = null;
             if (!string.IsNullOrWhiteSpace(prefix) && !name.StartsWith(prefix))
+            {
                 result = string.Format("{0}: {1}", prefix, name);
+            }
+
 
             if (result == null)
+            {
                 result = name;
+            }
 
             result.Trim();
 
+            if (guid != null && guid.HasValue)
+            {
+                result += string.Format(" [{0}]", guid);
+            }
+
             if (id != -1)
+            {
                 result += string.Format(" [{0}]", id);
+            }
 
             if (result.EndsWith(":"))
+            {
                 result = result.Substring(0, result.Length - 1);
+            }
 
             return result;
         }

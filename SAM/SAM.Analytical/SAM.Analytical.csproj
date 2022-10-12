@@ -226,6 +226,8 @@
     <Compile Include="Query\AirSupplyMethod.cs" />
     <Compile Include="Query\HeatingDesignRelativeHumidity.cs" />
     <Compile Include="Query\CoolingDesignRelativeHumidity.cs" />
+    <Compile Include="Query\UniqueNameDecomposition.cs" />
+    <Compile Include="Query\UniqueNamePrefix.cs" />
     <Compile Include="Query\VentilationSystems.cs" />
     <Compile Include="Query\Spaces.cs" />
     <Compile Include="Query\SpecificHeatTransferGain.cs" />
@@ -446,7 +448,6 @@
     <Compile Include="Query\InRange.cs" />
     <Compile Include="Query\ProfileGroup.cs" />
     <Compile Include="Query\Profiles.cs" />
-    <Compile Include="Query\UniqueIndex.cs" />
     <Compile Include="Query\UpdateConstructionsByPanels.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />
