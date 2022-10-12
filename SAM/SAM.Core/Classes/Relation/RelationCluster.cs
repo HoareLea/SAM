@@ -500,7 +500,6 @@ namespace SAM.Core
             if (!IsValid(type))
                 return null;
 
-
             List<string> typeNames = GetTypeNames(type);
             if (typeNames == null || typeNames.Count == 0)
             {
@@ -915,38 +914,115 @@ namespace SAM.Core
             return result;
         }
 
-        public int GetIndex(object @object)
+        public virtual int GetIndex(object @object)
         {
             if (@object == null)
+            {
                 return -1;
+            }
 
             object object_Temp = @object;
             if (@object is Guid)
+            {
                 object_Temp = GetObject(Guid);
+            }
 
             if (object_Temp == null)
+            {
                 return -1;
+            }
 
             Guid guid = GetGuid(object_Temp);
             if (guid.Equals(Guid.Empty))
+            {
                 return -1;
+            }
 
-            string typeName = object_Temp.GetType().FullName;
-
-            Dictionary<Guid, object> dictionary;
-            if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            List<string> typeNames = GetTypeNames(object_Temp.GetType());
+            if (typeNames == null || typeNames.Count == 0)
+            {
                 return -1;
+            }
 
             int count = 0;
-            foreach(Guid guid_Temp in dictionary.Keys)
+            foreach (string typeName in typeNames)
             {
-                if (guid_Temp.Equals(guid))
-                    return count;
+                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                {
+                    continue;
+                }
 
-                count++;
+                foreach (Guid guid_Temp in dictionary.Keys)
+                {
+                    if (guid_Temp.Equals(guid))
+                        return count;
+
+                    count++;
+                }
             }
 
             return -1;
+        }
+
+        public virtual bool TryGetObject<T>(int index, T @object)
+        {
+            @object = default;
+
+            List<string> typeNames = GetTypeNames(typeof(T));
+            if (typeNames == null || typeNames.Count == 0)
+            {
+                return false;
+            }
+
+            int count = 0;
+            foreach (string typeName in typeNames)
+            {
+                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                {
+                    continue;
+                }
+
+                foreach (Guid guid_Temp in dictionary.Keys)
+                {
+                    if(count == index)
+                    {
+                        object @object_Temp = dictionary[guid_Temp];
+                        if(object_Temp is T)
+                        {
+                            @object = (T)object_Temp;
+                            return true;
+                        }
+
+                        return false;
+                    }
+
+                    count++;
+                }
+            }
+
+            return false;
+        }
+
+        public virtual int Count<T>()
+        {
+            List<string> typeNames = GetTypeNames(typeof(T));
+            if (typeNames == null || typeNames.Count == 0)
+            {
+                return -1;
+            }
+
+            int count = 0;
+            foreach (string typeName in typeNames)
+            {
+                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                {
+                    continue;
+                }
+
+                count += dictionary.Count;
+            }
+
+            return count;
         }
 
         public List<string> GetTypeNames(Type type)

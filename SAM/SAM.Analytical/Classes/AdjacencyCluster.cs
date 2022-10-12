@@ -758,5 +758,123 @@ namespace SAM.Analytical
 
             return spaces.ConvertAll(x => Query.Shell(this, x));
         }
+
+        public override int GetIndex(object @object)
+        {
+            int result = base.GetIndex(@object);
+
+            if (result == -1)
+            {
+                if (@object is Aperture)
+                {
+                    List<Panel> panels = GetPanels();
+                    if (panels == null || panels.Count == 0)
+                    {
+                        return -1;
+                    }
+
+                    result = base.Count<Aperture>();
+                    if (result != 0)
+                    {
+                        result--;
+                    }
+
+                    Aperture aperture = (Aperture)@object;
+
+                    foreach (Panel panel in panels)
+                    {
+                        List<Aperture> apertures = panel?.Apertures;
+                        if (apertures == null && apertures.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach(Aperture aperture_Temp in apertures)
+                        {
+                            if(aperture_Temp != null && aperture.Guid.Equals(aperture_Temp.Guid))
+                            {
+                                return result;
+                            }
+
+                            result++;
+                        }
+                    }
+
+                }
+            }
+
+            return result;
+        }
+
+        public override bool TryGetObject<T>(int index, T @object)
+        {
+            if(base.TryGetObject(index, @object))
+            {
+                return true;
+            }
+
+            if (@object is Aperture)
+            {
+                List<Panel> panels = GetPanels();
+                if (panels == null || panels.Count == 0)
+                {
+                    return false;
+                }
+
+                int count = base.Count<Aperture>();
+                if (count != 0)
+                {
+                    count--;
+                }
+
+                foreach (Panel panel in panels)
+                {
+                    List<Aperture> apertures = panel?.Apertures;
+                    if (apertures == null && apertures.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (Aperture aperture_Temp in apertures)
+                    {
+                        if(count == index)
+                        {
+                            @object = (T)(object)aperture_Temp;
+                            return true;
+                        }
+
+                        count++;
+                    }
+                }
+
+            }
+
+            return false;
+        }
+
+        public override int Count<T>()
+        {
+            int result = base.Count<T>();
+
+            if(typeof(Aperture).IsAssignableFrom(typeof(T)))
+            {
+                List<Panel> panels = GetPanels();
+                if (panels != null && panels.Count != 0)
+                {
+                    foreach (Panel panel in panels)
+                    {
+                        List<Aperture> apertures = panel?.Apertures;
+                        if (apertures == null && apertures.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        result += apertures.Count;
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
