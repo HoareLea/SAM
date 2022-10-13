@@ -53,6 +53,16 @@ namespace SAM.Analytical
             }
         }
 
+        public virtual double GetArea()
+        {
+            if(face3D == null)
+            {
+                return double.NaN;
+            }
+
+            return face3D.GetArea();
+        }
+
         public virtual void Transform(Transform3D transform3D)
         {
             face3D = face3D?.Transform(transform3D);
