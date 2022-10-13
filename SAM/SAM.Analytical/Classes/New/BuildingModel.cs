@@ -247,6 +247,32 @@ namespace SAM.Analytical
             T @object = relationCluster.GetObject<T>(guid);
             if(@object == null)
             {
+                if(typeof(IOpening).IsAssignableFrom(typeof(T)))
+                {
+                    List<IHostPartition> hostPartitions = relationCluster?.GetObjects<IHostPartition>();
+                    if(hostPartitions == null || hostPartitions.Count == 0)
+                    {
+                        return default;
+                    }
+
+                    foreach(IHostPartition hostPartition in hostPartitions)
+                    {
+                        if(hostPartition == null)
+                        {
+                            continue;
+                        }
+
+                        if(hostPartition.HasOpening(guid))
+                        {
+                            IOpening opening = hostPartition.GetOpening(guid);
+                            if(opening is T)
+                            {
+                                return (T)opening;
+                            }
+                        }
+                    }
+                }
+                
                 return default;
             }
 
@@ -786,6 +812,11 @@ namespace SAM.Analytical
         public List<IMaterial> GetMaterials()
         {
             return GetMaterials<IMaterial>();
+        }
+
+        public IOpening GetOpening(Guid guid)
+        {
+            return GetObject<IOpening>(guid);
         }
 
         public List<string> GetMissingMaterialNames()

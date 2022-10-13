@@ -121,7 +121,15 @@ namespace SAM.Analytical
                 ApertureConstruction apertureConstruction = Type;
                 if(apertureConstruction != null)
                 {
-                    frameThickness = apertureConstruction.GetFrameThickness();
+                    if(apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultFrameWidth, out double frameThickness_Temp))
+                    {
+                        frameThickness = frameThickness_Temp;
+                    }
+                    
+                    if(frameThickness == 0 || double.IsNaN(frameThickness))
+                    {
+                        frameThickness = apertureConstruction.GetFrameThickness();
+                    }
                 }
 
                 if(!double.IsNaN(frameThickness) && frameThickness != 0)

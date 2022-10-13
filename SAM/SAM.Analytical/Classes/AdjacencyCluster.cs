@@ -445,6 +445,36 @@ namespace SAM.Analytical
             return result;
         }
 
+        public Aperture GetAperture(Guid guid)
+        {
+            Aperture result = GetObject<Aperture>(guid);
+            if(result != null)
+            {
+                return result;
+            }
+
+            List<Panel> panels = GetPanels();
+            if (panels == null || panels.Count == 0)
+            {
+                return null;
+            }
+
+            foreach(Panel panel in panels)
+            {
+                if(panel == null)
+                {
+                    continue;
+                }
+
+                if(panel.HasAperture(guid))
+                {
+                    return panel.GetAperture(guid);
+                }
+            }
+
+            return null;
+        }
+
         public List<Construction> GetConstructions()
         {
             List<Construction> result = null;
