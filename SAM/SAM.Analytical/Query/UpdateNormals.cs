@@ -71,8 +71,7 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
-
-                                if (normal_External.SameHalf(normal_Panel))
+                                if (normal_External.SameHalf(normal_Aperture))
                                 {
                                     continue;
                                 }
