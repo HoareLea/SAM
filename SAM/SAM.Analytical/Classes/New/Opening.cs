@@ -80,7 +80,7 @@ namespace SAM.Analytical
 
                     Geometry.Planar.IClosed2D externalEdge2D = face3D.ExternalEdge2D;
 
-                    List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Offset(face2D, frameThickness);
+                    List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Offset(face2D, -frameThickness);
                     internalEdge2Ds = face2Ds?.ConvertAll(x => x.ExternalEdge2D);
 
                     face2D = Geometry.Planar.Create.Face2D(externalEdge2D, internalEdge2Ds);

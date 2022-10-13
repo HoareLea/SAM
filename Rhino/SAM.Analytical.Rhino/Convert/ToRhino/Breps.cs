@@ -5,7 +5,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Convert
     {
-        public static List<Brep> ToRhino(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static List<Brep> ToRhino(this AdjacencyCluster adjacencyCluster, bool cutApertures = false, bool includeFrame = false, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null)
                 return null;
@@ -53,8 +53,43 @@ namespace SAM.Analytical.Rhino
                 if (brep == null)
                     continue;
 
+                List<Aperture> apertures = panel.Apertures;
+                if(apertures != null)
+                {
+                    foreach(Aperture aperture in apertures)
+                    {
+                        aperture.ToRhino(includeFrame)?.ForEach(x => result.Add(x));
+                    }
+                }
+
                 result.Add(brep);
             }
+
+            return result;
+        }
+
+        public static List<Brep> ToRhino(this Aperture aperture, bool includeFrame = false)
+        {
+            if(aperture == null)
+            {
+                return null;
+            }
+
+            List<Brep> result = new List<Brep>();
+
+            if (!includeFrame)
+            {
+                result.Add(Geometry.Rhino.Convert.ToRhino_Brep(new Geometry.Spatial.Face3D(aperture?.GetExternalEdge3D())));
+                return result;
+            }
+
+            List<Geometry.Spatial.Face3D> face3Ds = null;
+
+            face3Ds = aperture.GetFace3Ds(AperturePart.Frame);
+            face3Ds?.ForEach(x => result.Add(Geometry.Rhino.Convert.ToRhino_Brep(x)));
+
+            face3Ds = aperture.GetFace3Ds(AperturePart.Pane);
+            face3Ds?.ForEach(x => result.Add(Geometry.Rhino.Convert.ToRhino_Brep(x)));
 
             return result;
         }

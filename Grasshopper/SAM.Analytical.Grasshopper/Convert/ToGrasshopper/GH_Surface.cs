@@ -14,10 +14,5 @@ namespace SAM.Analytical.Grasshopper
         {
             return new GH_Surface(Rhino.Convert.ToRhino(planarBoundary3D));
         }
-
-        public static GH_Surface ToGrasshopper(this Aperture aperture)
-        {
-            return new GH_Surface(Geometry.Rhino.Convert.ToRhino_Brep(aperture.GetFace3D()));
-        }
     }
 }
