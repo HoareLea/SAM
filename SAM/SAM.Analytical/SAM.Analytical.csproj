@@ -148,6 +148,7 @@
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
+    <Compile Include="Enums\AperturePart.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\NCMSystemType.cs" />
     <Compile Include="Enums\NCMCountry.cs" />
