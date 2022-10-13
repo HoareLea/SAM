@@ -44,10 +44,53 @@ namespace SAM.Analytical
                 if (normal_External != null)
                 {
                     Vector3D normal_Partition = partition.Face3D?.GetPlane()?.Normal;
-                    if (normal_Partition != null && !normal_External.SameHalf(normal_Partition))
+                    if(normal_Partition == null)
                     {
-                        partition = partition.FlipNormal(includeOpenings, false);
-                        flippedPartitions.Add(partition);
+                        continue;
+                    }
+
+                    IPartition flippedPartition = null;
+
+                    if (!normal_External.SameHalf(normal_Partition))
+                    {
+                        flippedPartition = partition.FlipNormal(false, false);
+                    }
+
+                    if(includeOpenings && partition is IHostPartition)
+                    {
+                        IHostPartition hostPartition = partition as IHostPartition;
+                        List<IOpening> openings = hostPartition.GetOpenings();
+                        if(openings != null && openings.Count != 0)
+                        {
+                            foreach(IOpening opening in openings)
+                            {
+                                Vector3D normal_Opening = opening.Face3D?.GetPlane()?.Normal;
+                                if (normal_Opening == null)
+                                {
+                                    continue;
+                                }
+
+                                if (normal_External.SameHalf(normal_Opening))
+                                {
+                                    continue;
+                                }
+
+                                if(flippedPartition == null)
+                                {
+                                    flippedPartition = partition;
+                                }
+
+                                hostPartition = (IHostPartition)flippedPartition;
+                                hostPartition.RemoveOpening(opening.Guid);
+                                hostPartition.AddOpening(opening);
+                            }
+                        }
+
+                    }
+
+                    if(flippedPartition != null)
+                    {
+                        flippedPartitions.Add(flippedPartition);
                     }
                 }
 
