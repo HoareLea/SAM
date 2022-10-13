@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\New\Opening.cs" />
     <Compile Include="Classes\OpeningProperties.cs" />
     <Compile Include="Classes\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Enums\LightingPhotoelectricControls.cs" />
     <Compile Include="Enums\LightingOccupancyControls.cs" />
     <Compile Include="Enums\New\HostPartitionCategory.cs" />
+    <Compile Include="Enums\New\OpeningPart.cs" />
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />

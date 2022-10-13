@@ -4,34 +4,34 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public class Window : Opening<WindowType>, IOpening
+    public class Opening<T> : BuildingElement<T>, IOpening  where T : OpeningType
     {
-        public Window(Window window)
-            : base(window)
+        public Opening(Opening<T> opening)
+            : base(opening)
         {
 
         }
 
-        public Window(JObject jObject)
+        public Opening(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public Window(WindowType windowType, Face3D face3D)
-            : base(windowType, face3D)
+        public Opening(T openingType, Face3D face3D)
+            : base(openingType, face3D)
         {
 
         }
 
-        public Window(System.Guid guid, WindowType windowType, Face3D face3D)
-            : base(guid, windowType, face3D)
+        public Opening(System.Guid guid, T openingType, Face3D face3D)
+            : base(guid, openingType, face3D)
         {
 
         }
 
-        public Window(System.Guid guid, Window window, Face3D face3D)
-            : base(guid, window, face3D)
+        public Opening(System.Guid guid, Opening<T> opening, Face3D face3D)
+            : base(guid, opening, face3D)
         {
 
         }
