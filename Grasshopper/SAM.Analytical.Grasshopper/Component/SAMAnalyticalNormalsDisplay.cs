@@ -77,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
             }
             else if(sAMObject is Aperture)
             {
-                planarBoundary3Ds = new List<PlanarBoundary3D>() { ((Aperture)sAMObject).PlanarBoundary3D };
+                planarBoundary3Ds = new List<PlanarBoundary3D>() { new PlanarBoundary3D(((Aperture)sAMObject).GetExternalEdge3D()) };
             }
 
             if (planarBoundary3Ds == null || planarBoundary3Ds.Count == 0)
