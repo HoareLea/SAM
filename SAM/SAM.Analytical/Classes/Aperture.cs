@@ -95,6 +95,11 @@ namespace SAM.Analytical
             return planarBoundary3D.GetFace3D();
         }
 
+        public IClosedPlanar3D GetExternalEdge3D()
+        {
+            return GetFace3D().GetExternalEdge3D();
+        }
+
         public List<Face3D> GetFace3Ds(AperturePart aperturePart)
         {
             Face3D face3D = GetFace3D();
