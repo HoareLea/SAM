@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,6 +42,7 @@ namespace SAM.Analytical.Grasshopper
         {
             inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
             inputParamManager.AddBooleanParameter("_cutApertures", "_cutApertures", "Cut Apertures If Applicable", GH_ParamAccess.item, false);
+            inputParamManager.AddBooleanParameter("_includeFrame", "_includeFrame", "Include Frame", GH_ParamAccess.item, false);
             inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, 0.00001);
         }
 
@@ -75,8 +76,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool includeFrame = false;
+            if (!dataAccess.GetData(2, ref includeFrame))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
             double tolerance = 0.00001;
-            if (!dataAccess.GetData(2, ref tolerance))
+            if (!dataAccess.GetData(3, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -87,21 +95,21 @@ namespace SAM.Analytical.Grasshopper
             if (sAMObject is Panel)
                 result.Add(((Panel)sAMObject).ToGrasshopper(cutApertures, tolerance));
             else if (sAMObject is Aperture)
-                result.Add(((Aperture)sAMObject).ToGrasshopper());
+                result.AddRange(((Aperture)sAMObject).ToGrasshopper(includeFrame));
             else if (sAMObject is PlanarBoundary3D)
                 result.Add(((PlanarBoundary3D)sAMObject).ToGrasshopper());
             else if(sAMObject is Space)
                 result.Add(((Space)sAMObject).ToGrasshopper());
             else if (sAMObject is AdjacencyCluster)
             {
-                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures, tolerance);
+                List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures, includeFrame, tolerance);
                 if(breps != null)
                     result.AddRange(breps);
 
             }
             else if (sAMObject is AnalyticalModel)
             {
-                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper(cutApertures, tolerance);
+                List<GH_Brep> breps = ((AnalyticalModel)sAMObject)?.AdjacencyCluster?.ToGrasshopper(cutApertures, includeFrame, tolerance);
                 if (breps != null)
                     result.AddRange(breps);
             }
