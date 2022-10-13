@@ -35,6 +35,15 @@ namespace SAM.Analytical.Rhino
                             continue;
 
                         breps.Add(brep);
+
+                        List<Aperture> apertures = panel.Apertures;
+                        if (apertures != null)
+                        {
+                            foreach (Aperture aperture in apertures)
+                            {
+                                aperture.ToRhino(includeFrame)?.ForEach(x => result.Add(x));
+                            }
+                        }
                     }
 
                     if (breps == null || breps.Count == 0)
@@ -44,6 +53,8 @@ namespace SAM.Analytical.Rhino
 
                     if (breps_Join != null)
                         result.AddRange(breps_Join);
+
+
                 }
             }
 
