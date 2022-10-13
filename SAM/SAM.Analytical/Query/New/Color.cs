@@ -54,6 +54,11 @@
             return Color(OpeningAnalyticalType(opening));
         }
 
+        public static System.Drawing.Color Color(this IOpening opening, OpeningPart openingPart)
+        {
+            return Color(OpeningAnalyticalType(opening), openingPart);
+        }
+
         public static System.Drawing.Color Color(this IOpening opening, bool internalEdges)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
@@ -138,10 +143,44 @@
             switch(openingAnalyticalType)
             {
                 case Analytical.OpeningAnalyticalType.Door:
-                    return System.Drawing.Color.Brown;
+                    return Color(openingAnalyticalType, OpeningPart.Frame);
 
                 case Analytical.OpeningAnalyticalType.Window:
-                    return System.Drawing.Color.Blue;
+                    return Color(openingAnalyticalType, OpeningPart.Pane);
+
+                case Analytical.OpeningAnalyticalType.Undefined:
+                    return System.Drawing.Color.Empty;
+            }
+
+            return System.Drawing.Color.Empty;
+        }
+
+        public static System.Drawing.Color Color(this OpeningAnalyticalType openingAnalyticalType, OpeningPart openingPart)
+        {
+            switch (openingAnalyticalType)
+            {
+                case Analytical.OpeningAnalyticalType.Door:
+                    switch(openingPart)
+                    {
+                        case OpeningPart.Frame:
+                            return System.Drawing.Color.Brown;
+
+                        case OpeningPart.Pane:
+                            return System.Drawing.Color.Blue;
+                    }
+                    break;
+
+
+                case Analytical.OpeningAnalyticalType.Window:
+                    switch (openingPart)
+                    {
+                        case OpeningPart.Frame:
+                            return System.Drawing.Color.Brown;
+
+                        case OpeningPart.Pane:
+                            return System.Drawing.Color.Blue;
+                    }
+                    break;
 
                 case Analytical.OpeningAnalyticalType.Undefined:
                     return System.Drawing.Color.Empty;
