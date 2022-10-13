@@ -52,18 +52,21 @@ namespace SAM.Analytical
                     if (normal_Panel == null)
                         continue;
 
-                    if (normal_External.SameHalf(normal_Panel))
-                        continue;
+                    bool updated = false;
 
-                    panel = new Panel(panel);
-                    panel.FlipNormal(false, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                    if (!normal_External.SameHalf(normal_Panel))
+                    {
+                        panel = new Panel(panel);
+                        panel.FlipNormal(false, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                        updated = true;
+                    }
 
                     if(includeApertures)
                     {
                         List<Aperture> apertures = panel.Apertures;
                         if(apertures != null)
                         {
-                            foreach(Aperture aperture in apertures)
+                            foreach (Aperture aperture in apertures)
                             {
                                 Vector3D normal_Aperture = aperture.Plane?.Normal;
                                 if (normal_Aperture == null)
@@ -76,15 +79,24 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
+                                if (!updated)
+                                {
+                                    panel = new Panel(panel);
+                                }
+
                                 aperture.FlipNormal(false);
 
                                 panel.RemoveAperture(aperture.Guid);
                                 panel.AddAperture(aperture);
+                                updated = true;
                             }
                         }
                     }
 
-                    result.AddObject(panel);
+                    if(updated)
+                    {
+                        result.AddObject(panel);
+                    }
                 }
             }
 
