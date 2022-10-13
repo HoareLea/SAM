@@ -181,22 +181,54 @@
             }
         }
 
-        public static System.Drawing.Color Color(this ApertureType apertureType)
+        public static System.Drawing.Color Color(this ApertureType apertureType, AperturePart aperturePart)
         {
             System.Drawing.Color color = System.Drawing.Color.Empty;
 
             switch (apertureType)
             {
                 case Analytical.ApertureType.Door:
-                    color = System.Drawing.Color.Brown;
+                    switch(aperturePart)
+                    {
+                        case AperturePart.Frame:
+                            color = System.Drawing.Color.Brown;
+                            break;
+
+                        case AperturePart.Pane:
+                            color = System.Drawing.Color.Blue;
+                            break;
+                    }
                     break;
 
                 case Analytical.ApertureType.Window:
-                    color = System.Drawing.Color.Blue;
+                    switch (aperturePart)
+                    {
+                        case AperturePart.Frame:
+                            color = System.Drawing.Color.Brown;
+                            break;
+
+                        case AperturePart.Pane:
+                            color = System.Drawing.Color.Blue;
+                            break;
+                    }
                     break;
             }
 
             return color;
+        }
+
+        public static System.Drawing.Color Color(this ApertureType apertureType)
+        {
+            switch(apertureType)
+            {
+                case Analytical.ApertureType.Window:
+                    return Color(apertureType, AperturePart.Pane);
+
+                case Analytical.ApertureType.Door:
+                    return Color(apertureType, AperturePart.Frame);
+            }
+
+            return System.Drawing.Color.Empty;
         }
     }
 }
