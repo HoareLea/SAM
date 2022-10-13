@@ -3,11 +3,9 @@ using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -75,44 +73,20 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            List<object> objects = new List<object>();
-            dataAccess.GetDataList(0, objects);
+            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
+            dataAccess.GetDataList(0, objectWrappers);
 
-            List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
-            foreach (object @object in objects)
+            List<Face3D> face3Ds = new List<Face3D>();
+
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                List<ISAMGeometry3D> geometry3Ds_Temp = null;
-                if (@object is IGH_GeometricGoo)
+                if(Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp) && face3Ds_Temp != null)
                 {
-                    geometry3Ds_Temp = ((IGH_GeometricGoo)@object).ToSAM(true).Cast<ISAMGeometry3D>().ToList();
+                    face3Ds.AddRange(face3Ds_Temp);
                 }
-                else if (@object is GH_ObjectWrapper)
-                {
-                    GH_ObjectWrapper objectWrapper_Temp = ((GH_ObjectWrapper)@object);
-                    if (objectWrapper_Temp.Value is ISAMGeometry3D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper_Temp.Value };
-                    else if (objectWrapper_Temp.Value is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, objectWrapper_Temp.Value as dynamic) };
-                }
-                else if (@object is IGH_Goo)
-                {
-                    Geometry.ISAMGeometry sAMGeometry = (@object as dynamic).Value as Geometry.ISAMGeometry;
-                    if (sAMGeometry is ISAMGeometry3D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { (ISAMGeometry3D)sAMGeometry };
-                    else if (sAMGeometry is Geometry.Planar.ISAMGeometry2D)
-                        geometry3Ds_Temp = new List<ISAMGeometry3D>() { Geometry.Spatial.Query.Convert(Plane.WorldXY, sAMGeometry as dynamic) };
-                }
-
-                if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
-                    geometry3Ds.AddRange(geometry3Ds_Temp);
             }
 
-            List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);
-
-            if(geometry3Ds != null && closedPlanar3Ds != null && geometry3Ds.Count != closedPlanar3Ds.Count)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Some of the geometries could not be converted");
-            }
+            //List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);
 
             bool trimGeometry = true;
             if (!dataAccess.GetData(4, ref trimGeometry))
@@ -150,13 +124,13 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Aperture> apertures = new List<Aperture>();
 
-                if(closedPlanar3Ds != null)
+                if(face3Ds != null)
                 {
-                    foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                    foreach (Face3D face3D in face3Ds)
                     {
                         ApertureConstruction apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, apertureType);
 
-                        List<Aperture> apertures_Temp = panel.AddApertures(apertureConstruction_Temp, closedPlanar3D, trimGeometry, minArea, maxDistance);
+                        List<Aperture> apertures_Temp = panel.AddApertures(apertureConstruction_Temp, face3D, trimGeometry, minArea, maxDistance);
                         if (apertures_Temp != null)
                             apertures.AddRange(apertures_Temp);
                     }
@@ -191,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
             if (panels != null)
             {
                 List<Tuple<BoundingBox3D, IClosedPlanar3D>> tuples = new List<Tuple<BoundingBox3D, IClosedPlanar3D>>();
-                foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                foreach (IClosedPlanar3D closedPlanar3D in face3Ds)
                 {
                     if (closedPlanar3D == null)
                         continue;
