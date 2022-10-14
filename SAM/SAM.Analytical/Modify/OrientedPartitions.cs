@@ -32,9 +32,9 @@ namespace SAM.Analytical
 
             if (!external)
             {
-                foreach (KeyValuePair<IPartition, Vector3D> keyValuePair in dictionary)
+                foreach (IPartition partition in dictionary.Keys)
                 {
-                    dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                    dictionary[partition] = dictionary[partition].GetNegated();
                 }
             }
 

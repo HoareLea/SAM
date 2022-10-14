@@ -36,9 +36,9 @@ namespace SAM.Analytical
 
                 if (!external)
                 {
-                    foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                    foreach (Panel panel in dictionary.Keys)
                     {
-                        dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                        dictionary[panel] = dictionary[panel].GetNegated();
                     }
                 }
 
@@ -137,11 +137,11 @@ namespace SAM.Analytical
             if (dictionary == null)
                 return null;
 
-            if(!external)
+            if (!external)
             {
-                foreach(KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                foreach (Panel panel in dictionary.Keys)
                 {
-                    dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                    dictionary[panel] = dictionary[panel].GetNegated();
                 }
             }
 
