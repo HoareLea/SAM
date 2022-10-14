@@ -24,10 +24,18 @@ namespace SAM.Analytical
                 return null;
             }
 
-            Dictionary<IPartition, Vector3D> dictionary = buildingModel.NormalDictionary(space, out Shell shell, external, silverSpacing, tolerance);
+            Dictionary<IPartition, Vector3D> dictionary = buildingModel.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if (dictionary == null)
             {
                 return null;
+            }
+
+            if (!external)
+            {
+                foreach (KeyValuePair<IPartition, Vector3D> keyValuePair in dictionary)
+                {
+                    dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                }
             }
 
             flippedPartitions = new List<IPartition>();

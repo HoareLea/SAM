@@ -30,11 +30,19 @@ namespace SAM.Analytical
             foreach(Space space in spaces)
             {
                 Shell shell = null;
-                Dictionary<Panel, Vector3D> dictionary = result.NormalDictionary(space, out shell, external, silverSpacing, tolerance);
+                Dictionary<Panel, Vector3D> dictionary = result.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
                 if (dictionary == null)
                     continue;
 
-                foreach(KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                if (!external)
+                {
+                    foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                    {
+                        dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                    }
+                }
+
+                foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
                 {
                     Panel panel = keyValuePair.Key;
                     if (panel == null)
@@ -125,9 +133,17 @@ namespace SAM.Analytical
 
             Shell shell = null;
 
-            Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, external, silverSpacing, tolerance);
+            Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
             if (dictionary == null)
                 return null;
+
+            if(!external)
+            {
+                foreach(KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                {
+                    dictionary[keyValuePair.Key] = keyValuePair.Value.GetNegated();
+                }
+            }
 
             List<Panel> result = new List<Panel>();
             foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
