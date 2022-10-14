@@ -575,7 +575,7 @@ namespace SAM.Analytical
                 result.Add(tuple.Item1, tuple.Item2);
             }
 
-            result.OrientPartitions(false, silverSpacing, tolerance_Distance);
+            result.OrientPartitions(false, true, silverSpacing, tolerance_Distance);
             result.AddMissingMaterials(materialLibrary);
 
             return result;

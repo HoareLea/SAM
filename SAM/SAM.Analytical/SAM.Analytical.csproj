@@ -221,6 +221,7 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\Name.cs" />
     <Compile Include="Query\IsPerimeter.cs" />
     <Compile Include="Query\AdjacentSpaces.cs" />
     <Compile Include="Query\CalculatedOccupancyLatentGain.cs" />
