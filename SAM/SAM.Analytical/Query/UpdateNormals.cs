@@ -1,5 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -36,7 +37,8 @@ namespace SAM.Analytical
 
                 if (!external)
                 {
-                    foreach (Panel panel in dictionary.Keys)
+                    List<Panel> panels = dictionary.Keys.ToList();
+                    foreach (Panel panel in panels)
                     {
                         dictionary[panel] = dictionary[panel].GetNegated();
                     }
@@ -139,7 +141,8 @@ namespace SAM.Analytical
 
             if (!external)
             {
-                foreach (Panel panel in dictionary.Keys)
+                List<Panel> panels = dictionary.Keys.ToList();
+                foreach (Panel panel in panels)
                 {
                     dictionary[panel] = dictionary[panel].GetNegated();
                 }

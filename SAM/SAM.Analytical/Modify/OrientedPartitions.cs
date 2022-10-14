@@ -1,5 +1,6 @@
 ﻿using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -32,7 +33,9 @@ namespace SAM.Analytical
 
             if (!external)
             {
-                foreach (IPartition partition in dictionary.Keys)
+                List<IPartition> partitions = dictionary.Keys.ToList();
+
+                foreach (IPartition partition in partitions)
                 {
                     dictionary[partition] = dictionary[partition].GetNegated();
                 }
