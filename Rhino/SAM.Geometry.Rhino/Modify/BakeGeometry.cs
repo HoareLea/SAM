@@ -1,7 +1,9 @@
 ﻿using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
+using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Rhino
 {
@@ -25,45 +27,45 @@ namespace SAM.Geometry.Rhino
                 sAMGeometry = Spatial.Query.Convert(Spatial.Plane.WorldXY, sAMGeometry as dynamic);
             }
 
-            if (sAMGeometry is Spatial.Point3D)
+            if (sAMGeometry is Point3D)
             {
-                guid = rhinoDoc.Objects.AddPoint(new Point(Convert.ToRhino((Spatial.Point3D)sAMGeometry)), objectAttributes, null, false);
+                guid = rhinoDoc.Objects.AddPoint(new Point(Convert.ToRhino((Point3D)sAMGeometry)), objectAttributes, null, false);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.ICurve3D)
+            if (sAMGeometry is ICurve3D)
             {
-                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino((Spatial.ICurve3D)sAMGeometry), objectAttributes);
+                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino((ICurve3D)sAMGeometry), objectAttributes);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.Face3D)
+            if (sAMGeometry is Face3D)
             {
-                guid = rhinoDoc.Objects.AddBrep(Convert.ToRhino_Brep((Spatial.Face3D)sAMGeometry), objectAttributes);
+                guid = rhinoDoc.Objects.AddBrep(Convert.ToRhino_Brep((Face3D)sAMGeometry), objectAttributes);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.Shell)
+            if (sAMGeometry is Shell)
             {
-                guid = rhinoDoc.Objects.AddBrep(Convert.ToRhino((Spatial.Shell)sAMGeometry), objectAttributes);
+                guid = rhinoDoc.Objects.AddBrep(Convert.ToRhino((Shell)sAMGeometry), objectAttributes);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.Polygon3D)
+            if (sAMGeometry is Polygon3D)
             {
-                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino_PolylineCurve((Spatial.Polygon3D)sAMGeometry), objectAttributes);
+                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino_PolylineCurve((Polygon3D)sAMGeometry), objectAttributes);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.Triangle3D)
+            if (sAMGeometry is Triangle3D)
             {
-                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino_PolylineCurve((Spatial.Triangle3D)sAMGeometry), objectAttributes);
+                guid = rhinoDoc.Objects.AddCurve(Convert.ToRhino_PolylineCurve((Triangle3D)sAMGeometry), objectAttributes);
                 return true;
             }
 
-            if (sAMGeometry is Spatial.Mesh3D)
+            if (sAMGeometry is Mesh3D)
             {
-                guid = rhinoDoc.Objects.AddMesh(Convert.ToRhino(((Spatial.Mesh3D)sAMGeometry)), objectAttributes);
+                guid = rhinoDoc.Objects.AddMesh(Convert.ToRhino(((Mesh3D)sAMGeometry)), objectAttributes);
                 return true;
             }
 
@@ -75,6 +77,19 @@ namespace SAM.Geometry.Rhino
             }
 
             return false;
+        }
+
+        public static bool BakeGeometry(this IEnumerable<Face3D> face3Ds, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
+        {
+            guid = Guid.Empty;
+
+            if (face3Ds == null)
+            {
+                return false;
+            }
+
+            guid = rhinoDoc.Objects.AddBrep(Convert.ToRhino(face3Ds), objectAttributes);
+            return true;
         }
     }
 }

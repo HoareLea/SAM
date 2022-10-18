@@ -5,7 +5,7 @@ namespace SAM.Analytical.Grasshopper
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByApertureConstruction(this RhinoDoc rhinoDoc, global::Grasshopper.Kernel.Data.IGH_Structure gH_Structure)
+        public static void BakeGeometry_ByApertureConstruction(this RhinoDoc rhinoDoc, global::Grasshopper.Kernel.Data.IGH_Structure gH_Structure, bool includeFrame = false)
         {
             if (rhinoDoc == null)
                 return;
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            Rhino.Modify.BakeGeometry_ByApertureConstruction(rhinoDoc, apertures);
+            Rhino.Modify.BakeGeometry_ByApertureConstruction(rhinoDoc, apertures, includeFrame);
         }
   }
 }

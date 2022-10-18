@@ -11,12 +11,16 @@ namespace SAM.Geometry.Rhino
             if (shell == null)
                 return null;
 
-            List<Face3D> face3Ds = shell.Face3Ds;
-            if (face3Ds == null || face3Ds.Count == 0)
+            return ToRhino(shell.Face3Ds, tolerance);
+        }
+
+        public static global::Rhino.Geometry.Brep ToRhino(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.MacroDistance)
+        {
+            if (face3Ds == null)
                 return null;
 
             List<global::Rhino.Geometry.Brep> breps = new List<global::Rhino.Geometry.Brep>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 global::Rhino.Geometry.Brep brep = face3D.ToRhino_Brep(Core.Tolerance.Distance);
                 if (brep == null)

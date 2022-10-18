@@ -202,19 +202,11 @@ namespace SAM.Analytical.Grasshopper
         {
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByApertureType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByApertureConstruction, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type With Frame", Menu_BakeByApertureTypeWithFrame, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction With Frame", Menu_BakeByApertureConstructionWithFrame, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
-        }
-
-        private void Menu_BakeByApertureConstruction(object sender, EventArgs e)
-        {
-            BakeGeometry_ByApertureConstruction(RhinoDoc.ActiveDoc);
-        }
-
-        public void BakeGeometry_ByApertureConstruction(RhinoDoc doc)
-        {
-            Modify.BakeGeometry_ByApertureConstruction(doc, VolatileData);
         }
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
@@ -374,6 +366,36 @@ namespace SAM.Analytical.Grasshopper
         public void BakeGeometry_ByApertureType(RhinoDoc doc)
         {
             Modify.BakeGeometry_ByApertureType(doc, VolatileData);
+        }
+
+        private void Menu_BakeByApertureConstruction(object sender, EventArgs e)
+        {
+            BakeGeometry_ByApertureConstruction(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByApertureConstruction(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByApertureConstruction(doc, VolatileData);
+        }
+
+        private void Menu_BakeByApertureTypeWithFrame(object sender, EventArgs e)
+        {
+            BakeGeometry_ByApertureTypeWithFrame(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByApertureTypeWithFrame(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByApertureType(doc, VolatileData, true);
+        }
+
+        private void Menu_BakeByApertureConstructionWithFrame(object sender, EventArgs e)
+        {
+            BakeGeometry_ByApertureConstructionWithFrame(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByApertureConstructionWithFrame(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByApertureConstruction(doc, VolatileData, true);
         }
     }
 }

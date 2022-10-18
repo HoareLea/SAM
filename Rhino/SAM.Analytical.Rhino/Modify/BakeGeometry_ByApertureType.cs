@@ -7,7 +7,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByApertureType(this RhinoDoc rhinoDoc, IEnumerable<Aperture> apertures)
+        public static void BakeGeometry_ByApertureType(this RhinoDoc rhinoDoc, IEnumerable<Aperture> apertures, bool includeFrame = false)
         {
             global::Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -42,7 +42,7 @@ namespace SAM.Analytical.Rhino
                 objectAttributes.LayerIndex = layer.Index;
 
                 Guid guid = default;
-                if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid, includeFrame))
                     guids.Add(guid);
             }
         }
