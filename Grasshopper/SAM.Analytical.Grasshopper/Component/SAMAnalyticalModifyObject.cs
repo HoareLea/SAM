@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "objects_", NickName = "objects_", Description = "Object to be added", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -88,40 +88,130 @@ namespace SAM.Analytical.Grasshopper
 
             if(sAMObjects != null && sAMObjects.Count != 0)
             {
+                AdjacencyCluster adjacencyCluster = null;
+                
                 if (sAMObject is AnalyticalModel)
                 {
                     AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
                     sAMObjects.FindAll(x => x is IMaterial).ForEach(x => analyticalModel.AddMaterial((IMaterial)x));
                     sAMObjects.FindAll(x => x is Profile).ForEach(x => analyticalModel.AddProfile((Profile)x));
 
-                    AdjacencyCluster adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                    if(adjacencyCluster != null)
-                    {
-                        List<SAMObject> sAMObjects_AdjacencyCluster = sAMObjects.FindAll(x => adjacencyCluster.IsValid(x));
-                        if(sAMObjects_AdjacencyCluster != null && sAMObjects_AdjacencyCluster.Count > 0)
-                        {
-                            sAMObjects_AdjacencyCluster.ForEach(x => adjacencyCluster.AddObject(x));
-                            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                        }
-                    }
-
                     sAMObject = analyticalModel;
                 }
                 else if (sAMObject is AdjacencyCluster)
                 {
-                    AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                    foreach (SAMObject sAMObject_Object in sAMObjects)
-                    {
-                        if (adjacencyCluster.IsValid(sAMObject_Object))
-                            adjacencyCluster.AddObject(sAMObject_Object);
-                    }
-
-                    sAMObject = adjacencyCluster;
+                    adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 }
                 else
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
+                }
+
+                if(adjacencyCluster != null)
+                {
+                    foreach (SAMObject sAMObject_Temp in sAMObjects)
+                    {
+                        if (sAMObject_Temp is Aperture)
+                        {
+                            Aperture aperture = (Aperture)sAMObject_Temp;
+
+                            Panel panel = adjacencyCluster.GetPanel(aperture);
+                            if (panel != null)
+                            {
+                                panel.RemoveAperture(aperture.Guid);
+                                panel.AddAperture(aperture);
+                                adjacencyCluster.AddObject(panel);
+                            }
+
+                            if (adjacencyCluster.Contains<Aperture>(aperture.Guid))
+                            {
+                                adjacencyCluster.AddObject(aperture);
+                            }
+                        }
+                        else if (sAMObject_Temp is ApertureConstruction)
+                        {
+                            ApertureConstruction apertureConstruction = (ApertureConstruction)sAMObject_Temp;
+
+                            List<Panel> panels = adjacencyCluster.GetPanels(apertureConstruction);
+                            if (panels != null)
+                            {
+                                foreach (Panel panel in panels)
+                                {
+                                    List<Aperture> apertures = panel.GetApertures(apertureConstruction);
+                                    if (apertures != null)
+                                    {
+                                        foreach (Aperture aperture in apertures)
+                                        {
+                                            panel.RemoveAperture(aperture.Guid);
+                                            panel.AddAperture(new Aperture(aperture, apertureConstruction));
+                                        }
+                                        adjacencyCluster.AddObject(panel);
+                                    }
+                                }
+                            }
+
+                            if (adjacencyCluster.Contains<ApertureConstruction>(apertureConstruction.Guid))
+                            {
+                                adjacencyCluster.AddObject(apertureConstruction);
+                            }
+                        }
+                        else if (sAMObject_Temp is Construction)
+                        {
+                            Construction construction = (Construction)sAMObject_Temp;
+
+                            List<Panel> panels = adjacencyCluster.GetPanels(construction);
+                            if (panels != null)
+                            {
+                                foreach (Panel panel in panels)
+                                {
+                                    adjacencyCluster.AddObject(Create.Panel(panel, construction));
+                                }
+                            }
+
+                            if (adjacencyCluster.Contains<Construction>(construction.Guid))
+                            {
+                                adjacencyCluster.AddObject(construction);
+                            }
+                        }
+                        else if (sAMObject_Temp is InternalCondition)
+                        {
+                            InternalCondition internalCondition = (InternalCondition)sAMObject_Temp;
+
+                            List<Space> spaces = adjacencyCluster.GetSpaces();
+                            if (spaces != null)
+                            {
+                                foreach (Space space in spaces)
+                                {
+                                    InternalCondition internalCodintion_Space = space.InternalCondition;
+                                    if(internalCodintion_Space != null && internalCodintion_Space.Guid == internalCondition.Guid)
+                                    {
+                                        space.InternalCondition = internalCondition;
+                                        adjacencyCluster.AddObject(space);
+                                    }
+                                }
+                            }
+
+                            if (adjacencyCluster.Contains<InternalCondition>(internalCondition.Guid))
+                            {
+                                adjacencyCluster.AddObject(internalCondition);
+                            }
+                        }
+                        else if (adjacencyCluster.IsValid(sAMObject_Temp))
+                        {
+                            adjacencyCluster.AddObject(sAMObject_Temp);
+                        }
+                    }
+                    
+                    
+                    if (sAMObject is AnalyticalModel)
+                    {
+                        sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+                    }
+                    else if (sAMObject is AdjacencyCluster)
+                    {
+                        sAMObject = adjacencyCluster;
+                    }
                 }
             }
 
