@@ -105,6 +105,51 @@ namespace SAM.Analytical
             return paneConstructionLayers != null && paneConstructionLayers.Count != 0;
         }
 
+        public List<ConstructionLayer> GetConstructionLayers(AperturePart aperturePart)
+        {
+            if(aperturePart == AperturePart.Undefined)
+            {
+                return null;
+            }
+
+            switch(aperturePart)
+            {
+                case AperturePart.Frame:
+                    return FrameConstructionLayers;
+
+                case AperturePart.Pane:
+                    return PaneConstructionLayers;
+            }
+
+            return null;
+        }
+
+        public double GetThickness(AperturePart aperturePart)
+        {
+            if(aperturePart == AperturePart.Undefined)
+            {
+                return double.NaN;
+            }
+
+            List<ConstructionLayer> constructionLayers = GetConstructionLayers(aperturePart);
+            if(constructionLayers == null || constructionLayers.Count == 0)
+            {
+                return 0;
+            }
+
+            return constructionLayers.ConvertAll(x => x.Thickness).Sum();
+        }
+
+        public double GetPaneThickness()
+        {
+            return GetThickness(AperturePart.Pane);
+        }
+
+        public double GetFrameThickness()
+        {
+            return GetThickness(AperturePart.Frame);
+        }
+
         public ApertureType ApertureType
         {
             get

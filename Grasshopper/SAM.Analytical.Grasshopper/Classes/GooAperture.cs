@@ -68,7 +68,13 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
         {
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            Face3D face3D = Value?.GetFrameFace3D();
+            if(face3D == null)
+            {
+                return;
+            }
+
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
             gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
         }
 
@@ -77,15 +83,41 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return;
 
-            DisplayMaterial displayMaterial = null;
-            if(Value.ApertureConstruction != null)
-                displayMaterial = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType);
+            DisplayMaterial displayMaterial_Pane = null;
+            DisplayMaterial displayMaterial_Frame = null;
+            if (Value.ApertureConstruction != null)
+            {
+                displayMaterial_Pane = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Pane);
+                displayMaterial_Frame = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Frame);
+            }
 
-            if (displayMaterial == null)
-                displayMaterial = args.Material;
-            
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial);
+            if (displayMaterial_Pane == null)
+                displayMaterial_Pane = args.Material;
+
+            if (displayMaterial_Frame == null)
+                displayMaterial_Frame = args.Material;
+
+            List<Face3D> face3Ds = null;
+
+            face3Ds = Value.GetFace3Ds(AperturePart.Frame);
+            if(face3Ds != null)
+            {
+                foreach(Face3D face3D in face3Ds)
+                {
+                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
+                    gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial_Frame);
+                }
+            }
+
+            face3Ds = Value.GetFace3Ds(AperturePart.Pane);
+            if (face3Ds != null)
+            {
+                foreach (Face3D face3D in face3Ds)
+                {
+                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
+                    gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial_Pane);
+                }
+            }
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

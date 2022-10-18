@@ -2,6 +2,7 @@
 
 using System.Collections.Generic;
 using SAM.Architectural;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -130,6 +131,51 @@ namespace SAM.Analytical
 
                 paneMaterialLayers = value?.ConvertAll(x => new MaterialLayer(x));
             }
+        }
+
+        public List<MaterialLayer> GetMaterialLayers(OpeningPart openingPart)
+        {
+            if(openingPart == OpeningPart.Undefined)
+            {
+                return null;
+            }
+
+            switch(openingPart)
+            {
+                case OpeningPart.Frame:
+                    return FrameMaterialLayers;
+
+                case OpeningPart.Pane:
+                    return PaneMaterialLayers;
+            }
+
+            return null;
+        }
+
+        public double GetThickness(OpeningPart openingPart)
+        {
+            if(openingPart == OpeningPart.Undefined)
+            {
+                return double.NaN;
+            }
+
+            List<MaterialLayer> materialLayers = GetMaterialLayers(openingPart);
+            if(materialLayers == null || materialLayers.Count == 0)
+            {
+                return 0;
+            }
+
+            return materialLayers.ConvertAll(x => x.Thickness).Sum();
+        }
+
+        public double GetFrameThickness()
+        {
+            return GetThickness(OpeningPart.Frame);
+        }
+
+        public double GetPaneThickness()
+        {
+            return GetThickness(OpeningPart.Pane);
         }
 
     }

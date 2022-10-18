@@ -231,7 +231,15 @@ namespace SAM.Analytical
                                         apertureConstruction_New = new ApertureConstruction(apertureConstruction, name_New);
                                     }
 
-                                    color = Query.Color(apertureConstruction_New.ApertureType);
+                                    if(apertureConstruction_New.ApertureType == ApertureType.Door)
+                                    {
+                                        color = Query.Color(apertureConstruction_New.ApertureType, AperturePart.Frame);
+                                    }
+                                    else if(apertureConstruction_New.ApertureType == ApertureType.Window)
+                                    {
+                                        color = Query.Color(apertureConstruction_New.ApertureType, AperturePart.Pane);
+                                    }
+
                                     if (color != System.Drawing.Color.Empty)
                                     {
                                         apertureConstruction_New.SetValue(ApertureConstructionParameter.Color, color);

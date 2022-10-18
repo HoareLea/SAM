@@ -47,8 +47,15 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return;
 
-            System.Drawing.Color color_ExternalEdge = Analytical.Query.Color(Value, false);
-            System.Drawing.Color color_InternalEdges = Analytical.Query.Color(Value, true);
+            System.Drawing.Color color_ExternalEdge = System.Drawing.Color.Empty;
+            System.Drawing.Color color_InternalEdges = System.Drawing.Color.Empty;
+
+            OpeningType openingType = Value.Type();
+            if (openingType != null)
+            {
+                color_ExternalEdge = Analytical.Query.Color(openingType, false);
+                color_InternalEdges = Analytical.Query.Color(openingType, true);
+            }
 
             if (color_ExternalEdge == System.Drawing.Color.Empty)
                 color_ExternalEdge = System.Drawing.Color.DarkRed;
@@ -56,7 +63,19 @@ namespace SAM.Analytical.Grasshopper
             if (color_InternalEdges == System.Drawing.Color.Empty)
                 color_InternalEdges = System.Drawing.Color.BlueViolet;
 
-            Geometry.Grasshopper.Modify.DrawViewportWires(Value.Face3D, args, color_ExternalEdge, color_InternalEdges);
+            DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
+        }
+
+        public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
+        {
+            Face3D face3D = (Value as dynamic)?.GetFrameFace3D();
+            if (face3D == null)
+            {
+                return;
+            }
+
+            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
+            gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
@@ -64,18 +83,39 @@ namespace SAM.Analytical.Grasshopper
             if (Value == null)
                 return;
 
-            DisplayMaterial displayMaterial = null;
-            if(Value != null)
-                displayMaterial = Query.DisplayMaterial(Value);
+            DisplayMaterial displayMaterial_Pane = null;
+            DisplayMaterial displayMaterial_Frame = null;
 
-            if (displayMaterial == null)
-                displayMaterial = args.Material;
+            displayMaterial_Pane = Query.DisplayMaterial(Value, OpeningPart.Pane);
+            displayMaterial_Frame = Query.DisplayMaterial(Value, OpeningPart.Frame);
 
-            Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(Value.Face3D);
-            if (brep == null)
-                return;
+            if (displayMaterial_Pane == null)
+                displayMaterial_Pane = args.Material;
 
-            args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+            if (displayMaterial_Frame == null)
+                displayMaterial_Frame = args.Material;
+
+            List<Face3D> face3Ds = null;
+
+            face3Ds = (Value as dynamic).GetFace3Ds(OpeningPart.Frame);
+            if (face3Ds != null)
+            {
+                foreach (Face3D face3D in face3Ds)
+                {
+                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
+                    gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial_Frame);
+                }
+            }
+
+            face3Ds = (Value as dynamic).GetFace3Ds(OpeningPart.Pane);
+            if (face3Ds != null)
+            {
+                foreach (Face3D face3D in face3Ds)
+                {
+                    GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
+                    gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial_Pane);
+                }
+            }
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

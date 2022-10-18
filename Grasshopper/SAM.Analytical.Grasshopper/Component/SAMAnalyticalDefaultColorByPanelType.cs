@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalDefaultColorByPanelType()
-          : base("SAMAnalytical.DefaultColorByPanelType", "SAMAnalytical.DefaultColorByPanelType",
+          : base("SAMAnalytical.DefaultColor", "SAMAnalytical.DefaultColor",
               "Gets Default Color for given Panel (PanelType) or Aperture (ApertureType)",
               "SAM", "Analytical")
         {
@@ -102,7 +102,18 @@ namespace SAM.Analytical.Grasshopper
                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                 if(apertureConstruction != null)
                 {
-                    color = Analytical.Query.Color(apertureConstruction.ApertureType);
+                    switch(apertureConstruction.ApertureType)
+                    {
+                        case ApertureType.Window:
+                            color = Analytical.Query.Color(apertureConstruction.ApertureType, AperturePart.Pane);
+                            break;
+
+                        case ApertureType.Door:
+                            color = Analytical.Query.Color(apertureConstruction.ApertureType, AperturePart.Frame);
+                            break;
+                    }
+
+                    
                 }
             }
             else if(@object is string)
@@ -115,7 +126,16 @@ namespace SAM.Analytical.Grasshopper
                 else
                 {
                     ApertureType apertureType = Analytical.Query.ApertureType((string)@object);
-                    color = Analytical.Query.Color(apertureType);
+                    switch (apertureType)
+                    {
+                        case ApertureType.Window:
+                            color = Analytical.Query.Color(apertureType, AperturePart.Pane);
+                            break;
+
+                        case ApertureType.Door:
+                            color = Analytical.Query.Color(apertureType, AperturePart.Frame);
+                            break;
+                    }
                 }
             }
             else

@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\New\Opening.cs" />
     <Compile Include="Classes\OpeningProperties.cs" />
     <Compile Include="Classes\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
@@ -148,12 +149,14 @@
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
+    <Compile Include="Enums\AperturePart.cs" />
     <Compile Include="Enums\ApertureType.cs" />
     <Compile Include="Enums\NCMSystemType.cs" />
     <Compile Include="Enums\NCMCountry.cs" />
     <Compile Include="Enums\LightingPhotoelectricControls.cs" />
     <Compile Include="Enums\LightingOccupancyControls.cs" />
     <Compile Include="Enums\New\HostPartitionCategory.cs" />
+    <Compile Include="Enums\New\OpeningPart.cs" />
     <Compile Include="Enums\New\OpeningAnalyticalType.cs" />
     <Compile Include="Enums\New\PartitionAnalyticalType.cs" />
     <Compile Include="Enums\Parameter\AdjacencyClusterSimulationResultParameter.cs" />
@@ -218,6 +221,7 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\Name.cs" />
     <Compile Include="Query\IsPerimeter.cs" />
     <Compile Include="Query\AdjacentSpaces.cs" />
     <Compile Include="Query\CalculatedOccupancyLatentGain.cs" />
@@ -226,6 +230,8 @@
     <Compile Include="Query\AirSupplyMethod.cs" />
     <Compile Include="Query\HeatingDesignRelativeHumidity.cs" />
     <Compile Include="Query\CoolingDesignRelativeHumidity.cs" />
+    <Compile Include="Query\UniqueNameDecomposition.cs" />
+    <Compile Include="Query\UniqueNamePrefix.cs" />
     <Compile Include="Query\VentilationSystems.cs" />
     <Compile Include="Query\Spaces.cs" />
     <Compile Include="Query\SpecificHeatTransferGain.cs" />
@@ -446,7 +452,6 @@
     <Compile Include="Query\InRange.cs" />
     <Compile Include="Query\ProfileGroup.cs" />
     <Compile Include="Query\Profiles.cs" />
-    <Compile Include="Query\UniqueIndex.cs" />
     <Compile Include="Query\UpdateConstructionsByPanels.cs" />
     <Compile Include="Query\UpdateHeatTransferCoefficients.cs" />
     <Compile Include="Query\HasMaterial.cs" />

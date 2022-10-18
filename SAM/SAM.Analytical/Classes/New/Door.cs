@@ -4,7 +4,7 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public class Door : BuildingElement<DoorType>, IOpening
+    public class Door : Opening<DoorType>, IOpening
     {
         public Door(Door door)
             : base(door)

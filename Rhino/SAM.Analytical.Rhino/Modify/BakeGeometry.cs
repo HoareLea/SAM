@@ -59,7 +59,7 @@ namespace SAM.Analytical.Rhino
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, aperture);
             objectAttributes.Name = aperture.Name;
 
-            if (!Geometry.Rhino.Modify.BakeGeometry(aperture.GetFace3D(), rhinoDoc, objectAttributes, out guid))
+            if (!Geometry.Rhino.Modify.BakeGeometry(new Geometry.Spatial.Face3D(aperture.GetExternalEdge3D()), rhinoDoc, objectAttributes, out guid))
                 return false;
 
             GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);

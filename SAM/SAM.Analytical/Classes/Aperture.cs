@@ -4,6 +4,7 @@ using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -94,6 +95,94 @@ namespace SAM.Analytical
             return planarBoundary3D.GetFace3D();
         }
 
+        public IClosedPlanar3D GetExternalEdge3D()
+        {
+            return GetFace3D().GetExternalEdge3D();
+        }
+
+        public List<Face3D> GetFace3Ds(AperturePart aperturePart)
+        {
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+            {
+                return null;
+            }
+
+            if (aperturePart == AperturePart.Undefined)
+            {
+                return new List<Face3D>() { face3D };
+            }
+
+            List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
+            if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+            {
+                double frameThickness = 0;
+
+                ApertureConstruction apertureConstruction = Type;
+                if(apertureConstruction != null)
+                {
+                    if(apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultFrameWidth, out double frameThickness_Temp))
+                    {
+                        frameThickness = frameThickness_Temp;
+                    }
+                    
+                    if(frameThickness == 0 || double.IsNaN(frameThickness))
+                    {
+                        frameThickness = apertureConstruction.GetFrameThickness();
+                    }
+                }
+
+                if(!double.IsNaN(frameThickness) && frameThickness != 0)
+                {
+                    Plane plane = face3D.GetPlane();
+                    Geometry.Planar.Face2D face2D = plane.Convert(face3D);
+
+                    Geometry.Planar.IClosed2D externalEdge2D = face3D.ExternalEdge2D;
+
+                    List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Offset(face2D, -frameThickness);
+                    internalEdge2Ds = face2Ds?.ConvertAll(x => x.ExternalEdge2D);
+
+                    face2D = Geometry.Planar.Create.Face2D(externalEdge2D, internalEdge2Ds);
+                    face3D = plane.Convert(face2D);
+                }
+            }
+
+            List<IClosedPlanar3D> internalEdge3Ds = face3D?.GetInternalEdge3Ds();
+
+            switch (aperturePart)
+            {
+                case AperturePart.Pane:
+                    return internalEdge3Ds == null || internalEdge3Ds.Count == 0 ? new List<Face3D>() { face3D } : internalEdge3Ds.ConvertAll(x => new Face3D(x));
+
+                case AperturePart.Frame:
+                    return internalEdge3Ds == null || internalEdge3Ds.Count == 0 ? new List<Face3D>() : new List<Face3D>() { face3D };
+
+            }
+
+            return null;
+        }
+
+        public Face3D GetFrameFace3D()
+        {
+            List<Face3D> face3Ds = GetFace3Ds(AperturePart.Frame);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            if(face3Ds.Count > 0)
+            {
+                face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
+            }
+
+            return face3Ds[0];
+        }
+
+        public List<Face3D> GetPaneFace3Ds()
+        {
+            return GetFace3Ds(AperturePart.Pane);
+        }
+
         public Face3D Face3D
         {
             get
@@ -107,11 +196,53 @@ namespace SAM.Analytical
 
         public double GetArea()
         {
-            Face3D face3D = GetFace3D();
-            if (face3D == null)
+            Geometry.Planar.IClosed2D closed2D = GetFace3D()?.ExternalEdge2D;
+            if (closed2D == null)
                 return double.NaN;
 
-            return face3D.GetArea();
+            return closed2D.GetArea();
+        }
+
+        public double GetFrameArea()
+        {
+            return GetArea(AperturePart.Frame);
+        }
+
+        public double GetPaneArea()
+        {
+            return GetArea(AperturePart.Pane);
+        }
+
+        public double GetArea(AperturePart aperturePart)
+        {
+            List<Face3D> face3Ds = GetFace3Ds(aperturePart);
+            if(face3Ds == null || face3Ds.Count ==0)
+            {
+                return 0;
+            }
+
+            return face3Ds.ConvertAll(x => x.GetArea()).Sum();
+        }
+
+        /// <summary>
+        /// Frame Factor (0-1)
+        /// </summary>
+        /// <returns>Frame Factor (0-1)</returns>
+        public double GetFrameFactor()
+        {
+            double area_Frame = GetArea(AperturePart.Frame);
+            if(double.IsNaN(area_Frame) || area_Frame == 0)
+            {
+                return 0;
+            }
+
+            double area_Pane = GetArea(AperturePart.Pane);
+            if(double.IsNaN(area_Pane) || area_Pane == 0)
+            {
+                return 1;
+            }
+
+            return area_Frame / (area_Frame + area_Pane);
         }
 
         public Aperture Clone()

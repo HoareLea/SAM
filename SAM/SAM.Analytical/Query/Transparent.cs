@@ -42,5 +42,27 @@ namespace SAM.Analytical
         {
             return Transparent(aperture?.ApertureConstruction, materialLibrary);
         }
+
+        public static bool Transparent(this ApertureConstruction apertureConstruction, MaterialLibrary materialLibrary, AperturePart aperturePart)
+        {
+            if (apertureConstruction == null)
+            {
+                return false;
+            }
+
+            List<ConstructionLayer> constructionLayers = apertureConstruction.GetConstructionLayers(aperturePart);
+            if (constructionLayers == null || constructionLayers.Count == 0)
+            {
+                constructionLayers = apertureConstruction.FrameConstructionLayers;
+            }
+
+            MaterialType materialType = MaterialType(constructionLayers, materialLibrary);
+            return materialType == Core.MaterialType.Transparent;
+        }
+
+        public static bool Transparent(this Aperture aperture, MaterialLibrary materialLibrary, AperturePart aperturePart)
+        {
+            return Transparent(aperture?.ApertureConstruction, materialLibrary, aperturePart);
+        }
     }
 }

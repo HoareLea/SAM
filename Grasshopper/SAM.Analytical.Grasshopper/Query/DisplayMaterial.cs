@@ -26,5 +26,15 @@
 
             return new global::Rhino.Display.DisplayMaterial(color);
         }
+
+        public static global::Rhino.Display.DisplayMaterial DisplayMaterial(this ApertureType apertureType, AperturePart aperturePart)
+        {
+            System.Drawing.Color color = Analytical.Query.Color(apertureType, aperturePart);
+
+            if (color == System.Drawing.Color.Empty)
+                return null;
+
+            return new global::Rhino.Display.DisplayMaterial(color);
+        }
     }
 }
