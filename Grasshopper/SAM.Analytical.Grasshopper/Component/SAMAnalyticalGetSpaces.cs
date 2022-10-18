@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,7 +62,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "shells", NickName = "shells", Description = "SAM Geometry Shells", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -125,7 +126,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            DataTree<GooSpace> dataTree = new DataTree<GooSpace>();
+            DataTree<GooSpace> dataTree_Spaces = new DataTree<GooSpace>();
+            DataTree<Geometry.Grasshopper.GooSAMGeometry> dataTree_Shells = new DataTree<Geometry.Grasshopper.GooSAMGeometry>();
             List<Tuple<GH_Path, Geometry.Spatial.Point3D>> tuples = new List<Tuple<GH_Path, Geometry.Spatial.Point3D>>();
 
             for (int i=0; i < objects.Count; i++)
@@ -151,21 +153,35 @@ namespace SAM.Analytical.Grasshopper
                         if (!internalCondition.Guid.Equals(((InternalCondition)@object).Guid))
                             continue;
 
-                        dataTree.Add(new GooSpace(space), path);
+                        dataTree_Spaces.Add(new GooSpace(space), path);
+                        dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
                     }
                 }
                 else if (@object is Panel)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces((Panel)@object);
                     if (spaces != null)
-                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
+                    {
+                        foreach(Space space in spaces)
+                        {
+                            dataTree_Spaces.Add(new GooSpace(space), path);
+                            dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
+                        }
+                    }
+
                 }
                 else if (@object is Aperture)
                 {
                     Panel panel = adjacencyCluster.GetPanel((Aperture)@object);
                     List<Space> spaces = adjacencyCluster.GetSpaces(panel);
                     if (spaces != null)
-                        spaces?.ForEach(x => dataTree.Add(new GooSpace(x), path));
+                    {
+                        foreach (Space space in spaces)
+                        {
+                            dataTree_Spaces.Add(new GooSpace(space), path);
+                            dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
+                        }
+                    }
                 }
                 else if (@object is ApertureConstruction)
                 {
@@ -183,7 +199,10 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         foreach (Space space in dictionary.Values)
-                            dataTree.Add(new GooSpace(space), path);
+                        {
+                            dataTree_Spaces.Add(new GooSpace(space), path);
+                            dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
+                        }
                     }
                 }
                 else if (@object is Construction)
@@ -202,7 +221,10 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         foreach (Space space in dictionary.Values)
-                            dataTree.Add(new GooSpace(space), path);
+                        {
+                            dataTree_Spaces.Add(new GooSpace(space), path);
+                            dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
+                        }
                     }
                 }
                 else if (@object is Profile && analyticalModel != null)
@@ -223,7 +245,8 @@ namespace SAM.Analytical.Grasshopper
                         {
                             if (profile.Guid == ((Profile)@object).Guid)
                             {
-                                dataTree.Add(new GooSpace(space), path);
+                                dataTree_Spaces.Add(new GooSpace(space), path);
+                                dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
                                 break;
                             }
                         }
@@ -270,16 +293,22 @@ namespace SAM.Analytical.Grasshopper
                             
                             if (keyValuePair.Value.InRange(point3D) || keyValuePair.Value.Inside(point3D))
                             {
-                                dataTree.Add( new GooSpace(keyValuePair.Key), tuple.Item1);
+                                dataTree_Spaces.Add( new GooSpace(keyValuePair.Key), tuple.Item1);
+                                dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(keyValuePair.Key)), tuple.Item1);
                                 break;
                             }
                         }
                     }
                 }
             }
-            index = Params.IndexOfOutputParam("Spaces");
+
+            index = Params.IndexOfOutputParam("spaces");
             if (index != -1)
-                dataAccess.SetDataTree(index, dataTree);
+                dataAccess.SetDataTree(index, dataTree_Spaces);
+
+            index = Params.IndexOfOutputParam("shells");
+            if (index != -1)
+                dataAccess.SetDataTree(index, dataTree_Shells);
         }
     }
 }

@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("d1914180-0be2-4982-8f26-c290889535c4");
+        public override Guid ComponentGuid => new Guid("a5a1e858-0db7-46db-bf50-da74f24a5a8f");
 
         /// <summary>
         /// The latest version of this component
