@@ -402,7 +402,6 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-
             Menu_AppendItem(menu, "Show All", Menu_ShowAll, VolatileData.AllData(true).Any(), showAll).Tag = showAll;
 
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());

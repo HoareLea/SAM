@@ -200,9 +200,21 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByApertureType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByApertureConstruction, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_BakeByApertureConstruction(object sender, EventArgs e)
+        {
+            BakeGeometry_ByApertureConstruction(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByApertureConstruction(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByApertureConstruction(doc, VolatileData);
         }
 
         protected override GH_GetterResult Prompt_Plural(ref List<GooAperture> values)
@@ -352,6 +364,16 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_SaveAs(object sender, EventArgs e)
         {
             Core.Grasshopper.Query.SaveAs(VolatileData);
+        }
+
+        private void Menu_BakeByApertureType(object sender, EventArgs e)
+        {
+            BakeGeometry_ByApertureType(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByApertureType(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByApertureType(doc, VolatileData);
         }
     }
 }
