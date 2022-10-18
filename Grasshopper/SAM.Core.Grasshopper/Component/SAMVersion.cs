@@ -14,7 +14,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "2.0.0";
 
         /// <summary>
         /// Provides an Icon for the component.
