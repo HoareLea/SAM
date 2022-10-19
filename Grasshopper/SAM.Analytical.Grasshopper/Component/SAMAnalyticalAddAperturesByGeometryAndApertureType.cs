@@ -127,13 +127,13 @@ namespace SAM.Analytical.Grasshopper
 
             bool framePercentage = true;
             List<double> values = new List<double>();
-            if (dataAccess.GetData(6, ref values))
+            if (dataAccess.GetDataList(6, values))
             {
                 framePercentage = false;
             }
             if(framePercentage)
             {
-                dataAccess.GetData(7, ref values);
+                dataAccess.GetDataList(7, values);
             }
 
             if (values != null && values.Count != 0)
@@ -155,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                     if (framePercentage)
                     {
                         double area = face3D.GetArea();
-                        SAM.Geometry.Planar.BoundingBox2D boundingBox2D = face3D.GetPlane().Convert(face3D).GetBoundingBox();
+                        Geometry.Planar.BoundingBox2D boundingBox2D = face3D.GetPlane().Convert(face3D).GetBoundingBox();
                         double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
 
                         Func<double, double> func = new Func<double, double>((double offset) =>
@@ -171,7 +171,7 @@ namespace SAM.Analytical.Grasshopper
                                 return double.NaN;
                             }
 
-                            double area_Temp = face3Ds_Offset.ConvertAll(x => x.GetArea()).Sum();
+                            double area_Temp = face3Ds_Offset_Temp.ConvertAll(x => x.GetArea()).Sum();
 
                             return area - area_Temp / area;
 
@@ -186,7 +186,20 @@ namespace SAM.Analytical.Grasshopper
 
                         if (face3Ds_Offset != null && face3Ds_Offset.Count != 0)
                         {
-                            face3Ds_Temp.AddRange(face3Ds_Offset);
+                            Plane plane = face3D.GetPlane();
+                            List<Geometry.Planar.IClosed2D> edge2Ds = face3Ds_Offset.ConvertAll(x => plane.Convert(x)?.ExternalEdge2D);
+                            edge2Ds.Add(plane.Convert(face3D)?.ExternalEdge2D);
+
+                            face3Ds_Offset = Geometry.Spatial.Create.Face3Ds(edge2Ds, plane);
+                            if(face3Ds_Offset != null && face3Ds_Offset.Count != 0)
+                            {
+                                face3Ds_Temp.AddRange(face3Ds_Offset);
+                            }
+                            else
+                            {
+                                face3Ds_Temp.Add(face3D);
+                            }
+
                         }
                         else
                         {
