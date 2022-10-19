@@ -6,6 +6,7 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -54,6 +55,12 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
             inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "Trim Aperture Geometry", GH_ParamAccess.item, true);
             inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Tolerance.MacroDistance);
+
+            index = inputParamManager.AddNumberParameter("frameWidth_", "frameWidth_", "Frame Width [m]", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
+
+            index = inputParamManager.AddNumberParameter("framePercentage_", "framePercentage_", "Frame Percentage [%]", GH_ParamAccess.list);
+            inputParamManager[index].Optional = true;
         }
 
         /// <summary>
@@ -116,6 +123,82 @@ namespace SAM.Analytical.Grasshopper
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            bool framePercentage = true;
+            List<double> values = new List<double>();
+            if (dataAccess.GetData(6, ref values))
+            {
+                framePercentage = false;
+            }
+            if(framePercentage)
+            {
+                dataAccess.GetData(7, ref values);
+            }
+
+            if (values != null && values.Count != 0)
+            {
+                List<Face3D> face3Ds_Temp = new List<Face3D>();
+                for (int i = 0; i < face3Ds.Count; i++)
+                {
+                    Face3D face3D = face3Ds[i];
+                    if (face3D == null)
+                    {
+                        continue;
+                    }
+
+                    face3D = new Face3D(face3D.GetExternalEdge3D());
+
+                    double value = i < values.Count ? values[i] : values.Last();
+
+                    List<Face3D> face3Ds_Offset = null;
+                    if (framePercentage)
+                    {
+                        double area = face3D.GetArea();
+                        SAM.Geometry.Planar.BoundingBox2D boundingBox2D = face3D.GetPlane().Convert(face3D).GetBoundingBox();
+                        double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
+
+                        Func<double, double> func = new Func<double, double>((double offset) =>
+                        {
+                            if (face3D == null)
+                            {
+                                return double.NaN;
+                            }
+
+                            List<Face3D> face3Ds_Offset_Temp = face3D.Offset(-offset);
+                            if (face3Ds_Offset_Temp == null || face3Ds_Offset_Temp.Count == 0)
+                            {
+                                return double.NaN;
+                            }
+
+                            double area_Temp = face3Ds_Offset.ConvertAll(x => x.GetArea()).Sum();
+
+                            return area - area_Temp / area;
+
+                        });
+
+                        value = Core.Query.Calculate_ByDivision(func, value / 100, 0, max);
+                    }
+
+                    if (!double.IsNaN(value))
+                    {
+                        face3Ds_Offset = face3Ds[i].Offset(-value);
+
+                        if (face3Ds_Offset != null && face3Ds_Offset.Count != 0)
+                        {
+                            face3Ds_Temp.AddRange(face3Ds_Offset);
+                        }
+                        else
+                        {
+                            face3Ds_Temp.Add(face3D);
+                        }
+                    }
+                    else
+                    {
+                        face3Ds_Temp.Add(face3D);
+                    }
+                }
+                face3Ds = face3Ds_Temp;
             }
 
             if (sAMObject is Panel)
