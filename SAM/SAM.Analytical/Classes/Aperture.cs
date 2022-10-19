@@ -116,30 +116,34 @@ namespace SAM.Analytical
             List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
             if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
             {
-                double frameThickness = 0;
+                double frameWidth = 0;
 
                 ApertureConstruction apertureConstruction = Type;
                 if(apertureConstruction != null)
                 {
-                    if(apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultFrameWidth, out double frameThickness_Temp))
+                    double frameThickness = apertureConstruction.GetFrameThickness();
+                    if(!double.IsNaN(frameThickness) && frameThickness > 0)
                     {
-                        frameThickness = frameThickness_Temp;
-                    }
-                    
-                    if(frameThickness == 0 || double.IsNaN(frameThickness))
-                    {
-                        frameThickness = apertureConstruction.GetFrameThickness();
+                        if (apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultFrameWidth, out double frameThickness_Temp))
+                        {
+                            frameWidth = frameThickness_Temp;
+                        }
+
+                        if (frameWidth == 0 || double.IsNaN(frameWidth))
+                        {
+                            frameWidth = apertureConstruction.GetFrameThickness();
+                        }
                     }
                 }
 
-                if(!double.IsNaN(frameThickness) && frameThickness != 0)
+                if(!double.IsNaN(frameWidth) && frameWidth != 0)
                 {
                     Plane plane = face3D.GetPlane();
                     Geometry.Planar.Face2D face2D = plane.Convert(face3D);
 
                     Geometry.Planar.IClosed2D externalEdge2D = face3D.ExternalEdge2D;
 
-                    List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Offset(face2D, -frameThickness);
+                    List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Offset(face2D, -frameWidth);
                     internalEdge2Ds = face2Ds?.ConvertAll(x => x.ExternalEdge2D);
 
                     face2D = Geometry.Planar.Create.Face2D(externalEdge2D, internalEdge2Ds);
