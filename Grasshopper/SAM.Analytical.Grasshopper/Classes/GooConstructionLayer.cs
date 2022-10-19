@@ -1,12 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooConstructionLayer: GH_Goo<ConstructionLayer>
+    public class GooConstructionLayer: GooJSAMObject<ConstructionLayer>
     {
         public GooConstructionLayer()
             : base()

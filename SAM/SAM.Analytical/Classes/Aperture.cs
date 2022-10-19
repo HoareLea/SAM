@@ -245,6 +245,22 @@ namespace SAM.Analytical
             return area_Frame / (area_Frame + area_Pane);
         }
 
+        public double GetThickness(AperturePart aperturePart)
+        {
+            if(aperturePart == AperturePart.Undefined)
+            {
+                return double.NaN;
+            }
+
+            ApertureConstruction apertureConstruction = Type;
+            if(apertureConstruction == null)
+            {
+                return double.NaN;
+            }
+
+            return apertureConstruction.GetThickness(aperturePart);
+        }
+
         public Aperture Clone()
         {
             return new Aperture(this);
