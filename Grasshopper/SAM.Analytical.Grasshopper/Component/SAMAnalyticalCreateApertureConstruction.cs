@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
 
             gooConstructionLayerParam = new GooConstructionLayerParam();
             gooConstructionLayerParam.Optional = true;
-            gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.FrameConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
+            //gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.FrameConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
             inputParamManager.AddParameter(gooConstructionLayerParam, "frameConstructionLayers_", "frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
         }
 
@@ -116,17 +116,12 @@ namespace SAM.Analytical.Grasshopper
             }
 
             objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(3, objectWrappers))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            dataAccess.GetDataList(3, objectWrappers);
 
             List<ConstructionLayer> frameConstructionLayers = null;
 
             if (objectWrappers != null && objectWrappers.Count != 0)
             {
-                frameConstructionLayers = new List<ConstructionLayer>();
                 foreach (GH_ObjectWrapper objectWrapper_ConstructionLayer in objectWrappers)
                 {
                     ConstructionLayer constructionLayer = null;
@@ -137,6 +132,11 @@ namespace SAM.Analytical.Grasshopper
 
                     if (constructionLayer == null)
                         continue;
+
+                    if(frameConstructionLayers == null)
+                    {
+                        frameConstructionLayers = new List<ConstructionLayer>();
+                    }
 
                     frameConstructionLayers.Add(constructionLayer); 
                 }
