@@ -76,6 +76,23 @@ namespace SAM.Core
             return result;
         }
 
+        public List<List<string>> GetValues()
+        {
+            IEnumerable<string> keys = Keys;
+            if(keys == null)
+            {
+                return null;
+            }
+
+            List<List<string>> result = new List<List<string>>();
+            foreach(string key in keys)
+            {
+                result.Add(GetValues(key));
+            }
+
+            return result;
+        }
+
         public IEnumerable<string> Keys
         {
             get
