@@ -1,4 +1,6 @@
-﻿namespace SAM.Geometry.Planar
+﻿using System.Collections.Generic;
+
+namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
@@ -44,10 +46,7 @@
                 return null;
             }
 
-            BoundingBox2D result = new BoundingBox2D(boundingBox2D);
-            result.Move(vector2D);
-
-            return result;
+            return new BoundingBox2D(boundingBox2D.Min.GetMoved(vector2D), boundingBox2D.Max.GetMoved(vector2D));
         }
 
         public static Circle2D Move(this Circle2D circle2D, Vector2D vector2D)
@@ -96,10 +95,7 @@
                 return null;
             }
 
-            Line2D result = new Line2D(line2D);
-            result.Move(vector2D);
-
-            return result;
+            return new Line2D(line2D.Origin.GetMoved(vector2D), line2D.Direction);
         }
 
         public static Polycurve2D Move(this Polycurve2D polycurve2D, Vector2D vector2D)
@@ -109,10 +105,7 @@
                 return null;
             }
 
-            Polycurve2D result = new Polycurve2D(polycurve2D);
-            result.Move(vector2D);
-
-            return result;
+            return new Polycurve2D(polycurve2D.GetCurves().ConvertAll(x => x.Move(vector2D)));
         }
 
         public static PolycurveLoop2D Move(this PolycurveLoop2D polycurveLoop2D, Vector2D vector2D)
@@ -122,10 +115,7 @@
                 return null;
             }
 
-            PolycurveLoop2D result = new PolycurveLoop2D(polycurveLoop2D);
-            result.Move(vector2D);
-
-            return result;
+            return new PolycurveLoop2D(polycurveLoop2D.GetCurves().ConvertAll(x => x.Move(vector2D)));
         }
 
         public static Polyline2D Move(this Polyline2D polyline2D, Vector2D vector2D)
@@ -135,10 +125,7 @@
                 return null;
             }
 
-            Polyline2D result = new Polyline2D(polyline2D);
-            result.Move(vector2D);
-
-            return result;
+            return new Polyline2D(polyline2D.Points.ConvertAll(x => x.GetMoved(vector2D)), polyline2D.IsClosed());
         }
 
         public static Rectangle2D Move(this Rectangle2D rectangle2D, Vector2D vector2D)
@@ -161,10 +148,7 @@
                 return null;
             }
 
-            Segment2D result = new Segment2D(segment2D);
-            result.Move(vector2D);
-
-            return result;
+            return new Segment2D(segment2D[0].GetMoved(vector2D), segment2D[1].GetMoved(vector2D));
         }
 
         public static Triangle2D Move(this Triangle2D triangle2D, Vector2D vector2D)
@@ -174,10 +158,9 @@
                 return null;
             }
 
-            Triangle2D result = new Triangle2D(triangle2D);
-            result.Move(vector2D);
+            List<Point2D> point2Ds = triangle2D.GetPoints();
 
-            return result;
+            return new Triangle2D(point2Ds[0].GetMoved(vector2D), point2Ds[1].GetMoved(vector2D), point2Ds[2].GetMoved(vector2D));
         }
 
         public static T Move<T>(this T sAMGeometry2D, Vector2D vector2D) where T: ISAMGeometry2D

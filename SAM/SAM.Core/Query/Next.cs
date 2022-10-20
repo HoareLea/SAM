@@ -45,7 +45,7 @@ namespace SAM.Core
 
         public static int Next(this int count, int index)
         {
-            if (index <= 0)
+            if (index < 0)
             {
                 return -1;
             }

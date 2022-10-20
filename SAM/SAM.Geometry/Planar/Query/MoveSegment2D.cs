@@ -36,13 +36,15 @@ namespace SAM.Geometry.Planar
             }
 
             Segment2D segment2D = segment2Ds[index];
-            segment2D.Move(vector2D);
+            segment2D = segment2D.Move(vector2D);
 
             Segment2D segment2D_Previous = segment2Ds[index_Previous];
             Segment2D segment2D_Next = segment2Ds[index_Next];
 
-            if(segment2D_Next.Direction.SmallestAngle(segment2D_Previous.Direction) <= tolerance_Angle)
+            if(segment2D_Next.Direction.SmallestAngle(segment2D_Previous.Direction) <= tolerance_Angle && segment2D.Direction.SmallestAngle(segment2D_Next.Direction) < tolerance_Angle)
             {
+                segment2Ds[index] = segment2D;
+
                 segment2Ds.Insert(index_Previous, new Segment2D(segment2D_Previous[1], segment2D[0]));
                 segment2Ds.Insert(index_Next, new Segment2D(segment2D[1], segment2D_Next[0]));
             }
