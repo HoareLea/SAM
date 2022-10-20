@@ -77,6 +77,7 @@
     <Compile Include="Classes\GooJSAMObject.cs" />
     <Compile Include="Classes\GooObject.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
+    <Compile Include="Component\SAMCoreTextMapValues.cs" />
     <Compile Include="Component\SAMCoreReplaceByGuid.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />
     <Compile Include="Component\SAMCoreCreateDelimitedFileTableBySAMObjects.cs" />
