@@ -326,6 +326,8 @@ namespace SAM.Core
                 return null; 
             });
 
+            Dictionary<double, double> dictionary = new Dictionary<double, double>();
+
             Tuple<double, double> tuple = null;
             for (int i = 2; i <= maxDivisions; i++)
             {
@@ -335,8 +337,27 @@ namespace SAM.Core
                     continue;
                 }
 
-                List<Tuple<double, double>> tuples = values.ConvertAll(x => new Tuple<double, double>(x, func.Invoke(x)));
-                tuples.RemoveAll(x => double.IsNaN(x.Item2));
+                List<Tuple<double, double>> tuples = new List<Tuple<double, double>>();
+                foreach(double value_Temp in values)
+                {
+                    if(!dictionary.TryGetValue(value_Temp, out double calculatedValue))
+                    {
+                        calculatedValue = func.Invoke(value_Temp);
+                        dictionary[value_Temp] = calculatedValue;
+                    }
+
+                    if(double.IsNaN(calculatedValue))
+                    {
+                        continue;
+                    }
+
+                    tuples.Add(new Tuple<double, double>(value_Temp, calculatedValue));
+                }
+
+                if(tuples == null || tuples.Count == 0)
+                {
+                    continue;
+                }
 
                 SortedSet<double> sortedSet = new SortedSet<double>(tuples.ConvertAll(x => x.Item2));
                 Tuple<double, double> tuple_Temp = getMinAndMax(sortedSet, value);
