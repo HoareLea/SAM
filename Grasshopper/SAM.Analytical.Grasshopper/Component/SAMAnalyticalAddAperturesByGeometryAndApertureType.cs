@@ -173,11 +173,11 @@ namespace SAM.Analytical.Grasshopper
 
                             double area_Temp = face3Ds_Offset_Temp.ConvertAll(x => x.GetArea()).Sum();
 
-                            return area - area_Temp / area;
+                            return (area - area_Temp) / area;
 
                         });
 
-                        value = Core.Query.Calculate_ByDivision(func, value / 100, 0, max);
+                        value = Core.Query.Calculate_ByDivision(func, value / 100, 0, max, 200, 200, 0.0001);
                     }
 
                     if (!double.IsNaN(value))
@@ -193,7 +193,12 @@ namespace SAM.Analytical.Grasshopper
                             face3Ds_Offset = Geometry.Spatial.Create.Face3Ds(edge2Ds, plane);
                             if(face3Ds_Offset != null && face3Ds_Offset.Count != 0)
                             {
-                                face3Ds_Temp.AddRange(face3Ds_Offset);
+                                if(face3Ds_Offset.Count> 1)
+                                {
+                                    face3Ds_Offset.Sort((x, y) => y.ExternalEdge2D.GetArea().CompareTo(x.ExternalEdge2D.GetArea()));
+                                }
+                                
+                                face3Ds_Temp.Add(face3Ds_Offset[0]);
                             }
                             else
                             {
