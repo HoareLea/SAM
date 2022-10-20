@@ -29,27 +29,41 @@ namespace SAM.Core
 
         public static T Previous<T>(this IEnumerable<T> values, int index)
         {
-            if (values == null || index < 0)
+            if (values == null)
             {
                 return default(T);
             }
 
-            int count = values.Count();
-            if (count == 0)
+            int index_Temp = Previous(values.Count(), index);
+            if(index_Temp == -1)
             {
                 return default(T);
             }
-
-
-            int index_Temp = index;
-            while (index_Temp >= count)
-            {
-                index_Temp -= count;
-            }
-
-            index_Temp = index_Temp == 0 ? count - 1 : index_Temp - 1;
 
             return values.ElementAt(index_Temp);
+        }
+
+        public static int Previous(this int count, int index)
+        {
+            if (index < 0)
+            {
+                return -1;
+            }
+
+            if (count == 0)
+            {
+                return -1;
+            }
+
+            int result = index;
+            while (result >= count)
+            {
+                result -= count;
+            }
+
+            result = result == 0 ? count - 1 : result - 1;
+
+            return result;
         }
     }
 }

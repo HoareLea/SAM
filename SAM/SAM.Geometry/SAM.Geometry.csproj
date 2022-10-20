@@ -84,6 +84,7 @@
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Planar\Query\MoveSegment2D.cs" />
     <Compile Include="Planar\Query\MovePoint2D.cs" />
     <Compile Include="Planar\Query\Convex.cs" />
     <Compile Include="Planar\Query\Concave.cs" />
