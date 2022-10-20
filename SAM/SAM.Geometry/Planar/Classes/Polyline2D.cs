@@ -37,7 +37,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return new List<Point2D>(points);
+                return Query.Clone(points);
             }
         }
 

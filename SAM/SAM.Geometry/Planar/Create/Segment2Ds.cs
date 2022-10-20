@@ -145,9 +145,9 @@ namespace SAM.Geometry.Planar
             if (point2Ds.Count() < 2)
                 return result;
 
-            int aCount = point2Ds.Count();
+            int count = point2Ds.Count();
 
-            for (int i = 0; i < aCount - 1; i++)
+            for (int i = 0; i < count - 1; i++)
                 result.Add(new Segment2D(point2Ds.ElementAt(i), point2Ds.ElementAt(i + 1)));
 
             if (close)
