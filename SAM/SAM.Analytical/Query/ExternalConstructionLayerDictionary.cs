@@ -7,7 +7,7 @@ namespace SAM.Analytical
     {
         public static Dictionary<Panel, ConstructionLayer> ExternalConstructionLayerDictionary(this Space space, AdjacencyCluster adjacencyCluster, double silverSpacing = Tolerance.MacroDistance, double tolerance = Tolerance.Distance)
         {
-            List<Panel> panels = adjacencyCluster?.UpdateNormals(space, false, true, silverSpacing, tolerance);
+            List<Panel> panels = adjacencyCluster?.UpdateNormals(space, false, true, false, silverSpacing, tolerance);
             if (panels == null || panels.Count == 0)
                 return null;
 
