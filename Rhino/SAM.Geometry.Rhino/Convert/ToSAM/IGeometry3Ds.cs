@@ -50,6 +50,17 @@ namespace SAM.Geometry.Rhino
                 if (brepFace.TryGetPlane(out global::Rhino.Geometry.Plane plane_BrepFace))
                 {
                     plane = plane_BrepFace.ToSAM();
+
+                    Vector3D normal = brepFace.NormalAt(0.5, 0.5).ToSAM();
+                    if(normal != null)
+                    {
+                        if (!plane.Normal.SameHalf(normal))
+                        {
+                            plane.FlipZ(true);
+                        }
+                    }
+
+
                 }
                 
                 List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
