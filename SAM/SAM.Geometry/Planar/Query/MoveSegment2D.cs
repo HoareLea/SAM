@@ -73,6 +73,18 @@ namespace SAM.Geometry.Planar
                 }
             }
 
+            List<double> indexes = new List<double>() { index_Previous, index, index_Next};
+            indexes.RemoveAll(x => x == -1);
+            indexes.Sort((x, y) => y.CompareTo(x));
+
+            foreach(int index_Temp in indexes)
+            {
+                if(segment2Ds[index_Temp][0].Distance(segment2Ds[index_Temp][1]) < tolerance_Distance)
+                {
+                    segment2Ds.RemoveAt(index_Temp);
+                }
+            }
+
             List<Point2D> point2Ds = new List<Point2D>();
             foreach(Segment2D segment2D_Temp in segment2Ds)
             {
