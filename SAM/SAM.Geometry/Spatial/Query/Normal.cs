@@ -5,6 +5,42 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
+        public static Vector3D Normal(this Plane plane, IEnumerable<Planar.Point2D> point2Ds)
+        {
+            if(plane == null || point2Ds == null)
+            {
+                return null;
+            }
+
+            int count = point2Ds.Count();
+
+            if(count < 3)
+            {
+                return null;
+            }
+
+            for (int i = 0; i < count; i++)
+            {
+                int index_1 = i;
+                int index_2 = Core.Query.Next(count, i + 1);
+                int index_3 = Core.Query.Next(count, i + 2);
+
+                Point3D point3D_1 = plane.Convert(point2Ds.ElementAt(index_1));
+                Point3D point3D_2 = plane.Convert(point2Ds.ElementAt(index_2));
+                Point3D point3D_3 = plane.Convert(point2Ds.ElementAt(index_3));
+
+                Vector3D normal = Normal(point3D_1, point3D_2, point3D_3);
+                if(normal == null || !normal.IsValid())
+                {
+                    continue;
+                }
+
+                return normal;
+            }
+
+            return null;
+        }
+
         public static Vector3D Normal(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (point3Ds == null || point3Ds.Collinear(tolerance))
@@ -13,7 +49,9 @@ namespace SAM.Geometry.Spatial
             int count = point3Ds.Count();
 
             if (count < 3)
+            {
                 return null;
+            }
 
             if(count == 3)
             {
@@ -25,7 +63,10 @@ namespace SAM.Geometry.Spatial
             if (point3Ds.Coplanar(tolerance))
             {
                 for (int i = 0; i < count - 1; i++)
+                {
                     normal += (point3Ds.ElementAt(i) - origin).CrossProduct(point3Ds.ElementAt(i + 1) - origin);
+                }
+
                 return normal.Unit;
             }
 
