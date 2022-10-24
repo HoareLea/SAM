@@ -14,7 +14,7 @@ namespace SAM.Geometry.Spatial
             Planar.IClosed2D externalEdge2D = closed2D;
             if (closed2D is Planar.Face2D)
             {
-                externalEdge2D = (Planar.Face2D)externalEdge2D;
+                externalEdge2D = ((Planar.Face2D)externalEdge2D).ExternalEdge2D;
             }
 
             if (externalEdge2D == null)
