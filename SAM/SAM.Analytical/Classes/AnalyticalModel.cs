@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry;
 using System;
 using System.Collections.Generic;
 
@@ -528,6 +529,16 @@ namespace SAM.Analytical
         {
             if (adjacencyCluster != null)
                 adjacencyCluster.Transform(transform3D);
+        }
+
+        public bool Normalize(bool includeApertures = true, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        {
+            if(adjacencyCluster == null)
+            {
+                return false;
+            }
+
+            return adjacencyCluster.Normalize(includeApertures, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
         }
     }
 }
