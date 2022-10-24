@@ -106,6 +106,8 @@ namespace SAM.Analytical
                 }
             }
 
+            adjacencyCluster = adjacencyCluster.UpdateNormals(false, true, false, Tolerance.MacroDistance, tolerance);
+            adjacencyCluster.Normalize(false);
             adjacencyCluster.UpdatePanelTypes(elevation_Ground);
             adjacencyCluster.SetDefaultConstructionByPanelType();
 
@@ -215,6 +217,9 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster();
             foreach (AdjacencyCluster adjacencyCluster in adjacencyClusters)
                 result.Join(adjacencyCluster);
+
+            result = result.UpdateNormals(false, true, false, Tolerance.MacroDistance, tolerance);
+            result.Normalize(false);
 
             return result;
         }
@@ -799,6 +804,8 @@ namespace SAM.Analytical
 
             result = result.UpdateNormals(false, true, false, silverSpacing, tolerance_Distance);
             result = result.FixEdges(false, tolerance_Distance);
+
+            result.Normalize(false);
 
             return result;
         }
