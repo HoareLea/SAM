@@ -115,5 +115,52 @@ namespace SAM.Geometry.Spatial
 
             return new Planar.Polygon2D(point2Ds);
         }
+
+        public static Planar.Triangle2D Normalize(this Plane plane, Planar.Triangle2D triangle2D, Orientation orientation = Orientation.CounterClockwise)
+        {
+            if (plane == null || triangle2D == null)
+            {
+                return null;
+            }
+
+            List<Planar.Point2D> point2Ds = Normalize(plane, triangle2D.GetPoints(), orientation);
+            if (point2Ds == null)
+            {
+                return null;
+            }
+
+            return new Planar.Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]);
+        }
+
+        public static Planar.Rectangle2D Normalize(this Plane plane, Planar.Rectangle2D rectangle2D, Orientation orientation = Orientation.CounterClockwise)
+        {
+            if (plane == null || rectangle2D == null)
+            {
+                return null;
+            }
+
+           if(IsNormalized(plane, rectangle2D, orientation))
+            {
+                return new Planar.Rectangle2D(rectangle2D);
+            }
+
+            return new Planar.Rectangle2D(rectangle2D.Origin, rectangle2D.Width, rectangle2D.Height, rectangle2D.WidthDirection);
+        }
+
+        public static Planar.Polyline2D Normalize(this Plane plane, Planar.Polyline2D polyline2D, Orientation orientation = Orientation.CounterClockwise)
+        {
+            if (plane == null || polyline2D == null)
+            {
+                return null;
+            }
+
+            List<Planar.Point2D> point2Ds = Normalize(plane, polyline2D.Points, orientation);
+            if (point2Ds == null)
+            {
+                return null;
+            }
+
+            return new Planar.Polyline2D(point2Ds);
+        }
     }
 }

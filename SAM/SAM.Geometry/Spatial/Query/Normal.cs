@@ -22,8 +22,8 @@ namespace SAM.Geometry.Spatial
             for (int i = 0; i < count; i++)
             {
                 int index_1 = i;
-                int index_2 = Core.Query.Next(count, i + 1);
-                int index_3 = Core.Query.Next(count, i + 2);
+                int index_2 = Core.Query.Next(count, index_1);
+                int index_3 = Core.Query.Next(count, index_2);
 
                 Point3D point3D_1 = plane.Convert(point2Ds.ElementAt(index_1));
                 Point3D point3D_2 = plane.Convert(point2Ds.ElementAt(index_2));
