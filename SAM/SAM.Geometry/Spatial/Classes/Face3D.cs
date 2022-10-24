@@ -259,39 +259,13 @@ namespace SAM.Geometry.Spatial
             return System.Math.Sqrt((a * a) + (b * b));
         }
 
-        public void Normalize(double tolerance = Core.Tolerance.Distance)
+        public void Normalize(Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            Vector3D normal = plane?.Normal;
-            if (normal == null)
+            Face3D face3D = Query.Normalize(this, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
+            if(face3D != null)
             {
-                return;
-            }
-
-            bool? clockwise = Query.Clockwise(GetExternalEdge3D(), normal, Core.Tolerance.Angle, tolerance);
-            if(clockwise == null || !clockwise.HasValue)
-            {
-                return;
-            }
-
-            if (!clockwise.Value)
-            {
-                (externalEdge2D as Polygon2D)?.Reverse();
-            }
-
-            List<IClosedPlanar3D> internalEdge3Ds = GetInternalEdge3Ds();
-            if (internalEdge3Ds != null)
-            {
-                for (int i = 0; i < internalEdge3Ds.Count; i++)
-                {
-                    clockwise = Query.Clockwise(internalEdge3Ds[i], normal, Core.Tolerance.Angle, tolerance);
-                    if (clockwise == null || !clockwise.HasValue)
-                    {
-                        continue;
-                    }
-
-                    if (clockwise.Value)
-                        (internalEdge2Ds[i] as Polygon2D)?.Reverse();
-                }
+                externalEdge2D = face3D.externalEdge2D;
+                internalEdge2Ds = face3D.internalEdge2Ds;
             }
         }
 

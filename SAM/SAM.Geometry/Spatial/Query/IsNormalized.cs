@@ -4,17 +4,17 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool IsNormalized(this Plane plane, Planar.IClosed2D closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static bool IsNormalized(this Plane plane, Planar.IClosed2D closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (closed2D == null)
             {
                 return false;
             }
 
-            return IsNormalized(plane.Convert(closed2D), orientation, edgeOrientationMethod);
+            return IsNormalized(plane.Convert(closed2D), orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
         }
 
-        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = SAM.Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = SAM.Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Plane plane = closedPlanar3D?.GetPlane();
             if (plane == null)
@@ -39,7 +39,7 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            Orientation orientation_ExternalEdge3D = Orientation(externalEdge3D, normal);
+            Orientation orientation_ExternalEdge3D = Orientation(externalEdge3D, normal, tolerance_Angle, tolerance_Distance);
 
             bool result = orientation_ExternalEdge3D == orientation;
             if (!(closedPlanar3D is Face3D) || !result)
@@ -62,7 +62,7 @@ namespace SAM.Geometry.Spatial
 
             foreach (IClosedPlanar3D internalEdge3D in internalEdge3Ds)
             {
-                Orientation orientation_Temp = Orientation(internalEdge3D, normal);
+                Orientation orientation_Temp = Orientation(internalEdge3D, normal, tolerance_Angle, tolerance_Distance);
                 if (orientation_ExternalEdge3D != orientation_Temp)
                 {
                     result = false;
