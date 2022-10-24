@@ -316,15 +316,26 @@ namespace SAM.Analytical
         {
             Vector3D normal = plane?.Normal;
             if (normal == null)
+            {
                 return;
+            }
 
             IClosedPlanar3D externalEdge = plane.Convert(externalEdge2DLoop?.GetClosed2D());
             if (externalEdge == null)
+            {
                 return;
+            }
 
-            bool clockwise = Geometry.Spatial.Query.Clockwise(externalEdge, normal, Tolerance.Angle, tolerance);
-            if (!clockwise)
+            bool? clockwise = Geometry.Spatial.Query.Clockwise(externalEdge, normal, Tolerance.Angle, tolerance);
+            if(clockwise == null || !clockwise.HasValue)
+            {
+                return;
+            }
+            
+            if (!clockwise.Value)
+            {
                 externalEdge2DLoop.Reverse();
+            }
 
             if(internalEdge2DLoops != null)
             {
@@ -332,11 +343,20 @@ namespace SAM.Analytical
                 {
                     IClosedPlanar3D internalEdge = plane.Convert(internalEdge2DLoops[i]?.GetClosed2D());
                     if (internalEdge == null)
+                    {
                         continue;
+                    }
 
                     clockwise = Geometry.Spatial.Query.Clockwise(internalEdge, normal, Tolerance.Angle, tolerance);
-                    if (clockwise)
+                    if (clockwise == null || !clockwise.HasValue)
+                    {
+                        continue;
+                    }
+
+                    if (clockwise.Value)
+                    {
                         internalEdge2DLoops[i].Reverse();
+                    }
                 }
             }
         }

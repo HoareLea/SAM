@@ -4,7 +4,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static T Normalize<T>(this T closedPlanar3D, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite) where T : IClosedPlanar3D
+        public static T Normalize<T>(this T closedPlanar3D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite) where T : IClosedPlanar3D
         {
             Plane plane = closedPlanar3D?.GetPlane();
             if (plane == null)
@@ -29,7 +29,7 @@ namespace SAM.Geometry.Spatial
             return result is T ? (T)result : default(T);
         }
 
-        public static T Normalize<T>(this Plane plane, T closed2D, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite) where T: Planar.IClosed2D
+        public static T Normalize<T>(this Plane plane, T closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite) where T: Planar.IClosed2D
         {
             if(plane == null || closed2D == null)
             {
@@ -50,27 +50,21 @@ namespace SAM.Geometry.Spatial
             return result is T ? (T)result : default(T);
         }
 
-        public static List<Planar.Point2D> Normalize(this Plane plane, IEnumerable<Planar.Point2D> point2Ds, Orientation orientation = Orientation.CounterClockwise)
+        public static List<Planar.Point2D> Normalize(this Plane plane, IEnumerable<Planar.Point2D> point2Ds, Orientation orientation = Geometry.Orientation.CounterClockwise)
         {
             if (point2Ds == null || plane == null)
             {
                 return null;
             }
 
-            Vector3D normal = Normal(plane, point2Ds);
-            if (normal == null)
+            Orientation orientation_Point3Ds = Orientation(plane.Convert(point2Ds), plane.Normal);
+            if(orientation_Point3Ds == Geometry.Orientation.Undefined || orientation_Point3Ds == Geometry.Orientation.Collinear)
             {
                 return null;
             }
 
-            if (orientation == Orientation.Clockwise)
-            {
-                normal.Negate();
-            }
-
             List<Planar.Point2D> result = new List<Planar.Point2D>(point2Ds);
-
-            if (!plane.Normal.SameHalf(normal))
+            if (orientation_Point3Ds != orientation )
             {
                 result.Reverse();
             }
@@ -78,7 +72,7 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Planar.Face2D Normalize(this Plane plane, Planar.Face2D face2D, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static Planar.Face2D Normalize(this Plane plane, Planar.Face2D face2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             if(plane == null || face2D is null)
             {
@@ -100,7 +94,7 @@ namespace SAM.Geometry.Spatial
             return Planar.Create.Face2D(externalEdge2D, face2D.InternalEdge2Ds, edgeOrientationMethod);
         }
 
-        public static Planar.Polygon2D Normalize(this Plane plane, Planar.Polygon2D polygon2D, Orientation orientation = Orientation.CounterClockwise)
+        public static Planar.Polygon2D Normalize(this Plane plane, Planar.Polygon2D polygon2D, Orientation orientation = Geometry.Orientation.CounterClockwise)
         {
             if(plane == null || polygon2D == null)
             {
@@ -116,7 +110,7 @@ namespace SAM.Geometry.Spatial
             return new Planar.Polygon2D(point2Ds);
         }
 
-        public static Planar.Triangle2D Normalize(this Plane plane, Planar.Triangle2D triangle2D, Orientation orientation = Orientation.CounterClockwise)
+        public static Planar.Triangle2D Normalize(this Plane plane, Planar.Triangle2D triangle2D, Orientation orientation = Geometry.Orientation.CounterClockwise)
         {
             if (plane == null || triangle2D == null)
             {
@@ -132,7 +126,7 @@ namespace SAM.Geometry.Spatial
             return new Planar.Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]);
         }
 
-        public static Planar.Rectangle2D Normalize(this Plane plane, Planar.Rectangle2D rectangle2D, Orientation orientation = Orientation.CounterClockwise)
+        public static Planar.Rectangle2D Normalize(this Plane plane, Planar.Rectangle2D rectangle2D, Orientation orientation = Geometry.Orientation.CounterClockwise)
         {
             if (plane == null || rectangle2D == null)
             {
@@ -147,7 +141,7 @@ namespace SAM.Geometry.Spatial
             return new Planar.Rectangle2D(rectangle2D.Origin, rectangle2D.Width, rectangle2D.Height, rectangle2D.WidthDirection);
         }
 
-        public static Planar.Polyline2D Normalize(this Plane plane, Planar.Polyline2D polyline2D, Orientation orientation = Orientation.CounterClockwise)
+        public static Planar.Polyline2D Normalize(this Plane plane, Planar.Polyline2D polyline2D, Orientation orientation = Geometry.Orientation.CounterClockwise)
         {
             if (plane == null || polyline2D == null)
             {

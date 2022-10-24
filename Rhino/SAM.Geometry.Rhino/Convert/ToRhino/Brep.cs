@@ -86,12 +86,12 @@ namespace SAM.Geometry.Rhino
             {
                 internalEdge3Ds.RemoveAll(x => x == null || !x.IsValid());
                 
-                Orientation orientation_Main = externalEdge3D.Orinetation();
+                Orientation orientation_Main = externalEdge3D.Orientation();
                 if (orientation_Main != Orientation.Undefined && orientation_Main != Orientation.Collinear)
                 {
                     for (int i = 0; i < internalEdge3Ds.Count; i++)
                     {
-                        Orientation orientation = internalEdge3Ds[i].Orinetation();
+                        Orientation orientation = internalEdge3Ds[i].Orientation();
                         if (orientation != Orientation.Undefined && orientation != Orientation.Collinear)
                         {
                             internalEdge3Ds[i].Reverse();
