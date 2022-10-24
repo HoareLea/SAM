@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 
 using SAM.Core;
+using SAM.Geometry;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -397,9 +398,9 @@ namespace SAM.Analytical
             }
         }
 
-        public void Normalize(double tolerance = Tolerance.Distance)
+        public void Normalize(Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            planarBoundary3D?.Normalize(tolerance);
+            planarBoundary3D?.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
         }
 
         public void FlipNormal(bool flipX = true)
