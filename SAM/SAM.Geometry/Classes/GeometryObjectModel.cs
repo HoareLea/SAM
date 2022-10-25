@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 
-namespace SAM.Geometry.Classes
+namespace SAM.Geometry
 {
     public class GeometryObjectModel : Core.SAMModel
     {
