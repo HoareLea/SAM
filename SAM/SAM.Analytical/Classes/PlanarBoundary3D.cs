@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -312,33 +313,24 @@ namespace SAM.Analytical
             }
         }
 
-        public void Normalize(double tolerance = Tolerance.Distance)
+        public void Normalize(Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            Vector3D normal = plane?.Normal;
-            if (normal == null)
-                return;
-
-            IClosedPlanar3D externalEdge = plane.Convert(externalEdge2DLoop?.GetClosed2D());
-            if (externalEdge == null)
-                return;
-
-            bool clockwise = Geometry.Spatial.Query.Clockwise(externalEdge, normal, Tolerance.Angle, tolerance);
-            if (!clockwise)
-                externalEdge2DLoop.Reverse();
-
-            if(internalEdge2DLoops != null)
+            Face3D face3D = GetFace3D();
+            if(face3D == null)
             {
-                for (int i = 0; i < internalEdge2DLoops.Count; i++)
-                {
-                    IClosedPlanar3D internalEdge = plane.Convert(internalEdge2DLoops[i]?.GetClosed2D());
-                    if (internalEdge == null)
-                        continue;
-
-                    clockwise = Geometry.Spatial.Query.Clockwise(internalEdge, normal, Tolerance.Angle, tolerance);
-                    if (clockwise)
-                        internalEdge2DLoops[i].Reverse();
-                }
+                return;
             }
+
+            face3D = Geometry.Spatial.Query.Normalize(face3D, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
+            if(face3D == null)
+            {
+                return;
+            }
+
+            PlanarBoundary3D planarBoundary3D = new PlanarBoundary3D(face3D);
+            plane = planarBoundary3D.plane;
+            externalEdge2DLoop = planarBoundary3D.externalEdge2DLoop;
+            internalEdge2DLoops = planarBoundary3D.internalEdge2DLoops;
         }
 
         public override bool FromJObject(JObject jObject)

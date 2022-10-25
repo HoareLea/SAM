@@ -5,38 +5,53 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Clockwise(this IClosedPlanar3D closedPlanar3D, Vector3D normal = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool? Clockwise(this IClosedPlanar3D closedPlanar3D, Vector3D normal = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Vector3D vector3D_Normal = normal;
             if (vector3D_Normal == null)
+            {
                 vector3D_Normal = closedPlanar3D?.GetPlane()?.Normal;
+            }
 
             if (vector3D_Normal == null)
-                return false;
+            {
+                return null;
+            }
 
             ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
             if (segmentable3D == null)
+            {
                 throw new System.NotImplementedException();
+            }
 
             List<Point3D> point3Ds = segmentable3D.GetPoints();
             if (point3Ds == null || point3Ds.Count < 3)
-                return false;
+            {
+                return null;
+            }
 
             return Clockwise(point3Ds, vector3D_Normal, tolerance_Angle, tolerance_Distance);
 
         }
 
-        public static bool Clockwise(this IEnumerable<Point3D> point3Ds, Vector3D normal = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool? Clockwise(this IEnumerable<Point3D> point3Ds, Vector3D normal = null, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             if (point3Ds == null || point3Ds.Count() < 3)
-                return false;
+            {
+                return null;
+            }
 
             Vector3D vector3D_Normal = normal;
             if (vector3D_Normal == null)
+            {
                 vector3D_Normal = point3Ds.Normal(tolerance_Distance);
+            }
+
 
             if (vector3D_Normal == null)
-                return false;
+            {
+                return null;
+            }
 
             Vector3D direction = (point3Ds.First() - point3Ds.Last()).Unit;
 

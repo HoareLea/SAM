@@ -4,75 +4,17 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool IsNormalized(this Plane plane, Planar.IClosed2D closed2D, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static bool IsNormalized(this Plane plane, Planar.IClosed2D closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if (plane == null || closed2D == null)
+            if (closed2D == null)
             {
                 return false;
             }
 
-            Planar.IClosed2D externalEdge2D = closed2D;
-            if (closed2D is Planar.Face2D)
-            {
-                externalEdge2D = ((Planar.Face2D)externalEdge2D).ExternalEdge2D;
-            }
-
-            if (externalEdge2D == null)
-            {
-                return false;
-            }
-
-            Planar.ISegmentable2D segmentable2D = externalEdge2D as Planar.ISegmentable2D;
-            if (segmentable2D == null)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            Vector3D normal = Normal(plane, segmentable2D.GetPoints());
-            if (normal == null)
-            {
-                return false;
-            }
-
-            if (orientation == Orientation.Clockwise)
-            {
-                normal.GetNegated();
-            }
-
-            bool result = plane.Normal.SameHalf(normal);
-            if (!(closed2D is Planar.Face2D) || !result)
-            {
-                return result;
-            }
-
-            Planar.Face2D face2D = (Planar.Face2D)closed2D;
-
-            List<Planar.IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
-            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-            {
-                return result;
-            }
-
-            Orientation orinetation = Planar.Query.Orientation(externalEdge2D);
-            if (edgeOrientationMethod != EdgeOrientationMethod.Similar)
-            {
-                orinetation = orientation.Opposite();
-            }
-
-            foreach (Planar.IClosed2D internalEdge2D in internalEdge2Ds)
-            {
-                Orientation orientation_Temp = Planar.Query.Orientation(internalEdge2D);
-                if (orinetation != orientation_Temp)
-                {
-                    result = false;
-                    break;
-                }
-            }
-
-            return result;
+            return IsNormalized(plane.Convert(closed2D), orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
         }
 
-        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
+        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = SAM.Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Plane plane = closedPlanar3D?.GetPlane();
             if (plane == null)
@@ -80,13 +22,56 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            Planar.IClosed2D closed2D = plane.Convert(closedPlanar3D);
-            if(closed2D == null)
+            IClosedPlanar3D externalEdge3D = closedPlanar3D;
+            if (closedPlanar3D is Face3D)
+            {
+                externalEdge3D = ((Face3D)externalEdge3D).GetExternalEdge3D();
+            }
+
+            if (externalEdge3D == null)
             {
                 return false;
             }
 
-            return IsNormalized(plane, closed2D, orientation, edgeOrientationMethod);
+            Vector3D normal = plane.Normal;
+            if(normal == null)
+            {
+                return false;
+            }
+
+            Orientation orientation_ExternalEdge3D = Orientation(externalEdge3D, normal, tolerance_Angle, tolerance_Distance);
+
+            bool result = orientation_ExternalEdge3D == orientation;
+            if (!(closedPlanar3D is Face3D) || !result)
+            {
+                return result;
+            }
+
+            Face3D face3D = (Face3D)closedPlanar3D;
+
+            List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+            if (internalEdge3Ds == null || internalEdge3Ds.Count == 0)
+            {
+                return result;
+            }
+
+            if (edgeOrientationMethod != EdgeOrientationMethod.Similar)
+            {
+                orientation_ExternalEdge3D = orientation.Opposite();
+            }
+
+            foreach (IClosedPlanar3D internalEdge3D in internalEdge3Ds)
+            {
+                Orientation orientation_Temp = Orientation(internalEdge3D, normal, tolerance_Angle, tolerance_Distance);
+                if (orientation_ExternalEdge3D != orientation_Temp)
+                {
+                    result = false;
+                    break;
+                }
+            }
+
+            return result;
+
         }
 
     }

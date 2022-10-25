@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -686,14 +687,14 @@ namespace SAM.Analytical
             }
         }
 
-        public void Normalize(bool includeApertures = true, double tolerance = Tolerance.Distance)
+        public void Normalize(bool includeApertures = true, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
-            planarBoundary3D?.Normalize(tolerance);
+            planarBoundary3D?.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
 
             if (apertures != null && includeApertures)
             {
                 foreach (Aperture aperture in apertures)
-                    aperture.Normalize(tolerance);
+                    aperture.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
             }
         }
 
