@@ -84,6 +84,7 @@
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Spatial\Interfaces\IPolygon3DObject.cs" />
     <Compile Include="Spatial\Interfaces\ISegmentable3DObject.cs" />
     <Compile Include="Spatial\Interfaces\ISegment3DObject.cs" />
     <Compile Include="Spatial\Query\IsNormalized.cs" />
