@@ -316,13 +316,13 @@ namespace SAM.Analytical
         public void Normalize(Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Face3D face3D = GetFace3D();
-            if(face3D != null)
+            if(face3D == null)
             {
                 return;
             }
 
             face3D = Geometry.Spatial.Query.Normalize(face3D, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
-            if(face3D != null)
+            if(face3D == null)
             {
                 return;
             }
