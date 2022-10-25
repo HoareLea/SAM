@@ -84,6 +84,8 @@
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Spatial\Interfaces\ISegmentable3DObject.cs" />
+    <Compile Include="Spatial\Interfaces\ISegment3DObject.cs" />
     <Compile Include="Spatial\Query\IsNormalized.cs" />
     <Compile Include="Planar\Query\MoveSegment2D.cs" />
     <Compile Include="Planar\Query\MovePoint2D.cs" />
