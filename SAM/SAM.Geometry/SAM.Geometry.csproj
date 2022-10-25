@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Classes\GeometryObjectCollection.cs" />
+    <Compile Include="Classes\GeometryObjectModel.cs" />
     <Compile Include="Convert\ToNTS\Point.cs" />
     <Compile Include="Convert\ToNTS\Geometry.cs" />
     <Compile Include="Convert\ToNTS\Coordinates.cs" />
