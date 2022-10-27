@@ -1,4 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
@@ -37,6 +39,37 @@ namespace SAM.Geometry
 
             geometryObjectCollection.Add(sAMGeometryObject);
             return true;
+        }
+
+        public List<T> GetSAMGeometryObjects<T>(Func<T, bool> func = null) where T : ISAMGeometryObject
+        {
+            if(geometryObjectCollection == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach (ISAMGeometryObject sAMGeometryObject in geometryObjectCollection)
+            {
+                if(!(sAMGeometryObject is T))
+                {
+                    continue;
+                }
+
+                T t = (T)sAMGeometryObject;
+
+                if (func != null)
+                {
+                    if(!func.Invoke(t))
+                    {
+                        continue;
+                    }
+                }
+
+                result.Add(t);
+            }
+
+            return result;
         }
 
         public override JObject ToJObject()
