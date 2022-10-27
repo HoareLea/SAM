@@ -23,6 +23,22 @@ namespace SAM.Geometry
             FromJObject(jObject);
         }
 
+        public GeometryObjectModel()
+        {
+
+        }
+
+        public bool Add(ISAMGeometryObject sAMGeometryObject)
+        {
+            if(sAMGeometryObject == null)
+            {
+                return false;
+            }
+
+            geometryObjectCollection.Add(sAMGeometryObject);
+            return true;
+        }
+
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
