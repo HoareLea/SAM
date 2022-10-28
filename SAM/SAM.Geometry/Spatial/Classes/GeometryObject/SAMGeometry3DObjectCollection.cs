@@ -23,13 +23,13 @@ namespace SAM.Geometry.Spatial
             if (sAMGeometryObject3DCollection != null)
             {
                 List<ISAMGeometry3DObject> sAMGeometry3DObjects_Temp = sAMGeometryObject3DCollection.sAMGeometry3DObjects;
-                if(sAMGeometry3DObjects_Temp != null)
+                if (sAMGeometry3DObjects_Temp != null)
                 {
                     sAMGeometry3DObjects = new List<ISAMGeometry3DObject>();
                     foreach (ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects_Temp)
                     {
                         ISAMGeometry3DObject sAMGeometry3DObject_Temp = Core.Query.Clone(sAMGeometry3DObject);
-                        if(sAMGeometry3DObject_Temp != null)
+                        if (sAMGeometry3DObject_Temp != null)
                         {
                             sAMGeometry3DObjects.Add(sAMGeometry3DObject_Temp);
                         }
@@ -43,10 +43,10 @@ namespace SAM.Geometry.Spatial
             if (sAMGeometry3DObjects != null)
             {
                 this.sAMGeometry3DObjects = new List<ISAMGeometry3DObject>();
-                foreach(ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
+                foreach (ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
                 {
                     ISAMGeometry3DObject sAMGeometry3DObject_Temp = Core.Query.Clone(sAMGeometry3DObject);
-                    if(sAMGeometry3DObject_Temp == null)
+                    if (sAMGeometry3DObject_Temp == null)
                     {
                         continue;
                     }
@@ -60,23 +60,23 @@ namespace SAM.Geometry.Spatial
         {
             ISAMGeometry3DObject sAMGeometry3DObject_Temp = Core.Query.Clone(sAMGeometry3DObject);
 
-            if(sAMGeometry3DObject_Temp != null)
+            if (sAMGeometry3DObject_Temp != null)
             {
                 sAMGeometry3DObjects = new List<ISAMGeometry3DObject>() { sAMGeometry3DObject_Temp };
             }
 
-            
+
         }
 
         public void Add(ISAMGeometry3DObject sAMGeometry3DObject)
         {
-            if(sAMGeometry3DObject == null)
+            if (sAMGeometry3DObject == null)
             {
                 return;
             }
 
             ISAMGeometry3DObject sAMGeometry3DObject_Temp = Core.Query.Clone(sAMGeometry3DObject);
-            if(sAMGeometry3DObject_Temp == null)
+            if (sAMGeometry3DObject_Temp == null)
             {
                 return;
             }
@@ -91,20 +91,20 @@ namespace SAM.Geometry.Spatial
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Geometry3DObjects"))
+            if (jObject.ContainsKey("Geometry3DObjects"))
             {
                 sAMGeometry3DObjects = new List<ISAMGeometry3DObject>();
 
                 JArray jArray = jObject.Value<JArray>("Geometry3DObjects");
-                foreach(JObject jObject_GeometryObject in jArray)
+                foreach (JObject jObject_GeometryObject in jArray)
                 {
                     ISAMGeometry3DObject sAMGeometryObject = Core.Query.IJSAMObject(jObject_GeometryObject) as ISAMGeometry3DObject;
-                    if(sAMGeometryObject != null)
+                    if (sAMGeometryObject != null)
                     {
                         sAMGeometry3DObjects.Add(sAMGeometryObject);
                     }
@@ -124,12 +124,12 @@ namespace SAM.Geometry.Spatial
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(sAMGeometry3DObjects != null)
+            if (sAMGeometry3DObjects != null)
             {
                 JArray jArray = new JArray();
-                foreach(ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
+                foreach (ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
                 {
-                    if(sAMGeometry3DObject == null)
+                    if (sAMGeometry3DObject == null)
                     {
                         continue;
                     }
