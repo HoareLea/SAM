@@ -31,9 +31,23 @@ namespace SAM.Geometry
             if (geometries.Count() == 0)
                 return result;
 
+            List<NetTopologySuite.Geometries.Geometry> geometries_Temp = new List<NetTopologySuite.Geometries.Geometry>();
+            foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+            {
+                if(geometry_Temp == null || !geometry_Temp.IsValid)
+                {
+                    continue;
+                }
+
+                geometries_Temp.Add(geometry_Temp);
+            }
+
+            if (geometries_Temp.Count() == 0)
+                return result;
+
             GeometryNoder geometryNoder = new GeometryNoder(new PrecisionModel(1 / tolerance));
 
-            List<LineString> lineStrings = geometryNoder.Node(geometries).ToList();
+            List<LineString> lineStrings = geometryNoder.Node(geometries_Temp).ToList();
             if (lineStrings == null || lineStrings.Count == 0)
                 return result;
 
@@ -54,8 +68,8 @@ namespace SAM.Geometry
 
             if (geometries_Result.Count() == 0)
             {
-                result.AddRange(geometries.ToList().FindAll(x => x is Polygon).Cast<Polygon>());
-                result.AddRange(geometries.ToList().FindAll(x => x is LinearRing).ConvertAll(x => new Polygon((LinearRing)x)));
+                result.AddRange(geometries_Temp.FindAll(x => x is Polygon).Cast<Polygon>());
+                result.AddRange(geometries_Temp.FindAll(x => x is LinearRing).ConvertAll(x => new Polygon((LinearRing)x)));
                 return result;
             }
 
