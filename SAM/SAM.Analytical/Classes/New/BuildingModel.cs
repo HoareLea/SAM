@@ -2340,13 +2340,30 @@ namespace SAM.Analytical
 
         public BoundingBox3D GetBoundingBox3D()
         {
-            List<IBoundable3DObject> boundable3DObjects = relationCluster?.GetObjects<IBoundable3DObject>();
-            if(boundable3DObjects == null || boundable3DObjects.Count == 0)
+            List<ISAMGeometry3DObject> sAMGeometry3DObjects = relationCluster?.GetObjects<ISAMGeometry3DObject>();
+            if(sAMGeometry3DObjects == null || sAMGeometry3DObjects.Count == 0)
             {
                 return null;
             }
 
-            return new BoundingBox3D(boundable3DObjects.ConvertAll(x => x.GetBoundingBox()).FindAll(x => x != null));
+            List<BoundingBox3D> boundingBox3Ds = new List<BoundingBox3D>();
+            foreach (ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
+            {
+                IBoundable3D boundable3D = sAMGeometry3DObject.SAMGeometry3D<IBoundable3D>();
+                if(boundable3D == null)
+                {
+                    continue;
+                }
+
+                boundingBox3Ds.Add(boundable3D.GetBoundingBox());
+            }
+
+            if(boundingBox3Ds == null || boundingBox3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return new BoundingBox3D(boundingBox3Ds);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -2410,22 +2427,33 @@ namespace SAM.Analytical
 
         public void Transform(Transform3D transform3D)
         {
-            List<ISAMGeometry3DObject> sAMGeometry3DObjects = relationCluster?.GetObjects<ISAMGeometry3DObject>();
-            if(sAMGeometry3DObjects == null || sAMGeometry3DObjects.Count == 0)
+            List<IBuildingElement> buildingElements = relationCluster?.GetObjects<IBuildingElement>();
+            if(buildingElements != null && buildingElements.Count != 0)
             {
-                return;
-            }
-
-            foreach(ISAMGeometry3DObject sAMGeometry3DObject in sAMGeometry3DObjects)
-            {
-                if(sAMGeometry3DObject == null)
+                foreach (IBuildingElement buildingElement in buildingElements)
                 {
-                    continue;
-                }
+                    if (buildingElement == null)
+                    {
+                        continue;
+                    }
 
-                sAMGeometry3DObject.Transform(transform3D);
+                    buildingElement.Transform(transform3D);
+                }
             }
-            
+
+            List<Space> spaces = relationCluster?.GetObjects<Space>();
+            if (spaces != null && spaces.Count != 0)
+            {
+                foreach (Space space in spaces)
+                {
+                    if (space == null)
+                    {
+                        continue;
+                    }
+
+                    space.Transform(transform3D);
+                }
+            }
         }
     }
 }

@@ -112,6 +112,7 @@
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
     <Compile Include="Enums\Parameter\CoreSettingParameter.cs" />
+    <Compile Include="Interfaces\Base\ITaggable.cs" />
     <Compile Include="Interfaces\Base\IParameterData.cs" />
     <Compile Include="Interfaces\Base\ISAMType.cs" />
     <Compile Include="Interfaces\Base\ISAMInstance.cs" />

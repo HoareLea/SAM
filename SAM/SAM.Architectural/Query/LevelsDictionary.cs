@@ -25,7 +25,7 @@ namespace SAM.Architectural
                     continue;
                 }
 
-                double elevation = face3Dobject.GetBoundingBox().Min.Z;
+                double elevation = face3Dobject.Face3D.GetBoundingBox().Min.Z;
                 if (double.IsNaN(elevation))
                 {
                     continue;

@@ -70,7 +70,7 @@ namespace SAM.Analytical
                 }
 
                 IPartition partition = keyValuePair.Key;
-                BoundingBox3D boundingBox3D = partition.GetBoundingBox();
+                BoundingBox3D boundingBox3D = partition?.Face3D?.GetBoundingBox();
                 Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
 
                 foreach (Segment2D segment2D  in segment2Ds_Split)

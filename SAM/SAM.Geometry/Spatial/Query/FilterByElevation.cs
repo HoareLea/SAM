@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
             List<T> result = new List<T>();
             foreach(T face3DObject in face3DObjects)
             {
-                BoundingBox3D boundingBox3D = face3DObject?.GetBoundingBox();
+                BoundingBox3D boundingBox3D = face3DObject?.Face3D.GetBoundingBox();
                 if(boundingBox3D == null)
                 {
                     continue;

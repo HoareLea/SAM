@@ -5,6 +5,5 @@ namespace SAM.Analytical
 {
     public interface IOpening : IAnalyticalObject, IParameterizedSAMObject, IFace3DObject, IBuildingElement, ISAMObject
     {
-
     }
 }

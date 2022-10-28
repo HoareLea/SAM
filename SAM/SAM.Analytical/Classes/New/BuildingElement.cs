@@ -65,7 +65,7 @@ namespace SAM.Analytical
 
         public virtual void Transform(Transform3D transform3D)
         {
-            face3D = face3D?.Transform(transform3D);
+            face3D = Geometry.Spatial.Query.Transform(face3D, transform3D);
         }
 
         public virtual void Move(Vector3D vector3D)

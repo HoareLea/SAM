@@ -78,7 +78,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds = new List<Point3D>();
             foreach (T face3DObject in face3DObjects)
             {
-                BoundingBox3D boundingBox3D_Face3DObject = face3DObject.GetBoundingBox();
+                BoundingBox3D boundingBox3D_Face3DObject = face3DObject?.Face3D.GetBoundingBox();
                 if(!boundingBox3D.InRange(boundingBox3D_Face3DObject, tolerance))
                 {
                     continue;

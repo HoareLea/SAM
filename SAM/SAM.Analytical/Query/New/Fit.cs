@@ -123,18 +123,18 @@ namespace SAM.Analytical
                 return null;
             }
 
-            BoundingBox3D boundingBox3D = opening.GetBoundingBox();
+            BoundingBox3D boundingBox3D = opening?.Face3D?.GetBoundingBox();
 
             List<IOpening> openings = new List<IOpening>();
             foreach (IPartition partition in partitions)
             {
-                if (!boundingBox3D.InRange(partition?.GetBoundingBox(), maxDistance))
+                Face3D face3D = partition?.Face3D;
+                if (face3D == null)
                 {
                     continue;
                 }
 
-                Face3D face3D = partition?.Face3D;
-                if (face3D == null)
+                if (!boundingBox3D.InRange(face3D.GetBoundingBox(), maxDistance))
                 {
                     continue;
                 }
