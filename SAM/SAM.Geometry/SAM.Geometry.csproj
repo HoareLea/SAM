@@ -51,7 +51,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
-    <Compile Include="Classes\GeometryObjectCollection.cs" />
+    <Compile Include="Classes\SAMGeometryObjectCollection.cs" />
     <Compile Include="Classes\GeometryObjectModel.cs" />
     <Compile Include="Convert\ToNTS\Point.cs" />
     <Compile Include="Convert\ToNTS\Geometry.cs" />
@@ -87,6 +87,7 @@
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\Polygon3DObject.cs" />
+    <Compile Include="Spatial\Classes\GeometryObject\SAMGeometry3DObjectCollection.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\Segment3DObject.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\Face3DObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IPolygon3DObject.cs" />

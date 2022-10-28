@@ -6,16 +6,16 @@ namespace SAM.Geometry
 {
     public class GeometryObjectModel : Core.SAMModel
     {
-        private GeometryObjectCollection geometryObjectCollection;
+        private SAMGeometryObjectCollection sAMGeometryObjectCollection;
 
         public GeometryObjectModel(GeometryObjectModel geometryObjectModel)
         {
-            if(geometryObjectModel?.geometryObjectCollection != null)
+            if(geometryObjectModel?.sAMGeometryObjectCollection != null)
             {
-                geometryObjectCollection = new GeometryObjectCollection();
-                foreach(ISAMGeometryObject sAMGeometryObject in geometryObjectModel.geometryObjectCollection)
+                sAMGeometryObjectCollection = new SAMGeometryObjectCollection();
+                foreach(ISAMGeometryObject sAMGeometryObject in geometryObjectModel.sAMGeometryObjectCollection)
                 {
-                    geometryObjectCollection.Add(sAMGeometryObject);
+                    sAMGeometryObjectCollection.Add(sAMGeometryObject);
                 }
             }
         }
@@ -37,19 +37,19 @@ namespace SAM.Geometry
                 return false;
             }
 
-            geometryObjectCollection.Add(sAMGeometryObject);
+            sAMGeometryObjectCollection.Add(sAMGeometryObject);
             return true;
         }
 
         public List<T> GetSAMGeometryObjects<T>(Func<T, bool> func = null) where T : ISAMGeometryObject
         {
-            if(geometryObjectCollection == null)
+            if(sAMGeometryObjectCollection == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach (ISAMGeometryObject sAMGeometryObject in geometryObjectCollection)
+            foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
             {
                 if(!(sAMGeometryObject is T))
                 {
@@ -80,11 +80,11 @@ namespace SAM.Geometry
                 result = new JObject();
             }
 
-            if(geometryObjectCollection != null)
+            if(sAMGeometryObjectCollection != null)
             {
                 JArray jArray = new JArray();
 
-                foreach (ISAMGeometryObject sAMGeometryObject in geometryObjectCollection)
+                foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
                 {
                     if(sAMGeometryObject == null)
                     {
@@ -110,13 +110,13 @@ namespace SAM.Geometry
             {
                 JArray jArray = jObject.Value<JArray>("GeometryObjects");
 
-                geometryObjectCollection = new GeometryObjectCollection();
+                sAMGeometryObjectCollection = new SAMGeometryObjectCollection();
                 foreach (JObject jObject_GeometryObject in jArray)
                 {
                     ISAMGeometryObject sAMGeometryObject = Core.Create.IJSAMObject<ISAMGeometryObject>(jObject_GeometryObject);
                     if(sAMGeometryObject != null)
                     {
-                        geometryObjectCollection.Add(sAMGeometryObject);
+                        sAMGeometryObjectCollection.Add(sAMGeometryObject);
                     }
                 }
             }

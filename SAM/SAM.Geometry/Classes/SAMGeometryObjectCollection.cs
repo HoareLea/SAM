@@ -4,25 +4,25 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry
 {
-    public class GeometryObjectCollection : IEnumerable<ISAMGeometryObject>, ISAMGeometryObject
+    public class SAMGeometryObjectCollection : IEnumerable<ISAMGeometryObject>, ISAMGeometryObject
     {
         private List<ISAMGeometryObject> sAMGeometryObjects;
 
-        public GeometryObjectCollection()
+        public SAMGeometryObjectCollection()
         {
             sAMGeometryObjects = new List<ISAMGeometryObject>();
         }
 
-        public GeometryObjectCollection(JObject jObject)
+        public SAMGeometryObjectCollection(JObject jObject)
         {
             FromJObject(jObject);
         }
 
-        public GeometryObjectCollection(GeometryObjectCollection geometryObjectCollection)
+        public SAMGeometryObjectCollection(SAMGeometryObjectCollection sAMGeometryObjectCollection)
         {
-            if (geometryObjectCollection != null)
+            if (sAMGeometryObjectCollection != null)
             {
-                List<ISAMGeometryObject> sAMGeometryObjects_Temp = geometryObjectCollection.sAMGeometryObjects;
+                List<ISAMGeometryObject> sAMGeometryObjects_Temp = sAMGeometryObjectCollection.sAMGeometryObjects;
                 if(sAMGeometryObjects_Temp != null)
                 {
                     sAMGeometryObjects = new List<ISAMGeometryObject>();
@@ -38,25 +38,48 @@ namespace SAM.Geometry
             }
         }
 
-        public GeometryObjectCollection(IEnumerable<ISAMGeometryObject> sAMGeometryObjects)
+        public SAMGeometryObjectCollection(IEnumerable<ISAMGeometryObject> sAMGeometryObjects)
         {
             if (sAMGeometryObjects != null)
             {
-                sAMGeometryObjects = new List<ISAMGeometryObject>(sAMGeometryObjects);
+                this.sAMGeometryObjects = new List<ISAMGeometryObject>();
+                foreach(ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects)
+                {
+                    ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
+                    if(sAMGeometryObject_Temp != null)
+                    {
+                        this.sAMGeometryObjects.Add(sAMGeometryObject_Temp);
+                    }
+                }
             }
         }
 
-        public GeometryObjectCollection(ISAMGeometryObject sAMGeometryObject)
+        public SAMGeometryObjectCollection(ISAMGeometryObject sAMGeometryObject)
         {
-            sAMGeometryObjects = new List<ISAMGeometryObject>() { sAMGeometryObject };
+            ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
+            if(sAMGeometryObject_Temp != null)
+            {
+                sAMGeometryObjects = new List<ISAMGeometryObject>() { sAMGeometryObject_Temp };
+            }
         }
 
         public void Add(ISAMGeometryObject sAMGeometryObject)
         {
-            sAMGeometryObjects.Add(sAMGeometryObject);
+            ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
+            if (sAMGeometryObject_Temp == null)
+            {
+                return;
+            }
+
+            if(sAMGeometryObjects == null)
+            {
+                sAMGeometryObjects = new List<ISAMGeometryObject>();
+            }
+
+            sAMGeometryObjects.Add(sAMGeometryObject_Temp);
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public bool FromJObject(JObject jObject)
         {
             if(jObject == null)
             {
@@ -86,7 +109,7 @@ namespace SAM.Geometry
             return sAMGeometryObjects?.GetEnumerator();
         }
 
-        public virtual JObject ToJObject()
+        public JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
