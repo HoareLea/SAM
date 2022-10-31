@@ -182,5 +182,26 @@ namespace SAM.Geometry.Spatial
 
             return new Mesh3D(trinagle3Ds);
         }
+
+        public static Mesh3D Mesh3D(this Circle3D circle3D, double factor, int minDensity = 2, int maxDensity = 10)
+        {
+            int denisty = System.Convert.ToInt32(System.Math.Ceiling(circle3D.Radious / factor));
+            if (denisty < minDensity)
+            {
+                denisty = minDensity;
+            }
+            else if (denisty > maxDensity)
+            {
+                denisty = maxDensity;
+            }
+
+            List<Triangle3D> trinagle3Ds = circle3D.Triangulate(denisty);
+            if (trinagle3Ds == null)
+            {
+                return null;
+            }
+
+            return new Mesh3D(trinagle3Ds);
+        }
     }
 }
