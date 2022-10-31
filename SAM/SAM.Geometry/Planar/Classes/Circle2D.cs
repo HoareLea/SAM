@@ -96,6 +96,27 @@ namespace SAM.Geometry.Planar
             return 2 * System.Math.PI * radious;
         }
 
+        /// <summary>
+        /// Gets point on Circle for given angle
+        /// </summary>
+        /// <param name="angle">Angle in radians</param>
+        /// <returns>Point2D on circle</returns>
+        public Point2D GetPoint2D(double angle)
+        {
+            if(double.IsNaN(angle) || double.IsNaN(radious))
+            {
+                return null;
+            }
+
+            Vector2D vector2D = Query.Vector2D(angle);
+            if(vector2D == null)
+            {
+                return null;
+            }
+
+            return center.GetMoved(vector2D * radious);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Circle2D(this);

@@ -96,6 +96,28 @@ namespace SAM.Geometry.Spatial
             return new Plane(plane);
         }
 
+        /// <summary>
+        /// Gets Point3D on circle for given angle
+        /// </summary>
+        /// <param name="angle">Angle in radians</param>
+        /// <returns>Point on Circle</returns>
+        public Point3D GetPoint3D(double angle)
+        {
+            if(plane == null || double.IsNaN(radious))
+            {
+                return null;
+            }
+
+            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(plane.Origin), radious);
+            Planar.Point2D point2D = circle2D.GetPoint2D(angle);
+            if(point2D == null)
+            {
+                return null;
+            }
+
+            return plane.Convert(point2D);
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Circle3D((Plane)plane.Clone(), radious);

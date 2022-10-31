@@ -186,6 +186,43 @@ namespace SAM.Geometry.Planar
             return new List<Triangle2D>() { new Triangle2D(triangle2D) };
         }
 
+        public static List<Triangle2D> Triangulate(this Circle2D circle2D, int density)
+        {
+            if(circle2D == null)
+            {
+                return null;
+            }
+
+            double factor = System.Math.PI / density;
+
+            List<Point2D> point2Ds = new List<Point2D>();
+            for (int i = 0; i <= density; i++)
+            {
+                double value = i * factor;
+
+                Point2D point2D = circle2D.GetPoint2D(value);
+                if(point2D == null)
+                {
+                    continue;
+                }
+
+                point2Ds.Add(point2D);
+            }
+
+            if(point2Ds == null || point2Ds.Count < 2)
+            {
+                return null;
+            }
+
+            List<Triangle2D> result = new List<Triangle2D>();
+            for (int i=0; i < point2Ds.Count - 1; i++)
+            {
+                result.Add(new Triangle2D(circle2D.Center, point2Ds[i], point2Ds[i + 1]));
+            }
+
+            return result;
+        }
+
         public static List<Triangle2D> Triangulate<T>(this T geometry2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance) where T : ISegmentable2D, IClosed2D
         {
             if (geometry2D == null)

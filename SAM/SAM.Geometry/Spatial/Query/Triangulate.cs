@@ -222,5 +222,28 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Triangle3D> Triangulate(this Circle3D circle3D, int density)
+        {
+            if(circle3D == null || density < 1)
+            {
+                return null;
+            }
+
+            Plane plane = circle3D.GetPlane();
+            if (plane == null)
+            {
+                return null;
+            }
+
+            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(circle3D.Center), circle3D.Radious);
+            List<Planar.Triangle2D> triangle2Ds = Planar.Query.Triangulate(circle2D, density);
+            if(triangle2Ds == null || triangle2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return triangle2Ds.ConvertAll(x => plane.Convert(x));
+        }
     }
 }

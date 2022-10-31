@@ -18,8 +18,8 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            Vector2D vector2D_X = Vector2D.WorldX;
-            Vector2D vector2D_Y = Vector2D.WorldY;
+            Vector2D vector2D_X = Planar.Vector2D.WorldX;
+            Vector2D vector2D_Y = Planar.Vector2D.WorldY;
 
             Vector2D vector2D_X_Negated = vector2D_X.GetNegated();
             Vector2D vector2D_Y_Negated = vector2D_Y.GetNegated();
