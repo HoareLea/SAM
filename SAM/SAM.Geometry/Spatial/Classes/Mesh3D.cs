@@ -332,6 +332,17 @@ namespace SAM.Geometry.Spatial
             return new Tuple<int, int, int>(index_1, index_2, index_3);
         }
 
+        public Vector3D GetNormal(int index)
+        {
+            Tuple<int, int, int> triangleIndexes = GetTriangleIndexes(index);
+            if(triangleIndexes == null)
+            {
+                return null;
+            }
+
+            return Query.Normal(points[triangleIndexes.Item1], points[triangleIndexes.Item2], points[triangleIndexes.Item3]);
+        }
+
         public List<int> GetTriangleIndexes(int index_1, int index_2, int maxCount = int.MaxValue)
         {
             if(points == null || points.Count < 3 || indexes == null || indexes.Count == 0)

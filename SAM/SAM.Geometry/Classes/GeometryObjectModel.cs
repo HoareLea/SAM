@@ -37,6 +37,11 @@ namespace SAM.Geometry
                 return false;
             }
 
+            if(sAMGeometryObjectCollection == null)
+            {
+                sAMGeometryObjectCollection = new SAMGeometryObjectCollection();
+            }
+
             sAMGeometryObjectCollection.Add(sAMGeometryObject);
             return true;
         }
