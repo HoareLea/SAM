@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -35,6 +36,23 @@ namespace SAM.Core
             return log.Add(format, logRecordType, values);
         }
 
+
+        public static bool Add(this JObject jObject, Tag tag)
+        {
+            if(jObject == null || tag == null)
+            {
+                return false;
+            }
+
+            JObject jObject_Tag = tag.ToJObject();
+            if(jObject_Tag == null)
+            {
+                return false;
+            }
+
+            jObject.Add("Tag", jObject_Tag);
+            return true;
+        }
 
     }
 }

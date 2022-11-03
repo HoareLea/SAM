@@ -2,6 +2,6 @@
 {
     public interface ITaggable
     {
-        object Tag { get; set; }
+        Tag Tag { get; set; }
     }
 }

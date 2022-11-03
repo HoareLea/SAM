@@ -65,6 +65,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\Tag.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
     <Compile Include="Classes\Message\Message.cs" />
@@ -105,6 +106,7 @@
     <Compile Include="Enums\Operator\IncrementAndDecrementOperator.cs" />
     <Compile Include="Enums\Operator\RelationalOperator.cs" />
     <Compile Include="Enums\Operator\LogicalOperator.cs" />
+    <Compile Include="Enums\ValueType.cs" />
     <Compile Include="Enums\Parameter\LocationParameter.cs" />
     <Compile Include="Enums\Parameter\MaterialParameter.cs" />
     <Compile Include="Enums\UTC.cs" />
@@ -203,6 +205,7 @@
     <Compile Include="Query\Max.cs" />
     <Compile Include="Query\Count.cs" />
     <Compile Include="Query\TemplatesDirectory.cs" />
+    <Compile Include="Query\Tag.cs" />
     <Compile Include="Query\UserSAMTemporaryDirectory.cs" />
     <Compile Include="Query\UserSAMDirectory.cs" />
     <Compile Include="Query\UserDocumentsDirectory.cs" />
@@ -267,6 +270,7 @@
     <Compile Include="Query\ValidTypes.cs" />
     <Compile Include="Query\AssociatedTypesDictionary.cs" />
     <Compile Include="Query\UniqueTypes.cs" />
+    <Compile Include="Query\ValueType.cs" />
     <Compile Include="Query\WriteAccess.cs" />
     <Compile Include="Query\ReadAccess.cs" />
     <Compile Include="Query\ResourcesDirectory.cs" />
