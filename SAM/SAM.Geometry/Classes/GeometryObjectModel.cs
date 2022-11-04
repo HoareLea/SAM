@@ -9,6 +9,7 @@ namespace SAM.Geometry
         private SAMGeometryObjectCollection sAMGeometryObjectCollection;
 
         public GeometryObjectModel(GeometryObjectModel geometryObjectModel)
+            :base(geometryObjectModel)
         {
             if(geometryObjectModel?.sAMGeometryObjectCollection != null)
             {
@@ -21,11 +22,13 @@ namespace SAM.Geometry
         }
 
         public GeometryObjectModel(JObject jObject)
+            :base(jObject)
         {
-            FromJObject(jObject);
+
         }
 
         public GeometryObjectModel()
+            :base()
         {
 
         }
