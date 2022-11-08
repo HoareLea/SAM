@@ -6,54 +6,68 @@ namespace SAM.Analytical
     /// <summary>
     /// Opening Properties
     /// </summary>
-    public class OpeningProperties : IJSAMObject
+    public class OpeningProperties : ParameterizedSAMObject, IOpeningProperties
     {
-        public double OpenableArea { get; set; }
+        private double dischargeCoefficient { get; set; }
 
         public OpeningProperties()
         {
 
         }
 
-        public OpeningProperties(JObject jObject)
+        public OpeningProperties(double dischargeCoefficient)
         {
-            FromJObject(jObject);
+            this.dischargeCoefficient = dischargeCoefficient;
+        }
+
+        public OpeningProperties(JObject jObject)
+            :base(jObject)
+        {
         }
 
         public OpeningProperties(OpeningProperties openingProperties)
+            : base(openingProperties)
         {
             if(openingProperties != null)
             {
-                OpenableArea = openingProperties.OpenableArea;
+                dischargeCoefficient = openingProperties.dischargeCoefficient;
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if(!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("OpenableArea"))
+            if(jObject.ContainsKey("DischargeCoefficient"))
             {
-                OpenableArea = jObject.Value<double>("OpenableArea");
+                dischargeCoefficient = jObject.Value<double>("DischargeCoefficient");
             }
 
             return true;
         }
 
-        public JObject ToJObject()
+        public override JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
-
-            if(!double.IsNaN(OpenableArea))
+            JObject jObject = base.ToJObject();
+            if(jObject == null)
             {
-                jObject.Add("OpenableArea", OpenableArea);
+                return null;
+            }
+
+            if(!double.IsNaN(dischargeCoefficient))
+            {
+                jObject.Add("DischargeCoefficient", dischargeCoefficient);
             }
 
             return jObject;
+        }
+
+        public double GetDischargeCoefficient()
+        {
+            return dischargeCoefficient;
         }
     }
 }

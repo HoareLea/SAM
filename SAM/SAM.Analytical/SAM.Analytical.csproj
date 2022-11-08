@@ -47,6 +47,7 @@
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
     <Compile Include="Classes\New\Opening.cs" />
+    <Compile Include="Classes\PartLOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties.cs" />
     <Compile Include="Classes\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
@@ -168,6 +169,7 @@
     <Compile Include="Enums\Parameter\New\PartitionSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\ApertureParameter.cs" />
     <Compile Include="Enums\Parameter\PanelSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\OpeningPropertiesParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\BoundaryType.cs" />
@@ -208,6 +210,7 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
+    <Compile Include="Interfaces\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />
     <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
     <Compile Include="Interfaces\New\IHostPartition.cs" />
