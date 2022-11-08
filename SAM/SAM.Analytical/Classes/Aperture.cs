@@ -284,12 +284,86 @@ namespace SAM.Analytical
 
         public double GetWidth()
         {
-            return Query.Width(planarBoundary3D);
+            return GetWidth(AperturePart.Frame);
+        }
+
+        public double GetWidth(AperturePart aperturePart)
+        {
+            if(aperturePart == AperturePart.Undefined)
+            {
+                return double.NaN;
+            }
+
+            switch(aperturePart)
+            {
+                case AperturePart.Frame:
+                    return Query.Width(planarBoundary3D);
+
+                case AperturePart.Pane:
+                    List<Face3D> face3Ds = GetFace3Ds(aperturePart);
+                    if(face3Ds == null || face3Ds.Count == 0)
+                    {
+                        return double.NaN;
+                    }
+
+                    double result = 0;
+                    foreach(Face3D face3D in face3Ds)
+                    {
+                        PlanarBoundary3D planarBoundary3D_Temp = new PlanarBoundary3D(face3D);
+                        result += Query.Width(planarBoundary3D_Temp);
+                    }
+                    
+                    if(result == 0)
+                    {
+                        return double.NaN;
+                    }
+
+                    return result;
+            }
+
+            return double.NaN;
+        }
+
+        public double GetHeight(AperturePart aperturePart)
+        {
+            if (aperturePart == AperturePart.Undefined)
+            {
+                return double.NaN;
+            }
+
+            switch (aperturePart)
+            {
+                case AperturePart.Frame:
+                    return Query.Height(planarBoundary3D);
+
+                case AperturePart.Pane:
+                    List<Face3D> face3Ds = GetFace3Ds(aperturePart);
+                    if (face3Ds == null || face3Ds.Count == 0)
+                    {
+                        return double.NaN;
+                    }
+
+                    double result = 0;
+                    foreach (Face3D face3D in face3Ds)
+                    {
+                        PlanarBoundary3D planarBoundary3D_Temp = new PlanarBoundary3D(face3D);
+                        result += Query.Height(planarBoundary3D_Temp);
+                    }
+
+                    if (result == 0)
+                    {
+                        return double.NaN;
+                    }
+
+                    return result;
+            }
+
+            return double.NaN;
         }
 
         public double GetHeight()
         {
-            return Query.Height(planarBoundary3D);
+            return GetHeight(AperturePart.Frame);
         }
 
         public void Move(Vector3D vector3D)

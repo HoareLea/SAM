@@ -16,5 +16,6 @@ namespace SAM.Analytical
         [ParameterProperties("Pilkington Shading Short Wavelength Coefficient", "Pilkington Shading Short Wavelength Coefficient"), DoubleParameterValue(0, 1)] PilkingtonShadingShortWavelengthCoefficient,
         [ParameterProperties("Pilkington Shading Long Wavelength Coefficient", "Pilkington Shading Long Wavelength Coefficient"), DoubleParameterValue(0, 1)] PilkingtonShadingLongWavelengthCoefficient,
         [ParameterProperties("Opening Properties", "Opening Properties"), SAMObjectParameterValue(typeof(IOpeningProperties))] OpeningProperties,
+        [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
     }
 }
