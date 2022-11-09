@@ -5,12 +5,12 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static Planar.ISAMGeometry2D Convert(this Plane plane, IBoundable3D geometry)
+        public static Planar.ISAMGeometry2D Convert(this Plane plane, IBoundable3D boundable3D)
         {
-            if (plane == null || geometry == null)
+            if (plane == null || boundable3D == null)
                 return null;
 
-            return Convert(plane, geometry as dynamic);
+            return Convert(plane, boundable3D as dynamic);
         }
 
         public static Planar.Polycurve2D Convert(this Plane plane, Polycurve3D polycurve3D)
@@ -39,12 +39,12 @@ namespace SAM.Geometry.Spatial
             throw new NotImplementedException();
         }
 
-        public static ISAMGeometry3D Convert(this Plane plane, Planar.ISAMGeometry2D geometry)
+        public static ISAMGeometry3D Convert(this Plane plane, Planar.ISAMGeometry2D sAMGeometry2D)
         {
-            if (plane == null || geometry == null)
+            if (plane == null || sAMGeometry2D == null)
                 return null;
 
-            return Convert(plane, geometry as dynamic);
+            return Convert(plane, sAMGeometry2D as dynamic);
         }
 
         public static PolycurveLoop3D Convert(this Plane plane, Planar.PolycurveLoop2D polycurveLoop2D)
