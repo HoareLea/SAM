@@ -48,7 +48,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dischargeCoefficients", NickName = "_dischargeCoefficients", Description = "Discharge Coefficients", Access = GH_ParamAccess.list};
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dischargeCoefficients", NickName = "_dischargeCoefficients", Description = "Discharge Coefficients\nDefault discharge coefficient of 0.62, which is usually appropriate for a sharp edged orifice such as a rectangular window.\nDischarge coefficients account for the ‘friction’ of an opening; the lower the discharge coefficient, the more the aperture resists the flow.", Access = GH_ParamAccess.list};
+                number.SetPersistentData(0.62);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "descriptions_", NickName = "descriptions_", Description = "Descriptions", Access = GH_ParamAccess.list, Optional = true };
@@ -57,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Colour colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "colours_", NickName = "colours_", Description = "Colours", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(colour, ParamVisibility.Voluntary));
 
-                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions", Access = GH_ParamAccess.list, Optional = true };
+                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions \nexample This function in define for the Approved Document O\nzdwon,0,19.00,21.00,99.00", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -200,6 +201,7 @@ namespace SAM.Analytical.Grasshopper
                     {
                         adjacencyCluster.AddObject(panel);
                         apertures_Result.Add(aperture_Temp);
+                        dischargeCoefficients_Result.Add(openingProperties.GetDischargeCoefficient());
                     }
                 }
             }
