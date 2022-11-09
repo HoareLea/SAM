@@ -6,38 +6,38 @@ namespace SAM.Analytical
     /// <summary>
     /// Opening Properties
     /// </summary>
-    public class PartLOpeningProperties : ParameterizedSAMObject, IOpeningProperties
+    public class PartOOpeningProperties : ParameterizedSAMObject, IOpeningProperties
     {
         private double width;
         private double height;
         private double openingAngle;
 
-        public PartLOpeningProperties()
+        public PartOOpeningProperties()
         {
 
         }
 
-        public PartLOpeningProperties(double width, double height, double openingAngle)
+        public PartOOpeningProperties(double width, double height, double openingAngle)
         {
             this.width = width;
             this.height = height;
             this.openingAngle = openingAngle;
         }
 
-        public PartLOpeningProperties(JObject jObject)
+        public PartOOpeningProperties(JObject jObject)
             :base(jObject)
         {
 
         }
 
-        public PartLOpeningProperties(PartLOpeningProperties partLOpeningProperties)
-            : base(partLOpeningProperties)
+        public PartOOpeningProperties(PartOOpeningProperties partOOpeningProperties)
+            : base(partOOpeningProperties)
         {
-            if(partLOpeningProperties != null)
+            if(partOOpeningProperties != null)
             {
-                width = partLOpeningProperties.width;
-                height = partLOpeningProperties.height;
-                openingAngle = partLOpeningProperties.openingAngle;
+                width = partOOpeningProperties.width;
+                height = partOOpeningProperties.height;
+                openingAngle = partOOpeningProperties.openingAngle;
             }
         }
 

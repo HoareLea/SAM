@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddOpeningPropertiesByPartL : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalAddOpeningPropertiesByPartO : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,8 +30,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddOpeningPropertiesByPartL()
-          : base("SAMAnalytical.AddOpeningPropertiesByPartL", "SAMAnalytical.AddOpeningPropertiesByPartL",
+        public SAMAnalyticalAddOpeningPropertiesByPartO()
+          : base("SAMAnalytical.AddOpeningPropertiesByPartO", "SAMAnalytical.AddOpeningPropertiesByPartO",
               "Add Opening Properties to given apertures",
               "SAM WIP", "Analytical")
         {
@@ -175,18 +175,18 @@ namespace SAM.Analytical.Grasshopper
                     double width = aperture_Temp.GetWidth(AperturePart.Pane);
                     double height = aperture_Temp.GetHeight(AperturePart.Pane);
 
-                    PartLOpeningProperties partLOpeningProperties = new PartLOpeningProperties(width, height, openingAngle);
+                    PartOOpeningProperties partOOpeningProperties = new PartOOpeningProperties(width, height, openingAngle);
 
                     if(descriptions != null && descriptions.Count != 0)
                     {
                         string description = descriptions.Count > i ? descriptions[i] : descriptions.Last();
-                        partLOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
+                        partOOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
                     }
 
                     if (functions != null && functions.Count != 0)
                     {
                         string function = functions.Count > i ? functions[i] : functions.Last();
-                        partLOpeningProperties.SetValue(OpeningPropertiesParameter.Function, function);
+                        partOOpeningProperties.SetValue(OpeningPropertiesParameter.Function, function);
                     }
 
                     if (colors != null && colors.Count != 0)
@@ -195,7 +195,7 @@ namespace SAM.Analytical.Grasshopper
                         aperture_Temp.SetValue(ApertureParameter.Color, color);
                     }
 
-                    aperture_Temp.SetValue(ApertureParameter.OpeningProperties, partLOpeningProperties);
+                    aperture_Temp.SetValue(ApertureParameter.OpeningProperties, partOOpeningProperties);
 
                     panel.RemoveAperture(aperture.Guid);
                     if(panel.AddAperture(aperture_Temp))
