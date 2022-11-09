@@ -202,7 +202,7 @@ namespace SAM.Analytical.Grasshopper
                     {
                         adjacencyCluster.AddObject(panel);
                         apertures_Result.Add(aperture_Temp);
-                        dischargeCoefficients_Result.Add(partLOpeningProperties.GetDischargeCoefficient());
+                        dischargeCoefficients_Result.Add(partOOpeningProperties.GetDischargeCoefficient());
                     }
                 }
             }
