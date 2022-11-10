@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,6 +48,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooGroupParam() { Name = "_zones_", NickName = "_zones_", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
+
+                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_airPanelOnly_", NickName = "airPanelOnly", Description = "If TRUE only AirPanels between spaces will be removes\nIf FALSE all internal Panles between spaces will be removed", Access = GH_ParamAccess.item };
+                paramBoolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
                 paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "run_", NickName = "run_", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
                 paramBoolean.SetPersistentData(false);
@@ -107,6 +111,26 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, zones);
             }
 
+            index = Params.IndexOfInputParam("_airPanelOnly_");
+            bool airOnly = true;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref airOnly);
+            }
+
+            List<PanelType> panelTypes = new List<PanelType>();
+            if(airOnly)
+            {
+                panelTypes.Add(PanelType.Air);
+            }
+            else
+            {
+                foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+                {
+                    panelTypes.Add(panelType);
+                }
+            }
+
             if (zones == null || zones.Count == 0)
             {
                 zones = adjacencyCluster.GetObjects<Zone>();
@@ -126,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
                     List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone);
                     if(spaces != null && spaces.Count > 1)
                     {
-                        List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
+                        List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, panelTypes, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
                         if(spaces_Merge != null)
                         {
                             foreach(Space space_Merge in spaces_Merge)

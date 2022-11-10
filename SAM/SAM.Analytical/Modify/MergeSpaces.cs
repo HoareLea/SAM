@@ -7,7 +7,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, List<Guid> spaceGuids, out List<Panel> panels, IEnumerable<Guid> panelGuids = null)
+        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, List<Guid> spaceGuids, out List<Panel> panels, IEnumerable<PanelType> panelTypes, IEnumerable<Guid> panelGuids = null)
         {
             panels = null;
             if (adjacencyCluster == null || spaceGuids == null)
@@ -64,7 +64,7 @@ namespace SAM.Analytical
 
                     panels.AddRange(panels_Temp);
 
-                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panels_Temp.ConvertAll(x => x.Guid));
+                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panelTypes, panels_Temp.ConvertAll(x => x.Guid));
                     if (space_New != null)
                     {
                         guids.Add(space_New.Guid);
@@ -76,7 +76,7 @@ namespace SAM.Analytical
             return guids.ToList().ConvertAll(x => adjacencyCluster.GetObject<Space>(x)).FindAll(x => x != null);
         }
 
-        public static Space MergeSpaces(this AdjacencyCluster adjacencyCluster, Guid spaceGuid_1, Guid spaceGuid_2, IEnumerable<Guid> panelGuids = null, string nameSeparator = "_")
+        public static Space MergeSpaces(this AdjacencyCluster adjacencyCluster, Guid spaceGuid_1, Guid spaceGuid_2, IEnumerable<PanelType> panelTypes, IEnumerable<Guid> panelGuids = null, string nameSeparator = "_")
         {
             if (adjacencyCluster == null)
             {
@@ -148,7 +148,7 @@ namespace SAM.Analytical
                 for (int i = panels_Adjacent.Count - 1; i >= 0; i--)
                 {
                     Panel panel = panels_Adjacent[i];
-                    if (panel.PanelType == PanelType.Air)
+                    if (panelTypes == null || panelTypes.Contains(panel.PanelType))
                     {
                         panels_Adjacent.RemoveAt(i);
                         adjacencyCluster.RemoveObject<Panel>(panel.Guid);
@@ -181,7 +181,7 @@ namespace SAM.Analytical
             return space_1;
         }
 
-        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, out List<Panel> panels, IEnumerable<Guid> spaceGuids = null)
+        public static List<Space> MergeSpaces(this AdjacencyCluster adjacencyCluster, out List<Panel> panels, IEnumerable<PanelType> panelTypes, IEnumerable<Guid> spaceGuids = null)
         {
             panels = null;
 
@@ -222,7 +222,11 @@ namespace SAM.Analytical
                 foreach (Space space_Adjacent in spaces_Adjacent)
                 {
                     List<Panel> panels_Temp = adjacencyCluster.GetPanels(Core.LogicalOperator.And, space, space_Adjacent);
-                    panels_Temp.RemoveAll(x => x.PanelType != PanelType.Air);
+                    if(panelTypes != null)
+                    {
+                        panels_Temp.RemoveAll(x => !panelTypes.Contains(x.PanelType));
+                    }
+
                     if (panels_Temp == null || panels_Temp.Count == 0)
                     {
                         continue;
@@ -238,7 +242,7 @@ namespace SAM.Analytical
 
                     panels.AddRange(panels_Temp);
 
-                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panels_Temp.ConvertAll(x => x.Guid));
+                    Space space_New = adjacencyCluster.MergeSpaces(space_1.Guid, space_2.Guid, panelTypes, panels_Temp.ConvertAll(x => x.Guid));
                     if (space_New != null)
                     {
                         guids.Add(space_New.Guid);

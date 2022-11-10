@@ -112,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
                 spaces = adjacencyCluster.GetSpaces();
             }
 
-            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(out List<Panel> panels, spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid));
+            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(out List<Panel> panels, new PanelType[] { PanelType.Air }, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
 
             if (sAMObject is AdjacencyCluster)
             {

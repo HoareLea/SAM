@@ -120,7 +120,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, panels);
             }
 
-            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid), out List<Panel> panels_Result, panels?.ConvertAll(x => x.Guid));
+            List<PanelType> panelTypes = new List<PanelType>();
+            foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+            {
+                panelTypes.Add(panelType);
+            }
+
+            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid), out List<Panel> panels_Result, panelTypes, panels?.ConvertAll(x => x.Guid));
 
             if (sAMObject is AdjacencyCluster)
             {
