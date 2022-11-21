@@ -65,6 +65,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\Types.cs" />
     <Compile Include="Classes\Base\Tag.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
