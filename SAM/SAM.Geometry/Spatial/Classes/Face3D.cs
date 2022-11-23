@@ -120,21 +120,90 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        /// <summary>
+        /// Returns true if face3D is inside this Face3D
+        /// </summary>
+        /// <param name="face3D">Face3D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Returns true if face3D is inside this Face3D</returns>
         public bool Inside(Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
-            if (!plane.Coplanar(face3D.plane, tolerance))
+            if (face3D == null || plane == null)
+            {
                 return false;
+            }
 
-            IClosed3D closed3D = face3D.plane.Convert(face3D.externalEdge2D);
-            if (closed3D == null)
+            Plane plane_2 = face3D.plane;
+            if (plane_2 == null)
+            {
                 return false;
+            }
 
-            IClosed2D closed2D = plane.Convert(closed3D);
+            if (!plane.Coplanar(plane_2, tolerance))
+            {
+                return false;
+            }
 
-            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
-                return externalEdge2D.Inside(closed2D, tolerance);
+            if (plane.Distance(plane_2.Origin) > tolerance)
+            {
+                return false;
+            }
 
-            return externalEdge2D.Inside(closed2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.Inside(closed2D, tolerance));
+            Face2D face2D_1 = plane.Convert(this);
+            if (face2D_1 == null)
+            {
+                return false;
+            }
+
+            Planar.Face2D face2D_2 = plane.Convert(plane.Project(face3D));
+            if (face2D_2 == null)
+            {
+                return false;
+            }
+
+            return face2D_1.Inside(face2D_2, tolerance);
+
+        }
+
+
+        public bool InRange(Face3D face3D, double tolerance = Core.Tolerance.Distance)
+        {
+            Plane plane_2 = face3D?.plane;
+            if (plane_2 == null)
+            {
+                return false;
+            }
+
+            if (!plane.Coplanar(plane_2, tolerance))
+            {
+                return false;
+            }
+
+            if (plane.Distance(plane_2.Origin) > tolerance)
+            {
+                return false;
+            }
+
+            IClosed3D closed3D_2 = face3D.plane.Convert(face3D.externalEdge2D);
+            if (closed3D_2 == null)
+            {
+                return false;
+            }
+
+            IClosed2D closed2D_2 = plane.Convert(closed3D_2);
+            if(closed2D_2 == null)
+            {
+                return false;
+            }
+
+            ISegmentable2D segmentable2D = closed2D_2 as ISegmentable2D;
+            if(segmentable2D == null)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            return segmentable2D.GetPoints().Find(x => externalEdge2D.Inside(x, tolerance)) != null;
+
         }
 
         public bool Inside(Point3D point3D, double tolerance = Core.Tolerance.Distance)

@@ -119,10 +119,25 @@ namespace SAM.Geometry.Planar
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
-            if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
+            if(closed2D == null || points == null || points.Count == 0)
+            {
+                return false;
+            }
 
-            throw new NotImplementedException();
+            if (!(closed2D is ISegmentable2D))
+            {
+                throw new NotImplementedException();
+            }
+
+            bool result = ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
+            if(!result)
+            {
+                return result;
+            }
+
+            result = points.Find(x => closed2D.Inside(x, tolerance) && !closed2D.On(x, tolerance)) == null;
+
+            return result;
         }
 
         public Point2D Closest(Point2D point2D, bool includeEdges)

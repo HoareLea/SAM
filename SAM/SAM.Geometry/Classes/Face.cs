@@ -222,6 +222,12 @@ namespace SAM.Geometry
             return !externalEdge2D.On(point2D, tolerance) && internalEdge2Ds.TrueForAll(x => !x.On(point2D, tolerance));
         }
 
+        /// <summary>
+        /// Returns true if closed2D is inside this Face2D
+        /// </summary>
+        /// <param name="closed2D">Closed2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Returns true if closed2D is inside this Face2D</returns>
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)

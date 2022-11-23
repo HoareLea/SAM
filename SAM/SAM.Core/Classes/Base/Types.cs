@@ -30,16 +30,16 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
-        public Types(Types displayTypes)
+        public Types(Types types)
         {
-            if (displayTypes != null)
+            if (types != null)
             {
-                if (displayTypes.types != null)
+                if (types.types != null)
                 {
-                    types = new List<object>();
-                    foreach (object @object in displayTypes.types)
+                    this.types = new List<object>();
+                    foreach (object @object in types.types)
                     {
-                        types.Add(@object);
+                        this.types.Add(@object);
                     }
                 }
             }

@@ -11,103 +11,6 @@ namespace SAM.Geometry.Planar
     {
         //Difference of U and A, denoted U \ A, is the set of all members of U that are not members of A. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
 
-        //public static List<Polygon2D> Difference(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
-        //{
-        //    if (polygon2D_1 == null || polygon2D_2 == null)
-        //        return null;
-
-        //    List<IntPoint> intPoints_1 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
-        //    List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_2, tolerance);
-
-        //    Clipper clipper = new Clipper();
-        //    clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
-        //    clipper.AddPath(intPoints_2, PolyType.ptClip, true);
-
-        //    List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
-
-        //    clipper.Execute(ClipType.ctDifference, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-
-        //    if (intPointsList == null)
-        //        return null;
-
-        //    List<Polygon2D> result = new List<Polygon2D>();
-        //    if (intPointsList.Count == 0)
-        //        return result;
-
-        //    foreach (List<IntPoint> intPoints in intPointsList)
-        //        result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
-
-        //    return result;
-        //}
-
-        //public static List<Polygon2D> Difference(this Polygon2D polygon2D, IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
-        //{
-        //    if (polygon2D == null || polygon2Ds == null)
-        //        return null;
-
-        //    if (polygon2Ds.Count() == 0)
-        //        return new List<Polygon2D>() { new Polygon2D(polygon2D) };
-
-        //    List<IntPoint> intPoints = Convert.ToClipper((ISegmentable2D)polygon2D, tolerance);
-
-        //    List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
-        //    foreach (Polygon2D polygon2D_Temp in polygon2Ds)
-        //        intPointsList.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
-
-        //    Clipper clipper = new Clipper();
-        //    clipper.AddPath(intPoints, PolyType.ptSubject, true);
-        //    clipper.AddPaths(intPointsList, PolyType.ptClip, true);
-
-        //    List<List<IntPoint>> intPointsList_Result = new List<List<IntPoint>>();
-
-        //    clipper.Execute(ClipType.ctDifference, intPointsList_Result, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-
-        //    if (intPointsList_Result == null)
-        //        return null;
-
-        //    List<Polygon2D> result = new List<Polygon2D>();
-        //    if (intPointsList_Result.Count == 0)
-        //        return result;
-
-        //    foreach (List<IntPoint> intPoints_Result in intPointsList_Result)
-        //        result.Add(new Polygon2D(intPoints_Result.ToSAM(tolerance)));
-
-        //    return result;
-        //}
-
-        //public static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
-        //{
-        //    if (polygon2Ds_1 == null || polygon2Ds_2 == null)
-        //        return null;
-
-        //    List<List<IntPoint>> intPointsList_1 = new List<List<IntPoint>>();
-        //    foreach (Polygon2D polygon2D_Temp in polygon2Ds_1)
-        //        intPointsList_1.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
-
-        //    List<List<IntPoint>> intPointsList_2 = new List<List<IntPoint>>();
-        //    foreach (Polygon2D polygon2D_Temp in polygon2Ds_2)
-        //        intPointsList_2.Add(Convert.ToClipper((ISegmentable2D)polygon2D_Temp, tolerance));
-
-        //    Clipper clipper = new Clipper();
-        //    clipper.AddPaths(intPointsList_1, PolyType.ptSubject, true);
-        //    clipper.AddPaths(intPointsList_2, PolyType.ptClip, true);
-
-        //    List<List<IntPoint>> intPointsList_Result = new List<List<IntPoint>>();
-
-        //    clipper.Execute(ClipType.ctDifference, intPointsList_Result, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-
-        //    if (intPointsList_Result == null)
-        //        return null;
-
-        //    List<Polygon2D> result = new List<Polygon2D>();
-        //    if (intPointsList_Result.Count == 0)
-        //        return result;
-
-        //    foreach (List<IntPoint> intPoints_Result in intPointsList_Result)
-        //        result.Add(new Polygon2D(intPoints_Result.ToSAM(tolerance)));
-
-        //    return result;
-        //}
 
         public static List<Segment2D> Difference(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.Distance)
         {
@@ -156,6 +59,13 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        /// <summary>
+        /// Difference of face2D_2 and face2D_1, denoted face2D_2 \ face2D_1, is the set of all members of face2D_2 that are not members of face2D_1. The set difference {1, 2, 3} \ {2, 3, 4} is {1} , while, conversely, the set difference
+        /// </summary>
+        /// <param name="face2D_1">Face2D</param>
+        /// <param name="face2D_2">Face2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Face2Ds which are part of face2D_2 but not part of face2D_1</returns>
         public static List<Face2D> Difference(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Face2D> result = null;
