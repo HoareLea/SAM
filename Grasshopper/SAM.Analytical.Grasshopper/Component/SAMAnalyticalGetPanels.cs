@@ -237,7 +237,6 @@ namespace SAM.Analytical.Grasshopper
                                 if (face3D.InRange(point3D, tolerance) || face3D.Inside(point3D, tolerance))
                                 {
                                     dataTree.Add(new GooPanel(tuple_Panel.Item1), tuple_Geometry.Item1);
-                                    break;
                                 }
                             }
                         }
@@ -256,7 +255,6 @@ namespace SAM.Analytical.Grasshopper
                                 if(face3D.Inside(face3D_Panel))
                                 {
                                     dataTree.Add(new GooPanel(tuple_Panel.Item1), tuple_Geometry.Item1);
-                                    break;
                                 }
                             }
                         }
@@ -275,7 +273,6 @@ namespace SAM.Analytical.Grasshopper
                                 if(plane.On(face3D_Panel, tolerance))
                                 {
                                     dataTree.Add(new GooPanel(tuple_Panel.Item1), tuple_Geometry.Item1);
-                                    break;
                                 }
                             }
                         }
