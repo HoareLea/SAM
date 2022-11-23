@@ -124,18 +124,24 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            if (!(closed2D is ISegmentable2D))
+            IClosed2D closed2D_Temp = closed2D;
+            if(closed2D_Temp is Face2D)
+            {
+                closed2D_Temp = ((Face2D)closed2D_Temp).ExternalEdge2D;
+            }
+
+            if (!(closed2D_Temp is ISegmentable2D))
             {
                 throw new NotImplementedException();
             }
 
-            bool result = ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
+            bool result = ((ISegmentable2D)closed2D_Temp).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
             if(!result)
             {
                 return result;
             }
 
-            result = points.Find(x => closed2D.Inside(x, tolerance) && !closed2D.On(x, tolerance)) == null;
+            result = points.Find(x => closed2D_Temp.Inside(x, tolerance) && !closed2D_Temp.On(x, tolerance)) == null;
 
             return result;
         }
