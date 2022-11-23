@@ -181,14 +181,14 @@
             }
         }
 
-        public static System.Drawing.Color Color(this ApertureType apertureType, AperturePart aperturePart)
+        public static System.Drawing.Color Color(this ApertureType apertureType, AperturePart aperturePart, bool openable = false)
         {
             System.Drawing.Color color = System.Drawing.Color.Empty;
 
             switch (apertureType)
             {
                 case Analytical.ApertureType.Door:
-                    switch(aperturePart)
+                    switch (aperturePart)
                     {
                         case AperturePart.Frame:
                             color = System.Drawing.Color.Brown;
@@ -208,7 +208,7 @@
                             break;
 
                         case AperturePart.Pane:
-                            color = System.Drawing.Color.Blue;
+                            color = openable ? System.Drawing.Color.FromArgb(102, 196, 55) : System.Drawing.Color.Blue;
                             break;
                     }
                     break;

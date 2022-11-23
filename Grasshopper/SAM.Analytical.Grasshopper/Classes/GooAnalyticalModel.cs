@@ -181,6 +181,11 @@ namespace SAM.Analytical.Grasshopper
             Modify.BakeGeometry_ByPanelType(doc, VolatileData, true, Core.Tolerance.Distance);
         }
 
+        public void BakeGeometry_ByDischargeCoefficient(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByDischargeCoefficient(doc, VolatileData);
+        }
+
         public void BakeGeometry_ByConstruction(RhinoDoc doc)
         {
             Modify.BakeGeometry_ByConstruction(doc, VolatileData, true, Core.Tolerance.Distance);
@@ -196,6 +201,7 @@ namespace SAM.Analytical.Grasshopper
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By BoundaryType", Menu_BakeByBoundaryType, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
@@ -204,6 +210,11 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_BakeByPanelType(object sender, EventArgs e)
         {
             BakeGeometry_ByPanelType(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_BakeByDischargeCoefficient(object sender, EventArgs e)
+        {
+            BakeGeometry_ByDischargeCoefficient(RhinoDoc.ActiveDoc);
         }
 
         private void Menu_BakeByConstruction(object sender, EventArgs e)

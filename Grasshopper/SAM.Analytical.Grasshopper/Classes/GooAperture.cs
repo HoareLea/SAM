@@ -204,6 +204,7 @@ namespace SAM.Analytical.Grasshopper
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByApertureConstruction, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Type With Frame", Menu_BakeByApertureTypeWithFrame, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction With Frame", Menu_BakeByApertureConstructionWithFrame, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
@@ -361,6 +362,16 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_BakeByApertureType(object sender, EventArgs e)
         {
             BakeGeometry_ByApertureType(RhinoDoc.ActiveDoc);
+        }
+
+        private void Menu_BakeByDischargeCoefficient(object sender, EventArgs e)
+        {
+            BakeGeometry_ByDischargeCoefficient(RhinoDoc.ActiveDoc);
+        }
+
+        public void BakeGeometry_ByDischargeCoefficient(RhinoDoc doc)
+        {
+            Modify.BakeGeometry_ByDischargeCoefficient(doc, VolatileData);
         }
 
         public void BakeGeometry_ByApertureType(RhinoDoc doc)

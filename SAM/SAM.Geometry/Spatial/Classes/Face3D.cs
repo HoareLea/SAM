@@ -155,7 +155,7 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            Planar.Face2D face2D_2 = plane.Convert(plane.Project(face3D));
+            Face2D face2D_2 = plane.Convert(plane.Project(face3D));
             if (face2D_2 == null)
             {
                 return false;

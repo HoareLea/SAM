@@ -62,7 +62,7 @@ namespace SAM.Analytical.Rhino
 
             if(!includeFrame)
             {
-                if (!Geometry.Rhino.Modify.BakeGeometry(new Geometry.Spatial.Face3D(aperture.GetExternalEdge3D()), rhinoDoc, objectAttributes, out guid))
+                if (!Geometry.Rhino.Modify.BakeGeometry(new Face3D(aperture.GetExternalEdge3D()), rhinoDoc, objectAttributes, out guid))
                 {
                     return false;
                 }

@@ -12,8 +12,8 @@ namespace SAM.Core
                 return null;
             }
 
-            Color color_1 = Query.Brighten(color, maxBrightness);
-            Color color_2 = Query.Brighten(color, minBrightness);
+            Color color_1 = Query.Brightness(color, maxBrightness);
+            Color color_2 = Query.Brightness(color, minBrightness);
 
             return Query.Lerps(color_1, color_2, count);
         }

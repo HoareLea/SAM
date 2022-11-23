@@ -198,6 +198,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Light.cs" />
     <Compile Include="Query\Ping.cs" />
     <Compile Include="Query\Calculate.cs" />
     <Compile Include="Query\Decompress.cs" />
@@ -211,7 +212,6 @@
     <Compile Include="Query\UserSAMDirectory.cs" />
     <Compile Include="Query\UserDocumentsDirectory.cs" />
     <Compile Include="Query\Search.cs" />
-    <Compile Include="Query\Brighten.cs" />
     <Compile Include="Query\Paths.cs" />
     <Compile Include="Query\Lerps.cs" />
     <Compile Include="Query\Lerp.cs" />
