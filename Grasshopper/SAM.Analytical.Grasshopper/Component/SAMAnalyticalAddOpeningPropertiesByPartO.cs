@@ -171,6 +171,9 @@ namespace SAM.Analytical.Grasshopper
                         continue;
                     }
 
+                    panel = Create.Panel(panel);
+                    aperture_Temp = new Aperture(aperture_Temp);
+
                     double openingAngle = openingAngles.Count > i ? openingAngles[i] : openingAngles.Last();
                     double width = aperture_Temp.GetWidth(AperturePart.Pane);
                     double height = aperture_Temp.GetHeight(AperturePart.Pane);

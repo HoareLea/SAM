@@ -172,6 +172,9 @@ namespace SAM.Analytical.Grasshopper
                         continue;
                     }
 
+                    panel = Create.Panel(panel);
+                    aperture_Temp = new Aperture(aperture_Temp);
+
                     double dischargeCoefficient = dischargeCoefficients.Count > i ? dischargeCoefficients[i] : dischargeCoefficients.Last();
 
                     OpeningProperties openingProperties = new OpeningProperties(dischargeCoefficient);
