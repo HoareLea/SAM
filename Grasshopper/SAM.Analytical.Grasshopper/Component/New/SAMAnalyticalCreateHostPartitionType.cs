@@ -10,6 +10,7 @@ using SAM.Architectural;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class SAMAnalyticalCreateHostPartitionType : GH_SAMComponent
     {
         /// <summary>
@@ -26,6 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.

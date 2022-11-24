@@ -4,6 +4,7 @@ using System;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class SAMAnalyticalHostPartitionCategory : GH_SAMEnumComponent<HostPartitionCategory>
     {
         /// <summary>
@@ -20,6 +21,8 @@ namespace SAM.Analytical.Grasshopper
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Panel Type
