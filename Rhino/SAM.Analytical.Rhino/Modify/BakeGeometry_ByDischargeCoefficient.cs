@@ -29,7 +29,7 @@ namespace SAM.Analytical.Rhino
             List<Aperture> apertures_NoDischargeCoefficient = new List<Aperture>();
             foreach(Aperture aperture in apertures)
             {
-                if (aperture == null || aperture.ApertureType != ApertureType.Window)
+                if (aperture == null)
                 {
                     continue;
                 }

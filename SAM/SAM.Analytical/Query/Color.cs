@@ -185,6 +185,8 @@
         {
             System.Drawing.Color color = System.Drawing.Color.Empty;
 
+            System.Drawing.Color color_Openable = System.Drawing.Color.FromArgb(102, 196, 55);
+
             switch (apertureType)
             {
                 case Analytical.ApertureType.Door:
@@ -195,7 +197,7 @@
                             break;
 
                         case AperturePart.Pane:
-                            color = System.Drawing.Color.Blue;
+                            color = openable ? color_Openable : System.Drawing.Color.Blue;
                             break;
                     }
                     break;
@@ -208,7 +210,7 @@
                             break;
 
                         case AperturePart.Pane:
-                            color = openable ? System.Drawing.Color.FromArgb(102, 196, 55) : System.Drawing.Color.Blue;
+                            color = openable ? color_Openable : System.Drawing.Color.Blue;
                             break;
                     }
                     break;
