@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -58,6 +58,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(colour, ParamVisibility.Voluntary));
 
                 @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions", Access = GH_ParamAccess.list, Optional = true };
+                @string.SetPersistentData("zdwno,0,19.00,21.00,99.00");
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
                 return result.ToArray();
