@@ -87,8 +87,21 @@ namespace SAM.Analytical.Grasshopper
             DisplayMaterial displayMaterial_Frame = null;
             if (Value.ApertureConstruction != null)
             {
-                displayMaterial_Pane = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Pane);
+                AperturePart aperturePart = Value.ApertureType == ApertureType.Door ? AperturePart.Frame : AperturePart.Pane;
+
+                displayMaterial_Pane = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, aperturePart);
                 displayMaterial_Frame = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Frame);
+            }
+
+            double dichargeCoefficient = 0;
+            if(Value.TryGetValue(ApertureParameter.OpeningProperties, out IOpeningProperties openingProperties) && openingProperties != null)
+            {
+                dichargeCoefficient = openingProperties.GetDischargeCoefficient();
+            }
+
+            if(dichargeCoefficient != 0)
+            {
+                displayMaterial_Pane = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Pane, true);
             }
 
             if (displayMaterial_Pane == null)
