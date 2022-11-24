@@ -1,4 +1,5 @@
-﻿using SAM.Analytical.Grasshopper.Properties;
+﻿using Grasshopper.Kernel;
+using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 
