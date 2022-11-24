@@ -10,10 +10,16 @@ namespace SAM.Analytical.Grasshopper
             if (rhinoDoc == null)
                 return;
 
+            List<Aperture> apertures = new List<Aperture>();
+
             List<Panel> panels = new List<Panel>();
             foreach (var variable in gH_Structure.AllData(true))
             {
-                if (variable is GooPanel)
+                if (variable is GooAperture)
+                {
+                    apertures.Add(((GooAperture)variable).Value);
+                }
+                else if(variable is GooPanel)
                 {
                     panels.Add(((GooPanel)variable).Value);
                 }
@@ -31,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<Aperture> apertures = new List<Aperture>();
+
             foreach(Panel panel in panels)
             {
                 List<Aperture> apertures_Panel = panel?.Apertures;
