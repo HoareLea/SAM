@@ -11,6 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooBuildingModel : GooJSAMObject<BuildingModel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public GooBuildingModel()
@@ -113,11 +114,14 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooBuildingModelParam : GH_PersistentParam<GooBuildingModel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         public override Guid ComponentGuid => new Guid("F11A6C34-3376-4A5D-8C6C-1D5331A7C96A");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         public bool Hidden { get; set; }
 

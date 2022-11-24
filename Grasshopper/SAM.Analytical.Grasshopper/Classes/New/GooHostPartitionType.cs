@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooHostPartitionType : GooJSAMObject<HostPartitionType>
     {
         public GooHostPartitionType()
@@ -25,11 +26,14 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooHostPartitionTypeParam : GH_PersistentParam<GooHostPartitionType>
     {
         public override Guid ComponentGuid => new Guid("d906080a-02e8-4a53-b394-ab9889a8b79f");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         public GooHostPartitionTypeParam()
             : base(typeof(HostPartitionType).Name, typeof(HostPartitionType).Name, typeof(HostPartitionType).FullName.Replace(".", " "), "Params", "SAM")

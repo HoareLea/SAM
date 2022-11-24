@@ -74,7 +74,7 @@
     <Compile Include="Classes\GooPanel.cs" />
     <Compile Include="Classes\GooDesignDay.cs" />
     <Compile Include="Classes\New\GooArchitecturalModel.cs" />
-    <Compile Include="Classes\New\GooAnalyticalObject.cs" />
+    <Compile Include="Classes\GooAnalyticalObject.cs" />
     <Compile Include="Classes\New\GooFloorType.cs" />
     <Compile Include="Classes\New\GooHostPartitionType.cs" />
     <Compile Include="Classes\New\GooOpening.cs" />

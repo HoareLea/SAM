@@ -16,6 +16,7 @@ using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooPartition : GooJSAMObject<IPartition>, IGH_PreviewData, IGH_BakeAwareData
     {
         public bool ShowAll = true;
@@ -196,6 +197,7 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooPartitionParam : GH_PersistentParam<GooPartition>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         private bool showAll = true;
@@ -203,6 +205,8 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("0091B0F4-8009-4388-8914-A3FE680EF12D");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         bool IGH_PreviewObject.Hidden { get; set; }
 

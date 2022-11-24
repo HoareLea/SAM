@@ -7,6 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooFloorType : GooJSAMObject<FloorType>
     {
         public GooFloorType()
@@ -25,11 +26,14 @@ namespace SAM.Analytical.Grasshopper
         }
     }
 
+    [Obsolete("Obsolete since 2021.11.24")]
     public class GooFloorTypeParam : GH_PersistentParam<GooFloorType>
     {
         public override Guid ComponentGuid => new Guid("3ace849b-b3f0-463e-88bb-3a1f60803507");
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         public GooFloorTypeParam()
             : base(typeof(FloorType).Name, typeof(FloorType).Name, typeof(FloorType).FullName.Replace(".", " "), "Params", "SAM")
