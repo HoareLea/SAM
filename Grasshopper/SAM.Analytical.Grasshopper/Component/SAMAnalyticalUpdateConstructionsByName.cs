@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateConstructionsByPanelType : GH_SAMComponent
+    public class SAMAnalyticalUpdateConstructionsByName : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,8 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateConstructionsByPanelType()
-          : base("SAMAnalytical.UpdateConstructionsByName", "SAMAnalytical.UpdateConstructionsByPanelType",
+        public SAMAnalyticalUpdateConstructionsByName()
+          : base("SAMAnalytical.UpdateConstructionsByName", "SAMAnalytical.UpdateConstructionsByName",
               "Update Constructions in SAM Adjacency Cluster or List of Panels",
               "SAM", "Analytical")
         {
@@ -94,7 +94,7 @@ namespace SAM.Analytical.Grasshopper
                     if(panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByPanelType(panels_Temp, constructionLibrary);
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
                         foreach(Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
@@ -110,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
                     if (panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByPanelType(panels_Temp, constructionLibrary);
+                        constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
                         foreach (Panel panel in panels_Temp)
                             adjacencyCluster.AddObject(panel);
                     }
@@ -122,7 +122,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(panels != null && panels.Count != 0)
             {
-                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByPanelType(panels, constructionLibrary);
+                ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary);
                 panels.ForEach(x => result.Add(x));
                 constructionLibraries.Add(constructionLibrary_Temp);
             }

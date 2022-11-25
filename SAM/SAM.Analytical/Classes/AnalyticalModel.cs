@@ -187,6 +187,22 @@ namespace SAM.Analytical
             }
         }
 
+        public ConstructionLibrary ConstructionLibrary
+        {
+            get
+            {
+                List<Construction> constructions = adjacencyCluster?.GetConstructions();
+                if(constructions == null)
+                {
+                    return null;
+                }
+
+                ConstructionLibrary result = new ConstructionLibrary(Name);
+                constructions.ForEach(x => result.Add(x));
+                return result;
+            }
+        }
+
         public MaterialLibrary MaterialLibrary
         {
             get

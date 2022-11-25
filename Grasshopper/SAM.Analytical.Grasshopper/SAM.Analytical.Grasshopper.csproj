@@ -259,7 +259,7 @@
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByMap.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateTypesByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
     <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
     <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />

@@ -18,13 +18,39 @@ namespace SAM.Analytical
                 if (string.IsNullOrWhiteSpace(name))
                     continue;
 
-                Construction construction = result.GetConstructions(name)?.FirstOrDefault();
-                if (construction == null)
+                List<Construction> constructions = result.GetConstructions(name);
+                if(constructions == null || constructions.Count == 0)
                 {
-                    construction = constructionLibrary.GetConstructions(name)?.FirstOrDefault();
-                    if (construction == null)
-                        continue;
+                    constructions = constructionLibrary.GetConstructions(name);
+                }
 
+                if(constructions == null || constructions.Count == 0)
+                {
+                    continue;
+                }
+
+                Construction construction = null;
+                foreach(Construction construction_Temp in constructions)
+                {
+                    if(construction_Temp.PanelType() == panels[i].PanelType)
+                    {
+                        construction = construction_Temp;
+                        break;
+                    }
+                }
+
+                if(construction == null)
+                {
+                    construction = constructions[0];
+                }
+
+                if(construction == null)
+                {
+                    continue;
+                }
+
+                if (!result.Contains(construction))
+                {
                     result.Add(construction);
                 }
 
