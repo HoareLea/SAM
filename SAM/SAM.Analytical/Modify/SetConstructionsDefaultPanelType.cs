@@ -40,7 +40,7 @@ namespace SAM.Analytical
                 
                 foreach(PanelType panelType in panelTypes)
                 {
-                    Construction construction_PanelType = updateNames ? new Construction(construction, string.Format("{0} ({1})]", construction.Name, Core.Query.Description(panelType))) : new Construction(construction, Guid.NewGuid());
+                    Construction construction_PanelType = updateNames ? new Construction(construction, string.Format("{0} ({1})", construction.Name, Core.Query.Description(panelType))) : new Construction(construction, Guid.NewGuid());
 
                     construction_PanelType.SetValue(ConstructionParameter.DefaultPanelType, panelType.Text());
                     
