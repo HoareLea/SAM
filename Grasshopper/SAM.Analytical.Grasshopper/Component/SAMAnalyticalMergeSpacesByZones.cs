@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,8 +31,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalMergeSpacesByZones()
           : base("SAMAnalytical.MergeSpacesByZones", "SAMAnalytical.MergeSpacesByZones",
-              "Merge Analytical Spaces By Zones. Removes air panels and combines spaces",
-              "SAM WIP", "Analytical")
+              "Merge Analytical Spaces By Zones. By default removes air panels and combines spaces alternatively removed all internal Panels between spaces.   ",
+              "SAM", "Analytical")
         {
         }
 
@@ -70,8 +70,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces that are removed", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels that are removed", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -151,13 +151,22 @@ namespace SAM.Analytical.Grasshopper
                     if(spaces != null && spaces.Count > 1)
                     {
                         List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, panelTypes, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
-                        if(spaces_Merge != null)
+                        if (spaces_Merge != null)
                         {
-                            foreach(Space space_Merge in spaces_Merge)
+                            spaces_Merge = adjacencyCluster.GetRelatedObjects<Space>(zone);
+                            if (spaces_Merge != null && spaces_Merge.Count > 0)
                             {
-                                if(spaces_Result.Find(x => x.Guid == space_Merge.Guid) == null)
+                                foreach (Space space in spaces)
                                 {
-                                    spaces_Result.Add(space_Merge);
+                                    if (spaces_Merge.Find(x => x.Guid == space.Guid) != null)
+                                    {
+                                        continue;
+                                    }
+
+                                    if (spaces_Result.Find(x => x.Guid == space.Guid) == null)
+                                    {
+                                        spaces_Result.Add(space);
+                                    }
                                 }
                             }
                         }

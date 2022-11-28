@@ -56,10 +56,10 @@ namespace SAM.Analytical
 
                     Space space_1 = space;
                     Space space_2 = space_Adjacent;
-                    if (space_1.Volume(adjacencyCluster) < space_2.Volume(adjacencyCluster))
+                    if (space.Volume(adjacencyCluster) > space_Adjacent.Volume(adjacencyCluster))
                     {
-                        space_2 = space;
                         space_1 = space_Adjacent;
+                        space_2 = space;
                     }
 
                     panels.AddRange(panels_Temp);
@@ -234,7 +234,7 @@ namespace SAM.Analytical
 
                     Space space_1 = space;
                     Space space_2 = space_Adjacent;
-                    if (space_1.Volume(adjacencyCluster) > space_2.Volume(adjacencyCluster))
+                    if (space_1.Volume(adjacencyCluster) < space_2.Volume(adjacencyCluster))
                     {
                         space_2 = space;
                         space_1 = space_Adjacent;
