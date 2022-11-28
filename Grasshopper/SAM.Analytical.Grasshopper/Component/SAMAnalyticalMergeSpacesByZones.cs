@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalMergeSpacesByZones()
           : base("SAMAnalytical.MergeSpacesByZones", "SAMAnalytical.MergeSpacesByZones",
-              "Merge Analytical Spaces By Zones. By default removes air panels and combines spaces alternatively removed all internal Panels between spaces.\n Zone can be Name or object \nIf no Zone Connected all Zones will be selected and merged",
+              "Merge Analytical Spaces By Zones.\nZone input can be Name or SAM Zone Object\nBy default removes air panels and combines spaces alternatively removed all internal Panels between spaces.\nIf no Zone Connected all Zones will be selected and merged \nIf boolean set to false input Analytical Object will be return",
               "SAM", "Analytical")
         {
         }
@@ -55,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
                 paramBoolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
-                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "run_", NickName = "run_", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
+                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "run_", NickName = "run_", Description = "Run \nIf boolean set to false input Analytical Object will be return", Access = GH_ParamAccess.item, Optional = true };
                 paramBoolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
