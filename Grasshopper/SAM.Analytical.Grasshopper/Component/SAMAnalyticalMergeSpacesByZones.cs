@@ -1,9 +1,11 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "_zones_", NickName = "_zones_", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_zones_", NickName = "_zones_", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
 
@@ -106,9 +108,41 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_zones_");
             List<Zone> zones = new List<Zone>();
+
+            List<GH_ObjectWrapper> objectWrappers = null;
             if (index != -1)
             {
-                dataAccess.GetDataList(index, zones);
+                objectWrappers = new List<GH_ObjectWrapper>();
+                if (dataAccess.GetDataList(index, objectWrappers) && objectWrappers != null)
+                {
+                    foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                    {
+                        object value = objectWrapper.Value;
+                        if (value is IGH_Goo)
+                        {
+                            value = (value as dynamic).Value;
+                        }
+
+                        if(value is Zone)
+                        {
+                            zones.Add((Zone)value);
+                        }
+                        else if(value is string)
+                        {
+                            Zone zone = adjacencyCluster.GetZones((string)value).FirstOrDefault();
+                            if(zone != null)
+                            {
+                                zones.Add(zone);
+                            }
+                        }
+                    }
+
+                    if (zones == null || zones.Count == 0)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+                }
             }
 
             index = Params.IndexOfInputParam("_airPanelOnly_");

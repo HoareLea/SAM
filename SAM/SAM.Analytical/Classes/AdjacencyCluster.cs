@@ -644,6 +644,17 @@ namespace SAM.Analytical
             return GetObjects<Zone>();
         }
 
+        public List<Zone> GetZones(string name)
+        {
+            if(string.IsNullOrEmpty(name))
+            {
+                return null;
+            }
+
+            List<Zone> result = GetObjects<Zone>();
+            return result?.FindAll(x => x?.Name == name);
+        }
+
         /// <summary>
         /// Gets spaces for given point
         /// </summary>
