@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyClusterByBreps()
           : base("SAMAnalytical.CreateAdjacencyClusterByBreps", "SAMAnalytical.CreateAdjacencyClusterByBreps",
-              "Create AdjacencyCluster from Breps",
+              "Create AdjacencyCluster from Breps or SAM Shells",
               "SAM", "Analytical")
         {
         }
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_breps", NickName = "_breps", Description = "Rhino Breps", Access = GH_ParamAccess.list };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_breps", NickName = "_breps", Description = "Rhino Breps or SAM Shells", Access = GH_ParamAccess.list };
                 genericObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
