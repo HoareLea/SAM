@@ -68,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = null;
             if(analyticalObject is AdjacencyCluster)
             {
-                adjacencyCluster = (AdjacencyCluster)analyticalObject;
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
             else if(analyticalObject is AnalyticalModel)
             {

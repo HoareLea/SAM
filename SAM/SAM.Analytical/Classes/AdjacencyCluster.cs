@@ -671,7 +671,7 @@ namespace SAM.Analytical
                 if (GetGuid(space) == Guid.Empty)
                     continue;
 
-                if (!result.AddObject(space))
+                if (!result.AddObject(new Space(space)))
                     continue;
 
                 List<object> relatedObjects = GetRelatedObjects(space);
@@ -683,10 +683,17 @@ namespace SAM.Analytical
                     if (relatedObject == null)
                         continue;
 
-                    if (!result.AddObject(relatedObject))
+                    object relatedObject_Temp = relatedObject;
+
+                    if(relatedObject_Temp is Core.IJSAMObject)
+                    {
+                        relatedObject_Temp = Core.Query.Clone((Core.IJSAMObject)relatedObject_Temp);
+                    }
+
+                    if (!result.AddObject(relatedObject_Temp))
                         continue;
 
-                    result.AddRelation(space, relatedObject);
+                    result.AddRelation(space, relatedObject_Temp);
                 }
             }
 
