@@ -96,7 +96,13 @@ namespace SAM.Analytical.Grasshopper
             {
                 foreach (Panel panel in panels)
                 {
-                    Panel panel_Temp = Create.Panel(panel);
+                    if(panel == null)
+                    {
+                        continue;
+                    }
+
+                    Panel panel_Temp = adjacencyCluster.GetObject<Panel>(panel.Guid);
+                    panel_Temp = Create.Panel(panel);
                     if(panel_Temp != null)
                     {
                         panel_Temp.SetValue(PanelParameter.Adiabatic, adiabatic);
