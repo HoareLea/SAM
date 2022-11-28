@@ -80,33 +80,31 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = new List<Panel>();
             dataAccess.GetDataList(1, panels);
-            if(panels == null || panels.Count == 0)
+            if(panels != null && panels.Count != 0)
             {
-                panels = adjacencyCluster?.GetPanels();
-            }
-
-            bool adiabatic = true;
-            if (!dataAccess.GetData(2, ref adiabatic))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            if(panels != null)
-            {
-                foreach (Panel panel in panels)
+                bool adiabatic = true;
+                if (!dataAccess.GetData(2, ref adiabatic))
                 {
-                    if(panel == null)
-                    {
-                        continue;
-                    }
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
 
-                    Panel panel_Temp = adjacencyCluster.GetObject<Panel>(panel.Guid);
-                    panel_Temp = Create.Panel(panel);
-                    if(panel_Temp != null)
+                if (panels != null)
+                {
+                    foreach (Panel panel in panels)
                     {
-                        panel_Temp.SetValue(PanelParameter.Adiabatic, adiabatic);
-                        adjacencyCluster?.AddObject(panel_Temp);
+                        if (panel == null)
+                        {
+                            continue;
+                        }
+
+                        Panel panel_Temp = adjacencyCluster.GetObject<Panel>(panel.Guid);
+                        panel_Temp = Create.Panel(panel);
+                        if (panel_Temp != null)
+                        {
+                            panel_Temp.SetValue(PanelParameter.Adiabatic, adiabatic);
+                            adjacencyCluster?.AddObject(panel_Temp);
+                        }
                     }
                 }
             }
