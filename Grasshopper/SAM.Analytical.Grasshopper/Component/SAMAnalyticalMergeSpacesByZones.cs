@@ -96,6 +96,25 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("run_");
+            bool run = false;
+            if (!dataAccess.GetData(index, ref run) || !run)
+            {
+                index = Params.IndexOfOutputParam("analytical");
+                if (index != -1)
+                    dataAccess.SetData(index, sAMObject);
+
+                index = Params.IndexOfOutputParam("spaces");
+                if (index != -1)
+                    dataAccess.SetDataList(index, null);
+
+                index = Params.IndexOfOutputParam("panels");
+                if (index != -1)
+                    dataAccess.SetDataList(index, null);
+
+                return;
+            }
+
             AdjacencyCluster adjacencyCluster = null;
             if(sAMObject is AdjacencyCluster)
             {
