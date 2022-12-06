@@ -23,6 +23,12 @@ namespace SAM.Core
 
         }
 
+        public Group(Group group, string name)
+            : base(name, group)
+        {
+
+        }
+
         public Group(JObject jObject)
             : base(jObject)
         {

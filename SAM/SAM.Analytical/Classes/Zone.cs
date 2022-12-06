@@ -18,6 +18,12 @@ namespace SAM.Analytical
 
         }
 
+        public Zone(Zone zone, string name)
+            : base(zone, name)
+        {
+
+        }
+
         public Zone(Zone zone)
             : base(zone)
         {

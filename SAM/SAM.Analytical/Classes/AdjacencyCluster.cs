@@ -655,6 +655,31 @@ namespace SAM.Analytical
             return result?.FindAll(x => x?.Name == name);
         }
 
+        public List<Zone> GetZones(Space space, string zoneCategory = null)
+        {
+            List<Zone> zones = GetRelatedObjects<Zone>(space);
+            if(zones == null || zones.Count == 0 || zoneCategory == null)
+            {
+                return zones;
+            }
+
+            List<Zone> result = new List<Zone>();
+            foreach(Zone zone in zones)
+            {
+                if(!zone.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory_Zone) || zoneCategory_Zone == null)
+                {
+                    continue;
+                }
+
+                if(zoneCategory.Equals(zoneCategory_Zone))
+                {
+                    result.Add(zone);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Gets spaces for given point
         /// </summary>
