@@ -114,7 +114,7 @@ namespace SAM.Geometry.Planar
             return rectangle;
         }
 
-        public static Rectangle2D Rectangle2D(this IEnumerable<ISegmentable2D> segmentable2Ds)
+        public static Rectangle2D Rectangle2D(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if(segmentable2Ds == null)
             {
@@ -138,7 +138,20 @@ namespace SAM.Geometry.Planar
                 point2Ds.AddRange(point2Ds_Temp);
             }
 
-            return Rectangle2D(point2Ds);
+            return Rectangle2D(point2Ds, tolerance);
+        }
+
+        public static Rectangle2D Rectangle2D(this Rectangle2D rectangle2D_1, Rectangle2D rectangle2D_2, double tolerance = Core.Tolerance.Distance)
+        {
+            if(rectangle2D_1 == null || rectangle2D_2 == null)
+            {
+                return null;
+            }
+
+            List<Point2D> point2Ds = rectangle2D_1.GetPoints();
+            point2Ds.AddRange(rectangle2D_2.GetPoints());
+
+            return Rectangle2D(point2Ds, tolerance);
         }
     }
 }
