@@ -48,87 +48,48 @@ namespace SAM.Geometry.Planar
                 List<Polygon2D> polygon2Ds_ExternalEdge_Temp = new List<Polygon2D>() { polygon2D_ExternalEdge };
 
                 List<Polygon2D> polygon2Ds_InternalEdge_Temp = polygon2Ds_InternalEdge?.FindAll(x => polygon2D_ExternalEdge.Inside(x.InternalPoint2D(tolerance)));
-                if(polygon2Ds_InternalEdge_Temp != null && polygon2Ds_InternalEdge_Temp.Count != 0)
+                if(polygon2Ds_InternalEdge_Temp == null || polygon2Ds_InternalEdge_Temp.Count == 0)
                 {
-                    //Fix for the case when externalEdge and internal edge intersect
-                    List<Segment2D> segment2Ds_All = polygon2D_ExternalEdge.GetSegments();
-                    polygon2Ds_InternalEdge_Temp.ForEach(x => segment2Ds_All.AddRange(x.GetSegments()));
-                    segment2Ds_All = segment2Ds_All.Split(tolerance);
-                    segment2Ds_All = segment2Ds_All.Snap(true, tolerance);
+                    Face2D face2D_New = Face2D.Create(polygon2D_ExternalEdge, new IClosed2D[] { }, EdgeOrientationMethod.Opposite, tolerance);
+                    if(face2D_New != null)
+                    {
+                        result.Add(face2D_New);
+                    }
+                    continue;
+                }
 
-                    //NEW VERSION START 25.05.20222
-                    List<Face2D> face2Ds = Create.Face2Ds(segment2Ds_All, EdgeOrientationMethod.Undefined, tolerance);
-                    if(face2Ds == null || face2Ds.Count == 0)
+                //Fix for the case when externalEdge and internal edge intersect
+                List<Segment2D> segment2Ds_All = polygon2D_ExternalEdge.GetSegments();
+                polygon2Ds_InternalEdge_Temp.ForEach(x => segment2Ds_All.AddRange(x.GetSegments()));
+                segment2Ds_All = segment2Ds_All.Split(tolerance);
+                segment2Ds_All = segment2Ds_All.Snap(true, tolerance);
+
+                List<Face2D> face2Ds = Create.Face2Ds(segment2Ds_All, EdgeOrientationMethod.Undefined, tolerance);
+                if (face2Ds == null || face2Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                if (face2Ds.Count == 1)
+                {
+                    result.Add(face2Ds.FirstOrDefault());
+                }
+                else
+                {
+                    face2Ds.Sort((x, y) => y.ExternalEdge2D.GetBoundingBox().GetArea().CompareTo(x.ExternalEdge2D.GetBoundingBox().GetArea()));
+                    IClosed2D externalEdge = face2Ds[0].ExternalEdge2D;
+                    face2Ds.RemoveAt(0);
+                    List<IClosed2D> internalEdges_Temp = new List<IClosed2D>();
+                    face2Ds.ForEach(x => internalEdges_Temp.AddRange(x.Edge2Ds));
+
+                    Face2D face2D_New = Face2D.Create(externalEdge, internalEdges_Temp, EdgeOrientationMethod.Opposite, tolerance);
+                    if (face2D_New == null)
                     {
                         continue;
                     }
 
-                    if(face2Ds.Count == 1)
-                    {
-                        result.Add(face2Ds.FirstOrDefault());
-                    }
-                    else
-                    {
-                        face2Ds.Sort((x, y) => y.ExternalEdge2D.GetBoundingBox().GetArea().CompareTo(x.ExternalEdge2D.GetBoundingBox().GetArea()));
-                        IClosed2D externalEdge = face2Ds[0].ExternalEdge2D;
-                        face2Ds.RemoveAt(0);
-                        List<IClosed2D> internalEdges_Temp = new List<IClosed2D>();
-                        face2Ds.ForEach(x => internalEdges_Temp.AddRange(x.Edge2Ds));
-
-                        Face2D face2D_New = Face2D.Create(externalEdge, internalEdges_Temp, EdgeOrientationMethod.Opposite, tolerance);
-                        if(face2D_New == null)
-                        {
-                            continue;
-                        }
-
-                        result.Add(face2D_New);
-                    }
-                    //NEW VERSION END 25.05.20222
-
-                    //OLD VERSION
-                    //polygon2Ds_ExternalEdge_Temp = Create.Polygon2Ds(segment2Ds_All, tolerance);
-                    //if(polygon2Ds_ExternalEdge_Temp == null || polygon2Ds_ExternalEdge_Temp.Count == 0)
-                    //{
-                    //    continue;
-                    //}
-
-                    //polygon2Ds_ExternalEdge_Temp.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
-
-                    //for (int i = polygon2Ds_ExternalEdge_Temp.Count - 1; i >= 0; i--)
-                    //{
-                    //    Polygon2D polygon2D_ExternalEdge_Temp = polygon2Ds_ExternalEdge_Temp[i];
-
-                    //    //Polygon2D polygon2D = polygon2Ds_InternalEdge_Temp.Find(x => polygon2Ds_ExternalEdge_Temp[i].Inside(x.InternalPoint2D(tolerance)));
-                    //    Polygon2D polygon2D = null;
-                    //    foreach (Polygon2D polygon2D_InternalEdge_Temp in polygon2Ds_InternalEdge_Temp)
-                    //    {
-                    //        Point2D point2D = polygon2D_InternalEdge_Temp.InternalPoint2D(tolerance);
-                    //        if (polygon2D_ExternalEdge_Temp.Inside(point2D, tolerance) || polygon2D_ExternalEdge_Temp.On(point2D, tolerance))
-                    //        {
-                    //            polygon2D = polygon2D_InternalEdge_Temp;
-                    //            break;
-                    //        }
-                    //    }
-
-                    //    if(polygon2D != null)
-                    //    {
-                    //        polygon2Ds_ExternalEdge_Temp.RemoveAt(i);
-                    //    }
-                    //}
+                    result.Add(face2D_New);
                 }
-
-                //OLD VERSION
-                //foreach(Polygon2D polygon2D_ExternalEdge_Temp in polygon2Ds_ExternalEdge_Temp)
-                //{
-                //    if(polygon2D_ExternalEdge_Temp == null || polygon2D_ExternalEdge_Temp.GetArea() < 0)
-                //    {
-                //        continue;
-                //    }
-
-                //    Face2D face2D_New = Face2D.Create(polygon2D_ExternalEdge_Temp, polygon2Ds_InternalEdge_Temp, EdgeOrientationMethod.Opposite, tolerance);
-                //    if (face2D_New != null)
-                //        result.Add(face2D_New);
-                //}
             }
 
             return result;
