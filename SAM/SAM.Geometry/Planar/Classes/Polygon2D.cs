@@ -117,6 +117,13 @@ namespace SAM.Geometry.Planar
             return !On(point2D, tolerance);
         }
 
+        /// <summary>
+        /// Checks if closed2D is inside this Polygon2D
+        /// </summary>
+        /// <param name="closed2D">Closed2D</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>True if closed2D is inside this Polygon2</returns>
+        /// <returns>True if closed2D is inside this Polygon2</returns>
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             if(closed2D == null || points == null || points.Count == 0)
