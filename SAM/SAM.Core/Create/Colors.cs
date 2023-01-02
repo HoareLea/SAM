@@ -7,7 +7,7 @@ namespace SAM.Core
     {
         public static List<Color> Colors(this Color color, int count, double minBrightness = 0, double maxBrightness = 1)
         {
-            if(color == Color.Empty || count < 1)
+            if(color == System.Drawing.Color.Empty || count < 1)
             {
                 return null;
             }

@@ -85,6 +85,7 @@
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
+    <Compile Include="Create\Color.cs" />
     <Compile Include="Create\EnumParameterDatas.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
