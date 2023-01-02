@@ -198,6 +198,7 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Query\Equals.cs" />
     <Compile Include="Query\Brightness.cs" />
     <Compile Include="Query\Ping.cs" />
     <Compile Include="Query\Calculate.cs" />
