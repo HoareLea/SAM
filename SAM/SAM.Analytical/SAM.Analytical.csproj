@@ -225,6 +225,7 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\DefaultInternalConditionTextMap.cs" />
     <Compile Include="Query\Openable.cs" />
     <Compile Include="Query\Name.cs" />
     <Compile Include="Query\IsPerimeter.cs" />
