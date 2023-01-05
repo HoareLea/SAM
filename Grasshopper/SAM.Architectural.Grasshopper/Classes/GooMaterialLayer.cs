@@ -3,6 +3,8 @@ using Grasshopper.Kernel.Types;
 using SAM.Architectural.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Architectural.Grasshopper
 {
@@ -119,6 +121,20 @@ namespace SAM.Architectural.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooMaterialLayer value)
         {
             throw new NotImplementedException();
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+
+            //Menu_AppendSeparator(menu);
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }

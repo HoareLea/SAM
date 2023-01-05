@@ -88,9 +88,17 @@
       <Project>{4cf0f164-3c3b-4f14-ad9c-8267ac379d71}</Project>
       <Name>SAM.Math.Rhino</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{5fb69acc-6813-49ca-a3ca-0d4b62080100}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
       <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
       <Name>SAM.Math</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
+      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
+      <Name>SAM.Core.Grasshopper</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

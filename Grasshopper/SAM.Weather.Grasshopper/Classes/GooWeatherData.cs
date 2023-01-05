@@ -5,6 +5,8 @@ using SAM.Weather.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
+using System.Linq;
 
 namespace SAM.Weather.Grasshopper
 {
@@ -55,6 +57,20 @@ namespace SAM.Weather.Grasshopper
         protected override GH_GetterResult Prompt_Singular(ref GooWeatherData value)
         {
             throw new NotImplementedException();
+        }
+
+        public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
+        {
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+
+            //Menu_AppendSeparator(menu);
+
+            base.AppendAdditionalMenuItems(menu);
+        }
+
+        private void Menu_SaveAs(object sender, EventArgs e)
+        {
+            Core.Grasshopper.Query.SaveAs(VolatileData);
         }
     }
 }
