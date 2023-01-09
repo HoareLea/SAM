@@ -87,6 +87,7 @@
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
     <Compile Include="Planar\Query\Vector2D.cs" />
+    <Compile Include="Query\ISAMGeometryObject.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\SAMGeometry3DObjectCollection.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IShellObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IPolygon3DObject.cs" />

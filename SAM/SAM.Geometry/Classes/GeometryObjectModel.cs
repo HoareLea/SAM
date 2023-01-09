@@ -80,6 +80,25 @@ namespace SAM.Geometry
             return result;
         }
 
+        public T GetSAMGeometryObject<T>(Func<T, bool> func, bool recursive = true) where T : ISAMGeometryObject
+        {
+            if (sAMGeometryObjectCollection == null || func == null)
+            {
+                return default(T);
+            }
+
+            foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
+            {
+                T t = Query.ISAMGeometryObject(sAMGeometryObject, func, recursive);
+                if(t != null)
+                {
+                    return t;
+                }
+            }
+
+            return default(T);
+        }
+
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
