@@ -1,0 +1,444 @@
+[
+  {
+    "_type": "SAM.Analytical.ProfileLibrary,SAM.Analytical",
+    "Name": "TM 59 Profile Library",
+    "Guid": "06d351fa-1f83-4389-a473-eb6c76291bf2",
+    "Objects": [
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Living Room/Kitchen Gains",
+        "Guid": "09d674d5-5021-4b23-b915-99906aca3f5b",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            85.0
+          ],
+          [
+            9,
+            17,
+            110.0
+          ],
+          [
+            18,
+            19,
+            450.0
+          ],
+          [
+            20,
+            21,
+            200.0
+          ],
+          [
+            22,
+            23,
+            110.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Living Room Gains",
+        "Guid": "31dbc907-cf21-459d-80ec-a434c61c864a",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            35.0
+          ],
+          [
+            9,
+            17,
+            60.0
+          ],
+          [
+            18,
+            21,
+            150.0
+          ],
+          [
+            22,
+            23,
+            60.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Kitchen Gains",
+        "Guid": "312c54df-a9d9-4e8f-9ddd-8034b6c8d146",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            17,
+            50.0
+          ],
+          [
+            18,
+            19,
+            300.0
+          ],
+          [
+            20,
+            23,
+            50.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Bedroom Gains",
+        "Guid": "e5e20676-3500-48aa-a4ce-b3f7d8159d2e",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            7,
+            10.0
+          ],
+          [
+            8,
+            22,
+            80.0
+          ],
+          [
+            23,
+            10.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "TM59 Default Lighting Schedule",
+        "Guid": "07615a9c-f6b7-48b9-85d4-cd632f8bce83",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            17,
+            0.0
+          ],
+          [
+            18,
+            22,
+            1.0
+          ],
+          [
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Studio Occupancy",
+        "Guid": "42c9ad91-7522-437a-9164-cf8275f58753",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            7,
+            1.4
+          ],
+          [
+            8,
+            22,
+            2.0
+          ],
+          [
+            23,
+            1.4
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
+        "Guid": "17ea106c-65b9-4fe8-b508-259b813ef6d8",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            1.0
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "1 Bed Apt. Living Room Occupancy",
+        "Guid": "7c354bac-58a3-402d-b3e7-ba5681ea7187",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            0.75
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "1 Bed Apt. Kitchen Occupancy",
+        "Guid": "7d70fd1f-d76d-49c0-b4a7-595c1d57be32",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            0.25
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
+        "Guid": "450a70ad-d3e3-47ae-bbf7-9daea9b8ac04",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            2.0
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "2 Bed Apt. Living Room Occupancy",
+        "Guid": "269a8b8a-a8d1-4f7a-a54a-454c3963fdcb",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            1.5
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "2 Bed Apt. Kitchen Occupancy",
+        "Guid": "8a883f2b-3e76-4596-bdaf-02d5389292d5",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            0.5
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
+        "Guid": "b09f394a-5d39-44f4-b8ba-b92142303a0c",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            3.0
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "3 Bed Apt. Living Room Occupancy",
+        "Guid": "65bc808e-abd4-4012-991d-8dac59afb056",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            2.25
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "3 Bed Apt. Kitchen Occupancy",
+        "Guid": "3cae46f2-3731-4869-8dbf-0ff7a35271c7",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            8,
+            0.0
+          ],
+          [
+            9,
+            21,
+            0.75
+          ],
+          [
+            22,
+            23,
+            0.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Double Bedroom Occupancy",
+        "Guid": "192841cd-6579-4bff-875e-8af7d2bdf2e0",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            7,
+            1.4
+          ],
+          [
+            8,
+            2.0
+          ],
+          [
+            9,
+            21,
+            1.0
+          ],
+          [
+            22,
+            2.0
+          ],
+          [
+            23,
+            1.4
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Single Bedroom Occupancy",
+        "Guid": "22758790-8a5c-4d43-94ca-a4a839b7dec5",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            7,
+            0.7
+          ],
+          [
+            8,
+            22,
+            1.0
+          ],
+          [
+            23,
+            0.7
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "No Heating",
+        "Guid": "d26c0286-2f21-435e-9aad-4bc3244989f4",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            23,
+            -50.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "No Cooling",
+        "Guid": "2df6f150-f922-4c10-9e40-190a7ff4d0ab",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            23,
+            150.0
+          ]
+        ]
+      }
+    ]
+  }
+]

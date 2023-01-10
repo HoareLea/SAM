@@ -17,5 +17,16 @@ namespace SAM.Core
         {
             AddRange(values);
         }
+
+        public bool TryGetValue<T>(int index, out T value)
+        {
+            value = default(T);
+            if( index < 0 || index >= Count)
+            {
+                return false;
+            }
+
+            return Query.TryConvert(this[index], out value);
+        }
     }
 }

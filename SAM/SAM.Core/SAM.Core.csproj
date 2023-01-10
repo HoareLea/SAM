@@ -86,6 +86,7 @@
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
     <Compile Include="Create\Color.cs" />
+    <Compile Include="Create\DelimitedFileRows.cs" />
     <Compile Include="Create\EnumParameterDatas.cs" />
     <Compile Include="Create\DelimitedFileTable.cs" />
     <Compile Include="Create\Commands.cs" />
