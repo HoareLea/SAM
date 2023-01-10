@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,6 +46,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometry", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
 

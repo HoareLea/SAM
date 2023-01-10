@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,6 +42,7 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
             int index = inputParamManager.AddParameter(new GooApertureParam(), "_apertures_", "_apertures_", "SAM Analytical Apertures", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
+            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance", GH_ParamAccess.item, 0.1);
 
