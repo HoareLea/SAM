@@ -2,7 +2,7 @@
   {
     "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
     "Name": "TM 59 InternalCondition Library",
-    "Guid": "761f7ffc-5d04-4ad5-8467-220c4056fa26",
+    "Guid": "7fb519e2-57c2-4b74-9cb7-b9f4c960d272",
     "Objects": [
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -59,8 +59,8 @@
             ]
           }
         ],
-        "Name": "Studio Occupancy",
-        "Guid": "e0ad0c91-211e-45fa-9502-06781e0b555f"
+        "Name": "Studio",
+        "Guid": "4f50ea9d-d47f-4dd7-8dc9-cabfbf3f5350"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -117,8 +117,8 @@
             ]
           }
         ],
-        "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
-        "Guid": "74f0acec-4bc9-40f7-8054-0a9f519559a5"
+        "Name": "1 Bed Apt. Living Room /Kitchen",
+        "Guid": "544bc2c9-d281-472a-ad38-83f0f01a3827"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -175,8 +175,8 @@
             ]
           }
         ],
-        "Name": "1 Bed Apt. Living Room Occupancy",
-        "Guid": "007d629f-ba4b-48e5-a016-c1002a522597"
+        "Name": "1 Bed Apt. Living Room",
+        "Guid": "86378c03-2c15-4846-8416-ac12a3e9e1a0"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -233,8 +233,8 @@
             ]
           }
         ],
-        "Name": "1 Bed Apt. Kitchen Occupancy",
-        "Guid": "f589dee7-0111-4cdc-b5fb-1baefb10eccd"
+        "Name": "1 Bed Apt. Kitchen",
+        "Guid": "5a081e45-59b9-4eb5-b75a-f966aff169e1"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -291,8 +291,8 @@
             ]
           }
         ],
-        "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "b5239e41-c9ec-474a-90f9-b73927ef8838"
+        "Name": "2 Bed Apt. Living Room/Kitchen",
+        "Guid": "8082c972-2211-425b-b996-a06ff60d266e"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -349,8 +349,8 @@
             ]
           }
         ],
-        "Name": "2 Bed Apt. Living Room Occupancy",
-        "Guid": "7b5cd109-98c7-452c-8840-640882c41a52"
+        "Name": "2 Bed Apt. Living Room",
+        "Guid": "dfcb615f-4c36-4e76-921a-d2cac6e70092"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -407,8 +407,8 @@
             ]
           }
         ],
-        "Name": "2 Bed Apt. Kitchen Occupancy",
-        "Guid": "cdc00d7c-4180-4c26-97df-ec07801ccbca"
+        "Name": "2 Bed Apt. Kitchen",
+        "Guid": "610c41d5-eb37-423e-bfb9-71af001c7fb4"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -465,8 +465,8 @@
             ]
           }
         ],
-        "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "7b175312-6b5d-47b7-858f-429e98250923"
+        "Name": "3 Bed Apt. Living Room/Kitchen",
+        "Guid": "3a02565e-7f1c-43c8-b74e-c3afca711382"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -523,8 +523,8 @@
             ]
           }
         ],
-        "Name": "3 Bed Apt. Living Room Occupancy",
-        "Guid": "139db0b2-59ef-414d-943a-15ad1a78136e"
+        "Name": "3 Bed Apt. Living Room",
+        "Guid": "550f14a6-8a92-42c9-8586-03e72f6c01b5"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -581,8 +581,8 @@
             ]
           }
         ],
-        "Name": "3 Bed Apt. Kitchen Occupancy",
-        "Guid": "2eb9b8ad-ddf8-4903-b1a5-fc5afd548825"
+        "Name": "3 Bed Apt. Kitchen",
+        "Guid": "27dd6315-16f1-471e-8330-0a2d1359e602"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -639,8 +639,8 @@
             ]
           }
         ],
-        "Name": "Double Bedroom Occupancy",
-        "Guid": "36a53561-f34c-4995-80df-9e344bbbddda"
+        "Name": "Double Bedroom",
+        "Guid": "ce74532c-2994-4f3f-9bd9-f94ef7a4c273"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -697,8 +697,8 @@
             ]
           }
         ],
-        "Name": "Single Bedroom Occupancy",
-        "Guid": "087c054e-8c71-467a-b828-95e0dea584b6"
+        "Name": "Single Bedroom",
+        "Guid": "ce77cf8a-f280-4d1a-9559-c38e1810badf"
       }
     ]
   }
