@@ -2,7 +2,7 @@
   {
     "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
     "Name": "TM 59 InternalCondition Library",
-    "Guid": "61d42518-20d3-4a8e-a7c8-0cbb202ee4f2",
+    "Guid": "9f3d5fdf-ccef-4e36-960b-def22d0f6955",
     "Objects": [
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -25,7 +25,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room/Kitchen Gains"
               },
               {
@@ -47,12 +47,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "Studio Occupancy",
-        "Guid": "bf622de6-57bf-42f8-866a-3b3f7b61e9db"
+        "Guid": "7cfc8243-e180-4a6f-9b49-58bc40aaf282"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -75,7 +83,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room/Kitchen Gains"
               },
               {
@@ -97,12 +105,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
-        "Guid": "099d1ec1-b162-4337-a271-a93c384bf281"
+        "Guid": "a36f1f36-5f01-44d6-8cad-5112ef17095b"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -125,7 +141,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room Gains"
               },
               {
@@ -147,12 +163,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Living Room Occupancy",
-        "Guid": "c83df9a4-d8cb-447d-997e-1627c1a77e4d"
+        "Guid": "aeb9e20c-f2e3-4273-8d6c-333ec3a0b2b4"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -175,7 +199,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Kitchen Gains"
               },
               {
@@ -197,12 +221,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Kitchen Occupancy",
-        "Guid": "6d412f01-3042-4576-a995-4e0b94dc7648"
+        "Guid": "8cb5ffac-abb1-472f-b1b1-d0d5e647be4b"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -225,7 +257,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room/Kitchen Gains"
               },
               {
@@ -247,12 +279,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "fe3a8963-1938-4194-bb54-24387caeb6da"
+        "Guid": "12c73927-efc5-47b5-ad9b-5f747c2dc807"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -275,7 +315,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room Gains"
               },
               {
@@ -297,12 +337,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Living Room Occupancy",
-        "Guid": "3150205b-140e-4406-afd2-607decd3f694"
+        "Guid": "8a82d690-e57d-4d6a-b3b0-81c1c3d4edf3"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -325,7 +373,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Kitchen Gains"
               },
               {
@@ -347,12 +395,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Kitchen Occupancy",
-        "Guid": "84f1f3a3-451e-48aa-b5cf-9544d9b775b2"
+        "Guid": "c4b9e295-9dcd-4909-99a4-970dfb6ad479"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -375,7 +431,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room/Kitchen Gains"
               },
               {
@@ -397,12 +453,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "e4c2772b-85d7-4a1a-9af9-7fc27bad5bce"
+        "Guid": "5431b3d4-09d2-43fa-8c80-2779e5bf3151"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -425,7 +489,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Living Room Gains"
               },
               {
@@ -447,12 +511,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Living Room Occupancy",
-        "Guid": "9c7e78ea-6b84-418b-a347-bd377d7806db"
+        "Guid": "a2794a33-1fdf-445d-bb93-6a8fae075180"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -475,7 +547,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Kitchen Gains"
               },
               {
@@ -497,12 +569,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Kitchen Occupancy",
-        "Guid": "ede72a40-b26e-4960-9436-9213ea96fc09"
+        "Guid": "34687b60-3b71-4121-b4b5-c5f21248f111"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -525,7 +605,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Bedroom Gains"
               },
               {
@@ -547,12 +627,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "Double Bedroom Occupancy",
-        "Guid": "46c49040-121e-4b20-b20c-c6eedf21511f"
+        "Guid": "33e2d70b-fe3a-4bfa-a34a-710c2fcd4167"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -575,7 +663,7 @@
                 "Value": 75.0
               },
               {
-                "Name": "Equipment Latent Profile Name",
+                "Name": "Equipment Sensible Profile Name",
                 "Value": "Bedroom Gains"
               },
               {
@@ -597,12 +685,20 @@
               {
                 "Name": "Lighting Gain Per Area",
                 "Value": 2.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 1.0
               }
             ]
           }
         ],
         "Name": "Single Bedroom Occupancy",
-        "Guid": "0269f405-f2ee-46f7-878e-bc8c509c7ca6"
+        "Guid": "d7dd80e5-5d4c-4682-9424-c4c7caa92938"
       }
     ]
   }
