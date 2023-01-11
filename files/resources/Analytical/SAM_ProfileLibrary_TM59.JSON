@@ -2,12 +2,12 @@
   {
     "_type": "SAM.Analytical.ProfileLibrary,SAM.Analytical",
     "Name": "TM 59 Profile Library",
-    "Guid": "440d383c-978b-4747-afd2-1c84fa84df36",
+    "Guid": "a74b0237-b584-4f6b-b02f-435b21ad67b8",
     "Objects": [
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Living Room/Kitchen Gains",
-        "Guid": "85bfec03-17c2-42f1-a599-8b1cc498164f",
+        "Guid": "b9635404-f8ff-4dc2-ab47-38f5a5b32629",
         "Category": "Equipment Sensible",
         "Values": [
           [
@@ -39,41 +39,8 @@
       },
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
-        "Name": "Living Room/Kitchen Gains",
-        "Guid": "c550d1f3-e379-4e00-bf68-1c154e23c0bd",
-        "Category": "Equipment Latent",
-        "Values": [
-          [
-            0,
-            8,
-            0.1889
-          ],
-          [
-            9,
-            17,
-            0.244444444
-          ],
-          [
-            18,
-            19,
-            1.0
-          ],
-          [
-            20,
-            21,
-            0.444444444
-          ],
-          [
-            22,
-            23,
-            0.244444444
-          ]
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Living Room Gains",
-        "Guid": "77b391e3-0d6f-4860-a011-f69ddd0cfe76",
+        "Guid": "f84c040a-d6e4-45f3-8f9c-21c5e53f4da0",
         "Category": "Equipment Sensible",
         "Values": [
           [
@@ -100,36 +67,8 @@
       },
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
-        "Name": "Living Room Gains",
-        "Guid": "cd91bc6f-d177-4494-9651-c5a8e2a12cbd",
-        "Category": "Equipment Latent",
-        "Values": [
-          [
-            0,
-            8,
-            0.233333333
-          ],
-          [
-            9,
-            17,
-            0.4
-          ],
-          [
-            18,
-            21,
-            1.0
-          ],
-          [
-            22,
-            23,
-            0.4
-          ]
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Kitchen Gains",
-        "Guid": "320795a6-7568-407d-b1b0-a3eb67ac8cc7",
+        "Guid": "9b827d78-d4ee-4d49-9326-7b75951be546",
         "Category": "Equipment Sensible",
         "Values": [
           [
@@ -151,54 +90,9 @@
       },
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
-        "Name": "Kitchen Gains",
-        "Guid": "c902dd36-09e3-44cd-936c-12226dd39930",
-        "Category": "Equipment Latent",
-        "Values": [
-          [
-            0,
-            17,
-            0.166666667
-          ],
-          [
-            18,
-            19,
-            1.0
-          ],
-          [
-            20,
-            23,
-            0.166666667
-          ]
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Bedroom Gains",
-        "Guid": "0a05c4db-1d86-4278-9728-8a77d1a59c60",
+        "Guid": "2e53dc0d-d62a-4dc8-87a7-b494c6a3c38f",
         "Category": "Equipment Sensible",
-        "Values": [
-          [
-            0,
-            7,
-            0.125
-          ],
-          [
-            8,
-            22,
-            1.0
-          ],
-          [
-            23,
-            0.125
-          ]
-        ]
-      },
-      {
-        "_type": "SAM.Analytical.Profile,SAM.Analytical",
-        "Name": "Bedroom Gains",
-        "Guid": "3faa136e-7fb6-4e15-b032-c218f2a9ee3e",
-        "Category": "Equipment Latent",
         "Values": [
           [
             0,
@@ -219,7 +113,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "TM59 Default Lighting Schedule",
-        "Guid": "36ed8c76-9cfb-4d5a-8ee9-39beab23f16a",
+        "Guid": "2a2eb843-12b8-4011-b0bc-e8bfa670c274",
         "Category": "Lighting",
         "Values": [
           [
@@ -241,7 +135,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Studio Occupancy",
-        "Guid": "fdc763cc-d783-4f63-b942-1ead235ad01d",
+        "Guid": "2f0a1e45-9f6e-4c51-b623-8b316c34ed6d",
         "Category": "Occupancy",
         "Values": [
           [
@@ -263,7 +157,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
-        "Guid": "35bdb788-f2d3-495a-bad9-5a55c64dd6e4",
+        "Guid": "2eb9228d-55e0-4f7a-9303-2884a0f5b3fe",
         "Category": "Occupancy",
         "Values": [
           [
@@ -286,7 +180,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "1 Bed Apt. Living Room Occupancy",
-        "Guid": "2376bcb7-3df4-4897-9d3c-afb0acdc69ba",
+        "Guid": "b6f9e034-c94f-4a1f-8777-a216ef2f25de",
         "Category": "Occupancy",
         "Values": [
           [
@@ -309,7 +203,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "1 Bed Apt. Kitchen Occupancy",
-        "Guid": "fd9b2670-2abf-4319-8521-a5f53730ff38",
+        "Guid": "fa9b4fdb-bdfc-4be3-b095-e50c81d802c8",
         "Category": "Occupancy",
         "Values": [
           [
@@ -332,7 +226,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "7fcf2738-6cd8-4ea7-a521-96ca56e9063a",
+        "Guid": "246c2219-b0c3-4a49-ac66-101b997de110",
         "Category": "Occupancy",
         "Values": [
           [
@@ -355,7 +249,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "2 Bed Apt. Living Room Occupancy",
-        "Guid": "3b9d5ece-617e-46c1-beb2-d653c08e0bca",
+        "Guid": "cb7183e4-3732-4464-a927-c40c7f680670",
         "Category": "Occupancy",
         "Values": [
           [
@@ -378,7 +272,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "2 Bed Apt. Kitchen Occupancy",
-        "Guid": "f9bceed4-75fa-46d5-ba72-a25f0af1c6ba",
+        "Guid": "24bc65c9-c8bb-4946-abd6-cdc895374abf",
         "Category": "Occupancy",
         "Values": [
           [
@@ -401,7 +295,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "040f2fdc-ad40-4712-823a-2a0efd1f7a1a",
+        "Guid": "f04d5d5c-7f0f-4a07-acf2-3de1b61a08be",
         "Category": "Occupancy",
         "Values": [
           [
@@ -424,7 +318,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "3 Bed Apt. Living Room Occupancy",
-        "Guid": "0ce8814a-9338-4494-9576-8776dd074ed1",
+        "Guid": "66f45a45-9bf3-4b17-ab47-36b6527138e2",
         "Category": "Occupancy",
         "Values": [
           [
@@ -447,7 +341,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "3 Bed Apt. Kitchen Occupancy",
-        "Guid": "6a717690-7ab0-4979-8613-a3feed4b6c9b",
+        "Guid": "5c7d9920-2ec1-40ac-b9be-569b2feeac48",
         "Category": "Occupancy",
         "Values": [
           [
@@ -470,7 +364,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Double Bedroom Occupancy",
-        "Guid": "0fae08b1-b800-49b6-a1b6-5399c6402109",
+        "Guid": "4ec4917e-94f6-486c-87a2-ad25f66761e5",
         "Category": "Occupancy",
         "Values": [
           [
@@ -500,7 +394,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "Single Bedroom Occupancy",
-        "Guid": "9f3259df-5564-4d7a-8eca-07a2b0a73677",
+        "Guid": "561afec5-b2e6-4c5e-8520-f3a2b396662a",
         "Category": "Occupancy",
         "Values": [
           [
@@ -522,7 +416,7 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "No Heating",
-        "Guid": "fa830d5b-9a4f-44f2-b68c-1927af3f7bb5",
+        "Guid": "5d4288d0-f367-4cf2-92a8-e2a8606bd8ed",
         "Category": "Heating",
         "Values": [
           [
@@ -535,13 +429,26 @@
       {
         "_type": "SAM.Analytical.Profile,SAM.Analytical",
         "Name": "No Cooling",
-        "Guid": "308e31bb-3499-4382-bc55-c4ba3423e7bf",
+        "Guid": "e16303ea-4af6-40a8-bd48-b775a38b3e3f",
         "Category": "Cooling",
         "Values": [
           [
             0,
             23,
             150.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Infiltration",
+        "Guid": "2c67ea3d-5970-4f4f-a52f-288d44c587c2",
+        "Category": "Infiltration",
+        "Values": [
+          [
+            0,
+            23,
+            1.0
           ]
         ]
       }

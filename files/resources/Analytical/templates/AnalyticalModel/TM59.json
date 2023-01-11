@@ -1,0 +1,1206 @@
+[
+  {
+    "_type": "SAM.Analytical.AnalyticalModel,SAM.Analytical",
+    "Name": "New Project",
+    "Guid": "eb68d631-fc64-48e6-8f8f-99a9d16a15d5",
+    "AdjacencyCluster": {
+      "_type": "SAM.Analytical.AdjacencyCluster,SAM.Analytical",
+      "Guid": "fc06fbf1-80b7-4720-bc90-3e16c11c180e",
+      "Objects": [
+        {
+          "Key": "SAM.Analytical.InternalCondition",
+          "Value": [
+            {
+              "Key": "707b12d3-08f1-42c9-b022-4ee990cf979f",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "Studio Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room/Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 450.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "Studio Occupancy",
+                "Guid": "707b12d3-08f1-42c9-b022-4ee990cf979f"
+              }
+            },
+            {
+              "Key": "b687c069-1f63-455b-add7-3d26564a9508",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "1 Bed Apt. Living Room /Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room/Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 450.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
+                "Guid": "b687c069-1f63-455b-add7-3d26564a9508"
+              }
+            },
+            {
+              "Key": "13fe96e8-3b52-4baa-8a6c-4ad6c45ea3f1",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "1 Bed Apt. Living Room Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 150.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "1 Bed Apt. Living Room Occupancy",
+                "Guid": "13fe96e8-3b52-4baa-8a6c-4ad6c45ea3f1"
+              }
+            },
+            {
+              "Key": "d337c5c1-43d9-4f68-93da-878454a4eeec",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "1 Bed Apt. Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 300.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "1 Bed Apt. Kitchen Occupancy",
+                "Guid": "d337c5c1-43d9-4f68-93da-878454a4eeec"
+              }
+            },
+            {
+              "Key": "2fa9640d-3871-423e-ac9d-fb324efd4563",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "2 Bed Apt. Living Room/Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room/Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 450.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
+                "Guid": "2fa9640d-3871-423e-ac9d-fb324efd4563"
+              }
+            },
+            {
+              "Key": "c03b55d1-ed48-436e-82e2-e8e8f8b95d74",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "2 Bed Apt. Living Room Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 150.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "2 Bed Apt. Living Room Occupancy",
+                "Guid": "c03b55d1-ed48-436e-82e2-e8e8f8b95d74"
+              }
+            },
+            {
+              "Key": "5e95d36c-6554-4c37-9d4c-066d974a022a",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "2 Bed Apt. Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 300.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "2 Bed Apt. Kitchen Occupancy",
+                "Guid": "5e95d36c-6554-4c37-9d4c-066d974a022a"
+              }
+            },
+            {
+              "Key": "8074b48a-b92e-411f-8406-2afe2245a93e",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "3 Bed Apt. Living Room/Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room/Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 450.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
+                "Guid": "8074b48a-b92e-411f-8406-2afe2245a93e"
+              }
+            },
+            {
+              "Key": "3d2f89a3-e789-4359-a412-5d8bd16cf98a",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "3 Bed Apt. Living Room Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Living Room Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 150.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "3 Bed Apt. Living Room Occupancy",
+                "Guid": "3d2f89a3-e789-4359-a412-5d8bd16cf98a"
+              }
+            },
+            {
+              "Key": "2c7ef405-d564-476f-974f-971a766398db",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "3 Bed Apt. Kitchen Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Kitchen Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 300.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "3 Bed Apt. Kitchen Occupancy",
+                "Guid": "2c7ef405-d564-476f-974f-971a766398db"
+              }
+            },
+            {
+              "Key": "d83ee272-11ce-4993-9ec8-c3ec0dc3f425",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "Double Bedroom Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Bedroom Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 80.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "Double Bedroom Occupancy",
+                "Guid": "d83ee272-11ce-4993-9ec8-c3ec0dc3f425"
+              }
+            },
+            {
+              "Key": "1950b718-1da6-4274-9842-4793871ad258",
+              "Value": {
+                "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+                "ParameterSets": [
+                  {
+                    "_type": "SAM.Core.ParameterSet",
+                    "Name": "SAM.Analytical",
+                    "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+                    "Parameters": [
+                      {
+                        "Name": "Occupancy Profile Name",
+                        "Value": "Single Bedroom Occupancy"
+                      },
+                      {
+                        "Name": "Occupancy Latent Gain Per Person",
+                        "Value": 55.0
+                      },
+                      {
+                        "Name": "Occupancy Sensible Gain Per Person",
+                        "Value": 75.0
+                      },
+                      {
+                        "Name": "Equipment Sensible Profile Name",
+                        "Value": "Bedroom Gains"
+                      },
+                      {
+                        "Name": "Equipment Sensible Gain",
+                        "Value": 80.0
+                      },
+                      {
+                        "Name": "Heating Profile Name",
+                        "Value": "No Heating"
+                      },
+                      {
+                        "Name": "Cooling Profile Name",
+                        "Value": "No Cooling"
+                      },
+                      {
+                        "Name": "Lighting Profile Name",
+                        "Value": "TM59 Default Lighting Schedule"
+                      },
+                      {
+                        "Name": "Lighting Gain Per Area",
+                        "Value": 2.0
+                      },
+                      {
+                        "Name": "Infiltration Profile Name",
+                        "Value": "Infiltration"
+                      },
+                      {
+                        "Name": "Infiltration Air Changes Per Hour",
+                        "Value": 1.0
+                      }
+                    ]
+                  }
+                ],
+                "Name": "Single Bedroom Occupancy",
+                "Guid": "1950b718-1da6-4274-9842-4793871ad258"
+              }
+            }
+          ]
+        }
+      ],
+      "Relations": []
+    },
+    "ProfileLibrary": {
+      "_type": "SAM.Analytical.ProfileLibrary,SAM.Analytical",
+      "Name": "Default Profile Libarary",
+      "Guid": "15df4a21-4428-48f9-8e6c-ab547d9263e8",
+      "Objects": [
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Living Room/Kitchen Gains",
+          "Guid": "b9635404-f8ff-4dc2-ab47-38f5a5b32629",
+          "Category": "Equipment Sensible",
+          "Values": [
+            [
+              0,
+              8,
+              0.1889
+            ],
+            [
+              9,
+              17,
+              0.244444444
+            ],
+            [
+              18,
+              19,
+              1.0
+            ],
+            [
+              20,
+              21,
+              0.444444444
+            ],
+            [
+              22,
+              23,
+              0.244444444
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Living Room Gains",
+          "Guid": "f84c040a-d6e4-45f3-8f9c-21c5e53f4da0",
+          "Category": "Equipment Sensible",
+          "Values": [
+            [
+              0,
+              8,
+              0.233333333
+            ],
+            [
+              9,
+              17,
+              0.4
+            ],
+            [
+              18,
+              21,
+              1.0
+            ],
+            [
+              22,
+              23,
+              0.4
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Kitchen Gains",
+          "Guid": "9b827d78-d4ee-4d49-9326-7b75951be546",
+          "Category": "Equipment Sensible",
+          "Values": [
+            [
+              0,
+              17,
+              0.166666667
+            ],
+            [
+              18,
+              19,
+              1.0
+            ],
+            [
+              20,
+              23,
+              0.166666667
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Bedroom Gains",
+          "Guid": "2e53dc0d-d62a-4dc8-87a7-b494c6a3c38f",
+          "Category": "Equipment Sensible",
+          "Values": [
+            [
+              0,
+              7,
+              0.125
+            ],
+            [
+              8,
+              22,
+              1.0
+            ],
+            [
+              23,
+              0.125
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "TM59 Default Lighting Schedule",
+          "Guid": "2a2eb843-12b8-4011-b0bc-e8bfa670c274",
+          "Category": "Lighting",
+          "Values": [
+            [
+              0,
+              17,
+              0.0
+            ],
+            [
+              18,
+              22,
+              1.0
+            ],
+            [
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Studio Occupancy",
+          "Guid": "2f0a1e45-9f6e-4c51-b623-8b316c34ed6d",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              7,
+              0.7
+            ],
+            [
+              8,
+              22,
+              1.0
+            ],
+            [
+              23,
+              0.7
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
+          "Guid": "2eb9228d-55e0-4f7a-9303-2884a0f5b3fe",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              1.0
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "1 Bed Apt. Living Room Occupancy",
+          "Guid": "b6f9e034-c94f-4a1f-8777-a216ef2f25de",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.75
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "1 Bed Apt. Kitchen Occupancy",
+          "Guid": "fa9b4fdb-bdfc-4be3-b095-e50c81d802c8",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.25
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
+          "Guid": "246c2219-b0c3-4a49-ac66-101b997de110",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              1.0
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "2 Bed Apt. Living Room Occupancy",
+          "Guid": "cb7183e4-3732-4464-a927-c40c7f680670",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.75
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "2 Bed Apt. Kitchen Occupancy",
+          "Guid": "24bc65c9-c8bb-4946-abd6-cdc895374abf",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.25
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
+          "Guid": "f04d5d5c-7f0f-4a07-acf2-3de1b61a08be",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              1.0
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "3 Bed Apt. Living Room Occupancy",
+          "Guid": "66f45a45-9bf3-4b17-ab47-36b6527138e2",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.75
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "3 Bed Apt. Kitchen Occupancy",
+          "Guid": "5c7d9920-2ec1-40ac-b9be-569b2feeac48",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              8,
+              0.0
+            ],
+            [
+              9,
+              21,
+              0.25
+            ],
+            [
+              22,
+              23,
+              0.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Double Bedroom Occupancy",
+          "Guid": "4ec4917e-94f6-486c-87a2-ad25f66761e5",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              7,
+              0.7
+            ],
+            [
+              8,
+              1.0
+            ],
+            [
+              9,
+              21,
+              0.5
+            ],
+            [
+              22,
+              1.0
+            ],
+            [
+              23,
+              0.7
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Single Bedroom Occupancy",
+          "Guid": "561afec5-b2e6-4c5e-8520-f3a2b396662a",
+          "Category": "Occupancy",
+          "Values": [
+            [
+              0,
+              7,
+              0.7
+            ],
+            [
+              8,
+              22,
+              1.0
+            ],
+            [
+              23,
+              0.7
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "No Heating",
+          "Guid": "5d4288d0-f367-4cf2-92a8-e2a8606bd8ed",
+          "Category": "Heating",
+          "Values": [
+            [
+              0,
+              23,
+              -50.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "No Cooling",
+          "Guid": "e16303ea-4af6-40a8-bd48-b775a38b3e3f",
+          "Category": "Cooling",
+          "Values": [
+            [
+              0,
+              23,
+              150.0
+            ]
+          ]
+        },
+        {
+          "_type": "SAM.Analytical.Profile,SAM.Analytical",
+          "Name": "Infiltration",
+          "Guid": "2c67ea3d-5970-4f4f-a52f-288d44c587c2",
+          "Category": "Infiltration",
+          "Values": [
+            [
+              0,
+              23,
+              1.0
+            ]
+          ]
+        }
+      ]
+    }
+  }
+]
