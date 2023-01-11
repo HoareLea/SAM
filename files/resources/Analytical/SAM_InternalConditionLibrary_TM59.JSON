@@ -2,7 +2,7 @@
   {
     "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
     "Name": "TM 59 InternalCondition Library",
-    "Guid": "ca0260df-3ade-45c1-8d87-c230c22c2ff3",
+    "Guid": "761f7ffc-5d04-4ad5-8467-220c4056fa26",
     "Objects": [
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -54,13 +54,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "Studio Occupancy",
-        "Guid": "707b12d3-08f1-42c9-b022-4ee990cf979f"
+        "Guid": "e0ad0c91-211e-45fa-9502-06781e0b555f"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -112,13 +112,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Living Room /Kitchen Occupancy",
-        "Guid": "b687c069-1f63-455b-add7-3d26564a9508"
+        "Guid": "74f0acec-4bc9-40f7-8054-0a9f519559a5"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -170,13 +170,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Living Room Occupancy",
-        "Guid": "13fe96e8-3b52-4baa-8a6c-4ad6c45ea3f1"
+        "Guid": "007d629f-ba4b-48e5-a016-c1002a522597"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -228,13 +228,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "1 Bed Apt. Kitchen Occupancy",
-        "Guid": "d337c5c1-43d9-4f68-93da-878454a4eeec"
+        "Guid": "f589dee7-0111-4cdc-b5fb-1baefb10eccd"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -286,13 +286,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "2fa9640d-3871-423e-ac9d-fb324efd4563"
+        "Guid": "b5239e41-c9ec-474a-90f9-b73927ef8838"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -344,13 +344,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Living Room Occupancy",
-        "Guid": "c03b55d1-ed48-436e-82e2-e8e8f8b95d74"
+        "Guid": "7b5cd109-98c7-452c-8840-640882c41a52"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -402,13 +402,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "2 Bed Apt. Kitchen Occupancy",
-        "Guid": "5e95d36c-6554-4c37-9d4c-066d974a022a"
+        "Guid": "cdc00d7c-4180-4c26-97df-ec07801ccbca"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -460,13 +460,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Living Room/Kitchen Occupancy",
-        "Guid": "8074b48a-b92e-411f-8406-2afe2245a93e"
+        "Guid": "7b175312-6b5d-47b7-858f-429e98250923"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -518,13 +518,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Living Room Occupancy",
-        "Guid": "3d2f89a3-e789-4359-a412-5d8bd16cf98a"
+        "Guid": "139db0b2-59ef-414d-943a-15ad1a78136e"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -576,13 +576,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "3 Bed Apt. Kitchen Occupancy",
-        "Guid": "2c7ef405-d564-476f-974f-971a766398db"
+        "Guid": "2eb9b8ad-ddf8-4903-b1a5-fc5afd548825"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -634,13 +634,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "Double Bedroom Occupancy",
-        "Guid": "d83ee272-11ce-4993-9ec8-c3ec0dc3f425"
+        "Guid": "36a53561-f34c-4995-80df-9e344bbbddda"
       },
       {
         "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
@@ -692,13 +692,13 @@
               },
               {
                 "Name": "Infiltration Air Changes Per Hour",
-                "Value": 1.0
+                "Value": 0.15
               }
             ]
           }
         ],
         "Name": "Single Bedroom Occupancy",
-        "Guid": "1950b718-1da6-4274-9842-4793871ad258"
+        "Guid": "087c054e-8c71-467a-b828-95e0dea584b6"
       }
     ]
   }

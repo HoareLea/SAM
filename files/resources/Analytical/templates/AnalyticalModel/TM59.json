@@ -62,7 +62,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -123,7 +123,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -184,7 +184,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -245,7 +245,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -306,7 +306,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -367,7 +367,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -428,7 +428,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -489,7 +489,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -550,7 +550,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -611,7 +611,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -672,7 +672,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
@@ -733,7 +733,7 @@
                       },
                       {
                         "Name": "Infiltration Air Changes Per Hour",
-                        "Value": 1.0
+                        "Value": 0.15
                       }
                     ]
                   }
