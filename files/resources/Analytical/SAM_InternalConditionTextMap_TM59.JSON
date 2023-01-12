@@ -1,0 +1,88 @@
+[
+  {
+    "_type": "SAM.Core.TextMap,SAM.Core",
+    "Name": "",
+    "Guid": "c4e38d79-2d3e-4dbd-be75-b05ef49a973a",
+    "Map": [
+      [
+        "Studio",
+        "studio",
+        "bed",
+        "bedroom"
+      ],
+      [
+        "1 Bed Apt. Living Room/Kitchen",
+        "living/kitchen",
+        "living+kitchen",
+        "lvng/ktch"
+      ],
+      [
+        "1 Bed Apt. Living Room",
+        "living",
+        "lvg",
+        "lvng",
+        "liv",
+        "dining"
+      ],
+      [
+        "1 Bed Apt. Kitchen",
+        "kitchen",
+        "k'chn",
+        "kit"
+      ],
+      [
+        "2 Bed Apt. Living Room/Kitchen",
+        "living/kitchen",
+        "living+kitchen",
+        "lvng/ktch"
+      ],
+      [
+        "2 Bed Apt. Living Room",
+        "living",
+        "lvg",
+        "lvng",
+        "liv",
+        "dining"
+      ],
+      [
+        "2 Bed Apt. Kitchen",
+        "kitchen",
+        "k'chn",
+        "kit"
+      ],
+      [
+        "3 Bed Apt. Living Room/Kitchen",
+        "living/kitchen",
+        "living+kitchen",
+        "lvng/ktch"
+      ],
+      [
+        "3 Bed Apt. Living Room",
+        "living",
+        "lvg",
+        "lvng",
+        "liv",
+        "dining"
+      ],
+      [
+        "3 Bed Apt. Kitchen",
+        "kitchen",
+        "k'chn",
+        "kit"
+      ],
+      [
+        "Double Bedroom",
+        "bedroom",
+        "bed",
+        "sleeping",
+        "double"
+      ],
+      [
+        "Single Bedroom",
+        "study",
+        "bedroom",
+        "bed"
+      ]
+    ]
+  }
+]

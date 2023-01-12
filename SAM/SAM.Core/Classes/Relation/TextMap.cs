@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text.RegularExpressions;
 
 namespace SAM.Core
@@ -19,6 +20,23 @@ namespace SAM.Core
             : base(textMap)
         {
             if(textMap.dictionary != null)
+            {
+                dictionary = new Dictionary<string, HashSet<string>>();
+                foreach (KeyValuePair<string, HashSet<string>> keyValuePair in textMap.dictionary)
+                {
+                    HashSet<string> values = new HashSet<string>();
+                    foreach (string value in keyValuePair.Value)
+                        values.Add(value);
+
+                    dictionary[keyValuePair.Key] = values;
+                }
+            }
+        }
+
+        internal TextMap(string name, TextMap textMap)
+            : base(name, textMap)
+        {
+            if (textMap.dictionary != null)
             {
                 dictionary = new Dictionary<string, HashSet<string>>();
                 foreach (KeyValuePair<string, HashSet<string>> keyValuePair in textMap.dictionary)
@@ -54,10 +72,45 @@ namespace SAM.Core
 
             List<string> result = new List<string>();
             foreach(string value in values)
+            {
+                if (string.IsNullOrEmpty(value))
+                {
+                    continue;
+                }
+
                 if (values_Temp.Add(value))
+                {
                     result.Add(value);
+                }
+            }
 
             return result;
+        }
+
+        public bool UpdateValue(string key, string value_Old, string value_New)
+        {
+            if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value_New))
+            {
+                return false;
+            }
+
+            RemoveValue(key, value_Old);
+
+            return Add(key, value_New) != null;
+        }
+
+        public bool UpdateKey(string key_Old, string key_New)
+        {
+            if (string.IsNullOrEmpty(key_Old) || string.IsNullOrEmpty(key_New))
+            {
+                return false;
+            }
+
+            List<string> values = GetValues(key_Old);
+
+            RemoveKey(key_Old);
+
+            return Add(key_New, values.ToArray()) != null;
         }
 
         public List<string> GetValues(string key)
@@ -162,6 +215,11 @@ namespace SAM.Core
                 int count_Key = int.MaxValue;
                 foreach (string value in keyValuePair.Value)
                 {
+                    if(value == null)
+                    {
+                        continue;
+                    }
+
                     if (text.Equals(value))
                     {
                         if (!sortedDictionary.ContainsKey(-2))
@@ -323,6 +381,60 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public bool RemoveKey(string key)
+        {
+            if(dictionary == null || key == null)
+            {
+                return false;
+            }
+
+            return dictionary.Remove(key);
+        }
+
+        public bool AddKey(string key)
+        {
+            if(key == null)
+            {
+                return false;
+            }
+
+            return Add(key, new string[] { }) != null;
+        }
+
+        public bool RemoveValue(string key, string value)
+        {
+            if(key == null || value == null || dictionary == null)
+            {
+                return false;
+            }
+
+            if(!dictionary.TryGetValue(key, out HashSet<string> values) || values == null)
+            {
+                return false;
+            }
+
+            return values.Remove(value);
+        }
+
+        public void AddRange(TextMap textMap)
+        {
+            if (textMap == null)
+            {
+                return;
+            }
+
+            IEnumerable<string> keys = textMap.Keys;
+            if (keys == null || keys.Count() == 0)
+            {
+                return;
+            }
+
+            foreach (string key in keys)
+            {
+                Add(key, textMap.GetValues(key)?.ToArray());
+            }
         }
     }
 }
