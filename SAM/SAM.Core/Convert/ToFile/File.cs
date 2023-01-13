@@ -61,6 +61,31 @@ namespace SAM.Core
             }
         }
 
+        public static bool ToFile(this IEnumerable<DelimitedFileRow> delimitedFileRows, DelimitedFileType delimitedFileType, string path)
+        {
+            if(string.IsNullOrEmpty(path) || delimitedFileRows == null || delimitedFileType == DelimitedFileType.Undefined)
+            {
+                return false;
+            }
+
+            try
+            {
+                using (DelimitedFileWriter delimitedFileWriter = new DelimitedFileWriter(delimitedFileType.Separator(), path))
+                {
+                    foreach (DelimitedFileRow delimitedFileRow in delimitedFileRows)
+                    {
+                        delimitedFileWriter.Write(delimitedFileRow);
+                    }
+                }
+            }
+            catch
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         private static bool ToFile_SAM(this IEnumerable<IJSAMObject> jSAMObjects, string path)
         {
             if (string.IsNullOrWhiteSpace(path) || !Directory.Exists(Path.GetDirectoryName(path)))
