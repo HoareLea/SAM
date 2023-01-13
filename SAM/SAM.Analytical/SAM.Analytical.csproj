@@ -225,6 +225,8 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\DefaultInternalConditionLibrary_TM59.cs" />
+    <Compile Include="Query\DefaultInternalConditionTextMap_TM59.cs" />
     <Compile Include="Query\DefaultInternalConditionTextMap.cs" />
     <Compile Include="Query\Openable.cs" />
     <Compile Include="Query\Name.cs" />
@@ -236,6 +238,7 @@
     <Compile Include="Query\AirSupplyMethod.cs" />
     <Compile Include="Query\HeatingDesignRelativeHumidity.cs" />
     <Compile Include="Query\CoolingDesignRelativeHumidity.cs" />
+    <Compile Include="Query\TryGetInternalConditions.cs" />
     <Compile Include="Query\UniqueNameDecomposition.cs" />
     <Compile Include="Query\UniqueNamePrefix.cs" />
     <Compile Include="Query\VentilationSystems.cs" />

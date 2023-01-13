@@ -2,86 +2,50 @@
   {
     "_type": "SAM.Core.TextMap,SAM.Core",
     "Name": "",
-    "Guid": "c4e38d79-2d3e-4dbd-be75-b05ef49a973a",
+    "Guid": "12a87eb2-f108-45ab-a6cb-b294c531eb3b",
     "Map": [
       [
-        "Studio",
+        "Living",
         "studio",
+        "living",
+        "lvg",
+        "lvng",
+        "liv",
+        "dining"
+      ],
+      [
+        "Sleeping",
         "bed",
-        "bedroom"
-      ],
-      [
-        "1 Bed Apt. Living Room/Kitchen",
-        "living/kitchen",
-        "living+kitchen",
-        "lvng/ktch"
-      ],
-      [
-        "1 Bed Apt. Living Room",
-        "living",
-        "lvg",
-        "lvng",
-        "liv",
-        "dining"
-      ],
-      [
-        "1 Bed Apt. Kitchen",
-        "kitchen",
-        "k'chn",
-        "kit"
-      ],
-      [
-        "2 Bed Apt. Living Room/Kitchen",
-        "living/kitchen",
-        "living+kitchen",
-        "lvng/ktch"
-      ],
-      [
-        "2 Bed Apt. Living Room",
-        "living",
-        "lvg",
-        "lvng",
-        "liv",
-        "dining"
-      ],
-      [
-        "2 Bed Apt. Kitchen",
-        "kitchen",
-        "k'chn",
-        "kit"
-      ],
-      [
-        "3 Bed Apt. Living Room/Kitchen",
-        "living/kitchen",
-        "living+kitchen",
-        "lvng/ktch"
-      ],
-      [
-        "3 Bed Apt. Living Room",
-        "living",
-        "lvg",
-        "lvng",
-        "liv",
-        "dining"
-      ],
-      [
-        "3 Bed Apt. Kitchen",
-        "kitchen",
-        "k'chn",
-        "kit"
-      ],
-      [
-        "Double Bedroom",
+        "twin",
+        "double",
+        "dbl",
         "bedroom",
-        "bed",
-        "sleeping",
+        "sleep",
+        "studio"
+      ],
+      [
+        "Cooking",
+        "kitchen",
+        "k'chn",
+        "kit",
+        "kitchenette",
+        "cafe",
+        "ktch",
+        "studio"
+      ],
+      [
+        "1",
+        "twin",
+        "single",
+        "sgl",
+        "studio"
+      ],
+      [
+        "2",
+        "king",
+        "queen",
+        "dbl",
         "double"
-      ],
-      [
-        "Single Bedroom",
-        "study",
-        "bedroom",
-        "bed"
       ]
     ]
   }

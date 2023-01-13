@@ -10,23 +10,13 @@ namespace SAM.Analytical
         {
             internalCondition = null;
 
-            if (space == null || internalConditionLibrary == null || textMap == null)
+            if(!TryGetInternalConditions(space, internalConditionLibrary, textMap, out List<InternalCondition> internalConditions) || internalConditions == null || internalConditions.Count == 0)
+            {
                 return false;
+            }
 
-            string name = space.Name;
-            if (string.IsNullOrEmpty(name))
-                return false;
-
-            HashSet<string> names_InternalCondition = textMap.GetSortedKeys(name);
-            if (names_InternalCondition == null || names_InternalCondition.Count == 0)
-                return false;
-
-            List<InternalCondition> internalConditions = internalConditionLibrary.GetInternalConditions(names_InternalCondition.First());
-            if (internalConditions == null || internalConditions.Count == 0)
-                return false;
-
-            internalCondition = internalConditions[0];
-            return true;
+            internalCondition = internalConditions.Find(x => x != null);
+            return internalCondition != null;
         }
     }
 }

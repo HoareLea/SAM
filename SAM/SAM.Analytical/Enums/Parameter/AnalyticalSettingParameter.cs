@@ -17,6 +17,9 @@ namespace SAM.Analytical
         [ParameterProperties("Default SystemTypeLibrary", "Default SystemTypeLibrary"), SAMObjectParameterValue(typeof(SystemTypeLibrary))] DefaultSystemTypeLibrary,
         [ParameterProperties("InternalCondition TextMap", "InternalCondition TextMap"), SAMObjectParameterValue(typeof(TextMap))] InternalConditionTextMap,
 
+        [ParameterProperties("TM59 InternalCondition TextMap", "TM59 InternalCondition TextMap"), SAMObjectParameterValue(typeof(TextMap))] InternalConditionTextMap_TM59,
+        [ParameterProperties("TM59 Default InternalConditionLibrary", "TM59 Default InternalConditionLibrary"), SAMObjectParameterValue(typeof(InternalConditionLibrary))] DefaultInternalConditionLibrary_TM59,
+
         [ParameterProperties("Default MaterialLibrary File Name", "Default MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultMaterialLibraryFileName,
         [ParameterProperties("Default Gas MaterialLibrary File Name", "Default Gas MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultGasMaterialLibraryFileName,
         [ParameterProperties("Default ConstructionLibrary File Name", "Default ConstructionLibrary File Name"), ParameterValue(ParameterType.String)] DefaultConstructionLibraryFileName,
@@ -26,6 +29,9 @@ namespace SAM.Analytical
         [ParameterProperties("Default ProfileLibrary File Name", "Default ProfileLibrary File Name"), ParameterValue(ParameterType.String)] DefaultProfileLibraryFileName,
         [ParameterProperties("InternaCondition TextMap File Name", "InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] InternaConditionTextMaplFileName,
         [ParameterProperties("Default SystemTypeLibrary File Name", "Default SystemTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultSystemTypeLibraryFileName,
+
+        [ParameterProperties("TM59 Default InternaCondition TextMap File Name", "TM59 Default InternaCondition TextMap File Name"), ParameterValue(ParameterType.String)] DefaultInternaConditionTextMaplFileName_TM59,
+        [ParameterProperties("TM59 Default InternalConditionLibrary File Name", "TM59 Default Default InternalConditionLibrary File Name"), ParameterValue(ParameterType.String)] DefaultInternalConditionLibraryFileName_TM59,
 
         [ParameterProperties("Default HostPartitionTypeLibrary File Name", "Default HostPartitionTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultHostPartitionTypeLibraryFileName,
         [ParameterProperties("Default HostPartitionTypeLibrary", "Default HostPartitionTypeLibrary"), SAMObjectParameterValue(typeof(HostPartitionTypeLibrary))] DefaultHostPartitionTypeLibrary,
