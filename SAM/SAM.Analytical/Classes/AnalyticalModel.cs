@@ -300,13 +300,22 @@ namespace SAM.Analytical
             return materialLibrary.Add(material.Clone());
         }
 
-        public bool AddProfile(Profile profile)
+        public bool AddProfile(Profile profile, bool @override = true)
         {
             if (profile == null)
+            {
                 return false;
+            }
 
             if (profileLibrary == null)
+            {
                 profileLibrary = new ProfileLibrary("Default Profile Libarary");
+            }
+
+            if(!@override && profileLibrary.Contains(profile))
+            {
+                return false;
+            }
 
             return profileLibrary.Add(profile.Clone());
         }
