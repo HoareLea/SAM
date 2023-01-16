@@ -1,4 +1,6 @@
-﻿namespace SAM.Core
+﻿using Newtonsoft.Json.Linq;
+
+namespace SAM.Core
 {
     public static partial class Create
     {
@@ -25,6 +27,16 @@
             }
 
             return new TextMap(name, textMap);
+        }
+
+        public static TextMap TextMap(JObject jObject)
+        {
+            if (jObject == null)
+            {
+                return null;
+            }
+
+            return new TextMap(jObject);
         }
     }
 }

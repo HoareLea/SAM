@@ -83,6 +83,7 @@
     <Compile Include="Classes\Result\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\Result\ZoneSimulationResult.cs" />
     <Compile Include="Classes\DesignDay.cs" />
+    <Compile Include="Classes\TM59Manager.cs" />
     <Compile Include="Classes\Zone.cs" />
     <Compile Include="Classes\Result\SpaceSimulationResult.cs" />
     <Compile Include="Classes\System\HeatingSystem.cs" />
@@ -174,6 +175,7 @@
     <Compile Include="Enums\LoadType.cs" />
     <Compile Include="Enums\BoundaryType.cs" />
     <Compile Include="Enums\MechanicalSystemCategory.cs" />
+    <Compile Include="Enums\TM59SpaceApplication.cs" />
     <Compile Include="Enums\VentilationType.cs" />
     <Compile Include="Enums\ZoneType.cs" />
     <Compile Include="Enums\EmitterType.cs" />
