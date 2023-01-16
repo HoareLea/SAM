@@ -19,7 +19,7 @@ namespace SAM.Analytical
 
         [ParameterProperties("TM59 InternalCondition TextMap", "TM59 InternalCondition TextMap"), SAMObjectParameterValue(typeof(TextMap))] InternalConditionTextMap_TM59,
         [ParameterProperties("TM59 Default InternalConditionLibrary", "TM59 Default InternalConditionLibrary"), SAMObjectParameterValue(typeof(InternalConditionLibrary))] DefaultInternalConditionLibrary_TM59,
-        [ParameterProperties("TM59 Default ProfileLibrary", "TM59 Default ProfileLibrary"), SAMObjectParameterValue(typeof(InternalConditionLibrary))] DefaultProfileLibrary_TM59,
+        [ParameterProperties("TM59 Default ProfileLibrary", "TM59 Default ProfileLibrary"), SAMObjectParameterValue(typeof(ProfileLibrary))] DefaultProfileLibrary_TM59,
 
         [ParameterProperties("Default MaterialLibrary File Name", "Default MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultMaterialLibraryFileName,
         [ParameterProperties("Default Gas MaterialLibrary File Name", "Default Gas MaterialLibrary File Name"), ParameterValue(ParameterType.String)] DefaultGasMaterialLibraryFileName,
