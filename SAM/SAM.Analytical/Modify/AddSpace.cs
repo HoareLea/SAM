@@ -4,18 +4,21 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static bool AddSpace(this AdjacencyCluster adjacencyCluster, Space space, IEnumerable<Panel> panels)
+        public static bool AddSpace(this AdjacencyCluster adjacencyCluster, Space space, IEnumerable<Panel> panels = null)
         {
-            if (adjacencyCluster == null || space == null || panels == null)
+            if (adjacencyCluster == null || space == null)
                 return false;
 
             if (!adjacencyCluster.AddObject(space))
                 return false;
-
-            foreach(Panel panel in panels)
+            
+            if(panels != null)
             {
-                if (adjacencyCluster.AddObject(panel))
-                    adjacencyCluster.AddRelation(space, panel);
+                foreach (Panel panel in panels)
+                {
+                    if (adjacencyCluster.AddObject(panel))
+                        adjacencyCluster.AddRelation(space, panel);
+                }
             }
 
             return true;

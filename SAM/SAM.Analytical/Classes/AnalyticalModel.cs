@@ -265,13 +265,18 @@ namespace SAM.Analytical
             return result;
         }
 
-        public bool AddSpace(Space space, IEnumerable<Panel> panels)
+        public bool AddSpace(Space space, IEnumerable<Panel> panels = null)
         {
-            if (space == null || panels == null)
+            if (space == null)
+            {
                 return false;
+            }
+
 
             if (adjacencyCluster == null)
+            {
                 adjacencyCluster = new AdjacencyCluster();
+            }
 
             return adjacencyCluster.AddSpace(space, panels);
         }
