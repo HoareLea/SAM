@@ -36,16 +36,30 @@
       [
         "1",
         "twin",
+        "twin bed",
         "single",
+        "single bed",
         "sgl",
-        "studio"
+        "sgl bed",
+        "1-bed",
+        "1 bed"
       ],
       [
         "2",
         "king",
         "queen",
         "dbl",
-        "double"
+        "dbl bed",
+        "double",
+        "double bed",
+        "2 bed",
+        "2-bed",
+        "studio"
+      ],
+      [
+        "3",
+        "3-bed",
+        "3 bed"
       ]
     ]
   }

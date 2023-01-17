@@ -78,7 +78,12 @@ namespace SAM.Analytical
 
         public int Occupancy(Space space)
         {
-            return Count(space, textMap);
+            return Count(space?.Name, textMap);
+        }
+
+        public int Occupancy(InternalCondition internalCondition)
+        {
+            return Count(internalCondition?.Name, textMap);
         }
 
         public InternalCondition GetInternalCondition(AdjacencyCluster adjacencyCluster, InternalConditionLibrary internalConditionLibrary, Space space, string zoneType)
@@ -96,7 +101,7 @@ namespace SAM.Analytical
             }
 
             List<TM59SpaceApplication> applications = TM59SpaceApplications(space, textMap);
-            if (applications.Contains(TM59SpaceApplication.Sleeping) && applications.Contains(TM59SpaceApplication.Cooking) && applications.Contains(TM59SpaceApplication.Living))
+            if (spaces.Count == 1 || (applications.Contains(TM59SpaceApplication.Sleeping) && applications.Contains(TM59SpaceApplication.Cooking) && applications.Contains(TM59SpaceApplication.Living)))
             {
                 return internalConditionLibrary.GetInternalConditions("Studio").FirstOrDefault();
             }
@@ -105,7 +110,7 @@ namespace SAM.Analytical
 
             if (applications.Contains(TM59SpaceApplication.Sleeping))
             {
-                count = Count(space, textMap);
+                count = Count(space?.Name, textMap);
                 count = count == 0 ? 1 : count;
 
                 switch (count)
@@ -122,7 +127,8 @@ namespace SAM.Analytical
 
             List<Space> spaces_Sleeping = spaces.FindAll(y => IsSleeping(y, textMap));
 
-            count = spaces_Sleeping.ConvertAll(y => Count(y, textMap)).Sum();
+            //count = spaces_Sleeping.ConvertAll(y => Count(y?.Name, textMap)).Sum();
+            count = spaces_Sleeping.Count();
             count = count == 0 ? 1 : count;
             count = count > 3 ? 3 : count;
 
@@ -190,14 +196,14 @@ namespace SAM.Analytical
 
         }
 
-        private static int Count(Space space, TextMap textMap)
+        private static int Count(string name, TextMap textMap)
         {
-            if (space == null || textMap == null)
+            if (string.IsNullOrWhiteSpace(name) || textMap == null)
             {
                 return 0;
             }
 
-            HashSet<string> values = textMap.GetSortedKeys(space.Name);
+            HashSet<string> values = textMap.GetSortedKeys(name);
             foreach (string value in values)
             {
                 if (Core.Query.TryConvert<int>(value, out int result))
