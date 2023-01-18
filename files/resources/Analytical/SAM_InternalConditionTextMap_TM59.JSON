@@ -5,8 +5,10 @@
     "Guid": "12a87eb2-f108-45ab-a6cb-b294c531eb3b",
     "Map": [
       [
-        "Living",
+        "living",
         "studio",
+        "sitting",
+        "lounge",
         "living",
         "lvg",
         "lvng",

@@ -61,14 +61,29 @@ namespace SAM.Analytical
             return IsSleeping(space, textMap);
         }
 
+        public bool IsSleeping(InternalCondition internalCondition)
+        {
+            return IsSleeping(internalCondition, textMap);
+        }
+
         public bool IsLiving(Space space)
         {
             return IsLiving(space, textMap);
         }
 
+        public bool IsLiving(InternalCondition internalCondition)
+        {
+            return IsLiving(internalCondition, textMap);
+        }
+
         public bool IsCooking(Space space)
         {
             return IsCooking(space, textMap);
+        }
+
+        public bool IsCooking(InternalCondition internalCondition)
+        {
+            return IsCooking(internalCondition, textMap);
         }
 
         public List<TM59SpaceApplication> TM59SpaceApplications(Space space)
@@ -154,19 +169,49 @@ namespace SAM.Analytical
             return internalConditionLibrary.GetInternalConditions(name).FirstOrDefault();
         }
 
+        public static bool IsSleeping(string name, TextMap textMap)
+        {
+            return Is(name, textMap, "Sleeping");
+        }
+
         public static bool IsSleeping(Space space, TextMap textMap)
         {
-            return Is(space, textMap, "Sleeping");
+            return IsSleeping(space?.Name, textMap);
+        }
+
+        public static bool IsSleeping(InternalCondition internalCondition, TextMap textMap)
+        {
+            return IsSleeping(internalCondition?.Name, textMap);
         }
 
         public static bool IsLiving(Space space, TextMap textMap)
         {
-            return Is(space, textMap, "Living");
+            return IsLiving(space?.Name, textMap);
+        }
+
+        public static bool IsLiving(InternalCondition internalCondition, TextMap textMap)
+        {
+            return IsLiving(internalCondition?.Name, textMap);
+        }
+
+        public static bool IsLiving(string name, TextMap textMap)
+        {
+            return Is(name, textMap, "Living");
         }
 
         public static bool IsCooking(Space space, TextMap textMap)
         {
-            return Is(space, textMap, "Cooking");
+            return IsCooking(space?.Name, textMap);
+        }
+
+        public static bool IsCooking(InternalCondition internalCondition, TextMap textMap)
+        {
+            return IsCooking(internalCondition?.Name, textMap);
+        }
+
+        public static bool IsCooking(string name, TextMap textMap)
+        {
+            return Is(name, textMap, "Cooking");
         }
 
         public static List<TM59SpaceApplication> TM59SpaceApplications(Space space, TextMap textMap)
@@ -215,14 +260,14 @@ namespace SAM.Analytical
             return 0;
         }
 
-        private static bool Is(Space space, TextMap textMap, string key)
+        private static bool Is(string name, TextMap textMap, string key)
         {
-            if (space == null || textMap == null || string.IsNullOrEmpty(key))
+            if (string.IsNullOrWhiteSpace(name) || textMap == null || string.IsNullOrEmpty(key))
             {
                 return false;
             }
 
-            HashSet<string> values = textMap.GetSortedKeys(space.Name);
+            HashSet<string> values = textMap.GetSortedKeys(name);
             return values != null && values.Contains(key);
         }
 
