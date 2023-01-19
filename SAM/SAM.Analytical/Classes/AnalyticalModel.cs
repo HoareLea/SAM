@@ -439,6 +439,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetZones();
         }
 
+        public HashSet<string> GetZoneCategories()
+        {
+            return adjacencyCluster.GetZoneCategories();
+        }
+
         public List<T> GetResults<T>(IJSAMObject jSAMObject) where T : Result
         {
             if (jSAMObject == null)

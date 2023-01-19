@@ -680,6 +680,26 @@ namespace SAM.Analytical
             return result;
         }
 
+        public HashSet<string> GetZoneCategories()
+        {
+            List<Zone> zones = GetZones();
+            if(zones == null || zones.Count == 0)
+            {
+                return null;
+            }
+
+            HashSet<string> result = new HashSet<string>();
+            foreach(Zone zone in zones)
+            {
+                if(zone != null && zone.TryGetValue(ZoneParameter.ZoneCategory, out string zoneCategory) && zoneCategory != null)
+                {
+                    result.Add(zoneCategory);
+                }
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Gets spaces for given point
         /// </summary>
