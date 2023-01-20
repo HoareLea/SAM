@@ -272,6 +272,22 @@ namespace SAM.Analytical
 
             return result;
         }
+
+        public List<T> GetResults<T>(string source = null) where T: Core.Result
+        {
+            List<T> result = GetObjects<T>();
+            if(result == null)
+            {
+                return result;
+            }
+
+            if(source != null)
+            {
+                result.RemoveAll(x => x.Source != source);
+            }
+
+            return result;
+        }
         
         public List<Panel> GetPanels(Space space)
         {

@@ -454,6 +454,11 @@ namespace SAM.Analytical
             return adjacencyCluster.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => x?.Clone());
         }
 
+        public List<T> GetResults<T>(string source = null) where T : Core.Result
+        {
+            return adjacencyCluster.GetResults<T>(source);
+        }
+
         public List<AnalyticalModelSimulationResult> GetAnalyticalModelSimulationResults()
         {
             return adjacencyCluster?.GetObjects<AnalyticalModelSimulationResult>()?.ConvertAll(x => x?.Clone());
