@@ -116,6 +116,11 @@ namespace SAM.Analytical
             }
 
             List<TM59SpaceApplication> applications = TM59SpaceApplications(space, textMap);
+            if(applications == null || applications.Count == 0)
+            {
+                return null;
+            }
+
             if (spaces.Count == 1 || (applications.Contains(TM59SpaceApplication.Sleeping) && applications.Contains(TM59SpaceApplication.Cooking) && applications.Contains(TM59SpaceApplication.Living)))
             {
                 return internalConditionLibrary.GetInternalConditions("Studio").FirstOrDefault();
