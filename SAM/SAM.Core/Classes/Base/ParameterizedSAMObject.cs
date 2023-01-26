@@ -93,6 +93,27 @@ namespace SAM.Core
             return TryGetValue(@enum, out object value);
         }
 
+        public bool HasParameter(Enum @enum)
+        {
+            if (!Query.IsValid(GetType(), @enum))
+            {
+                return false;
+            }
+
+            Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
+            if (parameterProperties == null)
+            {
+                return false;
+            }
+
+            if (!parameterProperties.ReadAccess())
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public bool TryGetValue(string name, out object value)
         {
             value = null;

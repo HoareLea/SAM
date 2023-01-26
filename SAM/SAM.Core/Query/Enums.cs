@@ -6,6 +6,32 @@ namespace SAM.Core
 {
     public static partial class Query
     {
+        public static List<Enum> Enums(SAMObject sAMObject, bool notPublic = false)
+        {
+            Type type = sAMObject?.GetType();
+            if(type == null)
+            {
+                return null;
+            }
+
+            List<Enum> enums = Enums(type, notPublic);
+            if(enums == null || enums.Count == 0)
+            {
+                return null;
+            }
+
+            List<Enum> result = new List<Enum>();
+            foreach (Enum @enum in enums)
+            {
+                if(sAMObject.HasParameter(@enum))
+                {
+                    result.Add(@enum);
+                }
+            }
+
+            return result;
+        }
+
         public static List<Enum> Enums(Type type, string value, bool notPublic = false)
         {
             if (type == null || string.IsNullOrEmpty(value))
