@@ -116,17 +116,21 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            List<int> indexes = new List<int>();
+            List<Tuple<int, int, int>> tuples = new List<Tuple<int, int, int>>();
+            List<Triangle2D> triangle2Ds = mesh2D.GetTriangles();
+            foreach(Triangle2D triangle2D in triangle2Ds)
+            {
+                List<Point2D> point2Ds_Triangle = triangle2D.GetPoints();
+                tuples.Add(new Tuple<int, int, int>(mesh2D.IndexOf(point2Ds_Triangle[0]), mesh2D.IndexOf(point2Ds_Triangle[1]), mesh2D.IndexOf(point2Ds_Triangle[2])));
+            }
+
             List<Point3D> point3Ds = new List<Point3D>();
             foreach(Point2D point2D in point2Ds)
             {
-                int index = mesh2D.IndexOf(point2D);
-                indexes.Add(index);
-
                 point3Ds.Add(plane.Convert(point2D));
             }
 
-            return Mesh3D(point3Ds, indexes);
+            return new Mesh3D(point3Ds, tuples);
         }
 
         public static Mesh3D Mesh3D(this Shell shell, double tolerance = Core.Tolerance.Distance)

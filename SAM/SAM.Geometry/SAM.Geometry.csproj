@@ -90,6 +90,7 @@
     <Compile Include="Planar\Query\Vector2D.cs" />
     <Compile Include="Query\ISAMGeometryObject.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\SAMGeometry3DObjectCollection.cs" />
+    <Compile Include="Spatial\Interfaces\GeometryObject\IMesh3DObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IShellObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IPolygon3DObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\ISegment3DObject.cs" />
