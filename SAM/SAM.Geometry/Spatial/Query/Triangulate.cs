@@ -96,6 +96,11 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
+            if(point3Ds == null || point3Ds.Count() == 0)
+            {
+                return Planar.Query.Triangulate(face2D, tolerance)?.ConvertAll(x => plane.Convert(x));
+            }
+
             List<Tuple<Planar.Point2D, Vector3D>> tuples = null;
             if (point3Ds != null)
             {
