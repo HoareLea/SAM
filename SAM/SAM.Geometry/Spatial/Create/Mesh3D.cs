@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -100,6 +101,32 @@ namespace SAM.Geometry.Spatial
             }
 
             return new Mesh3D(point3Ds, tuples);
+        }
+
+        public static Mesh3D Mesh3D(this Mesh2D mesh2D, Plane plane)
+        {
+            if(mesh2D == null || plane == null)
+            {
+                return null;
+            }
+
+            List<Point2D> point2Ds = mesh2D.GetPoints();
+            if(point2Ds == null)
+            {
+                return null;
+            }
+
+            List<int> indexes = new List<int>();
+            List<Point3D> point3Ds = new List<Point3D>();
+            foreach(Point2D point2D in point2Ds)
+            {
+                int index = mesh2D.IndexOf(point2D);
+                indexes.Add(index);
+
+                point3Ds.Add(plane.Convert(point2D));
+            }
+
+            return Mesh3D(point3Ds, indexes);
         }
 
         public static Mesh3D Mesh3D(this Shell shell, double tolerance = Core.Tolerance.Distance)
