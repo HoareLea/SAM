@@ -133,13 +133,19 @@ namespace SAM.Geometry.Spatial
             return new Mesh3D(point3Ds, tuples);
         }
 
-        public static Mesh3D Mesh3D(this Shell shell, double tolerance = Core.Tolerance.Distance)
+        public static Mesh3D Mesh3D(this Extrusion extrusion, double tolerance = Core.Tolerance.Distance)
         {
+            Shell shell = Shell(extrusion, tolerance);
             if(shell == null)
             {
                 return null;
             }
 
+            return Mesh3D(shell, tolerance);
+        }
+
+        public static Mesh3D Mesh3D(this Shell shell, double tolerance = Core.Tolerance.Distance)
+        {
             List<Face3D> face3Ds = shell?.Face3Ds;
             if(face3Ds == null || face3Ds.Count == 0)
             {
