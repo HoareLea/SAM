@@ -222,6 +222,7 @@
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AddPanels.cs" />
+    <Compile Include="Modify\New\AddAperture.cs" />
     <Compile Include="Modify\Normalize.cs" />
     <Compile Include="Modify\MergeSpaces.cs" />
     <Compile Include="Modify\SplitSpace.cs" />

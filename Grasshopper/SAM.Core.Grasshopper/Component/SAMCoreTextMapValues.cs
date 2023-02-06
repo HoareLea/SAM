@@ -4,7 +4,6 @@ using Grasshopper.Kernel.Data;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace SAM.Core.Grasshopper
