@@ -17,8 +17,13 @@ namespace SAM.Weather
         public WeatherDay(WeatherDay weatherDay)
         {
             dictionary = new Dictionary<string, double[]>();
-            foreach (KeyValuePair<string, double[]> keyValuePair in weatherDay.dictionary)
-                dictionary[keyValuePair.Key] = (double[])keyValuePair.Value.Clone();
+            if(weatherDay != null)
+            {
+                foreach (KeyValuePair<string, double[]> keyValuePair in weatherDay.dictionary)
+                {
+                    dictionary[keyValuePair.Key] = (double[])keyValuePair.Value.Clone();
+                }
+            }
         }
 
         public WeatherDay(JObject jObject)
