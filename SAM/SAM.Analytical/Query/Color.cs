@@ -146,7 +146,28 @@
             if (panel == null)
                 return System.Drawing.Color.Empty;
 
+            if(panel.TryGetValue(PanelParameter.Color, out System.Drawing.Color color) && color != System.Drawing.Color.Empty)
+            {
+                return color;
+            }
+
             return Color(panel.PanelType);
+        }
+
+        public static System.Drawing.Color Color(this Aperture aperture, AperturePart aperturePart)
+        {
+            if (aperture == null)
+                return System.Drawing.Color.Empty;
+
+            if(aperturePart == AperturePart.Pane || aperture.ApertureType == Analytical.ApertureType.Door)
+            {
+                if (aperture.TryGetValue(ApertureParameter.Color, out System.Drawing.Color color) && color != System.Drawing.Color.Empty)
+                {
+                    return color;
+                }
+            }
+
+            return Color(aperture.ApertureType, aperturePart);
         }
 
         public static System.Drawing.Color Color(this ApertureType apertureType, bool internalEdges)

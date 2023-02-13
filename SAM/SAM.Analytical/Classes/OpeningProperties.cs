@@ -34,6 +34,12 @@ namespace SAM.Analytical
             }
         }
 
+        public OpeningProperties(OpeningProperties openingProperties, double dischargeCoefficient)
+            : base(openingProperties)
+        {
+            this.dischargeCoefficient = dischargeCoefficient;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if(!base.FromJObject(jObject))
