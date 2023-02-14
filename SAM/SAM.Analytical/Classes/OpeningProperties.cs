@@ -34,8 +34,8 @@ namespace SAM.Analytical
             }
         }
 
-        public OpeningProperties(OpeningProperties openingProperties, double dischargeCoefficient)
-            : base(openingProperties)
+        public OpeningProperties(IOpeningProperties openingProperties, double dischargeCoefficient)
+            : base(openingProperties as ParameterizedSAMObject)
         {
             this.dischargeCoefficient = dischargeCoefficient;
         }
