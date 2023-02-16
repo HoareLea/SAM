@@ -12,7 +12,7 @@
                 return double.NaN;
 
             double gain_1 = double.NaN;
-            if(internalCondition.TryGetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, out gain_1) && !double.IsNaN(gain_1))
+            if(internalCondition.TryGetValue(Analytical.InternalConditionParameter.OccupancyLatentGainPerPerson, out gain_1) && !double.IsNaN(gain_1))
             {
                 double occupancy = space.CalculatedOccupancy();
                 if(!double.IsNaN(occupancy))

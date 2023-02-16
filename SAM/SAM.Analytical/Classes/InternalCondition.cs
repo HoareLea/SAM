@@ -50,34 +50,24 @@ namespace SAM.Analytical
 
         public string GetProfileName(ProfileType profileType)
         {
-            if (profileType == ProfileType.Undefined || profileType == ProfileType.Other)
-                return null;
-
-            switch (profileType)
+            InternalConditionParameter? internalConditionParameter = Query.InternalConditionParameter(profileType);
+            if(internalConditionParameter == null || !internalConditionParameter.HasValue)
             {
-                case ProfileType.Cooling:
-                    return GetValue<string>(InternalConditionParameter.CoolingProfileName);
-                case ProfileType.Dehumidification:
-                    return GetValue<string>(InternalConditionParameter.DehumidificationProfileName);
-                case ProfileType.EquipmentLatent:
-                    return GetValue<string>(InternalConditionParameter.EquipmentLatentProfileName);
-                case ProfileType.EquipmentSensible:
-                    return GetValue<string>(InternalConditionParameter.EquipmentSensibleProfileName);
-                case ProfileType.Heating:
-                    return GetValue<string>(InternalConditionParameter.HeatingProfileName);
-                case ProfileType.Humidification:
-                    return GetValue<string>(InternalConditionParameter.HumidificationProfileName);
-                case ProfileType.Infiltration:
-                    return GetValue<string>(InternalConditionParameter.InfiltrationProfileName);
-                case ProfileType.Lighting:
-                    return GetValue<string>(InternalConditionParameter.LightingProfileName);
-                case ProfileType.Occupancy:
-                    return GetValue<string>(InternalConditionParameter.OccupancyProfileName);
-                case ProfileType.Pollutant:
-                    return GetValue<string>(InternalConditionParameter.PollutantProfileName);
+                return null;
             }
 
-            return null;
+            return GetValue<string>(internalConditionParameter.Value);
+        }
+
+        public bool SetProfileName(ProfileType profileType, string name)
+        {
+            InternalConditionParameter? internalConditionParameter = Query.InternalConditionParameter(profileType);
+            if (internalConditionParameter == null || !internalConditionParameter.HasValue)
+            {
+                return false;
+            }
+
+            return SetValue(internalConditionParameter.Value, name);
         }
 
         public string GetSystemTypeName<T>() where T: ISystemType

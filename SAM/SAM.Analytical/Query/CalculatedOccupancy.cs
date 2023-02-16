@@ -20,7 +20,7 @@
                 return double.NaN;
 
             double areaPerPerson;
-            if (!internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out areaPerPerson) || double.IsNaN(areaPerPerson))
+            if (!internalCondition.TryGetValue(Analytical.InternalConditionParameter.AreaPerPerson, out areaPerPerson) || double.IsNaN(areaPerPerson))
                 return double.NaN;
 
             if (areaPerPerson == 0)

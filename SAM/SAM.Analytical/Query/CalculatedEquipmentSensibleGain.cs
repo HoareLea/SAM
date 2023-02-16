@@ -12,7 +12,7 @@
                 return double.NaN;
 
             double gain_1 = double.NaN;
-            if(internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleGainPerArea, out gain_1) && !double.IsNaN(gain_1))
+            if(internalCondition.TryGetValue(Analytical.InternalConditionParameter.EquipmentSensibleGainPerArea, out gain_1) && !double.IsNaN(gain_1))
             {
                 double area = double.NaN;
                 if (!space.TryGetValue(SpaceParameter.Area, out area) || double.IsNaN(area))
@@ -22,7 +22,7 @@
             }
 
             double gain_2 = double.NaN;
-            internalCondition.TryGetValue(InternalConditionParameter.EquipmentSensibleGain, out gain_2);
+            internalCondition.TryGetValue(Analytical.InternalConditionParameter.EquipmentSensibleGain, out gain_2);
 
             if (double.IsNaN(gain_1) && double.IsNaN(gain_2))
                 return double.NaN;

@@ -12,7 +12,7 @@
                 return double.NaN;
 
             double gain_1 = double.NaN;
-            if (internalCondition.TryGetValue(InternalConditionParameter.PollutantGenerationPerArea, out gain_1) && !double.IsNaN(gain_1))
+            if (internalCondition.TryGetValue(Analytical.InternalConditionParameter.PollutantGenerationPerArea, out gain_1) && !double.IsNaN(gain_1))
             {
                 double area = double.NaN;
                 if (!space.TryGetValue(SpaceParameter.Area, out area) || double.IsNaN(area))
@@ -22,7 +22,7 @@
             }
 
             double gain_2 = double.NaN;
-            if (internalCondition.TryGetValue(InternalConditionParameter.PollutantGenerationPerPerson, out gain_2) && !double.IsNaN(gain_2))
+            if (internalCondition.TryGetValue(Analytical.InternalConditionParameter.PollutantGenerationPerPerson, out gain_2) && !double.IsNaN(gain_2))
             {
                 double occupancy = CalculatedOccupancy(space);
                 if (double.IsNaN(occupancy))

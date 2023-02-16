@@ -12,11 +12,11 @@
                 return double.NaN;
 
             double gain_1 = double.NaN;
-            if (!internalCondition.TryGetValue(InternalConditionParameter.OccupancyLatentGainPerPerson, out gain_1))
+            if (!internalCondition.TryGetValue(Analytical.InternalConditionParameter.OccupancyLatentGainPerPerson, out gain_1))
                 gain_1 = double.NaN;
 
             double gain_2 = double.NaN;
-            if (!internalCondition.TryGetValue(InternalConditionParameter.OccupancySensibleGainPerPerson, out gain_2))
+            if (!internalCondition.TryGetValue(Analytical.InternalConditionParameter.OccupancySensibleGainPerPerson, out gain_2))
                 gain_2 = double.NaN;
 
             if (double.IsNaN(gain_1) && double.IsNaN(gain_2))

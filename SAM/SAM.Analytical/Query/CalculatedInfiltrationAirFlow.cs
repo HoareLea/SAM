@@ -25,7 +25,7 @@
                 return double.NaN;
 
             double airChangesPerHour = double.NaN;
-            internalCondition.TryGetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, out airChangesPerHour);
+            internalCondition.TryGetValue(Analytical.InternalConditionParameter.InfiltrationAirChangesPerHour, out airChangesPerHour);
             if (double.IsNaN(airChangesPerHour))
                 return double.NaN;
 

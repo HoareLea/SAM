@@ -27,7 +27,7 @@ namespace SAM.Analytical
                 if (!double.IsNaN(area))
                 {
                     double areaPerPerson = double.NaN;
-                    if (internalCondition.TryGetValue(InternalConditionParameter.AreaPerPerson, out areaPerPerson))
+                    if (internalCondition.TryGetValue(Analytical.InternalConditionParameter.AreaPerPerson, out areaPerPerson))
                         occupancy = area / areaPerPerson;
                 }
             }
@@ -36,7 +36,7 @@ namespace SAM.Analytical
             if (!double.IsNaN(occupancy))
             {
                 double airFlowPerPerson = double.NaN;
-                if (internalCondition.TryGetValue(InternalConditionParameter.ExhaustAirFlowPerPerson, out airFlowPerPerson))
+                if (internalCondition.TryGetValue(Analytical.InternalConditionParameter.ExhaustAirFlowPerPerson, out airFlowPerPerson))
                     airFlow_1 = airFlowPerPerson * occupancy;
             }
 
@@ -44,12 +44,12 @@ namespace SAM.Analytical
             if (!double.IsNaN(area))
             {
                 double airFlowPerArea = double.NaN;
-                if (internalCondition.TryGetValue(InternalConditionParameter.ExhaustAirFlowPerArea, out airFlowPerArea))
+                if (internalCondition.TryGetValue(Analytical.InternalConditionParameter.ExhaustAirFlowPerArea, out airFlowPerArea))
                     airFlow_2 = airFlowPerArea * area;
             }
 
             double airFlow_3 = double.NaN;
-            if (!internalCondition.TryGetValue(InternalConditionParameter.ExhaustAirFlow, out airFlow_3))
+            if (!internalCondition.TryGetValue(Analytical.InternalConditionParameter.ExhaustAirFlow, out airFlow_3))
                 airFlow_3 = double.NaN;
 
             if (double.IsNaN(airFlow_1) && double.IsNaN(airFlow_2) && double.IsNaN(airFlow_3))
