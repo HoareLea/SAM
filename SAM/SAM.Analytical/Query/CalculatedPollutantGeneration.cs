@@ -28,7 +28,7 @@
                 if (double.IsNaN(occupancy))
                     return double.NaN;
 
-                gain_1 = gain_1 * occupancy;
+                gain_2 = gain_2 * occupancy;
             }
 
             if (double.IsNaN(gain_1) && double.IsNaN(gain_2))
