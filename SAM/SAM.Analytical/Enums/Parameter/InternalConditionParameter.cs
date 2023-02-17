@@ -15,6 +15,7 @@ namespace SAM.Analytical
         [ParameterProperties("Equipment Sensible Profile Name", "Equipment Sensible Profile Name"), ParameterValue(Core.ParameterType.String)] EquipmentSensibleProfileName,
         [ParameterProperties("Equipment Sensible Gain", "Equipment Sensible Gain [W]"), ParameterValue(Core.ParameterType.Double)] EquipmentSensibleGain,
         [ParameterProperties("Equipment Sensible Gain Per Area", "Equipment Sensible Gain Per Area [W/m2]"), ParameterValue(Core.ParameterType.Double)] EquipmentSensibleGainPerArea,
+        [ParameterProperties("Equipment Sensible Gain Per Person", "Equipment Sensible Gain Per Person [W/p]"), ParameterValue(Core.ParameterType.Double)] EquipmentSensibleGainPerPerson,
         [ParameterProperties("Equipment Latent Profile Name", "Equipment Latent Profile Name"), ParameterValue(Core.ParameterType.String)] EquipmentLatentProfileName,
         [ParameterProperties("Equipment Latent Gain", "Equipment Latent Gain [W]"), ParameterValue(Core.ParameterType.Double)] EquipmentLatentGain,
         [ParameterProperties("Equipment Latent Gain Per Area", "Equipment Latent Gain Per Area [W/m2]"), ParameterValue(Core.ParameterType.Double)] EquipmentLatentGainPerArea,
