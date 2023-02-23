@@ -128,7 +128,9 @@ namespace SAM.Analytical
                         continue;
 
                     //TODO: Update ExternalEdge with PlanarBoundary3D
-                    Modify.AddApertures(this, aperture.ApertureConstruction, aperture.GetFace3D(), trimGeometry, minArea, maxDistance);
+                    //Modify.AddApertures(this, aperture.ApertureConstruction, aperture.GetFace3D(), trimGeometry, minArea, maxDistance); //Old Version changed: 2023.02.23
+                    Modify.AddApertures(this, aperture, trimGeometry, minArea, maxDistance);
+
                 }
             }
         }

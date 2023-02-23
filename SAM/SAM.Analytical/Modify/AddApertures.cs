@@ -98,39 +98,127 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (apertures == null)
+                return null;
+
+            if (panels == null || panels.Count() == 0)
+                return null;
+
+            List<Tuple<BoundingBox3D, Aperture>> tuples_Aperture = new List<Tuple<BoundingBox3D, Aperture>>();
+            foreach (Aperture aperture in apertures)
+            {
+                BoundingBox3D boundingBox3D = aperture?.GetBoundingBox(tolerance);
+                if (boundingBox3D != null)
+                    tuples_Aperture.Add(new Tuple<BoundingBox3D, Aperture>(boundingBox3D, aperture));
+            }
+
+            List<Tuple<BoundingBox3D, Panel>> tuples_Panels = new List<Tuple<BoundingBox3D, Panel>>();
+            foreach (Panel panel in panels)
+            {
+                BoundingBox3D boundingBox3D = panel?.GetBoundingBox(tolerance);
+                if (boundingBox3D != null)
+                    tuples_Panels.Add(new Tuple<BoundingBox3D, Panel>(boundingBox3D, panel));
+            }
+
+            List<Tuple<Panel, Aperture>> tuples_Result = new List<Tuple<Panel, Aperture>>();
+            foreach (Tuple<BoundingBox3D, Panel> tuple_Panel in tuples_Panels)
+            {
+                BoundingBox3D boundingBox3D_Panel = tuple_Panel.Item1;
+
+                Panel panel = tuple_Panel.Item2;
+
+                foreach (Tuple<BoundingBox3D, Aperture> tuple_Aperture in tuples_Aperture)
+                {
+                    BoundingBox3D boundingBox3D_Aperture = tuple_Aperture.Item1;
+
+                    if (!boundingBox3D_Aperture.InRange(boundingBox3D_Panel, maxDistance))
+                        continue;
+
+                    List<Aperture> apertures_Temp = panel.AddApertures(tuple_Aperture.Item2, trimGeometry, minArea, maxDistance, tolerance);
+                    if (apertures_Temp == null)
+                        continue;
+
+                    apertures_Temp.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel, x)));
+                }
+            }
+
+            return tuples_Result.ConvertAll(x => x.Item2);
+        }
+
         public static List<Aperture> AddApertures(this AdjacencyCluster adjacencyCluster, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null || apertures == null)
                 return null;
 
-            List<Tuple<ApertureConstruction, List<IClosedPlanar3D>>> tuples = new List<Tuple<ApertureConstruction, List<IClosedPlanar3D>>>();
-            foreach (Aperture aperture in apertures)
+            List<Tuple<ApertureConstruction, List<Aperture>>> tuples = new List<Tuple<ApertureConstruction, List<Aperture>>>();
+            foreach(Aperture aperture in apertures)
             {
                 ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
                 if (apertureConstruction == null)
                     continue;
 
-                Tuple<ApertureConstruction, List<IClosedPlanar3D>> tuple = tuples.Find(x => x.Item1.Guid == apertureConstruction.Guid);
+                Tuple<ApertureConstruction, List<Aperture>> tuple = tuples.Find(x => x.Item1.Guid == apertureConstruction.Guid);
                 if (tuple == null)
                 {
-                    tuples.Add(new Tuple<ApertureConstruction, List<IClosedPlanar3D>>(apertureConstruction, new List<IClosedPlanar3D>() { aperture.GetFace3D() }));
+                    tuples.Add(new Tuple<ApertureConstruction, List<Aperture>>(apertureConstruction, new List<Aperture>() { aperture }));
                     continue;
                 }
 
-                tuple.Item2.Add(aperture.GetFace3D());
+                tuple.Item2.Add(new Aperture(aperture, apertureConstruction));
             }
 
-            List<Aperture> result = new List<Aperture>();
-            foreach(Tuple<ApertureConstruction, List<IClosedPlanar3D>> tuple in tuples)
+            List<Aperture> apertures_Temp = new List<Aperture>();
+            tuples.ForEach(x => apertures_Temp.AddRange(x.Item2));
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            List<Aperture> result = AddApertures(panels, apertures, trimGeometry, minArea, maxDistance, tolerance);
+            if (result != null && result.Count != 0)
             {
-                List<Aperture> apertures_ApetureConstruction = AddApertures(adjacencyCluster, tuple.Item1, tuple.Item2, trimGeometry, minArea, maxDistance, tolerance);
-                if (apertures_ApetureConstruction != null && apertures_ApetureConstruction.Count != 0)
-                    result.AddRange(apertures_ApetureConstruction);
+                foreach (Panel panel in panels)
+                {
+                    adjacencyCluster.AddObject(panel);
+                }
             }
 
             return result;
+
+
+            //if (adjacencyCluster == null || apertures == null)
+            //    return null;
+
+            //List<Tuple<ApertureConstruction, List<IClosedPlanar3D>>> tuples = new List<Tuple<ApertureConstruction, List<IClosedPlanar3D>>>();
+            //foreach (Aperture aperture in apertures)
+            //{
+            //    ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
+            //    if (apertureConstruction == null)
+            //        continue;
+
+            //    Tuple<ApertureConstruction, List<IClosedPlanar3D>> tuple = tuples.Find(x => x.Item1.Guid == apertureConstruction.Guid);
+            //    if (tuple == null)
+            //    {
+            //        tuples.Add(new Tuple<ApertureConstruction, List<IClosedPlanar3D>>(apertureConstruction, new List<IClosedPlanar3D>() { aperture.GetFace3D() }));
+            //        continue;
+            //    }
+
+            //    tuple.Item2.Add(aperture.GetFace3D());
+            //}
+
+            //List<Aperture> result = new List<Aperture>();
+            //foreach (Tuple<ApertureConstruction, List<IClosedPlanar3D>> tuple in tuples)
+            //{
+            //    List<Aperture> apertures_ApetureConstruction = AddApertures(adjacencyCluster, tuple.Item1, tuple.Item2, trimGeometry, minArea, maxDistance, tolerance);
+            //    if (apertures_ApetureConstruction != null && apertures_ApetureConstruction.Count != 0)
+            //        result.AddRange(apertures_ApetureConstruction);
+            //}
+
+            //return result;
         }
-    
+
         public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || apertureConstruction == null)
@@ -591,6 +679,98 @@ namespace SAM.Analytical
 
                 if (panel.AddAperture(aperture))
                     result.Add(aperture);
+            }
+
+            return result;
+        }
+
+        public static List<Aperture> AddApertures(this Panel panel, Aperture aperture, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (aperture == null || panel == null)
+                return null;
+
+            IClosedPlanar3D closedPlanar3D = aperture.GetFace3D();
+
+            if (!Query.ApertureHost(panel, closedPlanar3D, minArea, maxDistance, tolerance))
+                return null;
+
+            Face3D face3D = panel.GetFace3D();
+            if (face3D == null)
+                return null;
+
+            Plane plane = face3D.GetPlane();
+            if (plane == null)
+                return null;
+
+            Plane plane_Aperture = closedPlanar3D.GetPlane();
+            if (plane_Aperture == null)
+                return null;
+
+            //Flipping if not match with Aperture plane 
+            Vector3D normal = plane.Normal;
+            Vector3D normal_closedPlanar3D = plane_Aperture.Normal;
+            if (!normal.SameHalf(normal_closedPlanar3D))
+                plane.FlipZ(false);
+
+            if (!plane.AxisX.SameHalf(plane_Aperture.AxisX))
+                plane.FlipX(true);
+
+            Face3D face3D_Aperture = closedPlanar3D is Face3D ? (Face3D)closedPlanar3D : new Face3D(closedPlanar3D);
+            if (face3D_Aperture == null)
+                return null;
+
+            Face2D face2D_Aperture = plane.Convert(plane.Project(face3D_Aperture));
+            if (face2D_Aperture == null)
+                return null;
+
+            Face2D face2D = plane.Convert(face3D);
+
+            List<Face2D> face2Ds_Aperture_New = trimGeometry ? face2D.Intersection(face2D_Aperture) : new List<Face2D>() { face2D_Aperture };
+            if (face2Ds_Aperture_New == null || face2Ds_Aperture_New.Count == 0)
+            {
+                return null;
+            }
+
+            List<Aperture> result = new List<Aperture>();
+
+            if (face2Ds_Aperture_New.Count == 1)
+            {
+                if (System.Math.Abs(face2Ds_Aperture_New[0].GetArea() - closedPlanar3D.GetArea()) <= tolerance && Query.IsValid(panel, aperture))
+                {
+                    if (panel.AddAperture(new Aperture(aperture)))
+                    {
+                        result.Add(aperture);
+                        return result;
+                    }
+                }
+            }
+
+            ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+            foreach (Face2D face2D_Aperture_New in face2Ds_Aperture_New)
+            {
+                if (face2D_Aperture_New == null)
+                    continue;
+
+                double area = face2D_Aperture_New.GetArea();
+                if (area <= minArea)
+                {
+                    continue;
+                }
+
+                Face3D face3D_Aperture_New = plane.Convert(face2D_Aperture_New);
+
+                Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
+
+                Aperture aperture_New = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
+                if (!Query.IsValid(panel, aperture_New))
+                {
+                    continue;
+                }
+
+                if (panel.AddAperture(aperture_New))
+                {
+                    result.Add(aperture_New);
+                }
             }
 
             return result;
