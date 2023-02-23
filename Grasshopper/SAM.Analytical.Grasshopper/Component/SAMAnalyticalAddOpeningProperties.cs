@@ -196,6 +196,10 @@ namespace SAM.Analytical.Grasshopper
                         System.Drawing.Color color = colors.Count > i ? colors[i] : colors.Last();
                         aperture_Temp.SetValue(ApertureParameter.Color, color);
                     }
+                    else
+                    {
+                        aperture_Temp.SetValue(ApertureParameter.Color, Analytical.Query.Color(ApertureType.Window, AperturePart.Pane, true));
+                    }
 
                     aperture_Temp.SetValue(ApertureParameter.OpeningProperties, openingProperties);
 
