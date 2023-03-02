@@ -46,6 +46,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
+    <Compile Include="Classes\Filter\PanelTiltFilter.cs" />
+    <Compile Include="Classes\Filter\PanelConstructionFilter.cs" />
+    <Compile Include="Classes\Filter\PanelAperturesFilter.cs" />
+    <Compile Include="Classes\Filter\PanelPanelGroupFilter.cs" />
+    <Compile Include="Classes\Filter\PanelBoundaryTypeFilter.cs" />
+    <Compile Include="Classes\Filter\PanelAzimuthFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceElevationFilter.cs" />
+    <Compile Include="Classes\Filter\SpacePanelsFilter.cs" />
+    <Compile Include="Classes\Filter\MultiRelationAdjacencyClusterFilter.cs" />
+    <Compile Include="Classes\Filter\PanelPanelTypeFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceZonesFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceInternalConditionFilter.cs" />
     <Compile Include="Classes\New\Opening.cs" />
     <Compile Include="Classes\PartOOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties.cs" />
@@ -212,6 +225,7 @@
     <Compile Include="Classes\Construction.cs" />
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
+    <Compile Include="Interfaces\Filter\IAdjacencyClusterFilter.cs" />
     <Compile Include="Interfaces\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />
     <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
@@ -221,6 +235,7 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\AssignAdjacencyCluster.cs" />
     <Compile Include="Modify\AddPanels.cs" />
     <Compile Include="Modify\New\AddAperture.cs" />
     <Compile Include="Modify\Normalize.cs" />
@@ -228,6 +243,7 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\Filter.cs" />
     <Compile Include="Query\InternalConditionParameter.cs" />
     <Compile Include="Query\DefaultProfileLibrary_TM59.cs" />
     <Compile Include="Query\DefaultInternalConditionLibrary_TM59.cs" />

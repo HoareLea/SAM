@@ -77,6 +77,33 @@ namespace SAM.Core
             return objects_Out.ToList();
         }
 
+        public static List<T> Filter<T>(this IEnumerable<IJSAMObject> jSAMObjects, IFilter filter) where T : IJSAMObject
+        {
+            if (jSAMObjects == null || filter == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach (IJSAMObject jSAMObject in jSAMObjects)
+            {
+                if (!(jSAMObject is T))
+                {
+                    continue;
+                }
+
+                if (!filter.IsValid(jSAMObject))
+                {
+                    continue;
+                }
+
+                result.Add((T)jSAMObject);
+            }
+
+            return result;
+        }
+
+
         private static void Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects_In, HashSet<object> objects_Out)
         {
             if (objects_In == null || relationCluster_In == null || relationCluster_Out == null || objects_Out == null)

@@ -69,6 +69,17 @@
     <Compile Include="Classes\Base\Tag.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
+    <Compile Include="Classes\Filter\Filter.cs" />
+    <Compile Include="Classes\Filter\MultiRelationFilter.cs" />
+    <Compile Include="Classes\Filter\EnumFilter.cs" />
+    <Compile Include="Classes\Filter\NumberFilter.cs" />
+    <Compile Include="Classes\Filter\TextFilter.cs" />
+    <Compile Include="Classes\Filter\RelationFilter.cs" />
+    <Compile Include="Classes\Filter\TypeFilter.cs" />
+    <Compile Include="Classes\Filter\LogicalFilter.cs" />
+    <Compile Include="Classes\Filter\ParameterFilter.cs" />
+    <Compile Include="Classes\Filter\GuidFilter.cs" />
+    <Compile Include="Classes\Filter\NameFilter.cs" />
     <Compile Include="Classes\Message\Message.cs" />
     <Compile Include="Classes\Search\SearchObjectWrapper.cs" />
     <Compile Include="Classes\Search\SearchWrapper.cs" />
@@ -85,6 +96,7 @@
     <Compile Include="Classes\Relation\TextMap.cs" />
     <Compile Include="Convert\ToFile\File.cs" />
     <Compile Include="Convert\ToHexadecimal\Hexadecimal.cs" />
+    <Compile Include="Create\ParameterFilter.cs" />
     <Compile Include="Create\Color.cs" />
     <Compile Include="Create\DelimitedFileRows.cs" />
     <Compile Include="Create\EnumParameterDatas.cs" />
@@ -98,6 +110,7 @@
     <Compile Include="Create\TypeMap.cs" />
     <Compile Include="Create\TextMap.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
+    <Compile Include="Enums\FilterLogicalOperator.cs" />
     <Compile Include="Enums\PageOrientation.cs" />
     <Compile Include="Enums\PageSize.cs" />
     <Compile Include="Enums\AccessType.cs" />
@@ -125,6 +138,9 @@
     <Compile Include="Interfaces\Base\ISystem.cs" />
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
+    <Compile Include="Interfaces\Filter\IEnumFilter.cs" />
+    <Compile Include="Interfaces\Filter\IRelationFilter.cs" />
+    <Compile Include="Interfaces\Filter\IFilter.cs" />
     <Compile Include="Interfaces\Library\ISAMLibrary.cs" />
     <Compile Include="Modify\Add.cs" />
     <Compile Include="Modify\CopyValues.cs" />
