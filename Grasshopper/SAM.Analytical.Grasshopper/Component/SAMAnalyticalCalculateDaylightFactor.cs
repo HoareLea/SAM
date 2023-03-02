@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMAnalyticalCalculateDaylightFactor()
-          : base("SAMAnalytical.DaylightFactor", "SAMAnalytical.DaylightFactor",
+          : base("SAMAnalytical.CalculateDaylightFactor", "SAMAnalytical.CalculateDaylightFactor",
               "Calculates Daylight Factors",
               "SAM WIP", "Analytical")
         {
@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            index = Params.IndexOfOutputParam("Analytical");
+            index = Params.IndexOfOutputParam("analytical");
             if (index != -1)
                 dataAccess.SetData(index, analyticalObject);
         }
