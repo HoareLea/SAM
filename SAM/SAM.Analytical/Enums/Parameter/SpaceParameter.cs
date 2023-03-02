@@ -30,5 +30,7 @@ namespace SAM.Analytical
         [ParameterProperties("Outside Supply Air Flow", "Outside Supply Air Flow [m3/s]"), DoubleParameterValue(0)] OutsideSupplyAirFlow,
         [ParameterProperties("Supply Air Flow", "Supply Air Flow [m3/s]"), DoubleParameterValue(0)] SupplyAirFlow,
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), DoubleParameterValue(0)] ExhaustAirFlow,
+        
+        [ParameterProperties("Daylight Factor", "Daylight Factor [-]"), DoubleParameterValue(0)] DaylightFactor,
     }
 }
