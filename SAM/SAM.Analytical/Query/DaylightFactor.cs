@@ -24,7 +24,7 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                Face3D face3D_Panel = panel?.GetFace3D(true);
+                Face3D face3D_Panel = panel?.GetFace3D(false);
                 if(face3D_Panel == null)
                 {
                     continue;
@@ -62,14 +62,13 @@ namespace SAM.Analytical
                 {
                     foreach(Aperture aperture in apertures)
                     {
-                        Face3D face3D_Aperture = aperture?.GetFace3D();
-                        if(face3D_Aperture == null)
+                        if(aperture == null)
                         {
                             continue;
                         }
 
-                        double area_Aperture = face3D_Aperture.GetArea();
-                        if(double.IsNaN(area_Aperture))
+                        double area_Aperture = aperture.GetPaneArea();
+                        if (double.IsNaN(area_Aperture))
                         {
                             continue;
                         }
