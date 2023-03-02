@@ -272,6 +272,10 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// Tilit of the Panel mesured in degrees
+        /// </summary>
+        /// <returns>Tilt in degrees</returns>
         public double GetTilt()
         {
             return Query.Tilt(this);

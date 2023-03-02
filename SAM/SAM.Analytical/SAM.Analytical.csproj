@@ -243,6 +243,7 @@
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
+    <Compile Include="Query\DaylightFactor.cs" />
     <Compile Include="Query\Filter.cs" />
     <Compile Include="Query\InternalConditionParameter.cs" />
     <Compile Include="Query\DefaultProfileLibrary_TM59.cs" />
