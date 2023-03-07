@@ -94,7 +94,7 @@
     <Compile Include="Component\SAMCoreStringReplace.cs" />
     <Compile Include="Component\SAMCoreObjects.cs" />
     <Compile Include="Component\SAMCoreRemoveValue.cs" />
-    <Compile Include="Component\SAMCoreParameterFromType.cs" />
+    <Compile Include="Component\SAMCoreParameterByType.cs" />
     <Compile Include="Component\SAMCoreGetType.cs" />
     <Compile Include="Component\SAMCoreSAMLibraryAddObjects.cs" />
     <Compile Include="Component\SAMCoreDelimitedFileTableGetValue.cs" />

@@ -31,14 +31,14 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreGetType()
           : base("SAMCore.GetType", "SAMCore.GetType",
-              "Get Type form objects to find out all Parameter, \n *to be used with Node: SAMCore.ParameterFromType",
+              "Get Type form objects to find out all Parameter, \n *to be used with Node: SAMCore.ParameterByType",
               "SAM", "Core")
         {
         }
 
         public override bool Write(GH_IWriter writer)
         {
-            if(typeFullName == null)
+            if (typeFullName == null)
                 writer.SetString("TypeFullName", string.Empty);
             else
                 writer.SetString("TypeFullName", typeFullName);
@@ -95,7 +95,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            if(string.IsNullOrWhiteSpace(typeFullName))
+            if (string.IsNullOrWhiteSpace(typeFullName))
             {
                 dataAccess.SetData(0, null);
                 return;

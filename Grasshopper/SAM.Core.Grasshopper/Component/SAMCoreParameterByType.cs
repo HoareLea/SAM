@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreParameterFromType : GH_SAMComponent
+    public class SAMCoreParameterByType : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,8 +34,8 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Panel Type
         /// </summary>
-        public SAMCoreParameterFromType()
-          : base("SAMCore.ParameterFromType", "SAMCore.ParameterFromType",
+        public SAMCoreParameterByType()
+          : base("SAMCore.ParameterByType", "SAMCore.ParameterByType",
               "Get one Parameter from all possible Type parameters",
               "SAM", "Core")
         {
@@ -43,7 +43,7 @@ namespace SAM.Core.Grasshopper
 
         public override bool Write(GH_IWriter writer)
         {
-            if(typeFullName_Input == null)
+            if (typeFullName_Input == null)
                 writer.SetString("SAMCoreParameter_TypeFullName", string.Empty);
             else
                 writer.SetString("SAMCoreParameter_TypeFullName", typeFullName_Selected);
@@ -67,7 +67,7 @@ namespace SAM.Core.Grasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             base.AppendAdditionalComponentMenuItems(menu);
-            
+
             List<Type> types = null;
             if (!string.IsNullOrEmpty(typeFullName_Input))
             {
@@ -86,18 +86,18 @@ namespace SAM.Core.Grasshopper
 
             foreach (Type type in dictionary.Keys)
             {
-                foreach(Enum @enum in Enum.GetValues(type))
+                foreach (Enum @enum in Enum.GetValues(type))
                 {
                     ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
-                    if(parameterProperties != null)
+                    if (parameterProperties != null)
                     {
                         bool enabled = Core.Query.FullTypeName(type).Equals(typeFullName_Selected) && @enum.ToString().Equals(name_Selected);
                         Menu_AppendItem(menu, parameterProperties.Name, Menu_Changed, true, enabled).Tag = @enum;
                     }
                 }
-                    
+
             }
-                
+
         }
 
         private void Menu_Changed(object sender, EventArgs e)
@@ -157,24 +157,24 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
-            if(type != null)
+            if (type != null)
                 typeFullName_Input = Core.Query.FullTypeName(type);
 
             object result = null;
-            if(!string.IsNullOrEmpty(typeFullName_Selected))
+            if (!string.IsNullOrEmpty(typeFullName_Selected))
             {
                 Type type_Selected = Type.GetType(typeFullName_Selected);
-                if(type_Selected != null && type_Selected.IsEnum)
+                if (type_Selected != null && type_Selected.IsEnum)
                 {
-                    foreach(Enum @enum in Enum.GetValues(type_Selected))
+                    foreach (Enum @enum in Enum.GetValues(type_Selected))
                     {
-                        if(@enum.ToString().Equals(name_Selected))
+                        if (@enum.ToString().Equals(name_Selected))
                         {
                             result = @enum;
                             break;
                         }
                     }
-                    
+
                 }
             }
 

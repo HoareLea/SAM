@@ -95,6 +95,8 @@ namespace SAM.Analytical.Grasshopper
                     AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
                     sAMObjects.FindAll(x => x is IMaterial).ForEach(x => analyticalModel.AddMaterial((IMaterial)x));
                     sAMObjects.FindAll(x => x is Profile).ForEach(x => analyticalModel.AddProfile((Profile)x));
+                    sAMObjects.FindAll(x => x is Zone).ForEach(x => analyticalModel.AddZone((Zone)x));
+                    sAMObjects.FindAll(x => x is Space).ForEach(x => analyticalModel.AddSpace((Space)x));
 
                     sAMObject = analyticalModel;
                 }

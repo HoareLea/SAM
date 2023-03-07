@@ -333,6 +333,19 @@ namespace SAM.Analytical
             return adjacencyCluster.AddObject(new Panel(panel));
         }
 
+        public bool AddZone(Zone zone)
+        {
+            if (zone == null)
+            {
+                return false;
+            }
+
+            if (adjacencyCluster == null)
+                adjacencyCluster = new AdjacencyCluster();
+
+            return adjacencyCluster.AddObject(new Zone(zone));
+        }
+
         public bool AddInternalCondition(InternalCondition internalCondition)
         {
             if (internalCondition == null)
