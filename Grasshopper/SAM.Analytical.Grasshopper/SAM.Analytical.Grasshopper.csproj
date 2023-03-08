@@ -99,7 +99,7 @@
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />
     <Compile Include="Component\SAMAnalyticalBake.cs" />
-    <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor - Copy.cs" />
+    <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateSpacePanelArea.cs" />
     <Compile Include="Component\SAMAnalyticalDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByBoundaryType.cs" />
