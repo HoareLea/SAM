@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalModifySpaces()
           : base("SAMAnalytical.ModifySpaces", "SAMAnalytical.ModifySpaces",
-              "Modify Spaces in AdjacencyCluster or AnalyticalModel",
+              "Modify Spaces in AdjacencyCluster or AnalyticalModel \n You can ONLY apply one value to input object or list of objects",
               "SAM", "Analytical")
         {
         }

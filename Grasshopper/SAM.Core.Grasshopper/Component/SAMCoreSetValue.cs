@@ -30,7 +30,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreSetValue()
           : base("SetValue", "SetValue",
-              "Set Value of object by Parameter",
+              "Set Value of object by Parameter.\nie. If you have one space or list of spaces then for ONE specific parameter connect one value or individual for each  space  ",
               "SAM", "Core")
         {
         }
@@ -42,12 +42,12 @@ namespace SAM.Core.Grasshopper
         {
             global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObject", NickName = "_sAMObject", Description = "SAM Object", Access = GH_ParamAccess.item };
             genericObject.DataMapping = GH_DataMapping.Graft;
-            inputParamManager.AddParameter(genericObject, "_sAMObject", "_sAMObject", "SAM Object", GH_ParamAccess.item);
+            inputParamManager.AddParameter(genericObject, "_sAMObject", "_sAMObject", "SAM Object\nConnect item or list", GH_ParamAccess.item);
             
             int index = inputParamManager.AddTextParameter("_parameter", "_parameter", "Parameter", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Graft;
 
-            inputParamManager.AddGenericParameter("_value", "_value", "Value", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("_value", "_value", "Value \nConnect item or list", GH_ParamAccess.item);
         }
 
         /// <summary>
