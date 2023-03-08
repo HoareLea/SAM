@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,6 +52,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "ventilationRiserName_", NickName = "ventilationRiserName_", Description = "Ventilation Riser Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "heatingRiserName_", NickName = "heatingRiserName_", Description = "Heating Riser Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "coolingRiserName_", NickName = "coolingRiserName_", Description = "Cooling Riser Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "daylightFactor_", NickName = "daylightFactor_", Description = "Daylight Factor", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow_", NickName = "supplyAirFlow_", Description = "Supply Air Flow", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow_", NickName = "exhaustAirFlow_", Description = "Exhaust Air Flow", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "ventilationSystemTypeName_", NickName = "ventilationSystemTypeName_", Description = "Ventilation System Type Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -130,6 +131,7 @@ namespace SAM.Analytical.Grasshopper
                     string ventilationRiserName = null;
                     string heatingRiserName = null;
                     string coolingRiserName = null;
+                    double daylightFactor = double.NaN;
                     double supplyAirFlow = double.NaN;
                     double exhaustAirFlow = double.NaN;
                     string ventilationSystemTypeName = null;
@@ -173,6 +175,12 @@ namespace SAM.Analytical.Grasshopper
                     if (index != -1 && dataAccess.GetData(index, ref @string))
                     {
                         coolingRiserName = @string;
+                    }
+
+                    index = Params.IndexOfInputParam("daylightFactor_");
+                    if (index != -1 && dataAccess.GetData(index, ref @double))
+                    {
+                        daylightFactor = @double;
                     }
 
                     index = Params.IndexOfInputParam("supplyAirFlow_");
@@ -248,6 +256,11 @@ namespace SAM.Analytical.Grasshopper
                         if (heatingRiserName != null)
                         {
                             space.SetValue(SpaceParameter.HeatingRiserName, heatingRiserName);
+                        }
+
+                        if (!double.IsNaN(daylightFactor))
+                        {
+                            space.SetValue(SpaceParameter.DaylightFactor, daylightFactor);
                         }
 
                         if (!double.IsNaN(supplyAirFlow))
