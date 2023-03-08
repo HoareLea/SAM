@@ -62,7 +62,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                double area = panel.GetArea();
+                double area = panel.GetAreaNet();
                 if(double.IsNaN(area) || area <= 0)
                 {
                     continue;
