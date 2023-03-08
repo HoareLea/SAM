@@ -244,6 +244,7 @@
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
+    <Compile Include="Modify\UpdateSpacePanelArea.cs" />
     <Compile Include="Query\DaylightFactor.cs" />
     <Compile Include="Query\Filter.cs" />
     <Compile Include="Query\InternalConditionParameter.cs" />
