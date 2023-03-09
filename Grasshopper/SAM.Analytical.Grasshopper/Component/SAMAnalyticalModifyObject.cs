@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalModifyObject()
           : base("SAMAnalytical.ModifyObject", "SAMAnalytical.ModifyObject",
-              "Modify Object to AdjacencyCluster or AnalyticalModel",
+              "Modify Object to AdjacencyCluster or AnalyticalModel \n*If new Space is connected will be added this may cause duplicate spaces \n Consider using UpdateSpace node",
               "SAM", "Analytical")
         {
         }
