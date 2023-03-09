@@ -79,12 +79,23 @@ namespace SAM.Analytical.Grasshopper
                 minThinnessRatio = 0.003;
 
             AdjacencyCluster adjacencyCluster = null;
+            List<Panel> panels = null;
             if (sAMObject is AdjacencyCluster)
+            {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                panels = adjacencyCluster?.GetPanels();
+            }
             else if (sAMObject is AnalyticalModel)
+            {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+                panels = adjacencyCluster?.GetPanels();
+            }
+            else if(sAMObject is Panel)
+            {
+                panels = new List<Panel>() { (Panel)sAMObject };
+            }
 
-            if(adjacencyCluster == null)
+            if (panels == null || panels.Count == 0)
             {
                 dataAccess.SetData(0, sAMObject);
                 dataAccess.SetDataList(1, null);
@@ -92,37 +103,30 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
-            List<Panel> panels_In = null;
-            List<Panel> panels_Out = null;
-            if (panels != null && panels.Count != 0)
+            List<Panel> panels_In = new List<Panel>();
+            List<Panel> panels_Out = new List<Panel>();
+            foreach (Panel panel in panels)
             {
-                panels_In = new List<Panel>();
-                panels_Out = new List<Panel>();
+                if (panel == null)
+                    continue;
 
-                foreach (Panel panel in panels)
+                double area = panel.GetArea();
+                if (area > minArea)
                 {
-                    if (panel == null)
-                        continue;
-
-                    double area = panel.GetArea();
-                    if (area > minArea)
-                    {
-                        panels_In.Add(Create.Panel(panel));
-                        continue;
-                    }
-
-
-                    double thinnessRatio = panel.GetThinnessRatio();
-                    if (thinnessRatio > minThinnessRatio)
-                    {
-                        panels_In.Add(Create.Panel(panel));
-                        continue;
-                    }
-
-                    adjacencyCluster.RemoveObject<Panel>(panel.Guid);
-                    panels_Out.Add(Create.Panel(panel));
+                    panels_In.Add(Create.Panel(panel));
+                    continue;
                 }
+
+
+                double thinnessRatio = panel.GetThinnessRatio();
+                if (thinnessRatio > minThinnessRatio)
+                {
+                    panels_In.Add(Create.Panel(panel));
+                    continue;
+                }
+
+                adjacencyCluster?.RemoveObject<Panel>(panel.Guid);
+                panels_Out.Add(Create.Panel(panel));
             }
 
             if (sAMObject is AdjacencyCluster)
