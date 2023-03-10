@@ -103,6 +103,26 @@ namespace SAM.Core
             return result;
         }
 
+        public static void Filter(this IEnumerable<IJSAMObject> jSAMObjects, IFilter filter, out List<IJSAMObject> @in, out List<IJSAMObject> @out)
+        {
+            @in = null;
+            @out = null;
+
+            if(jSAMObjects == null || filter == null)
+            {
+                return;
+            }
+
+            @in = new List<IJSAMObject>();
+            @out = new List<IJSAMObject>();
+            foreach (IJSAMObject jSAMObject in jSAMObjects)
+            {
+                List<IJSAMObject> list = filter.IsValid(jSAMObject) ? @in : @out;
+                list.Add(jSAMObject);
+            }
+
+        }
+
 
         private static void Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects_In, HashSet<object> objects_Out)
         {

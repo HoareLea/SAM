@@ -9,7 +9,7 @@ namespace SAM.Math
             if (values == null)
                 return default;
 
-            return values.ToList().Min();
+            return values.ToList().Max();
         }
     }
 }

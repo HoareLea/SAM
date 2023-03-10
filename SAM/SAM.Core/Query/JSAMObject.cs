@@ -38,5 +38,21 @@ namespace SAM.Core
 
             return constructorInfo.Invoke(new object[] { jObject }) as IJSAMObject;
         }
+
+        public static T IJSAMObject<T>(this JObject jObject) where T : IJSAMObject
+        {
+            IJSAMObject jSAMObject = IJSAMObject(jObject);
+            if(jSAMObject == null)
+            {
+                return default;
+            }
+
+            if(!(jSAMObject is T))
+            {
+                return default;
+            }
+
+            return (T)jSAMObject;
+        }
     }
 }
