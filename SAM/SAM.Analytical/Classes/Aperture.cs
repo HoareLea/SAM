@@ -68,6 +68,13 @@ namespace SAM.Analytical
                 this.planarBoundary3D = new PlanarBoundary3D(planarBoundary3D);
         }
 
+        public Aperture(Guid guid, Aperture aperture)
+            : base(guid, aperture)
+        {
+            if (aperture?.planarBoundary3D != null)
+                planarBoundary3D = new PlanarBoundary3D(aperture.planarBoundary3D);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

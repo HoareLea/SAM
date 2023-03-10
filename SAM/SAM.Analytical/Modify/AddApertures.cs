@@ -746,8 +746,9 @@ namespace SAM.Analytical
             }
 
             ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-            foreach (Face2D face2D_Aperture_New in face2Ds_Aperture_New)
+            foreach(Face2D face2D_Aperture_New in face2Ds_Aperture_New)
             {
+
                 if (face2D_Aperture_New == null)
                     continue;
 
@@ -762,6 +763,11 @@ namespace SAM.Analytical
                 Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
 
                 Aperture aperture_New = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
+                if(result.Find(x => x.Guid == aperture.Guid) == null)
+                {
+                    aperture_New = new Aperture(aperture.Guid, aperture_New);
+                }
+
                 if (!Query.IsValid(panel, aperture_New))
                 {
                     continue;
