@@ -4,23 +4,23 @@ using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
-    public class SpaceElevationFilter : NumberFilter, IAdjacencyClusterFilter
+    public class SpaceVolumeFilter : NumberFilter, IAdjacencyClusterFilter
     {
         public AdjacencyCluster AdjacencyCluster { get; set; }
 
-        public SpaceElevationFilter(NumberComparisonType numberComparisonType, double value)
+        public SpaceVolumeFilter(NumberComparisonType numberComparisonType, double value)
             : base(numberComparisonType, value)
         {
 
         }
 
-        public SpaceElevationFilter(SpaceElevationFilter spaceElevationFilter)
-            : base(spaceElevationFilter)
+        public SpaceVolumeFilter(SpaceVolumeFilter spaceVolumeFilter)
+            : base(spaceVolumeFilter)
         {
 
         }
 
-        public SpaceElevationFilter(JObject jObject)
+        public SpaceVolumeFilter(JObject jObject)
             : base(jObject)
         {
 
@@ -45,14 +45,14 @@ namespace SAM.Analytical
                 return false;
             }
 
-            BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-            if(boundingBox3D == null)
+            double volume = shell.Volume();
+            if(double.IsNaN(volume))
             {
                 return false;
             }
 
 
-            return SAM.Core.Query.Compare(boundingBox3D.Min.Z, Value, NumberComparisonType);
+            return SAM.Core.Query.Compare(volume, Value, NumberComparisonType);
             
         }
     }

@@ -5,14 +5,14 @@ namespace SAM.Core
 {
     public abstract class EnumFilter<T> : Filter, IEnumFilter where T: Enum
     {
-        public T Enum { get; set; }
+        public T Value { get; set; }
 
         public EnumFilter(EnumFilter<T> enumFilter)
             :base(enumFilter)
         {
             if(enumFilter != null)
             {
-                Enum = enumFilter.Enum;
+                Value = enumFilter.Value;
             }
         }
 
@@ -45,17 +45,17 @@ namespace SAM.Core
                 return false;
             }
 
-            if(Enum == null && @enum == null)
+            if(Value == null && @enum == null)
             {
                 return true;
             }
 
-            if(Enum == null || @enum == null)
+            if(Value == null || @enum == null)
             {
                 return false;
             }
 
-            return Enum.Equals(@enum);
+            return Value.Equals(@enum);
         }
 
         public abstract bool TryGetEnum(IJSAMObject jSAMObject, out T @enum);
@@ -72,7 +72,7 @@ namespace SAM.Core
                 string text = jObject.Value<string>("Enum");
                 if(!string.IsNullOrWhiteSpace(text))
                 {
-                    Enum = Query.Enum<T>(text);
+                    Value = Query.Enum<T>(text);
                 }
             }
 
@@ -87,12 +87,28 @@ namespace SAM.Core
                 return result;
             }
 
-            if(Enum != null)
+            if(Value != null)
             {
-                result.Add(Enum.ToString());
+                result.Add(Value.ToString());
             }
 
             return result;
+        }
+
+        public Enum Enum 
+        {
+            get
+            {
+                return Value;
+            }
+
+            set
+            {
+                if(value is T)
+                {
+                    Value = (T)value;
+                }
+            }
         }
 
     }

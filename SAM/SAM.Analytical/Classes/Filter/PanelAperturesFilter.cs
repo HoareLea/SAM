@@ -19,6 +19,12 @@ namespace SAM.Analytical
 
         }
 
+        public PanelAperturesFilter(IFilter filter)
+            : base()
+        {
+            Filter = filter;
+        }
+
         public override List<Aperture> GetRelatives(IJSAMObject jSAMObject)
         {
             Panel panel = jSAMObject as Panel;

@@ -227,6 +227,7 @@
     <Compile Include="Query\Count.cs" />
     <Compile Include="Query\TemplatesDirectory.cs" />
     <Compile Include="Query\Tag.cs" />
+    <Compile Include="Query\TryGetEnum.cs" />
     <Compile Include="Query\UserSAMTemporaryDirectory.cs" />
     <Compile Include="Query\UserSAMDirectory.cs" />
     <Compile Include="Query\UserDocumentsDirectory.cs" />

@@ -3,21 +3,21 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public class PanelAzimuthFilter : NumberFilter
+    public class PanelAreaFilter : NumberFilter
     {
-        public PanelAzimuthFilter(NumberComparisonType numberComparisonType, double value)
+        public PanelAreaFilter(NumberComparisonType numberComparisonType, double value)
             : base(numberComparisonType, value)
         {
 
         }
 
-        public PanelAzimuthFilter(PanelAzimuthFilter panelAzimuthFilter)
-            : base(panelAzimuthFilter)
+        public PanelAreaFilter(PanelAreaFilter panelAreaFilter)
+            : base(panelAreaFilter)
         {
 
         }
 
-        public PanelAzimuthFilter(JObject jObject)
+        public PanelAreaFilter(JObject jObject)
             : base(jObject)
         {
 
@@ -31,13 +31,13 @@ namespace SAM.Analytical
                 return false;
             }
 
-            double azimuth = Query.Azimuth(panel);
-            if(double.IsNaN(azimuth))
+            double area = panel.GetAreaNet();
+            if(double.IsNaN(area))
             {
                 return false;
             }
 
-            return Core.Query.Compare(azimuth, Value, NumberComparisonType);
+            return Core.Query.Compare(area, Value, NumberComparisonType);
             
         }
     }

@@ -9,7 +9,7 @@ namespace SAM.Analytical
         public PanelPanelTypeFilter(PanelType panelType)
             :base()
         {
-            Enum = panelType;
+            Value = panelType;
         }
 
         public PanelPanelTypeFilter(PanelPanelTypeFilter panelPanelTypeFilter)

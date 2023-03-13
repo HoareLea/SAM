@@ -22,23 +22,18 @@ namespace SAM.Core
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetText(IJSAMObject jSAMObject, out string text)
         {
+            text = null;
+
             ISAMObject sAMObject = jSAMObject as ISAMObject;
-            if(sAMObject == null)
+            if (sAMObject == null)
             {
                 return false;
             }
 
-            string guidString = sAMObject.Guid.ToString();
-
-            bool result = Query.Compare(guidString, Value, TextComparisonType);
-            if(Inverted)
-            {
-                result = !result;
-            }
-
-            return result;
+            text = sAMObject.Guid.ToString();
+            return true;
         }
     }
 }

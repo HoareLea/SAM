@@ -47,12 +47,18 @@
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
+    <Compile Include="Classes\Filter\ApertureApertureTypeFilter.cs" />
+    <Compile Include="Classes\Filter\ApertureFrameAreaFilter.cs" />
+    <Compile Include="Classes\Filter\AperturePaneAreaFilter.cs" />
+    <Compile Include="Classes\Filter\PanelAreaFilter.cs" />
     <Compile Include="Classes\Filter\PanelTiltFilter.cs" />
     <Compile Include="Classes\Filter\PanelConstructionFilter.cs" />
     <Compile Include="Classes\Filter\PanelAperturesFilter.cs" />
     <Compile Include="Classes\Filter\PanelPanelGroupFilter.cs" />
     <Compile Include="Classes\Filter\PanelBoundaryTypeFilter.cs" />
     <Compile Include="Classes\Filter\PanelAzimuthFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceVolumeFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceAreaFilter.cs" />
     <Compile Include="Classes\Filter\SpaceElevationFilter.cs" />
     <Compile Include="Classes\Filter\SpacePanelsFilter.cs" />
     <Compile Include="Classes\Filter\MultiRelationAdjacencyClusterFilter.cs" />

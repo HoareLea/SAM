@@ -37,7 +37,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            return Core.Query.Compare(Value, tilt, NumberComparisonType);
+            return Core.Query.Compare(tilt, Value, NumberComparisonType);
             
         }
     }

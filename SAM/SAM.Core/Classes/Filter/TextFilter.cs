@@ -5,7 +5,10 @@ namespace SAM.Core
     public abstract class TextFilter : Filter
     {
         public TextComparisonType TextComparisonType { get; set; } = TextComparisonType.Equals;
+        
         public string Value { get; set; }
+
+        public bool CaseSensitive { get; set; } = true;
 
         public TextFilter(JObject jObject)
             :base(jObject)
@@ -27,6 +30,24 @@ namespace SAM.Core
         {
             TextComparisonType = textComparisonType;
             Value = value;
+        }
+
+        public abstract bool TryGetText(IJSAMObject jSAMObject, out string text);
+
+        public override bool IsValid(IJSAMObject jSAMObject)
+        {
+            if(!TryGetText(jSAMObject, out string text))
+            {
+                return false;
+            }
+
+            bool result = Query.Compare(text, Value, TextComparisonType, CaseSensitive);
+            if (Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
         }
 
         public override bool FromJObject(JObject jObject)

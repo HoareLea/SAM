@@ -10,7 +10,7 @@ namespace SAM.Analytical
         public PanelBoundaryTypeFilter(BoundaryType boundaryType)
             :base()
         {
-            Enum = boundaryType;
+            Value = boundaryType;
         }
 
         public PanelBoundaryTypeFilter(JObject jObject)
