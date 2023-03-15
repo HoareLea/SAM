@@ -216,6 +216,9 @@
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
+    <Compile Include="Modify\UpdateByType.cs" />
+    <Compile Include="Query\FindByType.cs" />
+    <Compile Include="Query\Types.cs" />
     <Compile Include="Query\Equals.cs" />
     <Compile Include="Query\Brightness.cs" />
     <Compile Include="Query\Ping.cs" />
@@ -227,6 +230,7 @@
     <Compile Include="Query\Count.cs" />
     <Compile Include="Query\TemplatesDirectory.cs" />
     <Compile Include="Query\Tag.cs" />
+    <Compile Include="Query\BaseFilter.cs" />
     <Compile Include="Query\TryGetEnum.cs" />
     <Compile Include="Query\UserSAMTemporaryDirectory.cs" />
     <Compile Include="Query\UserSAMDirectory.cs" />
