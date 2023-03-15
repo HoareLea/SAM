@@ -69,7 +69,7 @@ namespace SAM.Core
             value = default;
 
             Setting setting = GetSetting(assembly);
-            ParameterSet parameterSet = setting.GetParameterSet(assembly);
+            ParameterSet parameterSet = setting?.GetParameterSet(assembly);
             if (parameterSet == null)
                 return false;
 
@@ -159,6 +159,12 @@ namespace SAM.Core
             if (setting == null)
                 setting = settings.Find(x => x.Name.Equals(name));
 
+            if(setting == null)
+            {
+                setting = new Setting(assembly);
+                settings.Add(setting);
+            }
+
             return setting;
         }
 
@@ -214,7 +220,7 @@ namespace SAM.Core
             try
             {
                 string settingsDirectoryName = SettingsDirectoryPath;
-                if (System.IO.File.Exists(settingsDirectoryName))
+                if (System.IO.Directory.Exists(settingsDirectoryName))
                 {
                     string[] filePaths = System.IO.Directory.GetFiles(SettingsDirectoryPath);
                     if (filePaths != null && filePaths.Length > 0)

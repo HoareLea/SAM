@@ -112,7 +112,7 @@ namespace SAM.Core
 
         public override bool FromJObject(JObject jObject)
         {
-            if (!FromJObject(jObject))
+            if (!base.FromJObject(jObject))
                 return false;
 
             created = jObject.Value<DateTime>("Created");
