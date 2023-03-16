@@ -308,7 +308,7 @@ namespace SAM.Core
             if (assembly == null || string.IsNullOrWhiteSpace(name))
                 return false;
 
-            Setting setting = GetSetting(assembly);
+            Setting setting = UpdateSetting(assembly);
             ParameterSet parameterSet = setting.GetParameterSet(assembly);
             if (parameterSet == null)
             {
