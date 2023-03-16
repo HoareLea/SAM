@@ -5,6 +5,7 @@ namespace SAM.Core
     public abstract class NumberFilter : Filter
     {
         public NumberComparisonType NumberComparisonType { get; set; } = NumberComparisonType.Equals;
+        
         public double Value { get; set; }
 
         public NumberFilter(JObject jObject)

@@ -67,6 +67,11 @@ namespace SAM.Core
                 Value = jObject.Value<string>("Value");
             }
 
+            if (jObject.ContainsKey("CaseSensitive"))
+            {
+                CaseSensitive = jObject.Value<bool>("CaseSensitive");
+            }
+
             return true;
         }
 
@@ -84,6 +89,8 @@ namespace SAM.Core
             {
                 result.Add("Value", Value);
             }
+
+            result.Add("CaseSensitive", CaseSensitive);
 
             return result;
         }

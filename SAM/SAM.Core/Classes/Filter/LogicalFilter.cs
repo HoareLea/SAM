@@ -46,7 +46,12 @@ namespace SAM.Core
                 return false;
             }
 
-            if(jObject.ContainsKey("Filters"))
+            if (jObject.ContainsKey("FilterLogicalOperator"))
+            {
+                FilterLogicalOperator = Query.Enum<FilterLogicalOperator>(jObject.Value<string>("FilterLogicalOperator"));
+            }
+
+            if (jObject.ContainsKey("Filters"))
             {
                 JArray jArray = jObject.Value<JArray>("Filters");
                 if(jArray != null)
@@ -60,7 +65,6 @@ namespace SAM.Core
                             Filters.Add(filter);
                         }
                     }
-
                 }
             }
 
@@ -90,6 +94,8 @@ namespace SAM.Core
 
                 result.Add("Filters", jArray);
             }
+
+            result.Add("FilterLogicalOperator", FilterLogicalOperator.ToString());
 
             return result;
         }

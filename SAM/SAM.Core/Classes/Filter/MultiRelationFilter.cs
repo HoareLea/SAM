@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -70,12 +71,40 @@ namespace SAM.Core
 
         public override bool FromJObject(JObject jObject)
         {
-            return base.FromJObject(jObject);
+            if(! base.FromJObject(jObject))
+            {
+                return false;
+            }
+
+            if (jObject.ContainsKey("FilterLogicalOperator"))
+            {
+                FilterLogicalOperator = Query.Enum<FilterLogicalOperator>(jObject.Value<string>("FilterLogicalOperator"));
+            }
+
+            if (jObject.ContainsKey("Filter"))
+            {
+                Filter = Query.IJSAMObject(jObject.Value<JObject>("Filter")) as IFilter;
+            }
+
+            return true;
         }
 
         public override JObject ToJObject()
         {
-            return base.ToJObject();
+            JObject result = base.ToJObject();
+            if (result == null)
+            {
+                return result;
+            }
+
+            if (Filter != null)
+            {
+                result.Add("Filter", Filter.ToJObject());
+            }
+
+            result.Add("FilterLogicalOperator", FilterLogicalOperator.ToString());
+
+            return result;
         }
 
     }
