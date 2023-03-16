@@ -159,13 +159,19 @@ namespace SAM.Core
             if (setting == null)
                 setting = settings.Find(x => x.Name.Equals(name));
 
-            if(setting == null)
+            return setting;
+        }
+
+        public Setting UpdateSetting(Assembly assembly)
+        {
+            Setting result = GetSetting(assembly);
+            if (result == null)
             {
-                setting = new Setting(assembly);
-                settings.Add(setting);
+                result = new Setting(assembly);
+                settings.Add(result);
             }
 
-            return setting;
+            return result;
         }
 
         public bool FromJObject(JObject jObject)
