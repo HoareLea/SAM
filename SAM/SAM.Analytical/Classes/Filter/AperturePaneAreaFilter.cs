@@ -23,22 +23,17 @@ namespace SAM.Analytical
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
         {
+            number = double.NaN;
             Aperture aperture = jSAMObject as Aperture;
-            if(aperture == null)
+            if (aperture == null)
             {
                 return false;
             }
 
-            double area = aperture.GetPaneArea();
-            if(double.IsNaN(area))
-            {
-                return false;
-            }
-
-            return Core.Query.Compare(area, Value, NumberComparisonType);
-            
+            number = aperture.GetPaneArea();
+            return !double.IsNaN(number);
         }
     }
 }

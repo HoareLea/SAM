@@ -23,22 +23,17 @@ namespace SAM.Analytical
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
         {
+            number = double.NaN;
             Panel panel = jSAMObject as Panel;
-            if(panel == null)
+            if (panel == null)
             {
                 return false;
             }
 
-            double area = panel.GetAreaNet();
-            if(double.IsNaN(area))
-            {
-                return false;
-            }
-
-            return Core.Query.Compare(area, Value, NumberComparisonType);
-            
+            number = panel.GetAreaNet();
+            return !double.IsNaN(number);
         }
     }
 }

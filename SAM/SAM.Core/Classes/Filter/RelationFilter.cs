@@ -38,7 +38,13 @@ namespace SAM.Core
                 return true;
             }
 
-            return Filter.IsValid(GetRelative(jSAMObject));
+            bool result = Filter.IsValid(GetRelative(jSAMObject));
+            if(Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
         }
 
         public abstract T GetRelative(IJSAMObject jSAMObject);

@@ -28,34 +28,28 @@ namespace SAM.Analytical
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
         {
+            number = double.NaN;
             if (AdjacencyCluster == null)
             {
                 return false;
             }
 
             Space space = jSAMObject as Space;
-            if(space == null)
+            if (space == null)
             {
                 return false;
             }
 
             Shell shell = AdjacencyCluster.Shell(space);
-            if(shell == null)
+            if (shell == null)
             {
                 return false;
             }
 
-            double area = shell.Area(Offset);
-            if(double.IsNaN(area))
-            {
-                return false;
-            }
-
-
-            return SAM.Core.Query.Compare(area, Value, NumberComparisonType);
-            
+            number = shell.Area(Offset);
+            return !double.IsNaN(number);
         }
     }
 }

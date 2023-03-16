@@ -24,19 +24,19 @@ namespace SAM.Analytical
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
         {
+            number = double.NaN;
             Panel panel = jSAMObject as Panel;
-            if(panel == null)
+            if (panel == null)
             {
                 return false;
             }
 
             List<Aperture> apertures = panel.Apertures;
 
-            double count = apertures == null ? 0 : apertures.Count;
-
-            return Core.Query.Compare(count, Value, NumberComparisonType);
+            number = apertures == null ? 0 : apertures.Count;
+            return true;
         }
     }
 }

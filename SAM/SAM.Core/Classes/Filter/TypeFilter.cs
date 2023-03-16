@@ -34,7 +34,13 @@ namespace SAM.Core
                 return true;
             }
 
-            return Type.IsAssignableFrom(jSAMObject.GetType());
+            bool result = Type.IsAssignableFrom(jSAMObject.GetType());
+            if(Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
         }
 
         public override bool FromJObject(JObject jObject)
