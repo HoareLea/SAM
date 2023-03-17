@@ -55,7 +55,14 @@ namespace SAM.Core
                 return false;
             }
 
-            return Value.Equals(@enum);
+            bool result = Value.Equals(@enum);
+
+            if (Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
         }
 
         public abstract bool TryGetEnum(IJSAMObject jSAMObject, out T @enum);

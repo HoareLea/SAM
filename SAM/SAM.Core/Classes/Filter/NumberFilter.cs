@@ -30,6 +30,24 @@ namespace SAM.Core
             Value = value;
         }
 
+        public abstract bool TryGetNumber(IJSAMObject jSAMObject, out double number);
+
+        public override bool IsValid(IJSAMObject jSAMObject)
+        {
+            if (!TryGetNumber(jSAMObject, out double number))
+            {
+                return false;
+            }
+
+            bool result = Query.Compare(number, Value, NumberComparisonType);
+            if (Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if(!base.FromJObject(jObject))

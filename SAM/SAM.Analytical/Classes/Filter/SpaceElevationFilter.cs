@@ -26,34 +26,34 @@ namespace SAM.Analytical
 
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
         {
+            number = double.NaN;
             if (AdjacencyCluster == null)
             {
                 return false;
             }
 
             Space space = jSAMObject as Space;
-            if(space == null)
+            if (space == null)
             {
                 return false;
             }
 
             Shell shell = AdjacencyCluster.Shell(space);
-            if(shell == null)
+            if (shell == null)
             {
                 return false;
             }
 
             BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return false;
             }
 
-
-            return SAM.Core.Query.Compare(boundingBox3D.Min.Z, Value, NumberComparisonType);
-            
+            number = boundingBox3D.Min.Z;
+            return !double.IsNaN(number);
         }
     }
 }
