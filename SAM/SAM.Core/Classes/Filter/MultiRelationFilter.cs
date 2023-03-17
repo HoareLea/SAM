@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public abstract class MultiRelationFilter<T> : Filter, IRelationFilter where T :IJSAMObject
+    public abstract class MultiRelationFilter<T> : Filter, IMultiRelationFilter where T :IJSAMObject
     {
         public FilterLogicalOperator FilterLogicalOperator { get; set; } = FilterLogicalOperator.Or;
         

@@ -139,6 +139,7 @@
     <Compile Include="Interfaces\Base\IResult.cs" />
     <Compile Include="Interfaces\Base\ISystemType.cs" />
     <Compile Include="Interfaces\Filter\IEnumFilter.cs" />
+    <Compile Include="Interfaces\Filter\IMultiRelationFilter.cs" />
     <Compile Include="Interfaces\Filter\IRelationFilter.cs" />
     <Compile Include="Interfaces\Filter\IFilter.cs" />
     <Compile Include="Interfaces\Library\ISAMLibrary.cs" />
