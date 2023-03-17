@@ -1,0 +1,39 @@
+﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
+
+namespace SAM.Analytical
+{
+    public class ApertureAzimuthFilter : NumberFilter
+    {
+        public ApertureAzimuthFilter(NumberComparisonType numberComparisonType, double value)
+            : base(numberComparisonType, value)
+        {
+
+        }
+
+        public ApertureAzimuthFilter(PanelAzimuthFilter panelAzimuthFilter)
+            : base(panelAzimuthFilter)
+        {
+
+        }
+
+        public ApertureAzimuthFilter(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public override bool TryGetNumber(IJSAMObject jSAMObject, out double number)
+        {
+            number = double.NaN;
+            Aperture aperture = jSAMObject as Aperture;
+            if (aperture == null)
+            {
+                return false;
+            }
+
+            number = Query.Azimuth(aperture);
+            return !double.IsNaN(number);
+        }
+    }
+}
