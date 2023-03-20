@@ -11,8 +11,8 @@ namespace SAM.Analytical
 
         }
 
-        public ApertureAzimuthFilter(PanelAzimuthFilter panelAzimuthFilter)
-            : base(panelAzimuthFilter)
+        public ApertureAzimuthFilter(ApertureAzimuthFilter apertureAzimuthFilter)
+            : base(apertureAzimuthFilter)
         {
 
         }
