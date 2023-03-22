@@ -100,7 +100,7 @@
     <Compile Include="Classes\New\Window.cs" />
     <Compile Include="Classes\New\WindowType.cs" />
     <Compile Include="Classes\Result\AnalyticalModelSimulationResult.cs" />
-    <Compile Include="Classes\Result\PanelSimulationResult.cs" />
+    <Compile Include="Classes\Result\SurfaceSimulationResult.cs" />
     <Compile Include="Classes\Result\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\Result\ZoneSimulationResult.cs" />
     <Compile Include="Classes\DesignDay.cs" />
@@ -190,7 +190,7 @@
     <Compile Include="Enums\Parameter\New\HostPartitionTypeParameter.cs" />
     <Compile Include="Enums\Parameter\New\PartitionSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\ApertureParameter.cs" />
-    <Compile Include="Enums\Parameter\PanelSimulationResultParameter.cs" />
+    <Compile Include="Enums\Parameter\SurfaceSimulationResultParameter.cs" />
     <Compile Include="Enums\Parameter\OpeningPropertiesParameter.cs" />
     <Compile Include="Enums\Parameter\ZoneSimulationResultParameter.cs" />
     <Compile Include="Enums\LoadType.cs" />

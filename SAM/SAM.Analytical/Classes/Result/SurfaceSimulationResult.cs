@@ -4,33 +4,33 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class PanelSimulationResult : Result
+    public class SurfaceSimulationResult : Result
     {
-        public PanelSimulationResult(string name, string source, string reference)
+        public SurfaceSimulationResult(string name, string source, string reference)
             : base(name, source, reference)
         {
 
         }
 
-        public PanelSimulationResult(Guid guid, string name, string source, string reference)
+        public SurfaceSimulationResult(Guid guid, string name, string source, string reference)
             : base(guid, name, source, reference)
         {
 
         }
 
-        public PanelSimulationResult(PanelSimulationResult panelSimulationResult)
-            : base(panelSimulationResult)
+        public SurfaceSimulationResult(SurfaceSimulationResult surfaceSimulationResult)
+            : base(surfaceSimulationResult)
         {
 
         }
 
-        public PanelSimulationResult(Guid guid, PanelSimulationResult panelSimulationResult)
-            : base(guid, panelSimulationResult)
+        public SurfaceSimulationResult(Guid guid, SurfaceSimulationResult surfaceSimulationResult)
+            : base(guid, surfaceSimulationResult)
         {
 
         }
 
-        public PanelSimulationResult(JObject jObject)
+        public SurfaceSimulationResult(JObject jObject)
             : base(jObject)
         {
         }

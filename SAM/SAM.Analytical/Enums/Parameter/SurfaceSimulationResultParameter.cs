@@ -3,8 +3,8 @@ using SAM.Core.Attributes;
 
 namespace SAM.Analytical
 {
-    [AssociatedTypes(typeof(PanelSimulationResult)), Description("PanelSimulationResult Parameter")]
-    public enum PanelSimulationResultParameter
+    [AssociatedTypes(typeof(SurfaceSimulationResult)), Description("SurfaceSimulationResult Parameter")]
+    public enum SurfaceSimulationResultParameter
     {
         [ParameterProperties("Area", "Area [m2]"), DoubleParameterValue()] Area,
         [ParameterProperties("Load Type", "Load Type"), ParameterValue(Core.ParameterType.String)] LoadType,

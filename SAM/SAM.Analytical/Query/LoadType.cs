@@ -2,12 +2,12 @@
 {
     public static partial class Query
     {
-        public static LoadType LoadType(this PanelSimulationResult panelSimulationResult)
+        public static LoadType LoadType(this SurfaceSimulationResult surfaceSimulationResult)
         {
-            if (panelSimulationResult == null)
+            if (surfaceSimulationResult == null)
                 return Analytical.LoadType.Undefined;
 
-            if (!panelSimulationResult.TryGetValue(PanelSimulationResultParameter.LoadType, out string text) || string.IsNullOrWhiteSpace(text))
+            if (!surfaceSimulationResult.TryGetValue(SurfaceSimulationResultParameter.LoadType, out string text) || string.IsNullOrWhiteSpace(text))
                 return Analytical.LoadType.Undefined;
 
             return Core.Query.Enum<LoadType>(text);
