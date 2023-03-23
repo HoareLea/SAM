@@ -218,6 +218,7 @@
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
     <Compile Include="Modify\UpdateByType.cs" />
+    <Compile Include="Query\ActiveObject.cs" />
     <Compile Include="Query\FindByType.cs" />
     <Compile Include="Query\Types.cs" />
     <Compile Include="Query\Equals.cs" />
