@@ -108,7 +108,7 @@ namespace SAM.Geometry.Spatial
             return new SAMGeometry3DGroup(this);
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if(jObject == null)
             {
@@ -175,7 +175,7 @@ namespace SAM.Geometry.Spatial
             return new SAMGeometry3DGroup(coordinateSystem3D_New, sAMGeometry3Ds);
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject result = new JObject();
             result.Add("_type", Core.Query.FullTypeName(this));

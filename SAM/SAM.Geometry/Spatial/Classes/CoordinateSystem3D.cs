@@ -92,24 +92,29 @@ namespace SAM.Geometry.Spatial
 
         public bool FromJObject(JObject jObject)
         {
-            if(axisX != null)
+            if(jObject == null)
             {
-                jObject.Add("AxisX", axisX.ToJObject());
+                return false;
             }
 
-            if (axisY != null)
+            if(jObject.ContainsKey("AxisX"))
             {
-                jObject.Add("AxisY", axisY.ToJObject());
+                axisX = new Vector3D(jObject.Value<JObject>("AxisX"));
             }
 
-            if (axisZ != null)
+            if (jObject.ContainsKey("AxisY"))
             {
-                jObject.Add("AxisZ", axisZ.ToJObject());
+                axisY = new Vector3D(jObject.Value<JObject>("AxisY"));
             }
 
-            if (origin != null)
+            if (jObject.ContainsKey("AxisZ"))
             {
-                jObject.Add("Origin", origin.ToJObject());
+                axisZ = new Vector3D(jObject.Value<JObject>("AxisZ"));
+            }
+
+            if (jObject.ContainsKey("Origin"))
+            {
+                origin = new Point3D(jObject.Value<JObject>("Origin"));
             }
 
             return true;

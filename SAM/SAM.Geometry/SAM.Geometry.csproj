@@ -93,6 +93,7 @@
     <Compile Include="Spatial\Classes\CoordinateSystem3D.cs" />
     <Compile Include="Spatial\Classes\SAMGeometry3DGroup.cs" />
     <Compile Include="Spatial\Create\Matrix3D.cs" />
+    <Compile Include="Spatial\Interfaces\GeometryObject\ISAMGeometry3DGroupObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\ITriangle3DObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\ISphereObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IRectangle3DObject.cs" />
