@@ -347,6 +347,22 @@ namespace SAM.Geometry.Spatial
             return point3D.Transform(transform3D);
         }
 
+        public static List<Point3D> Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, IEnumerable<Point3D> point3Ds)
+        {
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || point3Ds == null)
+            {
+                return null;
+            }
+
+            List<Point3D> result = new List<Point3D>();
+            foreach(Point3D point3D in point3Ds)
+            {
+                result.Add(Convert(coordinateSystem3D_From, coordinateSystem3D_To, point3D));
+            }
+
+            return result;
+        }
+
         public static Point3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Vector3D vector3D)
         {
             if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || vector3D == null)
@@ -363,9 +379,72 @@ namespace SAM.Geometry.Spatial
             return vector3D.Transform(transform3D);
         }
 
+        public static Plane Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Plane plane)
+        {
+            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || plane == null)
+            {
+                return null;
+            }
+            
+            Point3D origin = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.Origin);
+            Vector3D axisX = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.AxisX);
+            Vector3D axisY = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.AxisY);
+
+            return new Plane(origin, axisX, axisY);
+        }
+
+        public static Polygon3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Polygon3D polygon3D)
+        {
+            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || polygon3D == null)
+            {
+                return null;
+            }
+
+            Plane plane = Convert(coordinateSystem3D_From, coordinateSystem3D_To, polygon3D.GetPlane());
+            if(plane == null)
+            {
+                return null;
+            }
+
+            List<Point3D> point3Ds = Convert(coordinateSystem3D_From, coordinateSystem3D_To, polygon3D.GetPoints());
+            if(point3Ds == null)
+            {
+                return null;
+            }
+
+            return new Polygon3D(plane, point3Ds.ConvertAll(x => Convert(plane, x)));
+        }
+
+        public static Rectangle3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Rectangle3D rectangle3D)
+        {
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || rectangle3D == null)
+            {
+                return null;
+            }
+
+            Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D_From, coordinateSystem3D_To);
+
+            return rectangle3D.Transform(transform3D);
+        }
+
+        public static Triangle3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Triangle3D triangle3D)
+        {
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || triangle3D == null)
+            {
+                return null;
+            }
+
+            Point3D point3D_1 = Convert(coordinateSystem3D_From, coordinateSystem3D_To, triangle3D[0]);
+            Point3D point3D_2 = Convert(coordinateSystem3D_From, coordinateSystem3D_To, triangle3D[1]);
+            Point3D point3D_3 = Convert(coordinateSystem3D_From, coordinateSystem3D_To, triangle3D[2]);
+
+            return new Triangle3D(point3D_1, point3D_2, point3D_3);
+        }
+
         public static Point3D Convert(CoordinateSystem3D coordinateSystem3D, Point3D point3D)
         {
             return Convert(CoordinateSystem3D.World, coordinateSystem3D, point3D);
         }
+
     }
 }
