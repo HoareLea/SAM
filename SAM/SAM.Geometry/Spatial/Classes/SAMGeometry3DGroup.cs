@@ -59,8 +59,48 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
+            if(sAMGeometry3Ds == null)
+            {
+                sAMGeometry3Ds = new List<ISAMGeometry3D>();
+            }
+
             sAMGeometry3Ds.Add(sAMGeometry3D.GetTransformed(transform3D));
             return true;
+        }
+
+        public int Count
+        {
+            get
+            {
+                if(sAMGeometry3Ds == null)
+                {
+                    return -1;
+                }
+
+                return sAMGeometry3Ds.Count;
+            }
+        }
+
+        public ISAMGeometry3D this[int index]
+        {
+            get
+            {
+                Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D, CoordinateSystem3D.World);
+
+                return sAMGeometry3Ds[index].GetTransformed(transform3D);
+            }
+
+            set
+            {
+                if(value == null)
+                {
+                    sAMGeometry3Ds[index] = null;
+                    return;
+                }
+
+                Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(CoordinateSystem3D.World, coordinateSystem3D);
+                sAMGeometry3Ds[index] = value.GetTransformed(transform3D);
+            }
         }
 
         public ISAMGeometry Clone()
