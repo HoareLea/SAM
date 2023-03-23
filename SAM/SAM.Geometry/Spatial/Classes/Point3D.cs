@@ -133,7 +133,7 @@ namespace SAM.Geometry.Spatial
 
         public bool IsValid()
         {
-            return !double.IsNaN(coordinates[0]) && !double.IsNaN(coordinates[1]) && !double.IsNaN(coordinates[2]);
+            return !IsNaN();
         }
 
         public bool IsZero()

@@ -206,34 +206,58 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Transform3D GetOriginToPlane(Plane plane)
+        public static Transform3D GetOriginToCoordinateSystem3D(CoordinateSystem3D coordinateSystem3D)
         {
-            if (plane == null)
+            if(coordinateSystem3D == null)
+            {
                 return null;
+            }
 
-            Point3D origin = plane.Origin;
+            return GetOriginToPlane(coordinateSystem3D.Origin, coordinateSystem3D.AxisX, coordinateSystem3D.AxisY, coordinateSystem3D.AxisZ);
+        }
 
-            Vector3D Vector3D_X = plane.AxisX;
-            Vector3D Vector3D_Y = plane.AxisY;
-            Vector3D Vector3D_Z = plane.AxisZ;
+        public static Transform3D GetCoordinateSystem3DToOrigin(CoordinateSystem3D coordinateSystem3D)
+        {
+            Transform3D result = GetOriginToCoordinateSystem3D(coordinateSystem3D);
+            result.Inverse();
+            return result;
+        }
+
+        private static Transform3D GetOriginToPlane(Point3D origin, Vector3D axisX, Vector3D axisY, Vector3D axisZ)
+        {
+            if(origin == null || axisX == null || axisY == null || axisZ == null)
+            {
+                return null;
+            }
 
             Matrix4D matrix4D = Matrix4D.GetIdentity();
-            matrix4D[0, 0] = Vector3D.WorldX.DotProduct(Vector3D_X);
-            matrix4D[0, 1] = Vector3D.WorldX.DotProduct(Vector3D_Y);
-            matrix4D[0, 2] = Vector3D.WorldX.DotProduct(Vector3D_Z);
+            matrix4D[0, 0] = Vector3D.WorldX.DotProduct(axisX);
+            matrix4D[0, 1] = Vector3D.WorldX.DotProduct(axisY);
+            matrix4D[0, 2] = Vector3D.WorldX.DotProduct(axisZ);
             matrix4D[0, 3] = origin.X;
 
-            matrix4D[1, 0] = Vector3D.WorldY.DotProduct(Vector3D_X);
-            matrix4D[1, 1] = Vector3D.WorldY.DotProduct(Vector3D_Y);
-            matrix4D[1, 2] = Vector3D.WorldY.DotProduct(Vector3D_Z);
+            matrix4D[1, 0] = Vector3D.WorldY.DotProduct(axisX);
+            matrix4D[1, 1] = Vector3D.WorldY.DotProduct(axisY);
+            matrix4D[1, 2] = Vector3D.WorldY.DotProduct(axisZ);
             matrix4D[1, 3] = origin.Y;
 
-            matrix4D[2, 0] = Vector3D.WorldZ.DotProduct(Vector3D_X);
-            matrix4D[2, 1] = Vector3D.WorldZ.DotProduct(Vector3D_Y);
-            matrix4D[2, 2] = Vector3D.WorldZ.DotProduct(Vector3D_Z);
+            matrix4D[2, 0] = Vector3D.WorldZ.DotProduct(axisX);
+            matrix4D[2, 1] = Vector3D.WorldZ.DotProduct(axisY);
+            matrix4D[2, 2] = Vector3D.WorldZ.DotProduct(axisZ);
             matrix4D[2, 3] = origin.Z;
 
             return new Transform3D(matrix4D);
+
+        }
+
+        public static Transform3D GetOriginToPlane(Plane plane)
+        {
+            if (plane == null)
+            {
+                return null;
+            }
+
+            return GetOriginToPlane(plane.Origin, plane.AxisX, plane.AxisY, plane.AxisZ);
         }
 
         public static Transform3D GetOriginTranslation(Point3D point3D)
@@ -250,6 +274,14 @@ namespace SAM.Geometry.Spatial
         {
             Transform3D transform3D_From = GetPlaneToOrigin(plane_From);
             Transform3D transform3D_To = GetOriginToPlane(plane_To);
+
+            return transform3D_To * transform3D_From;
+        }
+
+        public static Transform3D GetCoordinateSystem3DToCoordinateSystem3D(CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To)
+        {
+            Transform3D transform3D_From = GetCoordinateSystem3DToOrigin(coordinateSystem3D_From);
+            Transform3D transform3D_To = GetOriginToCoordinateSystem3D(coordinateSystem3D_To);
 
             return transform3D_To * transform3D_From;
         }

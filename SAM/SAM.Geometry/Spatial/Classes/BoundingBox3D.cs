@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -415,6 +416,30 @@ namespace SAM.Geometry.Spatial
 
             max = Query.Max(max, boundingBox3D.Max);
             min = Query.Min(min, boundingBox3D.Min);
+            return true;
+        }
+
+        public bool Include(Point3D point3D)
+        {
+            if(point3D == null)
+            {
+                return false;
+            }
+
+            max = Query.Max(max, point3D);
+            min = Query.Min(min, point3D);
+            return true;
+        }
+
+        public bool Include(IEnumerable<Point3D> point3Ds)
+        {
+            if(point3Ds == null || point3Ds.Count() == 0)
+            {
+                return false;
+            }
+
+            max = Query.Max(max, Query.Max(point3Ds));
+            min = Query.Min(min, Query.Min(point3Ds));
             return true;
         }
 

@@ -330,5 +330,42 @@ namespace SAM.Geometry.Spatial
 
             return origin.GetMoved(vector3D) as Point3D;
         }
+
+        public static Point3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Point3D point3D)
+        {
+            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || point3D == null)
+            {
+                return null;
+            }
+
+            Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D_From, coordinateSystem3D_To);
+            if(transform3D == null)
+            {
+                return null;
+            }
+
+            return point3D.Transform(transform3D);
+        }
+
+        public static Point3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Vector3D vector3D)
+        {
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || vector3D == null)
+            {
+                return null;
+            }
+
+            Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D_From, coordinateSystem3D_To);
+            if (transform3D == null)
+            {
+                return null;
+            }
+
+            return vector3D.Transform(transform3D);
+        }
+
+        public static Point3D Convert(CoordinateSystem3D coordinateSystem3D, Point3D point3D)
+        {
+            return Convert(CoordinateSystem3D.World, coordinateSystem3D, point3D);
+        }
     }
 }

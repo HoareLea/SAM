@@ -10,27 +10,9 @@ namespace SAM.Geometry.Spatial
             return Transform(point3D, transform3D?.Matrix4D);
         }
 
-        public static Point3D Transform(this Point3D point3D, Matrix4D matrix4D)
-        {
-            if (point3D == null || matrix4D == null)
-                return null;
-
-            Matrix matrix = matrix4D * point3D.GetArgumentedMatrix();
-
-            return Create.Point3D(matrix);
-        }
-
         public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Transform3D transform3D)
         {
             return Transform(boundingBox3D, transform3D?.Matrix4D);
-        }
-
-        public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Matrix4D matrix4D)
-        {
-            if (boundingBox3D == null || matrix4D == null)
-                return null;
-
-            return new BoundingBox3D(boundingBox3D.Min.Transform(matrix4D), boundingBox3D.Max.Transform(matrix4D));
         }
 
         public static List<Point3D> Transform(this IEnumerable<Point3D> point3Ds, Transform3D transform3D)
@@ -38,31 +20,9 @@ namespace SAM.Geometry.Spatial
             return Transform(point3Ds, transform3D?.Matrix4D);
         }
 
-        public static List<Point3D> Transform(this IEnumerable<Point3D> point3Ds, Matrix4D matrix4D)
-        {
-            if (point3Ds == null || matrix4D == null)
-                return null;
-
-            List<Point3D> result = new List<Point3D>();
-            foreach (Point3D point3D in point3Ds)
-                result.Add(point3D.Transform(matrix4D));
-
-            return result;
-        }
-
         public static Vector3D Transform(this Vector3D vector3D, Transform3D transform3D)
         {
             return Transform(vector3D, transform3D.Matrix4D);
-        }
-
-        public static Vector3D Transform(this Vector3D vector3D, Matrix4D matrix4D)
-        {
-            if (vector3D == null || matrix4D == null)
-                return null;
-
-            Matrix matrix = matrix4D * vector3D.GetArgumentedMatrix();
-
-            return Create.Vector3D(matrix);
         }
 
         public static Polygon3D Transform(this Polygon3D polygon3D, Transform3D transform3D)
@@ -115,6 +75,16 @@ namespace SAM.Geometry.Spatial
             return Transform(circle3D, transform3D?.Matrix4D);
         }
 
+        public static Sphere Transform(this Sphere sphere, Transform3D transform3D)
+        {
+            return Transform(sphere, transform3D?.Matrix4D);
+        }
+
+        public static CoordinateSystem3D Transform(this CoordinateSystem3D coordinateSystem3D, Transform3D transform3D)
+        {
+            return Transform(coordinateSystem3D, transform3D?.Matrix4D);
+        }
+
         public static Circle3D Transform(this Circle3D circle3D, Matrix4D matrix4D)
         {
             if (matrix4D == null)
@@ -129,11 +99,6 @@ namespace SAM.Geometry.Spatial
             }
 
             return new Circle3D(plane.Transform(matrix4D), circle3D.Radious);
-        }
-
-        public static Sphere Transform(this Sphere sphere, Transform3D transform3D)
-        {
-            return Transform(sphere, transform3D?.Matrix4D);
         }
 
         public static Sphere Transform(this Sphere sphere, Matrix4D matrix4D)
@@ -300,6 +265,61 @@ namespace SAM.Geometry.Spatial
             face3Ds = face3Ds.ConvertAll(x => x.Transform(matrix4D));
 
             return new Shell(face3Ds);
+        }
+
+        public static Vector3D Transform(this Vector3D vector3D, Matrix4D matrix4D)
+        {
+            if (vector3D == null || matrix4D == null)
+                return null;
+
+            Matrix matrix = matrix4D * vector3D.GetArgumentedMatrix();
+
+            return Create.Vector3D(matrix);
+        }
+
+        public static List<Point3D> Transform(this IEnumerable<Point3D> point3Ds, Matrix4D matrix4D)
+        {
+            if (point3Ds == null || matrix4D == null)
+                return null;
+
+            List<Point3D> result = new List<Point3D>();
+            foreach (Point3D point3D in point3Ds)
+                result.Add(point3D.Transform(matrix4D));
+
+            return result;
+        }
+
+        public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Matrix4D matrix4D)
+        {
+            if (boundingBox3D == null || matrix4D == null)
+                return null;
+
+            return new BoundingBox3D(boundingBox3D.Min.Transform(matrix4D), boundingBox3D.Max.Transform(matrix4D));
+        }
+
+        public static Point3D Transform(this Point3D point3D, Matrix4D matrix4D)
+        {
+            if (point3D == null || matrix4D == null)
+                return null;
+
+            Matrix matrix = matrix4D * point3D.GetArgumentedMatrix();
+
+            return Create.Point3D(matrix);
+        }
+
+        public static CoordinateSystem3D Transform(this CoordinateSystem3D coordinateSystem3D, Matrix4D matrix4D)
+        {
+            if(coordinateSystem3D == null || matrix4D == null)
+            {
+                return null;
+            }
+
+            Point3D origin = coordinateSystem3D.Origin.Transform(matrix4D);
+            Vector3D axisX = coordinateSystem3D.AxisX.Transform(matrix4D);
+            Vector3D axisY = coordinateSystem3D.AxisY.Transform(matrix4D);
+            Vector3D axisZ = coordinateSystem3D.AxisZ.Transform(matrix4D);
+
+            return new Spatial.CoordinateSystem3D(origin, axisX, axisY, axisZ);
         }
     }
 }
