@@ -199,31 +199,31 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
-        public static Transform3D GetPlaneToOrigin(Plane plane)
+        public static Transform3D GetOriginToPlane(Plane plane)
         {
-            Transform3D result = GetOriginToPlane(plane);
+            Transform3D result = GetPlaneToOrigin(plane);
             result.Inverse();
             return result;
         }
 
-        public static Transform3D GetOriginToCoordinateSystem3D(CoordinateSystem3D coordinateSystem3D)
+        public static Transform3D GetCoordinateSystem3DToOrigin(CoordinateSystem3D coordinateSystem3D)
         {
             if(coordinateSystem3D == null)
             {
                 return null;
             }
 
-            return GetOriginToPlane(coordinateSystem3D.Origin, coordinateSystem3D.AxisX, coordinateSystem3D.AxisY, coordinateSystem3D.AxisZ);
+            return GetPlaneToOrigin(coordinateSystem3D.Origin, coordinateSystem3D.AxisX, coordinateSystem3D.AxisY, coordinateSystem3D.AxisZ);
         }
 
-        public static Transform3D GetCoordinateSystem3DToOrigin(CoordinateSystem3D coordinateSystem3D)
+        public static Transform3D GetOriginToCoordinateSystem3D(CoordinateSystem3D coordinateSystem3D)
         {
-            Transform3D result = GetOriginToCoordinateSystem3D(coordinateSystem3D);
+            Transform3D result = GetCoordinateSystem3DToOrigin(coordinateSystem3D);
             result.Inverse();
             return result;
         }
 
-        private static Transform3D GetOriginToPlane(Point3D origin, Vector3D axisX, Vector3D axisY, Vector3D axisZ)
+        public static Transform3D GetPlaneToOrigin(Point3D origin, Vector3D axisX, Vector3D axisY, Vector3D axisZ)
         {
             if(origin == null || axisX == null || axisY == null || axisZ == null)
             {
@@ -250,14 +250,14 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public static Transform3D GetOriginToPlane(Plane plane)
+        public static Transform3D GetPlaneToOrigin(Plane plane)
         {
             if (plane == null)
             {
                 return null;
             }
 
-            return GetOriginToPlane(plane.Origin, plane.AxisX, plane.AxisY, plane.AxisZ);
+            return GetPlaneToOrigin(plane.Origin, plane.AxisX, plane.AxisY, plane.AxisZ);
         }
 
         public static Transform3D GetOriginTranslation(Point3D point3D)
@@ -272,8 +272,8 @@ namespace SAM.Geometry.Spatial
 
         public static Transform3D GetPlaneToPlane(Plane plane_From, Plane plane_To)
         {
-            Transform3D transform3D_From = GetPlaneToOrigin(plane_From);
-            Transform3D transform3D_To = GetOriginToPlane(plane_To);
+            Transform3D transform3D_From = GetOriginToPlane(plane_From);
+            Transform3D transform3D_To = GetPlaneToOrigin(plane_To);
 
             return transform3D_To * transform3D_From;
         }
