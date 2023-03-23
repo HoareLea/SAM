@@ -34,9 +34,9 @@ namespace SAM.Geometry.Spatial
             if(coordinateSystem3D != null)
             {
                 origin = coordinateSystem3D.Origin;
-                axisX = coordinateSystem3D.axisX;
-                axisY = coordinateSystem3D.axisX;
-                axisZ = coordinateSystem3D.axisZ;
+                axisX = coordinateSystem3D.AxisX;
+                axisY = coordinateSystem3D.AxisX;
+                axisZ = coordinateSystem3D.AxisZ;
             }
         }
 
