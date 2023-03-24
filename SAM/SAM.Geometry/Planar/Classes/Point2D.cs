@@ -7,7 +7,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Planar Point
     /// </summary>
-    public class Point2D : SAMGeometry, ISAMGeometry2D
+    public class Point2D : SAMGeometry, ISAMGeometry2D, IPoint
     {
         private double[] coordinates = new double[2] { 0, 0 };
 

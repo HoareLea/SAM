@@ -51,6 +51,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Classes\PointGraph.cs" />
+    <Compile Include="Classes\PointGraphEdge.cs" />
     <Compile Include="Classes\SAMGeometryObjectCollection.cs" />
     <Compile Include="Classes\GeometryObjectModel.cs" />
     <Compile Include="Convert\ToNTS\Point.cs" />
@@ -78,7 +80,9 @@
     <Compile Include="Enums\EdgeOrientationMethod.cs" />
     <Compile Include="Enums\Padding.cs" />
     <Compile Include="Enums\AlignmentPoint.cs" />
+    <Compile Include="Interfaces\IPoint.cs" />
     <Compile Include="Interfaces\IMesh.cs" />
+    <Compile Include="Planar\Classes\Point2DGraph.cs" />
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Create\Mesh2D.cs" />
@@ -91,6 +95,7 @@
     <Compile Include="Query\ISAMGeometryObject.cs" />
     <Compile Include="Spatial\Classes\GeometryObject\SAMGeometry3DObjectCollection.cs" />
     <Compile Include="Spatial\Classes\CoordinateSystem3D.cs" />
+    <Compile Include="Spatial\Classes\Point3DGraph.cs" />
     <Compile Include="Spatial\Classes\SAMGeometry3DGroup.cs" />
     <Compile Include="Spatial\Create\Matrix3D.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\ISAMGeometry3DGroupObject.cs" />

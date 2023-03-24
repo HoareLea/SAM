@@ -2,7 +2,7 @@
 
 namespace SAM.Geometry.Spatial
 {
-    public class Point3D : SAMGeometry, ISAMGeometry3D
+    public class Point3D : SAMGeometry, ISAMGeometry3D, IPoint
     {
         private double[] coordinates = new double[3] { 0, 0, 0 };
 
