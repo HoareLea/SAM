@@ -45,7 +45,7 @@ namespace SAM.Geometry.Spatial
             List<Point3D> point3Ds = GetPoints();
             if (point3Ds == null || point3Ds.Count == 0)
             {
-
+                return null;
             }
 
             foreach (Point3D point3D_Temp in point3Ds)

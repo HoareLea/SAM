@@ -135,13 +135,13 @@ namespace SAM.Geometry
 
         public List<Z> GetJSAMObjects<Z>(X point) where Z : T
         {
-            X point3D_AdjacencyGraph = Find(point);
-            if (point3D_AdjacencyGraph == null)
+            X point_Temp = Find(point);
+            if (point_Temp == null)
             {
                 return null;
             }
 
-            if (!bidirectionalGraph.TryGetOutEdges(point3D_AdjacencyGraph, out IEnumerable<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
+            if (!bidirectionalGraph.TryGetOutEdges(point_Temp, out IEnumerable<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
             {
                 return null;
             }
@@ -180,7 +180,7 @@ namespace SAM.Geometry
             List<X> result = new List<X>();
             foreach (X point in bidirectionalGraph.Vertices)
             {
-                if(!TryGetpoint3DGraphEdges(point, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
+                if(!TryGetPointGraphEdges(point, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
                 {
                     continue;
                 }
@@ -194,7 +194,7 @@ namespace SAM.Geometry
             return result;
         }
 
-        private bool TryGetpoint3DGraphEdges(X point, out List<PointGraphEdge<X, T>> pointGraphEdges)
+        private bool TryGetPointGraphEdges(X point, out List<PointGraphEdge<X, T>> pointGraphEdges)
         {
             pointGraphEdges = null;
             if(point == null || bidirectionalGraph == null || bidirectionalGraph.Edges == null)
@@ -220,19 +220,19 @@ namespace SAM.Geometry
 
         public List<T> GetConnectedJSAMObjects(X point)
         {
-            X point3D_Temp = Find(point);
-            if(point3D_Temp == null)
+            X point_Temp = Find(point);
+            if(point_Temp == null)
             {
                 return null;
             }
 
-            List<PointGraph<X, T>> point3DGraphs = Split<PointGraph<X, T>>();
-            if(point3DGraphs == null || point3DGraphs.Count == 0)
+            List<PointGraph<X, T>> pointGraphs = Split<PointGraph<X, T>>();
+            if(pointGraphs == null || pointGraphs.Count == 0)
             {
                 return null;
             }
 
-            PointGraph<X, T> pointGraph = point3DGraphs.Find(x => x.Find(point3D_Temp) != null);
+            PointGraph<X, T> pointGraph = pointGraphs.Find(x => x.Find(point_Temp) != null);
             if(pointGraph == null)
             {
                 return null;
@@ -390,9 +390,9 @@ namespace SAM.Geometry
                     dictionary[keyValuePair.Value] = pointGraphEdges;
                 }
 
-                if(TryGetpoint3DGraphEdges(keyValuePair.Key, out List<PointGraphEdge<X, T>> pointGraphEdges_Point3D) && pointGraphEdges != null)
+                if(TryGetPointGraphEdges(keyValuePair.Key, out List<PointGraphEdge<X, T>> pointGraphEdges_Point) && pointGraphEdges != null)
                 {
-                    foreach(PointGraphEdge<X, T> pointGraphEdge in pointGraphEdges_Point3D)
+                    foreach(PointGraphEdge<X, T> pointGraphEdge in pointGraphEdges_Point)
                     {
                         if(!pointGraphEdges.Contains(pointGraphEdge))
                         {
@@ -429,11 +429,11 @@ namespace SAM.Geometry
                 tolerance = jObject.Value<double>("Tolerance");
             }
 
-            if (jObject.ContainsKey("AdjacencyGraph"))
+            if (jObject.ContainsKey("BidirectionalGraph"))
             {
                 bidirectionalGraph = new QuickGraph.BidirectionalGraph<X, PointGraphEdge<X, T>>();
 
-                JObject jObject_AdjacencyGraph = jObject.Value<JObject>("AdjacencyGraph");
+                JObject jObject_AdjacencyGraph = jObject.Value<JObject>("BidirectionalGraph");
                 if (jObject_AdjacencyGraph.ContainsKey("Vertices"))
                 {
                     JArray jArray = jObject_AdjacencyGraph.Value<JArray>("Vertices");
@@ -444,17 +444,17 @@ namespace SAM.Geometry
                     }
                 }
 
-                if (jObject_AdjacencyGraph.ContainsKey("pointGraphEdges"))
+                if (jObject_AdjacencyGraph.ContainsKey("PointGraphEdges"))
                 {
-                    JArray jArray = jObject_AdjacencyGraph.Value<JArray>("pointGraphEdges");
+                    JArray jArray = jObject_AdjacencyGraph.Value<JArray>("PointGraphEdges");
                     if (jArray != null)
                     {
                         foreach (JObject jObject_Temp in jArray)
                         {
-                            PointGraphEdge<X, T> point3DGraphEdge = new PointGraphEdge<X, T>(jObject_Temp);
-                            if (point3DGraphEdge != null)
+                            PointGraphEdge<X, T> pointGraphEdge = new PointGraphEdge<X, T>(jObject_Temp);
+                            if (pointGraphEdge != null)
                             {
-                                bidirectionalGraph.AddEdge(point3DGraphEdge);
+                                bidirectionalGraph.AddEdge(pointGraphEdge);
                             }
                         }
                     }
@@ -467,12 +467,13 @@ namespace SAM.Geometry
         public JObject ToJObject()
         {
             JObject result = new JObject();
+            result.Add("_type", Core.Query.FullTypeName(this));
 
             result.Add("Tolerance", tolerance);
 
             if (bidirectionalGraph != null)
             {
-                JObject jObject_AdjacencyGraph = new JObject();
+                JObject jObject_BidirectionalGraph = new JObject();
 
                 if (bidirectionalGraph.Vertices != null)
                 {
@@ -482,21 +483,21 @@ namespace SAM.Geometry
                         jArray.Add(point.ToJObject());
                     }
 
-                    jObject_AdjacencyGraph.Add("Vertices", jArray);
+                    jObject_BidirectionalGraph.Add("Vertices", jArray);
                 }
 
                 if (bidirectionalGraph.Edges != null)
                 {
                     JArray jArray = new JArray();
-                    foreach (PointGraphEdge<X, T> point3DGraphEdge in bidirectionalGraph.Edges)
+                    foreach (PointGraphEdge<X, T> pointGraphEdge in bidirectionalGraph.Edges)
                     {
-                        jArray.Add(point3DGraphEdge.ToJObject());
+                        jArray.Add(pointGraphEdge.ToJObject());
                     }
 
-                    jObject_AdjacencyGraph.Add("pointGraphEdges", jArray);
+                    jObject_BidirectionalGraph.Add("PointGraphEdges", jArray);
                 }
 
-                result.Add("pointGraphEdges", jObject_AdjacencyGraph);
+                result.Add("BidirectionalGraph", jObject_BidirectionalGraph);
             }
 
             return result;
