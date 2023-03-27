@@ -82,6 +82,39 @@ namespace SAM.Geometry.Spatial
             return false;
         }
 
+        public static bool InRange(this BoundingBox3D boundingBox3D, ISegmentable3D segmentable3D, double tolerance = Tolerance.Distance)
+        {
+            List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
+            if (segment3Ds == null || segment3Ds.Count == 0)
+            {
+                return false;
+            }
+
+            return segment3Ds.Find(x => InRange(boundingBox3D, x, tolerance)) != null;
+        }
+
+        public static bool InRange(this BoundingBox3D boundingBox3D, Face3D face3D, double tolerance = Tolerance.Distance)
+        {
+            if (face3D == null || boundingBox3D == null)
+            {
+                return false;
+            }
+
+            IClosedPlanar3D closedPlanar3D = face3D.GetExternalEdge3D();
+            if(closedPlanar3D == null)
+            {
+                return false;
+            }
+
+            ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
+            if (segmentable3D == null)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            return InRange(boundingBox3D, segmentable3D, tolerance);
+        }
+
         public static bool InRange(this Shell shell, BoundingBox3D boundingBox3D, double tolerance = Tolerance.Distance)
         {
             if (shell == null || boundingBox3D == null)
@@ -313,6 +346,65 @@ namespace SAM.Geometry.Spatial
             }
 
             return tuple.ConvertAll(x => x.Item2);
+        }
+    
+        public static bool InRange(this BoundingBox3D boundingBox3D, ISAMGeometry3DObject sAMGeometry3DObject, double tolerance = Tolerance.Distance)
+        {
+            if(boundingBox3D == null || sAMGeometry3DObject == null)
+            {
+                return false;
+            }
+
+            if (sAMGeometry3DObject is IEnumerable<ISAMGeometry3DObject>)
+            {
+                foreach (ISAMGeometry3DObject sAMGeometry3DObject_Temp in (IEnumerable<ISAMGeometry3DObject>)sAMGeometry3DObject)
+                {
+                    if (InRange(boundingBox3D, sAMGeometry3DObject_Temp, tolerance))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            ISAMGeometry3D sAMGeometry3D = sAMGeometry3DObject.ISAMGeometry3D();
+            if(sAMGeometry3D == null)
+            {
+                return false;
+            }
+
+            if(sAMGeometry3D is Point3D)
+            {
+                return boundingBox3D.InRange((Point3D)sAMGeometry3D, tolerance);
+            }
+
+            if(sAMGeometry3D is Segment3D)
+            {
+                return boundingBox3D.InRange((Segment3D)sAMGeometry3D, tolerance);
+            }
+
+            if (sAMGeometry3D is BoundingBox3D)
+            {
+                return boundingBox3D.InRange((BoundingBox3D)sAMGeometry3D, tolerance);
+            }
+
+            if(sAMGeometry3D is Shell)
+            {
+                return InRange((Shell)sAMGeometry3D, boundingBox3D, tolerance);
+            }
+
+            if (sAMGeometry3D is Face3D)
+            {
+                return InRange(boundingBox3D, (Face3D)sAMGeometry3D, tolerance);
+            }
+
+            if (sAMGeometry3D is ISegmentable3D)
+            {
+                return InRange(boundingBox3D, (ISegmentable3D)sAMGeometry3D, tolerance);
+            }
+
+            return false;
         }
     }
 }

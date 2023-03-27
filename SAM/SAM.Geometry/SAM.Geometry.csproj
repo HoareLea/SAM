@@ -109,6 +109,7 @@
     <Compile Include="Spatial\Interfaces\GeometryObject\IShellObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\IPolygon3DObject.cs" />
     <Compile Include="Spatial\Interfaces\GeometryObject\ISegment3DObject.cs" />
+    <Compile Include="Spatial\Query\ISAMGeometry3D.cs" />
     <Compile Include="Spatial\Query\SAMGeometry3D.cs" />
     <Compile Include="Spatial\Query\IsNormalized.cs" />
     <Compile Include="Planar\Query\MoveSegment2D.cs" />

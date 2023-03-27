@@ -85,5 +85,133 @@ namespace SAM.Geometry.Spatial
             return face3Ds.ConvertAll(x => dictionary[x]);
 
         }
+
+        public static bool Inside(this BoundingBox3D boundingBox3D, ISegmentable3D segmentable3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if(boundingBox3D == null || segmentable3D == null)
+            {
+                return false;
+            }
+
+            List<Segment3D> segment3Ds = segmentable3D.GetSegments();
+            if(segment3Ds == null || segment3Ds.Count == 0)
+            {
+                return false;
+            }
+
+            return segment3Ds.Find(x => !boundingBox3D.Inside(x, acceptOnEdge, tolerance)) == null;
+        }
+
+        public static bool Inside(this BoundingBox3D boundingBox3D, Face3D face3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if(boundingBox3D == null || face3D == null)
+            {
+                return false;
+            }
+
+            IClosedPlanar3D closedPlanar3D = face3D.GetExternalEdge3D();
+            if(closedPlanar3D == null)
+            {
+                return false;
+            }
+
+            ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+            if(segmentable3D == null)
+            {
+                throw new System.NotImplementedException();
+            }
+
+            return Inside(boundingBox3D, segmentable3D, acceptOnEdge, tolerance);
+        }
+
+        public static bool Inside(this BoundingBox3D boundingBox3D, Shell shell, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if(boundingBox3D == null || shell == null)
+            {
+                return false;
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if(face3Ds == null)
+            {
+                return false;
+            }
+
+            foreach(Face3D face3D in face3Ds)
+            {
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                if(!Inside(boundingBox3D, face3D, acceptOnEdge, tolerance))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool Inside(this BoundingBox3D boundingBox3D, ISAMGeometry3DObject sAMGeometry3DObject, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
+        {
+            if (boundingBox3D == null || sAMGeometry3DObject == null)
+            {
+                return false;
+            }
+
+            if (sAMGeometry3DObject is IEnumerable<ISAMGeometry3DObject>)
+            {
+                foreach (ISAMGeometry3DObject sAMGeometry3DObject_Temp in (IEnumerable<ISAMGeometry3DObject>)sAMGeometry3DObject)
+                {
+                    if (Inside(boundingBox3D, sAMGeometry3DObject_Temp, acceptOnEdge, tolerance))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            ISAMGeometry3D sAMGeometry3D = sAMGeometry3DObject.ISAMGeometry3D();
+            if (sAMGeometry3D == null)
+            {
+                return false;
+            }
+
+            if (sAMGeometry3D is Point3D)
+            {
+                return boundingBox3D.Inside((Point3D)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            if (sAMGeometry3D is Segment3D)
+            {
+                return boundingBox3D.Inside((Segment3D)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            if (sAMGeometry3D is BoundingBox3D)
+            {
+                return boundingBox3D.Inside((BoundingBox3D)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            if (sAMGeometry3D is Shell)
+            {
+                return Inside(boundingBox3D, (Shell)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            if (sAMGeometry3D is Face3D)
+            {
+                return Inside(boundingBox3D, (Face3D)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            if (sAMGeometry3D is ISegmentable3D)
+            {
+                return Inside(boundingBox3D, (ISegmentable3D)sAMGeometry3D, acceptOnEdge, tolerance);
+            }
+
+            return false;
+        }
+
+
     }
 }

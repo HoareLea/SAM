@@ -60,8 +60,10 @@ namespace SAM.Geometry.Planar
 
         public static Rectangle2D Rectangle2D(this IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if (point2Ds == null || point2Ds.Count() < 2)
+            if (point2Ds == null || point2Ds.Count() <= 2)
+            {
                 return null;
+            }
 
             List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
             if(point2Ds_ConvexHull == null || point2Ds_ConvexHull.Count < 2)
