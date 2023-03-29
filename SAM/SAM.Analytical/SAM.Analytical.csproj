@@ -254,6 +254,7 @@
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
     <Compile Include="Query\DaylightFactor.cs" />
+    <Compile Include="Query\FilteringSAMObjects.cs" />
     <Compile Include="Query\Filter.cs" />
     <Compile Include="Query\InternalConditionParameter.cs" />
     <Compile Include="Query\DefaultProfileLibrary_TM59.cs" />
