@@ -41,7 +41,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                jSAMObjects_Filtering.RemoveAll(x => x is SAMObject);
+                jSAMObjects_Filtering.RemoveAll(x => !(x is SAMObject));
             }
 
             if(jSAMObjects_Filtering.Count == 0)

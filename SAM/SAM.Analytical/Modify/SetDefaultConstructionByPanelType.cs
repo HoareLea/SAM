@@ -39,7 +39,7 @@ namespace SAM.Analytical
                 bool update = false;
 
                 Construction construction = panel.Construction;
-                if (construction == null)
+                if (string.IsNullOrWhiteSpace(construction?.Name))
                 {
                     if(panelType != PanelType.Air)
                     {
