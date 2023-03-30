@@ -23,6 +23,7 @@ namespace SAM.Core
             {
                 TextComparisonType = textFilter.TextComparisonType;
                 Value = textFilter.Value;
+                CaseSensitive = textFilter.CaseSensitive;
             }
         }
 
