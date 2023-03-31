@@ -427,6 +427,49 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetPanels()?.ConvertAll(x => new Panel(x));
         }
 
+        public List<Panel> GetPanels(Func<Panel, bool> func)
+        {
+            if(func == null)
+            {
+                return null;
+            }
+
+            return adjacencyCluster?.GetPanels()?.FindAll(x => func.Invoke(x)).ConvertAll(x => new Panel(x));
+        }
+
+        public List<Aperture> GetApertures(Func<Aperture, bool> func)
+        {
+            if (func == null)
+            {
+                return null;
+            }
+
+            List<Panel> panels = adjacencyCluster?.GetPanels();
+            if(panels == null || panels.Count == 0)
+            {
+                return null;
+            }
+
+            List<Aperture> result = new List<Aperture>();
+            foreach(Panel panel in panels)
+            {
+                List<Aperture> apertures = panel?.Apertures;
+                if(apertures == null || apertures.Count == 0)
+                {
+                    continue;
+                }
+
+                apertures = apertures.FindAll(x => func.Invoke(x));
+                if (apertures == null || apertures.Count == 0)
+                {
+                    continue;
+                }
+                result.AddRange(apertures.ConvertAll(x => new Aperture(x)));
+            }
+
+            return result;
+        }
+
         public List<T> GetMechanicalSystems<T>() where T: MechanicalSystem
         {
             return adjacencyCluster?.GetMechanicalSystems<T>()?.ConvertAll(x => Core.Query.Clone(x));
@@ -505,6 +548,11 @@ namespace SAM.Analytical
         public List<Panel> ReplaceConstruction(IEnumerable<Guid> guids, Construction construction, ApertureConstruction apertureConstruction = null, double offset = 0)
         {
             return adjacencyCluster?.ReplaceConstruction(guids, construction, apertureConstruction, offset);
+        }
+
+        public List<Aperture> ReplaceApertureConstruction(IEnumerable<Guid> guids, ApertureConstruction apertureConstruction)
+        {
+            return adjacencyCluster?.ReplaceApertureConstruction(guids, apertureConstruction);
         }
 
         public List<Panel> ReplaceTransparentPanels(double offset = 0)

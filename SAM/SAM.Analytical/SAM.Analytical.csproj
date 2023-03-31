@@ -248,6 +248,8 @@
     <Compile Include="Modify\New\AddAperture.cs" />
     <Compile Include="Modify\Normalize.cs" />
     <Compile Include="Modify\MergeSpaces.cs" />
+    <Compile Include="Modify\ReplaceApertureConstruction.cs" />
+    <Compile Include="Modify\SplitMaterialsByThickness.cs" />
     <Compile Include="Modify\SplitSpace.cs" />
     <Compile Include="Modify\SplitPanels.cs" />
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
