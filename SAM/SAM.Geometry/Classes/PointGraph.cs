@@ -417,6 +417,11 @@ namespace SAM.Geometry
 
         public abstract X Find(X point);
 
+        public bool Contains(X point)
+        {
+            return Find(point) != null;
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
