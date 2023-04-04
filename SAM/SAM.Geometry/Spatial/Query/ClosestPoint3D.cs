@@ -70,6 +70,63 @@ namespace SAM.Geometry.Spatial
             return result;
         }
 
+        public static Point3D ClosestPoint3D(this ISegmentable3D segmentable3D, Point3D point3D, out double distance, out List<Segment3D> segment3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            distance = double.NaN;
+            segment3Ds = null;
+            if (segmentable3D == null || point3D == null)
+            {
+                return null;
+            }
+
+            List<Segment3D> segment3Ds_Segmentable3D = segmentable3D.GetSegments();
+            if (segment3Ds_Segmentable3D == null || segment3Ds_Segmentable3D.Count == 0)
+            {
+                return null;
+            }
+
+            Point3D result = null;
+            foreach (Segment3D segment3D in segment3Ds_Segmentable3D)
+            {
+                Point3D point3D_Project = segment3D.Closest(point3D, true);
+                if (point3D_Project == null)
+                {
+                    continue;
+                }
+
+                double distance_Project = point3D.Distance(point3D_Project);
+                if (double.IsNaN(distance_Project))
+                {
+                    continue;
+                }
+
+                if (!double.IsNaN(distance))
+                {
+                    if (distance_Project > distance)
+                    {
+                        continue;
+                    }
+                }
+
+                if (segment3Ds == null)
+                {
+                    segment3Ds = new List<Segment3D>();
+                }
+
+                if (System.Math.Abs(distance - distance_Project) > tolerance)
+                {
+                    segment3Ds.Clear();
+                }
+
+                segment3Ds.Add(segment3D);
+
+                result = point3D_Project;
+                distance = distance_Project;
+            }
+
+            return result;
+        }
+
         public static Point3D ClosestPoint3D(this ISegmentable3D segmentable3D, Point3D point3D)
         {
             return ClosestPoint3D(segmentable3D, point3D, out double distance);

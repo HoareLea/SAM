@@ -343,48 +343,5 @@ namespace SAM.Geometry.Spatial
 
             return origin.GetMoved(vector3D) as Point3D;
         }
-
-        public static Point3D Project(this ISegmentable3D segmentable3D, Point3D point3D, double tolerance = Core.Tolerance.Distance)
-        {
-            if(segmentable3D == null || point3D == null)
-            {
-                return null;
-            }
-
-            List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if(segment3Ds == null || segment3Ds.Count == 0)
-            {
-                return null;
-            }
-
-            double distance = double.MaxValue;
-            Point3D result = null;
-
-            foreach (Segment3D segment3D in segment3Ds)
-            {
-                Point3D point3D_Temp = segment3D.Project(point3D);
-                if (point3D_Temp == null)
-                {
-                    continue;
-                }
-
-                double distance_Temp = point3D.Distance(point3D_Temp);
-                if(double.IsNaN(distance_Temp))
-                {
-                    continue;
-                }
-
-                if(distance_Temp > distance)
-                {
-                    continue;
-                }
-
-                result = point3D_Temp;
-                distance = distance_Temp;
-            }
-
-            return result;
-        }
-
     }
 }
