@@ -46,7 +46,7 @@ namespace SAM.Core
             List<T> relatives = GetRelatives(jSAMObject);
             if(relatives == null || relatives.Count == 0)
             {
-                return false;
+                return Filter.Inverted ? true : false;
             }
 
             bool result = false;
