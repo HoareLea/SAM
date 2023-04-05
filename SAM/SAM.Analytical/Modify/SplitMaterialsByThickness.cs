@@ -91,16 +91,17 @@ namespace SAM.Analytical
                     continue;
                 }
 
+                constructionLayers.RemoveAt(0);
+
                 IEnumerable<double> thicknesses = constructionLayers_Name.ConvertAll(x => x.Thickness).Distinct();
                 if(thicknesses == null || thicknesses.Count() < 2)
                 {
-                    constructionLayers.RemoveAt(0);
                     continue;
                 }
 
                 foreach(double thickness in thicknesses)
                 {
-                    ConstructionLayer constructionLayer_New = new ConstructionLayer(string.Format("{0}_{1}", name, thicknesses), thickness);
+                    ConstructionLayer constructionLayer_New = new ConstructionLayer(string.Format("{0}_{1}", name, thickness), thickness);
                     tuples.Add(new Tuple<string, ConstructionLayer>(name, constructionLayer_New));
                 }
             }
