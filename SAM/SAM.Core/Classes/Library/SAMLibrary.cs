@@ -181,12 +181,23 @@ namespace SAM.Core
         public List<W> GetObjects<W>() where W: T
         {
             if (objects == null)
+            {
                 return null;
+            }
 
             List<W> result = new List<W>();
             foreach (T jSAMObject in objects.Values)
+            {
                 if (jSAMObject is W)
-                    result.Add((W)jSAMObject.Clone());
+                {
+                    T t = jSAMObject.Clone();
+                    if(t is W)
+                    {
+                        result.Add((W)t);
+                    }
+                }
+            }
+
             
             return result;
         }
