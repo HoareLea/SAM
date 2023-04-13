@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -8,11 +9,26 @@ namespace SAM.Analytical
         public static double Volume(this Space space, AdjacencyCluster adjacencyCluster)
         {
             if (space == null)
+            {
                 return double.NaN;
+            }
+
 
             double volume = double.NaN;
             if (space.TryGetValue(SpaceParameter.Volume, out volume))
+            {
                 return volume;
+            }
+
+            Shell shell = adjacencyCluster.Shell(space);
+            if(shell != null)
+            {
+                volume = shell.Volume();
+                if(!double.IsNaN(volume) && volume > 0)
+                {
+                    return volume;
+                }
+            }
 
             //TODO: Find better way to calculate volume from panels
 
