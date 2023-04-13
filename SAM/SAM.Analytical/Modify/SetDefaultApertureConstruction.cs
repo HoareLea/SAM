@@ -68,9 +68,9 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    if(panel.RemoveAperture(aperture.Guid))
+                    if(panel_New.RemoveAperture(aperture.Guid))
                     {
-                        panel.AddAperture(aperture);
+                        panel_New.AddAperture(aperture);
                         result.Add(aperture);
                     }
                 }
