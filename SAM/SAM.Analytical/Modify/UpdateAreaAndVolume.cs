@@ -27,6 +27,7 @@ namespace SAM.Analytical
 
             if(update)
             {
+                result.RemoveValue(SpaceParameter.Volume);
                 result.SetValue(SpaceParameter.Volume, result.Volume(adjacencyCluster));
             }
 
@@ -38,6 +39,7 @@ namespace SAM.Analytical
 
             if (update)
             {
+                result.RemoveValue(SpaceParameter.Area);
                 result.SetValue(SpaceParameter.Area, result.CalculatedArea(adjacencyCluster));
             }
 
