@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static Space UpdateAreaAndVolume(this AdjacencyCluster adjacencyCluster, Space space)
+        public static Space UpdateAreaAndVolume(this AdjacencyCluster adjacencyCluster, Space space, bool forceUpdate = true)
         {
             if (adjacencyCluster == null || space == null)
             {
@@ -17,14 +17,34 @@ namespace SAM.Analytical
                 return null;
             }
 
-            result.SetValue(SpaceParameter.Volume, result.Volume(adjacencyCluster));
+            bool update;
 
-            result.SetValue(SpaceParameter.Area, result.CalculatedArea(adjacencyCluster));
+            update = true;
+            if(!forceUpdate && result.TryGetValue(SpaceParameter.Volume, out double volume) && volume > 0)
+            {
+                update = false;
+            }
+
+            if(update)
+            {
+                result.SetValue(SpaceParameter.Volume, result.Volume(adjacencyCluster));
+            }
+
+            update = true;
+            if (!forceUpdate && result.TryGetValue(SpaceParameter.Area, out double area) && area > 0)
+            {
+                update = false;
+            }
+
+            if (update)
+            {
+                result.SetValue(SpaceParameter.Area, result.CalculatedArea(adjacencyCluster));
+            }
 
             return result;
         }
 
-        public static void UpdateAreaAndVolume(this AdjacencyCluster adjacencyCluster)
+        public static void UpdateAreaAndVolume(this AdjacencyCluster adjacencyCluster, bool forceUpdate = true)
         {
             List<Space> spaces = adjacencyCluster?.GetSpaces();
             if(spaces == null || spaces.Count == 0)
@@ -34,7 +54,7 @@ namespace SAM.Analytical
 
             foreach(Space space in spaces)
             {
-                Space space_New = UpdateAreaAndVolume(adjacencyCluster, space);
+                Space space_New = UpdateAreaAndVolume(adjacencyCluster, space, forceUpdate);
                 if(space_New == null)
                 {
                     continue;
