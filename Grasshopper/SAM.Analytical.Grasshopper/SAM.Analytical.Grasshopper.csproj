@@ -101,6 +101,7 @@
     <Compile Include="Component\SAMAnalyticalBake.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateSpacePanelArea.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateByModel.cs" />
     <Compile Include="Component\SAMAnalyticalSetDefaultApertureConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalDaylightFactor.cs" />

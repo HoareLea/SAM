@@ -245,6 +245,7 @@
     <Compile Include="Create\Levels.cs" />
     <Compile Include="Modify\AssignAdjacencyCluster.cs" />
     <Compile Include="Modify\AddPanels.cs" />
+    <Compile Include="Modify\CopyZones.cs" />
     <Compile Include="Modify\New\AddAperture.cs" />
     <Compile Include="Modify\Normalize.cs" />
     <Compile Include="Modify\MergeSpaces.cs" />
