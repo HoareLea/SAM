@@ -57,19 +57,20 @@ namespace SAM.Analytical
                             break;
                         case PanelType.Ceiling:
                             panelType = Query.PanelType(panel.Normal);
+                            List<Space> spaces = adjacencyCluster?.GetRelatedObjects<Space>(panel);
                             switch (panelType.PanelGroup())
                             {
                                 case PanelGroup.Wall:
                                     update = !construction.Name.StartsWith(wallExternalConstructionPrefix);
-                                    panelType = PanelType.WallExternal;
+                                    panelType = spaces != null && spaces.Count > 1 ? PanelType.WallInternal : PanelType.WallExternal;
                                     break;
                                 case PanelGroup.Floor:
                                     update = !construction.Name.StartsWith(floorExposedConstructionPrefix);
-                                    panelType = PanelType.FloorExposed;
+                                    panelType = spaces != null && spaces.Count > 1 ? PanelType.FloorInternal : PanelType.FloorExposed;
                                     break;
                                 case PanelGroup.Roof:
                                     update = !construction.Name.StartsWith(roofExternalConstructionPrefix);
-                                    panelType = PanelType.Roof;
+                                    panelType = spaces != null && spaces.Count > 1 ? PanelType.FloorInternal : PanelType.Roof;
                                     break;
                             }
                             break;

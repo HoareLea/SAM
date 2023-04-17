@@ -20,6 +20,7 @@
                 case Analytical.PanelType.SlabOnGrade:
                 case Analytical.PanelType.UndergroundSlab:
                 case Analytical.PanelType.UndergroundCeiling:
+                case Analytical.PanelType.Ceiling:
                     return Analytical.PanelGroup.Floor;
 
                 case Analytical.PanelType.Roof:

@@ -257,7 +257,7 @@ namespace SAM.Analytical
             if(values == null)
             {
                 values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
-                values.Add(new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min, max), value));
+                values.Add(min, new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min, max), value));
             }
             else
             {
