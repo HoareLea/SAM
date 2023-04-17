@@ -61,25 +61,7 @@ namespace SAM.Analytical
 
         public override string GetUniqueId(Profile profile)
         {
-            if (profile == null)
-                return null;
-
-            string name = profile.Name;
-            string category = profile.Category;
-
-            if (name == null && category == null)
-                return null;
-
-            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(name))
-                return string.Empty;
-            
-            if (string.IsNullOrEmpty(category))
-                return name;
-
-            if (string.IsNullOrEmpty(name))
-                return category;
-
-            return string.Format("{0}::{1}", category, name);
+            return UniqueId(profile);
         }
 
         public override bool IsValid(Profile profile)
@@ -190,6 +172,29 @@ namespace SAM.Analytical
                 return null;
 
             return profiles.FindAll(x => Core.Query.Compare(x.Name, text, textComparisonType, caseSensitive));
+        }
+    
+        public static string UniqueId(Profile profile)
+        {
+            if (profile == null)
+                return null;
+
+            string name = profile.Name;
+            string category = profile.Category;
+
+            if (name == null && category == null)
+                return null;
+
+            if (string.IsNullOrEmpty(name) && string.IsNullOrEmpty(name))
+                return string.Empty;
+
+            if (string.IsNullOrEmpty(category))
+                return name;
+
+            if (string.IsNullOrEmpty(name))
+                return category;
+
+            return string.Format("{0}::{1}", category, name);
         }
     }
 }
