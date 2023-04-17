@@ -18,9 +18,11 @@ namespace SAM.Analytical.Grasshopper
             AnalyticalSettingParameter.DefaultDegreeOfActivityLibrary,
             AnalyticalSettingParameter.DefaultGasMaterialLibrary,
             AnalyticalSettingParameter.DefaultInternalConditionLibrary,
+            AnalyticalSettingParameter.DefaultInternalConditionLibrary_TM59,
             AnalyticalSettingParameter.DefaultMaterialLibrary,
             AnalyticalSettingParameter.DefaultProfileLibrary,
-            AnalyticalSettingParameter.DefaultSystemTypeLibrary
+            AnalyticalSettingParameter.DefaultProfileLibrary_TM59,
+            AnalyticalSettingParameter.DefaultSystemTypeLibrary,
         };
 
         private static Enum defaulEnum = enums[5];
