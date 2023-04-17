@@ -22,7 +22,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Get3;
 
         private GH_OutputParamManager outputParamManager;
 

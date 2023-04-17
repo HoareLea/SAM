@@ -83,6 +83,16 @@ namespace SAM.Core.Grasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SAM_Filter3 {
+            get {
+                object obj = ResourceManager.GetObject("SAM_Filter3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SAM_Get {
             get {
                 object obj = ResourceManager.GetObject("SAM_Get", resourceCulture);
@@ -96,6 +106,16 @@ namespace SAM.Core.Grasshopper.Properties {
         internal static System.Drawing.Bitmap SAM_Get_Filterpng {
             get {
                 object obj = ResourceManager.GetObject("SAM_Get_Filterpng", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SAM_Get3 {
+            get {
+                object obj = ResourceManager.GetObject("SAM_Get3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -123,6 +143,16 @@ namespace SAM.Core.Grasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SAM_JSON3 {
+            get {
+                object obj = ResourceManager.GetObject("SAM_JSON3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SAM_Names {
             get {
                 object obj = ResourceManager.GetObject("SAM_Names", resourceCulture);
@@ -133,9 +163,29 @@ namespace SAM.Core.Grasshopper.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap SAM_Names3 {
+            get {
+                object obj = ResourceManager.GetObject("SAM_Names3", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap SAM_Small {
             get {
                 object obj = ResourceManager.GetObject("SAM_Small", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap SAM_Small3 {
+            get {
+                object obj = ResourceManager.GetObject("SAM_Small3", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -18,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small3;
 
         /// <summary>
         /// Text Comparison Type Enum Component

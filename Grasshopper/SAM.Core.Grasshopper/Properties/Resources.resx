@@ -124,8 +124,14 @@
   <data name="SAM_Explode" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Explode.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SAM_Filter3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_Filter3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SAM_Get" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Get.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SAM_Get3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_Get3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="SAM_Get_Filterpng" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Get.Filterpng.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,10 +142,19 @@
   <data name="SAM_JSON" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_JSON.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SAM_JSON3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_JSON3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SAM_Names" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Names.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="SAM_Names3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_Names3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="SAM_Small" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\SAM_Small.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="SAM_Small3" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\SAM_Small3.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

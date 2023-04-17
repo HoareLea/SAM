@@ -206,6 +206,24 @@
       <Version>13.0.2</Version>
     </PackageReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM3.0.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Small3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_JSON3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Names3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Get3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\SAM_Filter3.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
