@@ -554,16 +554,18 @@ namespace SAM.Analytical
 
             }
 
+            bool adiabatic = panel.Adiabatic();
+
             Construction construction = panel.Construction;
             if(construction == null)
             {
                 if (panelType != PanelType.Air)
                     result.Add(string.Format("{0} Panel (Guid: {1}) has no construction assigned.", name, panel.Guid), LogRecordType.Error);
             }
-            else if(panelType != PanelType.Shade)
+            else if(panelType != PanelType.Shade && !adiabatic)
             {
                 PanelGroup panelGroup_Construction = construction.PanelType().PanelGroup();
-                if(panelGroup_Construction != PanelGroup.Undefined)
+                if (panelGroup_Construction != PanelGroup.Undefined)
                 {
                     PanelGroup panelGroup_Panel = panelType.PanelGroup();
                     if (panelGroup_Panel != PanelGroup.Undefined)
@@ -571,8 +573,8 @@ namespace SAM.Analytical
                         string name_Construction = construction.Name;
                         if (string.IsNullOrWhiteSpace(name_Construction))
                             name_Construction = "???";
-                        
-                        if(panelGroup_Construction != panelGroup_Panel)
+
+                        if (panelGroup_Construction != panelGroup_Panel)
                             result.Add(string.Format("PanelType of {0} Panel (Guid: {1}) does not match with assigned {2} Construction (Guid: {3}).", name, panel.Guid, name_Construction, construction.Guid), LogRecordType.Warning);
                     }
                 }
@@ -610,7 +612,7 @@ namespace SAM.Analytical
                     {
                         result.Add(string.Format("{0} aperture (Guid: {1}) in {2} host panel (Guid: {3}) has no ApertureConstruction", name_Aperture, aperture.Guid, name, panel.Guid), LogRecordType.Error);
                     }
-                    else
+                    else if(!adiabatic)
                     {
                         string text;
                         if (apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
