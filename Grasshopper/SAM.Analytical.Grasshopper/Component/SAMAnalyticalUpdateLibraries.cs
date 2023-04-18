@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateLibrary : GH_SAMComponent
+    public class SAMAnalyticalUpdateLibraries : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -28,9 +28,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateLibrary()
-          : base("SAMAnalytical.UpdateLibrary", "SAMAnalytical.UpdateLibrary",
-              "Update Library in analyticalModel",
+        public SAMAnalyticalUpdateLibraries()
+          : base("SAMAnalytical.UpdateLibraries", "SAMAnalytical.UpdateLibraries",
+              "Update Libraries in analyticalModel",
               "SAM", "Analytical")
         {
         }
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
 
-            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_library", "_library", "SAM Library (MaterialLibrary or ProfileLibrary)", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_libraries", "_libraries", "SAM Libraries (MaterialLibraries or/and ProfileLibraries)", GH_ParamAccess.item);
 
             index = inputParamManager.AddBooleanParameter("_missingOnly", "_missingOnly", "Copy only missing objects from library", GH_ParamAccess.item, true);
             inputParamManager[index].Optional = true;
@@ -73,12 +73,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            ISAMLibrary sAMLibrary = null;
-            if (!dataAccess.GetData(1, ref sAMLibrary) || sAMLibrary == null)
+            List<IJSAMObject> jSAMObjects = null;
+            if (!dataAccess.GetData(1, ref jSAMObjects) || jSAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            List<ISAMLibrary> sAMLibraries = jSAMObjects.FindAll(x => x is ISAMLibrary).ConvertAll(x => (ISAMLibrary)x);
 
             bool missingOnly = true;
             if (!dataAccess.GetData(2, ref missingOnly))
@@ -86,35 +88,40 @@ namespace SAM.Analytical.Grasshopper
 
             }
 
-            if(sAMLibrary is MaterialLibrary)
+            foreach(ISAMLibrary sAMLibrary in sAMLibraries)
             {
-                IEnumerable<IMaterial> materials = missingOnly ? Analytical.Query.Materials(analyticalModel.AdjacencyCluster, (MaterialLibrary)sAMLibrary) : ((MaterialLibrary)sAMLibrary).GetMaterials();
-                if(materials != null)
+                if (sAMLibrary is MaterialLibrary)
                 {
-                    analyticalModel = new AnalyticalModel(analyticalModel);
-                    materials?.ToList().ForEach(x => analyticalModel.AddMaterial(x));
+                    IEnumerable<IMaterial> materials = missingOnly ? Analytical.Query.Materials(analyticalModel.AdjacencyCluster, (MaterialLibrary)sAMLibrary) : ((MaterialLibrary)sAMLibrary).GetMaterials();
+                    if (materials != null)
+                    {
+                        analyticalModel = new AnalyticalModel(analyticalModel);
+                        materials?.ToList().ForEach(x => analyticalModel.AddMaterial(x));
+                    }
                 }
-            }
-            else if(sAMLibrary is ProfileLibrary)
-            {
+                else if (sAMLibrary is ProfileLibrary)
+                {
 
-                IEnumerable<Profile> profiles = missingOnly ? Analytical.Query.Profiles(analyticalModel.AdjacencyCluster, (ProfileLibrary)sAMLibrary) : ((ProfileLibrary)sAMLibrary).GetProfiles();
-                if (profiles != null)
-                {
-                    analyticalModel = new AnalyticalModel(analyticalModel);
-                    profiles?.ToList().ForEach(x => analyticalModel.AddProfile(x));
+                    IEnumerable<Profile> profiles = missingOnly ? Analytical.Query.Profiles(analyticalModel.AdjacencyCluster, (ProfileLibrary)sAMLibrary) : ((ProfileLibrary)sAMLibrary).GetProfiles();
+                    if (profiles != null)
+                    {
+                        analyticalModel = new AnalyticalModel(analyticalModel);
+                        profiles?.ToList().ForEach(x => analyticalModel.AddProfile(x));
+                    }
                 }
-            }
-            else if (sAMLibrary is InternalConditionLibrary)
-            {
+                else if (sAMLibrary is InternalConditionLibrary)
+                {
 
-                IEnumerable<InternalCondition> internalConditions = ((InternalConditionLibrary)sAMLibrary).GetInternalConditions();
-                if (internalConditions != null)
-                {
-                    analyticalModel = new AnalyticalModel(analyticalModel);
-                    internalConditions?.ToList().ForEach(x => analyticalModel.AddInternalCondition(x));
+                    IEnumerable<InternalCondition> internalConditions = ((InternalConditionLibrary)sAMLibrary).GetInternalConditions();
+                    if (internalConditions != null)
+                    {
+                        analyticalModel = new AnalyticalModel(analyticalModel);
+                        internalConditions?.ToList().ForEach(x => analyticalModel.AddInternalCondition(x));
+                    }
                 }
             }
+
+
 
             dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
         }
