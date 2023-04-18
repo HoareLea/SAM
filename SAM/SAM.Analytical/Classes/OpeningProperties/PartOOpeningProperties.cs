@@ -14,6 +14,14 @@ namespace SAM.Analytical
 
         public double Factor { get; set; } = 1;
 
+        public ISingleOpeningProperties SingleOpeningProperties
+        {
+            get
+            {
+                return this.Clone();
+            }
+        }
+
         public PartOOpeningProperties()
         {
 

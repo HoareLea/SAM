@@ -93,5 +93,13 @@ namespace SAM.Analytical
         {
             return Factor;
         }
+
+        public ISingleOpeningProperties SingleOpeningProperties
+        {
+            get
+            {
+                return this.Clone();
+            }
+        }
     }
 }
