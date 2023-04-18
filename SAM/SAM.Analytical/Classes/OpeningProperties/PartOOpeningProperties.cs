@@ -6,11 +6,13 @@ namespace SAM.Analytical
     /// <summary>
     /// Opening Properties
     /// </summary>
-    public class PartOOpeningProperties : ParameterizedSAMObject, IOpeningProperties
+    public class PartOOpeningProperties : ParameterizedSAMObject, ISingleOpeningProperties
     {
         private double width;
         private double height;
         private double openingAngle;
+
+        public double Factor { get; set; } = 1;
 
         public PartOOpeningProperties()
         {
@@ -63,6 +65,11 @@ namespace SAM.Analytical
                 openingAngle = jObject.Value<double>("OpeningAngle");
             }
 
+            if (jObject.ContainsKey("Factor"))
+            {
+                Factor = jObject.Value<double>("Factor");
+            }
+
             return true;
         }
 
@@ -87,6 +94,11 @@ namespace SAM.Analytical
             if (!double.IsNaN(openingAngle))
             {
                 jObject.Add("OpeningAngle", openingAngle);
+            }
+
+            if (!double.IsNaN(Factor))
+            {
+                jObject.Add("Factor", Factor);
             }
 
             return jObject;
@@ -134,6 +146,11 @@ namespace SAM.Analytical
             }
 
             return maxDischargeCoefficient * (1 - System.Math.Exp(-gradient * openingAngle));
+        }
+
+        public double GetFactor()
+        {
+            return Factor;
         }
     }
 }

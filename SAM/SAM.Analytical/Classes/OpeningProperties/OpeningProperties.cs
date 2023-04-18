@@ -6,8 +6,10 @@ namespace SAM.Analytical
     /// <summary>
     /// Opening Properties
     /// </summary>
-    public class OpeningProperties : ParameterizedSAMObject, IOpeningProperties
+    public class OpeningProperties : ParameterizedSAMObject, ISingleOpeningProperties
     {
+        public double Factor { get; set; } = 1;
+        
         private double dischargeCoefficient { get; set; }
 
         public OpeningProperties()
@@ -52,6 +54,11 @@ namespace SAM.Analytical
                 dischargeCoefficient = jObject.Value<double>("DischargeCoefficient");
             }
 
+            if (jObject.ContainsKey("Factor"))
+            {
+                Factor = jObject.Value<double>("Factor");
+            }
+
             return true;
         }
 
@@ -68,12 +75,22 @@ namespace SAM.Analytical
                 jObject.Add("DischargeCoefficient", dischargeCoefficient);
             }
 
+            if (!double.IsNaN(Factor))
+            {
+                jObject.Add("Factor", Factor);
+            }
+
             return jObject;
         }
 
         public double GetDischargeCoefficient()
         {
             return dischargeCoefficient;
+        }
+
+        public double GetFactor()
+        {
+            return Factor;
         }
     }
 }

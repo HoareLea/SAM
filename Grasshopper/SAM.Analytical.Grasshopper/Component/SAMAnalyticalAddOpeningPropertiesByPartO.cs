@@ -206,7 +206,7 @@ namespace SAM.Analytical.Grasshopper
                         aperture_Temp.SetValue(ApertureParameter.Color, Analytical.Query.Color(ApertureType.Window, AperturePart.Pane, true));
                     }
 
-                    aperture_Temp.SetValue(ApertureParameter.OpeningProperties, partOOpeningProperties);
+                    aperture_Temp.AddSingleOpeningProperties(partOOpeningProperties);
 
                     panel.RemoveAperture(aperture.Guid);
                     if(panel.AddAperture(aperture_Temp))

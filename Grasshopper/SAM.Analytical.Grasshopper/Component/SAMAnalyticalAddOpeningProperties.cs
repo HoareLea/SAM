@@ -61,6 +61,12 @@ namespace SAM.Analytical.Grasshopper
                 @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions \nexample This function in define for the Approved Document O\nzdwon,0,19.00,21.00,99.00", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "factors_", NickName = "factors_", Description = "Factors", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -75,6 +81,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooOpeningPropertiesParam() { Name = "openingProperties", NickName = "openingProperties", Description = "SAM Analytical IOpeningProperties", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dischargeCoefficients", NickName = "dischargeCoefficients", Description = "Discharge Coefficients", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -148,13 +155,29 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, colors);
             }
 
+            index = Params.IndexOfInputParam("factors_");
+            List<double> factors = new List<double>();
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, factors);
+            }
+
+            index = Params.IndexOfInputParam("profiles_");
+            List<Profile> profiles = new List<Profile>();
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, profiles);
+            }
+
             List<Aperture> apertures_Result = null;
             List<double> dischargeCoefficients_Result = null;
+            List<IOpeningProperties> openingProperties_Result = null;
 
             if (apertures != null && dischargeCoefficients != null && apertures.Count > 0 && dischargeCoefficients.Count > 0)
             {
                 apertures_Result = new List<Aperture>();
                 dischargeCoefficients_Result = new List<double>();
+                openingProperties_Result = new List<IOpeningProperties>();
 
                 for (int i = 0; i < apertures.Count; i++)
                 {
@@ -177,18 +200,41 @@ namespace SAM.Analytical.Grasshopper
 
                     double dischargeCoefficient = dischargeCoefficients.Count > i ? dischargeCoefficients[i] : dischargeCoefficients.Last();
 
-                    OpeningProperties openingProperties = new OpeningProperties(dischargeCoefficient);
+                    double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
+
+                    ISingleOpeningProperties singleOpeningProperties = null;
+                    if (profiles != null && profiles.Count != 0)
+                    {
+                        Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
+                        ProfileOpeningProperties profileOpeningProperties = new ProfileOpeningProperties(dischargeCoefficient, profile);
+                        if(!double.IsNaN(factor))
+                        {
+                            profileOpeningProperties.Factor = factor;
+                        }
+
+                        singleOpeningProperties = profileOpeningProperties;
+                    }
+                    else
+                    {
+                        OpeningProperties openingProperties = new OpeningProperties(dischargeCoefficient);
+                        if (!double.IsNaN(factor))
+                        {
+                            openingProperties.Factor = factor;
+                        }
+
+                        singleOpeningProperties = openingProperties;
+                    }
 
                     if(descriptions != null && descriptions.Count != 0)
                     {
                         string description = descriptions.Count > i ? descriptions[i] : descriptions.Last();
-                        openingProperties.SetValue(OpeningPropertiesParameter.Description, description);
+                        singleOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
                     }
 
                     if (functions != null && functions.Count != 0)
                     {
                         string function = functions.Count > i ? functions[i] : functions.Last();
-                        openingProperties.SetValue(OpeningPropertiesParameter.Function, function);
+                        singleOpeningProperties.SetValue(OpeningPropertiesParameter.Function, function);
                     }
 
                     if (colors != null && colors.Count != 0)
@@ -201,14 +247,15 @@ namespace SAM.Analytical.Grasshopper
                         aperture_Temp.SetValue(ApertureParameter.Color, Analytical.Query.Color(ApertureType.Window, AperturePart.Pane, true));
                     }
 
-                    aperture_Temp.SetValue(ApertureParameter.OpeningProperties, openingProperties);
+                    aperture_Temp.AddSingleOpeningProperties(singleOpeningProperties);
 
                     panel.RemoveAperture(aperture.Guid);
                     if(panel.AddAperture(aperture_Temp))
                     {
                         adjacencyCluster.AddObject(panel);
                         apertures_Result.Add(aperture_Temp);
-                        dischargeCoefficients_Result.Add(openingProperties.GetDischargeCoefficient());
+                        dischargeCoefficients_Result.Add(singleOpeningProperties.GetDischargeCoefficient());
+                        openingProperties_Result.Add(singleOpeningProperties);
                     }
                 }
             }
@@ -233,6 +280,10 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("dischargeCoefficients");
             if (index != -1)
                 dataAccess.SetDataList(index, dischargeCoefficients_Result);
+
+            index = Params.IndexOfOutputParam("openingProperties");
+            if (index != -1)
+                dataAccess.SetDataList(index, openingProperties_Result);
         }
     }
 }

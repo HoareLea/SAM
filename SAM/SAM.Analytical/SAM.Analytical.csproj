@@ -68,6 +68,8 @@
     <Compile Include="Classes\Filter\SpaceZonesFilter.cs" />
     <Compile Include="Classes\Filter\SpaceInternalConditionFilter.cs" />
     <Compile Include="Classes\New\Opening.cs" />
+    <Compile Include="Classes\OpeningProperties\MultipleOpeningProperties.cs" />
+    <Compile Include="Classes\OpeningProperties\ProfileOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties\PartOOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties\OpeningProperties.cs" />
     <Compile Include="Classes\NCMData.cs" />
@@ -234,6 +236,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
     <Compile Include="Interfaces\Filter\IAdjacencyClusterFilter.cs" />
+    <Compile Include="Interfaces\OpeningProperties\ISingleOpeningProperties.cs" />
     <Compile Include="Interfaces\OpeningProperties\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />
     <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
@@ -243,6 +246,7 @@
     <Compile Include="Interfaces\New\IPartition.cs" />
     <Compile Include="Manager\ActiveSetting.cs" />
     <Compile Include="Create\Levels.cs" />
+    <Compile Include="Modify\AddSingleOpeningProperties.cs" />
     <Compile Include="Modify\AssignAdjacencyCluster.cs" />
     <Compile Include="Modify\AddPanels.cs" />
     <Compile Include="Modify\CopyZones.cs" />
@@ -257,6 +261,7 @@
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
+    <Compile Include="Query\SingleOpeningProperties.cs" />
     <Compile Include="Query\DaylightFactor.cs" />
     <Compile Include="Query\FilteringSAMObjects.cs" />
     <Compile Include="Query\Filter.cs" />
