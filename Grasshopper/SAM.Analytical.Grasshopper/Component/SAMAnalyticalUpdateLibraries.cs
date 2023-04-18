@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
 
-            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_libraries", "_libraries", "SAM Libraries (MaterialLibraries or/and ProfileLibraries)", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_libraries", "_libraries", "SAM Libraries (MaterialLibraries or/and ProfileLibraries)", GH_ParamAccess.list);
 
             index = inputParamManager.AddBooleanParameter("_missingOnly", "_missingOnly", "Copy only missing objects from library", GH_ParamAccess.item, true);
             inputParamManager[index].Optional = true;
@@ -73,8 +73,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<IJSAMObject> jSAMObjects = null;
-            if (!dataAccess.GetData(1, ref jSAMObjects) || jSAMObjects == null)
+            List<IJSAMObject> jSAMObjects = new List<IJSAMObject>();
+            if (!dataAccess.GetDataList(1, jSAMObjects) || jSAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
