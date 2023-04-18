@@ -40,6 +40,7 @@ namespace SAM.Analytical
                 width = partOOpeningProperties.width;
                 height = partOOpeningProperties.height;
                 openingAngle = partOOpeningProperties.openingAngle;
+                Factor = partOOpeningProperties.Factor;
             }
         }
 

@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -35,13 +34,16 @@ namespace SAM.Analytical
         public ProfileOpeningProperties(ProfileOpeningProperties profileOpeningProperties)
             : base(profileOpeningProperties)
         {
-
+            profile = profileOpeningProperties.profile == null ? null : new Profile(profileOpeningProperties.profile);
         }
 
         public ProfileOpeningProperties(IOpeningProperties openingProperties, double dischargeCoefficient)
             : base(openingProperties, dischargeCoefficient)
         {
-
+            if(openingProperties is ProfileOpeningProperties)
+            {
+                profile = ((ProfileOpeningProperties)openingProperties).profile == null ? null : new Profile(((ProfileOpeningProperties)openingProperties).profile);
+            }
         }
 
         public Profile Profile

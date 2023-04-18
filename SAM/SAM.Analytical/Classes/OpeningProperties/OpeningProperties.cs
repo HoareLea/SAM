@@ -32,6 +32,7 @@ namespace SAM.Analytical
         {
             if(openingProperties != null)
             {
+                Factor = openingProperties.Factor;
                 dischargeCoefficient = openingProperties.dischargeCoefficient;
             }
         }
