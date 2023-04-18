@@ -68,8 +68,8 @@
     <Compile Include="Classes\Filter\SpaceZonesFilter.cs" />
     <Compile Include="Classes\Filter\SpaceInternalConditionFilter.cs" />
     <Compile Include="Classes\New\Opening.cs" />
-    <Compile Include="Classes\PartOOpeningProperties.cs" />
-    <Compile Include="Classes\OpeningProperties.cs" />
+    <Compile Include="Classes\OpeningProperties\PartOOpeningProperties.cs" />
+    <Compile Include="Classes\OpeningProperties\OpeningProperties.cs" />
     <Compile Include="Classes\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
     <Compile Include="Classes\ApertureConstruction.cs" />
@@ -234,7 +234,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
     <Compile Include="Interfaces\Filter\IAdjacencyClusterFilter.cs" />
-    <Compile Include="Interfaces\IOpeningProperties.cs" />
+    <Compile Include="Interfaces\OpeningProperties\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />
     <Compile Include="Interfaces\New\IAnalyticalObject.cs" />
     <Compile Include="Interfaces\New\IHostPartition.cs" />
