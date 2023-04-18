@@ -32,7 +32,7 @@ namespace SAM.Analytical
         public MultipleOpeningProperties(MultipleOpeningProperties multipleOpeningProperties)
             : base(multipleOpeningProperties)
         {
-
+            singleOpeningProperties = multipleOpeningProperties?.singleOpeningProperties?.ConvertAll(x => Core.Query.Clone(x));
         }
 
         public MultipleOpeningProperties(MultipleOpeningProperties multipleOpeningProperties, IEnumerable<ISingleOpeningProperties> singleOpeningProperties)
