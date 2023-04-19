@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooAirHandlingUnitParam()
-            : base(typeof(Profile).Name, typeof(AirHandlingUnit).Name, typeof(AirHandlingUnit).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(AirHandlingUnit).Name, typeof(AirHandlingUnit).Name, typeof(AirHandlingUnit).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
