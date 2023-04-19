@@ -1,4 +1,4 @@
-﻿using System.ComponentModel;
+﻿ using System.ComponentModel;
 
 namespace SAM.Analytical
 {
@@ -16,6 +16,7 @@ namespace SAM.Analytical
         [Description("Cooling")] Cooling,
         [Description("Humidification")] Humidification,
         [Description("Dehumidification")] Dehumidification,
+        //[Description("Ventilation")] Ventilation,
         [Description("Other")] Other,
     }
 }

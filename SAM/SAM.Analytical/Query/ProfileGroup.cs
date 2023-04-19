@@ -25,6 +25,9 @@
                 case ProfileType.Cooling:
                     return Analytical.ProfileGroup.Thermostat;
 
+                case ProfileType.Ventilation:
+                    return Analytical.ProfileGroup.Ventilation;
+
             }
 
             return Analytical.ProfileGroup.Undefined;

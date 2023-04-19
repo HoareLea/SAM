@@ -45,12 +45,13 @@ namespace SAM.Analytical
 
         [ParameterProperties("Supply Air Flow Per Person", "Supply Air Flow Per Person [m3/s/p]"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlowPerPerson,
         [ParameterProperties("Exhaust Air Flow Per Person", "Exhaust Air Flow Per Person [m3/s/p]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlowPerPerson,
-        [ParameterProperties("Minimum Supply Air Changes Per Hour", "Minimum Supply Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] MinimumSupplyAirChangesPerHour,
-        [ParameterProperties("Minimum Exhaust Air Changes Per Hour", "Minimum Exhaust Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] MinimumExhaustAirChangesPerHour,
+        [ParameterProperties("Supply Air Changes Per Hour", "Supply Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] SupplyAirChangesPerHour,
+        [ParameterProperties("Exhaust Air Changes Per Hour", "Exhaust Air Changes Per Hour [ACH]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirChangesPerHour,
         [ParameterProperties("Supply Air Flow Per Area", "Supply Air Flow Per Area [m3/s/m2]"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlowPerArea,
         [ParameterProperties("Exhaust Air Flow Per Area", "Exhaust Air Flow Per Area [m3/s/m2]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlowPerArea,
         [ParameterProperties("Supply Air Flow", "Supply Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] SupplyAirFlow,
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), ParameterValue(Core.ParameterType.Double)] ExhaustAirFlow,
+        //[ParameterProperties("Ventilation Profile Name", "Ventilation Profile Name"), ParameterValue(Core.ParameterType.String)] VentilationProfileName,
 
         [ParameterProperties("Lighting Radiant Proportion", "Lighting Radiant Proportion [0-1]"), DoubleParameterValue(0, 1)] LightingRadiantProportion,
         [ParameterProperties("Occupancy Radiant Proportion", "Occupancy Radiant Proportion [0-1]"), DoubleParameterValue(0, 1)] OccupancyRadiantProportion,

@@ -9,5 +9,6 @@ namespace SAM.Analytical
         [Description("Gain")] Gain,
         [Description("Thermostat")] Thermostat,
         [Description("Humidistat")] Humidistat,
+        //[Description("Ventilation")] Ventilation,
     }
 }
