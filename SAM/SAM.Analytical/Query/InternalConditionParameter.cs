@@ -38,6 +38,9 @@
 
                 case ProfileType.Pollutant:
                     return Analytical.InternalConditionParameter.PollutantProfileName;
+
+                case ProfileType.Ventilation:
+                    return Analytical.InternalConditionParameter.VentilationProfileName;
             }
 
             return null;
