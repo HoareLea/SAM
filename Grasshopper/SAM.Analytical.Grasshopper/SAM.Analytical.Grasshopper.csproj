@@ -105,6 +105,7 @@
     <Compile Include="Component\SAMAnalyticalCreateProfileByBooleans.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateByModel.cs" />
     <Compile Include="Component\SAMAnalyticalSetDefaultApertureConstruction.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateVentilationProfile.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateLibraries.cs" />
     <Compile Include="Component\SAMAnalyticalDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByBoundaryType.cs" />

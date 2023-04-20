@@ -16,7 +16,7 @@ namespace SAM.Analytical
         [Description("Cooling")] Cooling,
         [Description("Humidification")] Humidification,
         [Description("Dehumidification")] Dehumidification,
-        //[Description("Ventilation")] Ventilation,
+        [Description("Ventilation")] Ventilation,
         [Description("Other")] Other,
     }
 }

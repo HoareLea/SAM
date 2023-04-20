@@ -237,7 +237,7 @@ namespace SAM.Geometry.Planar
 
         public bool Reorder(int startIndex)
         {
-            return Core.Modify.Reorder(points, startIndex); ;
+            return Core.Modify.Reorder(points, startIndex);
         }
 
         public double Distance(Point2D point2D)
