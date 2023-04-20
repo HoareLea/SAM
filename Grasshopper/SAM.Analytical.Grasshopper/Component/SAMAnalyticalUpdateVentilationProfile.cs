@@ -116,7 +116,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            analyticalModel = new AnalyticalModel(analyticalModel);
+
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+            if(adjacencyCluster != null)
+            {
+                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+            }
 
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("_spaces_");
@@ -205,6 +211,8 @@ namespace SAM.Analytical.Grasshopper
                 {
                     continue;
                 }
+
+                space_Temp = new Space(space_Temp);
 
                 InternalCondition internalCondition_Temp = space_Temp.InternalCondition;
                 if(internalCondition_Temp == null)
