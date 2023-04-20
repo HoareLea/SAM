@@ -32,10 +32,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list};
+                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile for ventilation", Access = GH_ParamAccess.item};
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile for ventilation.", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
 
             List<Space> spaces = null;
-            index = Params.IndexOfInputParam("_spaces");
+            index = Params.IndexOfInputParam("_spaces_");
             if(index != -1)
             {
                 spaces = new List<Space>();
@@ -293,13 +293,20 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirChangesPerHour, exhaustAirChangesPerHour);
                 }
 
-                double calculatedSupplyAirFlow = space.CalculatedSupplyAirFlow();
-                double calculatedExhaustAirFlow = space.CalculatedExhaustAirFlow();
+                space_Temp.InternalCondition = internalCondition_Temp;
+
+                adjacencyCluster.AddObject(space_Temp);
+
+                spaces_Result.Add(space_Temp);
+                internalConditions_Result.Add(internalCondition_Temp);
+
+                double calculatedSupplyAirFlow = space_Temp.CalculatedSupplyAirFlow();
+                double calculatedExhaustAirFlow = space_Temp.CalculatedExhaustAirFlow();
                 
                 double calculatedSupplyAirFlowPerPerson = double.NaN;
                 double calculatedExhaustAirFlowPerPerson = double.NaN;
                 
-                double occupancy = space.CalculatedOccupancy();
+                double occupancy = space_Temp.CalculatedOccupancy();
                 if(!double.IsNaN(occupancy) && occupancy > 0)
                 {
                     calculatedSupplyAirFlowPerPerson = calculatedSupplyAirFlow / occupancy;
@@ -308,7 +315,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double calculatedSupplyAirFlowPerArea = double.NaN;
                 double calculatedExhaustAirFlowPerArea = double.NaN;
-                if (space.TryGetValue(SpaceParameter.Area, out double area) && !double.IsNaN(area) && area > 0)
+                if (space_Temp.TryGetValue(SpaceParameter.Area, out double area) && !double.IsNaN(area) && area > 0)
                 {
                     calculatedSupplyAirFlowPerArea = calculatedSupplyAirFlow / area;
                     calculatedExhaustAirFlowPerArea = calculatedExhaustAirFlow / area;
@@ -316,7 +323,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double calculatedSupplyAirChangesPerHour = double.NaN;
                 double calculatedExhaustAirChangesPerHour = double.NaN;
-                if (space.TryGetValue(SpaceParameter.Volume, out double volume) && !double.IsNaN(volume) && volume > 0)
+                if (space_Temp.TryGetValue(SpaceParameter.Volume, out double volume) && !double.IsNaN(volume) && volume > 0)
                 {
                     calculatedSupplyAirChangesPerHour = calculatedSupplyAirFlow / volume * 3600;
                     calculatedExhaustAirChangesPerHour = calculatedExhaustAirFlow / volume * 3600;
@@ -333,13 +340,6 @@ namespace SAM.Analytical.Grasshopper
 
                 calculatedSupplyAirChangesPerHours.Add(calculatedSupplyAirChangesPerHour);
                 calculatedExhaustAirChangesPerHours.Add(calculatedExhaustAirChangesPerHour);
-
-                space_Temp.InternalCondition = internalCondition_Temp;
-
-                adjacencyCluster.AddObject(space_Temp);
-
-                spaces_Result.Add(space_Temp);
-                internalConditions_Result.Add(internalCondition_Temp);
             }
 
 
