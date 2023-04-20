@@ -221,6 +221,7 @@
     <Compile Include="Query\ActiveObject.cs" />
     <Compile Include="Query\TryParseGuids.cs" />
     <Compile Include="Query\FindByType.cs" />
+    <Compile Include="Query\TypeName.cs" />
     <Compile Include="Query\Types.cs" />
     <Compile Include="Query\Equals.cs" />
     <Compile Include="Query\Brightness.cs" />
