@@ -110,6 +110,7 @@ namespace SAM.Analytical
                 }
             }
 
+            HashSet<string> spaceNames = new HashSet<string>();
             foreach(Space space in spaces)
             {
                 Core.Modify.AddRange(result, space?.Log());
@@ -125,6 +126,17 @@ namespace SAM.Analytical
                 {
                     result.Add("Space {0} (Guid: {1}) has no location.", LogRecordType.Warning, space.Name, space.Guid);
                     continue;
+                }
+
+                if(space.Name != null)
+                {
+                    if (spaceNames.Contains(space.Name))
+                    {
+                        result.Add("Space {0} (Guid: {1}) name is duplicated", LogRecordType.Warning, space.Name, space.Guid);
+                        continue;
+                    }
+
+                    spaceNames.Add(space.Name);
                 }
 
                 List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
