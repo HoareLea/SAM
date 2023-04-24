@@ -658,12 +658,20 @@ namespace SAM.Core
 
         public object GetObject(Type type, Guid guid)
         {
+            return GetObject(type, guid, out Dictionary<Guid, object> dictionary, out string typeName);
+        }
+
+        private object GetObject(Type type, Guid guid, out Dictionary<Guid, object> dictionary, out string typeName)
+        {
+            dictionary = null;
+            typeName = null;
+
             if (!IsValid(type))
             {
                 return null;
             }
 
-            if(dictionary_Objects == null)
+            if (dictionary_Objects == null)
             {
                 return null;
             }
@@ -671,12 +679,14 @@ namespace SAM.Core
             string fullName = type.FullName;
             if (fullName != null)
             {
-                if (dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary) && dictionary != null)
+                if (dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary_Temp) && dictionary_Temp != null)
                 {
-                    if(dictionary.TryGetValue(guid, out object result) && result != null)
+                    if (dictionary_Temp.TryGetValue(guid, out object result) && result != null)
                     {
                         if (type.IsAssignableFrom(result.GetType()))
                         {
+                            dictionary = dictionary_Temp;
+                            typeName = fullName;
                             return result;
                         }
                     }
@@ -686,14 +696,16 @@ namespace SAM.Core
             List<string> typeNames = GetTypeNames(type);
             if (typeNames != null && typeNames.Count != 0)
             {
-                foreach (string typeName in typeNames)
+                foreach (string typeName_Temp in typeNames)
                 {
-                    if (dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) && dictionary != null)
+                    if (dictionary_Objects.TryGetValue(typeName_Temp, out Dictionary<Guid, object> dictionary_Temp) && dictionary_Temp != null)
                     {
-                        if (dictionary.TryGetValue(guid, out object result) && result != null)
+                        if (dictionary_Temp.TryGetValue(guid, out object result) && result != null)
                         {
                             if (type.IsAssignableFrom(result.GetType()))
                             {
+                                dictionary = dictionary_Temp;
+                                typeName = typeName_Temp;
                                 return result;
                             }
                         }
@@ -1280,19 +1292,8 @@ namespace SAM.Core
                 return false;
             }
 
-            if (!IsValid(type))
-            {
-                return false;
-            }
-
-            string typeName = type.FullName;
-
-            if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary_Object))
-            {
-                return false;
-            }
-
-            if (!dictionary_Object.TryGetValue(guid, out object @object))
+            object @object = GetObject(type, guid, out Dictionary<Guid, object> dictionary_Object, out string typeName);
+            if(@object == null)
             {
                 return false;
             }

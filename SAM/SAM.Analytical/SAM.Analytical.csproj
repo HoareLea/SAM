@@ -267,6 +267,8 @@
     <Compile Include="Query\CalculatedExhaustAirFlowPerPerson.cs" />
     <Compile Include="Query\CalculatedSupplyAirFlowPerPerson.cs" />
     <Compile Include="Query\CalculatedSupplyAirChangesPerHour.cs" />
+    <Compile Include="Query\MechanicalSystems.cs" />
+    <Compile Include="Query\MechanicalSystemTypes.cs" />
     <Compile Include="Query\SingleOpeningProperties.cs" />
     <Compile Include="Query\DaylightFactor.cs" />
     <Compile Include="Query\FilteringSAMObjects.cs" />

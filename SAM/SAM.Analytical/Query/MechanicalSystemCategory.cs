@@ -51,5 +51,30 @@
 
             return Analytical.MechanicalSystemCategory.Other;
         }
+
+        public static MechanicalSystemCategory MechanicalSystemCategory<T>() where T : MechanicalSystem
+        {
+            if (typeof(T) == null)
+            {
+                return Analytical.MechanicalSystemCategory.Undefined;
+            }
+
+            if (typeof(CoolingSystem).IsAssignableFrom(typeof(T)))
+            {
+                return Analytical.MechanicalSystemCategory.Cooling;
+            }
+
+            if (typeof(VentilationSystemType).IsAssignableFrom(typeof(T)))
+            {
+                return Analytical.MechanicalSystemCategory.Ventilation;
+            }
+
+            if (typeof(HeatingSystemType).IsAssignableFrom(typeof(T)))
+            {
+                return Analytical.MechanicalSystemCategory.Heating;
+            }
+
+            return Analytical.MechanicalSystemCategory.Other;
+        }
     }
 }
