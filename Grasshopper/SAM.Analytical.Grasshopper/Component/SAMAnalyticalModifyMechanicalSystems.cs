@@ -109,16 +109,16 @@ namespace SAM.Analytical.Grasshopper
             string exhaustUnitName = null;
             dataAccess.GetData(4, ref exhaustUnitName);
 
-            ISystemType ventilationSystemType = null;
-            dataAccess.GetData(5, ref ventilationSystemType);
+            ISystemType coolingSystemType = null;
+            dataAccess.GetData(5, ref coolingSystemType);
 
             ISystemType heatingSystemType = null;
             dataAccess.GetData(6, ref heatingSystemType);
 
-            ISystemType coolingSystemType = null;
-            dataAccess.GetData(7, ref coolingSystemType);
+            ISystemType ventilationSystemType = null;
+            dataAccess.GetData(7, ref ventilationSystemType);
 
-            List<MechanicalSystem> mechanicalSystems = null;
+            List<MechanicalSystem> mechanicalSystems = new List<MechanicalSystem>();
 
             AdjacencyCluster adjacencyCluster = null;
             if(analyticalObject is AnalyticalModel)
@@ -189,7 +189,7 @@ namespace SAM.Analytical.Grasshopper
 
                     }
 
-                    if(ventilationSystem != null)
+                    if(ventilationSystem == null)
                     {
                         ventilationSystem = adjacencyCluster.AddMechanicalSystem(systemTypeLibrary?.GetSystemTypes<VentilationSystemType>().FirstOrDefault(), spaces) as VentilationSystem;
                     }
