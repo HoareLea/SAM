@@ -13,7 +13,7 @@
                     return "Sustainable Analytical Model originated by Michal Dengusiak and Jakub Ziolkowski";
 
                 case (AboutInfoType.Other):
-                    return "Tbc";
+                    return System.DateTime.Now.ToString("dd-MM-yyyy"); ;
             }
 
             return null;
