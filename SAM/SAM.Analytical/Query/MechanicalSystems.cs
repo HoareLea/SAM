@@ -16,6 +16,16 @@ namespace SAM.Analytical
             return result;
         }
 
+        public static List<T> MechanicalSystems<T>(this AdjacencyCluster adjacencyCluster, Space space) where T: MechanicalSystem
+        {
+            if (adjacencyCluster == null || space == null)
+            {
+                return null;
+            }
+
+            return adjacencyCluster.GetRelatedObjects<T>(space);
+        }
+
         public static List<MechanicalSystem> MechanicalSystems(this AdjacencyCluster adjacencyCluster, Space space, MechanicalSystemCategory mechanicalSystemCategory)
         {
             List<MechanicalSystem> mechanicalSystems = MechanicalSystems(adjacencyCluster, space);

@@ -261,6 +261,8 @@
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
+    <Compile Include="Query\SystemTypeInternalConditionParameter.cs" />
+    <Compile Include="Query\IsMechanicalVentilation.cs" />
     <Compile Include="Query\CalculatedExhaustAirChangesPerHour.cs" />
     <Compile Include="Query\CalculatedExhaustAirFlowPerArea.cs" />
     <Compile Include="Query\CalculatedSupplyAirFlowPerArea.cs" />
