@@ -3,7 +3,7 @@
 [![Build Status](https://hldigitalinnovation.visualstudio.com/HLApps/_apis/build/status/SAM-Deploy-SAM?branchName=master)](https://hldigitalinnovation.visualstudio.com/HLApps/_build/latest?definitionId=18&branchName=master)
 
 <p align="center">
-  <img src="https://github.com/HoareLea/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png" alt="SAM Logo">
+  <img src="https://github.com/HoareLea/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png" alt="SAM Logo" align="left" hspace="10" vspace="6">
 </p>
 
 **Sustainable Analytical Model (SAM)** is an open-source software designed to help engineers create analytical models of energy-efficient buildings. It enables the creation and analysis of energy models of buildings, including heating, cooling, ventilation, and lighting.
