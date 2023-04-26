@@ -32,7 +32,7 @@ For more information about SAM, please visit our [wiki](https://github.com/Hoare
 
 SAM is free software licensed under the GNU Lesser General Public License. Each contributor holds copyright over their respective contributions. The project versioning (Git) records all such contribution source information. See [LICENSE](https://github.com/HoareLea/SAM_gbXML/blob/master/LICENSE) and [COPYRIGHT_HEADER](https://github.com/HoareLea/SAM/blob/master/COPYRIGHT_HEADER.txt) for more details.
 
-## Included Repositories
+## Included Repositories that link with SAM
 
 * https://github.com/HoareLea/SAM
 * https://github.com/HoareLea/SAM_Topologic
@@ -55,3 +55,34 @@ SAM is free software licensed under the GNU Lesser General Public License. Each 
 * https://github.com/HoareLea/SAM_IFC
 * https://github.com/HoareLea/SAM_BHoM
 * https://github.com/HoareLea/SAM_Systems
+
+
+## Build order
+
+1. SAM.sln
+2. SAM_Psychrometrics.sln
+3. SAM_Mollier.sln
+4. SAM_Windows.sln
+5. SAM_Topologic.sln
+6. SAM_Acoustic.sln
+7. SAM_BHom.sln
+8. SAM_gbXML.sln
+9. SAM_GEM.sln
+10. SAM_LadybugTools.sln
+11. SAM_Solver.sln
+12. SAM_SolarCalculator.sln
+13. SAM_Tas.sln
+14. SAM_Excel.sln
+15. SAM_SQLite.sln
+16. SAM_OpenStudio.sln
+17. SAM_Origin.sln
+18. SAM_Revit.sln (Release2020)
+19. SAM_Revit.sln (Release2021)
+20. SAM_Revit.sln (Release2022)
+21. SAM_Revit.sln (Release2023)
+22. SAM_UI.sln
+23. SAM_Rhino_UI.sln
+24. SAM_Revit_UI.sln (Release2020)
+25. SAM_Revit_UI.sln (Release2021)
+26. SAM_Revit_UI.sln (Release2022)
+27. SAM_Revit_UI.sln (Release2023)
