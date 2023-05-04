@@ -33,7 +33,7 @@ namespace SAM.Core
 
             object value = null;
 
-            DataTable dataTable = new DataTable();
+            DataTable dataTable = new();
 
             try
             {
@@ -52,7 +52,7 @@ namespace SAM.Core
 
             return TryConvert(value, out result);
         }
-    
+
         public static bool TryCompute<T>(Expression expression, out T result, Dictionary<string, object> variables)
         {
             result = default;
@@ -63,12 +63,10 @@ namespace SAM.Core
             string expressionText = expression.Text;
 
             List<ExpressionVariable> expressionVariables = expression.GetExpressionVariables();
-            foreach(ExpressionVariable expressionVariable in expressionVariables)
+            foreach (var expressionVariable in expressionVariables)
             {
-                ExpressionVariable expressionVariable_Temp;
-
                 string name = expressionVariable.GetName();
-                new ExpressionVariable(name).TryGetProperties(out expressionVariable_Temp, out name, '(', ')');
+                new ExpressionVariable(name).TryGetProperties(out ExpressionVariable expressionVariable_Temp, out name, '(', ')');
 
                 List<MethodInfo> methodInfos = MethodInfos(name);
                 if (methodInfos == null || methodInfos.Count == 0)
@@ -77,7 +75,7 @@ namespace SAM.Core
                 List<object> parameters = new List<object>();
 
                 name = expressionVariable_Temp.GetName();
-                if(name != null)
+                if (name != null)
                 {
                     foreach (string parameterName in name.Split(','))
                     {
@@ -91,10 +89,10 @@ namespace SAM.Core
                 string text = string.Empty;
 
                 MethodInfo methodInfo = null;
-                foreach(MethodInfo methodInfo_Temp in methodInfos)
+                foreach (MethodInfo methodInfo_Temp in methodInfos)
                 {
                     ParameterInfo[] parameterInfos = methodInfo_Temp.GetParameters();
-                    if((parameterInfos == null || parameterInfos.Length == 0) && (parameters == null || parameters.Count == 0))
+                    if ((parameterInfos == null || parameterInfos.Length == 0) && (parameters == null || parameters.Count == 0))
                     {
                         methodInfo = methodInfo_Temp;
                         break;
@@ -105,7 +103,7 @@ namespace SAM.Core
 
                     bool valid = true;
                     int count = 0;
-                    for(int i=0; i < parameterInfos.Length; i++)
+                    for (int i = 0; i < parameterInfos.Length; i++)
                     {
                         count++;
                         System.Type type = parameterInfos[i].ParameterType;
@@ -123,7 +121,7 @@ namespace SAM.Core
                         if (type.IsAssignableFrom(type_Parameter))
                             continue;
 
-                        if(TryConvert(parameters[count - 1], out object parameter, type))
+                        if (TryConvert(parameters[count - 1], out object parameter, type))
                         {
                             parameters[count - 1] = parameter;
                             continue;
@@ -139,7 +137,7 @@ namespace SAM.Core
                         break;
                     }
 
-                    if(valid)
+                    if (valid)
                     {
                         methodInfo = methodInfo_Temp;
                         break;
@@ -149,7 +147,7 @@ namespace SAM.Core
                 if (methodInfo == null)
                     return false;
 
-               object value = methodInfo.Invoke(null, parameters.ToArray());
+                object value = methodInfo.Invoke(null, parameters.ToArray());
                 if (value != null)
                 {
                     if (value is string)

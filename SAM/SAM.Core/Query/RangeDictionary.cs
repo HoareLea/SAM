@@ -9,9 +9,9 @@ namespace SAM.Core
             if (values == null)
                 return null;
 
-            List<T> values_Temp = new List<T>(values);
+            List<T> values_Temp = new (values);
 
-            Dictionary<Range<int>, T> result = new Dictionary<Range<int>, T>();
+            Dictionary<Range<int>, T> result = new ();
 
             Range<int> range = null;
             T value = default;

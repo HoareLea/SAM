@@ -7,8 +7,8 @@ namespace SAM.Core
     {
         public static bool TryGetObjects<T>(this ISAMLibrary sAMLibrary, out List<T> objects) where T: IJSAMObject
         {
-            objects = null;
-            if(sAMLibrary == null)
+            objects = new List<T>();
+            if (sAMLibrary == null)
             {
                 return false;
             }

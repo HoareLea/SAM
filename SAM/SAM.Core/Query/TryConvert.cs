@@ -35,7 +35,7 @@ namespace SAM.Core
 
                     if (@object is IEnumerable)
                     {
-                        JArray jArray = new JArray();
+                        JArray jArray = new ();
                         foreach(object @object_Temp in (IEnumerable)@object)
                         {
                             if (TryConvert(@object_Temp, out string value) && value != null)

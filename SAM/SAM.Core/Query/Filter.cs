@@ -11,7 +11,7 @@ namespace SAM.Core
             if (log == null || logRecordTypes == null)
                 return null;
 
-            Log result = new Log(log.Name);
+            Log result = new (log.Name);
             foreach(LogRecord logRecord in log)
             {
                 if (logRecord == null)
@@ -70,7 +70,7 @@ namespace SAM.Core
             if (relationCluster_Out == null)
                 relationCluster_Out = new RelationCluster();
 
-            HashSet<object> objects_Out = new HashSet<object>();
+            HashSet<object> objects_Out = new ();
 
             Filter(relationCluster_In, relationCluster_Out, objects, objects_Out);
 
@@ -84,7 +84,7 @@ namespace SAM.Core
                 return null;
             }
 
-            List<T> result = new List<T>();
+            List<T> result = new ();
             foreach (IJSAMObject jSAMObject in jSAMObjects)
             {
                 if (!(jSAMObject is T))
@@ -129,7 +129,7 @@ namespace SAM.Core
             if (objects_In == null || relationCluster_In == null || relationCluster_Out == null || objects_Out == null)
                 return;
 
-            HashSet<object> objects_In_New = new HashSet<object>();
+            HashSet<object> objects_In_New = new ();
             foreach (object object_In in objects_In)
             {
                 if (objects_Out.Contains(objects_In))

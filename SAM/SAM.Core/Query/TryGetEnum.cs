@@ -30,7 +30,7 @@ namespace SAM.Core
                 }
             }
 
-            List<string> texts = new List<string>();
+            List<string> texts = new ();
             string text_Temp = null;
 
             foreach (Enum @enum_Temp in array)

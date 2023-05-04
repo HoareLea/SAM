@@ -16,10 +16,10 @@ namespace SAM.Core
 
             string[] separators = new string[] { "\n", "\t", "," };
 
-            List<string> strings = new List<string>() { text };
+            List<string> strings = new () { text };
             foreach (string separator in separators)
             {
-                List<string> strings_Split = new List<string>();
+                List<string> strings_Split = new ();
                 foreach (string @string in strings)
                 {
                     string[] strings_Temp_Split = @string.Split(separators, StringSplitOptions.RemoveEmptyEntries);

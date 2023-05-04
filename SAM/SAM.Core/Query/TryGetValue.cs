@@ -10,7 +10,7 @@ namespace SAM.Core
     {
         public static bool TryGetValue<T>(this Dictionary<string, object> dictionary, string key, out T result)
         {
-            result = default(T);
+            result = default;
 
             if (dictionary == null || key == null)
                 return false;
@@ -98,7 +98,7 @@ namespace SAM.Core
             if (@object == null || string.IsNullOrEmpty(name))
                 return false;
 
-            List<string> names = new List<string>() { name };
+            List<string> names = new () { name };
             if (UserFriendlyName)
                 names = Names((string)name);
             else
@@ -118,7 +118,7 @@ namespace SAM.Core
 
         public static bool TryGetValue<T>(this object @object, string name, out T value)
         {
-            value = default(T);
+            value = default;
 
             object object_value = null;
             if (!TryGetValue(@object, name, out object_value))
@@ -138,7 +138,7 @@ namespace SAM.Core
 
         public static bool TryGetValue<T>(XAttribute xAttribute, out T value)
         {
-            value = default(T);
+            value = default;
 
             if(xAttribute == null)
             {

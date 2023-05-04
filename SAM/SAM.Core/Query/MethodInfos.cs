@@ -8,7 +8,7 @@ namespace SAM.Core
     {
         public static List<MethodInfo> MethodInfos(string assemblyName, string typeName, string methodName)
         {
-            List<MethodInfo> result = new List<MethodInfo>();
+            List<MethodInfo> result = new ();
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -124,7 +124,7 @@ namespace SAM.Core
 
                             if (count > 2)
                             {
-                                List<string> values_Temp = new List<string>(values);
+                                List<string> values_Temp = new (values);
                                 assemblyName = string.Join(".", values_Temp.GetRange(0, count - 2));
                                 
                             }

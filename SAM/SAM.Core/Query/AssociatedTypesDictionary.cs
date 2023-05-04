@@ -9,7 +9,7 @@ namespace SAM.Core
     {
         public static Dictionary<Type, AssociatedTypes> AssociatedTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
         {
-            Dictionary<Type, AssociatedTypes> result = new Dictionary<Type, AssociatedTypes>();
+            Dictionary<Type, AssociatedTypes> result = new ();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (assembly == null)

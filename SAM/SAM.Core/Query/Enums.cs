@@ -20,7 +20,7 @@ namespace SAM.Core
                 return null;
             }
 
-            List<Enum> result = new List<Enum>();
+            List<Enum> result = new ();
             foreach (Enum @enum in enums)
             {
                 if(sAMObject.HasParameter(@enum))
@@ -41,7 +41,7 @@ namespace SAM.Core
             if (dictionary == null)
                 return null;
 
-            List<Enum> result = new List<Enum>();
+            List<Enum> result = new ();
             foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in dictionary)
             {
                 if (!keyValuePair.Value.IsValid(type))
@@ -80,7 +80,7 @@ namespace SAM.Core
             if (dictionary == null)
                 return null;
 
-            List<Enum> result = new List<Enum>();
+            List<Enum> result = new ();
             foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in dictionary)
             {
                 if (!keyValuePair.Value.IsValid(type))
@@ -104,7 +104,7 @@ namespace SAM.Core
             if (types == null)
                 return null;
 
-            List<Enum> result = new List<Enum>();
+            List<Enum> result = new ();
             foreach(Type type in types)
             {
                 if (type == null )
