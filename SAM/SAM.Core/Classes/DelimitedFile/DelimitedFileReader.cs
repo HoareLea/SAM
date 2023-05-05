@@ -141,7 +141,7 @@ namespace SAM.Core
         /// Reads a rows of data from a CSV file
         /// </summary>
         /// <returns>List of the rows</returns>
-        public List<DelimitedFileRow> Read()
+        public new List<DelimitedFileRow> Read()
         {
             List<DelimitedFileRow> delimitedFileRows = new List<DelimitedFileRow>();
             DelimitedFileRow delimitedFileRow = new DelimitedFileRow();

@@ -85,7 +85,7 @@ namespace SAM.Core
             return string.Join(Environment.NewLine, logRecords.ConvertAll(x => x.ToString()));
         }
 
-        public bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
             if (jObject == null)
                 return false;
@@ -102,7 +102,7 @@ namespace SAM.Core
             return true;
         }
 
-        public JObject ToJObject()
+        public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
             if (jObject == null)

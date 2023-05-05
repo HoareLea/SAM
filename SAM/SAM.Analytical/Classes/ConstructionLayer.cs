@@ -22,7 +22,7 @@ namespace SAM.Analytical
 
         }
 
-        public bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
             {
@@ -32,7 +32,7 @@ namespace SAM.Analytical
             return true;
         }
 
-        public JObject ToJObject()
+        public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
             if (jObject == null)

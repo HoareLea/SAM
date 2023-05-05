@@ -249,12 +249,12 @@ namespace SAM.Analytical.Grasshopper
 
         #endregion IGH_PreviewObject
 
-        public void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
+        public override void BakeGeometry(RhinoDoc doc, List<Guid> obj_ids)
         {
             BakeGeometry(doc, doc.CreateDefaultAttributes(), obj_ids);
         }
 
-        public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
+        public override void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
             List<Text3d> text3ds = GetText3ds();
             if (text3ds == null || text3ds.Count == 0)
