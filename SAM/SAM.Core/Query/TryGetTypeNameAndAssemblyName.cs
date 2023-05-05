@@ -26,7 +26,6 @@
                 return true;
             }
 
-            return false;
         }
     }
 }

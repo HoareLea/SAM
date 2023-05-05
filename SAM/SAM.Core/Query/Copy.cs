@@ -63,7 +63,6 @@ namespace SAM.Core
 
             }
 
-            return false;
         }
     }
 }
