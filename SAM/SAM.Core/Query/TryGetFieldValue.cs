@@ -47,7 +47,7 @@ namespace SAM.Core
                     }
 
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     result = default;
                 }

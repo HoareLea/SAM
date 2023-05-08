@@ -13,6 +13,7 @@ namespace SAM.Analytical
         /// <param name="width">Width of the space , default 0.0012m</param>
         /// <param name="meanTemperature">Mean Temperature</param>
         /// <param name="angle">Angle of heat flow direction in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction</param>
+        /// <param name="tolerance">Tolerance for angle comparison, default is Tolerance.Angle</param>
         /// <returns>Nusselt Number (Nu) [-]</returns>
         public static double NusseltNumber(this FluidMaterial fluidMaterial, double temperatureDifference, double width, double meanTemperature, double angle, double tolerance = Tolerance.Angle)
         {

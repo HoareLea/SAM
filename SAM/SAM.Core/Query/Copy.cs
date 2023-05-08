@@ -40,7 +40,7 @@ namespace SAM.Core
 
                 return true;
             }
-            catch(Exception exception)
+            catch(Exception )
             {
                 try
                 {

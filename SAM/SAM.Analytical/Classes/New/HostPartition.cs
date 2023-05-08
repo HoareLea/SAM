@@ -55,19 +55,19 @@ namespace SAM.Analytical
             return openings?.ConvertAll(x => Core.Query.Clone(x));
         }
 
-        public List<T> GetOpenings<T>() where T : IOpening
+        public List<O> GetOpenings<O>() where O : IOpening
         {
             if(openings == null)
             {
                 return null;
             }
 
-            List<T> result = new List<T>();
+            List<O> result = new List<O>();
             foreach(IOpening opening in openings)
             {
-                if(opening is T)
+                if(opening is O)
                 {
-                    result.Add((T)opening.Clone());
+                    result.Add((O)opening.Clone());
                 }
             }
 

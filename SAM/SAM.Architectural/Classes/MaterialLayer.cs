@@ -75,6 +75,17 @@ namespace SAM.Architectural
             return Tuple.Create(name, thickness).GetHashCode();
         }
 
+        public override bool Equals(object obj)
+        {
+            MaterialLayer materialLayer = obj as MaterialLayer;
+            if(materialLayer == null)
+            {
+                return false;
+            }
+
+            return materialLayer.name == name && materialLayer.thickness == thickness;
+        }
+
         public static bool operator ==(MaterialLayer materialLayer_1, MaterialLayer materialLayer_2)
         {
             return materialLayer_1?.name == materialLayer_2?.name && materialLayer_1?.thickness == materialLayer_2?.thickness;

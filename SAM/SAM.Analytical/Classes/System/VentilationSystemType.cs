@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public class VentilationSystemType : MechanicalSystemType
     {
-        private string description;
+        //private string description;
 
         public VentilationSystemType(string name, string description)
             : base(name, description)

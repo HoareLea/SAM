@@ -14,7 +14,7 @@ namespace SAM.Core
                     fileStream.Close();
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 //the file is unavailable because it is:
                 //still being written to

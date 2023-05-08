@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public class CoolingSystemType : MechanicalSystemType
     {
-        private string description;
+        //private string description;
 
         public CoolingSystemType(string name, string description)
             : base(name, description)

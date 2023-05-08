@@ -49,7 +49,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="space">Space</param>
-        /// <param name="includeOpenings">Update Normals of Openings<</param>
+        /// <param name="includeOpenings">Update Normals of Openings</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
         /// <param name="external">If external then partitions normal will be pointed out outside space</param>

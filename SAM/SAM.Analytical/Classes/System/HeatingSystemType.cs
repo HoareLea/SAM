@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public class HeatingSystemType : MechanicalSystemType
     {
-        private string description;
+        //private string description;
 
         public HeatingSystemType(string name, string description)
             : base(name, description)

@@ -194,19 +194,19 @@ namespace SAM.Analytical
                                 if(apertureConstruction != null)
                                 {
                                     string name_Aperture = apertureConstruction.Name;
-                                    string prefix_Aperture = null;
+                                    //string prefix_Aperture = null;
                                     name_New = null;
                                     if (external)
                                     {
                                         if (name_Aperture.StartsWith("SIM_INT_GLZ"))
                                         {
                                             name_New = "SIM_EXT_GLZ" + name_Aperture.Substring(("SIM_INT_GLZ").Length);
-                                            prefix_Aperture = "SIM_EXT_GLZ";
+                                            //prefix_Aperture = "SIM_EXT_GLZ";
                                         }
                                         else if (name_Aperture.StartsWith("SIM_INT_SLD"))
                                         {
                                             name_New = "SIM_EXT_SLD" + name_Aperture.Substring(("SIM_INT_SLD").Length);
-                                            prefix_Aperture = "SIM_EXT_SLD";
+                                            //prefix_Aperture = "SIM_EXT_SLD";
                                         }
                                     }
                                     else
@@ -214,12 +214,12 @@ namespace SAM.Analytical
                                         if (name_Aperture.StartsWith("SIM_EXT_GLZ"))
                                         {
                                             name_New = "SIM_INT_GLZ" + name_Aperture.Substring(("SIM_EXT_GLZ").Length);
-                                            prefix_Aperture = "SIM_INT_GLZ";
+                                            //prefix_Aperture = "SIM_INT_GLZ";
                                         }
                                         else if (name_Aperture.StartsWith("SIM_EXT_SLD"))
                                         {
                                             name_New = "SIM_INT_SLD" + name_Aperture.Substring(("SIM_EXT_SLD").Length);
-                                            prefix_Aperture = "SIM_INT_SLD";
+                                            //prefix_Aperture = "SIM_INT_SLD";
                                         }
                                     }
 

@@ -136,7 +136,7 @@ namespace SAM.Core
             {
                 System.IO.File.AppendAllText(path, ToString() + Environment.NewLine);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }

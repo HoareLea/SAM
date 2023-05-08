@@ -100,6 +100,27 @@ namespace SAM.Core
             return jObject;
         }
 
+        public override bool Equals(object obj)
+        {
+            ExpressionVariable expressionVariable = obj as ExpressionVariable;
+            if(expressionVariable == null)
+            {
+                return false;
+            }
+
+            return text == expressionVariable.text;
+        }
+
+        public override int GetHashCode()
+        {
+            if(text == null)
+            {
+                return -1;
+            }
+
+            return text.GetHashCode();
+        }
+
         public static bool operator ==(ExpressionVariable expressionVariable, object @object)
         {
             if (ReferenceEquals(expressionVariable, null) || ReferenceEquals(expressionVariable.text, null))

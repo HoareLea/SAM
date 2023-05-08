@@ -28,7 +28,7 @@ namespace SAM.Core
             {
                 logRecord.Write(path);
             }
-            catch(Exception exception)
+            catch(Exception )
             {
                 return false;
             }

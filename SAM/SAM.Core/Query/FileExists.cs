@@ -14,7 +14,7 @@ namespace SAM.Core
             {
                 File.Exists(filePath);
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }

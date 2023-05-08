@@ -291,6 +291,27 @@ namespace SAM.Core
             return true;
         }
 
+        public override bool Equals(object obj)
+        {
+            Command command = obj as Command;
+            if(command == null)
+            {
+                return false;
+            }
+
+            return text == command.Text;
+        }
+
+        public override int GetHashCode()
+        {
+            if(text == null)
+            {
+                return -1;
+            }
+
+            return text.GetHashCode();
+        }
+
         public static bool operator ==(Command command, object @object)
         {
             if (ReferenceEquals(command, null) || ReferenceEquals(command.text, null))

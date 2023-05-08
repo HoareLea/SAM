@@ -1,5 +1,8 @@
 ﻿namespace SAM.Core
 {
+    /// <summary>
+    /// This class provides methods for calculating tolerance values.
+    /// </summary>
     public static class Tolerance
     {
         /// <summary>
@@ -16,7 +19,7 @@
         /// Macro dictance tolerance.
         /// </summary>
         public const double MacroDistance = 1e-3;
-        
+
         /// <summary>
         /// Angle tolerance. Equivalent of 2 degrees
         /// </summary>

@@ -242,7 +242,7 @@ namespace SAM.Core
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }
@@ -295,7 +295,7 @@ namespace SAM.Core
                     }
                 }
             }
-            catch (Exception exception)
+            catch (Exception)
             {
                 return false;
             }

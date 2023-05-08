@@ -103,6 +103,7 @@ namespace SAM.Analytical
         /// <summary>
         /// Calculated Supply Air Flow [m3/s] for whole Zone. Sum of SupplyAirFlowPerPerson, SupplyAirFlowPerArea, SupplyAirFlow and SupplyAirChangesPerHour for all the spaces in Zone
         /// </summary>
+        /// <param name="adjacencyCluster">AdjacencyCluster</param>
         /// <param name="zone">Zone</param>
         /// <returns>Supply Air Flow [m3/s]</returns>
         public static double CalculatedSupplyAirFlow(this AdjacencyCluster adjacencyCluster, Zone zone)

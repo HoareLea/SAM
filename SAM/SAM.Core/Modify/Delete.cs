@@ -19,7 +19,7 @@ namespace SAM.Core
             {
                 System.IO.File.Delete(path);
             }
-            catch(Exception exception)
+            catch
             {
                 return false;
             }

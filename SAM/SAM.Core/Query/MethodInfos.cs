@@ -58,7 +58,7 @@ namespace SAM.Core
                 {
                     types_Assembly = assembly.GetTypes();
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
 
                 }

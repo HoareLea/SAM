@@ -12,6 +12,7 @@ namespace SAM.Analytical
         /// <param name="adjacencyCluster">SAM AdjacencyCluster</param>
         /// <param name="includeApertures">Update normals for Apertures</param>
         /// <param name="external">if external is true then panel normals will be pointed out outside space</param>
+        /// <param name="flipX">Flip the X-axis direction of the normals</param>
         /// <param name="silverSpacing">Silver Spacing Tolerance</param>
         /// <param name="tolerance">Distance tolerance</param>
         /// <returns></returns>
@@ -125,6 +126,7 @@ namespace SAM.Analytical
         /// <param name="space">Space</param>
         /// <param name="includeApertures">Update normals for Apertures</param>
         /// <param name="external">if external is true then panel normals will be pointed out outside space</param>
+        /// <param name="flipX">Flip the X-axis direction of the normals</param>
         /// <param name="silverSpacing">SilverSpacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
         /// <returns>Copy of panels which enclose given space</returns>

@@ -11,7 +11,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="buildingModel">SAM Architectural Model</param>
         /// <param name="space">Space</param>
-        /// <param name="includeOpenings">Update Normals of Openings<</param>
+        /// <param name="includeOpenings">Update Normals of Openings</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="flippedPartitions">Partitions have been flipped</param>
         /// <param name="tolerance">Distance Tolerance</param>
@@ -116,10 +116,12 @@ namespace SAM.Analytical
         /// Update Partitions normals in the given room to point out outside/inside direction
         /// </summary>
         /// <param name="buildingModel">SAM Architectural Model</param>
-        /// <param name="space">Space</param>
-        /// <param name="includeOpenings">Update Normals of Openings<</param>
+        /// <param name="space">The Space object containing the partitions to update.</param>
+        /// <param name="includeOpenings">Update Normals of Openings</param>
+        /// <param name="external">Flag to indicate whether to update the partitions pointing outwards or inwards.</param>
         /// <param name="silverSpacing">Sliver Spacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
+        /// <returns>A list of updated partitions.</returns>
         public static List<IPartition> OrientedPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             return OrientedPartitions(buildingModel, space, includeOpenings, out List <IPartition> flippedPartitions, external, silverSpacing, tolerance);

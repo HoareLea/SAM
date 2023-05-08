@@ -27,7 +27,7 @@ namespace SAM.Core
                     // obtain the ITypeInfo interface from the object
                     dispatch.GetTypeInfo(0, 0, out typeInfo);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     //Cannot get the ITypeInfo interface for the specified COM object
                     return null;
@@ -43,14 +43,14 @@ namespace SAM.Core
                     //retrieves the documentation string for the specified type description 
                     typeInfo.GetDocumentation(-1, out typeName, out documentation, out helpContext, out helpFile);
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Cannot extract ITypeInfo information
                     return null;
                 }
                 return typeName;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Unexpected error
                 return null;
