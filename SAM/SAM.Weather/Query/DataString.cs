@@ -6,11 +6,16 @@ namespace SAM.Weather
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Generates a string representation of the given WeatherData object.
+        /// </summary>
+        /// <param name="weatherData">The WeatherData object to generate a string representation of.</param>
+        /// <returns>A string representation of the given WeatherData object.</returns>
         public static string DataString(this WeatherData weatherData)
         {
             if (weatherData == null)
                 return null;
-            
+
             IEnumerable<int> years = weatherData?.Years;
             if (years == null)
                 return null;
@@ -22,6 +27,12 @@ namespace SAM.Weather
             return string.Join("\n", values);
         }
 
+        /// <summary>
+        /// Generates a string of data for a given year and WeatherYear object.
+        /// </summary>
+        /// <param name="year">The year to generate data for.</param>
+        /// <param name="weatherYear">The WeatherYear object to generate data from.</param>
+        /// <returns>A string of data for the given year and WeatherYear object.</returns>
         public static string DataString(int year, WeatherYear weatherYear)
         {
             if (weatherYear == null)
@@ -43,6 +54,14 @@ namespace SAM.Weather
             return string.Join("\n", values);
         }
 
+        /// <summary>
+        /// Generates a string of data for a given day and weatherDay.
+        /// </summary>
+        /// <param name="year">The year of the data.</param>
+        /// <param name="month">The month of the data.</param>
+        /// <param name="day">The day of the data.</param>
+        /// <param name="weatherDay">The weatherDay of the data.</param>
+        /// <returns>A string of data for the given day and weatherDay.</returns>
         public static string DataString(int year, int month, int day, WeatherDay weatherDay)
         {
             if (weatherDay == null)
@@ -58,6 +77,15 @@ namespace SAM.Weather
             return string.Join("\n", values);
         }
 
+        /// <summary>
+        /// Generates a data string from the given year, month, day, hour, and WeatherDay object.
+        /// </summary>
+        /// <param name="year">The year.</param>
+        /// <param name="month">The month.</param>
+        /// <param name="day">The day.</param>
+        /// <param name="hour">The hour.</param>
+        /// <param name="weatherDay">The WeatherDay object.</param>
+        /// <returns>A data string.</returns>
         public static string DataString(int year, int month, int day, int hour, WeatherDay weatherDay)
         {
             if (weatherDay == null)

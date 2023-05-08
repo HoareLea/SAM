@@ -1,7 +1,15 @@
 ﻿namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries against a database.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Generates a string representation of the location data from a WeatherData object.
+        /// </summary>
+        /// <param name="weatherData">The WeatherData object to generate the string from.</param>
+        /// <returns>A string representation of the location data from the WeatherData object.</returns>
         public static string LocationString(this WeatherData weatherData)
         {
             if (weatherData == null)

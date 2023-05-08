@@ -2,8 +2,17 @@
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Generates a string representation of the GroundTemperatures in the WeatherData object.
+        /// </summary>
+        /// <returns>
+        /// A string representation of the GroundTemperatures in the WeatherData object.
+        /// </returns>
         public static string GroundTemperaturesString(this WeatherData weatherData)
         {
             if (weatherData == null)

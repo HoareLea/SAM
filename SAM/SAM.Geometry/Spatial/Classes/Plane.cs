@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -351,6 +352,22 @@ namespace SAM.Geometry.Spatial
             {
                 return new Plane(Point3D.Zero, Vector3D.WorldY);
             }
+        }
+
+        public override bool Equals(object obj)
+        {
+            Plane plane = obj as Plane;
+            if(plane == null)
+            {
+                return false;
+            }
+
+            return plane.normal == normal && plane.origin == origin && plane.axisY == axisY;
+        }
+
+        public override int GetHashCode()
+        {
+            return new Tuple<Vector3D, Point3D, Vector3D>(normal, origin, axisY).GetHashCode();
         }
 
         public static bool operator ==(Plane plane_1, Plane plane_2)

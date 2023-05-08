@@ -168,6 +168,22 @@ namespace SAM.Geometry.Spatial
             return Query.Transform(this, transform3D);
         }
 
+        public override bool Equals(object obj)
+        {
+            Circle3D circle3D = obj as Circle3D;
+            if(circle3D == null)
+            {
+                return false;
+            }
+
+            return circle3D.plane == plane && circle3D.radious == radious;
+        }
+
+        public override int GetHashCode()
+        {
+            return new Tuple<Plane, double>(plane, radious).GetHashCode();
+        }
+
         public static bool operator ==(Circle3D circle3D_1, Circle3D circle3D_2)
         {
             if (ReferenceEquals(circle3D_1, null) && ReferenceEquals(circle3D_2, null))

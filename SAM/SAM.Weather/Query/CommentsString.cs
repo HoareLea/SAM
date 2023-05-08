@@ -1,7 +1,15 @@
 ﻿namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries against a database.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Generates a string of comments from the given WeatherData object.
+        /// </summary>
+        /// <param name="weatherData">The WeatherData object to generate the comments string from.</param>
+        /// <returns>A string of comments from the given WeatherData object.</returns>
         public static string CommentsString(this WeatherData weatherData)
         {
             if (weatherData == null)

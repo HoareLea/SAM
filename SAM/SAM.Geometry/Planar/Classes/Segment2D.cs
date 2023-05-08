@@ -44,8 +44,7 @@ namespace SAM.Geometry.Planar
         /// <summary>
         /// Duplicate Segment2D by Segment2D
         /// </summary>
-        /// <param name="origin">Segment2D origin point.</param>
-        /// <param name="vector2D">Segment2D direction.</param>
+        /// <param name="segment2D">Segment2D</param>
         public Segment2D(Segment2D segment2D)
         {
             origin = new Point2D(segment2D.origin);

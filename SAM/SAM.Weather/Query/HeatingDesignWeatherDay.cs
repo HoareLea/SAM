@@ -3,18 +3,37 @@ using System.Linq;
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries against a database.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Gets the heating design weather day from the given weather data.
+        /// </summary>
+        /// <param name="weatherData">The weather data.</param>
+        /// <returns>The heating design weather day.</returns>
         public static WeatherDay HeatingDesignWeatherDay(this WeatherData weatherData)
         {
             return HeatingDesignWeatherDay(weatherData?.WeatherDays());
         }
 
+        /// <summary>
+        /// Gets the heating design weather day from a given weather year.
+        /// </summary>
+        /// <param name="weatherYear">The weather year.</param>
+        /// <returns>The heating design weather day.</returns>
         public static WeatherDay HeatingDesignWeatherDay(this WeatherYear weatherYear)
         {
             return HeatingDesignWeatherDay(weatherYear?.WeatherDays);
         }
 
+        /// <summary>
+        /// Gets the heating design weather day from the given weather days.
+        /// </summary>
+        /// <param name="weatherDays">The weather days.</param>
+        /// <param name="dayIndex">Index of the day.</param>
+        /// <returns>The heating design weather day.</returns>
         public static WeatherDay HeatingDesignWeatherDay(this IEnumerable<WeatherDay> weatherDays, out int dayIndex)
         {
             dayIndex = -1;
@@ -29,14 +48,14 @@ namespace SAM.Weather
             double relativeHumidity = double.MaxValue;
             WeatherDay weatherDay_DryBulbTemperature = null;
 
-            for(int i=0; i < weatherDays.Count(); i++)
+            for (int i = 0; i < weatherDays.Count(); i++)
             {
                 WeatherDay weatherDay = weatherDays.ElementAt(i);
-                if(weatherDay == null)
+                if (weatherDay == null)
                 {
                     continue;
                 }
-                
+
                 for (int j = 0; j < 24; j++)
                 {
                     if (weatherDay.TryGetValue(WeatherDataType.DryBulbTemperature, j, out double dryBulbTemperature) && dryBulbTemperature < dryBulbTemperature_Min)
@@ -72,6 +91,11 @@ namespace SAM.Weather
             return result;
         }
 
+        /// <summary>
+        /// Gets the heating design weather day from the given weather days.
+        /// </summary>
+        /// <param name="weatherDays">The weather days.</param>
+        /// <returns>The heating design weather day.</returns>
         public static WeatherDay HeatingDesignWeatherDay(this IEnumerable<WeatherDay> weatherDays)
         {
             return HeatingDesignWeatherDay(weatherDays, out int dayIndex);

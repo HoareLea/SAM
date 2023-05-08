@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -456,6 +457,22 @@ namespace SAM.Geometry.Spatial
         public double GetLength()
         {
             return (4 * Height) + (4 * Width) + (4 * Depth);
+        }
+
+        public override bool Equals(object obj)
+        {
+            BoundingBox3D boundingBox3D = obj as BoundingBox3D;
+            if(boundingBox3D == null)
+            {
+                return false;
+            }
+
+            return boundingBox3D.max == max && boundingBox3D.min == min;
+        }
+
+        public override int GetHashCode()
+        {
+            return new Tuple<Point3D, Point3D>(min, max).GetHashCode();
         }
 
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)

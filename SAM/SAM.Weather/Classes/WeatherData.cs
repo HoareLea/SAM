@@ -5,6 +5,9 @@ using System.Collections.Generic;
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// This class represents the WeatherData object which implements the SAMObject and IWeatherObject interfaces. 
+    /// </summary>
     public class WeatherData : SAMObject, IWeatherObject
     {
         private string description;
@@ -13,11 +16,22 @@ namespace SAM.Weather
         private double elevation;
         private List<WeatherYear> weatherYears;
 
+        /// <summary>
+        /// Constructor for the WeatherData class.
+        /// </summary>
+        /// <returns>
+        /// Nothing.
+        /// </returns>
         public WeatherData()
         {
 
         }
 
+        /// <summary>
+        /// Constructor for WeatherData class that takes a WeatherData object as a parameter and copies its values.
+        /// </summary>
+        /// <param name="weatherData">WeatherData object to copy values from.</param>
+        /// <returns>A new WeatherData object with the same values as the parameter.</returns>
         public WeatherData(WeatherData weatherData)
             : base(weatherData)
         {
@@ -26,14 +40,24 @@ namespace SAM.Weather
             longitude = weatherData.longitude;
             elevation = weatherData.elevation;
 
-            if(weatherData.weatherYears != null)
+            if (weatherData.weatherYears != null)
             {
                 weatherYears = new List<WeatherYear>();
-                foreach(WeatherYear weatherYear in weatherData.weatherYears)
+                foreach (WeatherYear weatherYear in weatherData.weatherYears)
                     weatherYears.Add(weatherYear == null ? null : new WeatherYear(weatherYear));
             }
         }
-        
+
+        /// <summary>
+        /// Constructor for WeatherData class.
+        /// </summary>
+        /// <param name="name">Name of the weather data.</param>
+        /// <param name="description">Description of the weather data.</param>
+        /// <param name="latitude">Latitude of the weather data.</param>
+        /// <param name="longitude">Longitude of the weather data.</param>
+        /// <param name="elevation">Elevation of the weather data.</param>
+        /// <param name="weatherYear">Weather year of the weather data.</param>
+        /// <returns>WeatherData object.</returns>
         public WeatherData(string name, string description, double latitude, double longitude, double elevation, WeatherYear weatherYear)
             : base(name)
         {
@@ -47,6 +71,17 @@ namespace SAM.Weather
                 weatherYears.Add(new WeatherYear(weatherYear));
         }
 
+        /// <summary>
+        /// Constructor for WeatherData class.
+        /// </summary>
+        /// <param name="name">Name of the weather data.</param>
+        /// <param name="description">Description of the weather data.</param>
+        /// <param name="latitude">Latitude of the weather data.</param>
+        /// <param name="longitude">Longitude of the weather data.</param>
+        /// <param name="elevation">Elevation of the weather data.</param>
+        /// <returns>
+        /// WeatherData object.
+        /// </returns>
         public WeatherData(string name, string description, double latitude, double longitude, double elevation)
             : base(name)
         {
@@ -56,6 +91,15 @@ namespace SAM.Weather
             this.elevation = elevation;
         }
 
+        /// <summary>
+        /// Constructor for WeatherData class that sets the latitude, longitude, and elevation of the location.
+        /// </summary>
+        /// <param name="latitude">The latitude of the location.</param>
+        /// <param name="longitude">The longitude of the location.</param>
+        /// <param name="elevation">The elevation of the location.</param>
+        /// <returns>
+        /// A WeatherData object with the specified latitude, longitude, and elevation.
+        /// </returns>
         public WeatherData(double latitude, double longitude, double elevation)
         : base()
         {
@@ -64,11 +108,23 @@ namespace SAM.Weather
             this.elevation = elevation;
         }
 
+        /// <summary>
+        /// Constructor for WeatherData class that takes a JObject as a parameter.
+        /// </summary>
+        /// <param name="jObject">JObject to be used for constructing the WeatherData object.</param>
+        /// <returns>
+        /// WeatherData object constructed from the given JObject.
+        /// </returns>
         public WeatherData(JObject jObject)
             : base(jObject)
         {
         }
 
+        /// <summary>
+        /// Gets the WeatherYear object for the specified year.
+        /// </summary>
+        /// <param name="year">The year to get the WeatherYear object for.</param>
+        /// <returns>The WeatherYear object for the specified year.</returns>
         public WeatherYear this[int year]
         {
             get
@@ -80,6 +136,11 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Adds a WeatherYear object to the list of WeatherYears.
+        /// </summary>
+        /// <param name="weatherYear">The WeatherYear object to add.</param>
+        /// <returns>True if the WeatherYear was added, false otherwise.</returns>
         public bool Add(WeatherYear weatherYear)
         {
             if (weatherYear == null)
@@ -97,6 +158,12 @@ namespace SAM.Weather
             return true;
         }
 
+        /// <summary>
+        /// Adds a new set of weather values to the collection for the specified date and time.
+        /// </summary>
+        /// <param name="dateTime">The date and time to add the values for.</param>
+        /// <param name="values">The values to add.</param>
+        /// <returns>True if the values were added successfully, false otherwise.</returns>
         public bool Add(DateTime dateTime, Dictionary<string, double> values)
         {
             if (dateTime == DateTime.MinValue)
@@ -118,6 +185,11 @@ namespace SAM.Weather
             return weatherYear.Add(day, hour, values);
         }
 
+        /// <summary>
+        /// Removes a weather year from the list of weather years.
+        /// </summary>
+        /// <param name="year">The year to remove.</param>
+        /// <returns>True if the year was removed, false otherwise.</returns>
         public bool Remove(int year)
         {
             if (weatherYears == null)
@@ -176,6 +248,9 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets or sets the description of the object.
+        /// </summary>
         public string Description
         {
             get
@@ -188,12 +263,17 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets the Location object with the given Name, longitude, latitude and elevation. 
+        /// If the TimeZone is available, it is also set in the Location object. 
+        /// </summary>
+        /// <returns>Location object with the given Name, longitude, latitude and elevation.</returns>
         public Location Location
         {
             get
             {
-                Location result =  new Location(Name, longitude, latitude, elevation);
-                if(TryGetValue(WeatherDataParameter.TimeZone, out string timeZone))
+                Location result = new Location(Name, longitude, latitude, elevation);
+                if (TryGetValue(WeatherDataParameter.TimeZone, out string timeZone))
                 {
                     result.SetValue(LocationParameter.TimeZone, timeZone);
                 }
@@ -202,6 +282,10 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets the years of the weather data.
+        /// </summary>
+        /// <returns>A collection of years.</returns>
         public IEnumerable<int> Years
         {
             get
@@ -213,6 +297,12 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets a list of WeatherYear objects.
+        /// </summary>
+        /// <returns>
+        /// A list of WeatherYear objects.
+        /// </returns>
         public List<WeatherYear> WeatherYears
         {
             get
@@ -221,6 +311,11 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Deserializes a JObject into a WeatherStation object.
+        /// </summary>
+        /// <param name="jObject">The JObject to deserialize.</param>
+        /// <returns>True if the deserialization was successful, false otherwise.</returns>
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -257,6 +352,10 @@ namespace SAM.Weather
             return true;
         }
 
+        /// <summary>
+        /// Converts the object to a JSON object.
+        /// </summary>
+        /// <returns>A JSON object representing the object.</returns>
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();

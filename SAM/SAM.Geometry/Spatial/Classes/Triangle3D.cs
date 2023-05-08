@@ -188,6 +188,22 @@ namespace SAM.Geometry.Spatial
 
         }
 
+        public override bool Equals(object obj)
+        {
+            Triangle3D triangle3D = obj as Triangle3D;
+            if(triangle3D == null)
+            {
+                return false;
+            }
+
+            return triangle3D.points[0] == points[0] && triangle3D.points[1] == points[1] && triangle3D.points[2] == points[2];
+        }
+
+        public override int GetHashCode()
+        {
+            return new Tuple<Point3D, Point3D, Point3D>(points[0], points[1], points[2]).GetHashCode();
+        }
+
         public static bool operator ==(Triangle3D triangle3D_1, Triangle3D triangle3D_2)
         {
             if (ReferenceEquals(triangle3D_1, null) && ReferenceEquals(triangle3D_2, null))

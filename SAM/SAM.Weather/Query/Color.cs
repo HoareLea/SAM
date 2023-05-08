@@ -2,8 +2,16 @@
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Gets the color associated with the specified weather data type.
+        /// </summary>
+        /// <param name="weatherDataType">The weather data type.</param>
+        /// <returns>The color associated with the specified weather data type.</returns>
         public static Color Color(this WeatherDataType weatherDataType)
         {
             switch (weatherDataType)

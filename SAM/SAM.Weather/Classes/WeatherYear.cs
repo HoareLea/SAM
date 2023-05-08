@@ -5,21 +5,32 @@ using System.Linq;
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// Represents weather data for an entire year.
+    /// </summary>
     public class WeatherYear : IWeatherObject
     {
         private int year;
         private WeatherDay[] weatherDays;
 
+        /// <summary>
+        /// Initializes a new instance of the WeatherYear class with the specified year.
+        /// </summary>
+        /// <param name="year">The year for which the weather data is stored.</param>
         public WeatherYear(int year)
         {
             this.year = year;
         }
 
+        /// <summary>
+        /// Initializes a new instance of the WeatherYear class by copying data from another WeatherYear instance.
+        /// </summary>
+        /// <param name="weatherYear">The WeatherYear instance to copy data from.</param>
         public WeatherYear(WeatherYear weatherYear)
         {
             year = weatherYear.year;
-            
-            if(weatherYear.weatherDays != null)
+
+            if (weatherYear.weatherDays != null)
             {
                 weatherDays = new WeatherDay[weatherYear.weatherDays.Length];
                 for (int i = 0; i < weatherYear.weatherDays.Length; i++)
@@ -27,11 +38,20 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the WeatherYear class from a JObject.
+        /// </summary>
+        /// <param name="jObject">The JObject from which to initialize the WeatherYear.</param>
         public WeatherYear(JObject jObject)
         {
             FromJObject(jObject);
         }
 
+        /// <summary>
+        /// Gets or sets the WeatherDay at the specified index.
+        /// </summary>
+        /// <param name="i">The index of the WeatherDay to get or set.</param>
+        /// <returns>The WeatherDay at the specified index.</returns>
         public WeatherDay this[int i]
         {
             get
@@ -56,6 +76,13 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Adds weather data for a specific day and hour.
+        /// </summary>
+        /// <param name="day">The day of the year (0-364).</param>
+        /// <param name="hour">The hour of the day (0-23).</param>
+        /// <param name="values">A dictionary containing weather data values.</param>
+        /// <returns>True if the data is added successfully, otherwise false.</returns>
         public bool Add(int day, int hour, Dictionary<string, double> values)
         {
             if (day < 0 || day >= 365)
@@ -68,18 +95,21 @@ namespace SAM.Weather
                 weatherDays = new WeatherDay[365];
 
             WeatherDay weatherDay = weatherDays[day];
-            if(weatherDay == null)
+            if (weatherDay == null)
             {
                 weatherDay = new WeatherDay();
                 weatherDays[day] = weatherDay;
             }
-            
-            foreach(KeyValuePair<string, double> keyValuePair in values)
+
+            foreach (KeyValuePair<string, double> keyValuePair in values)
                 weatherDay[keyValuePair.Key, hour] = keyValuePair.Value;
 
             return true;
         }
 
+        /// <summary>
+        /// Gets or sets the year.
+        /// </summary>
         public int Year
         {
             get
@@ -92,6 +122,13 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets a list of WeatherDay objects representing daily weather data for the year.
+        /// </summary>
+        /// <summary>
+        /// Gets a list of WeatherDay objects.
+        /// </summary>
+        /// <returns>A list of WeatherDay objects.</returns>
         public List<WeatherDay> WeatherDays
         {
             get
@@ -103,16 +140,21 @@ namespace SAM.Weather
             }
         }
 
+        /// <summary>
+        /// Gets a list of weather data values for a specific parameter by name.
+        /// </summary>
+        /// <param name="name">The name of the weather data parameter.</param>
+        /// <returns>A list of weather data values for the specified parameter.</returns>
         public List<double> GetValues(string name)
         {
             if (string.IsNullOrWhiteSpace(name))
                 return null;
 
             List<double> result = new List<double>();
-            for(int i=0; i < weatherDays.Length; i++)
+            for (int i = 0; i < weatherDays.Length; i++)
             {
                 WeatherDay weatherDay = weatherDays[i];
-                if(weatherDay == null)
+                if (weatherDay == null)
                 {
                     result.AddRange(Enumerable.Repeat(double.NaN, 24));
                     continue;
@@ -126,11 +168,21 @@ namespace SAM.Weather
             return result;
         }
 
+        /// <summary>
+        /// Gets a list of weather data values for a specific parameter by WeatherDataType.
+        /// </summary>
+        /// <param name="weatherDataType">The WeatherDataType of the weather data parameter.</param>
+        /// <returns>A list of weather data values for the specified parameter.</returns>
         public List<double> GetValues(WeatherDataType weatherDataType)
         {
             return GetValues(weatherDataType.ToString());
         }
 
+        /// <summary>
+        /// Deserializes a JObject to populate the WeatherYear instance.
+        /// </summary>
+        /// <param name="jObject">The JObject containing the serialized WeatherYear data.</param>
+        /// <returns>True if the deserialization is successful, otherwise false.</returns>
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -142,7 +194,7 @@ namespace SAM.Weather
             if (jObject.ContainsKey("WeatherDays"))
             {
                 JArray jArray = jObject.Value<JArray>("WeatherDays");
-                if(jArray != null && jArray.Count == 365)
+                if (jArray != null && jArray.Count == 365)
                 {
                     weatherDays = new WeatherDay[365];
                     for (int i = 0; i < 365; i++)
@@ -151,7 +203,7 @@ namespace SAM.Weather
                         if (jObject_Temp == null)
                             continue;
 
-                        weatherDays[i] =new WeatherDay(jObject_Temp);
+                        weatherDays[i] = new WeatherDay(jObject_Temp);
                     }
                 }
             }
@@ -159,6 +211,10 @@ namespace SAM.Weather
             return true;
         }
 
+        /// <summary>
+        /// Serializes the WeatherYear instance to a JObject.
+        /// </summary>
+        /// <returns>A JObject containing the serialized WeatherYear data.</returns>
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -167,7 +223,7 @@ namespace SAM.Weather
             if (year != int.MinValue)
                 jObject.Add("Year", year);
 
-            if(weatherDays != null)
+            if (weatherDays != null)
             {
                 JArray jArray = new JArray();
                 foreach (WeatherDay weatherDay in weatherDays)

@@ -4,8 +4,16 @@ using System.Linq;
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// Provides methods for converting weather data between different formats.
+    /// </summary>
     public static partial class Convert
     {
+        /// <summary>
+        /// Converts an EPW file to a WeatherData object.
+        /// </summary>
+        /// <param name="pathEPW">The path to the EPW file.</param>
+        /// <returns>A WeatherData object representing the EPW data, or null if the conversion fails.</returns>
         public static WeatherData ToSAM(string pathEPW)
         {
             if (string.IsNullOrWhiteSpace(pathEPW) || !System.IO.File.Exists(pathEPW))
@@ -18,6 +26,11 @@ namespace SAM.Weather
             return ToSAM(lines);
         }
 
+        /// <summary>
+        /// Converts a collection of lines from an EPW file to a WeatherData object.
+        /// </summary>
+        /// <param name="lines">An IEnumerable of strings representing the lines of an EPW file.</param>
+        /// <returns>A WeatherData object representing the EPW data, or null if the conversion fails.</returns>
         public static WeatherData ToSAM(IEnumerable<string> lines)
         {
             string city = null;
@@ -53,7 +66,7 @@ namespace SAM.Weather
                     groundTemperatures = new Core.SAMCollection<GroundTemperature>(groundTemperatures_Temp);
                     break;
                 }
-                    
+
             }
 
             string comments_1 = null;

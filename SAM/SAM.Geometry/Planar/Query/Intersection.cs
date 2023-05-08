@@ -221,7 +221,7 @@ namespace SAM.Geometry.Planar
                     {
                         geometry = polygon_1.Intersection(polygon_2);
                     }
-                    catch(System.Exception exception_1)
+                    catch(System.Exception)
                     {
 
                         try
@@ -230,7 +230,7 @@ namespace SAM.Geometry.Planar
                             polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
                             geometry = polygon_1.Intersection(polygon_2);
                         }
-                        catch (System.Exception exception_2)
+                        catch (System.Exception)
                         {
                             GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
                             NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);

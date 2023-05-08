@@ -76,7 +76,7 @@ namespace SAM.Geometry.Planar
                 result = Difference_NTS(face2D_1, face2D_2, tolerance);
                 sAM = false;
             }
-            catch(System.Exception exception)
+            catch(System.Exception)
             {
                 sAM = true;
             }
@@ -320,7 +320,7 @@ namespace SAM.Geometry.Planar
             {
                 geometry = polygon_1.Difference(polygon_2);
             }
-            catch (System.Exception exception_1)
+            catch (System.Exception)
             {
 
                 try
@@ -329,7 +329,7 @@ namespace SAM.Geometry.Planar
                     polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
                     geometry = polygon_1.Difference(polygon_2);
                 }
-                catch (System.Exception exception_2)
+                catch (System.Exception)
                 {
                     GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
                     NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);

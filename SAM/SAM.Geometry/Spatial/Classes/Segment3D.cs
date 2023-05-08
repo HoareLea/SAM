@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -321,6 +322,22 @@ namespace SAM.Geometry.Spatial
         public Line3D GetLine3D()
         {
             return new Line3D(origin, vector);
+        }
+
+        public override bool Equals(object obj)
+        {
+            Segment3D segment3D = obj as Segment3D;
+            if(segment3D == null)
+            {
+                return false;
+            }
+
+            return segment3D.origin == origin && segment3D.vector == vector;
+        }
+
+        public override int GetHashCode()
+        {
+            return new Tuple<Point3D, Vector3D>(origin, vector).GetHashCode();
         }
 
         public static explicit operator Segment3D(Line3D line3D)

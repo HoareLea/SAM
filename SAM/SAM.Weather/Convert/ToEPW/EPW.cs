@@ -1,7 +1,15 @@
 ﻿namespace SAM.Weather
 {
+    /// <summary>
+    /// Provides additional methods for converting weather data between different formats.
+    /// </summary>
     public static partial class Convert
     {
+        /// <summary>
+        /// Converts a WeatherData object to its EPW file representation as a string.
+        /// </summary>
+        /// <param name="weatherData">The WeatherData object to be converted.</param>
+        /// <returns>A string representing the EPW file format of the input WeatherData, or null if the conversion fails.</returns>
         public static string ToEPW(this WeatherData weatherData)
         {
             if (weatherData == null)

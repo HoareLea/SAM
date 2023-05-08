@@ -61,10 +61,10 @@ namespace SAM.Geometry.Planar
             // This code is not implemented yet
             throw new System.NotImplementedException();
 
-            if(polycurve2D.GetCurves().TrueForAll(x => x is Segment2D))
-            {
-                //TO be implemented
-            }
+            //if(polycurve2D.GetCurves().TrueForAll(x => x is Segment2D))
+            //{
+            //    //TO be implemented
+            //}
 
         }
 

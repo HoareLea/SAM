@@ -3,8 +3,18 @@ using System.Linq;
 
 namespace SAM.Weather
 {
+    /// <summary>
+    /// This class provides methods for creating and executing queries against a database.
+    /// </summary>
     public static partial class Query
     {
+        /// <summary>
+        /// Attempts to get ground temperatures from a list of strings.
+        /// </summary>
+        /// <param name="lines">The list of strings.</param>
+        /// <param name="index">The index of the string to parse.</param>
+        /// <param name="groundTemperatures">The list of ground temperatures.</param>
+        /// <returns>True if the ground temperatures were successfully parsed, false otherwise.</returns>
         public static bool TryGetGroundTemperatures(IEnumerable<string> lines, int index, out List<GroundTemperature> groundTemperatures)
         {
             groundTemperatures = null;

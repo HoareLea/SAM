@@ -26,7 +26,7 @@ namespace SAM.Weather
                 return false;
 
             int year_Temp = year;
-            if(year_Temp == -1)
+            if (year_Temp == -1)
             {
                 if (!int.TryParse(values[0], out year_Temp))
                     return false;
@@ -56,7 +56,7 @@ namespace SAM.Weather
             }
 
             dateTime = new DateTime(year_Temp, month, day, hour, 0, 0);
-            if(includeMinutes)
+            if (includeMinutes)
             {
                 dateTime = dateTime.AddMinutes(minute);
             }

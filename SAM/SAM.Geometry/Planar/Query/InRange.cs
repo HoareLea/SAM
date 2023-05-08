@@ -9,6 +9,7 @@ namespace SAM.Geometry.Planar
         /// </summary>
         /// <param name="closed2D">CLosed2D Shape</param>
         /// <param name="point2D">Point2D</param>
+        /// <param name="tolerance">Tolerance for distance comparison</param>
         /// <returns>True if poin2D is inside or on given closed shape</returns>
         public static bool InRange(this IClosed2D closed2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {

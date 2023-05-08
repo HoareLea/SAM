@@ -20,7 +20,15 @@ namespace SAM.Geometry
 
             List<ISAMGeometry2D> result = new List<ISAMGeometry2D>();
 
-            WKTReader wKTReader = new WKTReader(new GeometryFactory(new PrecisionModel(1 / tolerance)));
+            //WKTReader wKTReader = new WKTReader(new GeometryFactory(new PrecisionModel(1 / tolerance)));
+
+            NetTopologySuite.NtsGeometryServices ntsGeometryServices = NetTopologySuite.NtsGeometryServices.Instance;
+            if(ntsGeometryServices?.DefaultPrecisionModel != null && ntsGeometryServices.DefaultPrecisionModel.Scale != 1.0 / tolerance)
+            {
+                ntsGeometryServices.DefaultPrecisionModel.Scale = 1.0 / tolerance;
+            }
+
+            WKTReader wKTReader = new WKTReader(ntsGeometryServices);
             foreach(string line_NTS in lines_NTS)
             {
                 if (string.IsNullOrWhiteSpace(line_NTS))

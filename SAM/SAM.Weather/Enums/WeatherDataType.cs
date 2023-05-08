@@ -2,7 +2,9 @@
 
 namespace SAM.Weather
 {
-    [Description("Weather Data Type.")]
+    /// <summary>
+    /// Represents the types of weather data used in the SAM application.
+    /// </summary>
     public enum WeatherDataType
     {
         /// <summary>

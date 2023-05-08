@@ -1,6 +1,6 @@
 ﻿namespace SAM.Weather
 {
-    // <summary>
+    /// <summary>
     /// A static partial class that contains methods for querying weather data.
     /// </summary>
     public static partial class Query

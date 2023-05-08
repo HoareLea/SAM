@@ -292,9 +292,11 @@ namespace SAM.Geometry.Planar
                 geometry = new Polygon((LinearRing)lineString);
             }
 
-            OffsetCurveSetBuilder offsetCurveSetBuilder = new OffsetCurveSetBuilder(geometry, offset, new OffsetCurveBuilder(precisionModel, bufferParameters));
+            BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, bufferParameters);
+            IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = bufferCurveSetBuilder.GetCurves();
 
-            IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = offsetCurveSetBuilder.GetCurves();
+            //OffsetCurveSetBuilder offsetCurveSetBuilder = new OffsetCurveSetBuilder(geometry, offset, new OffsetCurveBuilder(precisionModel, bufferParameters));
+            //IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = offsetCurveSetBuilder.GetCurves();
 
             List<LineString> lineStrings = new List<LineString>();
             foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
