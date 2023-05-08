@@ -1,10 +1,12 @@
 ﻿using Rhino;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
     public static partial class Modify
     {
+        [Obsolete("Obsolete since 2021.11.24")]
         public static void BakeGeometry_ByType(this RhinoDoc rhinoDoc, global::Grasshopper.Kernel.Data.IGH_Structure gH_Structure, bool cutOpenings = false, double tolerance = Core.Tolerance.Distance)
         {
             if (rhinoDoc == null)

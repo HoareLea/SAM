@@ -19,9 +19,9 @@
         /// <summary>
         /// Gets Construction Name
         /// </summary>
-        /// <param name="name">Construction Name</param>
-        /// <returns name="construction">SAM Analytical Construction</returns>
-        /// <search>SAM Analytical Construction, ByName</search>
+        /// <param name="construction">SAM Analytical Construction</param>
+        /// <returns name="constructionName">Construction Name</returns>
+        /// <search>SAM Analytical Construction, Name</search>
         public static string Name(SAM.Analytical.Construction construction)
         {
             return construction.Name;

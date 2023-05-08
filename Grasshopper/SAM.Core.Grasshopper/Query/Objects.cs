@@ -47,7 +47,7 @@ namespace SAM.Core.Grasshopper
                     {
                         value = (t as dynamic).Value;
                     }
-                    catch(Exception exception)
+                    catch(Exception)
                     {
                         continue;
                     }

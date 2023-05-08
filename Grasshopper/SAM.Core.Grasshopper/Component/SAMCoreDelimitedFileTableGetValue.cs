@@ -25,7 +25,7 @@ namespace SAM.Core.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        private GH_OutputParamManager outputParamManager;
+        //private GH_OutputParamManager outputParamManager;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.

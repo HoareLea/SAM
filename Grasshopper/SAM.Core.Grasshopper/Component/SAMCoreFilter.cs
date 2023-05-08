@@ -94,7 +94,7 @@ namespace SAM.Core.Grasshopper
                     {
                         @object = (@object as dynamic).Value;
                     }
-                    catch (Exception exception)
+                    catch (Exception)
                     {
                         @object = null;
                     }

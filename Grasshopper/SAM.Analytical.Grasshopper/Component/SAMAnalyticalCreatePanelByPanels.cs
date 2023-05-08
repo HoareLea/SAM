@@ -85,7 +85,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     @object = (@object as dynamic).Value;
                 }
-                catch (Exception exception)
+                catch (Exception)
                 {
                     @object = null;
                 }
