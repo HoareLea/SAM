@@ -288,7 +288,12 @@ namespace SAM.Core
 
         public override bool Equals(object @object)
         {
-            if(this == @object)
+            if(@object == null)
+            {
+                return false;
+            }
+
+            if(@object is Tag && this == (Tag)@object)
             {
                 return true;
             }

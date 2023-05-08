@@ -1,10 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 
-/// <summary>
-/// This namespace contains classes related to weather data.
-/// </summary>
-
 
 namespace SAM.Weather
 {
