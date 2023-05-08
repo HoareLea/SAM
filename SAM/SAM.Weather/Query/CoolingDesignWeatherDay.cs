@@ -141,52 +141,7 @@ namespace SAM.Weather
         {
             return CoolingDesignWeatherDay(weatherDays, out int dayIndex);
         }
-        //[Test]
-        ///// <summary>
-        ///// Tests the CoolingDesignWeatherDay method to ensure it returns the correct WeatherDay object when given a list of WeatherDay objects.
-        ///// </summary>
-        //public static void CoolingDesignWeatherDay_ReturnsCorrectWeatherDay()
-        //{
-        //    // Arrange
-        //    var weatherDays = new List<WeatherDay>
-        //    {
-        //        new WeatherDay { Temperature = 70 },
-        //        new WeatherDay { Temperature = 75 },
-        //        new WeatherDay { Temperature = 80 },
-        //        new WeatherDay { Temperature = 85 },
-        //        new WeatherDay { Temperature = 90 }
-        //    };
 
-        //    // Act
-        //    var result = weatherDays.CoolingDesignWeatherDay();
-
-        //    // Assert
-        //    Assert.AreEqual(weatherDays[3], result);
-        //}
-
-        //[Test]
-        ///// <summary>
-        ///// Tests the CoolingDesignWeatherDay method to ensure that the correct day index is returned.
-        ///// </summary>
-        //public static void CoolingDesignWeatherDay_ReturnsCorrectDayIndex()
-        //{
-        //    // Arrange
-        //    var weatherDays = new List<WeatherDay>
-        //    {
-        //        new WeatherDay { Temperature = 70 },
-        //        new WeatherDay { Temperature = 75 },
-        //        new WeatherDay { Temperature = 80 },
-        //        new WeatherDay { Temperature = 85 },
-        //        new WeatherDay { Temperature = 90 }
-        //    };
-
-        //    // Act
-        //    int dayIndex;
-        //    var result = weatherDays.CoolingDesignWeatherDay(out dayIndex);
-
-        //    // Assert
-        //    Assert.AreEqual(3, dayIndex);
-        //}
     }
 
 }
