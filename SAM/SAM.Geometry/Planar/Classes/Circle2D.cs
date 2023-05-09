@@ -37,23 +37,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public double Radious
-        {
-            get
-            {
-                return radious;
-            }
-            set
-            {
-                radious = value;
-            }
-        }
-
-        public double GetArea()
-        {
-            return System.Math.PI * radious * radious;
-        }
-
         public double Diameter
         {
             get
@@ -66,6 +49,35 @@ namespace SAM.Geometry.Planar
             }
         }
 
+        public double Radious
+        {
+            get
+            {
+                return radious;
+            }
+            set
+            {
+                radious = value;
+            }
+        }
+
+        public override ISAMGeometry Clone()
+        {
+            return new Circle2D(this);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            center = new Point2D(jObject.Value<JObject>("Center"));
+            radious = jObject.Value<double>("Radious");
+            return true;
+        }
+
+        public double GetArea()
+        {
+            return System.Math.PI * radious * radious;
+        }
+
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
             return new BoundingBox2D(new Point2D(center[0] - radious, center[1] - radious), new Point2D(center[0] + radious, center[1] + radious), offset);
@@ -76,19 +88,19 @@ namespace SAM.Geometry.Planar
             return new Point2D(center);
         }
 
+        public override int GetHashCode()
+        {
+            return Tuple.Create(center, radious).GetHashCode();
+        }
+
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
+        {
+            return new Point2D(center);
+        }
+
         public Circle2D GetMoved(Vector2D vector2D)
         {
             return new Circle2D((Point2D)center.GetMoved(vector2D), radious);
-        }
-
-        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
-        {
-            return center.Distance(point2D) < radious + tolerance;
-        }
-
-        public void Move(Vector2D vector2D)
-        {
-            center.Move(vector2D);
         }
 
         public double GetPerimeter()
@@ -103,13 +115,13 @@ namespace SAM.Geometry.Planar
         /// <returns>Point2D on circle</returns>
         public Point2D GetPoint2D(double angle)
         {
-            if(double.IsNaN(angle) || double.IsNaN(radious))
+            if (double.IsNaN(angle) || double.IsNaN(radious))
             {
                 return null;
             }
 
             Vector2D vector2D = Query.Vector2D(angle);
-            if(vector2D == null)
+            if (vector2D == null)
             {
                 return null;
             }
@@ -117,9 +129,9 @@ namespace SAM.Geometry.Planar
             return center.GetMoved(vector2D * radious);
         }
 
-        public override ISAMGeometry Clone()
+        public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return new Circle2D(this);
+            return center.Distance(point2D) < radious + tolerance;
         }
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
@@ -130,11 +142,14 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
-        public override bool FromJObject(JObject jObject)
+        public void Move(Vector2D vector2D)
         {
-            center = new Point2D(jObject.Value<JObject>("Center"));
-            radious = jObject.Value<double>("Radious");
-            return true;
+            center.Move(vector2D);
+        }
+
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return System.Math.Abs(center.Distance(point2D) - radious) <= tolerance;
         }
 
         public override JObject ToJObject()
@@ -147,21 +162,6 @@ namespace SAM.Geometry.Planar
             jObject.Add("Radious", radious);
 
             return jObject;
-        }
-
-        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
-        {
-            return new Point2D(center);
-        }
-
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
-        {
-            return System.Math.Abs(center.Distance(point2D) - radious) <= tolerance;
-        }
-
-        public override int GetHashCode()
-        {
-            return Tuple.Create(center, radious).GetHashCode();
         }
     }
 }

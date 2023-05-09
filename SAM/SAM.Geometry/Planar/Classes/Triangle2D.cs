@@ -26,9 +26,44 @@ namespace SAM.Geometry.Planar
         {
         }
 
+        public static implicit operator Triangle2D(Spatial.Triangle3D triangle3D)
+        {
+            Spatial.Plane plane = triangle3D?.GetPlane();
+            if (plane == null)
+            {
+                return null;
+            }
+
+            List<Spatial.Point3D> point3Ds = triangle3D.GetPoints();
+
+            return new Triangle2D(Spatial.Query.Convert(plane, point3Ds[0]), Spatial.Query.Convert(plane, point3Ds[1]), Spatial.Query.Convert(plane, point3Ds[2]));
+        }
+
+        public override ISAMGeometry Clone()
+        {
+            return new Triangle2D(this);
+        }
+
         public bool Contains(Point2D point2D, double offset)
         {
             return Query.Contains(points, point2D, offset);
+        }
+
+        public double Distance(ISegmentable2D segmentable2D)
+        {
+            return Query.Distance(this, segmentable2D);
+        }
+
+        public double Distance(Point2D point2D)
+        {
+            return Query.Distance(this, point2D);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            points = Geometry.Create.ISAMGeometries<Point2D>(jObject.Value<JArray>("Points")).ToArray();
+
+            return true;
         }
 
         public double GetArea()
@@ -47,9 +82,24 @@ namespace SAM.Geometry.Planar
             return Query.Centroid(points);
         }
 
+        public List<ICurve2D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve2D)x);
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(points[0], points[1], points[2]).GetHashCode();
+        }
+
         public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
         {
             return GetCentroid();
+        }
+
+        public double GetLength()
+        {
+            return GetSegments().ConvertAll(x => x.GetLength()).Sum();
         }
 
         public Rectangle2D GetMinRectangle()
@@ -57,9 +107,26 @@ namespace SAM.Geometry.Planar
             return Create.Rectangle2D(points);
         }
 
+        public Orientation GetOrientation()
+        {
+            List<Point2D> point2Ds = GetPoints();
+
+            return Query.Orientation(point2Ds[0], point2Ds[1], point2Ds[2]);
+        }
+
+        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.Parameter(this, point2D, inverted, tolerance);
+        }
+
         public double GetPerimeter()
         {
             return points[0].Distance(points[1]) + points[1].Distance(points[2]) + points[2].Distance(points[0]);
+        }
+
+        public Point2D GetPoint(double parameter, bool inverted = false)
+        {
+            return Query.Point2D(this, parameter, inverted);
         }
 
         public List<Point2D> GetPoints()
@@ -70,11 +137,6 @@ namespace SAM.Geometry.Planar
         public List<Segment2D> GetSegments()
         {
             return new List<Segment2D> { new Segment2D(points[0], points[1]), new Segment2D(points[1], points[2]), new Segment2D(points[2], points[0]) };
-        }
-
-        public List<ICurve2D> GetCurves()
-        {
-            return GetSegments().ConvertAll(x => (ICurve2D)x);
         }
 
         public bool Inside(BoundingBox2D boundingBox2D, double tolerance = Core.Tolerance.Distance)
@@ -89,6 +151,14 @@ namespace SAM.Geometry.Planar
                 return result;
 
             return !On(point2D, tolerance);
+        }
+
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (closed2D is ISegmentable2D)
+                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
+
+            throw new NotImplementedException();
         }
 
         public void Mirror(Point2D point2D)
@@ -109,41 +179,14 @@ namespace SAM.Geometry.Planar
                 point2D.Mirror(segment2D);
         }
 
-        public IEnumerable<Triangle2D> Triangulate()
+        public bool On(Point2D point2D, double tolerance = 1E-09)
         {
-            return new Triangle2D[1] { new Triangle2D(new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2])) };
-        }
-
-        public override ISAMGeometry Clone()
-        {
-            return new Triangle2D(this);
-        }
-
-        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
-        {
-            if (closed2D is ISegmentable2D)
-                return ((ISegmentable2D)closed2D).GetPoints().TrueForAll(x => Inside(x, tolerance));
-
-            throw new NotImplementedException();
+            return Query.On(GetSegments(), point2D, tolerance);
         }
 
         public void Reverse()
         {
             points.Reverse();
-        }
-
-        public Orientation GetOrientation()
-        {
-            List<Point2D> point2Ds = GetPoints();
-
-            return Query.Orientation(point2Ds[0], point2Ds[1], point2Ds[2]);
-        }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            points = Geometry.Create.ISAMGeometries<Point2D>(jObject.Value<JArray>("Points")).ToArray();
-
-            return true;
         }
 
         public override JObject ToJObject()
@@ -157,57 +200,14 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public double Distance(ISegmentable2D segmentable2D)
+        public IEnumerable<Triangle2D> Triangulate()
         {
-            return Query.Distance(this, segmentable2D);
-        }
-
-        public bool On(Point2D point2D, double tolerance = 1E-09)
-        {
-            return Query.On(GetSegments(), point2D, tolerance);
-        }
-
-        public double Distance(Point2D point2D)
-        {
-            return Query.Distance(this, point2D);
-        }
-
-        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
-        {
-            return Query.Parameter(this, point2D, inverted, tolerance);
-        }
-
-        public Point2D GetPoint(double parameter, bool inverted = false)
-        {
-            return Query.Point2D(this, parameter, inverted);
+            return new Triangle2D[1] { new Triangle2D(new Point2D(points[0]), new Point2D(points[1]), new Point2D(points[2])) };
         }
 
         public ISegmentable2D Trim(double parameter, bool inverted = false)
         {
             return Query.Trim(this, parameter, inverted);
-        }
-
-        public double GetLength()
-        {
-            return GetSegments().ConvertAll(x => x.GetLength()).Sum();
-        }
-
-        public override int GetHashCode()
-        {
-            return Tuple.Create(points[0], points[1], points[2]).GetHashCode();
-        }
-
-        public static implicit operator Triangle2D(Spatial.Triangle3D triangle3D)
-        {
-            Spatial.Plane plane = triangle3D?.GetPlane();
-            if(plane == null)
-            {
-                return null;
-            }
-
-            List<Spatial.Point3D> point3Ds = triangle3D.GetPoints();
-
-            return new Triangle2D(Spatial.Query.Convert(plane, point3Ds[0]), Spatial.Query.Convert(plane, point3Ds[1]), Spatial.Query.Convert(plane, point3Ds[2]));
         }
     }
 }

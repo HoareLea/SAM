@@ -22,6 +22,16 @@ namespace SAM.Geometry.Planar
         {
         }
 
+        public override ISAMGeometry Clone()
+        {
+            return new PolycurveLoop2D(this);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            return base.FromJObject(jObject);
+        }
+
         public double GetArea()
         {
             List<ICurve2D> curves = GetCurves();
@@ -84,26 +94,7 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
-        public override ISAMGeometry Clone()
-        {
-            return new PolycurveLoop2D(this);
-        }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            return base.FromJObject(jObject);
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return null;
-
-            return jObject;
-        }
-
-        public bool On(Point2D point2D, double tolerance = 1E-09)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             List<ICurve2D> curves = GetCurves();
             if (curves == null)
@@ -113,6 +104,15 @@ namespace SAM.Geometry.Planar
                 throw new NotImplementedException();
 
             return Query.On(curves.Cast<Segment2D>(), point2D, tolerance);
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            return jObject;
         }
     }
 }

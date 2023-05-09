@@ -28,7 +28,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D(double[] coordinates)
         {
-            if(coordinates == null || coordinates.Length < 2)
+            if (coordinates == null || coordinates.Length < 2)
             {
                 coordinates[0] = double.NaN;
                 coordinates[1] = double.NaN;
@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
 
         public Point2D(Point2D point2D)
         {
-            if(point2D == null)
+            if (point2D == null)
             {
                 coordinates[0] = double.NaN;
                 coordinates[1] = double.NaN;
@@ -54,15 +54,19 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public double this[int index]
+        public static Point2D Invalid
         {
             get
             {
-                return coordinates[index];
+                return new Point2D(double.NaN, double.NaN);
             }
-            set
+        }
+
+        public static Point2D Zero
+        {
+            get
             {
-                coordinates[index] = value;
+                return new Point2D(0, 0);
             }
         }
 
@@ -96,40 +100,45 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public void Move(Vector2D vector2D)
+        public double this[int index]
         {
-            coordinates[0] += vector2D[0];
-            coordinates[1] += vector2D[1];
+            get
+            {
+                return coordinates[index];
+            }
+            set
+            {
+                coordinates[index] = value;
+            }
         }
 
-        public Point2D GetMoved(Vector2D vector2D)
+        public static implicit operator Point2D(Vector2D vector2D)
         {
-            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
+            if (vector2D == null)
+                return null;
+
+            return new Point2D(vector2D.X, vector2D.Y);
         }
 
-        public double Distance(Point2D point2D)
+        public static Vector2D operator -(Point2D point2D_1, Point2D point2D_2)
         {
-            return Vector(point2D).Length;
+            return new Vector2D(point2D_1.coordinates[0] - point2D_2.coordinates[0], point2D_1.coordinates[1] - point2D_2.coordinates[1]);
         }
 
-        public Vector2D Vector(Point2D point2D)
+        public static bool operator !=(Point2D point2D_1, Point2D point2D_2)
         {
-            return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
+            return point2D_1?.coordinates[0] != point2D_2?.coordinates[0] || point2D_1?.coordinates[1] != point2D_2?.coordinates[1];
         }
 
-        public Vector2D AsVector()
+        public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
         {
-            return new Vector2D(coordinates[0], coordinates[1]);
-        }
+            if (ReferenceEquals(point2D_1, null) && ReferenceEquals(point2D_2, null))
+                return true;
 
-        public override string ToString()
-        {
-            return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
-        }
+            if (ReferenceEquals(point2D_1, null) || ReferenceEquals(point2D_2, null))
+                return false;
 
-        public string ToString(double tolerance = Core.Tolerance.Distance)
-        {
-            return string.Format("Point2D(X={0},Y={1})", Core.Query.Round(coordinates[0], tolerance), Core.Query.Round(coordinates[1], tolerance));
+            return point2D_1.coordinates[0] == point2D_2.coordinates[0] && point2D_1.coordinates[1] == point2D_2.coordinates[1];
         }
 
         public bool AlmostEquals(Point2D point2D, double tolerance = Core.Tolerance.Distance)
@@ -144,6 +153,74 @@ namespace SAM.Geometry.Planar
             return System.Math.Abs(segment2D_temp[1].X * point2D.Y - point2D.X * segment2D_temp[1].Y) < tolerance;
         }
 
+        public Vector2D AsVector()
+        {
+            return new Vector2D(coordinates[0], coordinates[1]);
+        }
+
+        public override ISAMGeometry Clone()
+        {
+            return new Point2D(this);
+        }
+
+        public Point2D Closest(IEnumerable<Point2D> point2Ds)
+        {
+            return Query.Closest(point2Ds, this);
+        }
+
+        public double Distance(Point2D point2D)
+        {
+            return Vector(point2D).Length;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (!(obj is Point2D))
+                return false;
+
+            Point2D point2D = (Point2D)obj;
+            return point2D.coordinates[0].Equals(coordinates[0]) && point2D.coordinates[1].Equals(coordinates[1]);
+        }
+
+        public bool Equals(Point2D point2D, double tolerance)
+        {
+            if (tolerance == 0)
+                return Equals(point2D);
+
+            return Distance(point2D) <= tolerance;
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            coordinates[0] = jObject.Value<double>("X");
+            coordinates[1] = jObject.Value<double>("Y");
+
+            return true;
+        }
+
+        public override int GetHashCode()
+        {
+            return Tuple.Create(coordinates[0], coordinates[1]).GetHashCode();
+        }
+
+        public Point2D GetMoved(Vector2D vector2D)
+        {
+            return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
+        }
+
+        public Point2D GetScaled(double factor)
+        {
+            Point2D point2D = new Point2D(this);
+
+            point2D.Scale(factor);
+            return point2D;
+        }
+
+        public bool IsNaN()
+        {
+            return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
+        }
+
         public bool IsValid()
         {
             return !double.IsNaN(coordinates[0]) && !double.IsNaN(coordinates[1]);
@@ -152,6 +229,22 @@ namespace SAM.Geometry.Planar
         public bool IsZero()
         {
             return coordinates[0] == 0 && coordinates[1] == 0;
+        }
+
+        public void Mirror(Point2D point2D)
+        {
+            Move(new Vector2D(point2D, this));
+        }
+
+        public void Mirror(Segment2D segment2D)
+        {
+            Move(new Vector2D(segment2D.Project(this), this));
+        }
+
+        public void Move(Vector2D vector2D)
+        {
+            coordinates[0] += vector2D[0];
+            coordinates[1] += vector2D[1];
         }
 
         public void Round(int decimals = Core.Rounding.Distance)
@@ -167,16 +260,6 @@ namespace SAM.Geometry.Planar
         {
             coordinates[0] = Core.Query.Round(coordinates[0], tolerance);
             coordinates[1] = Core.Query.Round(coordinates[1], tolerance);
-        }
-
-        public void Mirror(Point2D point2D)
-        {
-            Move(new Vector2D(point2D, this));
-        }
-
-        public void Mirror(Segment2D segment2D)
-        {
-            Move(new Vector2D(segment2D.Project(this), this));
         }
 
         public void Scale(Point2D point2D, double factor)
@@ -210,62 +293,6 @@ namespace SAM.Geometry.Planar
             coordinates[1] = coordinates[1] * factor;
         }
 
-        public Point2D GetScaled(double factor)
-        {
-            Point2D point2D = new Point2D(this);
-
-            point2D.Scale(factor);
-            return point2D;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (!(obj is Point2D))
-                return false;
-
-            Point2D point2D = (Point2D)obj;
-            return point2D.coordinates[0].Equals(coordinates[0]) && point2D.coordinates[1].Equals(coordinates[1]);
-        }
-
-        public bool Equals(Point2D point2D, double tolerance)
-        {
-            if (tolerance == 0)
-                return Equals(point2D);
-
-            return Distance(point2D) <= tolerance;
-        }
-
-        public bool IsNaN()
-        {
-            return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
-        }
-
-        public Point2D Closest(IEnumerable<Point2D> point2Ds)
-        {
-            return Query.Closest(point2Ds, this);
-        }
-
-        public override ISAMGeometry Clone()
-        {
-            return new Point2D(this);
-        }
-
-        public Vector2D ToVector(Point2D point2D = null)
-        {
-            if (point2D == null)
-                return new Vector2D(coordinates[0], coordinates[1]);
-            else
-                return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
-        }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            coordinates[0] = jObject.Value<double>("X");
-            coordinates[1] = jObject.Value<double>("Y");
-
-            return true;
-        }
-
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
@@ -277,54 +304,27 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public override int GetHashCode()
+        public override string ToString()
         {
-            return Tuple.Create(coordinates[0], coordinates[1]).GetHashCode();
+            return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
 
-        public static Point2D Invalid
+        public string ToString(double tolerance = Core.Tolerance.Distance)
         {
-            get
-            {
-                return new Point2D(double.NaN, double.NaN);
-            }
+            return string.Format("Point2D(X={0},Y={1})", Core.Query.Round(coordinates[0], tolerance), Core.Query.Round(coordinates[1], tolerance));
         }
 
-        public static Point2D Zero
+        public Vector2D ToVector(Point2D point2D = null)
         {
-            get
-            {
-                return new Point2D(0, 0);
-            }
+            if (point2D == null)
+                return new Vector2D(coordinates[0], coordinates[1]);
+            else
+                return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
 
-        public static bool operator ==(Point2D point2D_1, Point2D point2D_2)
+        public Vector2D Vector(Point2D point2D)
         {
-            if (ReferenceEquals(point2D_1, null) && ReferenceEquals(point2D_2, null))
-                return true;
-
-            if (ReferenceEquals(point2D_1, null) || ReferenceEquals(point2D_2, null))
-                return false;
-
-            return point2D_1.coordinates[0] == point2D_2.coordinates[0] && point2D_1.coordinates[1] == point2D_2.coordinates[1];
-        }
-
-        public static bool operator !=(Point2D point2D_1, Point2D point2D_2)
-        {
-            return point2D_1?.coordinates[0] != point2D_2?.coordinates[0] || point2D_1?.coordinates[1] != point2D_2?.coordinates[1];
-        }
-
-        public static Vector2D operator -(Point2D point2D_1, Point2D point2D_2)
-        {
-            return new Vector2D(point2D_1.coordinates[0] - point2D_2.coordinates[0], point2D_1.coordinates[1] - point2D_2.coordinates[1]);
-        }
-
-        public static implicit operator Point2D(Vector2D vector2D)
-        {
-            if (vector2D == null)
-                return null;
-
-            return new Point2D(vector2D.X, vector2D.Y);
+            return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
     }
 }

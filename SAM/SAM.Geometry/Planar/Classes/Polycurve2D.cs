@@ -31,6 +31,22 @@ namespace SAM.Geometry.Planar
         {
         }
 
+        public static implicit operator Polycurve2D(Polyline2D polyline2D)
+        {
+            if (polyline2D == null)
+                return null;
+
+            return new Polycurve2D(polyline2D.GetSegments());
+        }
+
+        public static implicit operator Polycurve2D(Polygon2D polygon2D)
+        {
+            if (polygon2D == null)
+                return null;
+
+            return new Polycurve2D(polygon2D.GetSegments());
+        }
+
         public override ISAMGeometry Clone()
         {
             return new Polycurve2D(this);
@@ -44,17 +60,6 @@ namespace SAM.Geometry.Planar
             curves = Geometry.Create.ISAMGeometries<ICurve2D>(jObject.Value<JArray>("Curves"));
 
             return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return null;
-
-            jObject.Add("Curves", Geometry.Create.JArray(curves));
-
-            return jObject;
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
@@ -75,32 +80,6 @@ namespace SAM.Geometry.Planar
             return curves.Last().GetEnd();
         }
 
-        public double GetLength()
-        {
-            double length = 0;
-            curves.ForEach(x => length += x.GetLength());
-            return length;
-        }
-
-        public Point2D GetStart()
-        {
-            return curves.First().GetStart();
-        }
-
-        public Polygon2D ToPolygon2D()
-        {
-            if (curves == null)
-                return null;
-
-            return new Polygon2D(curves.ConvertAll(x => x.GetStart()));
-        }
-
-        public void Reverse()
-        {
-            curves.ForEach(x => x.Reverse());
-            curves.Reverse();
-        }
-
         public override int GetHashCode()
         {
             if (curves == null)
@@ -115,20 +94,41 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public static implicit operator Polycurve2D(Polyline2D polyline2D)
+        public double GetLength()
         {
-            if (polyline2D == null)
-                return null;
-
-            return new Polycurve2D(polyline2D.GetSegments());
+            double length = 0;
+            curves.ForEach(x => length += x.GetLength());
+            return length;
         }
 
-        public static implicit operator Polycurve2D(Polygon2D polygon2D)
+        public Point2D GetStart()
         {
-            if (polygon2D == null)
+            return curves.First().GetStart();
+        }
+
+        public void Reverse()
+        {
+            curves.ForEach(x => x.Reverse());
+            curves.Reverse();
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
                 return null;
 
-            return new Polycurve2D(polygon2D.GetSegments());
+            jObject.Add("Curves", Geometry.Create.JArray(curves));
+
+            return jObject;
+        }
+
+        public Polygon2D ToPolygon2D()
+        {
+            if (curves == null)
+                return null;
+
+            return new Polygon2D(curves.ConvertAll(x => x.GetStart()));
         }
     }
 }

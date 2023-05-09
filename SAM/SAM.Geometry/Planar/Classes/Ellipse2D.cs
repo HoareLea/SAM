@@ -6,9 +6,9 @@ namespace SAM.Geometry.Planar
     public class Ellipse2D : SAMGeometry, IClosed2D, IBoundable2D
     {
         private Point2D center;
-        private double width;
         private double height;
         private Vector2D heightDirection;
+        private double width;
 
         public Ellipse2D(double width, double height)
         {
@@ -51,18 +51,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public double Width
-        {
-            get
-            {
-                return width;
-            }
-            set
-            {
-                width = value;
-            }
-        }
-
         public double Height
         {
             get
@@ -75,9 +63,24 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public double GetArea()
+        public Vector2D HeightDirection
         {
-            return System.Math.PI * ((width / 2) * (height / 2));
+            get
+            {
+                return heightDirection;
+            }
+        }
+
+        public double Width
+        {
+            get
+            {
+                return width;
+            }
+            set
+            {
+                width = value;
+            }
         }
 
         public Vector2D WidthDirection
@@ -88,12 +91,23 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public Vector2D HeightDirection
+        public override ISAMGeometry Clone()
         {
-            get
-            {
-                return heightDirection;
-            }
+            return new Ellipse2D(this);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            center = new Point2D(jObject.Value<JObject>("Center"));
+            width = jObject.Value<double>("Width");
+            height = jObject.Value<double>("Height");
+            heightDirection = new Vector2D(jObject.Value<JObject>("HeightDirection"));
+            return true;
+        }
+
+        public double GetArea()
+        {
+            return System.Math.PI * ((width / 2) * (height / 2));
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
@@ -106,12 +120,32 @@ namespace SAM.Geometry.Planar
             return new Point2D(center);
         }
 
+        public override int GetHashCode()
+        {
+            return Tuple.Create(center, width, height, heightDirection).GetHashCode();
+        }
+
+        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
+        {
+            return new Point2D(center);
+        }
+
         public Ellipse2D GetMoved(Vector2D vector2D)
         {
             return new Ellipse2D(center.GetMoved(vector2D), width, height, heightDirection);
         }
 
+        public double GetPerimeter()
+        {
+            return 2 * System.Math.PI * (3 * (width * height) - System.Math.Sqrt(((3 * width) + height) * (width + (3 * height))));
+        }
+
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            throw new NotImplementedException();
+        }
+
+        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
         {
             throw new NotImplementedException();
         }
@@ -121,28 +155,9 @@ namespace SAM.Geometry.Planar
             center.Move(vector2D);
         }
 
-        public double GetPerimeter()
-        {
-            return 2 * System.Math.PI * (3*(width * height) - System.Math.Sqrt(((3 * width) + height) *(width + (3 * height))));
-        }
-
-        public override ISAMGeometry Clone()
-        {
-            return new Ellipse2D(this);
-        }
-
-        public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             throw new NotImplementedException();
-        }
-
-        public override bool FromJObject(JObject jObject)
-        {
-            center = new Point2D(jObject.Value<JObject>("Center"));
-            width = jObject.Value<double>("Width");
-            height = jObject.Value<double>("Height");
-            heightDirection = new Vector2D(jObject.Value<JObject>("HeightDirection"));
-            return true;
         }
 
         public override JObject ToJObject()
@@ -157,21 +172,6 @@ namespace SAM.Geometry.Planar
             jObject.Add("HeightDirection", heightDirection.ToJObject());
 
             return jObject;
-        }
-
-        public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
-        {
-            return new Point2D(center);
-        }
-
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
-        {
-            throw new NotImplementedException();
-        }
-
-        public override int GetHashCode()
-        {
-            return Tuple.Create(center, width, height, heightDirection).GetHashCode();
         }
     }
 }

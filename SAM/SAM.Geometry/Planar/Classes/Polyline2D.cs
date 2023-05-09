@@ -41,125 +41,6 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public List<Segment2D> GetSegments()
-        {
-            return Create.Segment2Ds(points, false);
-        }
-
-        public List<ICurve2D> GetCurves()
-        {
-            return GetSegments().ConvertAll(x => (ICurve2D)x);
-        }
-
-        public bool IsClosed()
-        {
-            return points.First().Equals(points.Last());
-        }
-
-        public bool IsClosed(double tolerance = Core.Tolerance.Distance)
-        {
-            return points.First().Distance(points.Last()) < tolerance;
-        }
-
-        public Point2D Closest(Point2D point2D, bool includeEdges)
-        {
-            if (includeEdges)
-                return Query.Closest(this, point2D);
-
-            return Query.Closest(points, point2D);
-        }
-
-        public void Close()
-        {
-            if (IsClosed())
-                return;
-
-            points.Add(new Point2D(points.First()));
-        }
-
-        public void Open()
-        {
-            if (!IsClosed())
-                return;
-
-            points.RemoveAt(points.Count - 1);
-        }
-
-        public Polygon2D ToPolygon2D()
-        {
-            List<Point2D> point2Ds = new List<Point2D>(points);
-            if (IsClosed())
-                point2Ds.Remove(point2Ds.Last());
-
-            return new Polygon2D(point2Ds);
-        }
-
-        public override ISAMGeometry Clone()
-        {
-            return new Polyline2D(this);
-        }
-
-        public BoundingBox2D GetBoundingBox(double offset = 0)
-        {
-            return new BoundingBox2D(points);
-        }
-
-        public Point2D GetStart()
-        {
-            return new Point2D(points.First());
-        }
-
-        public Point2D GetEnd()
-        {
-            return new Point2D(points.Last());
-        }
-
-        public void Reverse()
-        {
-            points.Reverse();
-        }
-
-        public Segment2D First()
-        {
-            if (points == null || points.Count < 2)
-                return null;
-
-            return new Segment2D(points[0], points[1]);
-        }
-
-        public Segment2D Last()
-        {
-            if (points == null)
-                return null;
-
-            int count = points.Count;
-
-            if (count < 2)
-                return null;
-
-            return new Segment2D(points[count - 2], points[count - 1]);
-        }
-
-        public ISAMGeometry2D GetMoved(Vector2D vector2D)
-        {
-            return new Polyline2D(points.ConvertAll(x => (Point2D)x.GetMoved(vector2D)));
-        }
-
-        public List<Point2D> GetPoints()
-        {
-            return points.ConvertAll(x => (Point2D)x.Clone());
-        }
-
-        public int CountPoints()
-        {
-            return points.Count;
-        }
-
-        public int CountSegments()
-        {
-            return points.Count - 1;
-        }
-
         public Point2D this[int index]
         {
             get
@@ -168,42 +49,12 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public override bool FromJObject(JObject jObject)
+        public static implicit operator Polyline2D(Polygon2D polygon2D)
         {
-            points = Create.Point2Ds(jObject.Value<JArray>("Points"));
-            return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
+            if (polygon2D == null)
                 return null;
 
-            jObject.Add("Points", Geometry.Create.JArray(points));
-            return jObject;
-        }
-
-        public double GetLength()
-        {
-            List<Segment2D> segment2Ds = GetSegments();
-
-            if (segment2Ds == null)
-                return double.NaN;
-
-            double length = 0;
-            segment2Ds.ForEach(x => length += x.GetLength());
-            return length;
-        }
-
-        public double Distance(ISegmentable2D segmentable2D)
-        {
-            return Query.Distance(this, segmentable2D);
-        }
-
-        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
-        {
-            return Query.On(GetSegments(), point2D, tolerance);
+            return new Polyline2D(polygon2D.GetPoints(), true);
         }
 
         public bool Add(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
@@ -261,6 +112,27 @@ namespace SAM.Geometry.Planar
             return false;
         }
 
+        public override ISAMGeometry Clone()
+        {
+            return new Polyline2D(this);
+        }
+
+        public void Close()
+        {
+            if (IsClosed())
+                return;
+
+            points.Add(new Point2D(points.First()));
+        }
+
+        public Point2D Closest(Point2D point2D, bool includeEdges)
+        {
+            if (includeEdges)
+                return Query.Closest(this, point2D);
+
+            return Query.Closest(points, point2D);
+        }
+
         public Point2D ClosestEnd(Point2D point2D)
         {
             Point2D end = GetEnd();
@@ -272,6 +144,55 @@ namespace SAM.Geometry.Planar
                 return start;
         }
 
+        public int CountPoints()
+        {
+            return points.Count;
+        }
+
+        public int CountSegments()
+        {
+            return points.Count - 1;
+        }
+
+        public double Distance(ISegmentable2D segmentable2D)
+        {
+            return Query.Distance(this, segmentable2D);
+        }
+
+        public double Distance(Point2D point2D)
+        {
+            return Query.Distance(this, point2D);
+        }
+
+        public Segment2D First()
+        {
+            if (points == null || points.Count < 2)
+                return null;
+
+            return new Segment2D(points[0], points[1]);
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            points = Create.Point2Ds(jObject.Value<JArray>("Points"));
+            return true;
+        }
+
+        public BoundingBox2D GetBoundingBox(double offset = 0)
+        {
+            return new BoundingBox2D(points);
+        }
+
+        public List<ICurve2D> GetCurves()
+        {
+            return GetSegments().ConvertAll(x => (ICurve2D)x);
+        }
+
+        public Point2D GetEnd()
+        {
+            return new Point2D(points.Last());
+        }
+
         public int GetEndIndex(Point2D point2D)
         {
             Point2D end = GetEnd();
@@ -281,53 +202,6 @@ namespace SAM.Geometry.Planar
                 return points.Count - 1;
             else
                 return 0;
-        }
-
-        public int GetSegmentIndex(Point2D point2D)
-        {
-            Point2D end = GetEnd();
-            Point2D start = GetStart();
-
-            if (end.Distance(point2D) < start.Distance(point2D))
-                return points.Count - 2;
-            else
-                return 0;
-        }
-
-        public Segment2D GetSegment(int index)
-        {
-            return GetSegments()[index];
-        }
-
-        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
-        {
-            return Query.Parameter(this, point2D, inverted, tolerance);
-        }
-
-        /// <summary>
-        /// Inserts new point on one of the edges (closest to given point2D)
-        /// </summary>
-        /// <param name="point2D">Point to be inserted</param>
-        /// <param name="tolerance">Tolerance</param>
-        /// <returns>Inserted Point2D</returns>
-        public Point2D InsertClosest(Point2D point2D, double tolerance = Core.Tolerance.Distance)
-        {
-            return Modify.InsertClosest(points, point2D, false, tolerance);
-        }
-
-        public Point2D GetPoint(double parameter, bool inverted = false)
-        {
-            return Query.Point2D(this, parameter, inverted);
-        }
-
-        public ISegmentable2D Trim(double parameter, bool inverted = false)
-        {
-            return Query.Trim(this, parameter, inverted);
-        }
-
-        public double Distance(Point2D point2D)
-        {
-            return Query.Distance(this, point2D);
         }
 
         public IEnumerator<Segment2D> GetEnumerator()
@@ -353,12 +227,137 @@ namespace SAM.Geometry.Planar
             return hash;
         }
 
-        public static implicit operator Polyline2D(Polygon2D polygon2D)
+        public double GetLength()
         {
-            if (polygon2D == null)
+            List<Segment2D> segment2Ds = GetSegments();
+
+            if (segment2Ds == null)
+                return double.NaN;
+
+            double length = 0;
+            segment2Ds.ForEach(x => length += x.GetLength());
+            return length;
+        }
+
+        public ISAMGeometry2D GetMoved(Vector2D vector2D)
+        {
+            return new Polyline2D(points.ConvertAll(x => (Point2D)x.GetMoved(vector2D)));
+        }
+
+        public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.Parameter(this, point2D, inverted, tolerance);
+        }
+
+        public Point2D GetPoint(double parameter, bool inverted = false)
+        {
+            return Query.Point2D(this, parameter, inverted);
+        }
+
+        public List<Point2D> GetPoints()
+        {
+            return points.ConvertAll(x => (Point2D)x.Clone());
+        }
+
+        public Segment2D GetSegment(int index)
+        {
+            return GetSegments()[index];
+        }
+
+        public int GetSegmentIndex(Point2D point2D)
+        {
+            Point2D end = GetEnd();
+            Point2D start = GetStart();
+
+            if (end.Distance(point2D) < start.Distance(point2D))
+                return points.Count - 2;
+            else
+                return 0;
+        }
+
+        public List<Segment2D> GetSegments()
+        {
+            return Create.Segment2Ds(points, false);
+        }
+
+        public Point2D GetStart()
+        {
+            return new Point2D(points.First());
+        }
+
+        /// <summary>
+        /// Inserts new point on one of the edges (closest to given point2D)
+        /// </summary>
+        /// <param name="point2D">Point to be inserted</param>
+        /// <param name="tolerance">Tolerance</param>
+        /// <returns>Inserted Point2D</returns>
+        public Point2D InsertClosest(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Modify.InsertClosest(points, point2D, false, tolerance);
+        }
+
+        public bool IsClosed()
+        {
+            return points.First().Equals(points.Last());
+        }
+
+        public bool IsClosed(double tolerance = Core.Tolerance.Distance)
+        {
+            return points.First().Distance(points.Last()) < tolerance;
+        }
+        public Segment2D Last()
+        {
+            if (points == null)
                 return null;
 
-            return new Polyline2D(polygon2D.GetPoints(), true);
+            int count = points.Count;
+
+            if (count < 2)
+                return null;
+
+            return new Segment2D(points[count - 2], points[count - 1]);
+        }
+
+        public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
+        {
+            return Query.On(GetSegments(), point2D, tolerance);
+        }
+
+        public void Open()
+        {
+            if (!IsClosed())
+                return;
+
+            points.RemoveAt(points.Count - 1);
+        }
+
+        public void Reverse()
+        {
+            points.Reverse();
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return null;
+
+            jObject.Add("Points", Geometry.Create.JArray(points));
+            return jObject;
+        }
+
+        public Polygon2D ToPolygon2D()
+        {
+            List<Point2D> point2Ds = new List<Point2D>(points);
+            if (IsClosed())
+                point2Ds.Remove(point2Ds.Last());
+
+            return new Polygon2D(point2Ds);
+        }
+
+        public ISegmentable2D Trim(double parameter, bool inverted = false)
+        {
+            return Query.Trim(this, parameter, inverted);
         }
     }
 }
