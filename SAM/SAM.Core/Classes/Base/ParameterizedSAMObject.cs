@@ -215,7 +215,7 @@ namespace SAM.Core
                 {
                     case ParameterType.IJSAMObject:
                         SAMObject sAMObject = null;
-                        return Modify.SetValue(this, @enum.GetType().Assembly, name, sAMObject);
+                        return Modify.SetValue((IJSAMObject)this, @enum.GetType().Assembly, name, sAMObject);
 
                     case ParameterType.String:
                         string @string = null;
@@ -272,12 +272,14 @@ namespace SAM.Core
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
+            jObject.Add("_type", Query.FullTypeName((IJSAMObject)this));
 
             if (parameterSets != null)
                 jObject.Add("ParameterSets", Create.JArray(parameterSets));
 
             return jObject;
         }
+
+        public static implicit operator JObject?(ParameterizedSAMObject parameterizedSAMObject) => parameterizedSAMObject?.ToJObject();
     }
 }

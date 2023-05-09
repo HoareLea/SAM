@@ -17,30 +17,6 @@ namespace SAM.Core
             this.jObject = jObject;
         }
 
-        public bool FromJObject(JObject jObject)
-        {
-            if (jObject == null)
-                return false;
-
-            this.jObject = jObject;
-            return true;
-        }
-
-        public JObject ToJObject()
-        {
-            return jObject;
-        }
-
-        public JSAMObjectWrapper Clone()
-        {
-            return new JSAMObjectWrapper(this);
-        }
-
-        public IJSAMObject ToIJSAMObject()
-        {
-            return Query.IJSAMObject(jObject);
-        }
-
         public Guid Guid
         {
             get
@@ -63,20 +39,18 @@ namespace SAM.Core
             }
         }
 
-        public string GetTypeName()
+        public JSAMObjectWrapper Clone()
         {
-            string fullTypeName = Query.FullTypeName(jObject);
-            if (string.IsNullOrWhiteSpace(fullTypeName))
-            {
-                return null;
-            }
+            return new JSAMObjectWrapper(this);
+        }
 
-            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out string typeName, out string assemblyName))
-            {
-                return null;
-            }
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+                return false;
 
-            return typeName;
+            this.jObject = jObject;
+            return true;
         }
 
         public string GetAssemblyName()
@@ -93,6 +67,32 @@ namespace SAM.Core
             }
 
             return assemblyName;
+        }
+
+        public string GetTypeName()
+        {
+            string fullTypeName = Query.FullTypeName(jObject);
+            if (string.IsNullOrWhiteSpace(fullTypeName))
+            {
+                return null;
+            }
+
+            if (!Query.TryGetTypeNameAndAssemblyName(fullTypeName, out string typeName, out string assemblyName))
+            {
+                return null;
+            }
+
+            return typeName;
+        }
+
+        public IJSAMObject ToIJSAMObject()
+        {
+            return Query.IJSAMObject(jObject);
+        }
+
+        public JObject ToJObject()
+        {
+            return jObject;
         }
     }
 }

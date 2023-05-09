@@ -32,10 +32,17 @@ namespace SAM.Core
             }
         }
 
+        public static implicit operator IntegerId(int id)
+        {
+            return new IntegerId(id);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (jObject == null)
+            {
                 return false;
+            }
 
             if (!base.FromJObject(jObject))
             {
@@ -57,11 +64,6 @@ namespace SAM.Core
             result.Add("Id", id);
 
             return result;
-        }
-
-        public static implicit operator IntegerId(int id)
-        {
-            return new IntegerId(id);
         }
     }
 }

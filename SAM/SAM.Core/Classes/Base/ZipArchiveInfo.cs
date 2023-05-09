@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.IO.Compression;
 
 namespace SAM.Core
@@ -9,11 +9,10 @@ namespace SAM.Core
     {
         public static string EntryName { get; } = string.Format("_{0}", typeof(ZipArchiveInfo).Name);
 
-        HashSet<Guid> guids;
-        
+        private HashSet<Guid> guids;
+
         internal ZipArchiveInfo()
         {
-
         }
 
         internal ZipArchiveInfo(JObject jObject)
@@ -26,6 +25,31 @@ namespace SAM.Core
             guids = new HashSet<Guid>();
             foreach (Guid guid in zipArchiveInfo.guids)
                 guids.Add(guid);
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+                return false;
+
+            if (jObject.ContainsKey("Guids"))
+            {
+                JArray jArray = jObject.Value<JArray>("Guids");
+                if (jArray != null)
+                {
+                    guids = new HashSet<Guid>();
+                    foreach (JToken jToken in jArray)
+                    {
+                        Guid guid;
+                        if (!Guid.TryParse(jToken.Value<string>(), out guid))
+                            continue;
+
+                        guids.Add(guid);
+                    }
+                }
+            }
+
+            return true;
         }
 
         public Guid NewGuid()
@@ -54,37 +78,12 @@ namespace SAM.Core
             return result;
         }
 
-        public bool FromJObject(JObject jObject)
-        {
-            if (jObject == null)
-                return false;
-
-            if(jObject.ContainsKey("Guids"))
-            {
-                JArray jArray = jObject.Value<JArray>("Guids");
-                if(jArray != null)
-                {
-                    guids = new HashSet<Guid>();
-                    foreach (JToken jToken in jArray)
-                    {
-                        Guid guid;
-                        if (!Guid.TryParse(jToken.Value<string>(), out guid))
-                            continue;
-
-                        guids.Add(guid);
-                    }
-                }
-            }
-
-            return true;
-        }
-
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
 
-            if(guids != null)
+            if (guids != null)
             {
                 JArray jArray = new JArray(guids);
                 jObject.Add("Guids", jArray);

@@ -65,7 +65,194 @@ namespace SAM.Core
                 return value;
             }
         }
-        
+
+        public ValueType ValueType
+        {
+            get
+            {
+                return Query.ValueType(Value);
+            }
+        }
+
+        public static implicit operator Tag(double value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(double? value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(Guid value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(Guid? value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(bool value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(bool? value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(DateTime value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(DateTime? value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(SAMObject value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(string value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(Color value)
+        {
+            return new Tag(value);
+        }
+
+        public static implicit operator Tag(Color? value)
+        {
+            return new Tag(value);
+        }
+
+        public static bool operator !=(Tag tag_1, Tag tag_2)
+        {
+            return !(tag_1 == tag_2);
+        }
+
+        public static bool operator ==(Tag tag_1, Tag tag_2)
+        {
+            if ((object)tag_1 == null)
+                return (object)tag_2 == null;
+
+            return tag_1.Equals(tag_2);
+        }
+
+        public override bool Equals(object @object)
+        {
+            if (@object == null)
+            {
+                return false;
+            }
+
+            if (@object is Tag && this == (Tag)@object)
+            {
+                return true;
+            }
+
+            if (value == @object)
+            {
+                return true;
+            }
+
+            return false;
+        }
+
+        public virtual bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+            {
+                return false;
+            }
+
+            if (!jObject.ContainsKey("Value"))
+            {
+                return false;
+            }
+
+            if (!jObject.ContainsKey("ValueType"))
+            {
+                value = jObject.GetValue("Value");
+                return true;
+            }
+
+            ValueType valueType = Query.Enum<ValueType>(jObject.Value<string>("ValueType"));
+            if (valueType == ValueType.Undefined)
+            {
+                value = null;
+                return true;
+            }
+
+            switch (valueType)
+            {
+                case ValueType.Boolean:
+                    value = jObject.Value<bool>("Value");
+                    return true;
+
+                case ValueType.Color:
+                    value = new SAMColor(jObject.Value<JObject>("Value")).ToColor();
+                    return true;
+
+                case ValueType.DateTime:
+                    value = jObject.Value<DateTime>("Value");
+                    return true;
+
+                case ValueType.Double:
+                    value = jObject.Value<double>("Value");
+                    return true;
+
+                case ValueType.Guid:
+                    if (!Enum.TryParse(jObject.Value<string>("Value"), out Guid guid))
+                    {
+                        return false;
+                    }
+                    value = guid;
+                    return true;
+
+                case ValueType.IJSAMObject:
+                    JObject jObject_Temp = jObject.Value<JObject>("Value");
+                    if (jObject_Temp == null)
+                    {
+                        return false;
+                    }
+
+                    value = new JSAMObjectWrapper(jObject_Temp).ToIJSAMObject();
+                    return true;
+
+                case ValueType.Integer:
+                    value = jObject.Value<int>("Value");
+                    return true;
+
+                case ValueType.String:
+                    value = jObject.Value<string>("Value");
+                    return true;
+            }
+
+            return false;
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                if (value == null)
+                {
+                    return -1;
+                }
+
+                return value.GetHashCode();
+            }
+        }
+
         public T GetValue<T>()
         {
             if(value is T)
@@ -114,87 +301,6 @@ namespace SAM.Core
         public void SetValue(Color value)
         {
             this.value = value;
-        }
-
-        public ValueType ValueType
-        {
-            get
-            {
-                return Query.ValueType(Value);
-            }
-        }
-
-        public virtual bool FromJObject(JObject jObject)
-        {
-            if(jObject == null)
-            {
-                return false;
-            }
-
-            if(!jObject.ContainsKey("Value"))
-            {
-                return false;
-            }
-
-            if(!jObject.ContainsKey("ValueType"))
-            {
-                value = jObject.GetValue("Value");
-                return true;
-            }
-
-            ValueType valueType = Query.Enum<ValueType>(jObject.Value<string>("ValueType"));
-            if(valueType == ValueType.Undefined)
-            {
-                value = null;
-                return true;
-            }
-
-            switch(valueType)
-            {
-                case ValueType.Boolean:
-                    value = jObject.Value<bool>("Value");
-                    return true;
-
-                case ValueType.Color:
-                    value = new SAMColor(jObject.Value<JObject>("Value")).ToColor();
-                    return true;
-
-                case ValueType.DateTime:
-                    value = jObject.Value<DateTime>("Value");
-                    return true;
-
-                case ValueType.Double:
-                    value = jObject.Value<double>("Value");
-                    return true;
-
-                case ValueType.Guid:
-                    if(!Enum.TryParse(jObject.Value<string>("Value"), out Guid guid))
-                    {
-                        return false;
-                    }
-                    value = guid;
-                    return true;
-
-                case ValueType.IJSAMObject:
-                    JObject jObject_Temp = jObject.Value<JObject>("Value");
-                    if(jObject_Temp == null)
-                    {
-                        return false;
-                    }
-
-                    value = new JSAMObjectWrapper(jObject_Temp).ToIJSAMObject();
-                    return true;
-
-                case ValueType.Integer:
-                    value = jObject.Value<int>("Value");
-                    return true;
-
-                case ValueType.String:
-                    value = jObject.Value<string>("Value");
-                    return true;
-            }
-
-            return false;
         }
 
         public virtual JObject ToJObject()
@@ -271,112 +377,6 @@ namespace SAM.Core
             }
 
             return jObject;
-        }
-
-        public override int GetHashCode()
-        {
-            unchecked
-            {
-                if(value == null)
-                {
-                    return -1;
-                }
-
-                return value.GetHashCode();
-            }
-        }
-
-        public override bool Equals(object @object)
-        {
-            if(@object == null)
-            {
-                return false;
-            }
-
-            if(@object is Tag && this == (Tag)@object)
-            {
-                return true;
-            }
-
-            if(value == @object)
-            {
-                return true;
-            }
-
-            return false;
-        }
-
-        public static bool operator ==(Tag tag_1, Tag tag_2)
-        {
-            if ((object)tag_1 == null)
-                return (object)tag_2 == null;
-
-            return tag_1.Equals(tag_2);
-        }
-
-        public static bool operator !=(Tag tag_1, Tag tag_2)
-        {
-            return !(tag_1 == tag_2);
-        }
-
-        public static implicit operator Tag(double value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(double? value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(Guid value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(Guid? value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(bool value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(bool? value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(DateTime value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(DateTime? value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(SAMObject value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(string value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(Color value)
-        {
-            return new Tag(value);
-        }
-
-        public static implicit operator Tag(Color? value)
-        {
-            return new Tag(value);
         }
     }
 }

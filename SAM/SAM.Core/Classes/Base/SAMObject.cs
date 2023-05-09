@@ -6,8 +6,8 @@ namespace SAM.Core
 {
     public class SAMObject : ParameterizedSAMObject, ISAMObject
     {
-        private Guid guid;
         protected string name;
+        private Guid guid;
 
         public SAMObject(SAMObject sAMObject)
             : base(sAMObject)
@@ -75,19 +75,19 @@ namespace SAM.Core
             guid = Guid.NewGuid();
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
-
         public Guid Guid
         {
             get
             {
                 return guid;
+            }
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
             }
         }
 
@@ -123,5 +123,7 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public static implicit operator JObject?(SAMObject sAMObject) => sAMObject?.ToJObject();
     }
 }
