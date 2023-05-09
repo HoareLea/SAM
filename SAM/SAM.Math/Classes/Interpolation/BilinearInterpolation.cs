@@ -5,35 +5,47 @@ namespace SAM.Math
 {
 
     /// <summary>
-    /// Bilinear Interpolation of given vlues
+    /// Class to perform Bilinear Interpolation on a set of data.
     /// </summary>
     public class BilinearInterpolation : IJSAMObject
     {
         /// <summary>
-        /// row values (horizontal values)
+        /// Array of row (horizontal) values.
         /// </summary>
         private double[] xArray;
 
         /// <summary>
-        /// column values (vertical values)
+        /// Array of column (vertical) values.
         /// </summary>
         private double[] yArray;
 
         /// <summary>
-        /// Values in [y, x] format
+        /// The data matrix for interpolation, in [y, x] format.
         /// </summary>
         private double[,] values;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the BilinearInterpolation class using a JSON object.
+        /// </summary>
+        /// <param name="jObject">The JSON object containing the data.</param>
         public BilinearInterpolation(JObject jObject)
         {
             FromJObject(jObject);
         }
-        
+
+        /// <summary>
+        /// Initializes a new instance of the BilinearInterpolation class using a 2D data array.
+        /// </summary>
+        /// <param name="data">The 2D data array.</param>
         public BilinearInterpolation(double[,] data)
         {
             Load(data);
         }
 
+        /// <summary>
+        /// Copy constructor. Initializes a new instance of the BilinearInterpolation class by copying an existing instance.
+        /// </summary>
+        /// <param name="bilinearInterpolation">The instance to copy.</param>
         public BilinearInterpolation(BilinearInterpolation bilinearInterpolation)
         {
             if (bilinearInterpolation != null)
@@ -55,6 +67,9 @@ namespace SAM.Math
             }
         }
 
+        /// <summary>
+        /// Default constructor. Initializes a new instance of the BilinearInterpolation class.
+        /// </summary>
         public BilinearInterpolation()
         {
 
@@ -167,6 +182,11 @@ namespace SAM.Math
             return result;
         }
 
+        /// <summary>
+        /// Populates the properties of this instance from a JSON object.
+        /// </summary>
+        /// <param name="jObject">The JSON object.</param>
+        /// <returns>true if the operation was successful; otherwise, false.</returns>
         public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -201,6 +221,10 @@ namespace SAM.Math
             return true;
         }
 
+        /// <summary>
+        /// Converts the properties of this instance to a JSON object.
+        /// </summary>
+        /// <returns>The JSON object.</returns>
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();

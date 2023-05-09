@@ -8,17 +8,26 @@ namespace SAM.Math
 {
 
     /// <summary>
-    /// Equation in format a(n)*x^(n) + a(n-1)*x^(n-1) + a(n-2)*x^(n-2) + [...] + a(1)*x +a(0) = 0
+    /// Represents a polynomial equation of the form a(n)*x^(n) + a(n-1)*x^(n-1) + a(n-2)*x^(n-2) + [...] + a(1)*x + a(0) = 0.
     /// </summary>
     public class PolynomialEquation : IEquation
     {
         private double[] coefficients;
-        
+
+        /// <summary>
+        /// Initializes a new instance of the PolynomialEquation class using a JObject.
+        /// </summary>
+        /// <param name="jObject">The JObject containing the polynomial equation data.</param>
         public PolynomialEquation(JObject jObject)
         {
             FromJObject(jObject);
         }
-        
+
+
+        /// <summary>
+        /// Initializes a new instance of the PolynomialEquation class using coefficients.
+        /// </summary>
+        /// <param name="coefficients">The coefficients of the polynomial equation.</param>
         public PolynomialEquation(IEnumerable<double> coefficients)
         {
             if (coefficients == null)
@@ -31,6 +40,10 @@ namespace SAM.Math
                 this.coefficients[i] = coefficients.ElementAt(i);
         }
 
+        /// <summary>
+        /// Initializes a new instance of the PolynomialEquation class using another PolynomialEquation object.
+        /// </summary>
+        /// <param name="polynomialEquation">The PolynomialEquation to copy from.</param>
         public PolynomialEquation(PolynomialEquation polynomialEquation)
         {
             if (polynomialEquation == null || polynomialEquation.coefficients == null)
@@ -43,6 +56,11 @@ namespace SAM.Math
                 coefficients[i] = polynomialEquation.coefficients[i];
         }
 
+        /// <summary>
+        /// Evaluates the polynomial equation for a given x value.
+        /// </summary>
+        /// <param name="value">The x value to evaluate the polynomial equation for.</param>
+        /// <returns>The result of the polynomial equation.</returns>
         public double Evaluate(double value)
         {
             int count = coefficients.Length;
@@ -56,6 +74,11 @@ namespace SAM.Math
             return result;
         }
 
+        /// <summary>
+        /// Evaluates the polynomial equation for a given set of x values.
+        /// </summary>
+        /// <param name="values">The x values to evaluate the polynomial equation for.</param>
+        /// <returns>The results of the polynomial equation.</returns>
         public List<double> Evaluate(IEnumerable<double> values)
         {
             if (values == null)
@@ -87,6 +110,9 @@ namespace SAM.Math
             return result;
         }
 
+        /// <summary>
+        /// Gets the coefficients of the polynomial equation.
+        /// </summary>
         public List<double> Coefficients
         {
             get
@@ -102,6 +128,11 @@ namespace SAM.Math
             }
         }
 
+        /// <summary>
+        /// Updates the PolynomialEquation object using a JObject.
+        /// </summary>
+        /// <param name="jObject">The JObject containing the polynomial equation data.</param>
+        /// <returns>True if the update was successful, false otherwise.</returns>
         public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -130,6 +161,10 @@ namespace SAM.Math
             return true;
         }
 
+        /// <summary>
+        /// Converts the PolynomialEquation object to a JObject.
+        /// </summary>
+        /// <returns>The JObject representation of the PolynomialEquation object.</returns>
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -147,6 +182,9 @@ namespace SAM.Math
             return jObject;
         }
 
+        /// <summary>
+        /// Gets the degree of the polynomial equation.
+        /// </summary>
         public int Degree
         {
             get
@@ -158,6 +196,10 @@ namespace SAM.Math
             }
         }
 
+        /// <summary>
+        /// Implicitly converts a LinearEquation to a PolynomialEquation.
+        /// </summary>
+        /// <param name="linearEquation">The LinearEquation to convert.</param>
         public static implicit operator PolynomialEquation(LinearEquation linearEquation)
         {
             if (linearEquation == null)

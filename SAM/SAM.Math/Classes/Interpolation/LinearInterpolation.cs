@@ -234,5 +234,6 @@ namespace SAM.Math
 
             return jObject;
         }
+
     }
 }
