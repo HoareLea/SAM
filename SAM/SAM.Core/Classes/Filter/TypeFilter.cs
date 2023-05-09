@@ -60,6 +60,7 @@ namespace SAM.Core
 
             return result;
         }
+
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
