@@ -123,7 +123,5 @@ namespace SAM.Core
 
             return jObject;
         }
-
-        public static implicit operator JObject?(SAMObject sAMObject) => sAMObject?.ToJObject();
     }
 }
