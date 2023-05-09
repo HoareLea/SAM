@@ -902,6 +902,7 @@ namespace SAM.Analytical
                 typeof(IAnalyticalEquipment).IsAssignableFrom(type) ||
                 typeof(DesignDay).IsAssignableFrom(type);
         }
+
         public bool Shade(Panel panel)
         {
             if (panel == null)
@@ -913,6 +914,7 @@ namespace SAM.Analytical
             List<Space> spaces = GetRelatedObjects<Space>(panel);
             return spaces == null || spaces.Count == 0;
         }
+
         public void Transform(Transform3D transform3D)
         {
             List<Panel> panels = GetPanels();
@@ -937,6 +939,7 @@ namespace SAM.Analytical
                 }
             }
         }
+
         public override bool TryGetObject<T>(int index, T @object)
         {
             if(base.TryGetObject(index, @object))

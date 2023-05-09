@@ -580,12 +580,12 @@ namespace SAM.Analytical
             return jObject;
         }
 
-        public bool AddAperture(Aperture aperture)
+        public bool AddAperture(Aperture aperture, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
             if (aperture == null)
                 return false;
 
-            if (!Query.IsValid(this, aperture))
+            if (!Query.IsValid(this, aperture, tolerance_Angle, tolerance_Distance))
                 return false;
 
             if (apertures == null)
