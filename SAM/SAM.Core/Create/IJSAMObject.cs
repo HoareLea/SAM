@@ -9,12 +9,16 @@ namespace SAM.Core
         public static IJSAMObject IJSAMObject(this JObject jObject)
         {
             if (jObject == null)
+            {
                 return null;
+            }
 
             JSAMObjectWrapper jSAMObjectWrapper = new JSAMObjectWrapper(jObject);
             IJSAMObject jSAMObject = jSAMObjectWrapper.ToIJSAMObject();
             if (jSAMObject == null)
+            {
                 return jSAMObjectWrapper;
+            }
 
             return jSAMObject;
         }
@@ -23,10 +27,14 @@ namespace SAM.Core
         {
             IJSAMObject jSAMObject = IJSAMObject(jObject);
             if (jSAMObject == null)
+            {
                 return default;
+            }
 
             if (jSAMObject is T)
+            {
                 return (T)jSAMObject;
+            }
 
             return default;
         }
@@ -34,7 +42,9 @@ namespace SAM.Core
         public static T IJSAMObject<T>(this string json) where T : IJSAMObject
         {
             if (string.IsNullOrWhiteSpace(json))
+            {
                 return default;
+            }
 
             JToken jToken = JToken.Parse(json);
 
@@ -43,14 +53,18 @@ namespace SAM.Core
             {
                 JArray jArray = jToken as JArray;
                 if (jArray == null || jArray.Count == 0)
+                {
                     return default;
+                }
 
                 jObject = jArray[0] as JObject;
             }
 
             if (jObject == null)
+            {
                 return default;
-                
+            }
+
             return IJSAMObject<T>(jObject);
         }
 
@@ -62,11 +76,15 @@ namespace SAM.Core
         public static IJSAMObject IJSAMObject(this ZipArchiveEntry zipArchiveEntry)
         {
             if (zipArchiveEntry == null)
+            {
                 return null;
+            }
 
             IJSAMObject result = null;
             using (StreamReader streamReader = new StreamReader(zipArchiveEntry.Open()))
+            {
                 result = IJSAMObject(streamReader.ReadToEnd());
+            }
 
             return result;
         }
@@ -75,7 +93,9 @@ namespace SAM.Core
         {
             IJSAMObject jSAMObject = IJSAMObject(zipArchiveEntry);
             if (jSAMObject is T)
+            {
                 return (T)jSAMObject;
+            }
 
             return default;
         }
