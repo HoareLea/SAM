@@ -5,10 +5,6 @@ namespace SAM.Core
 {
     public class LogicalFilter : Filter
     {
-        public FilterLogicalOperator FilterLogicalOperator { get; set; }
-
-        public List<IFilter> Filters { get; set; }
-
         public LogicalFilter(JObject jObject)
             : base(jObject)
         {
@@ -16,9 +12,9 @@ namespace SAM.Core
         }
 
         public LogicalFilter(LogicalFilter logicalFilter)
-            :base(logicalFilter)
+            : base(logicalFilter)
         {
-            if(logicalFilter != null)
+            if (logicalFilter != null)
             {
                 FilterLogicalOperator = logicalFilter.FilterLogicalOperator;
                 Filters = logicalFilter.Filters?.ConvertAll(x => Query.Clone(x));
@@ -39,9 +35,13 @@ namespace SAM.Core
             Filters = filters == null ? null : new List<IFilter>(filters);
         }
 
+        public FilterLogicalOperator FilterLogicalOperator { get; set; }
+
+        public List<IFilter> Filters { get; set; }
+
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
@@ -54,13 +54,13 @@ namespace SAM.Core
             if (jObject.ContainsKey("Filters"))
             {
                 JArray jArray = jObject.Value<JArray>("Filters");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     Filters = new List<IFilter>();
-                    foreach(JObject jObject_Temp in jArray)
+                    foreach (JObject jObject_Temp in jArray)
                     {
                         IFilter filter = Query.IJSAMObject(jObject_Temp) as IFilter;
-                        if(filter != null)
+                        if (filter != null)
                         {
                             Filters.Add(filter);
                         }
@@ -71,38 +71,9 @@ namespace SAM.Core
             return true;
         }
 
-        public override JObject ToJObject()
-        {
-            JObject result = base.ToJObject();
-            if(result == null)
-            {
-                return null;
-            }
-
-            if(Filters != null)
-            {
-                JArray jArray = new JArray();
-                foreach(IFilter filter in Filters)
-                {
-                    if(filter == null)
-                    {
-                        continue;
-                    }
-
-                    jArray.Add(filter.ToJObject());
-                }
-
-                result.Add("Filters", jArray);
-            }
-
-            result.Add("FilterLogicalOperator", FilterLogicalOperator.ToString());
-
-            return result;
-        }
-
         public override bool IsValid(IJSAMObject jSAMObject)
         {
-            if(FilterLogicalOperator == FilterLogicalOperator.Undefined)
+            if (FilterLogicalOperator == FilterLogicalOperator.Undefined)
             {
                 return false;
             }
@@ -113,7 +84,7 @@ namespace SAM.Core
             }
 
             bool result = false;
-            switch(FilterLogicalOperator)
+            switch (FilterLogicalOperator)
             {
                 case FilterLogicalOperator.Or:
                     result = Filters.Find(x => x.IsValid(jSAMObject)) != null;
@@ -128,6 +99,35 @@ namespace SAM.Core
             {
                 result = !result;
             }
+
+            return result;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject result = base.ToJObject();
+            if (result == null)
+            {
+                return null;
+            }
+
+            if (Filters != null)
+            {
+                JArray jArray = new JArray();
+                foreach (IFilter filter in Filters)
+                {
+                    if (filter == null)
+                    {
+                        continue;
+                    }
+
+                    jArray.Add(filter.ToJObject());
+                }
+
+                result.Add("Filters", jArray);
+            }
+
+            result.Add("FilterLogicalOperator", FilterLogicalOperator.ToString());
 
             return result;
         }

@@ -7,14 +7,9 @@ namespace SAM.Core
     {
         private Enum @enum;
 
-        public string Name { get; set; }
-
-        public object Value { get; set; }
-
         public ParameterFilter(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
-
         }
 
         public ParameterFilter(string name, string value, TextComparisonType textComparisonType)
@@ -31,82 +26,7 @@ namespace SAM.Core
             @enum = numberComparisonType;
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
-        {
-            if(!Query.TryGetValue(jSAMObject, Name, out object value))
-            {
-                return false;
-            }
-
-            bool result = false;
-
-            TextComparisonType? textComparisonType = TextComparisonType;
-            if(textComparisonType == null || !textComparisonType.HasValue)
-            {
-                NumberComparisonType? numberComparisonType = NumberComparisonType;
-                if (numberComparisonType == null || !numberComparisonType.HasValue)
-                {
-                    return false;
-                }
-
-                if (!Query.TryConvert(value, out double double_1))
-                {
-                    return false;
-                }
-
-                if (!Query.TryConvert(Value, out double double_2))
-                {
-                    return false;
-                }
-
-                result = Query.Compare(double_1, double_2, numberComparisonType.Value);
-
-            }
-            else
-            {
-                if (!Query.TryConvert(Value, out string string_1))
-                {
-                    return false;
-                }
-
-                if (!Query.TryConvert(value, out string string_2))
-                {
-                    return false;
-                }
-
-                result = Query.Compare(string_1, string_2, textComparisonType.Value);
-            }
-
-            if (Inverted)
-            {
-                result = !result;
-            }
-
-            return result;
-        }
-
-        public TextComparisonType? TextComparisonType
-        {
-            get
-            {
-                if(@enum is TextComparisonType)
-                {
-                    return (TextComparisonType)@enum;
-                }
-
-                return null;
-            }
-
-            set
-            {
-                if(value == null || !value.HasValue)
-                {
-                    return;
-                }
-
-                @enum = value.Value;
-            }
-        }
+        public string Name { get; set; }
 
         public NumberComparisonType? NumberComparisonType
         {
@@ -131,19 +51,43 @@ namespace SAM.Core
             }
         }
 
+        public TextComparisonType? TextComparisonType
+        {
+            get
+            {
+                if (@enum is TextComparisonType)
+                {
+                    return (TextComparisonType)@enum;
+                }
+
+                return null;
+            }
+
+            set
+            {
+                if (value == null || !value.HasValue)
+                {
+                    return;
+                }
+
+                @enum = value.Value;
+            }
+        }
+
+        public object Value { get; set; }
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Name"))
+            if (jObject.ContainsKey("Name"))
             {
                 Name = jObject.Value<string>("Name");
             }
 
-            if(jObject.ContainsKey("Value"))
+            if (jObject.ContainsKey("Value"))
             {
                 JToken jToken = jObject.GetValue("Value");
                 if (jToken != null)
@@ -186,13 +130,13 @@ namespace SAM.Core
                 }
             }
 
-            if(jObject.ContainsKey("Enum"))
+            if (jObject.ContainsKey("Enum"))
             {
                 string text = jObject.Value<string>("Enum");
-                if(!string.IsNullOrWhiteSpace(text))
+                if (!string.IsNullOrWhiteSpace(text))
                 {
                     Enum enum_Text = null;
-                    if(Query.TryGetEnum(text, out TextComparisonType textComparisonType))
+                    if (Query.TryGetEnum(text, out TextComparisonType textComparisonType))
                     {
                         enum_Text = textComparisonType;
                     }
@@ -203,11 +147,11 @@ namespace SAM.Core
                         enum_Number = numberComparisonType;
                     }
 
-                    if(enum_Text != null || enum_Number != null)
+                    if (enum_Text != null || enum_Number != null)
                     {
-                        if(enum_Text != null && enum_Number != null)
+                        if (enum_Text != null && enum_Number != null)
                         {
-                            if(Query.IsNumeric(Value))
+                            if (Query.IsNumeric(Value))
                             {
                                 @enum = enum_Number;
                             }
@@ -216,7 +160,7 @@ namespace SAM.Core
                                 @enum = enum_Text;
                             }
                         }
-                        else if(enum_Text != null)
+                        else if (enum_Text != null)
                         {
                             @enum = enum_Text;
                         }
@@ -224,7 +168,6 @@ namespace SAM.Core
                         {
                             @enum = enum_Number;
                         }
-
                     }
                 }
             }
@@ -232,25 +175,77 @@ namespace SAM.Core
             return true;
         }
 
+        public override bool IsValid(IJSAMObject jSAMObject)
+        {
+            if (!Query.TryGetValue(jSAMObject, Name, out object value))
+            {
+                return false;
+            }
+
+            bool result = false;
+
+            TextComparisonType? textComparisonType = TextComparisonType;
+            if (textComparisonType == null || !textComparisonType.HasValue)
+            {
+                NumberComparisonType? numberComparisonType = NumberComparisonType;
+                if (numberComparisonType == null || !numberComparisonType.HasValue)
+                {
+                    return false;
+                }
+
+                if (!Query.TryConvert(value, out double double_1))
+                {
+                    return false;
+                }
+
+                if (!Query.TryConvert(Value, out double double_2))
+                {
+                    return false;
+                }
+
+                result = Query.Compare(double_1, double_2, numberComparisonType.Value);
+            }
+            else
+            {
+                if (!Query.TryConvert(Value, out string string_1))
+                {
+                    return false;
+                }
+
+                if (!Query.TryConvert(value, out string string_2))
+                {
+                    return false;
+                }
+
+                result = Query.Compare(string_1, string_2, textComparisonType.Value);
+            }
+
+            if (Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
+        }
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }
 
-            if(Name != null)
+            if (Name != null)
             {
                 result.Add("Name", Name);
             }
 
-            if(Value != null)
+            if (Value != null)
             {
                 result.Add("Value", Value as dynamic);
             }
 
-            if(@enum != null)
+            if (@enum != null)
             {
                 result.Add("Enum", @enum.ToString());
             }

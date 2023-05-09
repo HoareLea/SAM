@@ -5,19 +5,19 @@ namespace SAM.Core
     public class GuidFilter : TextFilter
     {
         public GuidFilter(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public GuidFilter(GuidFilter guidFilter)
-            :base(guidFilter)
+            : base(guidFilter)
         {
 
         }
 
         public GuidFilter(TextComparisonType textComparisonType, string value)
-            :base(textComparisonType, value)
+            : base(textComparisonType, value)
         {
 
         }

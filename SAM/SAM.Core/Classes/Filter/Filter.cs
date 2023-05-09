@@ -17,7 +17,7 @@ namespace SAM.Core
 
         public Filter(Filter filter)
         {
-            if(filter != null)
+            if (filter != null)
             {
                 Inverted = filter.Inverted;
             }
@@ -28,21 +28,21 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
-        public abstract bool IsValid(IJSAMObject jSAMObject);
-
         public virtual bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Inverted"))
+            if (jObject.ContainsKey("Inverted"))
             {
                 Inverted = jObject.Value<bool>("Inverted");
             }
             return true;
         }
+
+        public abstract bool IsValid(IJSAMObject jSAMObject);
 
         public virtual JObject ToJObject()
         {

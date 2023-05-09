@@ -2,14 +2,11 @@
 
 namespace SAM.Core
 {
-    public abstract class RelationFilter<T> : Filter, IRelationFilter where T :IJSAMObject
+    public abstract class RelationFilter<T> : Filter, IRelationFilter where T : IJSAMObject
     {
-        public IFilter Filter { get; set; }
-
         public RelationFilter(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public RelationFilter(IFilter filter)
@@ -18,45 +15,24 @@ namespace SAM.Core
         }
 
         public RelationFilter(RelationFilter<T> relationFilter)
-            :base(relationFilter)
+            : base(relationFilter)
         {
-            if(relationFilter != null)
+            if (relationFilter != null)
             {
                 Filter = relationFilter.Filter;
             }
         }
 
-        public override bool IsValid(IJSAMObject jSAMObject)
-        {
-            if(jSAMObject == null)
-            {
-                return false;
-            }
-
-            if(Filter == null)
-            {
-                return true;
-            }
-
-            bool result = Filter.IsValid(GetRelative(jSAMObject));
-            if(Inverted)
-            {
-                result = !result;
-            }
-
-            return result;
-        }
-
-        public abstract T GetRelative(IJSAMObject jSAMObject);
+        public IFilter Filter { get; set; }
 
         public override bool FromJObject(JObject jObject)
         {
-            if(! base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Filter"))
+            if (jObject.ContainsKey("Filter"))
             {
                 Filter = Query.IJSAMObject(jObject.Value<JObject>("Filter")) as IFilter;
             }
@@ -64,10 +40,32 @@ namespace SAM.Core
             return true;
         }
 
+        public abstract T GetRelative(IJSAMObject jSAMObject);
+
+        public override bool IsValid(IJSAMObject jSAMObject)
+        {
+            if (jSAMObject == null)
+            {
+                return false;
+            }
+
+            if (Filter == null)
+            {
+                return true;
+            }
+
+            bool result = Filter.IsValid(GetRelative(jSAMObject));
+            if (Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
+        }
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }
@@ -79,6 +77,5 @@ namespace SAM.Core
 
             return result;
         }
-
     }
 }

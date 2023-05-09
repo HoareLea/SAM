@@ -4,20 +4,15 @@ namespace SAM.Core
 {
     public abstract class NumberFilter : Filter
     {
-        public NumberComparisonType NumberComparisonType { get; set; } = NumberComparisonType.Equals;
-        
-        public double Value { get; set; }
-
         public NumberFilter(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
-
         }
 
         public NumberFilter(NumberFilter numberFilter)
-            :base(numberFilter)
+            : base(numberFilter)
         {
-            if(numberFilter != null)
+            if (numberFilter != null)
             {
                 NumberComparisonType = numberFilter.NumberComparisonType;
                 Value = numberFilter.Value;
@@ -30,7 +25,29 @@ namespace SAM.Core
             Value = value;
         }
 
-        public abstract bool TryGetNumber(IJSAMObject jSAMObject, out double number);
+        public NumberComparisonType NumberComparisonType { get; set; } = NumberComparisonType.Equals;
+
+        public double Value { get; set; }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+            {
+                return false;
+            }
+
+            if (jObject.ContainsKey("NumberComparisonType"))
+            {
+                NumberComparisonType = Query.Enum<NumberComparisonType>(jObject.Value<string>("NumberComparisonType"));
+            }
+
+            if (jObject.ContainsKey("Value"))
+            {
+                Value = jObject.Value<double>("Value");
+            }
+
+            return true;
+        }
 
         public override bool IsValid(IJSAMObject jSAMObject)
         {
@@ -48,42 +65,24 @@ namespace SAM.Core
             return result;
         }
 
-        public override bool FromJObject(JObject jObject)
-        {
-            if(!base.FromJObject(jObject))
-            {
-                return false;
-            }
-
-            if(jObject.ContainsKey("NumberComparisonType"))
-            {
-                NumberComparisonType = Query.Enum<NumberComparisonType>(jObject.Value<string>("NumberComparisonType"));
-            }
-
-            if (jObject.ContainsKey("Value"))
-            {
-                Value = jObject.Value<double>("Value");
-            }
-
-            return true;
-        }
-
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }
 
             result.Add("NumberComparisonType", NumberComparisonType.ToString());
 
-            if(!double.IsNaN(Value))
+            if (!double.IsNaN(Value))
             {
                 result.Add("Value", Value);
             }
 
             return result;
         }
+
+        public abstract bool TryGetNumber(IJSAMObject jSAMObject, out double number);
     }
 }

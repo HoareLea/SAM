@@ -7,19 +7,16 @@ namespace SAM.Core
         public NameFilter(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public NameFilter(NameFilter nameFilter)
-            :base(nameFilter)
+            : base(nameFilter)
         {
-
         }
 
         public NameFilter(TextComparisonType textComparisonType, string value)
             : base(textComparisonType, value)
         {
-
         }
 
         public override bool TryGetText(IJSAMObject jSAMObject, out string text)
