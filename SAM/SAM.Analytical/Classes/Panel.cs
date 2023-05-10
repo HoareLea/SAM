@@ -58,16 +58,6 @@ namespace SAM.Analytical
                 apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
         }
 
-        internal Panel(string name, Panel panel, Construction construction)
-            : base(panel, construction)
-        {
-            planarBoundary3D = panel == null ? null : new PlanarBoundary3D(panel.planarBoundary3D);
-            panelType = panel == null ? PanelType.Undefined : panel.panelType;
-
-            if (panel?.apertures != null)
-                apertures = new List<Aperture>(panel.apertures.ConvertAll(x => new Aperture(x)));
-        }
-
         /// <summary>
         /// Creates new Panles by given Panel and new PanelType
         /// </summary>

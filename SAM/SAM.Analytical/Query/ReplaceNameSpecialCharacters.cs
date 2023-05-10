@@ -49,7 +49,7 @@
                 return panel;
 
 
-            return new Panel(name, panel, construction_New);
+            return new Panel(panel, construction_New);
         }
 
         public static Construction ReplaceNameSpecialCharacters(this Construction construction, string language)
