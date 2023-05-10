@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalAddAperturesByAperture()
           : base("SAMAnalytical.AddAperturesByAperture", "SAMAnalytical.AddAperturesByAperture",
-              "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
+              "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model. Component does not copy instance parameters of Aperture!",
               "SAM", "Analytical")
         {
         }
