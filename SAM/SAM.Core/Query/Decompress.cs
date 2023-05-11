@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -35,6 +36,22 @@ namespace SAM.Core
 
                 return Encoding.UTF8.GetString(buffer);
             }
+        }
+
+        public static List<T> Decompress<T>(this string @string) where T : IJSAMObject
+        {
+            if(string.IsNullOrWhiteSpace(@string))
+            {
+                return null;
+            }
+
+            string string_Decompress = Decompress(@string);
+            if (string.IsNullOrWhiteSpace(@string))
+            {
+                return null;
+            }
+
+            return SAM.Core.Convert.ToSAM<T>(string_Decompress);
         }
     }
 }

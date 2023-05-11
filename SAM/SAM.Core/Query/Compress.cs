@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Text;
@@ -35,6 +36,28 @@ namespace SAM.Core
             Buffer.BlockCopy(compressedData, 0, gZipBuffer, 4, compressedData.Length);
             Buffer.BlockCopy(BitConverter.GetBytes(buffer.Length), 0, gZipBuffer, 0, 4);
             return System.Convert.ToBase64String(gZipBuffer);
+        }
+
+        public static string Compress(this IJSAMObject jSAMObject)
+        {
+            string @string = jSAMObject?.ToJObject()?.ToString();
+            if(string.IsNullOrEmpty(@string))
+            {
+                return @string;
+            }
+
+            return Compress(@string);
+        }
+
+        public static string Compress<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject 
+        {
+            string json = SAM.Core.Convert.ToString(jSAMObjects);
+            if(string.IsNullOrEmpty(json))
+            {
+                return json;
+            }
+
+            return Compress(json);
         }
     }
 }

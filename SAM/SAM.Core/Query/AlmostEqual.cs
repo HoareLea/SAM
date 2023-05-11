@@ -10,10 +10,14 @@ namespace SAM.Core
             bool isNaN_2 = double.IsNaN(value_2);
 
             if (isNaN_1 && isNaN_2)
+            {
                 return true;
+            }
 
             if (isNaN_1 || isNaN_2)
+            {
                 return false;
+            }
 
             return Math.Abs(value_1 - value_2) <= tolerance;
         }
