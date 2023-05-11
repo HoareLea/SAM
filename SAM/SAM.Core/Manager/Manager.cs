@@ -324,5 +324,10 @@ namespace SAM.Core
 
             return parameterSet.Add(name, value as dynamic);
         }
+
+        ~Manager()
+        {
+            Write();
+        }
     }
 }
