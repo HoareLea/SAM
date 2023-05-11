@@ -26,6 +26,14 @@ namespace SAM.Architectural
             FromJObject(jObject);
         }
 
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+
         public double Thickness
         {
             get
@@ -33,13 +41,25 @@ namespace SAM.Architectural
                 return thickness;
             }
         }
-
-        public string Name
+        public static bool operator !=(MaterialLayer materialLayer_1, MaterialLayer materialLayer_2)
         {
-            get
+            return materialLayer_1?.name != materialLayer_2?.name || materialLayer_1?.thickness != materialLayer_2?.thickness;
+        }
+
+        public static bool operator ==(MaterialLayer materialLayer_1, MaterialLayer materialLayer_2)
+        {
+            return materialLayer_1?.name == materialLayer_2?.name && materialLayer_1?.thickness == materialLayer_2?.thickness;
+        }
+
+        public override bool Equals(object obj)
+        {
+            MaterialLayer materialLayer = obj as MaterialLayer;
+            if (materialLayer == null)
             {
-                return name;
+                return false;
             }
+
+            return materialLayer.name == name && materialLayer.thickness == thickness;
         }
 
         public virtual bool FromJObject(JObject jObject)
@@ -56,6 +76,11 @@ namespace SAM.Architectural
             return true;
         }
 
+        public override int GetHashCode()
+        {
+            return Tuple.Create(name, thickness).GetHashCode();
+        }
+
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
@@ -68,32 +93,6 @@ namespace SAM.Architectural
                 jObject.Add("Thickness", thickness);
 
             return jObject;
-        }
-
-        public override int GetHashCode()
-        {
-            return Tuple.Create(name, thickness).GetHashCode();
-        }
-
-        public override bool Equals(object obj)
-        {
-            MaterialLayer materialLayer = obj as MaterialLayer;
-            if(materialLayer == null)
-            {
-                return false;
-            }
-
-            return materialLayer.name == name && materialLayer.thickness == thickness;
-        }
-
-        public static bool operator ==(MaterialLayer materialLayer_1, MaterialLayer materialLayer_2)
-        {
-            return materialLayer_1?.name == materialLayer_2?.name && materialLayer_1?.thickness == materialLayer_2?.thickness;
-        }
-
-        public static bool operator !=(MaterialLayer materialLayer_1, MaterialLayer materialLayer_2)
-        {
-            return materialLayer_1?.name != materialLayer_2?.name || materialLayer_1?.thickness != materialLayer_2?.thickness;
         }
     }
 }

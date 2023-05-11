@@ -11,19 +11,16 @@ namespace SAM.Architectural
         public Terrain()
             : base()
         {
-
         }
 
         public Terrain(Terrain terrain)
             : base(terrain)
         {
-
         }
 
         public Terrain(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public abstract bool Below(Face3D face3D, double tolerance = Core.Tolerance.Distance);
@@ -71,6 +68,5 @@ namespace SAM.Architectural
 
             return jObject;
         }
-
     }
 }

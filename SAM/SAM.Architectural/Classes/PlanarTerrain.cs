@@ -17,7 +17,6 @@ namespace SAM.Architectural
         public PlanarTerrain(JObject jObject)
             : base(jObject)
         {
-
         }
 
         public PlanarTerrain(Plane plane)
@@ -28,7 +27,7 @@ namespace SAM.Architectural
 
         public override bool Below(Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(face3D == null)
+            if (face3D == null)
             {
                 return false;
             }
@@ -43,7 +42,7 @@ namespace SAM.Architectural
                 return false;
             }
 
-            if(plane != null)
+            if (plane != null)
             {
                 jObject.Add("Plane", plane.ToJObject());
             }
@@ -65,13 +64,12 @@ namespace SAM.Architectural
                 return jObject;
             }
 
-            if(jObject.ContainsKey("Plane"))
+            if (jObject.ContainsKey("Plane"))
             {
                 plane = new Plane(jObject.Value<JObject>("Plane"));
             }
 
             return jObject;
         }
-
     }
 }
