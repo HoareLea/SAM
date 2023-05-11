@@ -8,7 +8,7 @@ namespace SAM.Analytical
     {
         [ParameterProperties("Transparent", "Transparent"), ParameterValue(Core.ParameterType.Boolean)] Transparent,
         [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
-        [ParameterProperties("Thermal Transmittance", "Thermal Transmittance (U-Value) [W/m^2*K]"), DoubleParameterValue()] ThermalTransmittance,
+        [ParameterProperties("UValue", "Thermal Transmittance (U-Value) [W/m^2*K]"), DoubleParameterValue()] ThermalTransmittance,
         [ParameterProperties("Light Transmittance", "Light Transmittance [0-1]"), DoubleParameterValue(0, 1)] LightTransmittance,
         [ParameterProperties("Light Reflectance", "Light Reflectance [0-1]"), DoubleParameterValue(0, 1)] LightReflectance,
         [ParameterProperties("Direct Solar Energy Transmittance", "Direct Solar Energy Transmittance [0-1]"), DoubleParameterValue(0, 1)] DirectSolarEnergyTransmittance,
