@@ -422,7 +422,7 @@ namespace SAM.Geometry
             return Find(point) != null;
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
             {
@@ -469,7 +469,7 @@ namespace SAM.Geometry
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject result = new JObject();
             result.Add("_type", Core.Query.FullTypeName(this));
