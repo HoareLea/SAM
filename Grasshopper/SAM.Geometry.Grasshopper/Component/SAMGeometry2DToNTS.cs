@@ -9,6 +9,10 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
+    /// <summary>
+    /// The SAMGeometry2DToNTS class is a component that converts SAM 2D geometries to NetTopologySuite (NTS) geometries.
+    /// It inherits from the GH_SAMComponent base class.
+    /// </summary>
     public class SAMGeometry2DToNTS : GH_SAMComponent
     {
         /// <summary>
@@ -19,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,7 +34,7 @@ namespace SAM.Geometry.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMGeometry2DToNTS()
-          : base("SAMGeometry2D.ToNetTopologySuite", "SAMGeometry2D.ToNetTopologySuite",
+          : base("SAMGeometry2D.ToNTS", "SAMGeometry2D.ToNTS",
               "SAMGeometry To NetTopologySuite",
               "SAM", "Geometry")
         {
@@ -49,9 +53,9 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("NTSGeometries", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("Text", "Text", "Text", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("nTSGeometries", "nTSGeometries", "NTS Geometries", GH_ParamAccess.list);
+            outputParamManager.AddGenericParameter("nTS Text", "nTS Text", "Text", GH_ParamAccess.list);
+            outputParamManager.AddBooleanParameter("successful", "successful", "Correctly imported?", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -109,7 +109,7 @@ namespace SAM.Geometry.Spatial
             ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
             if (segmentable3D == null)
             {
-                throw new System.NotImplementedException();
+                throw new NotImplementedException();
             }
 
             return InRange(boundingBox3D, segmentable3D, tolerance);

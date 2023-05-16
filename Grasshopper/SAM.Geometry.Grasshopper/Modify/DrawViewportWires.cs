@@ -1,32 +1,54 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
+    /// <summary>
+    /// Provides methods to modify geometric objects.
+    /// </summary>
     public static partial class Modify
     {
+        /// <summary>
+        /// Draws viewport wires for the specified SAM geometry object.
+        /// </summary>
+        /// <param name="sAMGeomery">The SAM geometry to draw.</param>
+        /// <param name="previewWireArgs">The arguments for the preview wire.</param>
+        /// <param name="color">The color of the wire.</param>
         public static void DrawViewportWires(this ISAMGeometry sAMGeomery, GH_PreviewWireArgs previewWireArgs, System.Drawing.Color color)
         {
-            if(sAMGeomery == null || previewWireArgs == null)
+            if (sAMGeomery == null || previewWireArgs == null)
             {
                 return;
             }
 
             //TODO: Display Spatial.Surface as Rhino.Geometry.Surface
 
-            List<Spatial.ICurve3D> curve3Ds = null;
-            if (sAMGeomery is Spatial.Face3D)
+            List<ICurve3D> curve3Ds = null;
+            if (sAMGeomery is Face3D)
             {
-                curve3Ds = new List<Spatial.ICurve3D>();
+                curve3Ds = new List<ICurve3D>();
 
-                foreach (Spatial.IClosedPlanar3D closedPlanar3D in ((Spatial.Face3D)sAMGeomery).GetEdge3Ds())
-                    if (closedPlanar3D is Spatial.ICurvable3D)
-                        curve3Ds.AddRange(((Spatial.ICurvable3D)closedPlanar3D).GetCurves());
+                foreach (IClosedPlanar3D closedPlanar3D in ((Face3D)sAMGeomery).GetEdge3Ds())
+                    if (closedPlanar3D is ICurvable3D)
+                        curve3Ds.AddRange(((ICurvable3D)closedPlanar3D).GetCurves());
             }
-            else if (sAMGeomery is Spatial.ICurvable3D)
+            else if (sAMGeomery is Planar.Face2D)
             {
-                curve3Ds = ((Spatial.ICurvable3D)sAMGeomery).GetCurves();
+                Face3D face3D = Spatial.Query.Convert(Spatial.Plane.WorldXY, (Planar.Face2D)sAMGeomery);
+                if(face3D != null)
+                {
+                    curve3Ds = new List<ICurve3D>();
+
+                    foreach (IClosedPlanar3D closedPlanar3D in face3D.GetEdge3Ds())
+                        if (closedPlanar3D is ICurvable3D)
+                            curve3Ds.AddRange(((ICurvable3D)closedPlanar3D).GetCurves());
+                }
+            }
+            else if (sAMGeomery is ICurvable3D)
+            {
+                curve3Ds = ((ICurvable3D)sAMGeomery).GetCurves();
             }
             else if (sAMGeomery is Planar.ICurvable2D)
             {
@@ -39,9 +61,9 @@ namespace SAM.Geometry.Grasshopper
                 //return;
             }
 
-            if (sAMGeomery is Spatial.Point3D)
+            if (sAMGeomery is Point3D)
             {
-                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Spatial.Point3D)), color);
+                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Point3D)), color);
                 return;
             }
 
@@ -51,9 +73,9 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            if (sAMGeomery is Spatial.Face3D)
+            if (sAMGeomery is Face3D)
             {
-                Brep brep = Rhino.Convert.ToRhino_Brep((sAMGeomery as Spatial.Face3D));
+                Brep brep = Rhino.Convert.ToRhino_Brep((sAMGeomery as Face3D));
                 if (brep != null)
                 {
                     previewWireArgs.Pipeline.DrawBrepWires(brep, color);
@@ -61,16 +83,16 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            if (sAMGeomery is Spatial.Shell)
+            if (sAMGeomery is Shell)
             {
-                List<Brep> breps = ((Spatial.Shell)sAMGeomery).Face3Ds?.ConvertAll(x => Rhino.Convert.ToRhino_Brep(x));
+                List<Brep> breps = ((Shell)sAMGeomery).Face3Ds?.ConvertAll(x => Rhino.Convert.ToRhino_Brep(x));
                 breps?.FindAll(x => x != null).ForEach(x => previewWireArgs.Pipeline.DrawBrepWires(x, color));
                 return;
             }
 
-            if (sAMGeomery is Spatial.Mesh3D)
+            if (sAMGeomery is Mesh3D)
             {
-                Mesh mesh = Rhino.Convert.ToRhino(((Spatial.Mesh3D)sAMGeomery));
+                Mesh mesh = Rhino.Convert.ToRhino(((Mesh3D)sAMGeomery));
                 if(mesh != null)
                 {
                     previewWireArgs.Pipeline.DrawMeshWires(mesh, color);
@@ -80,23 +102,30 @@ namespace SAM.Geometry.Grasshopper
             }
         }
 
-        public static void DrawViewportWires(this Spatial.Face3D face3D, GH_PreviewWireArgs previewWireArgs, System.Drawing.Color color_ExternalEdges, System.Drawing.Color color_InternalEdges)
+        /// <summary>
+        /// Draws viewport wires for the specified Face3D object.
+        /// </summary>
+        /// <param name="face3D">The Face3D object to draw.</param>
+        /// <param name="previewWireArgs">The arguments for the preview wire.</param>
+        /// <param name="color_ExternalEdges">The color of the external edges.</param>
+        /// <param name="color_InternalEdges">The color of the internal edges.</param>
+        public static void DrawViewportWires(this Face3D face3D, GH_PreviewWireArgs previewWireArgs, System.Drawing.Color color_ExternalEdges, System.Drawing.Color color_InternalEdges)
         {
-            if(face3D == null || previewWireArgs == null)
+            if (face3D == null || previewWireArgs == null)
             {
                 return;
             }
 
-            Spatial.IClosedPlanar3D externalEdge3D = face3D.GetExternalEdge3D();
+            IClosedPlanar3D externalEdge3D = face3D.GetExternalEdge3D();
             if(externalEdge3D != null)
             {
                 DrawViewportWires(externalEdge3D, previewWireArgs, color_ExternalEdges);
             }
 
-            List<Spatial.IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+            List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
             if(internalEdge3Ds != null && internalEdge3Ds.Count != 0)
             {
-                foreach(Spatial.IClosedPlanar3D internalEdge3D in internalEdge3Ds)
+                foreach(IClosedPlanar3D internalEdge3D in internalEdge3Ds)
                 {
                     DrawViewportWires(internalEdge3D, previewWireArgs, color_InternalEdges);
                 }

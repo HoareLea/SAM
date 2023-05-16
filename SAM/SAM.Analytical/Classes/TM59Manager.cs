@@ -256,7 +256,7 @@ namespace SAM.Analytical
             HashSet<string> values = textMap.GetSortedKeys(name);
             foreach (string value in values)
             {
-                if (Core.Query.TryConvert<int>(value, out int result))
+                if (Core.Query.TryConvert(value, out int result))
                 {
                     return result;
                 }

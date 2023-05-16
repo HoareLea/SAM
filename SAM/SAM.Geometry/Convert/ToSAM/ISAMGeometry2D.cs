@@ -21,7 +21,7 @@ namespace SAM.Geometry
 
             List<ISAMGeometry2D> result = new List<ISAMGeometry2D>();
 
-            NetTopologySuite.Geometries.PrecisionModel precisionModel = new NetTopologySuite.Geometries.PrecisionModel(1.0 / tolerance);
+            PrecisionModel precisionModel = new PrecisionModel(1.0 / tolerance);
             //NetTopologySuite.Geometries.GeometryFactory geometryFactory = new NetTopologySuite.Geometries.GeometryFactory(precisionModel);
 
             // Create a new NtsGeometryServices instance with the new GeometryFactory

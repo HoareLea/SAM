@@ -319,7 +319,7 @@ namespace SAM.Geometry.Spatial
             Vector3D axisY = coordinateSystem3D.AxisY.Transform(matrix4D);
             Vector3D axisZ = coordinateSystem3D.AxisZ.Transform(matrix4D);
 
-            return new Spatial.CoordinateSystem3D(origin, axisX, axisY, axisZ);
+            return new CoordinateSystem3D(origin, axisX, axisY, axisZ);
         }
     }
 }
