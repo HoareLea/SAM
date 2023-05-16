@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -71,43 +72,62 @@ namespace SAM.Geometry.Grasshopper
 
             List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
 
-            List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = null;
+            List<ISAMGeometry3D> sAMGeometry3Ds = null;
             if (objectWrapper.Value is GooSAMGeometry)
             {
-                sAMGeometry3Ds = new List<Spatial.ISAMGeometry3D>();
+                sAMGeometry3Ds = new List<ISAMGeometry3D>();
 
                 ISAMGeometry sAMGeometry = ((GooSAMGeometry)objectWrapper.Value).Value;
-                if (sAMGeometry is Spatial.ISAMGeometry3D)
-                    sAMGeometry3Ds.Add((Spatial.ISAMGeometry3D)sAMGeometry);
+                if (sAMGeometry is ISAMGeometry3D)
+                {
+                    sAMGeometry3Ds.Add((ISAMGeometry3D)sAMGeometry);
+                }
                 else if (sAMGeometry is ISAMGeometry2D)
-                    sAMGeometry3Ds.Add(Spatial.Query.Convert(Spatial.Plane.WorldXY, (ISAMGeometry2D)sAMGeometry));
+                {
+                    sAMGeometry2Ds.Add((ISAMGeometry2D)sAMGeometry);
+                }
             }
             else if (objectWrapper.Value is IGH_GeometricGoo)
             {
                 sAMGeometry3Ds = Convert.ToSAM((IGH_GeometricGoo)objectWrapper.Value);
             }
+            else if (objectWrapper.Value is ISAMGeometry3D)
+            {
+                sAMGeometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)objectWrapper.Value };
+            }
+            else if (objectWrapper.Value is ISAMGeometry2D)
+            {
+                sAMGeometry2Ds.Add((ISAMGeometry2D)objectWrapper.Value);
+            }
 
             if (sAMGeometry3Ds != null && sAMGeometry3Ds.Count > 0)
             {
-                foreach (Spatial.ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
+                foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                 {
-                    List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
-                    if (sAMGeometry3D is Spatial.ICurvable3D)
-                        curve3Ds.AddRange(((Spatial.ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Query.Project(Spatial.Plane.WorldXY, x)));
-                    else if (sAMGeometry3D is Spatial.ICurve3D)
-                        curve3Ds.Add(Spatial.Query.Project(Spatial.Plane.WorldXY, (Spatial.ICurve3D)sAMGeometry3D));
-
-                    if (curve3Ds == null || curve3Ds.Count == 0)
-                        continue;
-
-                    foreach (Spatial.ICurve3D curve3D in curve3Ds)
+                    if(sAMGeometry3D is Face3D)
                     {
-                        if (curve3D == null)
+                        sAMGeometry2Ds.Add(Spatial.Query.Convert(Plane.WorldXY, (Face3D)sAMGeometry3D));
+                    }
+                    else
+                    {
+                        List<ICurve3D> curve3Ds = new List<ICurve3D>();
+                        if (sAMGeometry3D is ICurvable3D)
+                            curve3Ds.AddRange(((ICurvable3D)sAMGeometry3D).GetCurves().ConvertAll(x => Spatial.Query.Project(Plane.WorldXY, x)));
+                        else if (sAMGeometry3D is ICurve3D)
+                            curve3Ds.Add(Spatial.Query.Project(Plane.WorldXY, (ICurve3D)sAMGeometry3D));
+
+                        if (curve3Ds == null || curve3Ds.Count == 0)
                             continue;
 
-                        ICurvable2D curvable2D = Spatial.Query.Convert(Spatial.Plane.WorldXY, curve3D) as ICurvable2D;
-                        if (curvable2D != null)
-                            sAMGeometry2Ds.Add(curvable2D);
+                        foreach (ICurve3D curve3D in curve3Ds)
+                        {
+                            if (curve3D == null)
+                                continue;
+
+                            ICurvable2D curvable2D = Spatial.Query.Convert(Plane.WorldXY, curve3D) as ICurvable2D;
+                            if (curvable2D != null)
+                                sAMGeometry2Ds.Add(curvable2D);
+                        }
                     }
                 }
             }
