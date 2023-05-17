@@ -605,7 +605,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / 0.001));
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
 
             ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
 
