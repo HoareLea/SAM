@@ -594,33 +594,61 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            NetTopologySuite.Geometries.Geometry geometry = WorkGeometry(polygon, tolerance);
-            if(geometry == null)
-            {
-                geometry = polygon;
-            }
-
-            if(geometry == null)
-            {
-                return null;
-            }
-
             GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
 
-            ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
+            GeometryCollection geometryCollection = null;
 
-            conformingDelaunayTriangulationBuilder.SetSites(geometry);
-            conformingDelaunayTriangulationBuilder.Constraints = geometry;
+            if (polygon.Holes != null && polygon.Holes.Length != 0)
+            {
+                NetTopologySuite.Geometries.Geometry geometry = WorkGeometry(polygon, tolerance);
+                if (geometry == null)
+                {
+                    geometry = polygon;
+                }
 
-            GeometryCollection geometryCollection = conformingDelaunayTriangulationBuilder.GetTriangles(geometryFactory);
-            if (geometryCollection == null)
+                if (geometry == null)
+                {
+                    return null;
+                }
+
+                ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
+
+                conformingDelaunayTriangulationBuilder.SetSites(geometry);
+                conformingDelaunayTriangulationBuilder.Constraints = geometry;
+
+                geometryCollection = conformingDelaunayTriangulationBuilder.GetTriangles(geometryFactory);
+                if (geometryCollection == null)
+                {
+                    return null;
+                }
+
+                geometry = FilterRelevant(polygon, geometryCollection);
+
+                geometryCollection = geometry is GeometryCollection ? (GeometryCollection)geometry : new GeometryCollection(new NetTopologySuite.Geometries.Geometry[] { geometry }, geometryFactory);
+            }
+            else
+            {
+                Coordinate[] coordinates = polygon.Coordinates;
+                if(coordinates == null || coordinates.Length < 3)
+                {
+                    return null;
+                }
+
+                if(coordinates.Length == 3)
+                {
+                    return new List<Polygon>() { polygon };
+                }
+
+                DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
+                delaunayTriangulationBuilder.SetSites(polygon);
+
+                geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+            }
+
+            if(geometryCollection == null)
             {
                 return null;
             }
-
-            geometry = FilterRelevant(polygon, geometryCollection);
-            
-            geometryCollection = geometry is GeometryCollection ? (GeometryCollection)geometry : new GeometryCollection(new NetTopologySuite.Geometries.Geometry[] { geometry }, geometryFactory);
 
             List<Polygon> polygons = new List<Polygon>();
             foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometryCollection.Geometries)
@@ -657,12 +685,6 @@ namespace SAM.Geometry.Planar
 
                 foreach(Polygon polygon_Intersection in polygons_Intersection)
                 {
-                    //Polygon polygon_Intersection = polygon.Intersection(polygon_Temp_Temp) as Polygon;
-                    //if (polygon_Intersection == null)
-                    //{
-                    //    continue;
-                    //}
-
                     if (Core.Query.AlmostEqual(polygon_Temp.Area, polygon_Intersection.Area, tolerance))
                     {
                         result.Add(polygon_Intersection);
@@ -677,9 +699,6 @@ namespace SAM.Geometry.Planar
 
                     result.AddRange(polygons_Temp_Temp);
                 }
-
-
-
             }
 
             return result;
