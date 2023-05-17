@@ -78,22 +78,38 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<IBoundable3D> boundable3Ds = new List<IBoundable3D>();
-            List<Point3D> point3Ds = new List<Point3D>();
+            List<IPlanar3D> planars = new List<IPlanar3D>();
+            List<ISAMGeometry3D> notPlanars = new List<ISAMGeometry3D>();
 
             foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
             {
-                if(sAMGeometry3D is Point3D)
+                if(sAMGeometry3D == null)
                 {
-                    point3Ds.Add((Point3D)sAMGeometry3D);
+                    continue;
                 }
-                else if(sAMGeometry3D is IBoundable3D)
+                
+                if (sAMGeometry3D is Shell)
                 {
-                    boundable3Ds.Add((IBoundable3D)sAMGeometry3D);
+                    ((Shell)sAMGeometry3D).Face3Ds?.ForEach(x => planars.Add(x));
+                }
+                else if (sAMGeometry3D is Extrusion)
+                {
+                    ((Extrusion)sAMGeometry3D).Face3Ds()?.ForEach(x => planars.Add(x));
+                }
+                else if (sAMGeometry3D is IPlanar3D)
+                { 
+                    if(sAMGeometry3D is IBoundable3D)
+                    {
+                        planars.Add((IPlanar3D)sAMGeometry3D);
+                    }
+                }
+                else
+                {
+                    notPlanars.Add(sAMGeometry3D);
                 }
             }
 
-            if(boundable3Ds.Count == 0 && point3Ds.Count == 0)
+            if(planars.Count == 0 && notPlanars.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -132,12 +148,23 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
-            foreach(Point3D point3D in point3Ds)
+            foreach(ISAMGeometry3D notPlanar in notPlanars)
             {
-                sAMGeometry2Ds.Add(plane.Convert(point3D));
+                if(notPlanar is Point3D)
+                {
+                    sAMGeometry2Ds.Add(plane.Convert((Point3D)notPlanar));
+                }
+                else if(notPlanar is Segment3D)
+                {
+                    sAMGeometry2Ds.Add(plane.Convert((Segment3D)notPlanar));
+                }
+                else if(notPlanar != null)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Could not convert {0} geometry.", notPlanar.GetType().FullName));
+                }
             }
 
-            foreach(IBoundable3D boundable3D in boundable3Ds)
+            foreach(IBoundable3D boundable3D in planars)
             {
                 Plane plane_Boundable3D = plane;
                 if(ownPlane && boundable3D is IPlanar3D)
