@@ -12,7 +12,10 @@ namespace SAM.Geometry.Planar
             }
 
             Envelope envelope = geometry.Boundary.EnvelopeInternal;
-            envelope = new Envelope(envelope.MinX - 1, envelope.MaxX + 1, envelope.MinY - 1, envelope.MaxY + 1);
+
+            double buffer = 0.5 * envelope.MaxExtent;
+
+            envelope = new Envelope(envelope.MinX - buffer, envelope.MaxX + buffer, envelope.MinY - buffer, envelope.MaxY + buffer);
             var bounds = geometry.Factory.ToGeometry(envelope);
 
             return geometry.Factory.CreateGeometryCollection(new[] { geometry, bounds });
