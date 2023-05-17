@@ -473,9 +473,9 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
+        private static List<Polygon> Triangulate_Old(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(polygon == null)
+            if (polygon == null)
             {
                 return null;
             }
@@ -483,12 +483,12 @@ namespace SAM.Geometry.Planar
             ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
 
             List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
-            if(polygon.Holes != null)
+            if (polygon.Holes != null)
             {
-                foreach(LinearRing linearRing in polygon.Holes)
+                foreach (LinearRing linearRing in polygon.Holes)
                 {
                     List<Coordinate> coordinates = linearRing?.Coordinates?.ToList();
-                    if(coordinates == null)
+                    if (coordinates == null)
                     {
                         continue;
                     }
@@ -500,7 +500,7 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if(geometries != null && geometries.Count != 0)
+            if (geometries != null && geometries.Count != 0)
             {
                 conformingDelaunayTriangulationBuilder.Constraints = new GeometryCollection(geometries.ToArray());
             }
@@ -542,13 +542,111 @@ namespace SAM.Geometry.Planar
                 NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(polygon_Temp);
 
                 List<Polygon> polygons_Intersection = new List<Polygon>();
-                if(geometry is Polygon)
+                if (geometry is Polygon)
                 {
                     polygons_Intersection.Add((Polygon)geometry);
                 }
-                else if(geometry is GeometryCollection)
+                else if (geometry is GeometryCollection)
                 {
-                    foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
+                    foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
+                    {
+                        if (geometry_Temp is Polygon)
+                        {
+                            polygons_Intersection.Add((Polygon)geometry_Temp);
+                        }
+                    }
+                }
+
+                foreach (Polygon polygon_Intersection in polygons_Intersection)
+                {
+                    //Polygon polygon_Intersection = polygon.Intersection(polygon_Temp_Temp) as Polygon;
+                    //if (polygon_Intersection == null)
+                    //{
+                    //    continue;
+                    //}
+
+                    if (Core.Query.AlmostEqual(polygon_Temp.Area, polygon_Intersection.Area, tolerance))
+                    {
+                        result.Add(polygon_Intersection);
+                        continue;
+                    }
+
+                    List<Polygon> polygons_Temp_Temp = Triangulate(polygon_Intersection, tolerance);
+                    if (polygons_Temp_Temp == null || polygons_Temp_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    result.AddRange(polygons_Temp_Temp);
+                }
+
+
+
+            }
+
+            return result;
+        }
+
+        private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            if(polygon == null)
+            {
+                return null;
+            }
+
+            NetTopologySuite.Geometries.Geometry geometry = WorkGeometry(polygon, tolerance);
+            if(geometry == null)
+            {
+                geometry = polygon;
+            }
+
+            if(geometry == null)
+            {
+                return null;
+            }
+
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / 0.001));
+
+            ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
+
+            conformingDelaunayTriangulationBuilder.SetSites(geometry);
+            conformingDelaunayTriangulationBuilder.Constraints = geometry;
+
+            GeometryCollection geometryCollection = conformingDelaunayTriangulationBuilder.GetTriangles(geometryFactory);
+            if (geometryCollection == null)
+            {
+                return null;
+            }
+
+            geometry = FilterRelevant(polygon, geometryCollection);
+            
+            geometryCollection = geometry is GeometryCollection ? (GeometryCollection)geometry : new GeometryCollection(new NetTopologySuite.Geometries.Geometry[] { geometry }, geometryFactory);
+
+            List<Polygon> polygons = new List<Polygon>();
+            foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometryCollection.Geometries)
+            {
+                Polygon polygon_Temp = geometry_Temp as Polygon;
+                if (polygon == null)
+                {
+                    continue;
+                }
+
+                polygons.Add(polygon_Temp);
+            }
+
+            List<Polygon> result = new List<Polygon>();
+            foreach (Polygon polygon_Temp in polygons)
+            {
+                NetTopologySuite.Geometries.Geometry geometry_Intersection = polygon.Intersection(polygon_Temp);
+
+                List<Polygon> polygons_Intersection = new List<Polygon>();
+                if(geometry_Intersection is Polygon)
+                {
+                    polygons_Intersection.Add((Polygon)geometry_Intersection);
+                }
+                else if(geometry_Intersection is GeometryCollection)
+                {
+                    foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry_Intersection)
                     {
                         if(geometry_Temp is Polygon)
                         {
