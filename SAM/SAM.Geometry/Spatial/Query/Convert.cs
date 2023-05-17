@@ -147,7 +147,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             List<Point3D> point3Ds = polygon3D.GetPoints();
-            if (point3Ds == null)
+            if (point3Ds == null || point3Ds.Count < 3)
                 return null;
 
             return new Planar.Polygon2D(Convert(plane, point3Ds));
@@ -244,13 +244,21 @@ namespace SAM.Geometry.Spatial
         public static Planar.Face2D Convert(this Plane plane, Face3D face3D)
         {
             if (plane == null)
+            {
                 return null;
+            }
 
             IClosedPlanar3D closedPlanar3D_External = face3D?.GetExternalEdge3D();
             if (closedPlanar3D_External == null)
+            {
                 return null;
+            }
 
             Planar.IClosed2D closed2D_external = Convert(plane, closedPlanar3D_External);
+            if(closed2D_external == null)
+            {
+                return null;
+            }
 
             List<Planar.IClosed2D> closed2Ds_internal = new List<Planar.IClosed2D>();
             List<IClosedPlanar3D> closedPlanar3Ds_Internal = face3D.GetInternalEdge3Ds();

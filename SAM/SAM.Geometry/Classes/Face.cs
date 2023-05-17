@@ -104,6 +104,11 @@ namespace SAM.Geometry
 
         public double GetArea()
         {
+            if(externalEdge2D == null)
+            {
+                return double.NaN;
+            }
+
             double area = externalEdge2D.GetArea();
             if (internalEdge2Ds != null && internalEdge2Ds.Count > 0)
                 foreach (IClosed2D closed2D in internalEdge2Ds)
@@ -209,7 +214,7 @@ namespace SAM.Geometry
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            if (point2D == null)
+            if (point2D == null || !point2D.IsValid())
                 return false;
             
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)

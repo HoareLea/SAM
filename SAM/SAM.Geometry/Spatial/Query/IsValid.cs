@@ -115,6 +115,11 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
+            if(boundingBox3D.Min.Equals(boundingBox3D.Max))
+            {
+                return false;
+            }
+
             return true;
         }
 

@@ -13,8 +13,12 @@ namespace SAM.Geometry.Planar
         public Polygon2D(IEnumerable<Point2D> points)
         {
             this.points = Query.Clone(points);
-            if (this.points.Last().Equals(this.points.First()))
-                this.points.RemoveAt(this.points.Count - 1);
+
+            if(this.points != null && this.points.Count > 2)
+            {
+                if (this.points.Last().Equals(this.points.First()))
+                    this.points.RemoveAt(this.points.Count - 1);
+            }
         }
 
         public Polygon2D(Polygon2D polygon2D)
