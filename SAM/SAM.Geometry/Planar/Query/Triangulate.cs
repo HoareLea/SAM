@@ -3,6 +3,7 @@ using NetTopologySuite.Triangulate;
 using NetTopologySuite.Geometries;
 using System.Linq;
 using System;
+using System.Runtime.CompilerServices;
 
 namespace SAM.Geometry.Planar
 {
@@ -479,12 +480,45 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
-            delaunayTriangulationBuilder.SetSites(polygon);
+            ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
 
-            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
+            List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
+            if(polygon.Holes != null)
+            {
+                foreach(LinearRing linearRing in polygon.Holes)
+                {
+                    List<Coordinate> coordinates = linearRing?.Coordinates?.ToList();
+                    if(coordinates == null)
+                    {
+                        continue;
+                    }
 
-            GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
+                    coordinates.RemoveAt(0);
+
+                    LineString lineString = new LineString(coordinates.ToArray());
+                    geometries.Add(lineString);
+                }
+            }
+
+            if(geometries != null && geometries.Count != 0)
+            {
+                conformingDelaunayTriangulationBuilder.Constraints = new GeometryCollection(geometries.ToArray());
+            }
+
+            conformingDelaunayTriangulationBuilder.SetSites(polygon.ExteriorRing);
+            //conformingDelaunayTriangulationBuilder.Constraints = new MultiPoint(polygon.Coordinates.ToList().ConvertAll(x => x.X));
+
+            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / 0.001));
+
+            GeometryCollection geometryCollection = conformingDelaunayTriangulationBuilder.GetTriangles(geometryFactory);
+
+
+            //DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
+            //delaunayTriangulationBuilder.SetSites(polygon);
+
+            //GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
+
+            //GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
             if (geometryCollection == null)
             {
                 return null;

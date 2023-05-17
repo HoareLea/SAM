@@ -6,6 +6,7 @@ using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -19,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -52,7 +53,7 @@ namespace SAM.Geometry.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddGenericParameter("SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
+            outputParamManager.AddGenericParameter("sAMGeometry2D", "sAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -71,38 +72,35 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            IBoundable3D boundable3D = null;
-
-            if (objectWrapper.Value is GooSAMGeometry)
+            if (!Query.TryGetSAMGeometries(objectWrapper, out List<ISAMGeometry3D> sAMGeometry3Ds) || sAMGeometry3Ds == null || sAMGeometry3Ds.Count == 0)
             {
-                ISAMGeometry sAMGeometry = ((GooSAMGeometry)objectWrapper.Value).Value;
-                if(sAMGeometry is ISAMGeometry2D)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<IBoundable3D> boundable3Ds = new List<IBoundable3D>();
+            List<Point3D> point3Ds = new List<Point3D>();
+
+            foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
+            {
+                if(sAMGeometry3D is Point3D)
                 {
-                    dataAccess.SetData(0, sAMGeometry);
-                    return;
+                    point3Ds.Add((Point3D)sAMGeometry3D);
                 }
-
-                boundable3D = sAMGeometry as IBoundable3D;
-            }
-            else if (objectWrapper.Value is IBoundable3D)
-            {
-                boundable3D = objectWrapper.Value as dynamic;
+                else if(sAMGeometry3D is IBoundable3D)
+                {
+                    boundable3Ds.Add((IBoundable3D)sAMGeometry3D);
+                }
             }
 
-            if (boundable3D == null)
+            if(boundable3Ds.Count == 0 && point3Ds.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            GH_Boolean gHBoolean = objectWrapper.Value as GH_Boolean;
-            if (gHBoolean == null)
+            bool ownPlane = true;
+            if (!dataAccess.GetData(1, ref ownPlane))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -110,11 +108,7 @@ namespace SAM.Geometry.Grasshopper
 
             Plane plane = null;
 
-            bool ownPlane = gHBoolean.Value;
-            if (ownPlane && boundable3D is IPlanar3D)
-                plane = (boundable3D as IPlanar3D).GetPlane();
-
-            if (plane == null)
+            if(!ownPlane)
             {
                 if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
                 {
@@ -132,20 +126,29 @@ namespace SAM.Geometry.Grasshopper
                 plane = Convert.ToSAM(gHPlane);
             }
 
-            if (plane == null)
+            if(plane == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                plane = Plane.WorldXY;
             }
 
-            ISAMGeometry2D geometry2D = plane.Convert(boundable3D);
-            if (geometry2D == null)
+            List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
+            foreach(Point3D point3D in point3Ds)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot convert geometry");
-                return;
+                sAMGeometry2Ds.Add(plane.Convert(point3D));
             }
 
-            dataAccess.SetData(0, geometry2D);
+            foreach(IBoundable3D boundable3D in boundable3Ds)
+            {
+                Plane plane_Boundable3D = plane;
+                if(ownPlane && boundable3D is IPlanar3D)
+                {
+                    plane_Boundable3D = (boundable3D as IPlanar3D).GetPlane();
+                }
+
+                sAMGeometry2Ds.Add(plane_Boundable3D.Convert(boundable3D));
+            }
+
+            dataAccess.SetDataList(0, sAMGeometry2Ds);
         }
 
         /// <summary>

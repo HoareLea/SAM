@@ -11,7 +11,7 @@ namespace SAM.Analytical
         /// <search>Default SAM Analytical InternalCondition, IC, InternalCondition, TextMap</search> 
         public static TextMap DefaultInternalConditionTextMap_TM59()
         {
-            return ActiveSetting.Setting.GetValue<TextMap>(AnalyticalSettingParameter.InternalConditionTextMap_TM59);
+            return ActiveSetting.Setting?.GetValue<TextMap>(AnalyticalSettingParameter.InternalConditionTextMap_TM59);
         }
     }
 }
