@@ -104,6 +104,12 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
+                Face3D face3D_Boundary_Snapped = boundaries_Snapped[i].Item2;
+                if (!IsValid(face3D_Boundary_Snapped))
+                {
+                    continue;
+                }
+
                 List<Face3D> face3Ds = new List<Face3D>();
                 foreach(Tuple<BoundingBox3D, Face3D> boudnary_Snapping in boundaries_Snapping)
                 {
@@ -115,7 +121,7 @@ namespace SAM.Geometry.Spatial
                     face3Ds.Add(boudnary_Snapping.Item2);
                 }
 
-                Face3D face3D_Boundary_Snapped = boundaries_Snapped[i].Item2;
+
                 if (face3Ds == null || face3Ds.Count == 0)
                 {
                     face3Ds_Shell.Add(face3D_Boundary_Snapped);
