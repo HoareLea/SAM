@@ -11,6 +11,12 @@ namespace SAM.Core
         {
             result = default;
 
+            if(type == typeof(object))
+            {
+                result = @object;
+                return true;
+            }
+
             Type type_Object = @object?.GetType();
             if (type_Object == type || type == null)
             {

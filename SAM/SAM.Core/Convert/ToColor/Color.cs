@@ -24,12 +24,16 @@ namespace SAM.Core
         public static Color ToColor(string @string)
         {   
             if (string.IsNullOrWhiteSpace(@string))
+            {
                 return Color.Empty;
+            }
 
             string @string_Temp = @string;
 
             if(@string.IsHex())
+            {
                 @string_Temp = "#" + @string;
+            }
 
             object @object = null;
             try
