@@ -99,6 +99,8 @@ namespace SAM.Analytical.Grasshopper
                     sAMObjects.FindAll(x => x is Space).ForEach(x => analyticalModel.AddSpace((Space)x));
 
                     sAMObject = analyticalModel;
+
+                    adjacencyCluster = analyticalModel.AdjacencyCluster;
                 }
                 else if (sAMObject is AdjacencyCluster)
                 {
