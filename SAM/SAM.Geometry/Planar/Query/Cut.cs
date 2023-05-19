@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -69,58 +70,133 @@ namespace SAM.Geometry.Planar
         public static List<Face2D> Cut(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
         {
             if (face2D == null || segmentable2Ds == null)
+            {
                 return null;
+            }
 
-            List<IClosed2D> edges = face2D.Edge2Ds;
-            if (edges == null || edges.Count == 0)
+            IClosed2D externalEdge2D = face2D.ExternalEdge2D;
+            if(externalEdge2D == null)
+            {
                 return null;
+            }
+
+            List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
+
+            List<IClosed2D> edge2Ds = new List<IClosed2D>() { externalEdge2D };
+            if(internalEdge2Ds != null)
+            {
+                edge2Ds.AddRange(internalEdge2Ds);
+            }
 
             List<ISegmentable2D> segmentable2Ds_All = new List<ISegmentable2D>();
             foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 if (segmentable2D == null)
+                {
                     continue;
+                }
 
                 segmentable2Ds_All.Add(segmentable2D);
             }
 
             HashSet<Point2D> point2Ds = new HashSet<Point2D>();
-            foreach (IClosed2D closed2D in edges)
+            foreach (IClosed2D edge2D in edge2Ds)
             {
-                ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
+                ISegmentable2D segmentable2D = edge2D as ISegmentable2D;
                 if (segmentable2D == null)
+                {
                     continue;
+                }
 
                 segmentable2Ds_All.Add(segmentable2D);
                 foreach (Point2D point2D in segmentable2D.GetPoints())
+                {
                     point2Ds.Add(point2D);
+                }
             }
 
             if (segmentable2Ds_All == null || segmentable2Ds_All.Count == 0)
+            {
                 return null;
+            }
 
             List<Segment2D> segment2Ds = segmentable2Ds_All.Split(tolerance);
 
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
             if (polygon2Ds == null || polygon2Ds.Count == 0)
+            {
                 return null;
+            }
 
-            List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-
-            List<IClosed2D> externalEdges_New = new List<IClosed2D>();
-            List<IClosed2D> internalEdges_New = new List<IClosed2D>();
+            List<Tuple<Polygon2D, Point2D, double>> tuples = new List<Tuple<Polygon2D, Point2D, double>>();
             for (int i = 0; i < polygon2Ds.Count; i++)
             {
                 Polygon2D polygon2D = Snap(polygon2Ds[i], point2Ds, tolerance);
 
-                Point2D point2D = polygon2D.GetInternalPoint2D(tolerance);
-                if (face2D.Inside(point2D, tolerance))
-                    externalEdges_New.Add(polygon2D);
+                Point2D point2D = polygon2D?.GetInternalPoint2D(tolerance);
+                if (point2D == null || !externalEdge2D.Inside(point2D))
+                {
+                    continue;
+                }
 
-                IClosed2D closed2D = internalEdges?.Find(x => x.Inside(point2D, tolerance));
-                if (closed2D != null)
-                    internalEdges_New.Add(closed2D);
+                double area = polygon2D.GetArea();
+                if(double.IsNaN(area))
+                {
+                    continue;
+                }
+
+                tuples.Add(new Tuple<Polygon2D, Point2D, double>(polygon2D, point2D, area));
             }
+
+            List<IClosed2D> externalEdges_New = new List<IClosed2D>();
+            List<IClosed2D> internalEdges_New = new List<IClosed2D>();
+            for (int i = 0; i < tuples.Count; i++)
+            {
+                Tuple<Polygon2D, Point2D, double> tuple = tuples[i];
+
+                List<Tuple<Polygon2D, Point2D, double>> tuples_Temp = tuples.FindAll(x => x.Item1.Inside(tuple.Item2, tolerance));
+                if (tuples_Temp == null || tuples_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                if (tuples_Temp.Count == 1)
+                {
+                    externalEdges_New.Add(tuple.Item1);
+                    continue;
+                }
+
+                tuples_Temp.Sort((x, y) => y.Item3.CompareTo(x.Item3));
+                if(tuples_Temp[0] == tuple)
+                {
+                    externalEdges_New.Add(tuple.Item1);
+                    continue;
+                }
+
+                internalEdges_New.Add(tuple.Item1);
+            }
+
+            //    List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+
+
+            //for (int i = 0; i < polygon2Ds.Count; i++)
+            //{
+            //    Polygon2D polygon2D = Snap(polygon2Ds[i], point2Ds, tolerance);
+
+            //    Point2D point2D = polygon2D.GetInternalPoint2D(tolerance);
+            //    if(point2D == null || !externalEdge2D.Inside(point2D))
+            //    {
+            //        continue;
+            //    }
+
+
+            //    if (face2D.Inside(point2D, tolerance))
+            //        externalEdges_New.Add(polygon2D);
+
+            //    IClosed2D closed2D = internalEdges?.Find(x => x.Inside(point2D, tolerance));
+            //    if (closed2D != null)
+            //        internalEdges_New.Add(closed2D);
+            //}
 
             List<Face2D> result = new List<Face2D>();
             foreach (IClosed2D externalEdge_New in externalEdges_New)
