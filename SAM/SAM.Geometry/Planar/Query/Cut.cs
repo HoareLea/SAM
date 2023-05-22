@@ -176,28 +176,6 @@ namespace SAM.Geometry.Planar
                 internalEdges_New.Add(tuple.Item1);
             }
 
-            //    List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-
-
-            //for (int i = 0; i < polygon2Ds.Count; i++)
-            //{
-            //    Polygon2D polygon2D = Snap(polygon2Ds[i], point2Ds, tolerance);
-
-            //    Point2D point2D = polygon2D.GetInternalPoint2D(tolerance);
-            //    if(point2D == null || !externalEdge2D.Inside(point2D))
-            //    {
-            //        continue;
-            //    }
-
-
-            //    if (face2D.Inside(point2D, tolerance))
-            //        externalEdges_New.Add(polygon2D);
-
-            //    IClosed2D closed2D = internalEdges?.Find(x => x.Inside(point2D, tolerance));
-            //    if (closed2D != null)
-            //        internalEdges_New.Add(closed2D);
-            //}
-
             List<Face2D> result = new List<Face2D>();
             foreach (IClosed2D externalEdge_New in externalEdges_New)
             {
@@ -207,14 +185,32 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
+                List<Face2D> face2Ds_Fixed_Temp = new List<Face2D>();
+
                 List<Face2D> face2Ds_Fixed = face2D_New.FixEdges(tolerance);
                 if(face2Ds_Fixed == null || face2Ds_Fixed.Count == 0)
                 {
-                    result.Add(face2D_New);
+                    face2Ds_Fixed_Temp.Add(face2D_New);
                 }
                 else
                 {
-                    result.AddRange(face2Ds_Fixed);
+                    face2Ds_Fixed_Temp.AddRange(face2Ds_Fixed);
+                }
+
+                foreach(Face2D face2D_Fixed in face2Ds_Fixed)
+                {
+                    Point2D point2D = face2D_Fixed?.InternalPoint2D(tolerance);
+                    if(point2D == null)
+                    {
+                        continue;
+                    }
+
+                    if(!face2D.Inside(point2D, tolerance))
+                    {
+                        continue;
+                    }
+
+                    result.Add(face2D_Fixed);
                 }
             }
 

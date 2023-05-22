@@ -35,22 +35,6 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             List<Face3D> result = face2Ds.ConvertAll(x => plane_Face3D.Convert(x));
-
-            //for(int i=result.Count - 1; i >= 0; i--)
-            //{
-            //    if(result[i] == null)
-            //    {
-            //        result.RemoveAt(i);
-            //        continue;
-            //    }
-
-            //    Face3D face3D_Snap = result[i].Snap(face3D, tolerance, tolerance);
-            //    if(face3D_Snap != null)
-            //    {
-            //        result[i] = face3D_Snap;
-            //    }
-            //}
-
             return result;
         }
 
