@@ -216,6 +216,7 @@ namespace SAM.Geometry.Spatial
             Face2D face2D = plane.Convert(face3D);
 
             List<Face2D> face2Ds = Planar.Query.Split(face2D, segmentable2Ds, tolerance_Snap, tolerance_Distance);
+            face2Ds?.RemoveAll(x => x == null || !x.IsValid() || x.GetArea() < tolerance_Snap);
             if(face2Ds != null && face2Ds.Count > 0)
             {
                 List<Face2D> face2Ds_Difference = Planar.Query.Difference(face2D, face2Ds, tolerance_Distance);
