@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
         public static List<Face2D> FixEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
         {
             List<Point2D> point2Ds = (face2D?.ExternalEdge2D as ISegmentable2D)?.GetPoints();
-            if(point2Ds == null || point2Ds.Count < 3)
+            if (point2Ds == null || point2Ds.Count < 3)
             {
                 return null;
             }
@@ -43,15 +43,15 @@ namespace SAM.Geometry.Planar
             }
 
             List<Face2D> result = new List<Face2D>();
-            foreach(Polygon2D polygon2D_ExternalEdge in polygon2Ds_ExternalEdge)
+            foreach (Polygon2D polygon2D_ExternalEdge in polygon2Ds_ExternalEdge)
             {
                 List<Polygon2D> polygon2Ds_ExternalEdge_Temp = new List<Polygon2D>() { polygon2D_ExternalEdge };
 
                 List<Polygon2D> polygon2Ds_InternalEdge_Temp = polygon2Ds_InternalEdge?.FindAll(x => polygon2D_ExternalEdge.Inside(x.InternalPoint2D(tolerance)));
-                if(polygon2Ds_InternalEdge_Temp == null || polygon2Ds_InternalEdge_Temp.Count == 0)
+                if (polygon2Ds_InternalEdge_Temp == null || polygon2Ds_InternalEdge_Temp.Count == 0)
                 {
                     Face2D face2D_New = Face2D.Create(polygon2D_ExternalEdge, new IClosed2D[] { }, EdgeOrientationMethod.Opposite, tolerance);
-                    if(face2D_New != null)
+                    if (face2D_New != null)
                     {
                         result.Add(face2D_New);
                     }
@@ -97,20 +97,20 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> FixEdges(this Polygon2D polygon2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(polygon2D == null)
+            if (polygon2D == null)
             {
                 return null;
             }
 
             List<Point2D> point2Ds = polygon2D.GetPoints();
-            if(point2Ds == null || point2Ds.Count < 3)
+            if (point2Ds == null || point2Ds.Count < 3)
             {
                 return null;
             }
 
             for (int i = point2Ds.Count - 1; i > 0; i--)
             {
-                if(!point2Ds[i].AlmostEquals(point2Ds[i - 1], tolerance))
+                if (!point2Ds[i].AlmostEquals(point2Ds[i - 1], tolerance))
                 {
                     continue;
                 }
@@ -118,12 +118,12 @@ namespace SAM.Geometry.Planar
                 point2Ds.RemoveAt(i);
             }
 
-            if(point2Ds.Count < 3)
+            if (point2Ds.Count < 3)
             {
                 return null;
             }
 
-            if(point2Ds[0].AlmostEquals(point2Ds[point2Ds.Count - 1], tolerance))
+            if (point2Ds[0].AlmostEquals(point2Ds[point2Ds.Count - 1], tolerance))
             {
                 point2Ds.RemoveAt(point2Ds.Count - 1);
             }
@@ -134,24 +134,24 @@ namespace SAM.Geometry.Planar
             }
 
             List<Segment2D> segment2Ds = point2Ds.Segment2Ds(true);
-            if(segment2Ds == null || segment2Ds.Count < 3)
+            if (segment2Ds == null || segment2Ds.Count < 3)
             {
                 return null;
             }
 
             List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-            for(int i= segment2Ds.Count - 1; i >= 0; i--)
+            for (int i = segment2Ds.Count - 1; i >= 0; i--)
             {
                 Segment2D segment2D = segment2Ds[i];
 
                 segment2Ds.RemoveAt(i);
 
-                if(segment2D.GetLength() < tolerance)
+                if (segment2D.GetLength() < tolerance)
                 {
                     continue;
                 }
 
-                if(segment2Ds.Find(x => segment2D.AlmostSimilar(x, tolerance)) != null)
+                if (segment2Ds.Find(x => segment2D.AlmostSimilar(x, tolerance)) != null)
                 {
                     continue;
                 }
@@ -167,7 +167,10 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            return Create.Polygon2Ds(segment2Ds, tolerance);
+            List<Polygon2D> result = Create.Polygon2Ds(segment2Ds, tolerance);
+            result?.RemoveAll(x => x == null || !x.IsValid() || x.ThinnessRatio() < tolerance);
+
+            return result;
         }
     }
 }
