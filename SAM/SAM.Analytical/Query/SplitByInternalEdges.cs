@@ -11,7 +11,7 @@ namespace SAM.Analytical
                 return null;
 
             Face3D face3D = panel.GetFace3D();
-            if (face3D == null)
+            if (face3D == null || !face3D.IsValid())
                 return null;
 
             List<Face3D> face3Ds = face3D.SplitByInternalEdges(tolerance);
