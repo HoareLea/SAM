@@ -293,7 +293,7 @@ namespace SAM.Core
             if (!(@object is ParameterizedSAMObject))
                 return false;
 
-            IEnumerable<ParameterSet> parameterSets = ((ParameterizedSAMObject)@object).GetParamaterSets();
+            IEnumerable<ParameterSet> parameterSets = ((ParameterizedSAMObject)@object).GetParameterSets();
             if (parameterSets == null || parameterSets.Count() == 0)
                 return false;
 

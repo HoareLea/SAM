@@ -252,7 +252,7 @@ namespace SAM.Core
             return Modify.Add(parameterSets, parameterSet);
         }
 
-        public List<ParameterSet> GetParamaterSets()
+        public List<ParameterSet> GetParameterSets()
         {
             if (parameterSets == null)
                 return null;

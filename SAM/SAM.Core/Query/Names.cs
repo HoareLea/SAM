@@ -140,7 +140,7 @@ namespace SAM.Core
             if (parameterizedSAMObject == null)
                 return null;
 
-            IEnumerable<ParameterSet> parameterSets = (parameterizedSAMObject).GetParamaterSets();
+            IEnumerable<ParameterSet> parameterSets = (parameterizedSAMObject).GetParameterSets();
             if (parameterSets == null || parameterSets.Count() == 0)
                 return null;
 

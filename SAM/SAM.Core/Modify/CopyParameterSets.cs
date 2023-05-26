@@ -11,7 +11,7 @@ namespace SAM.Core
                 return null;
             }
 
-            List<ParameterSet> result = object_Source.GetParamaterSets();
+            List<ParameterSet> result = object_Source.GetParameterSets();
             if(result == null || result.Count == 0)
             {
                 return result;
