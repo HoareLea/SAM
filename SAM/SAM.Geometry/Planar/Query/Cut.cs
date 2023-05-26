@@ -185,16 +185,16 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                List<Face2D> face2Ds_Fixed_Temp = new List<Face2D>();
+                List<Face2D> face2Ds_Fixed = new List<Face2D>();
 
-                List<Face2D> face2Ds_Fixed = face2D_New.FixEdges(tolerance);
-                if(face2Ds_Fixed == null || face2Ds_Fixed.Count == 0)
+                List<Face2D> face2Ds_Fixed_Temp = face2D_New.FixEdges(tolerance);
+                if(face2Ds_Fixed_Temp == null || face2Ds_Fixed_Temp.Count == 0)
                 {
-                    face2Ds_Fixed_Temp.Add(face2D_New);
+                    face2Ds_Fixed.Add(face2D_New);
                 }
                 else
                 {
-                    face2Ds_Fixed_Temp.AddRange(face2Ds_Fixed);
+                    face2Ds_Fixed.AddRange(face2Ds_Fixed_Temp);
                 }
 
                 foreach(Face2D face2D_Fixed in face2Ds_Fixed)

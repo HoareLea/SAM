@@ -33,7 +33,8 @@ namespace SAM.Analytical
         public BoundaryEdge2DLoop(IClosed2D closed2D)
             : base()
         {
-            boundaryEdge2Ds = BoundaryEdge2D.FromGeometry(closed2D).ToList();
+            if (closed2D != null)
+                boundaryEdge2Ds = BoundaryEdge2D.FromGeometry(closed2D).ToList();
         }
 
         public BoundaryEdge2DLoop(Geometry.Spatial.IClosedPlanar3D closedPlanar3D)
