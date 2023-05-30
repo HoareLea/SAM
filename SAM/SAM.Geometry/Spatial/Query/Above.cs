@@ -59,5 +59,37 @@ namespace SAM.Geometry.Spatial
 
             return point3Ds.TrueForAll(x => plane.Above(x, tolerance));
         }
+
+        public static bool Above(this Plane plane, Shell shell, double tolerance)
+        {
+            if (plane == null || shell == null)
+            {
+                return false;
+            }
+
+            BoundingBox3D boundingBox3D = shell.GetBoundingBox();
+
+            if (boundingBox3D == null)
+            {
+                return false;
+            }
+
+            if(Above(plane, boundingBox3D, tolerance))
+            {
+                return true;
+            }
+
+            return shell.Boundaries.TrueForAll(x => plane.Above(x.Item1, tolerance) && plane.Above(x.Item2, tolerance));
+        }
+
+        public static bool Above(this Plane plane, BoundingBox3D boundingBox3D, double tolerance)
+        {
+            if(plane == null || boundingBox3D == null)
+            {
+                return false;
+            }
+
+            return boundingBox3D.GetPoints().TrueForAll(x => plane.Above(x, tolerance));
+        }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -213,6 +214,7 @@ namespace SAM.Analytical
                 return new Location(location);
             }
         }
+        
         public MaterialLibrary MaterialLibrary
         {
             get
@@ -234,6 +236,7 @@ namespace SAM.Analytical
                 return new ProfileLibrary(profileLibrary);
             }
         }
+        
         public bool AddInternalCondition(InternalCondition internalCondition)
         {
             if (internalCondition == null)
@@ -532,6 +535,51 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetZones();
         }
 
+        public Range<double> GetElevationRange()
+        {
+            List<Panel> panels = adjacencyCluster?.GetPanels();
+            if(panels == null || panels.Count == 0)
+            {
+                return null;
+            }
+
+            Range<double> result = null;
+            foreach(Panel panel in panels)
+            {
+                IClosedPlanar3D closedPlanar3D = panel?.Face3D?.GetExternalEdge3D();
+                if(closedPlanar3D == null)
+                {
+                    continue;
+                }
+
+                ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+                if(segmentable3D == null)
+                {
+                    throw new NotImplementedException();
+                }
+
+                List<Point3D> point3Ds = segmentable3D.GetPoints();
+                foreach(Point3D point3D in point3Ds)
+                {
+                    if(point3D == null)
+                    {
+                        continue;
+                    }
+
+                    if(result == null)
+                    {
+                        result = new Range<double>(point3D.Z);
+                    }
+                    else
+                    {
+                        result.Add(point3D.Z);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public bool HasMaterial(IMaterial material)
         {
             if (material == null || materialLibrary == null)
@@ -583,6 +631,7 @@ namespace SAM.Analytical
 
             return result;
         }
+        
         public List<Aperture> ReplaceApertureConstruction(IEnumerable<Guid> guids, ApertureConstruction apertureConstruction)
         {
             return adjacencyCluster?.ReplaceApertureConstruction(guids, apertureConstruction);
@@ -592,6 +641,7 @@ namespace SAM.Analytical
         {
             return adjacencyCluster?.ReplaceConstruction(guids, construction, apertureConstruction, offset);
         }
+        
         public List<Panel> ReplaceTransparentPanels(double offset = 0)
         {
             List<Panel> result = adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
@@ -604,6 +654,7 @@ namespace SAM.Analytical
             }
             return result;
         }
+        
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
@@ -630,6 +681,7 @@ namespace SAM.Analytical
 
             return jObject;
         }
+        
         public void Transform(Geometry.Spatial.Transform3D transform3D)
         {
             if (adjacencyCluster != null)

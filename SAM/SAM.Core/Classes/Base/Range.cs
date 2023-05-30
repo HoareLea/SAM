@@ -62,6 +62,25 @@ namespace SAM.Core
             }
         }
 
+        public bool Add(T value)
+        {
+            bool result = false;
+            
+            if((value as dynamic) > (max as dynamic))
+            {
+                max = value;
+                result = true;
+            }
+
+            if ((value as dynamic) < (min as dynamic))
+            {
+                min = value;
+                result = true;
+            }
+
+            return result;
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if (jObject == null)
