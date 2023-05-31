@@ -53,6 +53,8 @@
     <Compile Include="Classes\Filter\ApertureFrameAreaFilter.cs" />
     <Compile Include="Classes\Filter\AperturePaneAreaFilter.cs" />
     <Compile Include="Classes\Filter\PanelApertureCountFilter.cs" />
+    <Compile Include="Classes\Filter\PanelMaxElevationFilter.cs" />
+    <Compile Include="Classes\Filter\PanelMinElevationFilter.cs" />
     <Compile Include="Classes\Filter\PanelAreaFilter.cs" />
     <Compile Include="Classes\Filter\ApertureAzimuthFilter.cs" />
     <Compile Include="Classes\Filter\PanelTiltFilter.cs" />

@@ -666,6 +666,42 @@ namespace SAM.Analytical
             return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());
         }
 
+        public Range<double> GetElevationRange()
+        {
+            Range<double> result = null;
+            IClosedPlanar3D closedPlanar3D = Face3D?.GetExternalEdge3D();
+            if (closedPlanar3D == null)
+            {
+                return null;
+            }
+
+            ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+            if (segmentable3D == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            List<Point3D> point3Ds = segmentable3D.GetPoints();
+            foreach (Point3D point3D in point3Ds)
+            {
+                if (point3D == null)
+                {
+                    continue;
+                }
+
+                if (result == null)
+                {
+                    result = new Range<double>(point3D.Z);
+                }
+                else
+                {
+                    result.Add(point3D.Z);
+                }
+            }
+
+            return result;
+        }
+
         public void FlipNormal(bool includeApertures, bool flipX = true)
         {
             Face3D face3D = planarBoundary3D?.GetFace3D();

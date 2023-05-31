@@ -546,34 +546,19 @@ namespace SAM.Analytical
             Range<double> result = null;
             foreach(Panel panel in panels)
             {
-                IClosedPlanar3D closedPlanar3D = panel?.Face3D?.GetExternalEdge3D();
-                if(closedPlanar3D == null)
+                Range<double> elevationRange = panel?.GetElevationRange();
+                if(elevationRange == null)
                 {
                     continue;
                 }
 
-                ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
-                if(segmentable3D == null)
+                if (result == null)
                 {
-                    throw new NotImplementedException();
+                    result = elevationRange;
                 }
-
-                List<Point3D> point3Ds = segmentable3D.GetPoints();
-                foreach(Point3D point3D in point3Ds)
+                else
                 {
-                    if(point3D == null)
-                    {
-                        continue;
-                    }
-
-                    if(result == null)
-                    {
-                        result = new Range<double>(point3D.Z);
-                    }
-                    else
-                    {
-                        result.Add(point3D.Z);
-                    }
+                    result.Add(elevationRange);
                 }
             }
 
