@@ -292,7 +292,36 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-    
+
+        public static List<Shell> Cut(this Shell shell, IEnumerable<Plane> planes, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
+        {
+            if(shell == null || planes == null)
+            {
+                return null;
+            }
+
+            List<Shell> result = new List<Shell>() { shell };
+            foreach(Plane plane in planes)
+            {
+                List<Shell> shells_Temp = new List<Shell>();
+                foreach (Shell shell_Temp in result)
+                {
+                    List<Shell> shells_Cut = shell_Temp.Cut(plane, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
+                    if(shells_Cut == null || shells_Cut.Count == 0)
+                    {
+                        shells_Temp.Add(shell_Temp);
+                    }
+                    else
+                    {
+                        shells_Temp.AddRange(shells_Cut);
+                    }
+                }
+                result = shells_Temp;
+            }
+
+            return result;
+        }
+
         public static List<Face3D> Cut(this Face3D face3D, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
         {
             if(face3D == null || planes == null)
@@ -315,6 +344,36 @@ namespace SAM.Geometry.Spatial
                     result.AddRange(face3Ds);
                 }
             }
+
+            return result;
+        }
+
+        public static List<Face3D> Cut(this IEnumerable<Face3D> face3Ds, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
+        {
+            if(face3Ds == null || planes == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                if(face3D == null)
+                {
+                    continue;
+                }
+
+                List<Face3D> face3Ds_Cut = face3D.Cut(planes, tolerance);
+                if (face3Ds_Cut == null || face3Ds_Cut.Count == 0)
+                {
+                    result.Add(face3D);
+                }
+                else
+                {
+                    result.AddRange(face3Ds_Cut);
+                }
+            }
+
 
             return result;
         }

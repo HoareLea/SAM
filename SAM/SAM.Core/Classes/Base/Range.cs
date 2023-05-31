@@ -89,13 +89,13 @@ namespace SAM.Core
                 return false;
             }
 
-            if ((value as dynamic) > (value.max as dynamic))
+            if ((value.max as dynamic) > (max as dynamic))
             {
                 max = value.max;
                 result = true;
             }
 
-            if ((value as dynamic) < (value.min as dynamic))
+            if ((value.min as dynamic) < (min as dynamic))
             {
                 min = value.min;
                 result = true;
