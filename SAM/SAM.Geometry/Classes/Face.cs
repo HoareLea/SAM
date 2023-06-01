@@ -74,6 +74,14 @@ namespace SAM.Geometry
             }
         }
 
+        public bool HasInternalEdge2Ds
+        {
+            get
+            {
+                return internalEdge2Ds != null && internalEdge2Ds.Count > 0;
+            }
+        }
+
         public List<IClosed2D> Edge2Ds
         {
             get

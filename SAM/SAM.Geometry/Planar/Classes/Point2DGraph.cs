@@ -51,7 +51,7 @@ namespace SAM.Geometry.Planar
 
         public List<Point2DGraph<T>> Split()
         {
-            return base.Split<Point2DGraph<T>>();
+            return Split<Point2DGraph<T>>();
         }
 
         protected override double Weight(PointGraphEdge<Point2D, T> pointGraphEdge)

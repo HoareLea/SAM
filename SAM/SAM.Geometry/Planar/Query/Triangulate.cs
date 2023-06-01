@@ -3,7 +3,6 @@ using NetTopologySuite.Triangulate;
 using NetTopologySuite.Geometries;
 using System.Linq;
 using System;
-using System.Runtime.CompilerServices;
 
 namespace SAM.Geometry.Planar
 {
@@ -112,6 +111,10 @@ namespace SAM.Geometry.Planar
             foreach (Face2D face2D_Temp in face2Ds)
             {
                 Polygon polygon = face2D_Temp.ToNTS(tolerance);
+                if(polygon == null || polygon.IsEmpty)
+                {
+                    continue;
+                }
 
                 List<Polygon> polygons_Triangulate = null;
                 try
@@ -125,6 +128,28 @@ namespace SAM.Geometry.Planar
 
                 if(polygons_Triangulate == null || polygons_Triangulate.Count == 0)
                 {
+                    if(!face2D_Temp.HasInternalEdge2Ds)
+                    {
+                        continue;
+                    }
+
+                    List<Face2D> face2Ds_Split = face2D_Temp.SplitByInternalEdges(tolerance);
+                    if (face2Ds_Split == null || face2Ds_Split.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach(Face2D face2D_Split in face2Ds_Split)
+                    {
+                        List<Triangle2D> triangle2Ds = Triangulate(face2D_Split, tolerance);
+                        if(triangle2Ds == null || triangle2Ds.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        result.AddRange(triangle2Ds);
+                    }
+
                     continue;
                 }
 
@@ -437,120 +462,6 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        private static List<Polygon> Triangulate_Old(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
-        {
-            if (polygon == null)
-            {
-                return null;
-            }
-
-            ConformingDelaunayTriangulationBuilder conformingDelaunayTriangulationBuilder = new ConformingDelaunayTriangulationBuilder();
-
-            List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
-            if (polygon.Holes != null)
-            {
-                foreach (LinearRing linearRing in polygon.Holes)
-                {
-                    List<Coordinate> coordinates = linearRing?.Coordinates?.ToList();
-                    if (coordinates == null)
-                    {
-                        continue;
-                    }
-
-                    coordinates.RemoveAt(0);
-
-                    LineString lineString = new LineString(coordinates.ToArray());
-                    geometries.Add(lineString);
-                }
-            }
-
-            if (geometries != null && geometries.Count != 0)
-            {
-                conformingDelaunayTriangulationBuilder.Constraints = new GeometryCollection(geometries.ToArray());
-            }
-
-            conformingDelaunayTriangulationBuilder.SetSites(polygon.ExteriorRing);
-            //conformingDelaunayTriangulationBuilder.Constraints = new MultiPoint(polygon.Coordinates.ToList().ConvertAll(x => x.X));
-
-            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / 0.001));
-
-            GeometryCollection geometryCollection = conformingDelaunayTriangulationBuilder.GetTriangles(geometryFactory);
-
-
-            //DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
-            //delaunayTriangulationBuilder.SetSites(polygon);
-
-            //GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
-
-            //GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
-            if (geometryCollection == null)
-            {
-                return null;
-            }
-
-            List<Polygon> polygons = new List<Polygon>();
-            foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
-            {
-                Polygon polygon_Temp = geometry as Polygon;
-                if (polygon == null)
-                {
-                    continue;
-                }
-
-                polygons.Add(polygon_Temp);
-            }
-
-            List<Polygon> result = new List<Polygon>();
-            foreach (Polygon polygon_Temp in polygons)
-            {
-                NetTopologySuite.Geometries.Geometry geometry = polygon.Intersection(polygon_Temp);
-
-                List<Polygon> polygons_Intersection = new List<Polygon>();
-                if (geometry is Polygon)
-                {
-                    polygons_Intersection.Add((Polygon)geometry);
-                }
-                else if (geometry is GeometryCollection)
-                {
-                    foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
-                    {
-                        if (geometry_Temp is Polygon)
-                        {
-                            polygons_Intersection.Add((Polygon)geometry_Temp);
-                        }
-                    }
-                }
-
-                foreach (Polygon polygon_Intersection in polygons_Intersection)
-                {
-                    //Polygon polygon_Intersection = polygon.Intersection(polygon_Temp_Temp) as Polygon;
-                    //if (polygon_Intersection == null)
-                    //{
-                    //    continue;
-                    //}
-
-                    if (Core.Query.AlmostEqual(polygon_Temp.Area, polygon_Intersection.Area, tolerance))
-                    {
-                        result.Add(polygon_Intersection);
-                        continue;
-                    }
-
-                    List<Polygon> polygons_Temp_Temp = Triangulate(polygon_Intersection, tolerance);
-                    if (polygons_Temp_Temp == null || polygons_Temp_Temp.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    result.AddRange(polygons_Temp_Temp);
-                }
-
-
-
-            }
-
-            return result;
-        }
-
         private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
         {
             if(polygon == null)
@@ -564,7 +475,7 @@ namespace SAM.Geometry.Planar
 
             if (polygon.Holes != null && polygon.Holes.Length != 0)
             {
-                NetTopologySuite.Geometries.Geometry geometry = WorkGeometry(polygon, tolerance);
+                NetTopologySuite.Geometries.Geometry geometry = WorkGeometry(polygon);
                 if (geometry == null)
                 {
                     geometry = polygon;

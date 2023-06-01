@@ -14,7 +14,7 @@ namespace SAM.Geometry.Spatial
             return IsNormalized(plane.Convert(closed2D), orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
         }
 
-        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = SAM.Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        public static bool IsNormalized(this IClosedPlanar3D closedPlanar3D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Plane plane = closedPlanar3D?.GetPlane();
             if (plane == null)

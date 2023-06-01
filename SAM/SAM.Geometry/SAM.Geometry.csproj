@@ -95,6 +95,7 @@
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
     <Compile Include="Planar\Query\FilterRelevant.cs" />
+    <Compile Include="Planar\Query\SplitByInternalEdges.cs" />
     <Compile Include="Planar\Query\WorkGeometry.cs" />
     <Compile Include="Planar\Query\Vector2D.cs" />
     <Compile Include="Query\ISAMGeometryObject.cs" />

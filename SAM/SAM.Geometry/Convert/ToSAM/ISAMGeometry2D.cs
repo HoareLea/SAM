@@ -1,9 +1,5 @@
 ﻿using NetTopologySuite.Geometries;
-using NetTopologySuite.IO;
-using NetTopologySuite.Operation.Polygonize;
 using SAM.Geometry.Planar;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry
 {
