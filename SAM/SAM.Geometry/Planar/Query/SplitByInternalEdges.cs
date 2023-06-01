@@ -30,8 +30,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<Segment2D> segment2Ds = externalEdge.GetSegments();
-
+            List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
             foreach (IClosed2D internalEdge_Closed2D in internalEdges)
             {
                 ISegmentable2D internalEdge = internalEdge_Closed2D as ISegmentable2D;
@@ -40,9 +39,33 @@ namespace SAM.Geometry.Planar
                     throw new NotImplementedException();
                 }
 
+                List<Point2D> point2Ds_InternalEdge = internalEdge.GetPoints();
+                if(point2Ds_InternalEdge == null || point2Ds_InternalEdge.Count == 0)
+                {
+                    continue;
+                }
+
+                segmentable2Ds.Add(internalEdge);
+
+                foreach(Point2D point2D_InternalEdge in point2Ds_InternalEdge)
+                {
+                    Point2D point2D_Closest = Closest(externalEdge, point2Ds_InternalEdge);
+                    if(point2D_Closest == null)
+                    {
+                        continue;
+                    }
+
+                    point2Ds.Add(point2D_Closest, tolerance);
+                }
+            }
+
+            List<Segment2D> segment2Ds = externalEdge.GetSegments();
+
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
+            {
                 List<Tuple<Point2D, Point2D>> tuples = new List<Tuple<Point2D, Point2D>>();
 
-                point2Ds.ForEach(x => tuples.Add(new Tuple<Point2D, Point2D>(Closest(internalEdge, x), x)));
+                point2Ds.ForEach(x => tuples.Add(new Tuple<Point2D, Point2D>(Closest(segmentable2D, x), x)));
 
                 if (tuples.Count < 3)
                 {
@@ -77,7 +100,7 @@ namespace SAM.Geometry.Planar
 
                 segment2Ds.Add(segment2D_1);
                 segment2Ds.Add(segment2D_2);
-                segment2Ds.AddRange(internalEdge.GetSegments());
+                segment2Ds.AddRange(segmentable2D.GetSegments());
             }
 
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
