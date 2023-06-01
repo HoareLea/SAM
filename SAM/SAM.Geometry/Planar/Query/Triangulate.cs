@@ -113,7 +113,16 @@ namespace SAM.Geometry.Planar
             {
                 Polygon polygon = face2D_Temp.ToNTS(tolerance);
 
-                List<Polygon> polygons_Triangulate = Triangulate(polygon, tolerance);
+                List<Polygon> polygons_Triangulate = null;
+                try
+                {
+                    polygons_Triangulate = Triangulate(polygon, tolerance);
+                }
+                catch
+                {
+                    polygons_Triangulate = null;
+                }
+
                 if(polygons_Triangulate == null || polygons_Triangulate.Count == 0)
                 {
                     continue;
@@ -129,52 +138,7 @@ namespace SAM.Geometry.Planar
 
                     result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
                 }
-
-
-                //DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
-                //delaunayTriangulationBuilder.SetSites(polygon);
-
-                //GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
-
-                //GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
-                //if (geometryCollection == null)
-                //{
-                //    continue;
-                //}
-
-                //foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
-                //{
-                //    Polygon polygon_Temp = geometry as Polygon;
-                //    if (polygon == null)
-                //    {
-                //        continue;
-                //    }
-
-                //    polygons.Add(polygon_Temp);
-                //}
             }
-
-            //foreach(Polygon polygon_Temp in polygons)
-            //{
-            //    Polygon polygon_Intersection = polygon_Temp.Intersection(polygon_Temp) as Polygon;
-            //    if (!Core.Query.AlmostEqual(polygon_Intersection.Area, polygon_Temp.Area, tolerance))
-            //    {
-
-            //    }
-
-            //    if (!polygon.Contains(polygon_Temp.Centroid))
-            //    {
-            //        continue;
-            //    }
-
-            //    Coordinate[] coordinates = polygon_Temp.Coordinates;
-            //    if (coordinates == null || coordinates.Length != 4)
-            //    {
-            //        continue;
-            //    }
-
-            //    result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
-            //}
 
             return result;
         }
