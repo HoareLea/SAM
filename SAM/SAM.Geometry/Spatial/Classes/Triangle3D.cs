@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
 
         public Triangle3D(Triangle3D triangle3D)
         {
-            points = Query.Clone(triangle3D.points).ToArray();
+            points = Query.Clone(triangle3D?.points)?.ToArray();
         }
 
         public Triangle3D(JObject jObject)
@@ -80,7 +80,7 @@ namespace SAM.Geometry.Spatial
 
         public override ISAMGeometry Clone()
         {
-            throw new NotImplementedException();
+            return new Triangle3D(this);
         }
 
         public List<Segment3D> GetSegments()
@@ -147,7 +147,13 @@ namespace SAM.Geometry.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
-            points = Geometry.Create.ISAMGeometries<Point3D>(jObject.Value<JArray>("Points")).ToArray();
+            if(jObject == null)
+            {
+                return false;
+            }
+
+            points = Geometry.Create.ISAMGeometries<Point3D>(jObject.Value<JArray>("Points"))?.ToArray();
+            
             return true;
         }
 
@@ -157,7 +163,11 @@ namespace SAM.Geometry.Spatial
             if (jObject == null)
                 return null;
 
-            jObject.Add("Points", Geometry.Create.JArray(points));
+            if(points != null && points.Length == 3)
+            {
+                jObject.Add("Points", Geometry.Create.JArray(points));
+            }
+
             return jObject;
         }
 
@@ -201,6 +211,11 @@ namespace SAM.Geometry.Spatial
 
         public override int GetHashCode()
         {
+            if(points == null || points.Length != 3)
+            {
+                return -1;
+            }
+
             return new Tuple<Point3D, Point3D, Point3D>(points[0], points[1], points[2]).GetHashCode();
         }
 

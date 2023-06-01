@@ -14,7 +14,15 @@ namespace SAM.Geometry.Planar
 
             segment2Ds = segment2Ds.Split(tolerance);
 
-            return Create.Polygon2Ds(segment2Ds, tolerance);
+            List<Polygon2D> result = Create.Polygon2Ds(segment2Ds, tolerance);
+            if(result == null || result.Count == 0)
+            {
+                return result;
+            }
+
+            result.RemoveAll(x => x == null || !polygon2D.Inside(x.GetInternalPoint2D(tolerance), tolerance));
+
+            return result;
         }
     }
 }

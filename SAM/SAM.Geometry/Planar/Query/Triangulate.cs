@@ -98,20 +98,49 @@ namespace SAM.Geometry.Planar
         public static List<Triangle2D> Triangulate(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (face2D == null)
-                return null;
-
-            List<Face2D> face2Ds = face2D.FixEdges(tolerance);
-            if(face2Ds == null || face2Ds.Count == 0)
             {
-                face2Ds = new List<Face2D>() { face2D };
+                return null;
             }
 
             List<Triangle2D> result = new List<Triangle2D>();
 
+            if (!face2D.HasInternalEdge2Ds)
+            {
+                List<Point2D> point2Ds = (face2D.ExternalEdge2D as ISegmentable2D)?.GetPoints();
+                if (point2Ds != null && point2Ds.Count < 5)
+                {
+                    if (point2Ds.Count == 3)
+                    {
+                        result.Add(new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]));
+                    }
+
+                    if (point2Ds.Count == 4)
+                    {
+                        result.Add(new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]));
+                        result.Add(new Triangle2D(point2Ds[0], point2Ds[2], point2Ds[3]));
+                    }
+
+                    result.RemoveAll(x => x.GetArea() < tolerance);
+
+                    return result;
+                }
+            }
+
+            List<Face2D> face2Ds = face2D.FixEdges(tolerance);
+            if (face2Ds == null || face2Ds.Count == 0)
+            {
+                face2Ds = new List<Face2D>() { face2D };
+            }
+
             foreach (Face2D face2D_Temp in face2Ds)
             {
+                if(face2D_Temp == null)
+                {
+                    continue;
+                }
+                
                 Polygon polygon = face2D_Temp.ToNTS(tolerance);
-                if(polygon == null || polygon.IsEmpty)
+                if (polygon == null || polygon.IsEmpty)
                 {
                     continue;
                 }
@@ -126,27 +155,67 @@ namespace SAM.Geometry.Planar
                     polygons_Triangulate = null;
                 }
 
-                if(polygons_Triangulate == null || polygons_Triangulate.Count == 0)
+                if (polygons_Triangulate != null && polygons_Triangulate.Count != 0)
                 {
-                    if(!face2D_Temp.HasInternalEdge2Ds)
+                    double area = face2D_Temp.GetArea();
+                    double area_Trinagulate = polygons_Triangulate.ConvertAll(x => x.Area).Sum();
+                    if (!Core.Query.AlmostEqual(area, area_Trinagulate))
                     {
-                        continue;
+                        polygons_Triangulate = null;
                     }
+                }
 
-                    List<Face2D> face2Ds_Split = face2D_Temp.SplitByInternalEdges(tolerance);
-                    if (face2Ds_Split == null || face2Ds_Split.Count == 0)
+                if (polygons_Triangulate == null || polygons_Triangulate.Count == 0)
+                {
+                    List<Triangle2D> triangle2Ds = null;
+
+                    if (!face2D_Temp.HasInternalEdge2Ds)
                     {
-                        continue;
+                        Polygon2D polygon2D = new Polygon2D((face2D_Temp.ExternalEdge2D as ISegmentable2D)?.GetPoints());
+                        if(polygon2D.IsValid())
+                        {
+                            List<Polygon2D> polygon2Ds = polygon2D.SelfIntersectionPolygon2Ds(polygon2D.GetBoundingBox().DiagonalLength(), tolerance);
+                            if(polygon2Ds != null)
+                            {
+                                triangle2Ds = new List<Triangle2D>();
+
+                                foreach (Polygon2D polygon2D_Temp in polygon2Ds)
+                                {
+                                    List<Triangle2D> triangle2Ds_Temp = Triangulate(new Face2D(polygon2D_Temp.SimplifyByAngle()), tolerance);
+                                    if (triangle2Ds_Temp == null || triangle2Ds_Temp.Count == 0)
+                                    {
+                                        continue;
+                                    }
+
+                                    triangle2Ds.AddRange(triangle2Ds_Temp);
+                                }
+                            }
+                        }
                     }
-
-                    foreach(Face2D face2D_Split in face2Ds_Split)
+                    else
                     {
-                        List<Triangle2D> triangle2Ds = Triangulate(face2D_Split, tolerance);
-                        if(triangle2Ds == null || triangle2Ds.Count == 0)
+                        List<Face2D> face2Ds_Updated = face2D_Temp.SplitByInternalEdges(tolerance);
+                        if (face2Ds_Updated == null || face2Ds_Updated.Count == 0)
                         {
                             continue;
                         }
 
+                        triangle2Ds = new List<Triangle2D>();
+
+                        foreach (Face2D face2D_Split in face2Ds_Updated)
+                        {
+                            List<Triangle2D> triangle2Ds_Temp = Triangulate(face2D_Split, tolerance);
+                            if (triangle2Ds_Temp == null || triangle2Ds_Temp.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            triangle2Ds.AddRange(triangle2Ds_Temp);
+                        }
+                    }
+
+                    if(triangle2Ds != null)
+                    {
                         result.AddRange(triangle2Ds);
                     }
 
