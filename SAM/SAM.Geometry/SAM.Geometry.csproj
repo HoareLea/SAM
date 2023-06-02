@@ -97,6 +97,7 @@
     <Compile Include="Planar\Query\DiagonalLength.cs" />
     <Compile Include="Planar\Query\FilterRelevant.cs" />
     <Compile Include="Planar\Query\SplitByInternalEdges.cs" />
+    <Compile Include="Planar\Query\TriangulateByNTS.cs" />
     <Compile Include="Planar\Query\WorkGeometry.cs" />
     <Compile Include="Planar\Query\Vector2D.cs" />
     <Compile Include="Query\ISAMGeometryObject.cs" />

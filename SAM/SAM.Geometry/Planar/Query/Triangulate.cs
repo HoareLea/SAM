@@ -3,12 +3,14 @@ using NetTopologySuite.Triangulate;
 using NetTopologySuite.Geometries;
 using System.Linq;
 using System;
+using SAM.Core;
+using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<Triangle2D> Triangulate(this IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this IEnumerable<Point2D> point2Ds, double tolerance = Tolerance.MicroDistance)
         {
             if (point2Ds == null)
             {
@@ -62,40 +64,86 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Triangulate(this Polygon2D polygon2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
         {
-            if (polygon2D == null)
+            List<Point2D> point2Ds = polygon2D?.GetPoints();
+            if(point2Ds == null || point2Ds.Count < 3)
+            {
                 return null;
-
-            Polygon polygon = polygon2D.ToNTS_Polygon(tolerance);
-
-            DelaunayTriangulationBuilder delaunayTriangulationBuilder = new DelaunayTriangulationBuilder();
-            delaunayTriangulationBuilder.SetSites(polygon);
-
-            GeometryFactory geometryFactory = new GeometryFactory(new PrecisionModel(1 / tolerance));
-
-            GeometryCollection geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
-            if (geometryCollection == null)
-                return null;
+            }
 
             List<Triangle2D> result = new List<Triangle2D>();
-            foreach (NetTopologySuite.Geometries.Geometry geometry in geometryCollection.Geometries)
+
+            if (point2Ds.Count == 3)
             {
-                Polygon polygon_Temp = geometry as Polygon;
-                if (polygon_Temp == null)
-                    continue;
+                result.Add(new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]));
+                return result;
+            }
 
-                Coordinate[] coordinates = polygon_Temp.Coordinates;
-                if (coordinates == null || coordinates.Length != 4)
-                    continue;
+            if(point2Ds.Count == 4)
+            {
+                result.Add(new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]));
+                result.Add(new Triangle2D(point2Ds[2], point2Ds[3], point2Ds[0]));
+                return result;
+            }
 
-                result.Add(new Triangle2D(coordinates[0].ToSAM(tolerance), coordinates[1].ToSAM(), coordinates[2].ToSAM(tolerance)));
+            while (point2Ds.Count > 0)
+            {
+                double length = double.MaxValue;
+                Triangle2D triangle2D = null;
+                int index = -1;
+                for (int i = 0; i < point2Ds.Count; i++)
+                {
+                    Point2D point2D_Previous = Core.Query.Previous(point2Ds, i);
+                    Point2D point2D = point2Ds[i];
+                    Point2D point2D_Next = Core.Query.Next(point2Ds, i);
+
+                    Segment2D segment2D = new Segment2D(point2D_Previous, point2D_Next);
+
+                    double length_Temp = segment2D.GetLength();
+                    if(length_Temp > length)
+                    {
+                        continue;
+                    }
+
+                    List<Point2D> point2Ds_Intersection = Intersections(polygon2D, segment2D, tolerance);
+                    if (point2Ds_Intersection.Count > 2)
+                    {
+                        continue;
+                    }
+
+                    Triangle2D triangle2D_Temp = new Triangle2D(point2D_Previous, point2D, point2D_Next);
+
+                    Point2D point2D_Centroid = triangle2D_Temp.GetCentroid();
+                    if (point2D_Centroid == null)
+                    {
+                        continue;
+                    }
+
+                    if (!polygon2D.Inside(point2D_Centroid, tolerance) || polygon2D.On(point2D_Centroid, tolerance))
+                    {
+                        continue;
+                    }
+
+                    index = i;
+                    triangle2D = triangle2D_Temp;
+                    length = length_Temp;
+                }
+
+                if(index != -1)
+                {
+                    point2Ds.RemoveAt(index);
+                    result.Add(triangle2D);
+                    continue;
+                }
+
+                break;
             }
 
             return result;
         }
 
-        public static List<Triangle2D> Triangulate(this Face2D face2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this Face2D face2D, double tolerance = Tolerance.MicroDistance)
         {
             if (face2D == null)
             {
@@ -181,7 +229,7 @@ namespace SAM.Geometry.Planar
 
                                 foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                                 {
-                                    List<Triangle2D> triangle2Ds_Temp = Triangulate(new Face2D(polygon2D_Temp.SimplifyByAngle()), tolerance);
+                                    List<Triangle2D> triangle2Ds_Temp = Triangulate(polygon2D_Temp, tolerance);
                                     if (triangle2Ds_Temp == null || triangle2Ds_Temp.Count == 0)
                                     {
                                         continue;
@@ -237,7 +285,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Triangulate(this Polyline2D polyline2D, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this Polyline2D polyline2D, double tolerance = Tolerance.MicroDistance)
         {
             if (polyline2D == null)
                 return null;
@@ -317,7 +365,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Triangulate<T>(this T geometry2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance) where T : ISegmentable2D, IClosed2D
+        public static List<Triangle2D> Triangulate<T>(this T geometry2D, IEnumerable<Point2D> point2Ds, double tolerance = Tolerance.MicroDistance) where T : ISegmentable2D, IClosed2D
         {
             if (geometry2D == null)
             {
@@ -383,7 +431,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Triangle2D> Triangulate(this Face2D face2D, IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Triangle2D> Triangulate(this Face2D face2D, IEnumerable<Point2D> point2Ds, double tolerance = Tolerance.MicroDistance)
         {
             if (face2D == null)
             {
@@ -531,7 +579,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Core.Tolerance.MicroDistance)
+        private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Tolerance.MicroDistance)
         {
             if(polygon == null)
             {
