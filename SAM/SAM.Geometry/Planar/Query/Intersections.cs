@@ -18,7 +18,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_2 == null)
                 return null;
 
-            HashSet<Point2D> point2Ds = new HashSet<Point2D>();
+            List<Point2D> result = new List<Point2D>();
             foreach (Segment2D segment2D_1 in segment2Ds_1)
             {
                 if (segment2D_1 == null)
@@ -33,11 +33,11 @@ namespace SAM.Geometry.Planar
                     if (point2D_Intersection == null)
                         continue;
 
-                    point2Ds.Add(point2D_Intersection);
+                    result.Add(point2D_Intersection, tolerance);
                 }
             }
 
-            return point2Ds.ToList();
+            return result;
         }
 
         public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
