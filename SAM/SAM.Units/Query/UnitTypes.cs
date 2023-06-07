@@ -162,6 +162,25 @@ namespace SAM.Units
                     }
 
                     return result;
+
+                case UnitCategory.Power:
+
+                    if (unitStyles == null || unitStyles.Length == 0)
+                    {
+                        result.Add(Units.UnitType.Watt);
+                        result.Add(Units.UnitType.Kilowatt);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.SI))
+                    {
+                        result.Add(Units.UnitType.Watt);
+                        result.Add(Units.UnitType.Kilowatt);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
+                    {
+
+                    }
+
+                    return result;
             }
 
             return null;

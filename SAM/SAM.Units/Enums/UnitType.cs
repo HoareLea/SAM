@@ -26,5 +26,7 @@ namespace SAM.Units
         [Abbreviation("psi")] [Description("Pound Per Square Inch")] PoundPerSquareInch,
         [Abbreviation("kJ")] [Description("Kilojule")] Kilojule,
         [Abbreviation("J")] [Description("Jule")] Jule,
+        [Abbreviation("W")] [Description("Watt")] Watt,
+        [Abbreviation("kW")] [Description("Kliowatt")] Kilowatt,
     }
 }

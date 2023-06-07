@@ -46,6 +46,9 @@ namespace SAM.Units
 
                         case UnitCategory.Enthaply:
                             return Units.UnitType.Jule;
+
+                        case UnitCategory.Power:
+                            return Units.UnitType.Watt;
                     }
                     break;
 
