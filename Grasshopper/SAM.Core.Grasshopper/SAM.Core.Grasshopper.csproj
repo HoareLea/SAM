@@ -266,4 +266,11 @@ xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\Use
     <StartAction>Program</StartAction>
     <DocumentationFile>..\..\build\SAM.Core.Grasshopper.xml</DocumentationFile>
   </PropertyGroup>
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+    <StartProgram>C:\Program Files\Rhino 7\System\Rhino.exe</StartProgram>
+    <StartArguments>
+    </StartArguments>
+    <StartAction>Program</StartAction>
+    <DocumentationFile>..\..\build\SAM.Core.Grasshopper.xml</DocumentationFile>
+  </PropertyGroup>
 </Project>
