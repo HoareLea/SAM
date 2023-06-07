@@ -7,16 +7,35 @@ namespace SAM.Geometry.Planar
         public static bool Add(this List<Point2D> point2Ds, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (point2Ds == null || point2D == null)
-                return false;
-
-            Point2D point2D_Temp = point2Ds.Find(x => x.Distance(point2D) <= tolerance);
-            if(point2D_Temp == null)
             {
-                point2Ds.Add(point2D);
-                return true;
+                return false;
             }
 
-            return false;
+            foreach(Point2D point2D_Temp in point2Ds)
+            {
+                if(point2D_Temp == null)
+                {
+                    continue;
+                }
+
+                if(System.Math.Abs(point2D_Temp.X - point2D.X) > tolerance)
+                {
+                    continue;
+                }
+
+                if (System.Math.Abs(point2D_Temp.Y - point2D.Y) > tolerance)
+                {
+                    continue;
+                }
+
+                if(point2D_Temp.Distance(point2D) <= tolerance)
+                {
+                    return false;
+                }
+            }
+
+            point2Ds.Add(point2D);
+            return true;
         }
 
         public static bool Add(this List<Point2D> point2Ds, double x, double y)
