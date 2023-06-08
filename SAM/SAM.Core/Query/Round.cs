@@ -6,8 +6,8 @@ namespace SAM.Core
     {
         public static double Round(this double value, double tolerance = Core.Tolerance.Distance)
         {
-            if (double.IsNaN(value))
-                return double.NaN;
+            if (double.IsNaN(value) || double.IsInfinity(value))
+                return value;
 
             if (tolerance.Equals(0.0))
                 return value;
