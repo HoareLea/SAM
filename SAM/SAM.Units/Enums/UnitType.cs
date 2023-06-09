@@ -25,6 +25,8 @@ namespace SAM.Units
         [Abbreviation("Ba")] [Description("Bar")] Bar,
         [Abbreviation("psi")] [Description("Pound Per Square Inch")] PoundPerSquareInch,
         [Abbreviation("kJ")] [Description("Kilojule")] Kilojule,
+        [Abbreviation("kJ/kg")] [Description("Kilojule Per Kilogram")] KilojulePerKilogram,
+        [Abbreviation("J/kg")] [Description("Jule Per Kilogram")] JulePerKilogram,
         [Abbreviation("J")] [Description("Jule")] Jule,
         [Abbreviation("W")] [Description("Watt")] Watt,
         [Abbreviation("kW")] [Description("Kliowatt")] Kilowatt,

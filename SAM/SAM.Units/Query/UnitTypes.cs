@@ -163,6 +163,25 @@ namespace SAM.Units
 
                     return result;
 
+                case UnitCategory.SpecificEnthaply:
+
+                    if (unitStyles == null || unitStyles.Length == 0)
+                    {
+                        result.Add(Units.UnitType.JulePerKilogram);
+                        result.Add(Units.UnitType.KilojulePerKilogram);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.SI))
+                    {
+                        result.Add(Units.UnitType.JulePerKilogram);
+                        result.Add(Units.UnitType.KilojulePerKilogram);
+                    }
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
+                    {
+
+                    }
+
+                    return result;
+
                 case UnitCategory.Power:
 
                     if (unitStyles == null || unitStyles.Length == 0)

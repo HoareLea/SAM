@@ -47,6 +47,9 @@ namespace SAM.Units
                         case UnitCategory.Enthaply:
                             return Units.UnitType.Jule;
 
+                        case UnitCategory.SpecificEnthaply:
+                            return Units.UnitType.JulePerKilogram;
+
                         case UnitCategory.Power:
                             return Units.UnitType.Watt;
                     }

@@ -14,6 +14,7 @@ namespace SAM.Units
         [Description("Relative Humidity")] RelativeHumidity,
         [Description("Efficiency")] Efficiency,
         [Description("Enthalpy")] Enthaply,
+        [Description("Specific Enthalpy")] SpecificEnthaply,
         [Description("Power")] Power,
     }
 }
