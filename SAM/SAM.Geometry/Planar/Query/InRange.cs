@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
                     return true;
             }
 
-            if (!(closed2D is ISegmentable2D))
+            if (!(closed2D_Temp is ISegmentable2D))
                 throw new System.NotImplementedException();
 
             if (Intersect(closed2D_Temp as ISegmentable2D, segmentable2D.GetSegments()))
