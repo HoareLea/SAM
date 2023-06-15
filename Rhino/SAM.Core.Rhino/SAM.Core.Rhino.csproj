@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Modify\AddLayer.cs" />
     <Compile Include="Modify\AddSAMLayer.cs" />
     <Compile Include="Modify\GetLayer.cs" />
     <Compile Include="Modify\SetUserStrings.cs" />
