@@ -102,6 +102,7 @@
     <Compile Include="Component\SAMAnalyticalBake.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateSpacePanelArea.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModelBySpaces.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByBooleans.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateByModel.cs" />
     <Compile Include="Component\SAMAnalyticalSetDefaultApertureConstruction.cs" />
@@ -286,7 +287,7 @@
     <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePanelTypes.cs" />
     <Compile Include="Component\SAMAnalyticalAddSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModel.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster.cs" />
     <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />
     <Compile Include="Component\SAMAnalyticalPanelDistance.cs" />
     <Compile Include="Component\SAMAnalyticalTransfom.cs" />

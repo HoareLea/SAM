@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateAnalyticalModel : GH_SAMComponent
+    public class SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.5";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalCreateAnalyticalModel()
+        public SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster()
           : base("SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster", "SAMAnalytical.CreateAnalyticalModelByAdjacencyCluster",
               "Create Analytical Model",
               "SAM", "Analytical")
@@ -141,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
 
             IEnumerable<Profile> profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
-            profileLibrary = new ProfileLibrary("Default Material Library", profiles);
+            profileLibrary = new ProfileLibrary("Default Profile Library", profiles);
 
             dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster, materialLibrary, profileLibrary)));
         }
