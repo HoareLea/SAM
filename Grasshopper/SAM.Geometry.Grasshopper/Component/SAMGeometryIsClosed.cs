@@ -102,7 +102,7 @@ namespace SAM.Geometry.Grasshopper
             if (index != -1)
             {
                 double tolerance_Temp = double.NaN;
-                if (!dataAccess.GetData(index, ref tolerance_Temp) && !double.IsNaN(tolerance_Temp))
+                if (dataAccess.GetData(index, ref tolerance_Temp) && !double.IsNaN(tolerance_Temp))
                     tolerance = tolerance_Temp;
             }
 
