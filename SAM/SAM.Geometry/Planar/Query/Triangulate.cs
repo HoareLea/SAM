@@ -4,7 +4,6 @@ using NetTopologySuite.Geometries;
 using System.Linq;
 using System;
 using SAM.Core;
-using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Planar
 {
