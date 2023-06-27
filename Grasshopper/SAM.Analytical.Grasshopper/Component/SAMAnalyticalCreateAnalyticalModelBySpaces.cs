@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_location_", "_location_", "SAM Location \n *or WeatherData it will extract location", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddParameter(new GooPanelParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+            index = inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
             inputParamManager[index].Optional = false;
 
