@@ -138,7 +138,7 @@ namespace SAM.Analytical.Grasshopper
                 space.SetValue(SpaceParameter.Area, area);
             }
 
-            index = Params.IndexOfInputParam("space");
+            index = Params.IndexOfOutputParam("space");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooSpace(space));
