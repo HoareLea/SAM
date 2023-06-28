@@ -220,6 +220,7 @@
     <Compile Include="Modify\UpdateByType.cs" />
     <Compile Include="Query\ActiveObject.cs" />
     <Compile Include="Query\Category.cs" />
+    <Compile Include="Query\LogarithmicMeanTemperatureDifference.cs" />
     <Compile Include="Query\TryParseGuids.cs" />
     <Compile Include="Query\FindByType.cs" />
     <Compile Include="Query\TypeName.cs" />
