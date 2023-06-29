@@ -18,7 +18,7 @@
                 return double.NaN;
             }
             
-            double vapourizationLatentHeat = VapourizationLatentHeat(dryBulbTemperature_Inside);
+            double vapourizationLatentHeat = Core.Query.VapourizationLatentHeat(dryBulbTemperature_Inside);
             if (double.IsNaN(vapourizationLatentHeat))
             {
                 return double.NaN;
@@ -30,7 +30,7 @@
                 return double.NaN;
             }
 
-            return calculatedInfiltrationMassAirFlow * (humidityRatio_Outside - humidityRatio_Inside) * (1.86 * dryBulbTemperature_Inside + vapourizationLatentHeat) * 1000;
+            return calculatedInfiltrationMassAirFlow * (humidityRatio_Outside - humidityRatio_Inside) * (1.86 * dryBulbTemperature_Inside + vapourizationLatentHeat);
         }
     }
 }
