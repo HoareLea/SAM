@@ -3,7 +3,7 @@
     public static partial class Query
     {
         /// <summary>
-        /// Latent Heat of Vapourization - The specific heat of water condensation [J/kg] for temparture range from -25C to 100C 
+        /// Latent Heat of Vapourization (Evaporation heat of water) - The specific heat of water condensation [J/kg] for temparture range from -25C to 100C 
         /// </summary>
         /// <param name="dryBulbTemperature">Dry Bulb Temprature (from -25 to 100) [C]</param>
         /// <returns>Latent Heat of Vapourization [J/kg]</returns>
