@@ -90,6 +90,7 @@
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Create\Mesh2D.cs" />
     <Compile Include="Planar\Create\Polygon2D.cs" />
+    <Compile Include="Planar\Create\Vector2D.cs" />
     <Compile Include="Planar\Interfaces\IBoundable2DObject.cs" />
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
