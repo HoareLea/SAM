@@ -135,9 +135,19 @@ namespace SAM.Core
             return (value as dynamic) <= (max as dynamic) && (value as dynamic) >= (min as dynamic);
         }
 
+        public bool In(T value, T tolerance)
+        {
+            return (value as dynamic) <= (max as dynamic + tolerance as dynamic) && (value as dynamic) >= (min as dynamic - tolerance as dynamic);
+        }
+
         public bool Out(T value)
         {
             return !In(value);
+        }
+
+        public bool Out(T value, T tolerance)
+        {
+            return !In(value, tolerance);
         }
 
         public bool In(Range<T> range)
@@ -150,6 +160,16 @@ namespace SAM.Core
             return (range.min as dynamic) <= (min as dynamic) && (range.max as dynamic) >= (max as dynamic);
         }
 
+        public bool In(Range<T> range, T tolerance)
+        {
+            if (range == null)
+            {
+                return false;
+            }
+
+            return (range.min as dynamic) <= (min as dynamic - tolerance as dynamic) && (range.max as dynamic) >= (max as dynamic + tolerance as dynamic);
+        }
+
         public bool Out(Range<T> range)
         {
             if (range == null)
@@ -160,9 +180,24 @@ namespace SAM.Core
             return (range.min as dynamic) >= (max as dynamic) || (range.max as dynamic) <= (min as dynamic);
         }
 
+        public bool Out(Range<T> range, T tolerance)
+        {
+            if (range == null)
+            {
+                return false;
+            }
+
+            return (range.min as dynamic) >= (max as dynamic - tolerance as dynamic) || (range.max as dynamic) <= (min as dynamic + tolerance as dynamic);
+        }
+
         public bool Intersect(Range<T> range)
         {
             return !Out(range);
+        }
+
+        public bool Intersect(Range<T> range, T tolerance)
+        {
+            return !Out(range, tolerance);
         }
 
         public override bool Equals(object @object)
