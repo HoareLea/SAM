@@ -48,6 +48,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\CoolingCoil.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
     <Compile Include="Classes\Filter\ApertureApertureTypeFilter.cs" />
     <Compile Include="Classes\Filter\ApertureFrameAreaFilter.cs" />
@@ -82,7 +85,7 @@
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
     <Compile Include="Classes\BoundaryEdge2DLoop.cs" />
     <Compile Include="Classes\Boundary2D.cs" />
-    <Compile Include="Classes\AirHandlingUnit.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\AirHandlingUnit.cs" />
     <Compile Include="Classes\New\AirPartition.cs" />
     <Compile Include="Classes\New\OpeningTypeLibrary.cs" />
     <Compile Include="Classes\New\BuildingModel.cs" />
@@ -240,6 +243,7 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
     <Compile Include="Interfaces\Filter\IAdjacencyClusterFilter.cs" />
+    <Compile Include="Interfaces\IAirHandlingUnitComponent.cs" />
     <Compile Include="Interfaces\OpeningProperties\ISingleOpeningProperties.cs" />
     <Compile Include="Interfaces\OpeningProperties\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />

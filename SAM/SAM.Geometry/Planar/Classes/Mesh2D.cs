@@ -286,6 +286,23 @@ namespace SAM.Geometry.Planar
 
             return -1;
         }
+
+        public List<Tuple<int, int, int>> GetIndexes()
+        {
+            if(indexes == null)
+            {
+                return null;
+            }
+
+            List<Tuple<int, int, int>> result = new List<Tuple<int, int, int>>();
+            for (int i = 0; i < indexes.Count; i++)
+            {
+                result.Add(new Tuple<int, int, int>(indexes[i].Item1, indexes[i].Item2, indexes[i].Item3));
+            }
+
+            return result;
+        }
+
         public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (points == null || indexes == null)
