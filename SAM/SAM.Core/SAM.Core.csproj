@@ -69,6 +69,8 @@
     <Compile Include="Classes\Base\Tag.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
     <Compile Include="Classes\Base\ParameterizedSAMObject.cs" />
+    <Compile Include="Classes\Connection\ConnectionModel.cs" />
+    <Compile Include="Classes\Connection\Connection.cs" />
     <Compile Include="Classes\Filter\Filter.cs" />
     <Compile Include="Classes\Filter\MultiRelationFilter.cs" />
     <Compile Include="Classes\Filter\EnumFilter.cs" />

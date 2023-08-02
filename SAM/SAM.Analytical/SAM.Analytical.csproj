@@ -49,6 +49,8 @@
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\Humidifier.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\HeatRecoveryUnit.cs" />
     <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\CoolingCoil.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />

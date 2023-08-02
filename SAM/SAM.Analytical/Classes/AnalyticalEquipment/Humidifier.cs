@@ -1,36 +1,34 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
 using System;
 
 namespace SAM.Analytical
 {
     /// <summary>
-    /// Represents an cooling coil unit object in the analytical domain
+    /// Represents an heat humidifier unit unit object in the analytical domain
     /// </summary>
-    public class CoolingCoil : Coil
+    public class Humidifier : SAMObject, IAirHandlingUnitComponent
     {
-        private double OffTemperature = double.NaN;
-        private double contactFactor = double.NaN;
-
-        public CoolingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature)
-            : base(name, fluidSupplyTemperature, fluidReturnTemperature)
+        public Humidifier(string name)
+            : base(name)
         {
 
         }
 
-        public CoolingCoil(JObject jObject)
+        public Humidifier(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public CoolingCoil(CoolingCoil coolingCoil)
-            : base(coolingCoil)
+        public Humidifier(Humidifier humidifier)
+            : base(humidifier)
         {
 
         }
 
-        public CoolingCoil(Guid guid, string name, double fluidSupplyTemperature, double fluidReturnTemperature)
-            : base(guid, name, fluidSupplyTemperature, fluidReturnTemperature)
+        public Humidifier(Guid guid, string name)
+            : base(guid, name)
         {
 
         }
