@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Planar\Classes\Solver2D\Solver2DData.cs" />
+    <Compile Include="Planar\Classes\Solver2D\Solver2D.cs" />
     <Compile Include="Classes\PointGraph.cs" />
     <Compile Include="Classes\PointGraphEdge.cs" />
     <Compile Include="Classes\SAMGeometryObjectCollection.cs" />
@@ -88,6 +90,7 @@
     <Compile Include="Planar\Classes\Point2DGraph.cs" />
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Classes\Mesh2D.cs" />
+    <Compile Include="Planar\Classes\Solver2D\Solver2DResult.cs" />
     <Compile Include="Planar\Create\Mesh2D.cs" />
     <Compile Include="Planar\Create\Polygon2D.cs" />
     <Compile Include="Planar\Create\Vector2D.cs" />
