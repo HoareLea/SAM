@@ -24,5 +24,13 @@
             return closed2D is T ? (T)closed2D : default;
         }
 
+        public object Tag
+        {
+            get
+            {
+                return solver2DData?.Tag;
+            }
+        }
+
     }
 }
