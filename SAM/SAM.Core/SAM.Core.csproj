@@ -65,6 +65,7 @@
     <Compile Include="Attributes\Parameter\ParameterProperties.cs" />
     <Compile Include="Attributes\Parameter\ParameterValue.cs" />
     <Compile Include="Classes\Base\AnyOf.cs" />
+    <Compile Include="Classes\Base\Reference.cs" />
     <Compile Include="Classes\Base\Types.cs" />
     <Compile Include="Classes\Base\Tag.cs" />
     <Compile Include="Classes\Base\EnumParameterData.cs" />
@@ -83,6 +84,9 @@
     <Compile Include="Classes\Filter\GuidFilter.cs" />
     <Compile Include="Classes\Filter\NameFilter.cs" />
     <Compile Include="Classes\Message\Message.cs" />
+    <Compile Include="Classes\Relation\RelationCollection.cs" />
+    <Compile Include="Classes\Relation\Relation.cs" />
+    <Compile Include="Classes\Relation\RelationModel.cs" />
     <Compile Include="Classes\Search\SearchObjectWrapper.cs" />
     <Compile Include="Classes\Search\SearchWrapper.cs" />
     <Compile Include="Classes\Base\ParameterData.cs" />
@@ -112,6 +116,7 @@
     <Compile Include="Create\TypeMap.cs" />
     <Compile Include="Create\TextMap.cs" />
     <Compile Include="Create\ZipArchiveInfo.cs" />
+    <Compile Include="Enums\RelationType.cs" />
     <Compile Include="Enums\FilterLogicalOperator.cs" />
     <Compile Include="Enums\PageOrientation.cs" />
     <Compile Include="Enums\PageSize.cs" />
@@ -128,6 +133,8 @@
     <Compile Include="Enums\Parameter\LocationParameter.cs" />
     <Compile Include="Enums\Parameter\MaterialParameter.cs" />
     <Compile Include="Enums\UTC.cs" />
+    <Compile Include="Enums\Direction.cs" />
+    <Compile Include="Enums\YesNo.cs" />
     <Compile Include="Enums\Week.cs" />
     <Compile Include="Enums\SAMFileType.cs" />
     <Compile Include="Enums\ParameterType.cs" />
@@ -213,13 +220,13 @@
     <Compile Include="Enums\NumberComparisonType.cs" />
     <Compile Include="Interfaces\Base\IJSAMObject.cs" />
     <Compile Include="Interfaces\Base\IParameterizedSAMObject.cs" />
-    <Compile Include="Interfaces\Relation\ISAMRelation.cs" />
     <Compile Include="Modify\RemoveValue.cs" />
     <Compile Include="Modify\Copy.cs" />
     <Compile Include="Modify\Replace.cs" />
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
     <Compile Include="Modify\UpdateByType.cs" />
+    <Compile Include="Query\RelationType.cs" />
     <Compile Include="Query\ActiveObject.cs" />
     <Compile Include="Query\Category.cs" />
     <Compile Include="Query\LogarithmicMeanTemperatureDifference.cs" />
