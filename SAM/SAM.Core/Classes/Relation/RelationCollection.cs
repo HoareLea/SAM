@@ -1,0 +1,275 @@
+﻿using System.Collections;
+using System.Collections.Generic;
+
+namespace SAM.Core
+{
+    public class RelationCollection : IEnumerable<Relation>
+    {
+        private List<Relation> relations = new List<Relation>();
+
+        public RelationCollection()
+        {
+
+        }
+
+        public RelationCollection(IEnumerable<Relation> relations)
+        {
+            if(relations != null)
+            {
+                this.relations.AddRange(relations);
+            }
+        }
+
+        public IEnumerator<Relation> GetEnumerator()
+        {
+            return relations.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return relations.GetEnumerator();
+        }
+
+        public void Clear()
+        {
+            relations.Clear();
+        }
+
+        public bool Add(Relation relation)
+        {
+            if(relation == null)
+            {
+                return false;
+            }
+
+            relations.Add(relation);
+            return true;
+        }
+
+        public Relation Add(string id, Reference reference_1, Reference reference_2)
+        {
+            Relation result = new Relation(id, reference_1, reference_2);
+
+            relations.Add(result);
+
+            return result;
+            
+        }
+
+        public RelationCollection FindAll(string id)
+        {
+            if(relations == null || string.IsNullOrWhiteSpace(id))
+            {
+                return null;
+            }
+            RelationCollection result = new RelationCollection();
+            foreach (Relation relation in relations)
+            {
+                if(relation == null)
+                {
+                    continue;
+                }
+
+                if(relation.Id == id)
+                {
+                    result.Add(relation);
+                }
+            }
+
+            return result;
+        }
+
+        public RelationCollection FindAll(RelationType relationType)
+        {
+            RelationCollection result = new RelationCollection();
+            foreach (Relation relation in relations)
+            {
+                if (relation.RelationType == relationType)
+                {
+                    result.Add(relation);
+                }
+            }
+
+            return result;
+        }
+
+        public RelationCollection FindAll(Reference reference)
+        {
+            RelationCollection result = new RelationCollection();
+            foreach (Relation relation in relations)
+            {
+                if (relation.Contains(reference))
+                {
+                    result.Add(relation);
+                }
+            }
+
+            return result;
+        }
+
+        public RelationCollection FindAll_1(Reference reference)
+        {
+            RelationCollection result = new RelationCollection();
+            foreach (Relation relation in relations)
+            {
+                if(relation.Contains_1(reference))
+                {
+                    result.Add(relation);
+                }
+            }
+
+            return result;
+        }
+
+        public RelationCollection FindAll_2(Reference reference)
+        {
+            RelationCollection result = new RelationCollection();
+            foreach (Relation relation in relations)
+            {
+                if (relation.Contains_2(reference))
+                {
+                    result.Add(relation);
+                }
+            }
+
+            return result;
+        }
+
+        public Relation Find(string id)
+        {
+            if (relations == null || string.IsNullOrWhiteSpace(id))
+            {
+                return null;
+            }
+
+            foreach (Relation relation in relations)
+            {
+                if (relation == null)
+                {
+                    continue;
+                }
+
+                if (relation.Id == id)
+                {
+                    return relation;
+                }
+            }
+
+            return default;
+        }
+
+        public Relation Find(string id, Reference reference)
+        {
+            if (relations == null || string.IsNullOrWhiteSpace(id))
+            {
+                return null;
+            }
+
+            foreach (Relation relation in relations)
+            {
+                if (relation == null)
+                {
+                    continue;
+                }
+
+                if (relation.Id == id && relation.Contains(reference))
+                {
+                    return relation;
+                }
+            }
+
+            return default;
+        }
+
+        public bool Remove(Relation relation)
+        {
+            if(relation == null)
+            {
+                return false;
+            }
+
+            return relations.Remove(relation);
+        }
+
+        public bool Remove(Reference reference)
+        {
+            bool result = false;
+
+            for (int i = relations.Count - 1; i >= 0; i--)
+            {
+                Relation relation = relations[i];
+
+                if (relation == null)
+                {
+                    continue;
+                }
+
+                if (relation.Contains(reference))
+                {
+                    HashSet<Reference> references_1 = relation.References_1;
+                    references_1.Remove(reference);
+
+                    HashSet<Reference> references_2 = relation.References_2;
+                    references_2.Remove(reference);
+
+                    string id = relation.Id;
+
+                    if (references_1.Count == 0 || references_2.Count == 0)
+                    {
+                        relations.RemoveAt(i);
+                    }
+                    else
+                    {
+                        relations[i] = new Relation(id, references_1, references_2);
+                    }
+
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
+        public HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
+        {
+            if (!reference.IsValid())
+            {
+                return null;
+            }
+
+            RelationCollection relationCollection_Temp = FindAll(reference);
+            if (relationCollection_Temp == null)
+            {
+                return null;
+            }
+
+            HashSet<Reference> result = new HashSet<Reference>();
+
+            foreach (Relation relation in relationCollection_Temp)
+            {
+                if (relationId != null && relation.Id != relationId)
+                {
+                    continue;
+                }
+
+                if (relation.Contains_1(reference))
+                {
+                    foreach (Reference reference_2 in relation.References_2)
+                    {
+                        result.Add(reference_2);
+                    }
+                }
+
+                if (relation.Contains_2(reference))
+                {
+                    foreach (Reference reference_1 in relation.References_1)
+                    {
+                        result.Add(reference_1);
+                    }
+                }
+            }
+
+            return result;
+        }
+    }
+}
