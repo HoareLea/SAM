@@ -4,9 +4,17 @@ namespace SAM.Geometry.Planar
 {
     public class Solver2DSettings
     {
-        public double moveDistance { get; set; } = 0.1;
-        public double maxStepPolyline { get; set; } = 200;
-
-        public double maxStepPoint { get; set; } = 10;
+        /// <summary>
+        /// Distance of subsequent rectangle shifts
+        /// </summary>
+        public double MoveDistance { get; set; } = 0.1;
+        /// <summary>
+        /// Number of subsequent rectangle shifts in polyline variant
+        /// </summary>
+        public double MaxStepPolyline { get; set; } = 200;
+        /// <summary>
+        /// Number of subsequent rectangle shifts in point variant
+        /// </summary>
+        public double MaxStepPoint { get; set; } = 10;
     }
 }

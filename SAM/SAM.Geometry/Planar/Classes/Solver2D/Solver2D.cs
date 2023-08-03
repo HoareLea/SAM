@@ -13,7 +13,7 @@ namespace SAM.Geometry.Planar
             this.area = area;
             this.obstacles2D = obstacles2D;
         }
-
+         
         public bool Add(Rectangle2D rectangle2D, Polyline2D polyline2D, int priority = int.MinValue, object tag = null)
         {
             if (rectangle2D == null || polyline2D == null)
@@ -85,13 +85,13 @@ namespace SAM.Geometry.Planar
 
                     Rectangle2D rectangleWithGivenPointInCenter = rectangle2D.GetMoved(new Vector2D(center, point2D));
 
-                    for (int i = 0; i < solver2DSettings.maxStepPoint; i++)
+                    for (int i = 0; i < solver2DSettings.MaxStepPoint; i++)
                     {
                         if (rectangle2D_New != null) break;
 
                         foreach (Vector2D offset in offsets)
                         {
-                            Vector2D scaledOffset = offset * (1 + i * solver2DSettings.moveDistance);
+                            Vector2D scaledOffset = offset * (1 + i * solver2DSettings.MoveDistance);
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
                             if (area.InRange(rectangle_Temp) && !intersect(rectangle_Temp, result))
@@ -110,13 +110,13 @@ namespace SAM.Geometry.Planar
                     Point2D point = polyline2D.Closest(center);
                     double distanceToCenter = point.Distance(center);
 
-                    for (int i = 0; i < solver2DSettings.maxStepPolyline; i++)
+                    for (int i = 0; i < solver2DSettings.MaxStepPolyline; i++)
                     {
                         if (rectangle2D_New != null) break;
 
                         for (int j = -1; j <= 1; j += 2)
                         {
-                            double xNew = point.X + i * j * solver2DSettings.moveDistance;
+                            double xNew = point.X + i * j * solver2DSettings.MoveDistance;
                             double yNew = getY(polyline2D, xNew);
                             if (yNew == double.NaN) continue;
                             Point2D newPoint = new Point2D(xNew, yNew);
