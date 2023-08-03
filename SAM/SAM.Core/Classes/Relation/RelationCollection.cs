@@ -230,6 +230,47 @@ namespace SAM.Core
             return result;
         }
 
+        public bool Replace(Reference reference_ToBeReplaced, Reference reference)
+        {
+            if(!reference_ToBeReplaced.IsValid() || !reference.IsValid())
+            {
+                return false;
+            }
+
+            bool result = false;
+
+            for (int i = relations.Count - 1; i >= 0; i--)
+            {
+                Relation relation = relations[i];
+
+                if (relation == null)
+                {
+                    continue;
+                }
+
+                if (relation.Contains(reference_ToBeReplaced))
+                {
+                    HashSet<Reference> references_1 = relation.References_1;
+                    if(references_1.Remove(reference_ToBeReplaced))
+                    {
+                        references_1.Add(reference);
+                    }
+
+                    HashSet<Reference> references_2 = relation.References_2;
+                    if(references_2.Remove(reference_ToBeReplaced))
+                    {
+                        references_2.Add(reference);
+                    }
+
+                    relations[i] = new Relation(relation.Id, references_1, references_2);
+
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
         {
             if (!reference.IsValid())

@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\AirHandlingUnitModel.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Humidifier.cs" />
     <Compile Include="Classes\AnalyticalEquipment\HeatRecoveryUnit.cs" />
@@ -304,6 +305,7 @@
     <Compile Include="Query\AirSupplyMethod.cs" />
     <Compile Include="Query\HeatingDesignRelativeHumidity.cs" />
     <Compile Include="Query\CoolingDesignRelativeHumidity.cs" />
+    <Compile Include="Query\TryGetEnums.cs" />
     <Compile Include="Query\TryGetInternalConditions.cs" />
     <Compile Include="Query\UniqueNameDecomposition.cs" />
     <Compile Include="Query\UniqueNamePrefix.cs" />

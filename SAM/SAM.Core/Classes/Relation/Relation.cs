@@ -50,6 +50,36 @@ namespace SAM.Core
             }
         }
 
+        public HashSet<Reference> References
+        {
+            get
+            {
+                if(references_1 == null && references_2 == null)
+                {
+                    return null;
+                }
+
+                HashSet<Reference> result = new HashSet<Reference>();
+                if(references_1 != null)
+                {
+                    foreach(Reference reference in references_1)
+                    {
+                        result.Add(reference);
+                    }
+                }
+
+                if (references_2 != null)
+                {
+                    foreach (Reference reference in references_2)
+                    {
+                        result.Add(reference);
+                    }
+                }
+
+                return result;
+            }
+        }
+
         public HashSet<Reference> References_1
         {
             get

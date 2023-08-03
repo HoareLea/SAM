@@ -226,6 +226,7 @@
     <Compile Include="Modify\SetValue.cs" />
     <Compile Include="Modify\District.cs" />
     <Compile Include="Modify\UpdateByType.cs" />
+    <Compile Include="Query\Opposite.cs" />
     <Compile Include="Query\RelationType.cs" />
     <Compile Include="Query\ActiveObject.cs" />
     <Compile Include="Query\Category.cs" />
