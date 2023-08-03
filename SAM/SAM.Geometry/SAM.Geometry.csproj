@@ -53,6 +53,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Planar\Classes\Solver2D\Solver2DSettings.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2DData.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2D.cs" />
     <Compile Include="Classes\PointGraph.cs" />
