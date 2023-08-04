@@ -212,6 +212,7 @@ namespace SAM.Core
             return result;
         }
 
+        
         protected RelationCollection GetRelations(Func<Relation, bool> func = null)
         {
             return relationCollection?.FindAll(func);

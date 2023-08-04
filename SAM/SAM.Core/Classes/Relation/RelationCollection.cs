@@ -262,6 +262,73 @@ namespace SAM.Core
             return result;
         }
 
+        /// <summary>
+        /// Removes relations between two references. All relations will be removed if id not provided
+        /// </summary>
+        /// <param name="reference_1">First reference</param>
+        /// <param name="reference_2">Second reference</param>
+        /// <param name="id">Relation Id</param>
+        /// <returns>True if any references have been removed</returns>
+        public bool Remove(Reference reference_1, Reference reference_2, string id = null)
+        {
+            if(relations == null || relations.Count == 0)
+            {
+                return false;
+            }
+
+            bool result = false;
+
+            for(int i = relations.Count -1; i >= 0; i--)
+            {
+                Relation relation = relations[i];
+                
+                if(id != null && relation.Id != id)
+                {
+                    continue;
+                }
+                
+                if((relation.Contains_1(reference_1) && relation.Contains_2(reference_2)) || (relation.Contains_1(reference_2) && relation.Contains_2(reference_1)))
+                {
+                    HashSet<Reference> references_1 = relation.References_1;
+                    HashSet<Reference> references_2 = relation.References_2;
+
+                    bool removed = false;
+                    
+                    if (references_1.Contains(reference_1) && references_2.Contains(reference_2))
+                    {
+                        references_1.Remove(reference_1);
+                        references_2.Remove(reference_2);
+                        removed = true;
+                    }
+                    
+                    if(references_1.Contains(reference_2) && references_2.Contains(reference_1))
+                    {
+                        references_1.Remove(reference_2);
+                        references_2.Remove(reference_1);
+                        removed = true;
+                    }
+
+                    if(!removed)
+                    {
+                        continue;
+                    }
+
+                    result = true;
+
+                    if (references_1 == null || references_2 == null || references_1.Count == 0 || references_2.Count == 0)
+                    {
+                        relations.RemoveAt(i);
+                    }
+                    else
+                    {
+                        relations[i] = new Relation(relation.Id, references_1, references_2);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public bool Replace(Reference reference_ToBeReplaced, Reference reference)
         {
             if(!reference_ToBeReplaced.IsValid() || !reference.IsValid())
@@ -345,6 +412,66 @@ namespace SAM.Core
 
             return result;
         }
+
+        //public bool Insert(Reference reference_ToBeInserted, Reference reference_1, Reference reference_2, string id = null)
+        //{
+        //    if (relations == null || relations.Count == 0)
+        //    {
+        //        return false;
+        //    }
+
+        //    bool result = false;
+
+        //    for (int i = relations.Count - 1; i >= 0; i--)
+        //    {
+        //        Relation relation = relations[i];
+
+        //        if (id != null && relation.Id != id)
+        //        {
+        //            continue;
+        //        }
+
+        //        if ((relation.Contains_1(reference_1) && relation.Contains_2(reference_2)) || (relation.Contains_1(reference_2) && relation.Contains_2(reference_1)))
+        //        {
+        //            HashSet<Reference> references_1 = relation.References_1;
+        //            HashSet<Reference> references_2 = relation.References_2;
+
+        //            bool added = false;
+
+        //            if (references_1.Contains(reference_1) && references_2.Contains(reference_2))
+        //            {
+        //                references_1.Remove(reference_1);
+        //                references_1.Add(reference_ToBeInserted);
+
+        //                references_2.Remove(reference_2);
+        //                references_2.Add(reference_ToBeInserted);
+
+        //                added = true;
+        //            }
+
+        //            if (references_1.Contains(reference_2) && references_2.Contains(reference_1))
+        //            {
+        //                references_1.Remove(reference_2);
+        //                references_1.Add(reference_ToBeInserted);
+
+        //                references_2.Remove(reference_1);
+        //                references_2.Add(reference_ToBeInserted);
+        //                added = true;
+        //            }
+
+        //            if (!added)
+        //            {
+        //                continue;
+        //            }
+
+        //            result = true;
+
+        //            relations[i] = new Relation(relation.Id, references_1, references_2);
+        //        }
+        //    }
+
+        //    return result;
+        //}
 
         public HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
         {
