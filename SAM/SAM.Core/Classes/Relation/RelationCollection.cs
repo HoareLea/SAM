@@ -303,6 +303,49 @@ namespace SAM.Core
             return result;
         }
 
+        public bool Copy(Reference reference_ToBeCopied, Reference reference)
+        {
+            if (!reference_ToBeCopied.IsValid() || !reference.IsValid())
+            {
+                return false;
+            }
+
+            bool result = false;
+
+            for (int i = relations.Count - 1; i >= 0; i--)
+            {
+                Relation relation = relations[i];
+
+                if (relation == null)
+                {
+                    continue;
+                }
+
+                if (relation.Contains(reference_ToBeCopied))
+                {
+                    HashSet<Reference> references_1 = relation.References_1;
+                    if (references_1.Remove(reference_ToBeCopied))
+                    {
+                        references_1.Add(reference);
+                    }
+
+                    HashSet<Reference> references_2 = relation.References_2;
+                    if (references_2.Remove(reference_ToBeCopied))
+                    {
+                        references_2.Add(reference);
+                    }
+
+                    Relation relation_New = new Relation(relation.Id, references_1, references_2);
+
+                    relations.Add(relation_New);
+
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
         {
             if (!reference.IsValid())

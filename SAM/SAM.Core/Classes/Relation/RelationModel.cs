@@ -399,6 +399,31 @@ namespace SAM.Core
             return true;
         }
 
+        protected bool Copy(T object_ToBeCopied, T @object)
+        {
+            Reference? reference = GetReference(@object);
+            if (reference == null || !reference.HasValue || !reference.Value.IsValid())
+            {
+                return false;
+            }
+
+            Reference? reference_ToBeReplaced = GetReference(object_ToBeCopied);
+            if (reference_ToBeReplaced == null || !reference_ToBeReplaced.HasValue || !reference_ToBeReplaced.Value.IsValid())
+            {
+                return false;
+            }
+
+            if (!dictionary.ContainsKey(reference_ToBeReplaced.Value))
+            {
+                return false;
+            }
+
+            dictionary[reference.Value] = @object;
+
+            relationCollection.Copy(reference_ToBeReplaced.Value, reference.Value);
+            return true;
+        }
+
 
         public abstract Reference? GetReference(T @object);
     }
