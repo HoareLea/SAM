@@ -14,6 +14,43 @@ namespace SAM.Core
             relationCollection = new RelationCollection();
         }
 
+        public RelationModel(IEnumerable<T> objects, IEnumerable<Relation> relations)
+        {
+            if(objects != null)
+            {
+                foreach(T @object in objects)
+                {
+                    AddObject(@object);
+                }
+
+                if(relations != null)
+                {
+                    relationCollection = new RelationCollection(relations);
+                }
+            }
+        }
+
+        public RelationModel(RelationModel<T> relationModel)
+        {
+            if(relationModel != null && relationModel.dictionary != null)
+            {
+                if(relationModel.dictionary != null)
+                {
+                    dictionary = new Dictionary<Reference, T>();
+                    foreach (KeyValuePair<Reference, T> keyValuePair in relationModel.dictionary)
+                    {
+                        dictionary[keyValuePair.Key] = keyValuePair.Value;
+                    }
+                }
+
+                if(relationModel.relationCollection != null)
+                {
+                    relationCollection = new RelationCollection(relationModel.relationCollection);
+
+                }
+            }
+        }
+        
         
         protected Reference? AddObject(T @object)
         {
@@ -63,6 +100,51 @@ namespace SAM.Core
             }
 
             return relationCollection.Add(id, reference_1, reference_2);
+        }
+
+        protected Relation AddRelation(Relation relation)
+        {
+            if(relation == null)
+            {
+                return null;
+            }
+
+            HashSet<Reference> references_1 = relation.References_1;
+            if(references_1 != null)
+            {
+                HashSet<Reference> references_Temp = new HashSet<Reference>();
+                foreach(Reference reference in references_1)
+                {
+                    if(dictionary.ContainsKey(reference))
+                    {
+                        references_Temp.Add(reference);
+                    }
+                }
+                references_1 = references_Temp;
+            }
+
+            HashSet<Reference> references_2 = relation.References_2;
+            if (references_2 != null)
+            {
+                HashSet<Reference> references_Temp = new HashSet<Reference>();
+                foreach (Reference reference in references_2)
+                {
+                    if (dictionary.ContainsKey(reference))
+                    {
+                        references_Temp.Add(reference);
+                    }
+                }
+                references_2 = references_Temp;
+            }
+
+            if(references_1 != null && references_1.Count != 0 && references_2 != null && references_2.Count != 0)
+            {
+                Relation result = new Relation(relation.Id, references_1, references_2);
+                relationCollection.Add(result);
+                return result;
+            }
+
+            return null;
         }
 
 
@@ -130,6 +212,10 @@ namespace SAM.Core
             return result;
         }
 
+        protected RelationCollection GetRelations(Func<Relation, bool> func = null)
+        {
+            return relationCollection?.FindAll(func);
+        }
 
         protected RelationCollection GetRelations(Reference reference)
         {

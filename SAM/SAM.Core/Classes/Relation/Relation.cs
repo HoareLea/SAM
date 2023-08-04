@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class Relation
+    public class Relation : IJSAMObject
     {
         private string id = null;
         private HashSet<Reference> references_1 = null;
@@ -40,6 +41,21 @@ namespace SAM.Core
 
             references_2 = new HashSet<Reference>();
             references_2.Add(reference_2);
+        }
+
+        public Relation(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
+        public Relation(Relation relation)
+        {
+            if(relation != null)
+            {
+                id = relation.Id;
+                references_1 = relation.references_1 == null ? null : new HashSet<Reference>(relation.references_1);
+                references_2 = relation.references_2 == null ? null : new HashSet<Reference>(relation.references_2);
+            }
         }
 
         public string Id
@@ -109,6 +125,80 @@ namespace SAM.Core
         public bool Contains_2(Reference reference)
         {
             return references_2 == null ? false : references_2.Contains(reference);
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            if(jObject == null)
+            {
+                return false;
+            }
+
+            if(jObject.ContainsKey("Id"))
+            {
+                id = jObject.Value<string>("Id");
+            }
+
+            if(jObject.ContainsKey("References_1"))
+            {
+                JArray jArray = jObject.Value<JArray>("References_1");
+                if(jArray != null)
+                {
+                    references_1 = new HashSet<Reference>();
+                    foreach(string value in jArray)
+                    {
+                        references_1.Add(value);
+                    }
+                }
+            }
+
+            if (jObject.ContainsKey("References_2"))
+            {
+                JArray jArray = jObject.Value<JArray>("References_2");
+                if (jArray != null)
+                {
+                    references_2 = new HashSet<Reference>();
+                    foreach (string value in jArray)
+                    {
+                        references_2.Add(value);
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public JObject ToJObject()
+        {
+            JObject result = new JObject();
+            result.Add("_type", Query.FullTypeName(this));
+            
+            if(id != null)
+            {
+                result.Add("Id", id);
+            }
+
+            if(references_1 != null)
+            {
+                JArray jArray = new JArray();
+                foreach(Reference reference in references_1)
+                {
+                    jArray.Add(reference.ToString());
+                }
+                result.Add("References_1", jArray);
+            }
+
+            if (references_2 != null)
+            {
+                JArray jArray = new JArray();
+                foreach (Reference reference in references_2)
+                {
+                    jArray.Add(reference.ToString());
+                }
+                result.Add("References_2", jArray);
+            }
+
+            return result;
         }
 
         public RelationType RelationType

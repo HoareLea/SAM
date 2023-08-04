@@ -7,27 +7,27 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an heat humidifier unit unit object in the analytical domain
     /// </summary>
-    public class Humidifier : SimpleEquipment
+    public abstract class SimpleEquipment : SAMObject, ISimpleEquipment
     {
-        public Humidifier(string name)
+        public SimpleEquipment(string name)
             : base(name)
         {
 
         }
 
-        public Humidifier(JObject jObject)
+        public SimpleEquipment(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public Humidifier(Humidifier humidifier)
-            : base(humidifier)
+        public SimpleEquipment(SimpleEquipment simpleEquipment)
+            : base(simpleEquipment)
         {
 
         }
 
-        public Humidifier(Guid guid, string name)
+        public SimpleEquipment(Guid guid, string name)
             : base(guid, name)
         {
 

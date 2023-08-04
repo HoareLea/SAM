@@ -48,8 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
-    <Compile Include="Classes\AnalyticalEquipment\AirHandlingUnitModel.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\ComplexEquipmentModel.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\ComplexEquipment.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\SimpleEquipment.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Humidifier.cs" />
     <Compile Include="Classes\AnalyticalEquipment\HeatRecoveryUnit.cs" />
     <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
@@ -247,7 +249,8 @@
     <Compile Include="Classes\BoundaryEdge2D.cs" />
     <Compile Include="Classes\ProfileLibrary.cs" />
     <Compile Include="Interfaces\Filter\IAdjacencyClusterFilter.cs" />
-    <Compile Include="Interfaces\IAirHandlingUnitComponent.cs" />
+    <Compile Include="Interfaces\IComplexEquipment.cs" />
+    <Compile Include="Interfaces\ISimpleEquipment.cs" />
     <Compile Include="Interfaces\OpeningProperties\ISingleOpeningProperties.cs" />
     <Compile Include="Interfaces\OpeningProperties\IOpeningProperties.cs" />
     <Compile Include="Interfaces\IAnalyticalEquipment.cs" />

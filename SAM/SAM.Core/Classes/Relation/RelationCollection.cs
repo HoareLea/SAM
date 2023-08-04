@@ -1,9 +1,12 @@
-﻿using System.Collections;
+﻿using Newtonsoft.Json.Linq;
+using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
-    public class RelationCollection : IEnumerable<Relation>
+    public class RelationCollection : IEnumerable<Relation>, IJSAMObject
     {
         private List<Relation> relations = new List<Relation>();
 
@@ -16,8 +19,18 @@ namespace SAM.Core
         {
             if(relations != null)
             {
-                this.relations.AddRange(relations);
+                this.relations = relations.ToList().ConvertAll(x => x == null ? null : new Relation(x));
             }
+        }
+
+        public RelationCollection(RelationCollection relationCollection)
+        {
+            relations = relationCollection?.relations == null ? null : relationCollection.relations.ConvertAll(x => x == null ? null : new Relation(x));
+        }
+
+        public RelationCollection(JObject jObject)
+        {
+            FromJObject(jObject);
         }
 
         public IEnumerator<Relation> GetEnumerator()
@@ -54,6 +67,15 @@ namespace SAM.Core
 
             return result;
             
+        }
+
+        public Relation Add(string id, IEnumerable<Reference> references_1, IEnumerable<Reference> references_2)
+        {
+            Relation result = new Relation(id, references_1, references_2);
+
+            relations.Add(result);
+
+            return result;
         }
 
         public RelationCollection FindAll(string id)
@@ -133,6 +155,16 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public RelationCollection FindAll(Func<Relation, bool> func)
+        {
+            if(func == null)
+            {
+                return new RelationCollection(relations);
+            }
+
+            return new RelationCollection(relations.FindAll(x => func.Invoke(x)));
         }
 
         public Relation Find(string id)
@@ -311,6 +343,73 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+            {
+                return false;
+            }
+
+            if(jObject.ContainsKey("Relations"))
+            {
+                JArray jArray = jObject.Value<JArray>("Relations");
+                if(jArray != null)
+                {
+                    relations = new List<Relation>();
+                    foreach(JObject jObject_Relation in jArray)
+                    {
+                        Relation relation = Query.IJSAMObject<Relation>(jObject);
+                        if (relation != null)
+                        {
+                            relations.Add(relation);
+                        }
+                    }
+                }
+            }
+
+            return true;
+        }
+
+        public JObject ToJObject()
+        {
+            JObject result = new JObject();
+            result.Add("_type", Query.FullTypeName(this));
+
+            if(relations != null)
+            {
+                JArray jArray = new JArray();
+                foreach (Relation relation in relations)
+                {
+                    jArray.Add(relation.ToJObject());
+                }
+
+                result.Add("Relations", jArray);
+            }
+
+            return result;
+        }
+
+
+        public static implicit operator RelationCollection(List<Relation> relations)
+        {
+            if(relations == null)
+            {
+                return null;
+            }
+
+            return new RelationCollection(relations);
+        }
+        
+        public static implicit operator RelationCollection(Relation[] relations)
+        {
+            if (relations == null)
+            {
+                return null;
+            }
+
+            return new RelationCollection(relations);
         }
     }
 }

@@ -37,9 +37,31 @@ namespace SAM.Core
             return value == null ? 0 : value.GetHashCode();
         }
 
+
         public static implicit operator Reference(string value)
         {
             return new Reference(value);
+        }
+
+        public static implicit operator Reference(Guid value)
+        {
+            return new Reference(value.ToString("N"));
+        }
+
+        public static implicit operator Reference(SAMObject value)
+        {
+            string reference = null;
+            if(value != null)
+            {
+                reference = value.Guid.ToString("N");
+            }
+
+            return new Reference(reference);
+        }
+
+        public static implicit operator Reference(int value)
+        {
+            return new Reference(value.ToString());
         }
     }
 }

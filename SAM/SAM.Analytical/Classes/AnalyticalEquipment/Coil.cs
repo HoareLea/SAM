@@ -7,7 +7,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an coil unit object in the analytical domain
     /// </summary>
-    public abstract class Coil : SAMObject, IAirHandlingUnitComponent
+    public abstract class Coil : SimpleEquipment
     {
         private double fluidReturnTemperature;
         private double fluidSupplyTemperature;

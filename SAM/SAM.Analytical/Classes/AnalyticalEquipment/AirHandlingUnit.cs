@@ -7,7 +7,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an air handling unit object in the analytical domain
     /// </summary>
-    public class AirHandlingUnit : SAMObject, IAnalyticalEquipment
+    public class AirHandlingUnit : ComplexEquipment
     {
         /// <summary>
         /// Constructor that takes a name parameter and sets the base object's name
