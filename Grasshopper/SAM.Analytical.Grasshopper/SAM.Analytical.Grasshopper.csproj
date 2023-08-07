@@ -199,7 +199,6 @@
     <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateAirHandlingUnit_Old.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />

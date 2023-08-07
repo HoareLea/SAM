@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
 namespace SAM.Analytical
@@ -9,14 +8,20 @@ namespace SAM.Analytical
     /// </summary>
     public class AirHandlingUnit : ComplexEquipment
     {
+        private double summerSupplyTemperature;
+        private double winterSupplyTemperature;
+
         /// <summary>
         /// Constructor that takes a name parameter and sets the base object's name
         /// </summary>
         /// <param name="name">The name of the air handling unit</param>
-        public AirHandlingUnit(string name)
+        /// <param name="summerSupplyTemperature">Summer Supply Temperature [°C]</param>
+        /// <param name="winterSupplyTemperature">Winter Supply Temperature [°C]</param>
+        public AirHandlingUnit(string name, double summerSupplyTemperature, double winterSupplyTemperature)
             : base(name)
         {
-
+            this.winterSupplyTemperature = winterSupplyTemperature;
+            this.summerSupplyTemperature = summerSupplyTemperature;
         }
 
         /// <summary>
@@ -36,7 +41,11 @@ namespace SAM.Analytical
         public AirHandlingUnit(AirHandlingUnit airHandlingUnit)
             : base(airHandlingUnit)
         {
-
+            if(airHandlingUnit != null)
+            {
+                winterSupplyTemperature = airHandlingUnit.winterSupplyTemperature;
+                summerSupplyTemperature = airHandlingUnit.summerSupplyTemperature;
+            }
         }
 
         /// <summary>
@@ -44,10 +53,13 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="guid">The GUID of the air handling unit</param>
         /// <param name="name">The name of the air handling unit</param>
-        public AirHandlingUnit(Guid guid, string name)
+        /// <param name="summerSupplyTemperature">Summer Supply Temperature [°C]</param>
+        /// <param name="winterSupplyTemperature">Winter Supply Temperature [°C]</param>
+        public AirHandlingUnit(Guid guid, string name, double summerSupplyTemperature, double winterSupplyTemperature)
             : base(guid, name)
         {
-
+            this.winterSupplyTemperature = winterSupplyTemperature;
+            this.summerSupplyTemperature = summerSupplyTemperature;
         }
 
         /// <summary>
@@ -60,9 +72,49 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            // TODO: Implement specific deserialization logic for AirHandlingUnit properties
+            if(jObject.ContainsKey("SummerSupplyTemperature"))
+            {
+                summerSupplyTemperature = jObject.Value<double>("SummerSupplyTemperature");
+            }
+
+            if (jObject.ContainsKey("WinterSupplyTemperature"))
+            {
+                winterSupplyTemperature = jObject.Value<double>("WinterSupplyTemperature");
+            }
 
             return true;
+        }
+
+        /// <summary>
+        /// Summer Supply Temperature [°C]
+        /// </summary>
+        public double SummerSupplyTemperature
+        {
+            get
+            {
+                return summerSupplyTemperature;
+            }
+
+            set
+            {
+                summerSupplyTemperature = value;
+            }
+        }
+
+        /// <summary>
+        /// Winter Supply Temperature [°C]
+        /// </summary>
+        public double WinterSupplyTemperature
+        {
+            get
+            {
+                return winterSupplyTemperature;
+            }
+
+            set
+            {
+                winterSupplyTemperature = value;
+            }
         }
 
         /// <summary>
@@ -75,7 +127,15 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            // TODO: Implement specific serialization logic for AirHandlingUnit properties
+            if(!double.IsNaN(summerSupplyTemperature))
+            {
+                jObject.Add("SummerSupplyTemperature", summerSupplyTemperature);
+            }
+
+            if (!double.IsNaN(winterSupplyTemperature))
+            {
+                jObject.Add("WinterSupplyTemperature", winterSupplyTemperature);
+            }
 
             return jObject;
         }

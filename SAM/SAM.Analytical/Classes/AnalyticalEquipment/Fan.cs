@@ -1,33 +1,32 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
 namespace SAM.Analytical
 {
     /// <summary>
-    /// Represents an simple equipment object in the analytical domain
+    /// Represents an fan object in the analytical domain
     /// </summary>
-    public abstract class SimpleEquipment : SAMObject, ISimpleEquipment
+    public class Fan : SimpleEquipment
     {
-        public SimpleEquipment(string name)
+        public Fan(string name)
             : base(name)
         {
 
         }
 
-        public SimpleEquipment(JObject jObject)
+        public Fan(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public SimpleEquipment(SimpleEquipment simpleEquipment)
-            : base(simpleEquipment)
+        public Fan(Fan fan)
+            : base(fan)
         {
 
         }
 
-        public SimpleEquipment(Guid guid, string name)
+        public Fan(Guid guid, string name)
             : base(guid, name)
         {
 

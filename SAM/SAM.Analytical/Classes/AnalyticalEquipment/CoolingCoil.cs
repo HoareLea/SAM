@@ -4,15 +4,12 @@ using System;
 namespace SAM.Analytical
 {
     /// <summary>
-    /// Represents an cooling coil unit object in the analytical domain
+    /// Represents an cooling coil object in the analytical domain
     /// </summary>
     public class CoolingCoil : Coil
     {
-        private double OffTemperature = double.NaN;
-        private double contactFactor = double.NaN;
-
-        public CoolingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature)
-            : base(name, fluidSupplyTemperature, fluidReturnTemperature)
+        public CoolingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
+            : base(name, fluidSupplyTemperature, fluidReturnTemperature, contactFactor, offTemperature)
         {
 
         }
@@ -29,8 +26,8 @@ namespace SAM.Analytical
 
         }
 
-        public CoolingCoil(Guid guid, string name, double fluidSupplyTemperature, double fluidReturnTemperature)
-            : base(guid, name, fluidSupplyTemperature, fluidReturnTemperature)
+        public CoolingCoil(Guid guid, string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
+            : base(guid, name, fluidSupplyTemperature, fluidReturnTemperature, contactFactor, offTemperature)
         {
 
         }

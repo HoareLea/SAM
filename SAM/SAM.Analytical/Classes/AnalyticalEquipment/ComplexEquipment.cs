@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -34,6 +35,69 @@ namespace SAM.Analytical
         {
 
         }
+
+        public bool AddSimpleEquipments(FlowClassification flowClassification, params ISimpleEquipment[] simpleEquipments)
+        {
+            if(simpleEquipments == null || simpleEquipments.Length == 0)
+            {
+                return false;
+            }
+
+            if(complexEquipmentModel == null)
+            {
+                complexEquipmentModel = new ComplexEquipmentModel();
+            }
+
+            return complexEquipmentModel.AddRelations(flowClassification, simpleEquipments);
+        }
+
+        public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification, bool sort = true)
+        {
+            List<ISimpleEquipment> result = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
+            if(sort && result != null && result.Count > 1)
+            {
+                complexEquipmentModel.Sort(result, flowClassification, Direction.In);
+            }
+
+            return result;
+        }
+
+        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification, Func<T, bool> func) where T : ISimpleEquipment
+        {
+            List<ISimpleEquipment> simpleEquipments = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
+            if(simpleEquipments == null || simpleEquipments.Count == 0)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+            {
+                if(!(simpleEquipment is T))
+                {
+                    continue;
+                }
+
+                T t = (T)simpleEquipment;
+
+                if (func != null && !func.Invoke(t))
+                {
+                    continue;
+                }
+
+                result.Add(t);
+            }
+
+            return result;
+
+        }
+
+        public HashSet<FlowClassification> GetFlowClassifications()
+        {
+            return complexEquipmentModel?.GetFlowClassifications();
+        }
+
+
 
         public override bool FromJObject(JObject jObject)
         {

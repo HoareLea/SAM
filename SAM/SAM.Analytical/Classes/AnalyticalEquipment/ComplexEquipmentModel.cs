@@ -105,12 +105,12 @@ namespace SAM.Analytical
             return base.Replace(simpleEquipment_ToBeReplaced, simpleEquipment);
         }
 
-        public List<ISimpleEquipment> GetAirHandlingUnitComponents(FlowClassification flowClassification)
+        public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification)
         {
             return GetObjects(x => HasFlowClassification(x, flowClassification));
         }
 
-        public List<ISimpleEquipment> GetAirHandlingUnitComponents(ISimpleEquipment simpleEquipment, FlowClassification flowClassification, Direction direction)
+        public List<ISimpleEquipment> GetSimpleEquipments(ISimpleEquipment simpleEquipment, FlowClassification flowClassification, Direction direction)
         {
             if(simpleEquipment == null)
             {
@@ -257,13 +257,13 @@ namespace SAM.Analytical
                 simpleEquipments_Temp.Remove(simpleEquipment_Current);
                 result.Add(simpleEquipment_Current);
 
-                List<ISimpleEquipment> simpleEquipments_Related = GetAirHandlingUnitComponents(simpleEquipment_Current, flowClassification, direction);
+                List<ISimpleEquipment> simpleEquipments_Related = GetSimpleEquipments(simpleEquipment_Current, flowClassification, direction);
                 while(simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
                 {
                     simpleEquipment_Current = simpleEquipments_Related[0];
                     simpleEquipments_Temp.Remove(simpleEquipment_Current);
                     result.Add(simpleEquipment_Current);
-                    simpleEquipments_Related = GetAirHandlingUnitComponents(simpleEquipment_Current, flowClassification, direction);
+                    simpleEquipments_Related = GetSimpleEquipments(simpleEquipment_Current, flowClassification, direction);
                     if(simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
                     {
                         foreach (ISimpleEquipment simpleEquipment in result)

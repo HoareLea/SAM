@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
 namespace SAM.Analytical
@@ -45,8 +44,8 @@ namespace SAM.Analytical
 
         }
 
-        public HeatRecoveryUnit(HeatingCoil heatingCoil)
-            : base(heatingCoil)
+        public HeatRecoveryUnit(HeatRecoveryUnit heatRecoveryUnit)
+            : base(heatRecoveryUnit)
         {
 
         }
@@ -57,12 +56,154 @@ namespace SAM.Analytical
 
         }
 
+        public double WinterSensibleEfficiency
+        {
+            get
+            {
+                return winterSensibleEfficiency;
+            }
+
+            set
+            {
+                winterSensibleEfficiency = value;
+            }
+        }
+
+        public double WinterLatentEfficiency
+        {
+            get
+            {
+                return winterLatentEfficiency;
+            }
+
+            set
+            {
+                winterLatentEfficiency = value;
+            }
+        }
+
+        public double SummerSensibleEfficiency
+        {
+            get
+            {
+                return summerSensibleEfficiency;
+            }
+
+            set
+            {
+                summerSensibleEfficiency = value;
+            }
+        }
+
+        public double SummerLatentEfficiency
+        {
+            get
+            {
+                return summerLatentEfficiency;
+            }
+
+            set
+            {
+                summerLatentEfficiency = value;
+            }
+        }
+
+        public double WinterRelativeHumidity
+        {
+            get
+            {
+                return winterRelativeHumidity;
+            }
+
+            set
+            {
+                winterRelativeHumidity = value;
+            }
+        }
+
+        public double WinterDryBulbTemperature
+        {
+            get
+            {
+                return winterDryBulbTemperature;
+            }
+
+            set
+            {
+                winterDryBulbTemperature = value;
+            }
+        }
+
+        public double SummerRelativeHumidity
+        {
+            get
+            {
+                return summerRelativeHumidity;
+            }
+
+            set
+            {
+                summerRelativeHumidity = value;
+            }
+        }
+
+        public double SummerDryBulbTemperature
+        {
+            get
+            {
+                return summerDryBulbTemperature;
+            }
+
+            set
+            {
+                summerDryBulbTemperature = value;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
                 return false;
 
-            // TODO: Implement specific deserialization logic for AirHandlingUnit properties
+            if(jObject.ContainsKey("WinterSensibleEfficiency"))
+            {
+                winterSensibleEfficiency = jObject.Value<double>("WinterSensibleEfficiency");
+            }
+
+            if (jObject.ContainsKey("WinterLatentEfficiency"))
+            {
+                winterLatentEfficiency = jObject.Value<double>("WinterLatentEfficiency");
+            }
+
+            if (jObject.ContainsKey("SummerSensibleEfficiency"))
+            {
+                summerSensibleEfficiency = jObject.Value<double>("SummerSensibleEfficiency");
+            }
+
+            if (jObject.ContainsKey("SummerLatentEfficiency"))
+            {
+                summerLatentEfficiency = jObject.Value<double>("SummerLatentEfficiency");
+            }
+
+            if (jObject.ContainsKey("WinterRelativeHumidity"))
+            {
+                winterRelativeHumidity = jObject.Value<double>("WinterRelativeHumidity");
+            }
+
+            if (jObject.ContainsKey("WinterDryBulbTemperature"))
+            {
+                winterDryBulbTemperature = jObject.Value<double>("WinterDryBulbTemperature");
+            }
+
+            if (jObject.ContainsKey("SummerRelativeHumidity"))
+            {
+                summerRelativeHumidity = jObject.Value<double>("SummerRelativeHumidity");
+            }
+
+            if (jObject.ContainsKey("SummerDryBulbTemperature"))
+            {
+                summerDryBulbTemperature = jObject.Value<double>("SummerDryBulbTemperature");
+            }
 
             return true;
         }
@@ -73,7 +214,45 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            // TODO: Implement specific serialization logic for AirHandlingUnit properties
+            if(!double.IsNaN(winterSensibleEfficiency))
+            {
+                jObject.Add("WinterSensibleEfficiency", winterSensibleEfficiency);
+            }
+
+            if (!double.IsNaN(winterLatentEfficiency))
+            {
+                jObject.Add("WinterLatentEfficiency", winterLatentEfficiency);
+            }
+
+            if (!double.IsNaN(summerSensibleEfficiency))
+            {
+                jObject.Add("SummerSensibleEfficiency", summerSensibleEfficiency);
+            }
+
+            if (!double.IsNaN(summerLatentEfficiency))
+            {
+                jObject.Add("SummerLatentEfficiency", summerLatentEfficiency);
+            }
+
+            if (!double.IsNaN(winterRelativeHumidity))
+            {
+                jObject.Add("WinterRelativeHumidity", winterRelativeHumidity);
+            }
+
+            if (!double.IsNaN(winterDryBulbTemperature))
+            {
+                jObject.Add("WinterDryBulbTemperature", winterDryBulbTemperature);
+            }
+
+            if (!double.IsNaN(summerRelativeHumidity))
+            {
+                jObject.Add("SummerRelativeHumidity", summerRelativeHumidity);
+            }
+
+            if (!double.IsNaN(summerDryBulbTemperature))
+            {
+                jObject.Add("SummerDryBulbTemperature", summerDryBulbTemperature);
+            }
 
             return jObject;
         }

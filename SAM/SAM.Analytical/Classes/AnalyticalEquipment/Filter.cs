@@ -1,33 +1,32 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
 namespace SAM.Analytical
 {
     /// <summary>
-    /// Represents an simple equipment object in the analytical domain
+    /// Represents an filter object in the analytical domain
     /// </summary>
-    public abstract class SimpleEquipment : SAMObject, ISimpleEquipment
+    public class Filter : SimpleEquipment
     {
-        public SimpleEquipment(string name)
+        public Filter(string name)
             : base(name)
         {
 
         }
 
-        public SimpleEquipment(JObject jObject)
+        public Filter(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public SimpleEquipment(SimpleEquipment simpleEquipment)
-            : base(simpleEquipment)
+        public Filter(Filter filter)
+            : base(filter)
         {
 
         }
 
-        public SimpleEquipment(Guid guid, string name)
+        public Filter(Guid guid, string name)
             : base(guid, name)
         {
 

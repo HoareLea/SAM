@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
 using System;
 
 namespace SAM.Analytical
@@ -11,12 +10,16 @@ namespace SAM.Analytical
     {
         private double fluidReturnTemperature;
         private double fluidSupplyTemperature;
+        private double contactFactor;
+        private double offTemperature;
 
-        public Coil(string name, double fluidSupplyTemperature, double fluidReturnTemperature)
+        public Coil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(name)
         {
             this.fluidReturnTemperature = fluidReturnTemperature;
             this.fluidSupplyTemperature = fluidSupplyTemperature;
+            this.contactFactor = contactFactor;
+            this.offTemperature = offTemperature;
         }
 
         public Coil(JObject jObject)
@@ -28,14 +31,22 @@ namespace SAM.Analytical
         public Coil(Coil coil)
             : base(coil)
         {
-
+            if(coil != null)
+            {
+                fluidReturnTemperature = coil.fluidReturnTemperature;
+                fluidSupplyTemperature = coil.fluidSupplyTemperature;
+                contactFactor = coil.contactFactor;
+                offTemperature = coil.offTemperature;
+            }
         }
 
-        public Coil(Guid guid, string name, double fluidSupplyTemperature, double fluidReturnTemperature)
+        public Coil(Guid guid, string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(guid, name)
         {
             this.fluidReturnTemperature = fluidReturnTemperature;
             this.fluidSupplyTemperature = fluidSupplyTemperature;
+            this.contactFactor = contactFactor;
+            this.offTemperature = offTemperature;
         }
 
         public double FluidReturnTemperature
@@ -44,6 +55,11 @@ namespace SAM.Analytical
             {
                 return fluidReturnTemperature;
             }
+
+            set
+            {
+                fluidReturnTemperature = value;
+            }
         }
 
         public double FluidSupplyTemperature
@@ -51,6 +67,37 @@ namespace SAM.Analytical
             get
             {
                 return fluidSupplyTemperature;
+            }
+
+            set
+            {
+                fluidReturnTemperature = value;
+            }
+        }
+
+        public double ContactFactor
+        {
+            get
+            {
+                return contactFactor;
+            }
+
+            set
+            {
+                contactFactor = value;
+            }
+        }
+
+        public double OffTemperature
+        {
+            get
+            {
+                return offTemperature;
+            }
+
+            set
+            {
+                offTemperature = value;
             }
         }
 
@@ -67,6 +114,16 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("FluidSupplyTemperature"))
             {
                 fluidSupplyTemperature = jObject.Value<double>("FluidSupplyTemperature");
+            }
+
+            if (jObject.ContainsKey("ContactFactor"))
+            {
+                contactFactor = jObject.Value<double>("ContactFactor");
+            }
+
+            if (jObject.ContainsKey("OffTemperature"))
+            {
+                offTemperature = jObject.Value<double>("OffTemperature");
             }
 
             return true;
@@ -86,6 +143,16 @@ namespace SAM.Analytical
             if (!double.IsNaN(fluidReturnTemperature))
             {
                 jObject.Add("FluidReturnTemperature", fluidReturnTemperature);
+            }
+
+            if (!double.IsNaN(contactFactor))
+            {
+                jObject.Add("ContactFactor", contactFactor);
+            }
+
+            if (!double.IsNaN(offTemperature))
+            {
+                jObject.Add("OffTemperature", offTemperature);
             }
 
             return jObject;
