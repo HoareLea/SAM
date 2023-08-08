@@ -51,6 +51,8 @@
     <Compile Include="Classes\AnalyticalEquipment\ComplexEquipmentModel.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\ComplexEquipment.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\MixingSection.cs" />
+    <Compile Include="Classes\AnalyticalEquipment\EmptySection.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Silencer.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Filter.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Fan.cs" />
