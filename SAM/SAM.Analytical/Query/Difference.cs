@@ -9,7 +9,7 @@ namespace SAM.Analytical
     {
         public static List<Panel> Difference<T>(this Panel panel, IEnumerable<T> face3DObjects, double tolerance = Tolerance.Distance) where T : IFace3DObject
         {
-            if(panel == null || panels == null)
+            if(panel == null || face3DObjects == null)
             {
                 return null;
             }
@@ -42,7 +42,9 @@ namespace SAM.Analytical
                 return new List<Panel>() { panel.Clone() };
             }
 
-            SAM.Geometry.Spatial.Query.Di
+            // SAM.Geometry.Spatial.Query.Di
+
+            throw new System.NotImplementedException();
 
         }
     }
