@@ -283,6 +283,7 @@
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
     <Compile Include="Query\CalculatedInfiltrationSensibleGain.cs" />
     <Compile Include="Query\CalculatedInfiltrationLatentGain.cs" />
+    <Compile Include="Query\Difference.cs" />
     <Compile Include="Query\Id.cs" />
     <Compile Include="Query\SystemTypeInternalConditionParameter.cs" />
     <Compile Include="Query\IsMechanicalVentilation.cs" />

@@ -155,5 +155,15 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
+
+        public static List<Face3D> Difference(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
+        {
+            if(face3D == null || face3Ds == null)
+            {
+                return null;
+            }
+
+            throw new NotFiniteNumberException();
+        }
     }
 }
