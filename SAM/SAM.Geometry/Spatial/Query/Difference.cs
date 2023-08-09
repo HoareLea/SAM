@@ -163,7 +163,31 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            throw new NotFiniteNumberException();
+            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, face3Ds, tolerance_Angle, tolerance_Distance);
+            if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            {
+                return new List<Face3D>() { new Face3D(face3D) };
+            }
+
+            List<Planar.Face2D> face2Ds = planarIntersectionResult.GetGeometry2Ds<Planar.Face2D>();
+            if (face2Ds == null || face2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            Plane plane = planarIntersectionResult.Plane;
+            if (plane == null)
+            {
+                return null;
+            }
+
+            face2Ds = Planar.Query.Difference(plane.Convert(face3D), face2Ds, tolerance_Distance);
+            if (face2Ds == null || face2Ds.Count == 0)
+            {
+                return null;
+            }
+
+            return face2Ds.ConvertAll(x => plane.Convert(x));
         }
     }
 }
