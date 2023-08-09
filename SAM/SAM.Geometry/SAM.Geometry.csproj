@@ -99,6 +99,7 @@
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Planar\Modify\RemoveSimilar.cs" />
+    <Compile Include="Planar\Query\MoveToSegment2D.cs" />
     <Compile Include="Planar\Query\Rotate.cs" />
     <Compile Include="Planar\Query\DiagonalLength.cs" />
     <Compile Include="Planar\Query\FilterRelevant.cs" />

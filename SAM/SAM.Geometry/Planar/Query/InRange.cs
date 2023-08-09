@@ -43,7 +43,18 @@ namespace SAM.Geometry.Planar
             }
 
             if (!(closed2D_Temp is ISegmentable2D))
-                throw new System.NotImplementedException();
+            {
+                if(closed2D_Temp is Circle2D)
+                {
+                    Circle2D circle2D = (Circle2D)closed2D_Temp;
+                    return closed2D_Temp.Inside(circle2D.Center, tolerance) || point2Ds.Find(x => circle2D.Inside(x, tolerance)) != null;
+                }
+                else
+                {
+                    throw new System.NotImplementedException();
+                }
+            }
+
 
             if (Intersect(closed2D_Temp as ISegmentable2D, segmentable2D.GetSegments()))
                 return true;
