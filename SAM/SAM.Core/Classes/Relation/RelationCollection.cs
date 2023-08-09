@@ -569,7 +569,10 @@ namespace SAM.Core
                 return null;
             }
 
-            return new RelationCollection(relations);
+            RelationCollection result = new RelationCollection();
+            result.relations = relations.ToList().ConvertAll(x => x == null ? null : new Relation(x));
+
+            return result;
         }
         
         public static implicit operator RelationCollection(Relation[] relations)
