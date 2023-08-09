@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json.Linq;
+﻿using MathNet.Numerics.RootFinding;
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -105,6 +106,110 @@ namespace SAM.Analytical
             return base.Replace(simpleEquipment_ToBeReplaced, simpleEquipment);
         }
 
+        public bool InsertAfter(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
+        {
+            if(simpleEquipment_ToBeInserted == null || simpleEquipment == null)
+            {
+                return false;
+            }
+
+            if(!Contains(simpleEquipment))
+            {
+                return false;
+            }
+
+            List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
+            if(simpleEquipments == null || simpleEquipments.Count == 0)
+            {
+                return false;
+            }
+
+            simpleEquipments = Sort(simpleEquipments, flowClassification, Direction.In);
+
+            Reference reference = GetReference(simpleEquipment).Value;
+
+            int index = simpleEquipments.FindIndex(x => GetReference(x).Value == reference);
+            if(index == -1)
+            {
+                return false;
+            }
+
+            string id_In = Query.Id(flowClassification, Direction.In);
+            if (string.IsNullOrWhiteSpace(id_In))
+            {
+                return false;
+            }
+
+            string id_Out = Query.Id(flowClassification, Direction.Out);
+            if (string.IsNullOrWhiteSpace(id_Out))
+            {
+                return false;
+            }
+
+            RemoveRelations(id_In);
+            RemoveRelations(id_Out);
+
+            if (index == simpleEquipments.Count - 1)
+            {
+                simpleEquipments.Add(simpleEquipment_ToBeInserted);
+            }
+            else
+            {
+                index++;
+                simpleEquipments.Insert(index, simpleEquipment_ToBeInserted);
+            }
+
+            return AddRelations(flowClassification, simpleEquipments.ToArray());
+        }
+
+        public bool InsertBefore(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
+        {
+            if (simpleEquipment_ToBeInserted == null || simpleEquipment == null)
+            {
+                return false;
+            }
+
+            if (!Contains(simpleEquipment))
+            {
+                return false;
+            }
+
+            List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
+            if (simpleEquipments == null || simpleEquipments.Count == 0)
+            {
+                return false;
+            }
+
+            simpleEquipments = Sort(simpleEquipments, flowClassification, Direction.In);
+
+            Reference reference = GetReference(simpleEquipment).Value;
+
+            int index = simpleEquipments.FindIndex(x => GetReference(x).Value == reference);
+            if (index == -1)
+            {
+                return false;
+            }
+
+            string id_In = Query.Id(flowClassification, Direction.In);
+            if (string.IsNullOrWhiteSpace(id_In))
+            {
+                return false;
+            }
+
+            string id_Out = Query.Id(flowClassification, Direction.Out);
+            if (string.IsNullOrWhiteSpace(id_Out))
+            {
+                return false;
+            }
+
+            RemoveRelations(id_In);
+            RemoveRelations(id_Out);
+
+            simpleEquipments.Insert(index, simpleEquipment_ToBeInserted);
+
+            return AddRelations(flowClassification, simpleEquipments.ToArray());
+        }
+
         public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification)
         {
             return GetObjects(x => HasFlowClassification(x, flowClassification));
@@ -123,7 +228,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            return GetRelatedObjects(simpleEquipment, id);
+            return GetRelatedObjects_1(simpleEquipment, id);
         }
 
         public HashSet<FlowClassification> GetFlowClassifications(ISimpleEquipment simpleEquipment)

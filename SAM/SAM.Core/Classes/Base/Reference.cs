@@ -61,5 +61,15 @@ namespace SAM.Core
         {
             return new Reference(value.ToString());
         }
+
+        public static bool operator ==(Reference reference_1, Reference reference_2)
+        {
+            return reference_1.value == reference_2.value;
+        }
+
+        public static bool operator !=(Reference reference_1, Reference reference_2)
+        {
+            return reference_1.value != reference_2.value;
+        }
     }
 }
