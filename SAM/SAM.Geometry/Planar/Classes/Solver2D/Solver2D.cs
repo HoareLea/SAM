@@ -94,7 +94,7 @@ namespace SAM.Geometry.Planar
                             Vector2D scaledOffset = offset * (1 + i * solver2DSettings.MoveDistance);
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
-                            if (inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
                             {
                                 rectangle2D_New = rectangle_Temp;
                                 break;
@@ -128,7 +128,7 @@ namespace SAM.Geometry.Planar
                             bool clockwise = segment.Direction.GetPerpendicular().Y < 0;
                             Rectangle2D rectangle_Temp = fix(Query.MoveToSegment2D(rectangle2D, segment, newPoint, distanceToCenter, clockwise), rectangle2D);
 
-                            if (inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
                             {
                                 rectangle2D_New = rectangle_Temp;
                                 break;
@@ -227,21 +227,6 @@ namespace SAM.Geometry.Planar
             return (obstacles2D.Find(x => x.InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => x.Closed2D<Rectangle2D>().InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => rectangle2D.InRange(x.Closed2D<Rectangle2D>()) == true) != null);
-        }
-        private bool inside(Rectangle2D rectangle2D, Rectangle2D rectangle2D2)
-        {
-            if (rectangle2D == null || rectangle2D2 == null)
-                return false;
-            List<Point2D> points = rectangle2D2.GetPoints();
-
-            foreach(Point2D point in points)
-            {
-                if(!rectangle2D.Inside(point))
-                {
-                    return false;
-                }
-            }
-            return true;
         }
     }
 }

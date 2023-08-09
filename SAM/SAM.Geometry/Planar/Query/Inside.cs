@@ -47,5 +47,28 @@ namespace SAM.Geometry.Planar
 
             return true;
         }
+
+        /// <summary>
+        /// Checks whether rectangle2D2 is in the rectangle2D
+        /// </summary>
+        /// <param name="rectangle2D"></param>
+        /// <param name="rectangle2D2"></param>
+        /// <param name="tolerance"></param>
+        /// <returns></returns>
+        public static bool Inside(this Rectangle2D rectangle2D, Rectangle2D rectangle2D2, double tolerance = Core.Tolerance.Distance)
+        {
+            if (rectangle2D == null || rectangle2D2 == null)
+                return false;
+            List<Point2D> points = rectangle2D2.GetPoints();
+
+            foreach (Point2D point in points)
+            {
+                if (!rectangle2D.Inside(point, tolerance))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 }
