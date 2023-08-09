@@ -218,7 +218,7 @@ namespace SAM.Geometry.Planar
                 return calculatedRectangle;
             }
 
-            Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
+            Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, -calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
             return result;
         }   
 
