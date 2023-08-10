@@ -51,12 +51,32 @@ namespace SAM.Analytical
             return complexEquipmentModel.AddRelations(flowClassification, simpleEquipments);
         }
 
+        public bool InsertAfterSimpleEquipment(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
+        {
+            if(complexEquipmentModel == null)
+            {
+                return false;
+            }
+
+            return complexEquipmentModel.InsertAfter(flowClassification, simpleEquipment_ToBeInserted, simpleEquipment);
+        }
+
+        public bool InsertBeforeSimpleEquipment(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
+        {
+            if (complexEquipmentModel == null)
+            {
+                return false;
+            }
+
+            return complexEquipmentModel.InsertBefore(flowClassification, simpleEquipment_ToBeInserted, simpleEquipment);
+        }
+
         public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification, bool sort = true)
         {
             List<ISimpleEquipment> result = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
             if(sort && result != null && result.Count > 1)
             {
-                complexEquipmentModel.Sort(result, flowClassification, Direction.In);
+                result = complexEquipmentModel.Sort(result, flowClassification, Direction.In);
             }
 
             return result;

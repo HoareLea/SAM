@@ -223,6 +223,26 @@ namespace SAM.Core
             return relations.Remove(relation);
         }
 
+        public bool Remove(string id)
+        {
+            RelationCollection relationCollection = FindAll(id);
+            if(relationCollection == null || relationCollection.Count == 0)
+            {
+                return false;
+            }
+
+            bool result = false;
+            foreach(Relation relation in relationCollection)
+            {
+                if(Remove(relation))
+                {
+                    result = true;
+                }
+            }
+
+            return result;
+        }
+
         public bool Remove(Reference reference)
         {
             bool result = false;
@@ -413,65 +433,73 @@ namespace SAM.Core
             return result;
         }
 
-        //public bool Insert(Reference reference_ToBeInserted, Reference reference_1, Reference reference_2, string id = null)
-        //{
-        //    if (relations == null || relations.Count == 0)
-        //    {
-        //        return false;
-        //    }
+        public HashSet<Reference> GetRelatedReferences_1(Reference reference, string relationId = null)
+        {
+            if (!reference.IsValid())
+            {
+                return null;
+            }
 
-        //    bool result = false;
+            RelationCollection relationCollection_Temp = FindAll(reference);
+            if (relationCollection_Temp == null)
+            {
+                return null;
+            }
 
-        //    for (int i = relations.Count - 1; i >= 0; i--)
-        //    {
-        //        Relation relation = relations[i];
+            HashSet<Reference> result = new HashSet<Reference>();
 
-        //        if (id != null && relation.Id != id)
-        //        {
-        //            continue;
-        //        }
+            foreach (Relation relation in relationCollection_Temp)
+            {
+                if (relationId != null && relation.Id != relationId)
+                {
+                    continue;
+                }
 
-        //        if ((relation.Contains_1(reference_1) && relation.Contains_2(reference_2)) || (relation.Contains_1(reference_2) && relation.Contains_2(reference_1)))
-        //        {
-        //            HashSet<Reference> references_1 = relation.References_1;
-        //            HashSet<Reference> references_2 = relation.References_2;
+                if (relation.Contains_2(reference))
+                {
+                    foreach (Reference reference_1 in relation.References_1)
+                    {
+                        result.Add(reference_1);
+                    }
+                }
+            }
 
-        //            bool added = false;
+            return result;
+        }
 
-        //            if (references_1.Contains(reference_1) && references_2.Contains(reference_2))
-        //            {
-        //                references_1.Remove(reference_1);
-        //                references_1.Add(reference_ToBeInserted);
+        public HashSet<Reference> GetRelatedReferences_2(Reference reference, string relationId = null)
+        {
+            if (!reference.IsValid())
+            {
+                return null;
+            }
 
-        //                references_2.Remove(reference_2);
-        //                references_2.Add(reference_ToBeInserted);
+            RelationCollection relationCollection_Temp = FindAll(reference);
+            if (relationCollection_Temp == null)
+            {
+                return null;
+            }
 
-        //                added = true;
-        //            }
+            HashSet<Reference> result = new HashSet<Reference>();
 
-        //            if (references_1.Contains(reference_2) && references_2.Contains(reference_1))
-        //            {
-        //                references_1.Remove(reference_2);
-        //                references_1.Add(reference_ToBeInserted);
+            foreach (Relation relation in relationCollection_Temp)
+            {
+                if (relationId != null && relation.Id != relationId)
+                {
+                    continue;
+                }
 
-        //                references_2.Remove(reference_1);
-        //                references_2.Add(reference_ToBeInserted);
-        //                added = true;
-        //            }
+                if (relation.Contains_1(reference))
+                {
+                    foreach (Reference reference_2 in relation.References_2)
+                    {
+                        result.Add(reference_2);
+                    }
+                }
+            }
 
-        //            if (!added)
-        //            {
-        //                continue;
-        //            }
-
-        //            result = true;
-
-        //            relations[i] = new Relation(relation.Id, references_1, references_2);
-        //        }
-        //    }
-
-        //    return result;
-        //}
+            return result;
+        }
 
         public HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
         {
@@ -559,6 +587,14 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return relations == null ? 0 : relations.Count;
+            }
         }
 
 
