@@ -464,7 +464,19 @@ namespace SAM.Geometry.Spatial
             if (plane_2 == null)
                 return null;
 
-            if(!face3D_1.GetBoundingBox(tolerance_Distance).InRange(face3D_2.GetBoundingBox(tolerance_Distance)))
+            BoundingBox3D boundingBox3D_1 = face3D_1.GetBoundingBox(tolerance_Distance);
+            if(boundingBox3D_1 == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D_2 = face3D_2.GetBoundingBox(tolerance_Distance);
+            if (boundingBox3D_2 == null)
+            {
+                return null;
+            }
+
+            if (!boundingBox3D_1.InRange(boundingBox3D_2))
                 return new PlanarIntersectionResult(plane_1);
 
             if (plane_1.Coplanar(plane_2, tolerance_Distance))
