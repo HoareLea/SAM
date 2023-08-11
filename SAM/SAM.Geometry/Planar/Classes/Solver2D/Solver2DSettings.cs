@@ -3,9 +3,9 @@
     public class Solver2DSettings
     {
         /// <summary>
-        /// Distance of subsequent rectangle shifts
+        /// Distance of subsequent rectangle shifts in polyline variant
         /// </summary>
-        public double MoveDistance { get; set; } = 0.1;
+        public double MoveDistancePolyLine { get; set; } = 0.1;
         /// <summary>
         /// Number of subsequent rectangle shifts in polyline variant
         /// </summary>
@@ -14,5 +14,9 @@
         /// Number of subsequent rectangle shifts in point variant
         /// </summary>
         public double MaxStepPoint { get; set; } = 10;
+        /// <summary>
+        /// Distance of subsequent rectangle shifts in point variant
+        /// </summary>
+        public double MoveDistancePoint { get; set; } = 0.05;
     }
 }

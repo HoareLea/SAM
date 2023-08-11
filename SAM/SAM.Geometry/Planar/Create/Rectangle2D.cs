@@ -165,10 +165,10 @@ namespace SAM.Geometry.Planar
             Vector2D widthVector = segment2D.Direction.GetPerpendicular() * width / 2;
 
             List<Point2D> rectanglePoints = new List<Point2D>();
-            rectanglePoints.Add(new Point2D(segment2D.Start + widthVector).GetScaledY(axesRatio));
-            rectanglePoints.Add(new Point2D(segment2D.End + widthVector).GetScaledY(axesRatio));
-            rectanglePoints.Add(new Point2D(segment2D.Start + widthVector.GetNegated()).GetScaledY(axesRatio));
-            rectanglePoints.Add(new Point2D(segment2D.End + widthVector.GetNegated()).GetScaledY(axesRatio));
+            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector);
+            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector);
+            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector.GetNegated());
+            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector.GetNegated());
 
             return Create.Rectangle2D(rectanglePoints);
         }
