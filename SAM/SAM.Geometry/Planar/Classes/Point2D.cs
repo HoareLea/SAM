@@ -216,6 +216,20 @@ namespace SAM.Geometry.Planar
             return point2D;
         }
 
+        public Point2D GetScaledX(double factor)
+        {
+            Point2D point2D = new Point2D(this);
+
+            point2D.ScaleX(factor);
+            return point2D;
+        }
+        public Point2D GetScaledY(double factor)
+        {
+            Point2D point2D = new Point2D(this);
+
+            point2D.ScaleY(factor);
+            return point2D;
+        }
         public bool IsNaN()
         {
             return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
@@ -291,6 +305,20 @@ namespace SAM.Geometry.Planar
 
             coordinates[0] = coordinates[0] * factor;
             coordinates[1] = coordinates[1] * factor;
+        }
+        public void ScaleX(double factor)
+        {
+            if (factor == 1)
+                return;
+
+            coordinates[0] *=  factor;
+        }
+        public void ScaleY(double factor)
+        {
+            if (factor == 1)
+                return;
+
+            coordinates[1] *= factor;
         }
 
         public override JObject ToJObject()
