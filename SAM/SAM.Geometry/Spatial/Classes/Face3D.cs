@@ -55,7 +55,7 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            return plane.Convert(externalEdge2D).GetBoundingBox(offset);
+            return plane.Convert(externalEdge2D)?.GetBoundingBox(offset);
         }
 
         public IClosedPlanar3D GetExternalEdge3D()
