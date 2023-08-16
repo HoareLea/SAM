@@ -245,18 +245,29 @@ namespace SAM.Analytical.Grasshopper
 
             foreach(Space space in spaces)
             {
-                InternalCondition internalCondition = space?.InternalCondition;
+                if(space == null)
+                {
+                    continue;
+                }
+
+                Space space_Temp = new Space(space);
+
+                InternalCondition internalCondition = space_Temp.InternalCondition;
                 if(internalCondition == null)
                 {
                     continue;
                 }
 
-                if(!internalCondition.TryGetValue(InternalConditionParameter.NCMData, out NCMData nCMData) || nCMData == null)
+                internalCondition = new InternalCondition(internalCondition);
+
+                if (!internalCondition.TryGetValue(InternalConditionParameter.NCMData, out NCMData nCMData) || nCMData == null)
                 {
                     continue;
                 }
 
-                if(!string.IsNullOrWhiteSpace(typeName))
+                nCMData = new NCMData(nCMData);
+
+                if (!string.IsNullOrWhiteSpace(typeName))
                 {
                     nCMData.Type = typeName;
                 }
@@ -308,9 +319,9 @@ namespace SAM.Analytical.Grasshopper
 
                 internalCondition.SetValue(InternalConditionParameter.NCMData, nCMData);
 
-                space.InternalCondition = internalCondition;
+                space_Temp.InternalCondition = internalCondition;
 
-                adjacencyCluster.AddObject(space);
+                adjacencyCluster.AddObject(space_Temp);
             }
 
             index = Params.IndexOfOutputParam("analyticalModel");
