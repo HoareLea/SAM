@@ -99,11 +99,14 @@
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />
+    <Compile Include="Component\SAMAnalyticalApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalBake.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateSpacePanelArea.cs" />
     <Compile Include="Component\SAMAnalyticalCreateAnalyticalModelBySpaces.cs" />
     <Compile Include="Component\SAMAnalyticalCreateProfileByBooleans.cs" />
+    <Compile Include="Component\SAMAnalyticalLightingOccupancyControls.cs" />
+    <Compile Include="Component\SAMAnalyticalLightingPhotoelectricControls.cs" />
     <Compile Include="Component\SAMAnalyticalPanelsDifference.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateByModel.cs" />
     <Compile Include="Component\SAMAnalyticalSetDefaultApertureConstruction.cs" />
@@ -302,7 +305,7 @@
     <Compile Include="Component\SAMAnalyticalSetConstructionByCsv.cs" />
     <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
     <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />
-    <Compile Include="Component\SAMAnalyticalApertureType.cs" />
+    <Compile Include="Component\SAMAnalyticalNCMSystemType.cs" />
     <Compile Include="Component\SAMAnalyticalSetPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalPlanarBoundary3D.cs" />
     <Compile Include="Component\SAMAnalyticalCreatePanelBy3DGeometry.cs" />
