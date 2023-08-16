@@ -99,7 +99,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 spaces = new List<Space>();
                 dataAccess.GetDataList(index, objectWrappers);
-                if(objectWrappers != null && objectWrappers.Count == 0)
+                if(objectWrappers != null && objectWrappers.Count != 0)
                 {
                     foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
                     {
