@@ -313,7 +313,7 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster.AddObject(space);
             }
 
-            index = Params.IndexOfOutputParam("AnalyticalModel");
+            index = Params.IndexOfOutputParam("analyticalModel");
             if(index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, analyticalModel.ProfileLibrary);
