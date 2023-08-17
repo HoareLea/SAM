@@ -120,6 +120,19 @@ namespace SAM.Analytical
             return new Panel(construction, panelType, planarBoundary3D);
         }
 
+        /// <summary>
+        /// Creates Panel without geometry
+        /// </summary>
+        /// <param name="construction">Construction</param>
+        /// <param name="panelType">PanelType</param>
+        /// <returns>Panel</returns>
+        public static Panel Panel(Construction construction, PanelType panelType)
+        {
+            PlanarBoundary3D planarBoundary3D = null;
+
+            return new Panel(construction, panelType, planarBoundary3D);
+        }
+
         public static Panel Panel(Guid guid, Panel panel, PlanarBoundary3D planarBoundary3D)
         {
             if(guid == Guid.Empty || panel == null || planarBoundary3D == null)
