@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GroundTemperature.cs" />
+    <Compile Include="Classes\WeatherHour.cs" />
     <Compile Include="Classes\WeatherDay.cs" />
     <Compile Include="Classes\WeatherData.cs" />
     <Compile Include="Classes\WeatherYear.cs" />
@@ -56,6 +57,7 @@
     <Compile Include="Enums\WeatherDataType.cs" />
     <Compile Include="Interfaces\IWeatherObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Query\DayIndex.cs" />
     <Compile Include="Query\DryBulbTemperatureRange.cs" />
     <Compile Include="Query\DryBulbTemperatureRanges.cs" />
     <Compile Include="Query\MaxValue.cs" />
