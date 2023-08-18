@@ -82,7 +82,7 @@ namespace SAM.Weather.Grasshopper
             }
 
             List<int> indexes = null;
-            index = Params.IndexOfInputParam("indexes_");
+            index = Params.IndexOfInputParam("_indexes");
             if (index != -1)
             {
                 indexes = new List<int>();

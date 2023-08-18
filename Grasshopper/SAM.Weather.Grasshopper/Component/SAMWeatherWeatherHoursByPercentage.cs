@@ -42,7 +42,7 @@ namespace SAM.Weather.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                GooWeatherObjectParam weatherObjectParam = new GooWeatherObjectParam() { Name = "weatherObject", NickName = "weatherObject", Description = "SAM Weather Object", Access = GH_ParamAccess.item, Optional = false };
+                GooWeatherObjectParam weatherObjectParam = new GooWeatherObjectParam() { Name = "weatherObject", NickName = "weatherObject", Description = "SAM Weather Object\n *means WeatherData or WeatherYear or WeatherDay", Access = GH_ParamAccess.item, Optional = false };
                 result.Add(new GH_SAMParam(weatherObjectParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String @string = null;
@@ -54,7 +54,7 @@ namespace SAM.Weather.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Number @number;
 
                 @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_percentage_", NickName = "_percentage_", Description = "Percentage [0 - 100]", Access = GH_ParamAccess.item, Optional = true };
-                @number.SetPersistentData(97);
+                @number.SetPersistentData(98.5);
                 result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
 
                 @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_numberComparisonType_", NickName = "_numberComparisonType_", Description = "NumberComparisonType Enum", Access = GH_ParamAccess.item, Optional = true };
@@ -64,15 +64,15 @@ namespace SAM.Weather.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean;
 
                 boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_average_", NickName = "_average_", Description = "Average", Access = GH_ParamAccess.item, Optional = true };
-                @number.SetPersistentData(false);
-                result.Add(new GH_SAMParam(@number, ParamVisibility.Voluntary));
+                boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
                 @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minValue_", NickName = "minValue_", Description = "Minimal Value", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
 
                 boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
-                @number.SetPersistentData(false);
-                result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
+                boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -185,7 +185,7 @@ namespace SAM.Weather.Grasshopper
                 {
                     foreach (WeatherYear weatherYear in weatherYears)
                     {
-                        List<WeatherHour> weatherHours = ((WeatherYear)weatherObject).GetWeatherHours();
+                        List<WeatherHour> weatherHours = weatherYear?.GetWeatherHours();
                         for (int i = 0; i < weatherHours.Count; i++)
                         {
                             tuples.Add(new Tuple<int, WeatherHour> (i, weatherHours[i]));
@@ -221,8 +221,22 @@ namespace SAM.Weather.Grasshopper
 
             if(average)
             {
-                value = tuples.ConvertAll(x => x.Item2[weatherDataType]).Sum() / tuples.Count;
-                value = value * percentage / 100;
+                double min = double.MaxValue;
+                double max = double.MinValue;
+                foreach(Tuple<int, WeatherHour> tuple in tuples)
+                {
+                    double value_Temp = tuple.Item2[weatherDataType];
+                    if(value_Temp < min)
+                    {
+                        min = value_Temp;
+                    }
+                    if(value_Temp > max)
+                    {
+                        max = value_Temp;
+                    }
+                }
+
+                value = min + ((max - min) * percentage / 100);
             }
             else
             {
