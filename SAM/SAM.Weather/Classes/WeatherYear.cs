@@ -200,6 +200,22 @@ namespace SAM.Weather
             return result;
         }
 
+        public List<WeatherHour> GetWeatherHours(IEnumerable<int> hours)
+        {
+            if (weatherDays == null || hours == null)
+            {
+                return null;
+            }
+
+            List<WeatherHour> result = new List<WeatherHour>();
+            foreach(int hour in hours)
+            {
+                result.Add(GetWeatherHour(hour));
+            }
+
+            return result;
+        }
+
         /// <summary>
         /// Gets a list of weather data values for a specific parameter by name.
         /// </summary>

@@ -395,5 +395,21 @@ namespace SAM.Weather
 
             return result;
         }
+
+        public List<WeatherHour> GetWeatherHours(IEnumerable<int> hours)
+        {
+            if(hours == null)
+            {
+                return null;
+            }
+
+            List<WeatherHour> result = new List<WeatherHour>();
+            foreach(int hour in hours)
+            {
+                result.Add(GetWeatherHour(hour));
+            }
+
+            return result;
+        }
     }
 }
