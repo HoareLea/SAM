@@ -96,6 +96,10 @@ namespace SAM.Weather.Grasshopper
                     result = double.NaN;
                 }
             }
+            else if (weatherObject is WeatherHour)
+            {
+                result = ((WeatherHour)weatherObject)[weatherDataType];
+            }
             else if (weatherObject is WeatherData)
             {
                 WeatherYear weatherYear = ((WeatherData)weatherObject).WeatherYears?.FirstOrDefault();
