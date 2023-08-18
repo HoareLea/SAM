@@ -19,7 +19,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -67,6 +67,10 @@ namespace SAM.Weather.Grasshopper
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_unique_", NickName = "_unique_", Description = "Unique", Access = GH_ParamAccess.item, Optional = true };
+                boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
+
                 @number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minValue_", NickName = "minValue_", Description = "Minimal Value", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(@number, ParamVisibility.Binding));
 
@@ -86,6 +90,7 @@ namespace SAM.Weather.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "value", NickName = "value", Description = "value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "weatherHours_In", NickName = "weatherHours_In", Description = "SAM Weather Hours", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "indexes_In", NickName = "indexes_In", Description = "SAM Weather Hours indexes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "weatherHours_Out", NickName = "weatherHours_Out", Description = "SAM Weather Hours", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -168,6 +173,13 @@ namespace SAM.Weather.Grasshopper
                 dataAccess.GetData(index, ref average);
             }
 
+            bool unique = false;
+            index = Params.IndexOfInputParam("_unique_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref unique);
+            }
+
             double minValue = double.NaN;
             index = Params.IndexOfInputParam("minValue_");
             if (index != -1)
@@ -240,15 +252,21 @@ namespace SAM.Weather.Grasshopper
             }
             else
             {
-                List<Tuple<int, WeatherHour>> tuples_Temp = new List<Tuple<int, WeatherHour>>(tuples);
-                tuples_Temp.Sort((x, y) => x.Item2[weatherDataType].CompareTo(y.Item2[weatherDataType]));
-                int index_Temp = System.Convert.ToInt32(System.Convert.ToDouble(tuples_Temp.Count) * (percentage / 100));
-                if (index_Temp >= tuples_Temp.Count)
+                List<double> values = tuples.ConvertAll(x => x.Item2[weatherDataType]);
+                if (unique)
                 {
-                    index_Temp = tuples_Temp.Count - 1;
+                    values = values.Distinct().ToList();
                 }
 
-                value = tuples_Temp[index_Temp].Item2[weatherDataType];
+                values.Sort();
+
+                int index_Temp = System.Convert.ToInt32(System.Convert.ToDouble(values.Count) * (percentage / 100));
+                if (index_Temp >= values.Count)
+                {
+                    index_Temp = values.Count - 1;
+                }
+
+                value = values[index_Temp];
             }
 
             List<WeatherHour> weatherHours_In = new List<WeatherHour>();
@@ -269,6 +287,12 @@ namespace SAM.Weather.Grasshopper
                     weatherHours_Out.Add(tuple.Item2);
                     indexes_Out.Add(tuple.Item1);
                 }
+            }
+
+            index = Params.IndexOfOutputParam("value");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, value);
             }
 
             index = Params.IndexOfOutputParam("weatherHours_In");
