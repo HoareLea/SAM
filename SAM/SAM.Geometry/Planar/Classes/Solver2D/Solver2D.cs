@@ -91,7 +91,7 @@ namespace SAM.Geometry.Planar
 
                         foreach (Vector2D offset in offsets)
                         {
-                            Vector2D scaledOffset = offset * (1 + (i / 3)); //solver2DSettings.MoveDistancePoint);
+                            Vector2D scaledOffset = offset * (1 + (i / 5)); //solver2DSettings.MoveDistancePoint);
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
                             if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
