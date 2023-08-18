@@ -593,8 +593,11 @@ namespace SAM.Analytical
             if (type == null || guids == null)
                 return null;
             
-            if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type) || typeof(Result).IsAssignableFrom(type))
+            if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type) || typeof(Result).IsAssignableFrom(type) || typeof(Group).IsAssignableFrom(type) || typeof(MechanicalSystem).IsAssignableFrom(type))
+            {
                 return adjacencyCluster.Remove(type, guids);
+
+            }
 
             return null;
         }
