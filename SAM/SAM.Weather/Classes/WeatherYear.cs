@@ -86,13 +86,19 @@ namespace SAM.Weather
         public bool Add(int day, int hour, Dictionary<string, double> values)
         {
             if (day < 0 || day >= 365)
+            {
                 return false;
+            }
 
             if (hour < 0 || hour >= 24)
+            {
                 return false;
+            }
 
             if (weatherDays == null)
+            {
                 weatherDays = new WeatherDay[365];
+            }
 
             WeatherDay weatherDay = weatherDays[day];
             if (weatherDay == null)
@@ -102,9 +108,41 @@ namespace SAM.Weather
             }
 
             foreach (KeyValuePair<string, double> keyValuePair in values)
+            {
                 weatherDay[keyValuePair.Key, hour] = keyValuePair.Value;
+            }
 
             return true;
+        }
+
+        public bool Add(int day, int hour, WeatherHour weatherHour)
+        {
+            IEnumerable<string> keys = weatherHour?.Keys;
+            if(keys == null || keys.Count() == 0)
+            {
+                return false;
+            }
+
+
+            Dictionary<string, double> dictionary = new Dictionary<string, double>();
+            foreach(string key in keys)
+            {
+                dictionary[key] = weatherHour[key];
+            }
+
+            return Add(day, hour, dictionary);
+        }
+
+        public bool Add(int hour, WeatherHour weatherHour)
+        {
+            if(weatherHour == null)
+            {
+                return false;
+            }
+
+            int day = Query.DayIndex(hour, out int dayHour);
+
+            return Add(day, dayHour, weatherHour);
         }
 
         /// <summary>
@@ -138,6 +176,28 @@ namespace SAM.Weather
 
                 return weatherDays.ToList();
             }
+        }
+
+        public List<WeatherHour> GetWeatherHours()
+        {
+            if (weatherDays == null)
+            {
+                return null;
+            }
+
+            List<WeatherHour> result = new List<WeatherHour>();
+            foreach(WeatherDay weatherDay in weatherDays)
+            {
+                List<WeatherHour> weatherHours = weatherDay?.GetWeatherHours();
+                if(weatherHours == null)
+                {
+                    continue;
+                }
+
+                result.AddRange(weatherHours);
+            }
+
+            return result;
         }
 
         /// <summary>
@@ -176,6 +236,23 @@ namespace SAM.Weather
         public List<double> GetValues(WeatherDataType weatherDataType)
         {
             return GetValues(weatherDataType.ToString());
+        }
+
+        public WeatherHour GetWeatherHour(int hour)
+        {
+            int day = Query.DayIndex(hour, out int dayHour);
+
+            return GetWeatherHour(day, dayHour);
+        }
+
+        public WeatherHour GetWeatherHour(int day, int hour)
+        {
+            if (day >= weatherDays.Length || hour < 0 || hour > 23)
+            {
+                return null;
+            }
+
+            return weatherDays[day]?.GetWeatherHour(hour);
         }
 
         /// <summary>

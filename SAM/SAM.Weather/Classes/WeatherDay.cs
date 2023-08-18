@@ -368,5 +368,32 @@ namespace SAM.Weather
 
             return directSolarRadiation + diffuseSolarRadiation;
         }
+
+        public WeatherHour GetWeatherHour(int index)
+        {
+            if (index < 0 || index > 23)
+            {
+                return null;
+            }
+
+            WeatherHour result = new WeatherHour();
+            foreach(KeyValuePair<string, double[]> keyValuePair in dictionary)
+            {
+                result[keyValuePair.Key] = keyValuePair.Value[index];
+            }
+
+            return result;
+        }
+
+        public List<WeatherHour> GetWeatherHours()
+        {
+            List<WeatherHour> result = new List<WeatherHour>();
+            for(int i=0; i < 24; i++)
+            {
+                result.Add(GetWeatherHour(i));
+            }
+
+            return result;
+        }
     }
 }
