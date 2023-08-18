@@ -25,7 +25,7 @@ namespace SAM.Geometry.Planar
         }
 
         public bool Add(Rectangle2D rectangle2D, Point2D point2D, int priority = int.MinValue, object tag = null)
-        {
+        { 
             if (rectangle2D == null || point2D == null)
             {
                 return false;
@@ -91,7 +91,7 @@ namespace SAM.Geometry.Planar
 
                         foreach (Vector2D offset in offsets)
                         {
-                            Vector2D scaledOffset = offset * (1 + i * solver2DSettings.MoveDistance);
+                            Vector2D scaledOffset = offset * (1 + (i / 5)); //solver2DSettings.MoveDistancePoint);
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
                             if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
@@ -116,7 +116,7 @@ namespace SAM.Geometry.Planar
 
                         for (int j = -1; j <= 1; j += 2)
                         {
-                            double xNew = point.X + i * j * solver2DSettings.MoveDistance;
+                            double xNew = point.X + i * j * solver2DSettings.MoveDistancePolyLine;
                             double yNew = getY(polyline2D, xNew);
                             if (yNew == double.NaN) continue;
                             Point2D newPoint = new Point2D(xNew, yNew);
@@ -218,7 +218,7 @@ namespace SAM.Geometry.Planar
                 return calculatedRectangle;
             }
 
-            Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
+            Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, -calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
             return result;
         }   
 

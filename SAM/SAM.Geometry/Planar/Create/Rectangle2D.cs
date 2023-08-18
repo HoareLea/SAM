@@ -155,5 +155,22 @@ namespace SAM.Geometry.Planar
 
             return Rectangle2D(point2Ds, tolerance);
         }
+
+        public static Rectangle2D Rectangle2D(this Segment2D segment2D, double width, double axesRatio = 1)
+        {
+            if(segment2D == null)
+            {
+                return null;
+            }
+            Vector2D widthVector = segment2D.Direction.GetPerpendicular() * width / 2;
+
+            List<Point2D> rectanglePoints = new List<Point2D>();
+            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector);
+            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector);
+            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector.GetNegated());
+            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector.GetNegated());
+
+            return Create.Rectangle2D(rectanglePoints);
+        }
     }
 }
