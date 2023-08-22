@@ -525,6 +525,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetSpaces()?.ConvertAll(x => new Space(x));
         }
 
+        public List<Space> GetSpaces(Zone zone)
+        {
+            return adjacencyCluster?.GetRelatedObjects<Space>(zone)?.ConvertAll(x => new Space(x));
+        }
+
         public HashSet<string> GetZoneCategories()
         {
             return adjacencyCluster.GetZoneCategories();

@@ -116,6 +116,7 @@ namespace SAM.Weather.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 dataAccess.SetDataList(0, null);
                 dataAccess.SetDataList(1, null);
+                dataAccess.SetDataList(2, null);
                 return;
             }
 
