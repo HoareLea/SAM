@@ -190,6 +190,7 @@
     <Compile Include="Create\ConstructionLayers.cs" />
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
+    <Compile Include="Enums\SeasonType.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\AperturePart.cs" />
     <Compile Include="Enums\ApertureType.cs" />
@@ -281,10 +282,12 @@
     <Compile Include="Modify\UpdateAreaAndVolume.cs" />
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
+    <Compile Include="Query\TryGetSeasonProfiles.cs" />
     <Compile Include="Query\CalculatedInfiltrationSensibleGain.cs" />
     <Compile Include="Query\CalculatedInfiltrationLatentGain.cs" />
     <Compile Include="Query\Difference.cs" />
     <Compile Include="Query\Id.cs" />
+    <Compile Include="Query\Next.cs" />
     <Compile Include="Query\SystemTypeInternalConditionParameter.cs" />
     <Compile Include="Query\IsMechanicalVentilation.cs" />
     <Compile Include="Query\CalculatedExhaustAirChangesPerHour.cs" />

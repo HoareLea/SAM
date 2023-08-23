@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Core.Attributes;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -222,6 +223,32 @@ namespace SAM.Weather
         public bool Remove(WeatherDataType weatherDataType)
         {
             return Remove(weatherDataType.ToString());
+        }
+
+        public double Average(string name)
+        {
+            if (dictionary == null || dictionary.Count == 0 || name == null)
+            {
+                return double.NaN;
+            }
+
+            if(!dictionary.ContainsKey(name))
+            {
+                return double.NaN;
+            }
+
+            double[] values = dictionary[name];
+            if(values == null)
+            {
+                return double.NaN;
+            }
+
+            return values.Sum() / System.Convert.ToDouble(values.Length);
+        }
+
+        public double Average(WeatherDataType weatherDataType)
+        {
+            return Average(weatherDataType.ToString());
         }
 
         /// <summary>

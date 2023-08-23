@@ -98,6 +98,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />
     <Compile Include="Component\SAMAnalyticalBake.cs" />
@@ -352,6 +353,7 @@
     </Compile>
     <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Query\DataTree.cs" />
     <Compile Include="Query\New\DisplayMaterial.cs" />
     <Compile Include="Query\TryConvertToPanelGeometries.cs" />
     <Compile Include="Query\DisplayMaterial.cs" />
