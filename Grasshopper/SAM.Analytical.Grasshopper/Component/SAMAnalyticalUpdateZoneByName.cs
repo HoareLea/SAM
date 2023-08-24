@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateZone : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalUpdateZoneByName : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateZone()
+        public SAMAnalyticalUpdateZoneByName()
           : base("SAMAnalytical.UpdateZone", "SAMAnalytical.UpdateZone",
               "Update or Create Zone (Group) in Analytical Object",
               "SAM", "Analytical")

@@ -205,8 +205,9 @@
     <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
     <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalModifyZonesCategoryName.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateZone.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateZoneByName.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
