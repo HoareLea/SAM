@@ -65,27 +65,47 @@ namespace SAM.Analytical
 
             int next = System.Math.Min(next_Heating, System.Math.Min(next_FreeCooling, next_Cooling));
 
-            int count_Heating = dictionary[SeasonType.Heating].ToList().GetRange(0, next).Count(x => x == true);
-            int count_FreeCooling = dictionary[SeasonType.FreeCooling].ToList().GetRange(0, next).Count(x => x == true);
-            int count_Cooling = dictionary[SeasonType.Cooling].ToList().GetRange(0, next).Count(x => x == true);
-
-            int max = System.Math.Max(count_Heating, System.Math.Max(count_FreeCooling, count_Cooling));
-            if (max == count_Heating)
+            double averageTemperature = temperatures.ToList().GetRange(start, next).Average();
+            if (averageTemperature <= heatingTemperature)
             {
                 sesonType = SeasonType.Heating;
                 heatingProfile.Update(0, next * 24, 1);
+            }
+            else
+            {
+                if (!double.IsNaN(coolingTemperature) && coolingTemperature != heatingTemperature && averageTemperature <= coolingTemperature)
+                {
+                    sesonType = SeasonType.FreeCooling;
+                    freeCoolingProfile.Update(0, next * 24, 1);
+                }
+                else
+                {
+                    sesonType = SeasonType.Cooling;
+                    coolingProfile.Update(0, next * 24, 1);
+                }
+            }
 
-            }
-            else if (next == next_FreeCooling)
-            {
-                sesonType = SeasonType.FreeCooling;
-                freeCoolingProfile.Update(0, next * 24, 1);
-            }
-            else if (next == next_Cooling)
-            {
-                sesonType = SeasonType.Cooling;
-                coolingProfile.Update(0, next * 24, 1);
-            }
+            //int count_Heating = dictionary[SeasonType.Heating].ToList().GetRange(0, next).Count(x => x == true);
+            //int count_FreeCooling = dictionary[SeasonType.FreeCooling].ToList().GetRange(0, next).Count(x => x == true);
+            //int count_Cooling = dictionary[SeasonType.Cooling].ToList().GetRange(0, next).Count(x => x == true);
+
+            //int max = System.Math.Max(count_Heating, System.Math.Max(count_FreeCooling, count_Cooling));
+            //if (max == count_Heating)
+            //{
+            //    sesonType = SeasonType.Heating;
+            //    heatingProfile.Update(0, next * 24, 1);
+
+            //}
+            //else if (max == count_FreeCooling)
+            //{
+            //    sesonType = SeasonType.FreeCooling;
+            //    freeCoolingProfile.Update(0, next * 24, 1);
+            //}
+            //else if (max == count_Cooling)
+            //{
+            //    sesonType = SeasonType.Cooling;
+            //    coolingProfile.Update(0, next * 24, 1);
+            //}
 
             start = next;
 
