@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalUpdateZoneByName()
           : base("SAMAnalytical.UpdateZone", "SAMAnalytical.UpdateZone",
-              "Update or Create Zone (Group) in Analytical Object",
+              "Update or Create Zone (Group) in Analytical Object\n*Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applied",
               "SAM", "Analytical")
         {
         }
@@ -50,10 +50,10 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_String param_String = null;
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applyed", Access = GH_ParamAccess.item, Optional = true };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applied", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -112,14 +112,12 @@ namespace SAM.Analytical.Grasshopper
             string zoneCategory = null;
             if (index == -1 || !dataAccess.GetData(index, ref zoneCategory) || string.IsNullOrWhiteSpace(zoneCategory))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                zoneCategory = null;
             }
 
             if(!Enum.TryParse(zoneCategory, out ZoneType zoneType))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                zoneType = ZoneType.Undefined;
             }
 
             index = Params.IndexOfInputParam("zoneCategoryName_");
@@ -127,6 +125,12 @@ namespace SAM.Analytical.Grasshopper
             if (index == -1 || !dataAccess.GetData(index, ref zoneCategory))
             {
                 zoneCategory = null;
+            }
+
+            if(zoneType == ZoneType.Undefined && zoneCategory ==null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
             Zone zone = null;
