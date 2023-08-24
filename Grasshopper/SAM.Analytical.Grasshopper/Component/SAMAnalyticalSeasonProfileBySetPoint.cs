@@ -190,7 +190,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("stringProfile");
             if (index != -1)
             {
-                dataAccess.SetData(index, seasonTypes?.ConvertAll(x => x.ToString()));
+                dataAccess.SetDataList(index, seasonTypes?.ConvertAll(x => x.ToString()));
             }
 
             index = Params.IndexOfOutputParam("heatingProfile");
