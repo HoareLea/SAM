@@ -71,6 +71,21 @@ namespace SAM.Analytical
             return complexEquipmentModel.InsertBefore(flowClassification, simpleEquipment_ToBeInserted, simpleEquipment);
         }
 
+        public bool RemoveSimpleEquipment(ISimpleEquipment simpleEquipment)
+        {
+            if(simpleEquipment == null)
+            {
+                return false; 
+            }
+
+            if(complexEquipmentModel == null)
+            {
+                return false;
+            }
+
+            return complexEquipmentModel.Remove(simpleEquipment);
+        }
+
         public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification, bool sort = true)
         {
             List<ISimpleEquipment> result = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
@@ -116,8 +131,6 @@ namespace SAM.Analytical
         {
             return complexEquipmentModel?.GetFlowClassifications();
         }
-
-
 
         public override bool FromJObject(JObject jObject)
         {

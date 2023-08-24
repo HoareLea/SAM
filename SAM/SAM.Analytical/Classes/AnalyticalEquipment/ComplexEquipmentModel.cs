@@ -1,5 +1,4 @@
-﻿using MathNet.Numerics.RootFinding;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -324,6 +323,40 @@ namespace SAM.Analytical
         public override Reference? GetReference(ISimpleEquipment @object)
         {
             return @object.Guid.ToString("N");
+        }
+
+        /// <summary>
+        /// Gets list of terminal simple equipments (first and last)
+        /// </summary>
+        /// <param name="flowClassification">Flow Calssification</param>
+        /// <returns></returns>
+        public List<T> TerminalSimpleEquipments<T>(FlowClassification flowClassification) where T: ISimpleEquipment
+        {
+            List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
+            if (simpleEquipments == null)
+            {
+                return null;
+            }
+
+            if(simpleEquipments.Count < 2)
+            {
+                return simpleEquipments.FindAll(x => x is T).ConvertAll(x => (T)x);
+            }
+
+            simpleEquipments = Sort(simpleEquipments, flowClassification, Direction.In);
+
+            ISimpleEquipment simpleEquipment = default;
+
+            List<T> result = new List<T>();
+
+            simpleEquipment = simpleEquipments.First();
+            if(simpleEquipment is T)
+            {
+                result.Add((T)simpleEquipment);
+            }
+
+
+            return new List<T>() { simpleEquipments.First(), simpleEquipments.Last() }
         }
 
         public List<ISimpleEquipment> Sort(IEnumerable<ISimpleEquipment> simpleEquipments, FlowClassification flowClassification, Direction direction)
