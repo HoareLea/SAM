@@ -355,8 +355,13 @@ namespace SAM.Analytical
                 result.Add((T)simpleEquipment);
             }
 
+            simpleEquipment = simpleEquipments.Last();
+            if (simpleEquipment is T)
+            {
+                result.Add((T)simpleEquipment);
+            }
 
-            return new List<T>() { simpleEquipments.First(), simpleEquipments.Last() }
+            return result;
         }
 
         public List<ISimpleEquipment> Sort(IEnumerable<ISimpleEquipment> simpleEquipments, FlowClassification flowClassification, Direction direction)
