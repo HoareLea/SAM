@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,8 +48,13 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooSpaceParam { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_name", NickName = "_name", Description = "Zone Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = null;
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applyed", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -117,6 +122,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("zoneCategoryName_");
+            zoneCategory = null;
+            if (index == -1 || !dataAccess.GetData(index, ref zoneCategory))
+            {
+                zoneCategory = null;
+            }
+
             Zone zone = null;
             if(sAMObject is AnalyticalModel)
             {
@@ -125,14 +137,29 @@ namespace SAM.Analytical.Grasshopper
                 if(adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                    if(zoneCategory != null)
+                    {
+                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, spaces.ToArray());
+                    }
+                    else
+                    {
+                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                    }
+                    
                     sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
             else if(sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-                zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                if (zoneCategory != null)
+                {
+                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, spaces.ToArray());
+                }
+                else
+                {
+                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                }
                 sAMObject = adjacencyCluster;
             }
 
