@@ -43,13 +43,13 @@ namespace SAM.Analytical
             }
 
             heatingProfile = new Profile("Heating Season", Analytical.ProfileGroup.Thermostat);
-            heatingProfile.Update(0, count, 0);
+            heatingProfile.Update(0, count * 24, 0);
 
             freeCoolingProfile = new Profile("Free Cooling Season", Analytical.ProfileGroup.Thermostat);
-            freeCoolingProfile.Update(0, count, 0);
+            freeCoolingProfile.Update(0, count * 24, 0);
 
             coolingProfile = new Profile("Cooling Season", Analytical.ProfileGroup.Thermostat);
-            coolingProfile.Update(0, count, 0);
+            coolingProfile.Update(0, count * 24, 0);
 
             SeasonType sesonType = SeasonType.Undefined;
 
@@ -73,18 +73,18 @@ namespace SAM.Analytical
             if (max == count_Heating)
             {
                 sesonType = SeasonType.Heating;
-                heatingProfile.Update(0, next, 1);
+                heatingProfile.Update(0, next * 24, 1);
 
             }
             else if (next == next_FreeCooling)
             {
                 sesonType = SeasonType.FreeCooling;
-                freeCoolingProfile.Update(0, next, 1);
+                freeCoolingProfile.Update(0, next * 24, 1);
             }
             else if (next == next_Cooling)
             {
                 sesonType = SeasonType.Cooling;
-                coolingProfile.Update(0, next, 1);
+                coolingProfile.Update(0, next * 24, 1);
             }
 
             start = next;
@@ -104,15 +104,15 @@ namespace SAM.Analytical
                 switch (sesonType)
                 {
                     case SeasonType.Heating:
-                        heatingProfile.Update(start, next - start, 1);
+                        heatingProfile.Update(start * 24, (next - start) * 24, 1);
                         break;
 
                     case SeasonType.FreeCooling:
-                        freeCoolingProfile.Update(start, next - start, 1);
+                        freeCoolingProfile.Update(start * 24, (next - start) * 24, 1);
                         break;
 
                     case SeasonType.Cooling:
-                        coolingProfile.Update(start, next - start, 1);
+                        coolingProfile.Update(start * 24, (next - start) * 24, 1);
                         break;
                 }
 
