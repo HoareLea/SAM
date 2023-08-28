@@ -20,6 +20,18 @@ namespace SAM.Analytical
  
         }
 
+        public HeatingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double summerOffTemperature, double winterOffTemperature)
+            : base(name, fluidSupplyTemperature, fluidReturnTemperature, contactFactor, summerOffTemperature, winterOffTemperature)
+        {
+
+        }
+
+        public HeatingCoil(double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double summerOffTemperature, double winterOffTemperature)
+            : base("Heating Coil", fluidSupplyTemperature, fluidReturnTemperature, contactFactor, summerOffTemperature, winterOffTemperature)
+        {
+
+        }
+
         public HeatingCoil(JObject jObject)
             : base(jObject)
         {

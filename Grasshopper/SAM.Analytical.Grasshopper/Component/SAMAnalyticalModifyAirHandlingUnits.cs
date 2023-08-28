@@ -313,7 +313,8 @@ namespace SAM.Analytical.Grasshopper
                         HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
                         if(frostCoil != null)
                         {
-                            frostCoil.OffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.OffTemperature;
+                            frostCoil.WinterOffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.WinterOffTemperature;
+                            frostCoil.SummerOffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.SummerOffTemperature;
                         }
 
                         HeatRecoveryUnit heatRecoveryUnit = airHandlingUnit.GetSimpleEquipments<HeatRecoveryUnit>(FlowClassification.Supply)?.FirstOrDefault();
@@ -342,16 +343,8 @@ namespace SAM.Analytical.Grasshopper
                         {
                             heatingCoil.FluidSupplyTemperature = !double.IsNaN(heatingCoilFluidFlowTemperature) ? heatingCoilFluidFlowTemperature : heatingCoil.FluidSupplyTemperature;
                             heatingCoil.FluidReturnTemperature = !double.IsNaN(heatingCoilFluidReturnTemperature) ? heatingCoilFluidReturnTemperature : heatingCoil.FluidReturnTemperature;
-                        }
-
-                        if (!double.IsNaN(winterHeatingCoilSupplyTemperature))
-                        {
-                            airHandlingUnit.SetValue(AirHandlingUnitParameter.WinterHeatingCoilSupplyTemperature, winterHeatingCoilSupplyTemperature);
-                        }
-
-                        if(summerHeatingCoil != null && summerHeatingCoil.HasValue)
-                        {
-                            airHandlingUnit.SetValue(AirHandlingUnitParameter.SummerHeatingCoil, summerHeatingCoil.Value);
+                            heatingCoil.WinterOffTemperature = !double.IsNaN(winterHeatingCoilSupplyTemperature) ? winterHeatingCoilSupplyTemperature : heatingCoil.WinterOffTemperature;
+                            heatingCoil.Summer = summerHeatingCoil != null && summerHeatingCoil.HasValue ? summerHeatingCoil.Value : heatingCoil.Summer;
                         }
 
                         adjacencyCluster.AddObject(airHandlingUnit);

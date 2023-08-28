@@ -11,7 +11,12 @@ namespace SAM.Analytical
         private double fluidReturnTemperature;
         private double fluidSupplyTemperature;
         private double contactFactor;
-        private double offTemperature;
+        
+        private bool summer;
+        private double summerOffTemperature;
+
+        private bool winter;
+        private double winterOffTemperature;
 
         public Coil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(name)
@@ -19,7 +24,18 @@ namespace SAM.Analytical
             this.fluidReturnTemperature = fluidReturnTemperature;
             this.fluidSupplyTemperature = fluidSupplyTemperature;
             this.contactFactor = contactFactor;
-            this.offTemperature = offTemperature;
+            summerOffTemperature = offTemperature;
+            winterOffTemperature = offTemperature;
+        }
+
+        public Coil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double summerOffTemperature, double winterOffTemperature)
+            : base(name)
+        {
+            this.fluidReturnTemperature = fluidReturnTemperature;
+            this.fluidSupplyTemperature = fluidSupplyTemperature;
+            this.contactFactor = contactFactor;
+            this.summerOffTemperature = summerOffTemperature;
+            this.winterOffTemperature = winterOffTemperature;
         }
 
         public Coil(JObject jObject)
@@ -36,7 +52,8 @@ namespace SAM.Analytical
                 fluidReturnTemperature = coil.fluidReturnTemperature;
                 fluidSupplyTemperature = coil.fluidSupplyTemperature;
                 contactFactor = coil.contactFactor;
-                offTemperature = coil.offTemperature;
+                winterOffTemperature = coil.winterOffTemperature;
+                summerOffTemperature = coil.summerOffTemperature;
             }
         }
 
@@ -46,7 +63,8 @@ namespace SAM.Analytical
             this.fluidReturnTemperature = fluidReturnTemperature;
             this.fluidSupplyTemperature = fluidSupplyTemperature;
             this.contactFactor = contactFactor;
-            this.offTemperature = offTemperature;
+            summerOffTemperature = offTemperature;
+            winterOffTemperature = offTemperature;
         }
 
         public double FluidReturnTemperature
@@ -88,16 +106,67 @@ namespace SAM.Analytical
             }
         }
 
-        public double OffTemperature
+        /// <summary>
+        /// Winter temperature of air exiting the coil
+        /// </summary>
+        public double WinterOffTemperature
         {
             get
             {
-                return offTemperature;
+                return winterOffTemperature;
             }
 
             set
             {
-                offTemperature = value;
+                winterOffTemperature = value;
+            }
+        }
+
+        /// <summary>
+        /// Summer temperature of air exiting the coil
+        /// </summary>
+        public double SummerOffTemperature
+        {
+            get
+            {
+                return summerOffTemperature;
+            }
+
+            set
+            {
+                summerOffTemperature = value;
+            }
+        }
+
+        /// <summary>
+        /// Off/On during summer season
+        /// </summary>
+        public bool Summer
+        {
+            get
+            {
+                return summer;
+            }
+
+            set
+            {
+                summer = value;
+            }
+        }
+
+        /// <summary>
+        /// Off/On during winter season
+        /// </summary>
+        public bool Winter
+        {
+            get
+            {
+                return winter;
+            }
+
+            set
+            {
+                winter = value;
             }
         }
 
@@ -121,9 +190,14 @@ namespace SAM.Analytical
                 contactFactor = jObject.Value<double>("ContactFactor");
             }
 
-            if (jObject.ContainsKey("OffTemperature"))
+            if (jObject.ContainsKey("SummerOffTemperature"))
             {
-                offTemperature = jObject.Value<double>("OffTemperature");
+                summerOffTemperature = jObject.Value<double>("SummerOffTemperature");
+            }
+
+            if (jObject.ContainsKey("WinterOffTemperature"))
+            {
+                winterOffTemperature = jObject.Value<double>("WinterOffTemperature");
             }
 
             return true;
@@ -150,9 +224,14 @@ namespace SAM.Analytical
                 jObject.Add("ContactFactor", contactFactor);
             }
 
-            if (!double.IsNaN(offTemperature))
+            if (!double.IsNaN(summerOffTemperature))
             {
-                jObject.Add("OffTemperature", offTemperature);
+                jObject.Add("SummerOffTemperature", summerOffTemperature);
+            }
+
+            if (!double.IsNaN(winterOffTemperature))
+            {
+                jObject.Add("WinterOffTemperature", winterOffTemperature);
             }
 
             return jObject;

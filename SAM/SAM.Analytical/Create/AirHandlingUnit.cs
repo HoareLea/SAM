@@ -12,7 +12,6 @@ namespace SAM.Analytical
             }
 
             AirHandlingUnit result = new AirHandlingUnit(name, 23, double.NaN);
-            result.SetValue(AirHandlingUnitParameter.SummerHeatingCoil, false);
 
             List<ISimpleEquipment> simpleEquipments = null;
 
@@ -22,33 +21,41 @@ namespace SAM.Analytical
 
             //Intake
             simpleEquipments = new List<ISimpleEquipment>();
-            simpleEquipments.Add(new HeatingCoil("Frost Coil", double.NaN, double.NaN, 0.9, double.NaN));
-            simpleEquipments.Add(new EmptySection());
+            if(frostCoil)
+            {
+                simpleEquipments.Add(new HeatingCoil("Frost Coil", double.NaN, double.NaN, 0.9, double.NaN));
+                simpleEquipments.Add(new EmptySection());
+            }
             simpleEquipments.Add(new Filter("Intake Filter"));
-            simpleEquipments.Add(mixingSection);
             simpleEquipments.Add(heatRecoveryUnit);
             result.AddSimpleEquipments(FlowClassification.Intake, simpleEquipments.ToArray());
 
             //Supply
             simpleEquipments = new List<ISimpleEquipment>();
             simpleEquipments.Add(heatRecoveryUnit);
-            simpleEquipments.Add(new Fan("Supply Fan"));
+            simpleEquipments.Add(mixingSection);
             simpleEquipments.Add(new CoolingCoil("Cooling Coil", 6, 12, 0.9, double.NaN));
+            simpleEquipments.Add(new EmptySection());
+            simpleEquipments.Add(new HeatingCoil("Heating Coil", double.NaN, double.NaN, 0.9, double.NaN, double.NaN));
+            simpleEquipments.Add(new EmptySection());
             simpleEquipments.Add(new Humidifier("Humidifier"));
-            simpleEquipments.Add(new HeatingCoil("Heating Coil", double.NaN, double.NaN, 0.9, double.NaN));
+            simpleEquipments.Add(new Fan("Supply Fan"));
             result.AddSimpleEquipments(FlowClassification.Supply, simpleEquipments.ToArray());
 
             //Exhaust
             simpleEquipments = new List<ISimpleEquipment>();
             simpleEquipments.Add(heatRecoveryUnit);
-            simpleEquipments.Add(mixingSection);
             simpleEquipments.Add(new Silencer());
             result.AddSimpleEquipments(FlowClassification.Exhaust, simpleEquipments.ToArray());
 
             //Extract
             simpleEquipments.Add(heatRecoveryUnit);
+            simpleEquipments.Add(new EmptySection());
+            simpleEquipments.Add(new Fan("Extract Fan"));
+            simpleEquipments.Add(new EmptySection());
             simpleEquipments.Add(new Filter("Extract Filter"));
-            
+            result.AddSimpleEquipments(FlowClassification.Extract, simpleEquipments.ToArray());
+
             return result;
         }
     }
