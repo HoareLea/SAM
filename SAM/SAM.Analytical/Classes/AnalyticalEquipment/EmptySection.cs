@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class EmptySection : SimpleEquipment
     {
+        public EmptySection()
+            : base("Empty Section")
+        {
+
+        }
+
         public EmptySection(string name)
             : base(name)
         {
@@ -20,8 +26,8 @@ namespace SAM.Analytical
 
         }
 
-        public EmptySection(Filter filter)
-            : base(filter)
+        public EmptySection(EmptySection emptySection)
+            : base(emptySection)
         {
 
         }

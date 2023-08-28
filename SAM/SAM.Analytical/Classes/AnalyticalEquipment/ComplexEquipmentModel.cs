@@ -214,6 +214,26 @@ namespace SAM.Analytical
             return GetObjects(x => HasFlowClassification(x, flowClassification));
         }
 
+        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification) where T: ISimpleEquipment
+        {
+            List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
+            if(simpleEquipments == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+            {
+                if(simpleEquipment is T)
+                {
+                    result.Add((T)simpleEquipment);
+                }
+            }
+
+            return result;
+        }
+
         public List<ISimpleEquipment> GetSimpleEquipments(ISimpleEquipment simpleEquipment, FlowClassification flowClassification, Direction direction)
         {
             if(simpleEquipment == null)

@@ -190,6 +190,7 @@
     <Compile Include="Create\ConstructionLayers.cs" />
     <Compile Include="Create\Log.cs" />
     <Compile Include="Create\Panels.cs" />
+    <Compile Include="Enums\FilterGroup.cs" />
     <Compile Include="Enums\SeasonType.cs" />
     <Compile Include="Enums\AirSupplyMethod.cs" />
     <Compile Include="Enums\AperturePart.cs" />

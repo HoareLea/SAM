@@ -8,6 +8,15 @@ namespace SAM.Analytical
     /// </summary>
     public class Filter : SimpleEquipment
     {
+        private FilterGroup filterGroup = FilterGroup.Undefined;
+        private double efficiency = double.NaN;
+
+        public Filter()
+            : base("Filter")
+        {
+
+        }
+
         public Filter(string name)
             : base(name)
         {
@@ -31,6 +40,45 @@ namespace SAM.Analytical
         {
 
         }
+
+        /// <summary>
+        /// Filter group according to ISO 16890
+        /// </summary>
+        public FilterGroup FilterGroup
+        {
+            get
+            {
+                return filterGroup;
+            }
+
+            set
+            {
+                filterGroup = value;
+            }
+        }
+
+        /// <summary>
+        /// Efficiency according to ISO 16890
+        /// </summary>
+        public double Efficiency
+        {
+            get
+            {
+                return efficiency;
+            }
+
+            set
+            {
+                if(double.IsNaN(value))
+                {
+                    efficiency = value;
+                    return;
+                }
+
+                efficiency = 5 * (int)System.Math.Floor(value / 5.0);
+            }
+        }
+
 
         public override bool FromJObject(JObject jObject)
         {

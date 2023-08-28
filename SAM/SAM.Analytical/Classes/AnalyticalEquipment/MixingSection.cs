@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class MixingSection : SimpleEquipment
     {
+        public MixingSection()
+            : base("Mixing Section")
+        {
+
+        }
+
         public MixingSection(string name)
             : base(name)
         {
@@ -20,8 +26,8 @@ namespace SAM.Analytical
 
         }
 
-        public MixingSection(Filter filter)
-            : base(filter)
+        public MixingSection(MixingSection mixingSection)
+            : base(mixingSection)
         {
 
         }

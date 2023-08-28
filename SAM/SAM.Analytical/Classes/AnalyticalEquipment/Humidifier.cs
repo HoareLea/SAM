@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class Humidifier : SimpleEquipment
     {
+        public Humidifier()
+            : base("Humidifier")
+        {
+
+        }
+
         public Humidifier(string name)
             : base(name)
         {

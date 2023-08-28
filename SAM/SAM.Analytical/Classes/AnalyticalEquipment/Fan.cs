@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class Fan : SimpleEquipment
     {
+        public Fan()
+            : base("Fan")
+        {
+
+        }
+
         public Fan(string name)
             : base(name)
         {

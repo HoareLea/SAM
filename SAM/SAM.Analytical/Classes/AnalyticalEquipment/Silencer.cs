@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class Silencer : SimpleEquipment
     {
+        public Silencer()
+            : base("Silencer")
+        {
+
+        }
+
         public Silencer(string name)
             : base(name)
         {
@@ -20,8 +26,8 @@ namespace SAM.Analytical
 
         }
 
-        public Silencer(Fan fan)
-            : base(fan)
+        public Silencer(Silencer silencer)
+            : base(silencer)
         {
 
         }

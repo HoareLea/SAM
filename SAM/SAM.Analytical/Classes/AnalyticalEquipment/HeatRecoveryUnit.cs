@@ -17,6 +17,27 @@ namespace SAM.Analytical
         private double summerRelativeHumidity = double.NaN;
         private double summerDryBulbTemperature = double.NaN;
 
+        public HeatRecoveryUnit(
+            double winterSensibleEfficiency,
+            double winterLatentEfficiency,
+            double summerSensibleEfficiency,
+            double summerLatentEfficiency,
+            double winterRelativeHumidity,
+            double winterDryBulbTemperature,
+            double summerRelativeHumidity,
+            double summerDryBulbTemperature)
+            : base("Heat Recovery Unit")
+        {
+            this.winterSensibleEfficiency = winterSensibleEfficiency;
+            this.winterLatentEfficiency = winterLatentEfficiency;
+            this.summerSensibleEfficiency = summerSensibleEfficiency;
+            this.summerLatentEfficiency = summerLatentEfficiency;
+            this.winterRelativeHumidity = winterRelativeHumidity;
+            this.winterDryBulbTemperature = winterDryBulbTemperature;
+            this.summerRelativeHumidity = summerRelativeHumidity;
+            this.summerDryBulbTemperature = summerDryBulbTemperature;
+        }
+
         public HeatRecoveryUnit(string name, 
             double winterSensibleEfficiency, 
             double winterLatentEfficiency,

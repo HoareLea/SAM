@@ -8,6 +8,12 @@ namespace SAM.Analytical
     /// </summary>
     public class CoolingCoil : Coil
     {
+        public CoolingCoil(double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
+            : base("Cooling Coil", fluidSupplyTemperature, fluidReturnTemperature, contactFactor, offTemperature)
+        {
+
+        }
+
         public CoolingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(name, fluidSupplyTemperature, fluidReturnTemperature, contactFactor, offTemperature)
         {
