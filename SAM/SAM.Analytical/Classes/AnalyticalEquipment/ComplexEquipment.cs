@@ -27,7 +27,7 @@ namespace SAM.Analytical
         public ComplexEquipment(ComplexEquipment complexEquipment)
             : base(complexEquipment)
         {
-
+            complexEquipmentModel = complexEquipment?.complexEquipmentModel == null ? null : complexEquipment?.complexEquipmentModel.Clone();
         }
 
         public ComplexEquipment(Guid guid, string name)
