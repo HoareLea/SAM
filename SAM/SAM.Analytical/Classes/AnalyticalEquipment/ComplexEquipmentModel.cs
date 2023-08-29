@@ -15,7 +15,11 @@ namespace SAM.Analytical
         public ComplexEquipmentModel(ComplexEquipmentModel complexEquipmentModel)
             :base(complexEquipmentModel)
         {
-
+            List<ISimpleEquipment> simpleEquipments = complexEquipmentModel.GetObjects();
+            if(simpleEquipments != null)
+            {
+                simpleEquipments?.ForEach(x => AddObject(x?.Clone()));
+            }
         }
 
         public ComplexEquipmentModel(JObject jObject)

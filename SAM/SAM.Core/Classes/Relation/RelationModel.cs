@@ -39,7 +39,8 @@ namespace SAM.Core
                     dictionary = new Dictionary<Reference, T>();
                     foreach (KeyValuePair<Reference, T> keyValuePair in relationModel.dictionary)
                     {
-                        dictionary[keyValuePair.Key] = keyValuePair.Value;
+                        T @object = keyValuePair.Value;
+                        dictionary[keyValuePair.Key] = @object;
                     }
                 }
 
