@@ -8,8 +8,8 @@ namespace SAM.Analytical
     /// </summary>
     public class AirHandlingUnit : ComplexEquipment
     {
-        private double summerSupplyTemperature;
-        private double winterSupplyTemperature;
+        private double summerSupplyTemperature = double.NaN;
+        private double winterSupplyTemperature = double.NaN;
 
         /// <summary>
         /// Constructor that takes a name parameter and sets the base object's name

@@ -8,15 +8,15 @@ namespace SAM.Analytical
     /// </summary>
     public abstract class Coil : SimpleEquipment
     {
-        private double fluidReturnTemperature;
-        private double fluidSupplyTemperature;
-        private double contactFactor;
+        private double fluidReturnTemperature = double.NaN;
+        private double fluidSupplyTemperature = double.NaN;
+        private double contactFactor = double.NaN;
         
-        private bool summer;
-        private double summerOffTemperature;
+        private bool summer = true;
+        private double summerOffTemperature = double.NaN;
 
-        private bool winter;
-        private double winterOffTemperature;
+        private bool winter = true;
+        private double winterOffTemperature = double.NaN;
 
         public Coil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(name)
