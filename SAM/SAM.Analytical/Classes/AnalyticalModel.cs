@@ -515,7 +515,7 @@ namespace SAM.Analytical
             return adjacencyCluster.GetResults<T>(source);
         }
 
-        public List<Geometry.Spatial.Shell> GetShells()
+        public List<Shell> GetShells()
         {
             return adjacencyCluster?.GetShells();
         }
@@ -675,7 +675,7 @@ namespace SAM.Analytical
             return jObject;
         }
         
-        public void Transform(Geometry.Spatial.Transform3D transform3D)
+        public void Transform(Transform3D transform3D)
         {
             if (adjacencyCluster != null)
                 adjacencyCluster.Transform(transform3D);

@@ -53,19 +53,19 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooWeatherObjectParam { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM WeatherObject such as WeatherData", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
+                Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_heatingSeasonSetPoint", NickName = "_heatingSeasonSetPoint", Description = "Heating Set Point", Access = GH_ParamAccess.item, Optional = true };
+                number = new Param_Number { Name = "_heatingSeasonSetPoint", NickName = "_heatingSeasonSetPoint", Description = "Heating Set Point", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(16);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Integer integer = null;
+                Param_Integer integer = null;
 
-                integer = new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "_numberOfDaysBelowSetPoint", NickName = "_numberOfDaysBelowSetPoint", Description = "Number Of Days Below Set Point", Access = GH_ParamAccess.item, Optional = true };
+                integer = new Param_Integer { Name = "_numberOfDaysBelowSetPoint", NickName = "_numberOfDaysBelowSetPoint", Description = "Number Of Days Below Set Point", Access = GH_ParamAccess.item, Optional = true };
                 integer.SetPersistentData(3);
                 result.Add(new GH_SAMParam(integer, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_coolingSeasonSetPoint", NickName = "_coolingSeasonSetPoint", Description = "Cooling Set Point", Access = GH_ParamAccess.item, Optional = true };
+                number = new Param_Number { Name = "_coolingSeasonSetPoint", NickName = "_coolingSeasonSetPoint", Description = "Cooling Set Point", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -80,16 +80,16 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "stringProfile", NickName = "stringProfile", Description = "String Profile", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_String { Name = "stringProfile", NickName = "stringProfile", Description = "String Profile", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "heatingProfile", NickName = "heatingProfile", Description = "SAM Analytical Heating Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "heatingHourIndex", NickName = "heatingHourIndex", Description = "Heating Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Integer() { Name = "heatingHourIndex", NickName = "heatingHourIndex", Description = "Heating Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "coolingProfile", NickName = "coolingProfile", Description = "SAM Analytical Cooling Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "coolingHourIndex", NickName = "coolingHourIndex", Description = "Cooling Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Integer() { Name = "coolingHourIndex", NickName = "coolingHourIndex", Description = "Cooling Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "freeCoolingProfile", NickName = "freeCoolingProfile", Description = "SAM Analytical Free Cooling Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "freeCoolingHourIndex", NickName = "freeCoolingHourIndex", Description = "Free Cooling Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Integer() { Name = "freeCoolingHourIndex", NickName = "freeCoolingHourIndex", Description = "Free Cooling Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }

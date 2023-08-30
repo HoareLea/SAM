@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<MechanicalSystem> AddMechanicalSystems(this AdjacencyCluster adjacencyCluster, Core.SystemTypeLibrary systemTypeLibrary, IEnumerable<Space> spaces = null, string supplyUnitName = null, string exhaustUnitName = null, string ventilationRiserName = null, string heatingRiserName = null, string coolingRiserName = null)
+        public static List<MechanicalSystem> AddMechanicalSystems(this AdjacencyCluster adjacencyCluster, SystemTypeLibrary systemTypeLibrary, IEnumerable<Space> spaces = null, string supplyUnitName = null, string exhaustUnitName = null, string ventilationRiserName = null, string heatingRiserName = null, string coolingRiserName = null)
         {
             if (adjacencyCluster == null || systemTypeLibrary == null)
                 return null;
