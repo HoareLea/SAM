@@ -312,9 +312,9 @@ namespace SAM.Core
             return result;
         }
 
-        public static List<Enum> GetParameterEnums(SAMObject sAMObject, string name = null)
+        public static List<Enum> GetParameterEnums(ParameterizedSAMObject parameterizedSAMObject, string name = null)
         {
-            return GetParameterEnums(sAMObject?.GetType(), name);
+            return GetParameterEnums(parameterizedSAMObject?.GetType(), name);
         }
     }
 }

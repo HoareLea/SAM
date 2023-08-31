@@ -56,7 +56,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
             this.outputParamManager = outputParamManager;
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "SAMObject", "SAMObject", "SAMObject", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooJSAMObjectParam<ParameterizedSAMObject>(), "SAMObject", "SAMObject", "SAMObject", GH_ParamAccess.item);
             //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
             outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
         }
@@ -70,13 +70,13 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null || !(objectWrapper.Value is SAMObject))
+            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null || !(objectWrapper.Value is ParameterizedSAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            SAMObject sAMObject = objectWrapper.Value as SAMObject;
+            ParameterizedSAMObject parameterizedSAMObject = objectWrapper.Value as ParameterizedSAMObject;
 
             string name = null;
             if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
@@ -85,7 +85,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
+            List<Enum> enums = ActiveManager.GetParameterEnums(parameterizedSAMObject, name);
 
             objectWrapper = null;
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
@@ -99,7 +99,7 @@ namespace SAM.Core.Grasshopper
             if(value is IGH_Goo)
                 value = (value as dynamic).Value;
 
-            sAMObject = sAMObject.Clone();
+            parameterizedSAMObject = parameterizedSAMObject.Clone();
 
             bool result = false;
 
@@ -108,25 +108,25 @@ namespace SAM.Core.Grasshopper
                 if(value == null)
                 {
                     foreach (Enum @enum in enums)
-                        if (sAMObject.RemoveValue(@enum))
+                        if (parameterizedSAMObject.RemoveValue(@enum))
                             result = true;
                 }
                 else
                 {
                     foreach (Enum @enum in enums)
-                        if (sAMObject.SetValue(@enum, value))
+                        if (parameterizedSAMObject.SetValue(@enum, value))
                             result = true;
                 }
             }
             else
             {
                 if (value == null)
-                    result = sAMObject.RemoveValue(name);
+                    result = parameterizedSAMObject.RemoveValue(name);
                 else
-                    result = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                    result = Core.Modify.SetValue(parameterizedSAMObject, name, value as dynamic);
             }
             
-            dataAccess.SetData(0, sAMObject);
+            dataAccess.SetData(0, parameterizedSAMObject);
             dataAccess.SetData(1, result);
         }
     }
