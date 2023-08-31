@@ -15,7 +15,7 @@ namespace SAM.Analytical
 
             List<ISimpleEquipment> simpleEquipments = null;
 
-            HeatRecoveryUnit heatRecoveryUnit = new HeatRecoveryUnit("Heat Recovery Unit", 75, 0, 75, 0, double.NaN, double.NaN, double.NaN, double.NaN);
+            HeatRecoveryUnit heatRecoveryUnit = new HeatRecoveryUnit("Heat Recovery Unit", 76, 0, 76, 0, double.NaN, double.NaN, double.NaN, double.NaN);
             MixingSection mixingSection = new MixingSection("Mixing Section");
 
 
@@ -36,7 +36,7 @@ namespace SAM.Analytical
             simpleEquipments.Add(mixingSection);
             simpleEquipments.Add(new CoolingCoil("Cooling Coil", 6, 12, 0.9, double.NaN));
             simpleEquipments.Add(new EmptySection());
-            simpleEquipments.Add(new HeatingCoil("Heating Coil", double.NaN, double.NaN, 0.9, double.NaN, double.NaN));
+            simpleEquipments.Add(new HeatingCoil("Heating Coil", 60, 30, 0.9, double.NaN, double.NaN));
             simpleEquipments.Add(new EmptySection());
             simpleEquipments.Add(new Humidifier("Humidifier"));
             simpleEquipments.Add(new Fan("Supply Fan"));

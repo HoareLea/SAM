@@ -68,7 +68,17 @@ namespace SAM.Analytical
         public HeatRecoveryUnit(HeatRecoveryUnit heatRecoveryUnit)
             : base(heatRecoveryUnit)
         {
-
+            if(heatRecoveryUnit != null)
+            {
+                winterSensibleEfficiency = heatRecoveryUnit.winterSensibleEfficiency;
+                winterLatentEfficiency = heatRecoveryUnit.winterLatentEfficiency;
+                summerSensibleEfficiency = heatRecoveryUnit.summerSensibleEfficiency;
+                summerLatentEfficiency = heatRecoveryUnit.summerLatentEfficiency;
+                winterRelativeHumidity = heatRecoveryUnit.winterRelativeHumidity;
+                winterDryBulbTemperature = heatRecoveryUnit.winterDryBulbTemperature;
+                summerRelativeHumidity = heatRecoveryUnit.summerRelativeHumidity;
+                summerDryBulbTemperature = heatRecoveryUnit.summerDryBulbTemperature;
+            }
         }
 
         public HeatRecoveryUnit(Guid guid, string name)
