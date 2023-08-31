@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Data for National Calculation Method
     /// </summary>
-    public class NCMData : IJSAMObject
+    public class NCMData : ParameterizedSAMObject
     {
         public string Type { get; set; } = "Unoccupied and Unconditioned";
 
@@ -34,16 +34,18 @@ namespace SAM.Analytical
         public double AirPermeability { get; set; } = 0;
 
         public NCMData()
+            :base()
         {
 
         }
 
         public NCMData(JObject jObject)
+            : base(jObject)
         {
-            FromJObject(jObject);
         }
 
         public NCMData(NCMData nCMData)
+            :base(nCMData)
         {
             if(nCMData != null)
             {
@@ -61,9 +63,11 @@ namespace SAM.Analytical
             }
         }
 
-        public bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            bool result = base.FromJObject(jObject);
+            
+            if(!result)
             {
                 return false;
             }
@@ -127,13 +131,16 @@ namespace SAM.Analytical
                 AirPermeability = jObject.Value<double>("AirPermeability");
             }
 
-            return true;
+            return result;
         }
 
         public JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
+            JObject jObject = base.ToJObject();
+            if(jObject == null)
+            {
+                return null;
+            }
 
             if (Type != null)
             {
