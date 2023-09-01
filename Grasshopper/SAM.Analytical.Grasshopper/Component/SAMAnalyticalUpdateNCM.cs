@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,9 +32,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces or Zones, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "NCM Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "NCM Name\n *Type under inspect of NCM Data in Internal Condition", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "systemType_", NickName = "systemType_", Description = "System Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "lightingOccupancyControls_", NickName = "lightingOccupancyControls_", Description = "Lighting Occupancy Controls", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "lightingPhotoelectricControls_", NickName = "lightingPhotoelectricControls_", Description = "Lighting Photoelectric Controls", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -243,6 +243,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            List<Space> spaces_Result = new List<Space>();
             foreach(Space space in spaces)
             {
                 if(space == null)
@@ -322,6 +323,7 @@ namespace SAM.Analytical.Grasshopper
                 space_Temp.InternalCondition = internalCondition;
 
                 adjacencyCluster.AddObject(space_Temp);
+                spaces_Result.Add(space_Temp);
             }
 
             index = Params.IndexOfOutputParam("analyticalModel");
@@ -333,7 +335,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfOutputParam("spaces");
             if (index != -1)
-                dataAccess.SetDataList(index, spaces?.ConvertAll(x => new GooSpace(x)));
+                dataAccess.SetDataList(index, spaces_Result?.ConvertAll(x => new GooSpace(x)));
         }
     }
 }
