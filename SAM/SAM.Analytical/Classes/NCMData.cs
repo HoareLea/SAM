@@ -33,6 +33,8 @@ namespace SAM.Analytical
 
         public double AirPermeability { get; set; } = 0;
 
+        public string Description { get; set; } = null;
+
         public NCMData()
             :base()
         {
@@ -60,6 +62,7 @@ namespace SAM.Analytical
                 AirPermeability = nCMData.AirPermeability;
                 Type = nCMData.Type;
                 SystemType = nCMData.SystemType;
+                Description = nCMData.Description;
             }
         }
 
@@ -131,6 +134,11 @@ namespace SAM.Analytical
                 AirPermeability = jObject.Value<double>("AirPermeability");
             }
 
+            if (jObject.ContainsKey("Description"))
+            {
+                Description = jObject.Value<string>("Description");
+            }
+
             return result;
         }
 
@@ -180,6 +188,11 @@ namespace SAM.Analytical
             if (!double.IsNaN(AirPermeability))
             {
                 jObject.Add("AirPermeability", AirPermeability);
+            }
+
+            if (Description != null)
+            {
+                jObject.Add("Description", Description);
             }
 
             return jObject;

@@ -44,6 +44,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "isMainsGasAvailable_", NickName = "isMainsGasAvailable_", Description = "Is Mains Gas Available", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingPhotoelectricParasiticPower_", NickName = "lightingPhotoelectricParasiticPower_", Description = "Lighting Photoelectric Parasitic Power", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "airPermeability_", NickName = "airPermeability_", Description = "Air Permeability", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_description_", NickName = "_description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -243,6 +244,18 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+
+            string description = null;
+            index = Params.IndexOfInputParam("_description_");
+            if (index != -1)
+            {
+                string description_Temp = null;
+                if (dataAccess.GetData(index, ref description_Temp))
+                {
+                    description = description_Temp;
+                }
+            }
+
             List<Space> spaces_Result = new List<Space>();
             foreach(Space space in spaces)
             {
@@ -316,6 +329,11 @@ namespace SAM.Analytical.Grasshopper
                 if (airPermeability != null && airPermeability.HasValue)
                 {
                     nCMData.AirPermeability = airPermeability.Value;
+                }
+
+                if(description != null)
+                {
+                    nCMData.Description = description;
                 }
 
                 internalCondition.SetValue(InternalConditionParameter.NCMData, nCMData);

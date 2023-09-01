@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static Dictionary<string, Space> UpdateSpaceNames(this AdjacencyCluster adjacencyCluster)
+        public static Dictionary<string, Space> UpdateSpaceNames(this AdjacencyCluster adjacencyCluster, string format = "{0} {1}")
         {
             List<Space> spaces = adjacencyCluster?.GetSpaces();
             if(spaces == null || spaces.Count == 0)
@@ -47,11 +47,11 @@ namespace SAM.Analytical
                 {
                     spaces = adjacencyCluster.GetSpaces();
 
-                    string name_New = string.Format("{0} {1}", name, index.ToString());
+                    string name_New = string.Format(format, name, index.ToString());
                     while (spaces.Find(x => x.Name == name_New) != null)
                     {
                         index++;
-                        name_New = string.Format("{0} {1}", name, index.ToString());
+                        name_New = string.Format(format, name, index.ToString());
                     }
 
                     Space space_New = new Space(space_Name, name_New, space_Name.Location);
