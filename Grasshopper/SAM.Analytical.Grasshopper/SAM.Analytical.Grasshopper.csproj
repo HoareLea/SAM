@@ -207,6 +207,7 @@
     <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalModifyZonesCategoryName.cs" />
     <Compile Include="Component\SAMAnalyticalCreateZonesByValues.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateSpaceNames.cs" />
     <Compile Include="Component\SAMAnalyticalZoneType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateZoneByName.cs" />
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
