@@ -134,7 +134,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public JObject ToJObject()
+        public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
             if(jObject == null)

@@ -20,7 +20,19 @@ namespace SAM.Core
             {
                 dictionary = new Dictionary<string, object>();
                 foreach (KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
-                    dictionary[keyValuePair.Key] = keyValuePair.Value;
+                {
+                    object @object = keyValuePair.Value;
+                    if(@object is IJSAMObject)
+                    {
+                        object @object_Temp = ((IJSAMObject)@object).Clone();
+                        if(object_Temp != null)
+                        {
+                            @object = @object_Temp;
+                        }
+                    }
+
+                    dictionary[keyValuePair.Key] = @object;
+                }
             }
         }
 
