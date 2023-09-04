@@ -199,7 +199,7 @@
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "I00_Mineral Wool_700kg/m3_0.025W/mK",
-          "Thickness": 0.0098
+          "Thickness": 0.124
         }
       ]
     },
@@ -359,7 +359,7 @@
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "I02_Mineral Wool_40kg/m3_0.03W/mK",
-          "Thickness": 0.154
+          "Thickness": 0.170
         }
       ]
     },
@@ -524,7 +524,7 @@
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
-          "Thickness": 0.14
+          "Thickness": 0.20
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
@@ -694,7 +694,7 @@
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "I03_Mineral Wool_43.25kg/m3_0.035W/mK",
-          "Thickness": 0.14
+          "Thickness": 0.20
         },
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",

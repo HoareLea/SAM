@@ -24,7 +24,17 @@
         {
           "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
           "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
-          "Thickness": 0.05
+          "Thickness": 0.01
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "I01_Mineral Wool_20kg/m3_0.025W/mK",
+          "Thickness": 0.01
+        },
+        {
+          "_type": "SAM.Analytical.ConstructionLayer,SAM.Analytical",
+          "Name": "C00_Hardwood_2100kg/m3_0.18W/mK",
+          "Thickness": 0.01
         }
       ],
       "FrameConstructionLayers": [
