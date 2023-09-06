@@ -208,6 +208,30 @@ namespace SAM.Geometry.Planar
             return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
         }
 
+        public Point2D GetScaled(Point2D point2D, double factor)
+        {
+            if (point2D == null)
+            {
+                return null;
+            }
+
+            if (factor == 0)
+            {
+                return null;
+            }
+
+            if (factor == 1)
+            {
+                return new Point2D( point2D.coordinates[0], point2D.coordinates[1]);
+            }
+
+            Vector2D vector2D = Vector(point2D);
+            vector2D.Length = vector2D.Length * factor;
+
+
+            return new Point2D(point2D.coordinates[0] + vector2D[0], point2D.coordinates[1] + vector2D[1]);
+        }
+
         public Point2D GetScaled(double factor)
         {
             Point2D point2D = new Point2D(this);
@@ -223,6 +247,7 @@ namespace SAM.Geometry.Planar
             point2D.ScaleX(factor);
             return point2D;
         }
+        
         public Point2D GetScaledY(double factor)
         {
             Point2D point2D = new Point2D(this);
@@ -230,6 +255,7 @@ namespace SAM.Geometry.Planar
             point2D.ScaleY(factor);
             return point2D;
         }
+        
         public bool IsNaN()
         {
             return double.IsNaN(coordinates[0]) || double.IsNaN(coordinates[1]);
@@ -306,6 +332,7 @@ namespace SAM.Geometry.Planar
             coordinates[0] = coordinates[0] * factor;
             coordinates[1] = coordinates[1] * factor;
         }
+        
         public void ScaleX(double factor)
         {
             if (factor == 1)
@@ -313,6 +340,7 @@ namespace SAM.Geometry.Planar
 
             coordinates[0] *=  factor;
         }
+        
         public void ScaleY(double factor)
         {
             if (factor == 1)
