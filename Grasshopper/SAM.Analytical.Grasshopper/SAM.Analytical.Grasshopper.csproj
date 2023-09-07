@@ -98,6 +98,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />
     <Compile Include="Component\SAMAnalyticalApertureType.cs" />
@@ -213,7 +214,7 @@
     <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
     <Compile Include="Component\SAMAnalyticalGetSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateInternalConditionByProfiles.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateSetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalUpdatePollutantGains.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInfiltrationGains.cs" />
