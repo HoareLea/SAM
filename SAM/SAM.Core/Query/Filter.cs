@@ -60,6 +60,8 @@ namespace SAM.Core
                     @in.RemoveAt(i);
                 }
             }
+
+            @out.Reverse();
         }
 
         public static List<object> Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects)
