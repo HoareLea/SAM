@@ -201,81 +201,105 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref equipmentLatGainPerArea);
 
             Profile profile_Heating = null;
-            index = Params.IndexOfInputParam("heatingSetPoint_");
+            index = Params.IndexOfInputParam("_heatingSetPoint_");
             if (index != -1)
             {
                 GH_ObjectWrapper objectWrapper = null;
 
                 if (dataAccess.GetData(index, ref objectWrapper))
                 {
-                    if (objectWrapper.Value is double)
+                    object value = objectWrapper.Value;
+                    if (value is IGH_Goo)
                     {
-                        double heatingSetPoint = (double)objectWrapper.Value;
+                        value = (value as dynamic).Value; 
+                    }
+
+                    if (value is double)
+                    {
+                        double heatingSetPoint = (double)value;
                         profile_Heating = double.IsNaN(heatingSetPoint) ? null : new Profile(string.Format("HTG_1to24_{0}", heatingSetPoint), heatingSetPoint, ProfileGroup.Thermostat);
                     }
-                    if (objectWrapper.Value is Profile)
+                    else if (value is Profile)
                     {
-                        profile_Heating = (Profile)objectWrapper.Value;
+                        profile_Heating = (Profile)value;
                     }
                 }
             }
 
             Profile profile_Cooling = null;
-            index = Params.IndexOfInputParam("coolingSetPoint_");
+            index = Params.IndexOfInputParam("_coolingSetPoint_");
             if (index != -1)
             {
                 GH_ObjectWrapper objectWrapper = null;
 
                 if (dataAccess.GetData(index, ref objectWrapper))
                 {
-                    if (objectWrapper.Value is double)
+                    object value = objectWrapper.Value;
+                    if (value is IGH_Goo)
                     {
-                        double coolingSetPoint = (double)objectWrapper.Value;
+                        value = (value as dynamic).Value;
+                    }
+
+                    if (value is double)
+                    {
+                        double coolingSetPoint = (double)value;
                         profile_Cooling = double.IsNaN(coolingSetPoint) ? null : new Profile(string.Format("CLG_1to24_{0}", coolingSetPoint), coolingSetPoint, ProfileGroup.Thermostat);
                     }
-                    if (objectWrapper.Value is Profile)
+                    else if (value is Profile)
                     {
-                        profile_Cooling = (Profile)objectWrapper.Value;
+                        profile_Cooling = (Profile)value;
                     }
                 }
             }
 
             Profile profile_Humidification = null;
-            index = Params.IndexOfInputParam("humidificationSetPoint_");
+            index = Params.IndexOfInputParam("_humidificationSetPoint_");
             if (index != -1)
             {
                 GH_ObjectWrapper objectWrapper = null;
 
                 if (dataAccess.GetData(index, ref objectWrapper))
                 {
-                    if (objectWrapper.Value is double)
+                    object value = objectWrapper.Value;
+                    if (value is IGH_Goo)
                     {
-                        double humidificationSetPoint = (double)objectWrapper.Value;
+                        value = (value as dynamic).Value;
+                    }
+
+                    if (value is double)
+                    {
+                        double humidificationSetPoint = (double)value;
                         profile_Humidification = double.IsNaN(humidificationSetPoint) ? null : new Profile(string.Format("HUM_1to24_{0}", humidificationSetPoint), humidificationSetPoint, ProfileGroup.Humidistat);
                     }
-                    if (objectWrapper.Value is Profile)
+                    else if (value is Profile)
                     {
-                        profile_Humidification = (Profile)objectWrapper.Value;
+                        profile_Humidification = (Profile)value;
                     }
                 }
             }
 
             Profile profile_Dehumidification = null;
-            index = Params.IndexOfInputParam("dehumidificationSetPoint_");
+            index = Params.IndexOfInputParam("_dehumidificationSetPoint_");
             if (index != -1)
             {
                 GH_ObjectWrapper objectWrapper = null;
 
                 if (dataAccess.GetData(index, ref objectWrapper))
                 {
-                    if (objectWrapper.Value is double)
+                    object value = objectWrapper.Value;
+                    if (value is IGH_Goo)
                     {
-                        double dehumidificationSetPoint = (double)objectWrapper.Value;
+                        value = (value as dynamic).Value;
+                    }
+
+                    if (value is double)
+                    {
+                        double dehumidificationSetPoint = (double)value;
                         profile_Humidification = double.IsNaN(dehumidificationSetPoint) ? null : new Profile(string.Format("DHU_1to24_{0}", dehumidificationSetPoint), dehumidificationSetPoint, ProfileGroup.Humidistat);
                     }
-                    if (objectWrapper.Value is Profile)
+                    else if (value is Profile)
                     {
-                        profile_Humidification = (Profile)objectWrapper.Value;
+                        profile_Humidification = (Profile)value;
                     }
                 }
             }
