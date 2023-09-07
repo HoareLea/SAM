@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -76,21 +77,23 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(0);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint, default Constant 21 degC", Access = GH_ParamAccess.item };
-                number.SetPersistentData(21);
-                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_coolingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint, default Constant 24 degC", Access = GH_ParamAccess.item};
-                number.SetPersistentData(24);
-                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_heatingSetPoint_", NickName = "_heatingSetPoint_", Description = "Heating SetPoint, default Constant 21 degC", Access = GH_ParamAccess.item };
+                genericObject.SetPersistentData(21);
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidificationSetPoint_", NickName = "_humidificationSetPoint_", Description = "Humidification SetPoint, default Constant 40%", Access = GH_ParamAccess.item};
-                number.SetPersistentData(40);
-                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_coolingSetPoint_", NickName = "_coolingSetPoint_", Description = "Cooling SetPoint, default Constant 24 degC", Access = GH_ParamAccess.item};
+                genericObject.SetPersistentData(24);
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dehumidificationSetPoint_", NickName = "_dehumidificationSetPoint_", Description = "Dehumidification SetPoint, default Constant 60%", Access = GH_ParamAccess.item};
-                number.SetPersistentData(60);
-                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_humidificationSetPoint_", NickName = "_humidificationSetPoint_", Description = "Humidification SetPoint, default Constant 40%", Access = GH_ParamAccess.item};
+                genericObject.SetPersistentData(40);
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
+
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_dehumidificationSetPoint_", NickName = "_dehumidificationSetPoint_", Description = "Dehumidification SetPoint, default Constant 60%", Access = GH_ParamAccess.item};
+                genericObject.SetPersistentData(60);
+                result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationACH_", NickName = "_infiltrationACH_", Description = "Infiltration, default Constant 0.2 ac/h for spaces with external Panels", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
@@ -108,8 +111,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "internalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -197,25 +200,85 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentLatGainPerArea);
 
-            double heatingSetPoint = double.NaN;
-            index = Params.IndexOfInputParam("_heatingSetPoint_");
+            Profile profile_Heating = null;
+            index = Params.IndexOfInputParam("heatingSetPoint_");
             if (index != -1)
-                dataAccess.GetData(index, ref heatingSetPoint);
+            {
+                GH_ObjectWrapper objectWrapper = null;
 
-            double coolingSetPoint = double.NaN;
-            index = Params.IndexOfInputParam("_coolingSetPoint_");
-            if (index != -1)
-                dataAccess.GetData(index, ref coolingSetPoint);
+                if (dataAccess.GetData(index, ref objectWrapper))
+                {
+                    if (objectWrapper.Value is double)
+                    {
+                        double heatingSetPoint = (double)objectWrapper.Value;
+                        profile_Heating = double.IsNaN(heatingSetPoint) ? null : new Profile(string.Format("HTG_1to24_{0}", heatingSetPoint), heatingSetPoint, ProfileGroup.Thermostat);
+                    }
+                    if (objectWrapper.Value is Profile)
+                    {
+                        profile_Heating = (Profile)objectWrapper.Value;
+                    }
+                }
+            }
 
-            double humidificationSetPoint = double.NaN;
-            index = Params.IndexOfInputParam("_humidificationSetPoint_");
+            Profile profile_Cooling = null;
+            index = Params.IndexOfInputParam("coolingSetPoint_");
             if (index != -1)
-                dataAccess.GetData(index, ref humidificationSetPoint);
+            {
+                GH_ObjectWrapper objectWrapper = null;
 
-            double dehumidificationSetPoint = double.NaN;
-            index = Params.IndexOfInputParam("_dehumidificationSetPoint_");
+                if (dataAccess.GetData(index, ref objectWrapper))
+                {
+                    if (objectWrapper.Value is double)
+                    {
+                        double coolingSetPoint = (double)objectWrapper.Value;
+                        profile_Cooling = double.IsNaN(coolingSetPoint) ? null : new Profile(string.Format("CLG_1to24_{0}", coolingSetPoint), coolingSetPoint, ProfileGroup.Thermostat);
+                    }
+                    if (objectWrapper.Value is Profile)
+                    {
+                        profile_Cooling = (Profile)objectWrapper.Value;
+                    }
+                }
+            }
+
+            Profile profile_Humidification = null;
+            index = Params.IndexOfInputParam("humidificationSetPoint_");
             if (index != -1)
-                dataAccess.GetData(index, ref dehumidificationSetPoint);
+            {
+                GH_ObjectWrapper objectWrapper = null;
+
+                if (dataAccess.GetData(index, ref objectWrapper))
+                {
+                    if (objectWrapper.Value is double)
+                    {
+                        double humidificationSetPoint = (double)objectWrapper.Value;
+                        profile_Humidification = double.IsNaN(humidificationSetPoint) ? null : new Profile(string.Format("HUM_1to24_{0}", humidificationSetPoint), humidificationSetPoint, ProfileGroup.Humidistat);
+                    }
+                    if (objectWrapper.Value is Profile)
+                    {
+                        profile_Humidification = (Profile)objectWrapper.Value;
+                    }
+                }
+            }
+
+            Profile profile_Dehumidification = null;
+            index = Params.IndexOfInputParam("dehumidificationSetPoint_");
+            if (index != -1)
+            {
+                GH_ObjectWrapper objectWrapper = null;
+
+                if (dataAccess.GetData(index, ref objectWrapper))
+                {
+                    if (objectWrapper.Value is double)
+                    {
+                        double dehumidificationSetPoint = (double)objectWrapper.Value;
+                        profile_Humidification = double.IsNaN(dehumidificationSetPoint) ? null : new Profile(string.Format("DHU_1to24_{0}", dehumidificationSetPoint), dehumidificationSetPoint, ProfileGroup.Humidistat);
+                    }
+                    if (objectWrapper.Value is Profile)
+                    {
+                        profile_Humidification = (Profile)objectWrapper.Value;
+                    }
+                }
+            }
 
             double infiltration = double.NaN;
             index = Params.IndexOfInputParam("infiltrationACH_");
@@ -250,12 +313,6 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
             }
-
-            Profile profile_Heating = new Profile(string.Format("HTG_1to24_{0}", heatingSetPoint), heatingSetPoint, ProfileGroup.Thermostat);
-            Profile profile_Cooling = new Profile(string.Format("CLG_1to24_{0}", coolingSetPoint), coolingSetPoint, ProfileGroup.Thermostat);
-
-            Profile profile_Humidification = new Profile(string.Format("HUM_1to24_{0}", humidificationSetPoint), humidificationSetPoint, ProfileGroup.Humidistat);
-            Profile profile_Dehumidification = new Profile(string.Format("DHU_1to24_{0}", dehumidificationSetPoint), dehumidificationSetPoint, ProfileGroup.Humidistat);
 
             Profile profile_Infiltartion = null;
             if(!double.IsNaN(infiltration) && infiltration != 0)
@@ -377,14 +434,14 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster.AddObject(space_Temp);
             }
 
-            index = Params.IndexOfOutputParam("AnalyticalModel");
+            index = Params.IndexOfOutputParam("analyticalModel");
             if(index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
             }
 
-            index = Params.IndexOfOutputParam("InternalConditions");
+            index = Params.IndexOfOutputParam("internalConditions");
             if (index != -1)
                 dataAccess.SetDataList(index, internalConditions?.ConvertAll(x => new GooInternalCondition(x)));
         }
