@@ -118,7 +118,7 @@ namespace SAM.Analytical
                 Shell shell = adjacencyCluster.Shell(space);
                 if(shell == null || !shell.IsClosed())
                 {
-                    result.Add("Space {0} (Guid: {1}) is not enclosed.", LogRecordType.Warning, space.Name, space.Guid);
+                    result.Add("Space {0} (Guid: {1}) is not enclosed (with 1e-6 tolerance).", LogRecordType.Warning, space.Name, space.Guid);
                     continue;
                 }
 
