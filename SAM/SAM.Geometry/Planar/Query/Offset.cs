@@ -317,12 +317,12 @@ namespace SAM.Geometry.Planar
             lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
             if(lineString.IsClosed)
             {
-                double offset_Abs = System.Math.Abs(offset);
+                double offset_Abs = System.Math.Abs(offset) - (tolerance * 10); // given tolerance has to be greater than input tolerance so multiply by 10
 
                 for (int i = lineStrings.Count - 1; i >= 0; i--)
                 {
                     double distance = lineStrings[i].Distance(lineString);
-                    if (distance < offset_Abs - tolerance)
+                    if (distance < offset_Abs)
                     {
                         lineStrings.RemoveAt(i);
                     }
