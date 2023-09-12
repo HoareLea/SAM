@@ -1,6 +1,7 @@
 ﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Precision;
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -118,7 +119,27 @@ namespace SAM.Geometry.Planar
                 return result;
 
             MultiPolygon multiPolygon = new MultiPolygon(polygons.ToArray());
-            NetTopologySuite.Geometries.Geometry geometry = multiPolygon.Union();
+
+            NetTopologySuite.Geometries.Geometry geometry = null;
+            try
+            {
+                geometry = multiPolygon.Union();
+            }
+            catch
+            //TODO 2023-09-12 https://github.com/NetTopologySuite/NetTopologySuite/issues/708
+            {
+                double tolerance = Tolerance.Distance;
+
+                Polygon[] polygons_Temp = new Polygon[polygons.Count()];
+                for(int i =0; i < polygons_Temp.Length; i++)
+                {
+                    polygons_Temp[i] = SimplifyByTopologyPreservingSimplifier(polygons.ElementAt(i), tolerance);
+                }
+
+                multiPolygon = new MultiPolygon(polygons_Temp, new GeometryFactory(new PrecisionModel(1 / tolerance)));
+                geometry = multiPolygon.Union();
+            }
+
             if (geometry == null)
                 return null;
 
