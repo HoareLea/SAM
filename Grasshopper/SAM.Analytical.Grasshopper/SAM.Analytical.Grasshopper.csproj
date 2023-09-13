@@ -59,6 +59,7 @@
     <Compile Include="Classes\GooAnalyticalModel.cs" />
     <Compile Include="Classes\GooApertureConstruction.cs" />
     <Compile Include="Classes\GooAirHandlingUnit.cs" />
+    <Compile Include="Classes\GooConstructionManager.cs" />
     <Compile Include="Classes\GooOpeningProperties.cs" />
     <Compile Include="Classes\GooProfileLibrary.cs" />
     <Compile Include="Classes\GooProfile.cs" />
@@ -98,6 +99,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalDefaultConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />

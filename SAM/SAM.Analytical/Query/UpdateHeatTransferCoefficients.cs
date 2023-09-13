@@ -96,7 +96,7 @@ namespace SAM.Analytical
                     {
                         foreach(KeyValuePair<double, List<Panel>> keyValuePair in dictionary)
                         {
-                            string name = GetSAMTypenName(construction, keyValuePair.Key);
+                            string name = GetSAMTypeName(construction, keyValuePair.Key);
                             if (string.IsNullOrWhiteSpace(name))
                                 continue;
 
@@ -251,7 +251,7 @@ namespace SAM.Analytical
                     {
                         foreach (KeyValuePair<double, List<Aperture>> keyValuePair in dictionary)
                         {
-                            string name = GetSAMTypenName(apertureConstruction, keyValuePair.Key);
+                            string name = GetSAMTypeName(apertureConstruction, keyValuePair.Key);
                             if (string.IsNullOrWhiteSpace(name))
                                 continue;
 
@@ -424,7 +424,7 @@ namespace SAM.Analytical
             return string.Format("{0}_{1}mm_{2}W/m2K_{3}deg", Core.Query.Description(defaultGasType), thickness_Millimetres, heatTransferCoefficient_Rounded, tilt_Degree);
         }
 
-        private static string GetSAMTypenName(SAMType sAMType, double tilt)
+        private static string GetSAMTypeName(SAMType sAMType, double tilt)
         {
             if (sAMType == null)
                 return null;

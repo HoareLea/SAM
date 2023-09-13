@@ -61,6 +61,7 @@
     <Compile Include="Classes\AnalyticalEquipment\HeatRecoveryUnit.cs" />
     <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\CoolingCoil.cs" />
+    <Compile Include="Classes\ConstructionManager.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
     <Compile Include="Classes\Filter\ApertureApertureTypeFilter.cs" />
     <Compile Include="Classes\Filter\ApertureFrameAreaFilter.cs" />
@@ -155,6 +156,7 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Query\DefaultConstructionManager.cs" />
     <Compile Include="Create\DesignDay.cs" />
     <Compile Include="Create\RiserName.cs" />
     <Compile Include="Create\New\BuildingModel.cs" />
@@ -284,6 +286,7 @@
     <Compile Include="Modify\UpdateDaylightFactors.cs" />
     <Compile Include="Modify\UpdateSpaceNames.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
+    <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
     <Compile Include="Query\TryGetSeasonProfiles.cs" />
     <Compile Include="Query\CalculatedInfiltrationSensibleGain.cs" />
     <Compile Include="Query\CalculatedInfiltrationLatentGain.cs" />
