@@ -53,13 +53,15 @@
     <Compile Include="Convert\ToRadians.cs" />
     <Compile Include="Convert\ToSI.cs" />
     <Compile Include="Enums\UnitType.cs" />
-    <Compile Include="Classes\Factor.cs" />
     <Compile Include="Query\DefaultTolerance.cs" />
     <Compile Include="Query\Description.cs" />
     <Compile Include="Query\Abbreviation.cs" />
     <Compile Include="Query\UnitType.cs" />
     <Compile Include="Query\UnitTypes.cs" />
+    <Compile Include="Variables\Factor.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Classes\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
