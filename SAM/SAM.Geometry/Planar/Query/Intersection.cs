@@ -1,5 +1,6 @@
 ﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,35 +10,6 @@ namespace SAM.Geometry.Planar
     public static partial class Query
     {
         //Intersection of the sets A and B, denoted A ∩ B, is the set of all objects that are members of both A and B. The intersection of {1, 2, 3} and {2, 3, 4} is the set {2, 3}
-
-        //public static List<Polygon2D> Intersection(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
-        //{
-        //    if (polygon2D_1 == null || polygon2D_2 == null)
-        //        return null;
-
-        //    List<IntPoint> intPoints_1 = Convert.ToClipper((ISegmentable2D)polygon2D_1, tolerance);
-        //    List<IntPoint> intPoints_2 = Convert.ToClipper((ISegmentable2D)polygon2D_2, tolerance);
-
-        //    Clipper clipper = new Clipper();
-        //    clipper.AddPath(intPoints_1, PolyType.ptSubject, true);
-        //    clipper.AddPath(intPoints_2, PolyType.ptClip, true);
-
-        //    List<List<IntPoint>> intPointsList = new List<List<IntPoint>>();
-
-        //    clipper.Execute(ClipType.ctIntersection, intPointsList, PolyFillType.pftEvenOdd, PolyFillType.pftEvenOdd);
-
-        //    if (intPointsList == null)
-        //        return null;
-
-        //    List<Polygon2D> result = new List<Polygon2D>();
-        //    if (intPointsList.Count == 0)
-        //        return result;
-
-        //    foreach (List<IntPoint> intPoints in intPointsList)
-        //        result.Add(new Polygon2D(intPoints.ToSAM(tolerance)));
-
-        //    return result;
-        //}
 
         /// <summary>
         /// Intersection of the segment2D_1 and segment2D_2, denoted segment2D_1 ∩ segment2D_2, is the set of all segment2Ds that are members of both segment2D_1 and segment2D_2. The intersection of {1, 2, 3} and {2, 3, 4} is the set {2, 3}
@@ -216,10 +188,22 @@ namespace SAM.Geometry.Planar
                         polygon_2 = polygons_Snap[1];
                     }
 
+                    NetTopologySuite.Geometries.Geometry geometry_1 = polygon_1;
+                    if(!geometry_1.IsValid)
+                    {
+                        geometry_1 = GeometryFixer.Fix(geometry_1);
+                    }
+
+                    NetTopologySuite.Geometries.Geometry geometry_2 = polygon_2;
+                    if (!geometry_2.IsValid)
+                    {
+                        geometry_2 = GeometryFixer.Fix(geometry_2);
+                    }
+
                     NetTopologySuite.Geometries.Geometry geometry = null;
                     try
                     {
-                        geometry = polygon_1.Intersection(polygon_2);
+                        geometry = geometry_1.Intersection(geometry_2);
                     }
                     catch(System.Exception)
                     {
@@ -228,13 +212,19 @@ namespace SAM.Geometry.Planar
                         {
                             polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
                             polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
-                            geometry = polygon_1.Intersection(polygon_2);
+                            geometry_1 = GeometryFixer.Fix(polygon_1);
+                            geometry_2 = GeometryFixer.Fix(polygon_2);
+
+                            geometry = geometry_1.Intersection(geometry_2);
                         }
                         catch (System.Exception)
                         {
                             GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
-                            NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);
-                            NetTopologySuite.Geometries.Geometry geometry_2 = geometryPrecisionReducer.Reduce(polygon_2);
+                            geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);
+                            geometry_2 = geometryPrecisionReducer.Reduce(polygon_2);
+
+                            geometry_1 = GeometryFixer.Fix(geometry_1);
+                            geometry_2 = GeometryFixer.Fix(geometry_2);
 
                             geometry = geometry_1.Intersection(geometry_2);
                         }

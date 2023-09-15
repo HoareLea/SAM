@@ -127,11 +127,12 @@ namespace SAM.Geometry.Planar
                 return result;
             }
 
-            MultiPolygon multiPolygon = new MultiPolygon(polygons.ToArray());
+            NetTopologySuite.Geometries.Geometry geometry = new MultiPolygon(polygons.ToArray());
+            if(!geometry.IsValid)
+            {
+                geometry = GeometryFixer.Fix(geometry); //2023-09-12 https://github.com/NetTopologySuite/NetTopologySuite/issues/708
+            }
 
-            NetTopologySuite.Geometries.Geometry geometry = null;
-
-            geometry = GeometryFixer.Fix(multiPolygon); //2023-09-12 https://github.com/NetTopologySuite/NetTopologySuite/issues/708
             try
             {
                 geometry = geometry.Union();
@@ -146,8 +147,8 @@ namespace SAM.Geometry.Planar
                     polygons_Temp[i] = SimplifyByTopologyPreservingSimplifier(polygons.ElementAt(i), tolerance);
                 }
 
-                multiPolygon = new MultiPolygon(polygons_Temp, new GeometryFactory(new PrecisionModel(1 / tolerance)));
-                geometry = GeometryFixer.Fix(multiPolygon);
+                geometry = new MultiPolygon(polygons_Temp, new GeometryFactory(new PrecisionModel(1 / tolerance)));
+                geometry = GeometryFixer.Fix(geometry);
                 geometry = geometry.Union();
             }
 
