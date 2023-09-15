@@ -1,5 +1,6 @@
 ﻿//using ClipperLib;
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
 using System.Collections.Generic;
 using System.Linq;
@@ -322,20 +323,38 @@ namespace SAM.Geometry.Planar
             }
             catch (System.Exception)
             {
-
                 try
                 {
-                    polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
-                    polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
-                    geometry = polygon_1.Difference(polygon_2);
-                }
-                catch (System.Exception)
-                {
-                    GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
-                    NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);
-                    NetTopologySuite.Geometries.Geometry geometry_2 = geometryPrecisionReducer.Reduce(polygon_2);
+                    //Fix method only
+                    NetTopologySuite.Geometries.Geometry geometry_1 = GeometryFixer.Fix(polygon_1);
+                    NetTopologySuite.Geometries.Geometry geometry_2 = GeometryFixer.Fix(polygon_2);
 
                     geometry = geometry_1.Difference(geometry_2);
+                }
+                catch
+                {
+                    try
+                    {
+                        //DouglasPeucker and fix methods
+                        polygon_1 = SimplifyByDouglasPeucker(polygon_1, tolerance);
+                        polygon_2 = SimplifyByDouglasPeucker(polygon_2, tolerance);
+                        NetTopologySuite.Geometries.Geometry geometry_1 = GeometryFixer.Fix(polygon_1);
+                        NetTopologySuite.Geometries.Geometry geometry_2 = GeometryFixer.Fix(polygon_2);
+
+                        geometry = geometry_1.Difference(geometry_2);
+                    }
+                    catch (System.Exception)
+                    {
+                        //PrecisionReducer and fix methods
+                        GeometryPrecisionReducer geometryPrecisionReducer = new GeometryPrecisionReducer(new PrecisionModel(1 / tolerance));
+                        NetTopologySuite.Geometries.Geometry geometry_1 = geometryPrecisionReducer.Reduce(polygon_1);
+                        NetTopologySuite.Geometries.Geometry geometry_2 = geometryPrecisionReducer.Reduce(polygon_2);
+
+                        geometry_1 = GeometryFixer.Fix(polygon_1);
+                        geometry_2 = GeometryFixer.Fix(polygon_2);
+
+                        geometry = geometry_1.Difference(geometry_2);
+                    }
                 }
             }
 
