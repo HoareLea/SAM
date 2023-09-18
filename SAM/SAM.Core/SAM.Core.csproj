@@ -54,8 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Accuracy\Rounding.cs" />
-    <Compile Include="Accuracy\Tolerance.cs" />
+    <Compile Include="Variables\Rounding.cs" />
+    <Compile Include="Variables\Tolerance.cs" />
     <Compile Include="Attributes\Enum\Operator.cs" />
     <Compile Include="Attributes\Enum\AssociatedTypes.cs" />
     <Compile Include="Attributes\Parameter\IntegerParameterValue.cs" />
