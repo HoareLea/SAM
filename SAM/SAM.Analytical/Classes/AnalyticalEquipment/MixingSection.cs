@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an mixing section in the analytical domain
     /// </summary>
-    public class MixingSection : SimpleEquipment
+    public class MixingSection : SimpleEquipment, ISection
     {
         public MixingSection()
             : base("Mixing Section")

@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an heat recovery unit unit object in the analytical domain
     /// </summary>
-    public class HeatRecoveryUnit : SimpleEquipment
+    public class HeatRecoveryUnit : SimpleEquipment, ISection
     {
         private double winterSensibleEfficiency = double.NaN;
         private double winterLatentEfficiency = double.NaN;

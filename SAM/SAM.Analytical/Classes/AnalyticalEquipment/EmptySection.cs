@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an empty section in the analytical domain
     /// </summary>
-    public class EmptySection : SimpleEquipment
+    public class EmptySection : SimpleEquipment, ISection
     {
         public EmptySection()
             : base("Empty Section")

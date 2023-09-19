@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an fan object in the analytical domain
     /// </summary>
-    public class Silencer : SimpleEquipment
+    public class Silencer : SimpleEquipment, ISection
     {
         public Silencer()
             : base("Silencer")

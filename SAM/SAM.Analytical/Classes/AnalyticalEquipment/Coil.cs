@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an coil unit object in the analytical domain
     /// </summary>
-    public abstract class Coil : SimpleEquipment
+    public abstract class Coil : SimpleEquipment, ISection
     {
         private double fluidReturnTemperature = double.NaN;
         private double fluidSupplyTemperature = double.NaN;

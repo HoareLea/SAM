@@ -6,7 +6,7 @@ namespace SAM.Analytical
     /// <summary>
     /// Represents an filter object in the analytical domain
     /// </summary>
-    public class Filter : SimpleEquipment
+    public class Filter : SimpleEquipment, ISection
     {
         private FilterGroup filterGroup = FilterGroup.Undefined;
         private double efficiency = double.NaN;

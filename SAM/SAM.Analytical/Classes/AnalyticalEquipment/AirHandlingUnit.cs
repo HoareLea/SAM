@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -60,6 +61,16 @@ namespace SAM.Analytical
         {
             this.winterSupplyTemperature = winterSupplyTemperature;
             this.summerSupplyTemperature = summerSupplyTemperature;
+        }
+
+        public List<ISection> GetSections_Supply()
+        {
+            return GetSimpleEquipments<ISection>(FlowClassification.Supply);
+        }
+
+        public List<ISection> GetSections_Extract()
+        {
+            return GetSimpleEquipments<ISection>(FlowClassification.Extract);
         }
 
         /// <summary>

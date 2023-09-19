@@ -310,7 +310,7 @@ namespace SAM.Analytical.Grasshopper
                         airHandlingUnit.SummerSupplyTemperature = !double.IsNaN(summerSupplyTemperature) ? summerSupplyTemperature : airHandlingUnit.SummerSupplyTemperature;
                         airHandlingUnit.WinterSupplyTemperature = !double.IsNaN(winterSupplyTemperature) ? winterSupplyTemperature : airHandlingUnit.WinterSupplyTemperature;
 
-                        HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Intake)?.FirstOrDefault();
+                        HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
                         if(frostCoil != null)
                         {
                             frostCoil.WinterOffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.WinterOffTemperature;
