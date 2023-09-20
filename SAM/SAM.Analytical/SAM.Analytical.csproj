@@ -77,6 +77,14 @@
     <Compile Include="Classes\Filter\PanelPanelGroupFilter.cs" />
     <Compile Include="Classes\Filter\PanelBoundaryTypeFilter.cs" />
     <Compile Include="Classes\Filter\PanelAzimuthFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceCoolingSystemTypeNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceCoolingSystemFullNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceHeatinigSystemTypeNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceMechanicalSystemFullNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceHeatingSystemFullNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceVentilationSystemFullNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceVentilationSystemTypeNameFilter.cs" />
+    <Compile Include="Classes\Filter\SpaceMechanicalSystemTypeNameFilter.cs" />
     <Compile Include="Classes\Filter\SpaceVolumeFilter.cs" />
     <Compile Include="Classes\Filter\SpaceAreaFilter.cs" />
     <Compile Include="Classes\Filter\SpaceElevationFilter.cs" />
