@@ -43,43 +43,49 @@ namespace SAM.Analytical
 
             adjacencyCluster.AddObject(mechanicalSystem);
 
-            foreach(Space space in spaces_Temp)
+            if(spaces_Temp == null || spaces_Temp.Count == 0)
             {
-                if(space == null)
-                {
-                    continue;
-                }
-
-                if(!allowMultipleSystems)
-                {
-                    List<MechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<MechanicalSystem>(space);
-                    if(mechanicalSystems_Space != null)
-                    {
-                        foreach(MechanicalSystem mechanicalSystem_Space in mechanicalSystems_Space)
-                        {
-                            if(mechanicalSystem_Space.MechanicalSystemCategory() == mechanicalSystemType.MechanicalSystemCategory())
-                            {
-                                adjacencyCluster.RemoveRelation(space, mechanicalSystem_Space);
-                            }
-                        }
-                    }
-                }
-
-                InternalCondition internalCondition = space.InternalCondition;
-                if(internalCondition != null)
-                {
-                    InternalConditionParameter? internalConditionParameter = Query.SystemTypeInternalConditionParameter(mechanicalSystem.MechanicalSystemCategory());
-                    if(internalConditionParameter != null && internalConditionParameter.HasValue)
-                    {
-                        internalCondition.SetValue(internalConditionParameter.Value, mechanicalSystem.Name);
-                        space.InternalCondition = internalCondition;
-                        adjacencyCluster.AddObject(space);
-                    }
-                }
-
-                adjacencyCluster.AddRelation(mechanicalSystem, space);
+                return mechanicalSystem;
             }
 
+            AssignMechanicalSystem(adjacencyCluster, mechanicalSystem, spaces_Temp, allowMultipleSystems);
+
+            //foreach(Space space in spaces_Temp)
+            //{
+            //    if(space == null)
+            //    {
+            //        continue;
+            //    }
+
+            //    if(!allowMultipleSystems)
+            //    {
+            //        List<MechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<MechanicalSystem>(space);
+            //        if(mechanicalSystems_Space != null)
+            //        {
+            //            foreach(MechanicalSystem mechanicalSystem_Space in mechanicalSystems_Space)
+            //            {
+            //                if(mechanicalSystem_Space.MechanicalSystemCategory() == mechanicalSystemType.MechanicalSystemCategory())
+            //                {
+            //                    adjacencyCluster.RemoveRelation(space, mechanicalSystem_Space);
+            //                }
+            //            }
+            //        }
+            //    }
+
+            //    InternalCondition internalCondition = space.InternalCondition;
+            //    if(internalCondition != null)
+            //    {
+            //        InternalConditionParameter? internalConditionParameter = Query.SystemTypeInternalConditionParameter(mechanicalSystem.MechanicalSystemCategory());
+            //        if(internalConditionParameter != null && internalConditionParameter.HasValue)
+            //        {
+            //            internalCondition.SetValue(internalConditionParameter.Value, mechanicalSystem.Name);
+            //            space.InternalCondition = internalCondition;
+            //            adjacencyCluster.AddObject(space);
+            //        }
+            //    }
+
+            //    adjacencyCluster.AddRelation(mechanicalSystem, space);
+            //}
 
             return mechanicalSystem;
         }
