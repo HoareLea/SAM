@@ -523,6 +523,24 @@ namespace SAM.Analytical
             return GetObjects<MechanicalSystem>();
         }
 
+        public List<MechanicalSystem> GetMechanicalSystems(MechanicalSystemType mechanicalSystemType)
+        {
+            if(mechanicalSystemType == null)
+            {
+                return null;
+            }
+
+            List<MechanicalSystem> result = GetMechanicalSystems();
+            if(result == null)
+            {
+                return null;
+            }
+
+            result.RemoveAll(x => x.TypeGuid != mechanicalSystemType.Guid);
+
+            return result;
+        }
+
         public List<MechanicalSystemType> GetMechanicalSystemTypes()
         {
             return GetMechanicalSystemTypes<MechanicalSystemType>();
