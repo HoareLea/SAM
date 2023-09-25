@@ -62,6 +62,19 @@ namespace SAM.Analytical
         {
         }
 
+        public new string Name
+        {
+            get 
+            { 
+                return name; 
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+
         public AnalyticalModel(AnalyticalModel analyticalModel)
             : base(analyticalModel)
         {
