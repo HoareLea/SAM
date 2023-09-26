@@ -14,9 +14,6 @@
         /// Number of subsequent rectangle shifts in point variant
         /// </summary>
         public double MaxStepPoint { get; set; } = 10;
-        /// <summary>
-        /// Distance of subsequent rectangle shifts in point variant
-        /// </summary>
-        public double MoveDistancePoint { get; set; } = 0.05;
+
     }
 }
