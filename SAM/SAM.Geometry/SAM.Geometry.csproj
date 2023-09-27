@@ -92,8 +92,10 @@
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2DResult.cs" />
+    <Compile Include="Planar\Create\Line2D.cs" />
     <Compile Include="Planar\Create\Mesh2D.cs" />
     <Compile Include="Planar\Create\Polygon2D.cs" />
+    <Compile Include="Planar\Create\Segment2D.cs" />
     <Compile Include="Planar\Create\Vector2D.cs" />
     <Compile Include="Planar\Interfaces\IBoundable2DObject.cs" />
     <Compile Include="Planar\Interfaces\IFace2DObject.cs" />
