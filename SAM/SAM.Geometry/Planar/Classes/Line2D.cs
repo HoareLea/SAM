@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Geometry.Spatial;
 using SAM.Math;
 using System;
 
@@ -133,6 +134,33 @@ namespace SAM.Geometry.Planar
             }
 
             return null;
+        }
+
+        public Point2D Intersection(Line2D line2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if(line2D == null)
+            {
+                return null;
+            }
+
+            return Query.Intersection(origin, origin.GetMoved(vector), line2D.origin, line2D.origin.GetMoved(line2D.vector), false, tolerance);
+        }
+
+        public Point2D Intersection(Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
+        {
+            if (segment2D == null)
+            {
+                return null;
+            }
+
+            Point2D point2D =  Query.Intersection(origin, origin.GetMoved(vector), segment2D.Start, segment2D.End, false, tolerance);
+            if(point2D == null)
+            {
+                return null;
+            }
+
+            return segment2D.On(point2D, tolerance) ? point2D : null;
+
         }
     }
 }

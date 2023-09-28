@@ -464,55 +464,7 @@ namespace SAM.Geometry.Planar
         /// <returns>Intersection Point2D</returns>
         public Point2D Intersection(Segment2D segment2D, out Point2D point2D_Closest1, out Point2D point2D_Closest2, double tolerance = Core.Tolerance.Distance)
         {
-            point2D_Closest1 = null;
-            point2D_Closest2 = null;
-
-            if (segment2D == null)
-                return null;
-
-            // Get the segments' parameters.
-            double dx12 = End.X - Start.X;
-            double dy12 = End.Y - Start.Y;
-            double dx34 = segment2D.End.X - segment2D.Start.X;
-            double dy34 = segment2D.End.Y - segment2D.Start.Y;
-
-            // Solve for t1 and t2
-            double denominator = (dy12 * dx34 - dx12 * dy34);
-            if (double.IsNaN(denominator) || System.Math.Abs(denominator) < tolerance)
-                return null;
-
-            double t1 = ((Start.X - segment2D.Start.X) * dy34 + (segment2D.Start.Y - Start.Y) * dx34) / denominator;
-
-            // The lines are parallel (or close enough to it).
-            if (double.IsInfinity(t1) || double.IsNaN(t1))
-                return null;
-
-            double t2 = ((segment2D.Start.X - Start.X) * dy12 + (Start.Y - segment2D.Start.Y) * dx12) / -denominator;
-
-            // Find the point of intersection.
-            Point2D point2D_Intersection = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
-
-            double t1_Temp = Core.Query.Round(t1, tolerance);
-            double t2_Temp = Core.Query.Round(t2, tolerance);
-
-            // The segments intersect if t1 and t2 are between 0 and 1.
-            if (((t1_Temp >= 0) && (t1_Temp <= 1) && (t2_Temp >= 0) && (t2_Temp <= 1)))
-                return point2D_Intersection;
-
-            // Find the closest points on the segments.
-            if (t1 < 0)
-                t1 = 0;
-            else if (t1 > 1)
-                t1 = 1;
-
-            if (t2 < 0)
-                t2 = 0;
-            else if (t2 > 1)
-                t2 = 1;
-
-            point2D_Closest1 = new Point2D(Start.X + dx12 * t1, Start.Y + dy12 * t1);
-            point2D_Closest2 = new Point2D(segment2D.Start.X + dx34 * t2, segment2D.Start.Y + dy34 * t2);
-            return point2D_Intersection;
+            return Query.Intersection(Start, End, segment2D?.Start, segment2D?.End, out point2D_Closest1, out point2D_Closest2, tolerance);
         }
 
         /// <summary>
@@ -524,14 +476,12 @@ namespace SAM.Geometry.Planar
         /// <returns>Intersection Point2D</returns>
         public Point2D Intersection(Segment2D segment2D, bool bounded = true, double tolerance = Core.Tolerance.Distance)
         {
-            Point2D point2D_Closest1 = null;
-            Point2D point2D_Closest2 = null;
-
-            Point2D point2D_Intersection = Intersection(segment2D, out point2D_Closest1, out point2D_Closest2, tolerance);
-            if (bounded && (point2D_Closest1 != null || point2D_Closest2 != null))
+            if(segment2D == null)
+            {
                 return null;
+            }
 
-            return point2D_Intersection;
+            return Query.Intersection(Start, End, segment2D.Start, segment2D.End, bounded, tolerance);
         }
 
         public List<Point2D> Intersections(IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.Distance)
