@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Manager\ActionManager.cs" />
     <Compile Include="Variables\Rounding.cs" />
     <Compile Include="Variables\Tolerance.cs" />
     <Compile Include="Attributes\Enum\Operator.cs" />
