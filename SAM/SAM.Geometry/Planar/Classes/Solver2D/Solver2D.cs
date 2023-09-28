@@ -6,9 +6,9 @@ namespace SAM.Geometry.Planar
     {
         private List<Solver2DData> solver2DDatas;
         private List<IClosed2D> obstacles2D;
-        private Rectangle2D area;
+        private IClosed2D area;
 
-        public Solver2D(Rectangle2D area, List<IClosed2D> obstacles2D)
+        public Solver2D(IClosed2D area, List<IClosed2D> obstacles2D)
         {
             this.area = area;
             this.obstacles2D = obstacles2D;
@@ -53,6 +53,27 @@ namespace SAM.Geometry.Planar
             solver2DDatas.Add(solver2DData);
             return true;
         }
+        public bool Add(Rectangle2D rectangle2D, IClosed2D limitArea, Point2D point2D, int priority = int.MinValue, object tag = null)
+        {
+            if (rectangle2D == null || point2D == null)
+            {
+                return false;
+            }
+
+            if (solver2DDatas == null)
+            {
+                solver2DDatas = new List<Solver2DData>();
+            }
+
+            Solver2DData solver2DData = new Solver2DData(rectangle2D, point2D);
+            solver2DData.Priority = priority;
+            solver2DData.Tag = tag;
+            solver2DData.LimitArea = limitArea;
+
+            solver2DDatas.Add(solver2DData);
+            return true;
+
+        }
 
         public List<Solver2DResult> Solve(Solver2DSettings solver2DSettings)
         {
@@ -80,8 +101,8 @@ namespace SAM.Geometry.Planar
                 if (sAMGeometry2D is Point2D)
                 {
                     Point2D point2D = (Point2D)sAMGeometry2D;
-                    double defaultDistanceFromPoint = point2D.Distance(center);
-                    List<Vector2D> offsets = generateOffsets(defaultDistanceFromPoint);
+                    double defaultDistancePoint = solver2DSettings.DefaultDistancePoint;
+                    List<Vector2D> offsets = generateOffsets(defaultDistancePoint);
 
                     Rectangle2D rectangleWithGivenPointInCenter = rectangle2D.GetMoved(new Vector2D(center, point2D));
 
@@ -91,11 +112,15 @@ namespace SAM.Geometry.Planar
 
                         foreach (Vector2D offset in offsets)
                         {
-                            Vector2D scaledOffset = offset * (1.0 + ((double)i / 5.0)); //solver2DSettings.MoveDistancePoint);
+                            Vector2D scaledOffset = offset * (1.0 + ((double)i / 5.0));
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
-                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+                            if (area.Inside(rectangle_Temp) && !intersect(rectangle_Temp, result))
                             {
+                                if(solver2DData.LimitArea != null && !solver2DData.LimitArea.Inside(rectangle_Temp.GetCentroid()))
+                                {
+                                    continue;
+                                }
                                 rectangle2D_New = rectangle_Temp;
                                 break;
                             }
@@ -128,7 +153,7 @@ namespace SAM.Geometry.Planar
                             bool clockwise = segment.Direction.GetPerpendicular().Y < 0;
                             Rectangle2D rectangle_Temp = fix(Query.MoveToSegment2D(rectangle2D, segment, newPoint, distanceToCenter, clockwise), rectangle2D);
 
-                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+                            if (area.Inside(rectangle_Temp) && !intersect(rectangle_Temp, result))
                             {
                                 rectangle2D_New = rectangle_Temp;
                                 break;
@@ -221,12 +246,12 @@ namespace SAM.Geometry.Planar
             Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, -calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
             return result;
         }   
-
         private bool intersect(Rectangle2D rectangle2D, List<Solver2DResult> solver2DResults)
         {
             return (obstacles2D.Find(x => x.InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => x.Closed2D<Rectangle2D>().InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => rectangle2D.InRange(x.Closed2D<Rectangle2D>()) == true) != null);
         }
+
     }
 }

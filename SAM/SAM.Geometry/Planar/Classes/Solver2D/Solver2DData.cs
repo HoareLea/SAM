@@ -6,6 +6,8 @@
         private ISAMGeometry2D geometry2D;
         private object tag = null;
         private int priority = int.MinValue;
+        private IClosed2D limitArea = null;
+
 
         public object Tag
         {
@@ -30,6 +32,18 @@
             set
             {
                 priority = value;
+            }
+        }
+
+        public IClosed2D LimitArea
+        {
+            get
+            {
+                return limitArea;
+            }
+            set
+            {
+                limitArea = value;
             }
         }
 
