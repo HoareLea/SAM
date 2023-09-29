@@ -14,66 +14,89 @@ namespace SAM.Geometry.Planar
             this.obstacles2D = obstacles2D;
         }
          
-        public bool Add(Rectangle2D rectangle2D, Polyline2D polyline2D, int priority = int.MinValue, object tag = null)
+
+        public bool Add(Solver2DData solver2DData)
         {
-            if (rectangle2D == null || polyline2D == null)
+            if(solver2DData == null || solver2DData.Geometry2D<ISAMGeometry2D>() == null || solver2DData.Closed2D<IClosed2D>() == null)
             {
                 return false;
             }
-
-            return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)polyline2D, priority, tag);
-        }
-
-        public bool Add(Rectangle2D rectangle2D, Point2D point2D, int priority = int.MinValue, object tag = null)
-        { 
-            if (rectangle2D == null || point2D == null)
-            {
-                return false;
-            }
-
-            return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)point2D, priority, tag);
-        }
-
-        private bool Add(IClosed2D closed2D, ISAMGeometry2D geometry2D, int priority = int.MinValue, object tag = null)
-        {
-            if (closed2D == null || geometry2D == null)
-            {
-                return false;
-            }
-
-            if (solver2DDatas == null)
+            if(solver2DDatas == null)
             {
                 solver2DDatas = new List<Solver2DData>();
             }
 
-            Solver2DData solver2DData = new Solver2DData(closed2D, geometry2D);
-            solver2DData.Priority = priority;
-            solver2DData.Tag = tag;
-
             solver2DDatas.Add(solver2DData);
             return true;
         }
-        public bool Add(Rectangle2D rectangle2D, IClosed2D limitArea, Point2D point2D, int priority = int.MinValue, object tag = null)
+        public bool AddRange(List<Solver2DData> solver2DDatas)
         {
-            if (rectangle2D == null || point2D == null)
+            if(solver2DDatas == null)
             {
                 return false;
             }
 
-            if (solver2DDatas == null)
-            {
-                solver2DDatas = new List<Solver2DData>();
-            }
-
-            Solver2DData solver2DData = new Solver2DData(rectangle2D, point2D);
-            solver2DData.Priority = priority;
-            solver2DData.Tag = tag;
-            solver2DData.LimitArea = limitArea;
-
-            solver2DDatas.Add(solver2DData);
+            solver2DDatas.ForEach(x => Add(x));
             return true;
-
         }
+        //public bool Add(Rectangle2D rectangle2D, Polyline2D polyline2D, int priority = int.MinValue, object tag = null)
+        //{
+        //    if (rectangle2D == null || polyline2D == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)polyline2D, priority, tag);
+        //}
+        //public bool Add(Rectangle2D rectangle2D, Point2D point2D, int priority = int.MinValue, object tag = null)
+        //{ 
+        //    if (rectangle2D == null || point2D == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)point2D, priority, tag);
+        //}
+        //private bool Add(IClosed2D closed2D, ISAMGeometry2D geometry2D, int priority = int.MinValue, object tag = null)
+        //{
+        //    if (closed2D == null || geometry2D == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    if (solver2DDatas == null)
+        //    {
+        //        solver2DDatas = new List<Solver2DData>();
+        //    }
+
+        //    Solver2DData solver2DData = new Solver2DData(closed2D, geometry2D);
+        //    solver2DData.Priority = priority;
+        //    solver2DData.Tag = tag;
+
+        //    solver2DDatas.Add(solver2DData);
+        //    return true;
+        //}
+        //public bool Add(Rectangle2D rectangle2D, IClosed2D limitArea, Point2D point2D, int priority = int.MinValue, object tag = null)
+        //{
+        //    if (rectangle2D == null || point2D == null)
+        //    {
+        //        return false;
+        //    }
+
+        //    if (solver2DDatas == null)
+        //    {
+        //        solver2DDatas = new List<Solver2DData>();
+        //    }
+
+        //    Solver2DData solver2DData = new Solver2DData(rectangle2D, point2D);
+        //    solver2DData.Priority = priority;
+        //    solver2DData.Tag = tag;
+        //    solver2DData.LimitArea = limitArea;
+
+        //    solver2DDatas.Add(solver2DData);
+        //    return true;
+
+        //}
 
         public List<Solver2DResult> Solve(Solver2DSettings solver2DSettings)
         {
@@ -86,7 +109,6 @@ namespace SAM.Geometry.Planar
             solver2DDatas.Sort((x, y) => x.Priority.CompareTo(y.Priority));
 
             List<Solver2DResult> result = new List<Solver2DResult>();
-
             foreach (Solver2DData solver2DData in solver2DDatas)
             {
                 Rectangle2D rectangle2D = solver2DData.Closed2D<Rectangle2D>();
@@ -111,7 +133,7 @@ namespace SAM.Geometry.Planar
                         if (rectangle2D_New != null) break;
 
                         foreach (Vector2D offset in offsets)
-                        {
+                        { 
                             Vector2D scaledOffset = offset * (1.0 + ((double)i / 5.0));
                             Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
 
@@ -155,6 +177,10 @@ namespace SAM.Geometry.Planar
 
                             if (area.Inside(rectangle_Temp) && !intersect(rectangle_Temp, result))
                             {
+                                if (solver2DData.LimitArea != null && !solver2DData.LimitArea.Inside(rectangle_Temp.GetCentroid()))
+                                {
+                                    continue;
+                                }
                                 rectangle2D_New = rectangle_Temp;
                                 break;
                             }
@@ -171,6 +197,7 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
+
 
         private double getY(Polyline2D polyLine2D, double x)
         {
@@ -231,7 +258,6 @@ namespace SAM.Geometry.Planar
             }
             return offsets;
         }
-
         private Rectangle2D fix(Rectangle2D calculatedRectangle, Rectangle2D defaultRectangle)
         {
             if (calculatedRectangle == null || defaultRectangle == null)
