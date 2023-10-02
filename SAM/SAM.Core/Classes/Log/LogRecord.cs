@@ -97,7 +97,7 @@ namespace SAM.Core
                 return string.Format("[{0}\t{1}]\t{2}", dateTime.ToString("yyyy-MM-dd HH:mm:ss.f"), logRecordType.ToString(), text_Temp);
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
                 return false;
@@ -112,7 +112,7 @@ namespace SAM.Core
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
