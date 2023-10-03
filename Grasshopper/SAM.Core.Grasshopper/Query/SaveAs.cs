@@ -13,32 +13,7 @@ namespace SAM.Core.Grasshopper
                 return false;
             }
 
-            List<IJSAMObject> jSAMObjects = new List<IJSAMObject>();
-            foreach (var variable in gH_Structure.AllData(true))
-            {
-                if (variable is IGH_Goo)
-                {
-                    IGH_Goo gH_Goo = (IGH_Goo)variable;
-
-                    IJSAMObject jSAMObject = null;
-                    try
-                    {
-                        jSAMObject = (gH_Goo as dynamic).Value as IJSAMObject;
-                    }
-                    catch
-                    {
-                        jSAMObject = null;
-                    }
-
-                    if (jSAMObject == null)
-                    {
-                        continue;
-                    }
-
-                    jSAMObjects.Add(jSAMObject);
-                }
-            }
-
+            List<IJSAMObject> jSAMObjects = JSAMObjects<IJSAMObject>(gH_Structure);
             if (jSAMObjects == null || jSAMObjects.Count == 0)
             {
                 return false;

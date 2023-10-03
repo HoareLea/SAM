@@ -134,6 +134,7 @@
     <Compile Include="Modify\RunGrasshopperScript.cs" />
     <Compile Include="Modify\AppendSourceCodeAdditionalMenuItem.cs" />
     <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />
+    <Compile Include="Query\JSAMObjects.cs" />
     <Compile Include="Query\SaveAs.cs" />
     <Compile Include="Query\Copy.cs" />
     <Compile Include="Query\Objects.cs" />
@@ -266,7 +267,7 @@ xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\Use
     <StartAction>Program</StartAction>
     <DocumentationFile>..\..\build\SAM.Core.Grasshopper.xml</DocumentationFile>
   </PropertyGroup>
-    <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|AnyCPU'">
     <StartProgram>C:\Program Files\Rhino 7\System\Rhino.exe</StartProgram>
     <StartArguments>
     </StartArguments>

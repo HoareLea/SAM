@@ -54,7 +54,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Base\StartupOptions.cs" />
     <Compile Include="Classes\Manager\ActionManager.cs" />
+    <Compile Include="Create\StartupOptions.cs" />
+    <Compile Include="Enums\StartupArgument.cs" />
     <Compile Include="Variables\Rounding.cs" />
     <Compile Include="Variables\Tolerance.cs" />
     <Compile Include="Attributes\Enum\Operator.cs" />
