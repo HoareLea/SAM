@@ -56,6 +56,14 @@ namespace SAM.Analytical
             }
         }
 
+        public string Group
+        {
+            get
+            {
+                return group;
+            }
+        }
+
         public string FullName
         {
             get
