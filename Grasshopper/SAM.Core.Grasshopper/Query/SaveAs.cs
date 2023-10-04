@@ -1,5 +1,4 @@
-﻿using Grasshopper.Kernel.Types;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper

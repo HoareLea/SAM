@@ -1,6 +1,4 @@
-﻿using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
-using SAM.Core;
+﻿using SAM.Core;
 using System.Collections.Generic;
 using System.Diagnostics;
 

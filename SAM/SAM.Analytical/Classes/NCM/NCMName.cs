@@ -1,8 +1,6 @@
-﻿using NetTopologySuite.Utilities;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using SAM.Geometry.Planar;
-using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -55,6 +53,31 @@ namespace SAM.Analytical
             get
             {
                 return description;
+            }
+        }
+
+        public string FullName
+        {
+            get
+            {
+                List<string> values = new List<string>();
+                if(!string.IsNullOrWhiteSpace(group))
+                {
+                    values.Add(group);
+                }
+
+                if(!string.IsNullOrWhiteSpace(name))
+                {
+                    values.Add(name);
+                }
+
+                if(!string.IsNullOrWhiteSpace(version))
+                {
+                    values.Add(name);
+                }
+
+
+                return string.Join("_", values);
             }
         }
 

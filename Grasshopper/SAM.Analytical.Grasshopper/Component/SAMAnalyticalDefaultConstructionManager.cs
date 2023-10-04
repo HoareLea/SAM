@@ -3,7 +3,6 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 
 namespace SAM.Analytical.Grasshopper
 {

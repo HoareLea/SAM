@@ -1,8 +1,5 @@
-﻿using NetTopologySuite.Utilities;
-using Newtonsoft.Json.Linq;
+﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using SAM.Geometry.Planar;
-using System;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -11,6 +8,11 @@ namespace SAM.Analytical
     public class NCMNameCollection : IEnumerable<NCMName>, IJSAMObject
     {
         private List<NCMName> nCMNames = new List<NCMName>();
+
+        public NCMNameCollection()
+        {
+
+        }
 
         public NCMNameCollection(IEnumerable<NCMName> nCMNames)
         {

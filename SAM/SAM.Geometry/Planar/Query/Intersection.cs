@@ -1,9 +1,7 @@
 ﻿//using ClipperLib;
-using MathNet.Numerics.LinearAlgebra.Factorization;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 

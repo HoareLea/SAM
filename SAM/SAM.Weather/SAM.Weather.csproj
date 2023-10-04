@@ -33,6 +33,46 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Interop.TAS3D">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TAS3D.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TasConv">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TasConv.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TBD">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TBD.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TCD">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TCD.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TCR">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TCR.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TIC">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TIC.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TPD">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TPD.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TSD">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TSD.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="Interop.TWD">
+      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TWD.dll</HintPath>
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="SAM.Architectural, Version=1.0.8677.28762, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\build\SAM.Architectural.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
