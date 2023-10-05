@@ -67,6 +67,28 @@ namespace SAM.Core
             }
         }
 
+        public bool Remove<T>(T item)
+        {
+            if (item == null)
+            {
+                return false;
+            }
+
+            string text = func == null ? item.ToString() : func.Invoke(item);
+
+            if (!searchWrapper.Remove(text))
+            {
+                return false;
+            }
+
+            if(dictionary.ContainsKey(text))
+            {
+                dictionary.Remove(text);
+            }
+
+            return true;
+        }
+
         public IEnumerable<string> Texts
         {
             get

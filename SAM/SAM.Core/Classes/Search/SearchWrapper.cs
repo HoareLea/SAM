@@ -79,6 +79,21 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Remove(string text)
+        {
+            if(text == null || dictionary == null)
+            {
+                return false;
+            }
+
+            if(!dictionary.ContainsKey(text))
+            {
+                return false;
+            }
+
+            return dictionary.Remove(text);
+        }
+
         private List<string> GetValues(string text)
         {
             if (string.IsNullOrWhiteSpace(text))
