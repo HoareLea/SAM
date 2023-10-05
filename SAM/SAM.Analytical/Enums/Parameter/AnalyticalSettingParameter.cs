@@ -39,5 +39,8 @@ namespace SAM.Analytical
         [ParameterProperties("Default HostPartitionTypeLibrary", "Default HostPartitionTypeLibrary"), SAMObjectParameterValue(typeof(HostPartitionTypeLibrary))] DefaultHostPartitionTypeLibrary,
         [ParameterProperties("Default OpeningTypeLibrary File Name", "Default OpeningTypeLibrary File Name"), ParameterValue(ParameterType.String)] DefaultOpeningTypeLibraryFileName,
         [ParameterProperties("Default OpeningTypeLibrary", "Default OpeningTypeLibrary"), SAMObjectParameterValue(typeof(OpeningTypeLibrary))] DefaultOpeningTypeLibrary,
+
+        [ParameterProperties("Default NCMNameCollection File Name", "Default NCMNameCollection File Name"), ParameterValue(ParameterType.String)] DefaultNCMNameCollectionFileName,
+        [ParameterProperties("Default NCMNameCollection", "Default NCMNameCollection"), SAMObjectParameterValue(typeof(NCMNameCollection))] DefaultNCMNameCollection,
     }
 }

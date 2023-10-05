@@ -22,6 +22,11 @@ namespace SAM.Analytical
             }
         }
 
+        public NCMNameCollection(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public bool Add(NCMName nCMName)
         {
             if(nCMName == null)

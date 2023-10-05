@@ -300,6 +300,7 @@
     <Compile Include="Modify\UpdateSpaceNames.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
+    <Compile Include="Query\DefaultNCMNameCollection.cs" />
     <Compile Include="Query\TryGetSeasonProfiles.cs" />
     <Compile Include="Query\CalculatedInfiltrationSensibleGain.cs" />
     <Compile Include="Query\CalculatedInfiltrationLatentGain.cs" />

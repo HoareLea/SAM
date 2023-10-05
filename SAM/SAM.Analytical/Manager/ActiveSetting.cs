@@ -46,6 +46,8 @@ namespace SAM.Analytical
             result.SetValue(AnalyticalSettingParameter.DefaultInternalConditionLibraryFileName_TM59, "SAM_InternalConditionLibrary_TM59.JSON");
             result.SetValue(AnalyticalSettingParameter.DefaultProfileLibraryFileName_TM59, "SAM_ProfileLibrary_TM59.JSON");
 
+            result.SetValue(AnalyticalSettingParameter.DefaultNCMNameCollectionFileName, "SAM_NCMNameCollection.JSON");
+
 
             string path = null;
 
@@ -104,6 +106,10 @@ namespace SAM.Analytical
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultProfileLibraryFileName_TM59);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultProfileLibrary_TM59, Core.Create.IJSAMObject<ProfileLibrary>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultNCMNameCollectionFileName);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.DefaultNCMNameCollection, Core.Create.IJSAMObject<NCMNameCollection>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

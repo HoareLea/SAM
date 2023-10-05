@@ -1,0 +1,2079 @@
+[
+  {
+    "_type": "SAM.Analytical.NCMNameCollection,SAM.Analytical",
+    "NCMNames": [
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CarPark",
+        "Version": "v6.1.b",
+        "Description": "Area designated for parking cars (enclosed or underground) People Density 0.004299465 pers/m2. Lux level 75 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all non-public corridors and stairways. For public circulation spaces select Sales area - general. People Density 0.1037143 pers/m2. Lux level 100 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DepStoreSales",
+        "Version": "v6.1.b",
+        "Description": "All Sales areas in Department Stores which do not have a large concentration of fridges/freezers or electrical appliances. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DepStoreSalesChill",
+        "Version": "v6.1.b",
+        "Description": "A sales area  in Department Stores designed to accommodate a considerable quantity of fridges/freezers such as a supermarket or food hall. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DepStoreSalesElectric",
+        "Version": "v6.1.b",
+        "Description": "Sales areas  in Department Stores designed to accommodate considerable electrical equipment loads such as lighting sales areas and IT/TV/Hi-fi sales areas. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Display",
+        "Version": "v6.1.b",
+        "Description": "An area where display lighting is used to illuminate items with glazing onto the outside such as a shop window, but which is boxed/enclosed, separated from the main retail space. People Density 0.0433125 pers/m2. Lux level 50 Lux. Display Lighting 22 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "An area specifically designed for eating and drinking. People Density 0.3305085 pers/m2. Lux level 200 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.108 pers/m2. Lux level 500 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used only for washing and/or drying clothes using washing machines and/or tumble dryers. This is not for where there is an individual washing machine within another space (e.g. a food preparation area). People Density 0.1246667 pers/m2. Lux level 300 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.09514286 pers/m2. Lux level 300 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.1060714 pers/m2. Lux level 200 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "RetWareSales",
+        "Version": "v6.1.b",
+        "Description": "All Sales areas in Retail Warehouses which do not have a large concentration of fridges/freezers or electrical appliances. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "RetWareSalesChill",
+        "Version": "v6.1.b",
+        "Description": "A sales area in Retail Warehouses designed to accommodate a considerable quantity of fridges/freezers such as a supermarket or food hall. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "RetWareSalesElectric",
+        "Version": "v6.1.b",
+        "Description": "Sales areas in Retail Warehouses designed to accommodate considerable electrical equipment loads such as lighting sales areas and IT/TV/Hi-fi sales areas. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Sales",
+        "Version": "v6.1.b",
+        "Description": "All Sales areas in Small Shop Units which do not have a large concentration of fridges/freezers or electrical appliances. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "SalesChill",
+        "Version": "v6.1.b",
+        "Description": "A sales area  in Small Shop Units designed to accommodate a considerable quantity of fridges/freezers such as a supermarket or food hall. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "SalesElectric",
+        "Version": "v6.1.b",
+        "Description": "Sales areas  in Small Shop Units designed to accommodate considerable electrical equipment loads such as lighting sales areas and IT/TV/Hi-fi sales areas. People Density 0.116875 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.1037143 pers/m2. Lux level 100 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.1037143 pers/m2. Lux level 200 Lux.",
+        "Group": "A1A2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all non-public corridors and stairways. For public circulation spaces select Eating/drinking area. People Density 0.1276396 pers/m2. Lux level 100 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed. This could include open corridors or stairs providing access to the main eating/drinking spaces. People Density 0.2 pers/m2. Lux level 200 Lux. Display Lighting 10 W/m2.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.11 pers/m2. Lux level 500 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.1094366 pers/m2. Lux level 300 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building e.g.: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Stage",
+        "Version": "v6.1.b",
+        "Description": "For stages with dedicated lighting and equipment in addition to that within the remainder of the space. For stages within other activity areas which do not have specific lighting or additional electrical equipment, do not define these as separate spaces. People Density 0.03592437 pers/m2. Lux level 300 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.08840491 pers/m2. Lux level 200 Lux.",
+        "Group": "A345"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CarPark",
+        "Version": "v6.1.b",
+        "Description": "Area designated for parking cars (enclosed or underground) People Density 0.005894737 pers/m2. Lux level 75 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. For areas which can be used to for changing but which do not contain showers, such as a cloak room/locker room, use the Generic Office Space. People Density 0.1 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For corridors and stairways when these are separated  from Office spaces, e.g. stairwells for access to other parts of the building. People Density 0.1173333 pers/m2. Lux level 100 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed by staff and visitors, e.g. canteen or office restaurant sitting areas. People Density 0.2888889 pers/m2. Lux level 200 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared for staff and visitors, e.g. kitchen in canteen or office restaurant. People Density 0.1080357 pers/m2. Lux level 500 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Gym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.1648485 pers/m2. Lux level 300 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.111 pers/m2. Lux level 300 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building e.g.: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside, from other building storeys or in general waiting areas containing a reception desk. People Density 0.1008333 pers/m2. Lux level 300 Lux. Display Lighting 9 W/m2.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.025 pers/m2. Lux level 100 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers. People Density 0.1124444 pers/m2. Lux level 200 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "Area for sedentary light practical work, often containing some machinery, e.g. key cutting or shoe repairing. As per the definition, light industry appropriate in a residential area. People Density 0.05 pers/m2. Lux level 300 Lux.",
+        "Group": "B1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Bathrooms outside the bedrooms. People Density 0.2589474 pers/m2. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bedroom",
+        "Version": "v6.1.b",
+        "Description": "Guest bedroom without a bathroom. People Density 0.05 pers/m2. Lux level 100 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas.  People Density 0.1190526 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.1147239 pers/m2. Lux level 100 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.04122807 pers/m2. Lux level 300 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed, e.g. restaurant. People Density 0.1873874 pers/m2. Lux level 200 Lux. Display Lighting 10 W/m2.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EnsuiteBedroom",
+        "Version": "v6.1.b",
+        "Description": "Guest bedroom unit including bedroom and on suite bathroom. Contains a bath and/or shower and usually a basin and toilet. People Density 0.09443265 pers/m2. Lux level 100 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitGym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.1401754 pers/m2. Lux level 300 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared, e.g. restaurant kitchen. People Density 0.1080357 pers/m2. Lux level 500 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Hall",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. This could include a stage area. People Density 0.1833333 pers/m2. Lux level 300 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used specifically for washing and/or drying clothes using washing machines and/or tumble dryers. People Density 0.121 pers/m2. Lux level 300 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.1060667 pers/m2. Lux level 300 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building e.g.: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other internal reception areas. People Density 0.1046012 pers/m2. Lux level 300 Lux. Display Lighting 9 W/m2.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.11 pers/m2. Lux level 100 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Swim",
+        "Version": "v6.1.b",
+        "Description": "The area in which a swimming pool is contained. This activity should be used for the whole pool hall. People Density 0.1395417 pers/m2. Lux level 300 Lux. Other Gain 94 W/m2. Percentage Latent 100 %.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas external to guest bedroom units, for example, in the lobby or restaurant. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers. People Density 0.1178571 pers/m2. Lux level 200 Lux.",
+        "Group": "C1"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Bathrooms for residents. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bedroom",
+        "Version": "v6.1.b",
+        "Description": "Bedrooms. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. People Density 0.09630476 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways in the residential areas. For non residential areas, select the Circulation activity from building D1 Non-residential Institutions - Education People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CommunalArea",
+        "Version": "v6.1.b",
+        "Description": "TV lounges and other common spaces for use of residents. It may contain some hot drink facilities. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed by residents and staff. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. People Density 0.1622813 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared for residents and staff. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. People Density 0.09430087 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "HighDensIT",
+        "Version": "v6.1.b",
+        "Description": "High density desk based work space with corresponding dense IT. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "A facility that provides controlled conditions in which scientific research, experiments, and measurement may be performed. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used specifically for washing and/or drying clothes using washing machines and/or tumble dryers. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. It also includes clinic consulting, interview, examination and treatment areas. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Swim",
+        "Version": "v6.1.b",
+        "Description": "The area in which a swimming pool is contained. This activity should be used for the whole pool hall. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Other Gain 94 W/m2. Percentage Latent 100 %.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Teaching",
+        "Version": "v6.1.b",
+        "Description": "Teaching areas which include classrooms and corridors providing access to and between classrooms. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers. For non residential areas, select the Circulation activity from building D1 Non-residential Institutions - Education People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "A teaching area for practical non-science classes (egg woodwork, metalwork). For practical science based teaching spaces use Laboratory and for non practical teaching spaces use Teaching Areas. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Schools"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Bathrooms for residents. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. People Density 0.2315789 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bed",
+        "Version": "v6.1.b",
+        "Description": "Bedrooms. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. People Density 0.120381 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. People Density 0.1338691 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CommunalArea",
+        "Version": "v6.1.b",
+        "Description": "TV lounges and other common spaces for use of residents. It may contain some hot drink facilities. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. People Density 0.1141622 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. People Density 0.05362022 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed, e.g. canteen. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. People Density 0.2062385 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitGym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. People Density 0.1823087 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared, e.g. canteen kitchen. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. People Density 0.09560959 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "HighDensIT",
+        "Version": "v6.1.b",
+        "Description": "High density desk based work space with correspondingly dense IT. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. People Density 0.23125 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IndProcess",
+        "Version": "v6.1.b",
+        "Description": "An area for industrial process work, usually involving large machinery or equipment. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. People Density 0.01931818 pers/m2. Lux level 0 Lux. Lux level 0 Lux. Lux level 0 Lux. Lux level 0 Lux. Lux level 0 Lux. Lux level 0 Lux. Lux level 0 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "A facility that provides controlled conditions in which scientific research, experiments, and measurement may be performed. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. People Density 0.10625 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used only for washing and/or drying clothes using washing machines and/or tumble dryers. This is not for where there is an individual washing machines within another space (egg a food preparation area). People Density 0.1052174 pers/m2. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. People Density 0.2016667 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. People Density 0.1015385 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Swim",
+        "Version": "v6.1.b",
+        "Description": "The area in which a swimming pool is contained. This activity should be used for the whole pool hall. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. People Density 0.1806648 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Other Gain 94 W/m2. Percentage Latent 100 %.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Tea",
+        "Version": "v6.1.b",
+        "Description": "Common area kitchens used by residents, e.g. in residents' halls. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. People Density 0.1122 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. People Density 0.1064744 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "An area for sedentary-light practical work. Often containing some machinery. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. People Density 0.06761364 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Uni_ClassRm",
+        "Version": "v6.1.b",
+        "Description": "All teaching areas other than for science or practical classes, for which refer to \"Laboratory\" or \"Workshop - small scale\". People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. People Density 0.2034247 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "C2_Uni"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CarPark",
+        "Version": "v6.1.b",
+        "Description": "Area designated for parking cars (enclosed or underground) People Density 0.005324243 pers/m2. Lux level 75 Lux.",
+        "Group": "CarPark"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all corridors and stairways. People Density 0.05856667 pers/m2. Lux level 100 Lux.",
+        "Group": "CarPark"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lo People Density 0.111 pers/m2. Lux level 300 Lux.",
+        "Group": "CarPark"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "CarPark"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to \"changing facilities\" People Density 0.0605 pers/m2. Lux level 200 Lux.",
+        "Group": "CarPark"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Cell",
+        "Version": "v6.1.b",
+        "Description": "A room which accommodates one or more prisoners. People Density 0.143 pers/m2. Lux level 100 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.1124444 pers/m2. Lux level 100 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "An area specifically designed for eating and drinking. People Density 0.2577778 pers/m2. Lux level 200 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.1833333 pers/m2. Lux level 500 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.1625 pers/m2. Lux level 200 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.121162 pers/m2. Lux level 300 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1038889 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.1124444 pers/m2. Lux level 200 Lux.",
+        "Group": "Court"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. People Density 0.1413869 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. People Density 0.05272436 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. People Density 0.2 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared , e.g. canteen kitchen People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. People Density 0.1815 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "HighDensIT",
+        "Version": "v6.1.b",
+        "Description": "High density desk based work space with correspondingly dense IT. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "A facility that provides controlled conditions in which scientific research, experiments, and measurement may be performed. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. People Density 0.2098591 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. People Density 0.2183099 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. People Density 0.103 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux. Lux level 200 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. People Density 0.1155 pers/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2. Lux level 300 Lux. Display Lighting 9 W/m2.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. People Density 0.121 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Swim",
+        "Version": "v6.1.b",
+        "Description": "The area in which a swimming pool is contained. This activity should be used for the whole pool hall. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. People Density 0.1457796 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Other Gain 94 W/m2. Percentage Latent 100 %.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Teaching",
+        "Version": "v6.1.b",
+        "Description": "Teaching areas which include classrooms and corridors providing access to and between classrooms. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. People Density 0.5523239 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. People Density 0.11 pers/m2. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux. Lux level 100 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "A teaching area for practical non-science classes (egg woodwork, metalwork). For practical science based teaching spaces use \"laboratory” and for non practical teaching spaces use “classroom/meeting room”. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. People Density 0.06325926 pers/m2. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux. Lux level 500 Lux.",
+        "Group": "D1_Edu"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Auditoria",
+        "Version": "v6.1.b",
+        "Description": "Theatre auditoria spaces. People Density 0.3411765 pers/m2. Lux level 200 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_High",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - high HW usage. This activity should be assigned to the shower area and all associated changing areas. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_Low",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - low HW usage. This activity should be assigned to the shower area and all associated changing areas. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_Medium",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - medium HW usage. This activity should be assigned to the shower area and all associated changing areas. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.1008333 pers/m2. Lux level 100 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CirculationPub",
+        "Version": "v6.1.b",
+        "Description": "All public circulation areas such as a foyer. For non public spaces use \"Circulation areas (corridors and stairways) - non public\" People Density 0.2411765 pers/m2. Lux level 100 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.04671052 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "An area specifically designed for eating and drinking. People Density 0.2183051 pers/m2. Lux level 200 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitGym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.17 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitStud",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercising/dance, usually with high person density but with no machines. People Density 0.1322222 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.1305085 pers/m2. Lux level 500 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IceRink",
+        "Version": "v6.1.b",
+        "Description": "An area which contains an ice rink. People Density 0.225 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used only for washing and/or drying clothes using washing machines and/or tumble dryers. People Density 0.09625 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.175 pers/m2. Lux level 200 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.1164718 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1255833 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Sales",
+        "Version": "v6.1.b",
+        "Description": "All Sales areas which do not have a large concentration of fridges/freezers or electrical appliances. People Density 0.1022535 pers/m2. Lux level 300 Lux. Display Lighting 10 W/m2.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Stage",
+        "Version": "v6.1.b",
+        "Description": "For stages with dedicated lighting and equipment in addition to that within the remainder of the space. For stages within other activity areas which do not have specific lighting or additional electrical equipment, do not define these as separate spaces. People Density 0.04941177 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.11 pers/m2. Lux level 100 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Swim",
+        "Version": "v6.1.b",
+        "Description": "The area in which a swimming pool is contained. This activity should be used for the whole pool hall. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. People Density 0.1630534 pers/m2. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Lux level 300 Lux. Other Gain 94 W/m2. Percentage Latent 100 %.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers People Density 0.1008333 pers/m2. Lux level 200 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "An area for sedentary-light practical work. Often containing some machinery. People Density 0.06708334 pers/m2. Lux level 300 Lux.",
+        "Group": "D2"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.11375 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.11 pers/m2. Lux level 100 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.046875 pers/m2. Lux level 300 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed by residents and staff. People Density 0.3 pers/m2. Lux level 200 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared for residents and staff. People Density 0.143 pers/m2. Lux level 500 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.1690141 pers/m2. Lux level 200 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.1058803 pers/m2. Lux level 300 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. It also includes waiting areas. People Density 0.1084507 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.11 pers/m2. Lux level 100 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "An area for sedentary-light practical work. Often containing some machinery. People Density 0.06416667 pers/m2. Lux level 300 Lux.",
+        "Group": "DayCtr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomBath",
+        "Version": "v6.1.b",
+        "Description": "An area specifically used for bathing/washing. Contains a bath and/or shower and usually a basin and toilet. People Density 0.01873684 pers/m2. Lux level 150 Lux. Other Gain 15 W/m2. Percentage Latent 75 %.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomBed",
+        "Version": "v6.1.b",
+        "Description": "An area primarily used for sleep. People Density 0.02293877 pers/m2. Lux level 100 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomCirculation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas within the dwelling. People Density 0.01550388 pers/m2. Lux level 100 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomCommonAreas",
+        "Version": "v6.1.b",
+        "Description": "For all common circulation areas such as corridors and stairways outside the dwelling. People Density 0.01964602 pers/m2. Lux level 100 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomDining",
+        "Version": "v6.1.b",
+        "Description": "An area which is primarily used for eating meals. People Density 0.0169163 pers/m2. Lux level 50 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomKitchen",
+        "Version": "v6.1.b",
+        "Description": "The area within the dwelling where food is prepared People Density 0.0237037 pers/m2. Lux level 150 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomLounge",
+        "Version": "v6.1.b",
+        "Description": "The main reception room of the home. People Density 0.0187563 pers/m2. Lux level 50 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DomToilet",
+        "Version": "v6.1.b",
+        "Description": "An area containing a toilet and basin which is separate from the main bathroom People Density 0.02431718 pers/m2. Lux level 100 Lux.",
+        "Group": "Dwell"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Bathroom People Density 0.1660377 pers/m2. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bed",
+        "Version": "v6.1.b",
+        "Description": "Bedroom People Density 0.09142857 pers/m2. Lux level 100 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Cell",
+        "Version": "v6.1.b",
+        "Description": "A room which accommodates one or more prisoners. People Density 0.2228571 pers/m2. Lux level 100 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. For areas which can be used to for changing but which do not contain showers, such as a cloak room/locker room, refer to  People Density 0.13 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.121 pers/m2. Lux level 100 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.05 pers/m2. Lux level 300 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "An area specifically designed for eating and drinking. People Density 0.4128813 pers/m2. Lux level 200 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitGym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.17 pers/m2. Lux level 300 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.215339 pers/m2. Lux level 500 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.12765 pers/m2. Lux level 300 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.1201852 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.121 pers/m2. Lux level 100 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers People Density 0.121 pers/m2. Lux level 200 Lux.",
+        "Group": "EmgcySvc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "AECons",
+        "Version": "v6.1.b",
+        "Description": "For all A&E consulting/treatment/work areas, occupied and conditioned 24 hours a day. People Density 0.07 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Contains a bath and/or shower and usually a basin and toilet. Also to be used for bathrooms for staff and relatives accommodation. People Density 0.2341163 pers/m2. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bed",
+        "Version": "v6.1.b",
+        "Description": "En-suite bedrooms with no occupancy during day time, mainly for relatives or staff. Also for nursing home bedrooms. For patient private bedroom units with 24hr occupancy use activity \"24x7 Bedroom Unit\". People Density 0.1046857 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bed_24x7",
+        "Version": "v6.1.b",
+        "Description": "En-suite bedrooms for patients with 24 hrs occupancy. People Density 0.1046857 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for staff changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. For areas which can be used to for changing but which do not contain showers, such as a cloak room/locker room, use the Generic Office Space. People Density 0.5 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For restricted circulation areas such ward & department circulation,  corridor sub-waiting, and domestic circulation (staff accommodation). People Density 0.1135484 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "CirculationPub",
+        "Version": "v6.1.b",
+        "Description": "All public circulation areas within a hospital, e.g., corridors, stairs, hospital street, main atrium, main entrance, lobby. For non public (restricted) circulation spaces use \"Circulation areas (corridors and stairways) - non public/restricted\" People Density 0.2125 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "ClassRm",
+        "Version": "v6.1.b",
+        "Description": "For areas used for teaching/seminars which are not lecture theatres. People Density 1 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Diagnostic",
+        "Version": "v6.1.b",
+        "Description": "For areas which contain diagnostic imaging equipment (such as MRI and CT scanners, Bone Mineral Densitometry, Angiography, Mammography, PET, General Imaging, Linear Accelerator, Ultrasound). This category should be used for any associated plant areas where people work. People Density 0.1 pers/m2. Lux level 50 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "An area specifically designed for eating and drinking People Density 0.35 pers/m2. Lux level 200 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared. People Density 0.161 pers/m2. Lux level 500 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Hydrotherapy",
+        "Version": "v6.1.b",
+        "Description": "The area in which the hydrotherapy pool is contained. People Density 0.1 pers/m2. Lux level 300 Lux. Other Gain 100 W/m2. Percentage Latent 100 %.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IndProcess",
+        "Version": "v6.1.b",
+        "Description": "An area for industrial process work, usually involving large machinery or equipment, e.g., Central Food Processing Unit. People Density 0.1235246 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "For all hospital laboratories, e.g. Imaging Processing, Pharmacy dispensary, Aseptic suite, Specimen test, Pathology, Haematology, Dental, Media prep. People Density 0.08 pers/m2. Lux level 500 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used only for washing and/or drying clothes using washing machines and/or tumble dryers. This is not for where there is an individual washing machines within another space (egg a food preparation area). People Density 0.1173333 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 1 pers/m2. Lux level 200 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.195 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "OpTheatre",
+        "Version": "v6.1.b",
+        "Description": "For the operating theatre suite, including anaesthetic, scrub & preparation rooms. People Density 0.125 pers/m2. Lux level 500 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Physiotherapy",
+        "Version": "v6.1.b",
+        "Description": "For all physiotherapy areas, e.g., Fitness Suite/Gym, activity area, Cardiac stress test area. People Density 0.2 pers/m2. Lux level 300 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant, switchgear and battery, renal water treatment. People Density 0.1015385 pers/m2. Lux level 200 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "PostMortem",
+        "Version": "v6.1.b",
+        "Description": "Post-Mortem Facility (including Observation room and body preparation area) People Density 0.05 pers/m2. Lux level 500 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "An area often containing a reception desk and reception staff with transient occupancy. It also includes patient waiting area. For a 24hr operation, use the 24x7 Reception activity in the \"Others - Miscellaneous 24hr activities\" category. People Density 0.1516667 pers/m2. Lux level 200 Lux. Display Lighting 9 W/m2.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled storage with low transient occupancy, e.g. ward storage, disposal store, cleaners room, patient clothing. People Density 0.1015385 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas outside wards, e.g. in lobby or reception. Mainly for visitors. People Density 0.1177 pers/m2. Lux level 200 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Wards",
+        "Version": "v6.1.b",
+        "Description": "For all areas containing beds which accommodate either single or multiple patients. It includes toilets, ward storage, staff accommodation, day patient accommodation and intensive care units. People Density 0.1751539 pers/m2. Lux level 100 Lux.",
+        "Group": "Hosp"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed by staff and visitors, e.g. canteen or office restaurant sitting areas. People Density 0.1777778 pers/m2. Lux level 200 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared for staff and visitors, e.g. kitchen in canteen or office restaurant. People Density 0.2126667 pers/m2. Lux level 500 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IndProcess",
+        "Version": "v6.1.b",
+        "Description": "An area for industrial process work, usually involving large machinery or equipment. People Density 0.05 pers/m2. Lux level 200 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "A facility that provides controlled conditions in which scientific research, experiments, and measurement may be performed. People Density 0.05 pers/m2. Lux level 500 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.1079167 pers/m2. Lux level 300 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building e.g.: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.11 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers in Building Type B1. People Density 0.12375 pers/m2. Lux level 200 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WareStore",
+        "Version": "v6.1.b",
+        "Description": "Large (warehouse sized) storage areas (unchilled). People Density 0.05 pers/m2. Lux level 100 Lux.",
+        "Group": "Indust"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "21c",
+        "Version": "v6.1.b",
+        "Description": "IEA 21c People Density 0 pers/m2. Lux level 0 Lux.",
+        "Group": "IEA"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all non-public corridors and stairways. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DisplayPublic",
+        "Version": "v6.1.b",
+        "Description": "All public circulation areas where people are walking/sitting and where display items are exhibited / available normally using display lighting. People Density 0.1497023 pers/m2. Lux level 200 Lux. Display Lighting 13.2 W/m2.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed. People Density 0.32 pers/m2. Lux level 200 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "An area where food is prepared, e.g. kitchen People Density 0.176 pers/m2. Lux level 500 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lab",
+        "Version": "v6.1.b",
+        "Description": "A facility that provides controlled conditions in which scientific research, experiments, and measurement may be performed. People Density 0.09777778 pers/m2. Lux level 500 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.15 pers/m2. Lux level 200 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.09866667 pers/m2. Lux level 300 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.09472222 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.12375 pers/m2. Lux level 100 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.12375 pers/m2. Lux level 200 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "An area for sedentary-light practical work. Often containing some machinery. People Density 0.06222222 pers/m2. Lux level 300 Lux.",
+        "Group": "LibMusGall"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Unoccupied and Unconditioned",
+        "Version": "v6.1.b",
+        "Description": "",
+        "Group": "Misc"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "24x7_Reception",
+        "Version": "v6.1.b",
+        "Description": "An area often containing a reception desk and reception staff with transient occupancy. It also includes patient waiting area. People Density 0.1516667 pers/m2. Lux level 200 Lux. Display Lighting 9 W/m2.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc24Hr_DataCentre",
+        "Version": "v6.1.b",
+        "Description": "For data centres such as a web hosting facilities, with 24hr high internal gains from equipment and transient occupancy.  People Density 0.09625 pers/m2. Lux level 500 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc24Hr_HeavyPlant",
+        "Version": "v6.1.b",
+        "Description": "For heavy plant rooms with 24hr low-medium internal gains from equipment and transient occupancy. People Density 0.09625 pers/m2. Lux level 100 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc24Hr_ServerRoom",
+        "Version": "v6.1.b",
+        "Description": "For areas such as computer server spaces with 24hr low-medium internal gains from equipment and transient occupancy. For an area with 24hrs high gains from equipment, use the 'Data Centre' activity. People Density 0.09625 pers/m2. Lux level 100 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc_24x7Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all 24x7 hrs circulation areas such as corridors and stairways. People Density 0.09428571 pers/m2. Lux level 100 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc_24x7Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform 24 x7 hrs office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.09514286 pers/m2. Lux level 300 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Misc_24x7Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers. People Density 0.1037143 pers/m2. Lux level 200 Lux.",
+        "Group": "Misc_24hr"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Bath",
+        "Version": "v6.1.b",
+        "Description": "Bathroom People Density 0.2084848 pers/m2. Lux level 200 Lux. Other Gain 150 W/m2. Percentage Latent 75 %.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Cell",
+        "Version": "v6.1.b",
+        "Description": "A room which accommodates one or more residents/inmates. People Density 0.1898413 pers/m2. Lux level 100 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.13 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.1136531 pers/m2. Lux level 100 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "ClassRm",
+        "Version": "v6.1.b",
+        "Description": "All teaching areas other than for practical classes with machinery, for which use \"Workshop - small scale\". People Density 0.1830986 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "DrySptHall",
+        "Version": "v6.1.b",
+        "Description": "An area where indoor sports can be played. People Density 0.05 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Seated areas where food or drink are consumed, e.g. canteen. People Density 0.1406061 pers/m2. Lux level 200 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FitGym",
+        "Version": "v6.1.b",
+        "Description": "An area used for exercise containing machines. People Density 0.17 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared, e.g. kitchen in canteen. People Density 0.1111111 pers/m2. Lux level 500 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IndProcess",
+        "Version": "v6.1.b",
+        "Description": "An area for industrial process work, usually involving large machinery or equipment. People Density 0.01375 pers/m2. Lux level 0 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Laund",
+        "Version": "v6.1.b",
+        "Description": "An area used only for washing and/or drying clothes using washing machines and/or tumble dryers. People Density 0.08555555 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lecture",
+        "Version": "v6.1.b",
+        "Description": "An area which can accommodate a large number of seated people. People Density 0.1830986 pers/m2. Lux level 200 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.09314445 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. It also includes waiting areas. People Density 0.121 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.1258303 pers/m2. Lux level 100 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities use Changing facilities with showers. People Density 0.1136531 pers/m2. Lux level 200 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WkshpSS",
+        "Version": "v6.1.b",
+        "Description": "An area for sedentary-light practical work. Often containing some machinery. People Density 0.048125 pers/m2. Lux level 300 Lux.",
+        "Group": "Prison"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. People Density 0.121 pers/m2. Lux level 100 Lux.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform management, office and administration work separated from standard customer/public areas. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space and staff lounges. People Density 0.082 pers/m2. Lux level 300 Lux.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. It includes waiting areas. People Density 0.11 pers/m2. Lux level 200 Lux. Display Lighting 9 W/m2.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.121 pers/m2. Lux level 100 Lux.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.121 pers/m2. Lux level 200 Lux.",
+        "Group": "PrmHlthCare"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_High",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - high HW usage, in a stand alone modular building. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Stand"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_Low",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - low HW usage, in a stand alone modular building. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Stand"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing_Medium",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers - medium HW usage, in a stand alone modular building. People Density 0.125873 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Stand"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all non-public corridors and stairways. People Density 0.1161111 pers/m2. Lux level 100 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed by members of staff, e.g. staff cantine. People Density 0.2142857 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared for the staff, e.g. cantine kitchen. People Density 0.1184615 pers/m2. Lux level 500 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Lounges",
+        "Version": "v6.1.b",
+        "Description": "All areas where passengers are walking/sitting which are not covered by the other space types. This includes departure lounge, corridors, stairways and gate lounges. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. People Density 0.204932 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building egg: boilers/air conditioning plant. People Density 0.11 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.121 pers/m2. Lux level 200 Lux. Display Lighting 9 W/m2.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.1184615 pers/m2. Lux level 100 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. People Density 0.1188889 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WaitRm",
+        "Version": "v6.1.b",
+        "Description": "Enclosed waiting spaces with no through flow of people egg in the transport terminal areas. For larger, more open waiting areas such as departure lounges and gate areas use \"Lounges\". People Density 0.1846154 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "_Checkin",
+        "Version": "v6.1.b",
+        "Description": "Areas designated for check in, which may contain conveyer belts; security check areas, which may include equipment such as x ray machines; and baggage reclaim areas. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. People Density 0.3414352 pers/m2. Lux level 200 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "_Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.1226481 pers/m2. Lux level 300 Lux.",
+        "Group": "Terminal"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "",
+        "Version": "v6.1.b",
+        "Description": "Profile to allow the CIBSE TM33 Heating and Cooling Load Test to be performed People Density 0 pers/m2. Lux level 0 Lux.",
+        "Group": "TM33"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "WareStore",
+        "Version": "v6.1.b",
+        "Description": "Large (warehouse sized) storage areas (unchilled). People Density 0.05 pers/m2. Lux level 100 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Toilet",
+        "Version": "v6.1.b",
+        "Description": "Any toilet areas. If toilets are subsidiary to changing/shower activities refer to Changing facilities with showers. For 24x7 operations use the Toilets activity under building type \"Others - Miscellaneous 24hr activities\". People Density 0.1037143 pers/m2. Lux level 200 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Store",
+        "Version": "v6.1.b",
+        "Description": "Areas for un-chilled goods storage with low transient occupancy. People Density 0.1037143 pers/m2. Lux level 100 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Reception",
+        "Version": "v6.1.b",
+        "Description": "The area in a building which is used for entry from the outside or other building storeys. People Density 0.112814 pers/m2. Lux level 100 Lux. Display Lighting 9 W/m2.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Plant",
+        "Version": "v6.1.b",
+        "Description": "Areas containing the main HVAC equipment for the building e.g.: boilers/air conditioning plant. People Density 0.1060714 pers/m2. Lux level 200 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.09514286 pers/m2. Lux level 300 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "IndProcess",
+        "Version": "v6.1.b",
+        "Description": "An area for industrial process work, usually involving large machinery or equipment. People Density 0.05 pers/m2. Lux level 0 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "FoodPrep",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drinks are prepared for staff and visitors, e.g. kitchen in canteen or office restaurant. People Density 0.1240031 pers/m2. Lux level 500 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "EatDrink",
+        "Version": "v6.1.b",
+        "Description": "Areas where food or drink are consumed by staff and visitors, e.g. canteen or office restaurant sitting areas. People Density 0.3579661 pers/m2. Lux level 200 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Circulation",
+        "Version": "v6.1.b",
+        "Description": "For all circulation areas such as corridors and stairways. For 24x7 operations use the Circulation activity under building type \"Others - Miscellaneous 24hr activities\". People Density 0.09428571 pers/m2. Lux level 100 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "Changing",
+        "Version": "v6.1.b",
+        "Description": "An area used for changing, containing showers. This activity should be assigned to the shower area and all associated changing areas. People Density 0.325 pers/m2. Lux level 100 Lux. Other Gain 60 W/m2. Percentage Latent 100 %.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "24x7WareStore",
+        "Version": "v6.1.b",
+        "Description": "Large (warehouse sized) storage areas (unchilled) with 24 x 7 operation. If additional activities with 24x7 schedules are required (e.g. circulation, toilets) use the activities provided under building type \"Others - Miscellaneous 24hr activities\". People Density 0.05 pers/m2. Lux level 100 Lux.",
+        "Group": "Ware"
+      },
+      {
+        "_type": "SAM.Analytical.NCMName,SAM.Analytical",
+        "Name": "24x7Office",
+        "Version": "v6.1.b",
+        "Description": "Areas to perform 24 x7 hrs office  work including offices and meeting rooms. It can include internal corridors providing access to the office spaces, tea making facilities or kitchenettes within the office space, areas for photocopiers and fax machines and staff lounges. People Density 0.09514286 pers/m2. Lux level 300 Lux.",
+        "Group": "Ware"
+      }
+    ]
+  }
+]
