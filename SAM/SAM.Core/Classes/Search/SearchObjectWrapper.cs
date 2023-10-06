@@ -125,6 +125,11 @@ namespace SAM.Core
             return (T)value;
         }
 
+        public string GetText<T>(T item)
+        {
+            return func?.Invoke(item);
+        }
+
         public List<string> SearchTexts(string text, bool sort = true)
         {
             return searchWrapper.Search(text, sort);

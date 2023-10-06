@@ -79,7 +79,26 @@ namespace SAM.Analytical
                     values.Add(name);
                 }
 
-                if(!string.IsNullOrWhiteSpace(version))
+                return string.Join("_", values);
+            }
+        }
+
+        public string UniqueId
+        {
+            get
+            {
+                List<string> values = new List<string>();
+                if (!string.IsNullOrWhiteSpace(group))
+                {
+                    values.Add(group);
+                }
+
+                if (!string.IsNullOrWhiteSpace(name))
+                {
+                    values.Add(name);
+                }
+
+                if (!string.IsNullOrWhiteSpace(version))
                 {
                     values.Add(version);
                 }
@@ -88,6 +107,7 @@ namespace SAM.Analytical
                 return string.Join("_", values);
             }
         }
+
 
         public bool FromJObject(JObject jObject)
         {
@@ -149,24 +169,33 @@ namespace SAM.Analytical
 
         public override string ToString()
         {
-            return name?.ToString();
+            return FullName?.ToString();
         }
 
 
         public static implicit operator string(NCMName nCMName)
         {
-            return nCMName?.Name;
+            return nCMName?.FullName;
         }
 
 
-        public static implicit operator NCMName(string name)
+        public static implicit operator NCMName(string value)
         {
-            if(name == null)
+            if(value == null)
             {
                 return null;
             }
 
-            return new NCMName(name);
+            int index = value.IndexOf('_');
+            if (index == -1 || index == value.Length - 1)
+            {
+                return new NCMName(value);
+            }
+
+            string group = value.Substring(0, index);
+            string name = value.Substring(index + 1);
+
+            return new NCMName(name, null, null, group);
         }
     }
 }

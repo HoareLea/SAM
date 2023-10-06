@@ -40,7 +40,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return NCMName?.Name;
+                return NCMName?.FullName;
             }
 
             set
