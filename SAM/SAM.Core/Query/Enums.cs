@@ -1,6 +1,7 @@
 ﻿using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -126,6 +127,27 @@ namespace SAM.Core
                     }
                 }
 
+            }
+
+            return result;
+        }
+
+        public static List<T> Enums<T>(params T[] excluded) where T : Enum
+        {
+            List<T> result = new List<T>();
+
+            Array array = System.Enum.GetValues(typeof(T));
+
+            for (int i = 0; i < array.Length; i++)
+            {
+                T value = (T)array.GetValue(i);
+
+                if(excluded != null && excluded.Contains(value))
+                {
+                    continue;
+                }
+
+                result.Add(value);
             }
 
             return result;
