@@ -81,7 +81,7 @@ namespace SAM.Analytical
 
                 if(!string.IsNullOrWhiteSpace(version))
                 {
-                    values.Add(name);
+                    values.Add(version);
                 }
 
 
