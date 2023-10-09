@@ -62,6 +62,8 @@
     <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\CoolingCoil.cs" />
     <Compile Include="Classes\ConstructionManager.cs" />
+    <Compile Include="Classes\NCM\NCMNameCollection.cs" />
+    <Compile Include="Classes\NCM\NCMName.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
     <Compile Include="Classes\Filter\ApertureApertureTypeFilter.cs" />
     <Compile Include="Classes\Filter\ApertureFrameAreaFilter.cs" />
@@ -98,7 +100,7 @@
     <Compile Include="Classes\OpeningProperties\ProfileOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties\PartOOpeningProperties.cs" />
     <Compile Include="Classes\OpeningProperties\OpeningProperties.cs" />
-    <Compile Include="Classes\NCMData.cs" />
+    <Compile Include="Classes\NCM\NCMData.cs" />
     <Compile Include="Classes\AnalyticalModel.cs" />
     <Compile Include="Classes\ApertureConstruction.cs" />
     <Compile Include="Classes\BoundaryEdge3DLoop.cs" />
@@ -152,6 +154,7 @@
     <Compile Include="Classes\InternalCondition.cs" />
     <Compile Include="Classes\Profile.cs" />
     <Compile Include="Classes\DegreeOfActivity.cs" />
+    <Compile Include="Convert\ToSAM\AnalyticalModel.cs" />
     <Compile Include="Convert\ToSAM\ApertureConstruction.cs" />
     <Compile Include="Convert\ToSAM\ConstructionLayer.cs" />
     <Compile Include="Convert\ToSAM\Construction.cs" />
@@ -297,6 +300,7 @@
     <Compile Include="Modify\UpdateSpaceNames.cs" />
     <Compile Include="Modify\UpdateSpacePanelArea.cs" />
     <Compile Include="Query\DefaultApertureConstructionLibrary.cs" />
+    <Compile Include="Query\DefaultNCMNameCollection.cs" />
     <Compile Include="Query\TryGetSeasonProfiles.cs" />
     <Compile Include="Query\CalculatedInfiltrationSensibleGain.cs" />
     <Compile Include="Query\CalculatedInfiltrationLatentGain.cs" />

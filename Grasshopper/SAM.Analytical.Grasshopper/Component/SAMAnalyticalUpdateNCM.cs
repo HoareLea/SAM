@@ -129,11 +129,11 @@ namespace SAM.Analytical.Grasshopper
                 spaces = analyticalModel.GetSpaces();
             }
 
-            string typeName = null;
+            string name = null;
             index = Params.IndexOfInputParam("name_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref typeName);
+                dataAccess.GetData(index, ref name);
             }
 
             NCMSystemType? nCMSystemType = null;
@@ -281,9 +281,9 @@ namespace SAM.Analytical.Grasshopper
 
                 nCMData = new NCMData(nCMData);
 
-                if (!string.IsNullOrWhiteSpace(typeName))
+                if (!string.IsNullOrWhiteSpace(name))
                 {
-                    nCMData.Type = typeName;
+                    nCMData.Name = name;
                 }
 
                 if(nCMSystemType != null && nCMSystemType.HasValue)

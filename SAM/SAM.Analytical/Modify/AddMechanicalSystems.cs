@@ -41,6 +41,8 @@ namespace SAM.Analytical
                 if (internalCondition == null)
                     continue;
 
+                Space space_Temp = new Space(space);
+
                 VentilationSystemType ventilationSystemType = internalCondition.GetSystemType<VentilationSystemType>(systemTypeLibrary);
                 if(ventilationSystemType != null)
                 {
@@ -52,7 +54,7 @@ namespace SAM.Analytical
                         dictionary_MechanicalSystemType[ventilationSystemType.Guid] = ventilationSystemType;
                     }
 
-                    spaces_SystemType.Add(space);
+                    spaces_SystemType.Add(space_Temp);
                 }
 
                 CoolingSystemType coolingSystemType = internalCondition.GetSystemType<CoolingSystemType>(systemTypeLibrary);
@@ -66,7 +68,7 @@ namespace SAM.Analytical
                         dictionary_MechanicalSystemType[coolingSystemType.Guid] = coolingSystemType;
                     }
 
-                    spaces_SystemType.Add(space);
+                    spaces_SystemType.Add(space_Temp);
                 }
 
                 HeatingSystemType heatingSystemType = internalCondition.GetSystemType<HeatingSystemType>(systemTypeLibrary);
@@ -80,7 +82,7 @@ namespace SAM.Analytical
                         dictionary_MechanicalSystemType[heatingSystemType.Guid] = heatingSystemType;
                     }
 
-                    spaces_SystemType.Add(space);
+                    spaces_SystemType.Add(space_Temp);
                 }
 
             }

@@ -44,10 +44,16 @@ namespace SAM.Core
         public LogRecord Add(LogRecord logRecord)
         {
             if (logRecord == null)
+            {
                 return null;
+            }
 
-            LogRecord result = new LogRecord(logRecord);
-            logRecords.Add(result);
+            LogRecord result = logRecord.Clone();
+            if(result != null)
+            {
+                logRecords.Add(result);
+            }
+            
 
             return result;
         }
@@ -70,7 +76,7 @@ namespace SAM.Core
                 if (logRecord == null)
                     continue;
                 
-                LogRecord logRecord_New = new LogRecord(logRecord);
+                LogRecord logRecord_New = logRecord.Clone();
                 if (logRecord_New == null)
                     continue;
 

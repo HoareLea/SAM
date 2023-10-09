@@ -7,6 +7,7 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
@@ -203,6 +204,11 @@ namespace SAM.Analytical.Grasshopper
             Menu_AppendItem(menu, "Bake By BoundaryType", Menu_BakeByBoundaryType, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+            
+            if(System.IO.File.Exists(Query.AnalyticalUIPath()))
+            {
+                Menu_AppendItem(menu, "Open in UI", Menu_OpenInUI, VolatileData.AllData(true).Any());
+            }
 
             base.AppendAdditionalMenuItems(menu);
         }
@@ -230,6 +236,11 @@ namespace SAM.Analytical.Grasshopper
         private void Menu_SaveAs(object sender, EventArgs e)
         {
             Core.Grasshopper.Query.SaveAs(VolatileData);
+        }
+
+        private void Menu_OpenInUI(object sender, EventArgs e)
+        {
+            Process process = Convert.ToUI(VolatileData);
         }
     }
 }

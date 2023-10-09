@@ -8,7 +8,7 @@ namespace SAM.Analytical
     /// </summary>
     public class NCMData : ParameterizedSAMObject
     {
-        public string Type { get; set; } = "Unoccupied and Unconditioned";
+        public NCMName NCMName { get; set; }  = "Unoccupied and Unconditioned";
 
         public NCMSystemType SystemType { get; set; } = NCMSystemType.NaturalVentilation;
 
@@ -26,6 +26,7 @@ namespace SAM.Analytical
 
         public bool IsMainsGasAvailable { get; set; } = false;
 
+
         /// <summary>
         /// Lighting Photoelectric Parasitic Power [W]
         /// </summary>
@@ -34,6 +35,19 @@ namespace SAM.Analytical
         public double AirPermeability { get; set; } = 0;
 
         public string Description { get; set; } = null;
+
+        public string Name 
+        {
+            get
+            {
+                return NCMName?.FullName;
+            }
+
+            set
+            {
+                NCMName = value;
+            }
+        }
 
         public NCMData()
             :base()
@@ -60,7 +74,7 @@ namespace SAM.Analytical
                 IsMainsGasAvailable = nCMData.IsMainsGasAvailable;
                 LightingPhotoelectricParasiticPower = nCMData.LightingPhotoelectricParasiticPower;
                 AirPermeability = nCMData.AirPermeability;
-                Type = nCMData.Type;
+                NCMName = nCMData.NCMName;
                 SystemType = nCMData.SystemType;
                 Description = nCMData.Description;
             }
@@ -75,9 +89,9 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if (jObject.ContainsKey("Type"))
+            if (jObject.ContainsKey("NCMName"))
             {
-                Type = jObject.Value<string>("Type");
+                NCMName = new NCMName(jObject.Value<JObject>("NCMName"));
             }
 
             if (jObject.ContainsKey("SystemType"))
@@ -150,9 +164,9 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if (Type != null)
+            if (NCMName != null)
             {
-                jObject.Add("Type", Type);
+                jObject.Add("NCMName", NCMName.ToJObject());
             }
 
             if (SystemType != NCMSystemType.Undefined)

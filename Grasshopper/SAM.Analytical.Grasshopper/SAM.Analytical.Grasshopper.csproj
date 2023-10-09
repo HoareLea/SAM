@@ -337,6 +337,7 @@
     <Compile Include="Convert\ToGrasshopper\GH_Surfaces.cs" />
     <Compile Include="Convert\ToGrasshopper\New\GH_Mesh.cs" />
     <Compile Include="Classes\GooDegreeOfActivity.cs" />
+    <Compile Include="Convert\ToUI\Process.cs" />
     <Compile Include="Enums\PanelBakeMethod.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
     <Compile Include="Modify\BakeGeometry_ByApertureConstruction.cs" />
@@ -360,6 +361,7 @@
     </Compile>
     <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Query\AnalyticalUIPath.cs" />
     <Compile Include="Query\DataTree.cs" />
     <Compile Include="Query\New\DisplayMaterial.cs" />
     <Compile Include="Query\TryConvertToPanelGeometries.cs" />
