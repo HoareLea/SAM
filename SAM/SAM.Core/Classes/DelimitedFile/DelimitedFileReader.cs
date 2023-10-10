@@ -60,7 +60,9 @@ namespace SAM.Core
         {
             delimitedFileRow.LineText = ReadLine();
             if (delimitedFileRow.LineText == null)
+            {
                 return false;
+            }
 
             int position = 0;
             int rowCount = 0;
@@ -99,7 +101,9 @@ namespace SAM.Core
                         {
                             string lineText = ReadLine();
                             if (lineText == null)
+                            {
                                 break;
+                            }
 
                             delimitedFileRow.LineText += "\n" + lineText;
                         }
@@ -112,7 +116,10 @@ namespace SAM.Core
                     // Parse unquoted value
                     int start = position;
                     while (position < delimitedFileRow.LineText.Length && delimitedFileRow.LineText[position] != separator)
+                    {
                         position++;
+                    }
+
                     value = delimitedFileRow.LineText.Substring(start, position - start);
                 }
 

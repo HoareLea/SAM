@@ -2,13 +2,18 @@
 
 namespace SAM.Core
 {
-    public struct Reference
+    public struct Reference: IReference
     {
         private string value;
 
         private Reference(string value)
         {
             this.value = value;
+        }
+
+        public Reference(Reference reference)
+        {
+            value = reference.value;
         }
 
         public bool IsValid()
