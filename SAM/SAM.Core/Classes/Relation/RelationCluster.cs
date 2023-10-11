@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Xml.Linq;
@@ -504,6 +505,26 @@ namespace SAM.Core
                         {
                             return new List<object>() { objects[@int] };
                         }
+                    }
+                    else if(referenceString.StartsWith(@"""") && referenceString.EndsWith(@""""))
+                    {
+                        referenceString = referenceString.Substring(1, referenceString.Length - 2);
+
+                        List<object> result = new List<object>();
+                        foreach (object @object in objects)
+                        {
+                            SAMObject sAMObject = @object as SAMObject;
+                            if(sAMObject == null)
+                            {
+                                continue;
+                            }
+
+                            if(referenceString.Equals(sAMObject.Name))
+                            {
+                                result.Add(@object);
+                            }
+                        }
+                        return result;
                     }
 
                     return null;
