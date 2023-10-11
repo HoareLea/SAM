@@ -86,9 +86,24 @@ namespace SAM.Core
                 }
                 else
                 {
-                    string typeName_Temp = string_out;
-                    string_out = null;
-                    return new ObjectReference(typeName_Temp);
+                    string typeName_Temp = null;
+
+                    index = string_out.IndexOf("->");
+                    if (index == -1)
+                    {
+                        typeName_Temp = string_out;
+                        string_out = null;
+                    }
+                    else
+                    {
+                        typeName_Temp = string_out.Substring(0, index);
+                        string_out = string_out.Substring(index + 2);
+                    }
+
+                    if(!string.IsNullOrWhiteSpace(typeName_Temp))
+                    {
+                        return new ObjectReference(typeName_Temp);
+                    }
                 }
                 return null;
             }

@@ -121,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            IComplexReference complexReference = SAM.Core.Convert.ComplexReference(reference);
+            IComplexReference complexReference = Core.Convert.ComplexReference(reference);
             if(complexReference == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
