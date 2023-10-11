@@ -3,6 +3,14 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
+    /// <summary>
+    /// Parh reference in format {ObjectReference_1}->{ObjectRefernce_2}->{ObjectReference_3}
+    /// 
+    /// example:
+    /// Space::"InternalCondition"->InternalCondition::"Name"
+    /// Space->"InternalCondition"->"Name"
+    /// Space->Zone::"Name"
+    /// </summary>
     public class PathReference: IComplexReference, IEnumerable<ObjectReference>
     {
         private List<ObjectReference> objectReferences;
@@ -15,6 +23,24 @@ namespace SAM.Core
             }
         }
 
+        public PathReference(IEnumerable<ObjectReference> objectReferences, ObjectReference objectReference)
+        {
+            if (objectReferences != null)
+            {
+                this.objectReferences = objectReferences == null ? null : new List<ObjectReference>(objectReferences);
+            }
+
+            if(objectReference != null)
+            {
+                if(this.objectReferences == null)
+                {
+                    this.objectReferences = new List<ObjectReference>();
+                }
+
+                this.objectReferences.Add(objectReference);
+            }
+        }
+
         public override string ToString()
         {
             List<string> values = objectReferences?.ConvertAll(x => x?.ToString()).ConvertAll(x => x == null ? string.Empty : x);
@@ -23,7 +49,7 @@ namespace SAM.Core
                 return string.Empty;
             }
 
-            return string.Join(" -> ", values);
+            return string.Join("->", values);
         }
 
         public bool IsValid()

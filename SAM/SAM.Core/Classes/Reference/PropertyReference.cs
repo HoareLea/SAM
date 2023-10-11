@@ -2,6 +2,13 @@
 
 namespace SAM.Core
 {
+    /// <summary>
+    /// Property reference in format {TypeName}::[{Reference}]::"{PropertyName}"
+    /// 
+    /// example:
+    /// Space::"InternalCondition"
+    /// Space::[0]::"Name"
+    /// </summary>
     public class PropertyReference : ObjectReference
     {
         private string propertyName;

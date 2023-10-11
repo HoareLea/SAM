@@ -1144,6 +1144,28 @@ namespace SAM.Core
             return result;
         }
 
+        public List<Type> GetTypes()
+        {
+            if (dictionary_Objects == null)
+            {
+                return null;
+            }
+
+            List<Type> result = new List<Type>();
+            foreach (string typeName in dictionary_Objects.Keys)
+            {
+                Type type_Temp = Query.Type(typeName);
+                if (type_Temp == null)
+                {
+                    continue;
+                }
+
+                result.Add(type_Temp);
+            }
+
+            return result;
+        }
+
         public bool Contains(Type type)
         {
             if (type == null)

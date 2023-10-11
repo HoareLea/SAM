@@ -2,6 +2,15 @@
 
 namespace SAM.Core
 {
+    /// <summary>
+    /// Reference to the object format {TypeName}::[{Reference}] where TypeName - full typeName, Reference - reference to the object 
+    /// 
+    /// examples: 
+    /// SAM.Analytical.Space,SAM.Analytical::[0]
+    /// Space::[3cc94341-70ba-47b7-831e-581345b85bd3]
+    /// Space
+    /// Space::["Cell 1.2"]
+    /// </summary>
     public class ObjectReference : IComplexReference
     {
         private string typeName;
