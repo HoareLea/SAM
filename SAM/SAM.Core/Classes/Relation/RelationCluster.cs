@@ -1,8 +1,10 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SAM.Core
 {
@@ -453,6 +455,62 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public List<object> GetObjects(ObjectReference objectReference, object parent = null)
+        {
+            if (objectReference == null)
+            {
+                return null;
+            }
+
+            Type type = objectReference.Type;
+
+            List<object> objects = null;
+            if(parent == null)
+            {
+                objects = type != null ? GetObjects(type) : GetObjects();
+            }
+            else
+            {
+                objects = type != null ? GetRelatedObjects(parent, type) : GetRelatedObjects(parent);
+            }
+
+            if(objects == null || objects.Count == 0)
+            {
+                return objects;
+            }
+
+            Reference? reference = objectReference.Reference;
+            if(reference != null && reference.HasValue)
+            {
+                string referenceString = reference.ToString();
+                if(!string.IsNullOrWhiteSpace(referenceString))
+                {
+                    if(Guid.TryParse(referenceString, out Guid guid))
+                    {
+                        foreach(object @object in objects)
+                        {
+                            Guid guid_Temp = GetGuid(@object);
+                            if(guid_Temp == guid)
+                            {
+                                return new List<object>() { @object };
+                            }
+                        }
+                    }
+                    else if(int.TryParse(referenceString, out int @int))
+                    {
+                        if(@int != -1 && objects.Count > @int)
+                        {
+                            return new List<object>() { objects[@int] };
+                        }
+                    }
+
+                    return null;
+                }
+            }
+          
+            return objects;
         }
 
         public List<object> GetObjects(string typeName)

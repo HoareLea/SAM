@@ -68,10 +68,28 @@ namespace SAM.Core
             }
 
             string_out = string_Temp;
-            
+            if (string.IsNullOrWhiteSpace(string_out))
+            {
+                return null;
+            }
+
             index = string_out.IndexOf("::");
             if (index == -1)
             {
+                if (string_out.StartsWith(@""""))
+                {
+                    string propertyName_Temp = Query.QuotedText(string_out, out string_out);
+                    if(!string.IsNullOrWhiteSpace(propertyName_Temp))
+                    {
+                        return new PropertyReference(propertyName_Temp);
+                    }
+                }
+                else
+                {
+                    string typeName_Temp = string_out;
+                    string_out = null;
+                    return new ObjectReference(typeName_Temp);
+                }
                 return null;
             }
 
@@ -80,6 +98,13 @@ namespace SAM.Core
             string value_3 = null;
 
             value_1 = string_out.Substring(0, index);
+            int index_Temp = value_1.IndexOf("->");
+            if (index_Temp != -1) 
+            { 
+                string typeName_Temp = value_1.Substring(0, index_Temp);
+                string_out = string_out.Substring(index_Temp);
+                return new ObjectReference(typeName_Temp);
+            }
 
             string_out = string_out.Substring(index + 2);
             if(string_out.StartsWith(@""""))

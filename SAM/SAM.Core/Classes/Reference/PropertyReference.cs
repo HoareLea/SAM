@@ -6,6 +6,12 @@ namespace SAM.Core
     {
         private string propertyName;
 
+        public PropertyReference(string propertyName)
+            : base(null)
+        {
+            this.propertyName = propertyName;
+        }
+
         public PropertyReference(string typeName, string propertyName)
             : base(typeName)
         {
@@ -24,9 +30,17 @@ namespace SAM.Core
             this.propertyName = propertyName;
         }
 
+        public string PropertyName
+        {
+            get
+            {
+                return propertyName;
+            }
+        }
+
         public override bool IsValid()
         {
-            return base.IsValid() && !string.IsNullOrEmpty(propertyName);
+            return !string.IsNullOrEmpty(propertyName);
         }
 
         public override string ToString()
