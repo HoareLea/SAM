@@ -5,10 +5,11 @@ using System.Windows.Markup;
 
 namespace SAM.Core
 {
-    public abstract class ComplexReferenceFilter : Filter
+    public abstract class ComplexReferenceFilter : Filter, IRelationClusterFilter
     {
-        private RelationCluster relationCluster;
-        private IComplexReference complexReference;
+        public RelationCluster RelationCluster { get; set; }
+
+        public IComplexReference ComplexReference { get; set; }
 
         public ComplexReferenceFilter(JObject jObject)
             : base(jObject)
@@ -23,8 +24,10 @@ namespace SAM.Core
         public ComplexReferenceFilter(ComplexReferenceFilter complexReferenceFilter)
             : base(complexReferenceFilter)
         {
-
+            ComplexReference = complexReferenceFilter?.ComplexReference?.Clone();
+            RelationCluster = complexReferenceFilter?.RelationCluster;
         }
+        
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -32,59 +35,97 @@ namespace SAM.Core
                 return false;
             }
 
+            if (jObject.ContainsKey("ComplexReference"))
+            {
+                ComplexReference = Query.IJSAMObject<IComplexReference>(jObject.Value<JObject>("ComplexReference"));
+            }
+
             return true;
         }
 
         public override bool IsValid(IJSAMObject jSAMObject)
         {
-            if(complexReference == null || relationCluster == null)
+            if(ComplexReference == null || RelationCluster == null)
             {
                 return false;
             }
 
-            System.Guid guid = relationCluster.GetGuid(jSAMObject);
+            System.Guid guid = RelationCluster.GetGuid(jSAMObject);
             if(guid == null || guid == System.Guid.Empty)
             {
                 return false;
             }
 
-            ObjectReference objectReference = null;
-            if(complexReference is ObjectReference)
+            ObjectReference objectReference_First = null;
+            if(ComplexReference is ObjectReference)
             {
-                objectReference = (ObjectReference)complexReference;
+                objectReference_First = (ObjectReference)ComplexReference;
             }
-            if(complexReference is PathReference)
+            if(ComplexReference is PathReference)
             {
-                PathReference pathReference = (PathReference)complexReference;
+                PathReference pathReference = (PathReference)ComplexReference;
                 if(pathReference.Count() != 0)
                 {
-                    objectReference = pathReference.First();
+                    objectReference_First = pathReference.First();
                 }
             }
 
-            if(objectReference == null)
+            if(objectReference_First == null)
             {
                 return false;
             }
 
-            if(objectReference is PropertyReference)
+            ObjectReference objectReference_Temp = objectReference_First;
+            if (objectReference_Temp is PropertyReference)
             {
-                objectReference = new ObjectReference(objectReference);
+                objectReference_Temp = new ObjectReference(objectReference_Temp);
             }
 
-            List<object> objects = Query.Values(objectReference, relationCluster);
+            List<object> objects = Query.Values(objectReference_Temp, RelationCluster);
             if(objects == null || objects.Count == 0)
             {
                 return false;
             }
 
-            if(objects.Find(x => relationCluster.GetGuid(x) == guid) == null)
+            if(objects.Find(x => RelationCluster.GetGuid(x) == guid) == null)
             {
                 return false;
             }
 
-            throw new System.NotImplementedException();
+            if(objectReference_First is PropertyReference)
+            {
+                PropertyReference propertyReference = (PropertyReference)ComplexReference;
+                objectReference_First = new PropertyReference(propertyReference.TypeName, new Reference(guid), propertyReference.PropertyName);
+
+            }
+            else if (objectReference_First is ObjectReference)
+            {
+                objectReference_Temp = (ObjectReference)ComplexReference;
+                objectReference_First = new ObjectReference(objectReference_Temp.TypeName, new Reference(guid));
+            }
+
+            IComplexReference complexReference = objectReference_First;
+            if (ComplexReference is PathReference)
+            {
+                PathReference pathReference_Temp = (PathReference)ComplexReference;
+                List<ObjectReference> objectReferences = new List<ObjectReference>(pathReference_Temp);
+                objectReferences[0] = objectReference_First;
+
+                complexReference = new PathReference(objectReferences);
+            }
+
+            List<object> values = Query.Values(complexReference, RelationCluster);
+
+            bool result = IsValid(values);
+            if(Inverted)
+            {
+                result = !result;
+            }
+
+            return result;
         }
+
+        protected abstract bool IsValid(IEnumerable<object> values);
 
         public override JObject ToJObject()
         {
@@ -92,6 +133,11 @@ namespace SAM.Core
             if (result == null)
             {
                 return result;
+            }
+
+            if(ComplexReference != null)
+            {
+                result.Add("ComplexReference", ComplexReference.ToJObject());
             }
 
             return result;

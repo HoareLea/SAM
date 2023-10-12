@@ -42,6 +42,11 @@ namespace SAM.Core
             }
         }
 
+        public PathReference(JObject jObject)
+        {
+            FromJObject(jObject);
+        }
+
         public override string ToString()
         {
             List<string> values = objectReferences?.ConvertAll(x => x?.ToString()).ConvertAll(x => x == null ? string.Empty : x);
