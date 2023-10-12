@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Base\StartupOptions.cs" />
+    <Compile Include="Classes\Filter\ComplexReferenceFilter.cs" />
     <Compile Include="Classes\Manager\ActionManager.cs" />
     <Compile Include="Classes\Reference\PropertyReference.cs" />
     <Compile Include="Classes\Reference\PathReference.cs" />

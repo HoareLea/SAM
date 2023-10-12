@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -26,6 +27,11 @@ namespace SAM.Core
         {
             typeName = objectReference?.typeName;
             reference = objectReference?.reference;
+        }
+
+        public ObjectReference (JObject jObject)
+        {
+            FromJObject(jObject);
         }
 
         public Reference? Reference
@@ -60,6 +66,44 @@ namespace SAM.Core
         public override int GetHashCode()
         {
             return ToString().GetHashCode();
+        }
+
+        public virtual bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+            {
+                return false;
+            }
+
+            if (jObject.ContainsKey("TypeName"))
+            {
+                typeName = jObject.Value<string>("TypeName");
+            }
+
+            if(jObject.ContainsKey("Reference"))
+            {
+                reference = new Reference(jObject.Value<JObject>("Reference"));
+            }
+
+            return true;
+        }
+
+        public virtual JObject ToJObject()
+        {
+            JObject result = new JObject();
+            result.Add("_type", Query.FullTypeName(this));
+
+            if (typeName != null)
+            {
+                result.Add("TypeName", typeName);
+            }
+
+            if(reference != null && reference.HasValue)
+            {
+                result.Add("Reference", reference.Value.ToJObject());
+            }
+
+            return result;
         }
 
         public string TypeName

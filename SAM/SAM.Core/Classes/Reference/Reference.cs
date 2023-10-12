@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 
 namespace SAM.Core
 {
@@ -14,6 +15,13 @@ namespace SAM.Core
         public Reference(Reference reference)
         {
             value = reference.value;
+        }
+
+        public Reference(JObject jObject)
+        {
+            value = null;
+
+            FromJObject(jObject);
         }
 
         public bool IsValid()
@@ -40,6 +48,34 @@ namespace SAM.Core
             return value == null ? 0 : value.GetHashCode();
         }
 
+        public bool FromJObject(JObject jObject)
+        {
+            if (jObject == null)
+            {
+                return false;
+            }
+
+            value = null;
+            if(jObject.ContainsKey("Value"))
+            {
+                value = jObject.Value<string>("Value");
+            }
+
+            return true;
+        }
+
+        public JObject ToJObject()
+        {
+            JObject result = new JObject();
+            result.Add("_type", Query.FullTypeName(this));
+
+            if(value != null)
+            {
+                result.Add("Value", value);
+            }
+
+            return result;
+        }
 
         public static implicit operator Reference(string value)
         {

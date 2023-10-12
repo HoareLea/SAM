@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json.Linq;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -14,7 +15,7 @@ namespace SAM.Core
         private string propertyName;
 
         public PropertyReference(string propertyName)
-            : base(null)
+            : base(null as string)
         {
             this.propertyName = propertyName;
         }
@@ -37,12 +38,49 @@ namespace SAM.Core
             this.propertyName = propertyName;
         }
 
+        public PropertyReference(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
         public string PropertyName
         {
             get
             {
                 return propertyName;
             }
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if(! base.FromJObject(jObject))
+            {
+                return false;
+            }
+
+            if(jObject.ContainsKey("PropertyName"))
+            {
+                propertyName = jObject.Value<string>("PropertyName");
+            }
+
+            return true;
+        }
+
+        public override JObject ToJObject()
+        {
+            JObject result =  base.ToJObject();
+            if(result == null)
+            {
+                return result;
+            }
+
+            if(propertyName != null)
+            {
+                result.Add("PropertyName", propertyName);
+            }
+
+            return result;
         }
 
         public override bool IsValid()
