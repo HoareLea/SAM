@@ -55,16 +55,31 @@ namespace SAM.Core
             value = null;
 
             if (@object == null || string.IsNullOrWhiteSpace(name))
+            {
                 return false;
+            }
 
-            if (property && TryGetValue_Property(@object, name, out value))
-                return true;
+            try
+            {
+                if (property && TryGetValue_Property(@object, name, out value))
+                {
+                    return true;
+                }
 
-            if (method && TryGetValue_Method(@object, name, out value))
-                return true;
+                if (method && TryGetValue_Method(@object, name, out value))
+                {
+                    return true;
+                }
 
-            if (parameterSets && TryGetValue_ParameterSets(@object, name, out value))
-                return true;
+                if (parameterSets && TryGetValue_ParameterSets(@object, name, out value))
+                {
+                    return true;
+                }
+            }
+            catch
+            {
+                return false;
+            }
 
             return false;
         }

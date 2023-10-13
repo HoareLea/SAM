@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -105,6 +106,66 @@ namespace SAM.Core
             }
 
             return null;
+        }
+
+        public static Type Type(this string typeName, TextComparisonType textComparisonType, bool ignoreCase = false, Func<Assembly, bool> func = null)
+        {
+            if(string.IsNullOrWhiteSpace(typeName))
+            {
+                return null;
+            }
+
+            Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+            if (assemblies == null || assemblies.Length == 0)
+            {
+                return null;
+            }
+
+            string typeName_Temp = ignoreCase ? typeName.ToLower() : typeName;
+
+            foreach(Assembly assembly in assemblies)
+            {
+                if(func != null && !func.Invoke(assembly))
+                {
+                    continue;
+                }
+
+                Type[] types = null;
+                try
+                {
+                    types = assembly?.GetTypes();
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if(types == null || types.Length == 0)
+                {
+                    continue;
+                }
+                 
+                foreach(Type type in types)
+                {
+                    string name;
+
+                    name = ignoreCase ? type.FullName.ToLower() : type.FullName;
+                    if (Compare(name, typeName_Temp, textComparisonType))
+                    {
+                        return type;
+                    }
+
+                    name = ignoreCase ? type.Name.ToLower() : type.Name;
+                    if (Compare(name, typeName_Temp, textComparisonType))
+                    {
+                        return type;
+                    }
+                }
+
+            }
+
+            return null;
+
         }
     }
 }

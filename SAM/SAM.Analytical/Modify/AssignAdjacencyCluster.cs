@@ -23,6 +23,10 @@ namespace SAM.Analytical
             {
                 ((IAdjacencyClusterFilter)filter).AdjacencyCluster = adjacencyCluster;
             }
+            else if (filter is IRelationClusterFilter)
+            {
+                ((IRelationClusterFilter)filter).RelationCluster = adjacencyCluster;
+            }
         }
     }
 }

@@ -2,7 +2,7 @@
 
 namespace SAM.Core
 {
-    public abstract class TextFilter : Filter
+    public abstract class TextFilter : Filter, ITextFilter
     {
         public TextFilter(JObject jObject)
             : base(jObject)
@@ -27,9 +27,11 @@ namespace SAM.Core
         }
 
         public bool CaseSensitive { get; set; } = true;
+        
         public TextComparisonType TextComparisonType { get; set; } = TextComparisonType.Equals;
 
         public string Value { get; set; }
+        
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

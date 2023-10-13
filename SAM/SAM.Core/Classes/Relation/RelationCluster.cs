@@ -1,8 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using System.Diagnostics.Eventing.Reader;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 
 namespace SAM.Core
 {
@@ -453,6 +456,82 @@ namespace SAM.Core
             }
 
             return result;
+        }
+
+        public List<object> GetObjects(ObjectReference objectReference, object parent = null)
+        {
+            if (objectReference == null)
+            {
+                return null;
+            }
+
+            Type type = objectReference.Type;
+
+            List<object> objects = null;
+            if(parent == null)
+            {
+                objects = type != null ? GetObjects(type) : GetObjects();
+            }
+            else
+            {
+                objects = type != null ? GetRelatedObjects(parent, type) : GetRelatedObjects(parent);
+            }
+
+            if(objects == null || objects.Count == 0)
+            {
+                return objects;
+            }
+
+            Reference? reference = objectReference.Reference;
+            if(reference != null && reference.HasValue)
+            {
+                string referenceString = reference.ToString();
+                if(!string.IsNullOrWhiteSpace(referenceString))
+                {
+                    if(Guid.TryParse(referenceString, out Guid guid))
+                    {
+                        foreach(object @object in objects)
+                        {
+                            Guid guid_Temp = GetGuid(@object);
+                            if(guid_Temp == guid)
+                            {
+                                return new List<object>() { @object };
+                            }
+                        }
+                    }
+                    else if(int.TryParse(referenceString, out int @int))
+                    {
+                        if(@int != -1 && objects.Count > @int)
+                        {
+                            return new List<object>() { objects[@int] };
+                        }
+                    }
+                    else if(referenceString.StartsWith(@"""") && referenceString.EndsWith(@""""))
+                    {
+                        referenceString = referenceString.Substring(1, referenceString.Length - 2);
+
+                        List<object> result = new List<object>();
+                        foreach (object @object in objects)
+                        {
+                            SAMObject sAMObject = @object as SAMObject;
+                            if(sAMObject == null)
+                            {
+                                continue;
+                            }
+
+                            if(referenceString.Equals(sAMObject.Name))
+                            {
+                                result.Add(@object);
+                            }
+                        }
+                        return result;
+                    }
+
+                    return null;
+                }
+            }
+          
+            return objects;
         }
 
         public List<object> GetObjects(string typeName)
@@ -1060,6 +1139,28 @@ namespace SAM.Core
                 }
 
                 result.Add(typeName);
+            }
+
+            return result;
+        }
+
+        public List<Type> GetTypes()
+        {
+            if (dictionary_Objects == null)
+            {
+                return null;
+            }
+
+            List<Type> result = new List<Type>();
+            foreach (string typeName in dictionary_Objects.Keys)
+            {
+                Type type_Temp = Query.Type(typeName);
+                if (type_Temp == null)
+                {
+                    continue;
+                }
+
+                result.Add(type_Temp);
             }
 
             return result;
