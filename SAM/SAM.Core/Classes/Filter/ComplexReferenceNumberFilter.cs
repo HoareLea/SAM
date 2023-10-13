@@ -5,7 +5,7 @@ using System.Windows.Markup;
 
 namespace SAM.Core
 {
-    public abstract class ComplexReferenceNumberFilter : ComplexReferenceFilter
+    public class ComplexReferenceNumberFilter : ComplexReferenceFilter, INumberFilter
     {
         public FilterLogicalOperator FilterLogicalOperator { get; set; } = FilterLogicalOperator.Or;
 

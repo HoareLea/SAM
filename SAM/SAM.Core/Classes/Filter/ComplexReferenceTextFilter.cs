@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public abstract class ComplexReferenceTextFilter : ComplexReferenceFilter
+    public class ComplexReferenceTextFilter : ComplexReferenceFilter, ITextFilter
     {
         public FilterLogicalOperator FilterLogicalOperator { get; set; } = FilterLogicalOperator.Or;
 

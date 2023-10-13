@@ -23,6 +23,17 @@ namespace SAM.Core
             this.reference = reference;
         }
 
+        public ObjectReference(System.Type type)
+        {
+            typeName= Query.FullTypeName(type);
+        }
+
+        public ObjectReference(SAMObject sAMObject)
+        {
+            typeName = Query.FullTypeName(sAMObject);
+            reference = sAMObject?.Guid;
+        }
+
         public ObjectReference(ObjectReference objectReference)
         {
             typeName = objectReference?.typeName;
@@ -134,6 +145,11 @@ namespace SAM.Core
                 }
 
                 return result;
+            }
+
+            set
+            {
+                typeName = Query.FullTypeName(value);
             }
         }
     }

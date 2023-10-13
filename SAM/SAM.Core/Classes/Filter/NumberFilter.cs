@@ -2,7 +2,7 @@
 
 namespace SAM.Core
 {
-    public abstract class NumberFilter : Filter
+    public abstract class NumberFilter : Filter, INumberFilter
     {
         public NumberFilter(JObject jObject)
             : base(jObject)

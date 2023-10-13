@@ -65,6 +65,8 @@
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\StartupOptions.cs" />
     <Compile Include="Enums\StartupArgument.cs" />
+    <Compile Include="Interfaces\Filter\INumberFilter.cs" />
+    <Compile Include="Interfaces\Filter\ITextFilter.cs" />
     <Compile Include="Interfaces\Filter\IRelationClusterFilter.cs" />
     <Compile Include="Interfaces\Reference\IComplexReference.cs" />
     <Compile Include="Interfaces\Reference\IReference.cs" />
