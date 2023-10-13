@@ -165,7 +165,10 @@ namespace SAM.Geometry.Planar
                         {
                             double xNew = point.X + i * j * solver2DSettings.ShiftDistance;
                             double yNew = getY(polyline2D, xNew);
-                            if (double.IsNaN(yNew)) continue;
+                            if (double.IsNaN(yNew))
+                            {
+                                continue;
+                            }
                             Point2D newPoint = new Point2D(xNew, yNew);
 
                             List<Segment2D> segments = polyline2D.ClosestSegment2Ds(newPoint);
