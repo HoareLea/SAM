@@ -70,7 +70,6 @@
     <Compile Include="Interfaces\Filter\IRelationClusterFilter.cs" />
     <Compile Include="Interfaces\Reference\IComplexReference.cs" />
     <Compile Include="Interfaces\Reference\IReference.cs" />
-    <Compile Include="Query\Values.cs" />
     <Compile Include="Query\QuotedText.cs" />
     <Compile Include="Query\Descriptions.cs" />
     <Compile Include="Variables\Rounding.cs" />
