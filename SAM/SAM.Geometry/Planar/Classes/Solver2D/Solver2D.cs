@@ -6,97 +6,85 @@ namespace SAM.Geometry.Planar
     {
         private List<Solver2DData> solver2DDatas;
         private List<IClosed2D> obstacles2D;
-        private Rectangle2D area;
+        private IClosed2D area;
 
-        public Solver2D(Rectangle2D area, List<IClosed2D> obstacles2D)
+        public Solver2D(IClosed2D area, List<IClosed2D> obstacles2D)
         {
             this.area = area;
             this.obstacles2D = obstacles2D;
         }
          
-        public bool Add(Rectangle2D rectangle2D, Polyline2D polyline2D, int priority = int.MinValue, object tag = null)
+
+        public bool Add(Solver2DData solver2DData)
         {
-            if (rectangle2D == null || polyline2D == null)
+            if(solver2DData == null || solver2DData.Geometry2D<ISAMGeometry2D>() == null || solver2DData.Closed2D<IClosed2D>() == null)
             {
                 return false;
             }
-
-            return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)polyline2D, priority, tag);
-        }
-
-        public bool Add(Rectangle2D rectangle2D, Point2D point2D, int priority = int.MinValue, object tag = null)
-        { 
-            if (rectangle2D == null || point2D == null)
-            {
-                return false;
-            }
-
-            return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)point2D, priority, tag);
-        }
-
-        private bool Add(IClosed2D closed2D, ISAMGeometry2D geometry2D, int priority = int.MinValue, object tag = null)
-        {
-            if (closed2D == null || geometry2D == null)
-            {
-                return false;
-            }
-
-            if (solver2DDatas == null)
+            if(solver2DDatas == null)
             {
                 solver2DDatas = new List<Solver2DData>();
             }
 
-            Solver2DData solver2DData = new Solver2DData(closed2D, geometry2D);
-            solver2DData.Priority = priority;
-            solver2DData.Tag = tag;
-
             solver2DDatas.Add(solver2DData);
             return true;
         }
+        public bool AddRange(List<Solver2DData> solver2DDatas)
+        {
+            if(solver2DDatas == null)
+            {
+                return false;
+            }
 
-        public List<Solver2DResult> Solve(Solver2DSettings solver2DSettings)
+            solver2DDatas.ForEach(x => Add(x));
+            return true;
+        }
+
+        public List<Solver2DResult> Solve()
         {
             if (solver2DDatas == null || solver2DDatas.Count == 0)
             {
                 return null;
             }
 
-            // Apply priority order
-            solver2DDatas.Sort((x, y) => x.Priority.CompareTo(y.Priority));
-
             List<Solver2DResult> result = new List<Solver2DResult>();
+            // Apply priority order
+
+            solver2DDatas.Sort((x, y) => x.Priority.CompareTo(y.Priority));
 
             foreach (Solver2DData solver2DData in solver2DDatas)
             {
                 Rectangle2D rectangle2D = solver2DData.Closed2D<Rectangle2D>();
+                Solver2DSettings solver2DSettings = solver2DData.Solver2DSettings;
                 if (rectangle2D == null)
                 {
                     throw new System.NotImplementedException();
                 }
-                Rectangle2D rectangle2D_New = null;
-                Point2D center = rectangle2D.GetCentroid();
+                Rectangle2D resultRectangle2D = null;
 
                 ISAMGeometry2D sAMGeometry2D = solver2DData.Geometry2D<ISAMGeometry2D>();
                 if (sAMGeometry2D is Point2D)
                 {
                     Point2D point2D = (Point2D)sAMGeometry2D;
-                    double defaultDistanceFromPoint = point2D.Distance(center);
-                    List<Vector2D> offsets = generateOffsets(defaultDistanceFromPoint);
+                    Rectangle2D rectangle2DWithGivenPointInCenter = rectangle2D.GetMoved(new Vector2D(rectangle2D.GetCentroid(), point2D));
+                    List<Vector2D> offsets = generateOffsets();
 
-                    Rectangle2D rectangleWithGivenPointInCenter = rectangle2D.GetMoved(new Vector2D(center, point2D));
-
-                    for (int i = 0; i < solver2DSettings.MaxStepPoint; i++)
+                    for (int i = 0; i < solver2DSettings.IterationCount; i++)
                     {
-                        if (rectangle2D_New != null) break;
+                        if (resultRectangle2D != null) break;
 
                         foreach (Vector2D offset in offsets)
                         {
-                            Vector2D scaledOffset = offset * (1 + (i / 5)); //solver2DSettings.MoveDistancePoint);
-                            Rectangle2D rectangle_Temp = rectangleWithGivenPointInCenter.GetMoved(scaledOffset);
+                            Vector2D scaledOffset = offset * (solver2DSettings.StartingDistance + (i * solver2DSettings.ShiftDistance));
+                            Rectangle2D rectangleTemp = rectangle2DWithGivenPointInCenter.GetMoved(scaledOffset);
 
-                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+                            if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, result))
                             {
-                                rectangle2D_New = rectangle_Temp;
+                                if(solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
+                                {
+                                    continue;
+                                }
+                                resultRectangle2D = rectangleTemp;
                                 break;
                             }
                         }
@@ -106,19 +94,21 @@ namespace SAM.Geometry.Planar
                 {
                     Polyline2D polyline2D = (Polyline2D)sAMGeometry2D;
                     List<Segment2D> segment2Ds = polyline2D.GetSegments();
+                    Point2D point = polyline2D.Closest(rectangle2D.GetCentroid());
+                    double distanceToCenter = point.Distance(rectangle2D.GetCentroid());
 
-                    Point2D point = polyline2D.Closest(center);
-                    double distanceToCenter = point.Distance(center);
-
-                    for (int i = 0; i < solver2DSettings.MaxStepPolyline; i++)
+                    for (int i = 0; i < solver2DSettings.IterationCount; i++)
                     {
-                        if (rectangle2D_New != null) break;
+                        if (resultRectangle2D != null) break;
 
                         for (int j = -1; j <= 1; j += 2)
                         {
-                            double xNew = point.X + i * j * solver2DSettings.MoveDistancePolyLine;
+                            double xNew = point.X + i * j * solver2DSettings.ShiftDistance;
                             double yNew = getY(polyline2D, xNew);
-                            if (yNew == double.NaN) continue;
+                            if (double.IsNaN(yNew))
+                            {
+                                continue;
+                            }
                             Point2D newPoint = new Point2D(xNew, yNew);
 
                             List<Segment2D> segments = polyline2D.ClosestSegment2Ds(newPoint);
@@ -126,11 +116,19 @@ namespace SAM.Geometry.Planar
 
                             Segment2D segment = segments[0];
                             bool clockwise = segment.Direction.GetPerpendicular().Y < 0;
-                            Rectangle2D rectangle_Temp = fix(Query.MoveToSegment2D(rectangle2D, segment, newPoint, distanceToCenter, clockwise), rectangle2D);
 
-                            if (Query.Inside(area, rectangle_Temp) && !intersect(rectangle_Temp, result))
+
+                            Rectangle2D calculatedRectangle = Query.MoveToSegment2D(rectangle2D, segment, newPoint, distanceToCenter, clockwise);
+                            Rectangle2D rectangleTemp = fix(Query.MoveToSegment2D(rectangle2D, segment, newPoint, distanceToCenter, clockwise), rectangle2D);
+
+
+                            if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, result))
                             {
-                                rectangle2D_New = rectangle_Temp;
+                                if (solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
+                                {
+                                    continue;
+                                }
+                                resultRectangle2D = rectangleTemp;
                                 break;
                             }
                         }
@@ -141,11 +139,12 @@ namespace SAM.Geometry.Planar
                     throw new System.NotImplementedException();
                 }
 
-                result.Add(new Solver2DResult(solver2DData, rectangle2D_New));
+                result.Add(new Solver2DResult(solver2DData, resultRectangle2D));
             }
 
             return result;
         }
+
 
         private double getY(Polyline2D polyLine2D, double x)
         {
@@ -170,28 +169,21 @@ namespace SAM.Geometry.Planar
 
             return linearEquation.Evaluate(x);
         }
-        private List<Vector2D> generateOffsets(double distance)
+
+        /// <summary>
+        /// Generates unit vectors in 8 directions (angles: 0, 45, 90, 135...)
+        /// </summary>
+        /// <returns>List of offsets</returns>        
+        private List<Vector2D> generateOffsets()
         {
-
             List<Vector2D> offsets = new List<Vector2D>();
-            double offsetAngle = 180;
 
+            double offsetAngle = 90;
             for (double angle = 0; angle < 360; angle += offsetAngle)
             {
                 double radians = System.Math.PI * angle / 180;
-                double offsetX = distance * System.Math.Sin(radians);
-                double offsetY = distance * System.Math.Cos(radians);
-
-                offsets.Add(new Vector2D(offsetX, offsetY));
-            }
-
-            offsetAngle = 90;
-
-            for (double angle = 0; angle < 360; angle += offsetAngle)
-            {
-                double radians = System.Math.PI * angle / 180;
-                double offsetX = distance * System.Math.Sin(radians);
-                double offsetY = distance * System.Math.Cos(radians);
+                double offsetX = System.Math.Sin(radians);
+                double offsetY = System.Math.Cos(radians);
 
                 offsets.Add(new Vector2D(offsetX, offsetY));
             }
@@ -199,14 +191,14 @@ namespace SAM.Geometry.Planar
             for (double angle = 45; angle < 360; angle += offsetAngle)
             {
                 double radians = System.Math.PI * angle / 180; ;
-                double offsetX = distance * System.Math.Sin(radians);
-                double offsetY = distance * System.Math.Cos(radians);
+                double offsetX = System.Math.Sin(radians);
+                double offsetY = System.Math.Cos(radians);
 
                 offsets.Add(new Vector2D(offsetX, offsetY));
             }
+
             return offsets;
         }
-
         private Rectangle2D fix(Rectangle2D calculatedRectangle, Rectangle2D defaultRectangle)
         {
             if (calculatedRectangle == null || defaultRectangle == null)
@@ -221,12 +213,12 @@ namespace SAM.Geometry.Planar
             Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, -calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
             return result;
         }   
-
         private bool intersect(Rectangle2D rectangle2D, List<Solver2DResult> solver2DResults)
         {
             return (obstacles2D.Find(x => x.InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => x.Closed2D<Rectangle2D>().InRange(rectangle2D) == true) != null) ||
                     (solver2DResults.Find(x => rectangle2D.InRange(x.Closed2D<Rectangle2D>()) == true) != null);
         }
+
     }
 }

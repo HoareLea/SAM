@@ -3,20 +3,23 @@
     public class Solver2DSettings
     {
         /// <summary>
-        /// Distance of subsequent rectangle shifts in polyline variant
+        /// Starting distance between object to move and object around which it moves.
         /// </summary>
-        public double MoveDistancePolyLine { get; set; } = 0.1;
+        public double StartingDistance { get; set; } = 0;
+
         /// <summary>
-        /// Number of subsequent rectangle shifts in polyline variant
+        /// Distance of every shift of moveable object.
         /// </summary>
-        public double MaxStepPolyline { get; set; } = 200;
+        public double ShiftDistance { get; set; } = 1;
+
         /// <summary>
-        /// Number of subsequent rectangle shifts in point variant
+        /// Number of object shift attempts.
         /// </summary>
-        public double MaxStepPoint { get; set; } = 10;
+        public double IterationCount { get; set; } = 10;
+
         /// <summary>
-        /// Distance of subsequent rectangle shifts in point variant
+        /// Area where object may be shifted. Object's center must be inside limit area.
         /// </summary>
-        public double MoveDistancePoint { get; set; } = 0.05;
+        public IClosed2D LimitArea { get; set; } = null;
     }
 }
