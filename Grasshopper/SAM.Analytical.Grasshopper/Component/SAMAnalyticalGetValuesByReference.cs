@@ -128,7 +128,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<object> values =  Core.Query.Values(complexReference, adjacencyCluster);
+            List<object> values = adjacencyCluster.GetValues(complexReference);
 
             index = Params.IndexOfOutputParam("values");
             if (index != -1)

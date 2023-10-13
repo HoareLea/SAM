@@ -81,7 +81,7 @@ namespace SAM.Core
                 objectReference_Temp = new ObjectReference(objectReference_Temp);
             }
 
-            List<object> objects = Query.Values(objectReference_Temp, RelationCluster);
+            List<object> objects = RelationCluster.GetValues(objectReference_Temp);
             if(objects == null || objects.Count == 0)
             {
                 return false;
@@ -114,7 +114,7 @@ namespace SAM.Core
                 complexReference = new PathReference(objectReferences);
             }
 
-            List<object> values = Query.Values(complexReference, RelationCluster);
+            List<object> values = RelationCluster.GetValues(complexReference);
 
             bool result = IsValid(values);
             if(Inverted)
