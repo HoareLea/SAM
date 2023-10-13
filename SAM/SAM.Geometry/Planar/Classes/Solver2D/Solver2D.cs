@@ -39,66 +39,6 @@ namespace SAM.Geometry.Planar
             solver2DDatas.ForEach(x => Add(x));
             return true;
         }
-        //public bool Add(Rectangle2D rectangle2D, Polyline2D polyline2D, int priority = int.MinValue, object tag = null)
-        //{
-        //    if (rectangle2D == null || polyline2D == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)polyline2D, priority, tag);
-        //}
-        //public bool Add(Rectangle2D rectangle2D, Point2D point2D, int priority = int.MinValue, object tag = null)
-        //{ 
-        //    if (rectangle2D == null || point2D == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    return Add((IClosed2D)rectangle2D, (ISAMGeometry2D)point2D, priority, tag);
-        //}
-        //private bool Add(IClosed2D closed2D, ISAMGeometry2D geometry2D, int priority = int.MinValue, object tag = null)
-        //{
-        //    if (closed2D == null || geometry2D == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (solver2DDatas == null)
-        //    {
-        //        solver2DDatas = new List<Solver2DData>();
-        //    }
-
-        //    Solver2DData solver2DData = new Solver2DData(closed2D, geometry2D);
-        //    solver2DData.Priority = priority;
-        //    solver2DData.Tag = tag;
-
-        //    solver2DDatas.Add(solver2DData);
-        //    return true;
-        //}
-        //public bool Add(Rectangle2D rectangle2D, IClosed2D limitArea, Point2D point2D, int priority = int.MinValue, object tag = null)
-        //{
-        //    if (rectangle2D == null || point2D == null)
-        //    {
-        //        return false;
-        //    }
-
-        //    if (solver2DDatas == null)
-        //    {
-        //        solver2DDatas = new List<Solver2DData>();
-        //    }
-
-        //    Solver2DData solver2DData = new Solver2DData(rectangle2D, point2D);
-        //    solver2DData.Priority = priority;
-        //    solver2DData.Tag = tag;
-        //    solver2DData.LimitArea = limitArea;
-
-        //    solver2DDatas.Add(solver2DData);
-        //    return true;
-
-        //}
-
-
 
         public List<Solver2DResult> Solve()
         {
