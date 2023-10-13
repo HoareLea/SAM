@@ -38,10 +38,28 @@ namespace SAM.Core
             this.propertyName = propertyName;
         }
 
+        public PropertyReference(System.Type type, string propertyName)
+            : base(type)
+        {
+            this.propertyName = propertyName;
+        }
+
+        public PropertyReference(SAMObject sAMObject, string propertyName)
+            : base(sAMObject)
+        {
+            this.propertyName = propertyName;
+        }
+
         public PropertyReference(JObject jObject)
             : base(jObject)
         {
 
+        }
+
+        public PropertyReference(PropertyReference propertyReference)
+            :base(propertyReference)
+        {
+            propertyName = propertyReference?.propertyName;
         }
 
         public string PropertyName

@@ -94,13 +94,13 @@ namespace SAM.Core
 
             if(objectReference_First is PropertyReference)
             {
-                PropertyReference propertyReference = (PropertyReference)ComplexReference;
+                PropertyReference propertyReference = (PropertyReference)objectReference_First;
                 objectReference_First = new PropertyReference(propertyReference.TypeName, new Reference(guid), propertyReference.PropertyName);
 
             }
             else if (objectReference_First is ObjectReference)
             {
-                objectReference_Temp = (ObjectReference)ComplexReference;
+                objectReference_Temp = (ObjectReference)objectReference_First;
                 objectReference_First = new ObjectReference(objectReference_Temp.TypeName, new Reference(guid));
             }
 
