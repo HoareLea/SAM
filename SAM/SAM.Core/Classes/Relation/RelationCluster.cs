@@ -1563,5 +1563,81 @@ namespace SAM.Core
 
             return objects;
         }
+
+        public bool TryGetValues(object @object, IComplexReference complexReference, out List<object> values)
+        {
+            values = null;
+            if (complexReference == null || @object == null)
+            {
+                return false;
+            }
+
+            Guid guid = GetGuid(@object);
+            if (guid == null || guid == System.Guid.Empty)
+            {
+                return false;
+            }
+
+            ObjectReference objectReference_First = null;
+            if (complexReference is ObjectReference)
+            {
+                objectReference_First = (ObjectReference)complexReference;
+            }
+            if (complexReference is PathReference)
+            {
+                PathReference pathReference = (PathReference)complexReference;
+                if (pathReference.Count() != 0)
+                {
+                    objectReference_First = pathReference.First();
+                }
+            }
+
+            if (objectReference_First == null)
+            {
+                return false;
+            }
+
+            ObjectReference objectReference_Temp = objectReference_First;
+            if (objectReference_Temp is PropertyReference)
+            {
+                objectReference_Temp = new ObjectReference(objectReference_Temp);
+            }
+
+            List<object> objects = GetValues(objectReference_Temp);
+            if (objects == null || objects.Count == 0)
+            {
+                return false;
+            }
+
+            if (objects.Find(x => GetGuid(x) == guid) == null)
+            {
+                return false;
+            }
+
+            if (objectReference_First is PropertyReference)
+            {
+                PropertyReference propertyReference = (PropertyReference)objectReference_First;
+                objectReference_First = new PropertyReference(propertyReference.TypeName, new Reference(guid), propertyReference.PropertyName);
+
+            }
+            else if (objectReference_First is ObjectReference)
+            {
+                objectReference_Temp = (ObjectReference)objectReference_First;
+                objectReference_First = new ObjectReference(objectReference_Temp.TypeName, new Reference(guid));
+            }
+
+            IComplexReference complexReference_Temp = objectReference_First;
+            if (complexReference is PathReference)
+            {
+                PathReference pathReference_Temp = (PathReference)complexReference;
+                List<ObjectReference> objectReferences = new List<ObjectReference>(pathReference_Temp);
+                objectReferences[0] = objectReference_First;
+
+                complexReference_Temp = new PathReference(objectReferences);
+            }
+
+            values = GetValues(complexReference_Temp);
+            return true;
+        }
     }
 }
