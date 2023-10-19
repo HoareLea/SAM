@@ -12,7 +12,7 @@ namespace SAM.Analytical
 
         public NCMSystemType SystemType { get; set; } = NCMSystemType.NaturalVentilation;
 
-        public LightingOccupancyControls LightingOccupancyControls { get; set; } = LightingOccupancyControls.None;
+        public LightingOccupancyControls LightingOccupancyControls { get; set; } = LightingOccupancyControls.ManualOn_ManualOff;
 
         public LightingPhotoelectricControls LightingPhotoelectricControls { get; set; } = LightingPhotoelectricControls.None;
 
