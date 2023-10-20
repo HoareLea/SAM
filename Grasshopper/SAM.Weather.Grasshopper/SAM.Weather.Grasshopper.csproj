@@ -57,6 +57,7 @@
     <Compile Include="Classes\GooWeatherYear.cs" />
     <Compile Include="Classes\GooWeatherData.cs" />
     <Compile Include="Component\SAMWeatherHourlyValue.cs" />
+    <Compile Include="Component\SAMWeatherPrevailingMeanOutdoorAirTemperatures.cs" />
     <Compile Include="Component\SAMWeatherWeatherHoursByPercentage.cs" />
     <Compile Include="Component\SAMWeatherWeatherHoursByIndexes.cs" />
     <Compile Include="Component\SAMWeatherLoadWeatherData.cs" />

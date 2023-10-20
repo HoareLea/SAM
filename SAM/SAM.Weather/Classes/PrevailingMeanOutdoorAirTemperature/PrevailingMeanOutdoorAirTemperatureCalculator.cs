@@ -178,17 +178,15 @@ namespace SAM.Weather
                 return result;
             }
 
-            result.Add(dryBulbTempartures[0]);
-
             int sequentialDays = simpleArithmeticMeanCalculationMethod.SequentialDays;
 
-            for (int i = 1; i < dryBulbTempartures.Count - 1; i++)
+            for (int i = 0; i < dryBulbTempartures.Count; i++)
             {
                 int count = sequentialDays;
-                int indexStart = i - sequentialDays;
+                int indexStart = i - sequentialDays + 1;
                 if (indexStart < 0)
                 {
-                    count = i;
+                    count = i + 1;
                     indexStart = 0;
                 }
 
