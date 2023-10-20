@@ -93,6 +93,10 @@ namespace SAM.Analytical
             {
                 NCMName = new NCMName(jObject.Value<JObject>("NCMName"));
             }
+            else if (jObject.ContainsKey("Type"))
+            {
+                NCMName = jObject.Value<string>("Type");
+            }
 
             if (jObject.ContainsKey("SystemType"))
             {

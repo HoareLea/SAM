@@ -86,6 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GroundTemperature.cs" />
+    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\WeightingCalculationMethod.cs" />
+    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\SimpleArithmeticMeanCalculationMethod.cs" />
+    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\PrevailingMeanOutdoorAirTemperatureCalculator.cs" />
     <Compile Include="Classes\WeatherHour.cs" />
     <Compile Include="Classes\WeatherDay.cs" />
     <Compile Include="Classes\WeatherData.cs" />
@@ -95,6 +98,7 @@
     <Compile Include="Create\WeatherYear.cs" />
     <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
     <Compile Include="Enums\WeatherDataType.cs" />
+    <Compile Include="Interfaces\PrevailingMeanOutdoorAirTemperature\IPrevailingMeanOutdoorAirTemperatureCalculationMethod.cs" />
     <Compile Include="Interfaces\IWeatherObject.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Query\Compare.cs" />
