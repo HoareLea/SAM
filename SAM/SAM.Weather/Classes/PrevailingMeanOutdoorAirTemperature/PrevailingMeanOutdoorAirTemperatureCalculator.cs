@@ -123,8 +123,6 @@ namespace SAM.Weather
                 return result;
             }
 
-            result.Add(dryBulbTempartures[0]);
-
             double alpha = weightingCalculationMethod.Alpha;
 
             double[] alphas = new double[sequentialDays];
@@ -138,22 +136,21 @@ namespace SAM.Weather
                 }
             }
 
-            for (int i = 1; i < dryBulbTempartures.Count - 1; i++)
+            List<double> dryBulbTemperatures_Temp = new List<double>(dryBulbTempartures);
+            for (int i = 0; i < sequentialDays; i++)
             {
-                int count = sequentialDays;
-                int indexStart = i - sequentialDays;
-                if(indexStart < 0)
-                {
-                    count = i;
-                    indexStart = 0;
-                }
+                double dryBulbTemperature = dryBulbTemperatures_Temp[dryBulbTemperatures_Temp.Count - i - 1];
+                dryBulbTemperatures_Temp.Insert(0, dryBulbTemperature);
+            }
 
-                List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, count);
+            for (int i = sequentialDays; i < dryBulbTemperatures_Temp.Count; i++)
+            {
+                List<double> dryBulbTempartures_Range = dryBulbTemperatures_Temp.GetRange(i - sequentialDays, sequentialDays);
 
                 double dryBulbTemperature = 0;
-                for (int j = 0; j < dryBulbTempartures_Temp.Count; j++)
+                for (int j = 0; j < dryBulbTempartures_Range.Count; j++)
                 {
-                    dryBulbTemperature += dryBulbTempartures_Temp[j] * alphas[j];
+                    dryBulbTemperature += dryBulbTempartures_Range[j] * alphas[j];
                 }
 
                 dryBulbTemperature *= (1 - alpha);
@@ -163,6 +160,67 @@ namespace SAM.Weather
 
             return result;
         }
+
+        //private List<double> Calculate(List<double> dryBulbTempartures, WeightingCalculationMethod weightingCalculationMethod)
+        //{
+        //    if (dryBulbTempartures == null || weightingCalculationMethod == null || double.IsNaN(weightingCalculationMethod.Alpha) || weightingCalculationMethod.Alpha > 1 || weightingCalculationMethod.Alpha < 0)
+        //    {
+        //        return null;
+        //    }
+
+        //    int sequentialDays = weightingCalculationMethod.SequentialDays;
+        //    if (sequentialDays < 1)
+        //    {
+        //        return null;
+        //    }
+
+        //    List<double> result = new List<double>();
+
+        //    if (dryBulbTempartures.Count == 0)
+        //    {
+        //        return result;
+        //    }
+
+        //    result.Add(dryBulbTempartures[0]);
+
+        //    double alpha = weightingCalculationMethod.Alpha;
+
+        //    double[] alphas = new double[sequentialDays];
+        //    alphas[0] = 1;
+        //    if (sequentialDays > 1)
+        //    {
+        //        alphas[1] = alpha;
+        //        for (int i = 2; i < alphas.Count(); i++)
+        //        {
+        //            alphas[i] = alphas[i - 1] * alpha;
+        //        }
+        //    }
+
+        //    for (int i = 1; i < dryBulbTempartures.Count - 1; i++)
+        //    {
+        //        int count = sequentialDays;
+        //        int indexStart = i - sequentialDays;
+        //        if(indexStart < 0)
+        //        {
+        //            count = i;
+        //            indexStart = 0;
+        //        }
+
+        //        List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, count);
+
+        //        double dryBulbTemperature = 0;
+        //        for (int j = 0; j < dryBulbTempartures_Temp.Count; j++)
+        //        {
+        //            dryBulbTemperature += dryBulbTempartures_Temp[j] * alphas[j];
+        //        }
+
+        //        dryBulbTemperature *= (1 - alpha);
+
+        //        result.Add(dryBulbTemperature);
+        //    }
+
+        //    return result;
+        //}
 
         private List<double> Calculate(List<double> dryBulbTempartures, SimpleArithmeticMeanCalculationMethod simpleArithmeticMeanCalculationMethod)
         {
