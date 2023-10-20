@@ -180,22 +180,55 @@ namespace SAM.Weather
 
             int sequentialDays = simpleArithmeticMeanCalculationMethod.SequentialDays;
 
-            for (int i = 0; i < dryBulbTempartures.Count; i++)
+            List<double> dryBulbTemperatures_Temp = new List<double>(dryBulbTempartures);
+            for(int i = 0; i < sequentialDays; i++)
             {
-                int count = sequentialDays;
-                int indexStart = i - sequentialDays + 1;
-                if (indexStart < 0)
-                {
-                    count = i + 1;
-                    indexStart = 0;
-                }
+                double dryBulbTemperature = dryBulbTemperatures_Temp[dryBulbTemperatures_Temp.Count - i - 1];
+                dryBulbTemperatures_Temp.Insert(0, dryBulbTemperature);
+            }
 
-                List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, count);
+            for (int i = sequentialDays; i < dryBulbTemperatures_Temp.Count; i++)
+            {
+                List<double> dryBulbTempartures_Range = dryBulbTemperatures_Temp.GetRange(i - sequentialDays, sequentialDays);
 
-                result.Add(dryBulbTempartures_Temp.Average());
+                result.Add(dryBulbTempartures_Range.Average());
             }
 
             return result;
         }
+
+        //private List<double> Calculate(List<double> dryBulbTempartures, SimpleArithmeticMeanCalculationMethod simpleArithmeticMeanCalculationMethod)
+        //{
+        //    if (dryBulbTempartures == null || simpleArithmeticMeanCalculationMethod == null || simpleArithmeticMeanCalculationMethod.SequentialDays <= 0)
+        //    {
+        //        return null;
+        //    }
+
+        //    List<double> result = new List<double>();
+
+        //    if (dryBulbTempartures.Count == 0)
+        //    {
+        //        return result;
+        //    }
+
+        //    int sequentialDays = simpleArithmeticMeanCalculationMethod.SequentialDays;
+
+        //    for (int i = 0; i < dryBulbTempartures.Count; i++)
+        //    {
+        //        int count = sequentialDays;
+        //        int indexStart = i - sequentialDays + 1;
+        //        if (indexStart < 0)
+        //        {
+        //            count = i + 1;
+        //            indexStart = 0;
+        //        }
+
+        //        List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, count);
+
+        //        result.Add(dryBulbTempartures_Temp.Average());
+        //    }
+
+        //    return result;
+        //}
     }
 }
