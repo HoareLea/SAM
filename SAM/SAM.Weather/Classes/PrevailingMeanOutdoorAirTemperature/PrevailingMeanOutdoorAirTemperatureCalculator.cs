@@ -192,7 +192,7 @@ namespace SAM.Weather
                     indexStart = 0;
                 }
 
-                List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, );
+                List<double> dryBulbTempartures_Temp = dryBulbTempartures.GetRange(indexStart, count);
 
                 result.Add(dryBulbTempartures_Temp.Average());
             }
