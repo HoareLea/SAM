@@ -169,6 +169,8 @@
     <Compile Include="Create\Apertures.cs" />
     <Compile Include="Interfaces\ISection.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
+    <Compile Include="Create\ConstructionManager.cs" />
+    <Compile Include="Query\UpdateConstructionsByConstructionManager.cs" />
     <Compile Include="Query\DefaultConstructionManager.cs" />
     <Compile Include="Create\DesignDay.cs" />
     <Compile Include="Create\RiserName.cs" />

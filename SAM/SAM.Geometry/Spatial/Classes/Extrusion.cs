@@ -33,7 +33,19 @@ namespace SAM.Geometry.Spatial
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
-            throw new NotImplementedException();
+            BoundingBox3D boundingBox3D_1 = face3D?.GetBoundingBox(offset);
+            if(boundingBox3D_1 == null)
+            {
+                return null;
+            }
+
+            BoundingBox3D boundingBox3D_2 = boundingBox3D_1.GetMoved(vector) as BoundingBox3D;
+            if(boundingBox3D_2 == null)
+            {
+                return boundingBox3D_1;
+            }
+
+            return new BoundingBox3D(new BoundingBox3D[] { boundingBox3D_1, boundingBox3D_2});
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)

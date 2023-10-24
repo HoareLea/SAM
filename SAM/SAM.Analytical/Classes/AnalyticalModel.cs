@@ -62,19 +62,6 @@ namespace SAM.Analytical
         {
         }
 
-        public new string Name
-        {
-            get 
-            { 
-                return name; 
-            }
-
-            set
-            {
-                name = value;
-            }
-        }
-
         public AnalyticalModel(AnalyticalModel analyticalModel)
             : base(analyticalModel)
         {
@@ -169,6 +156,19 @@ namespace SAM.Analytical
 
             if (adjacencyCluster != null)
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+        }
+
+        public new string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
         }
 
         public Address Address
@@ -692,6 +692,14 @@ namespace SAM.Analytical
         {
             if (adjacencyCluster != null)
                 adjacencyCluster.Transform(transform3D);
+        }
+
+        public ConstructionManager ConstructionManager
+        {
+            get
+            {
+                return Create.ConstructionManager(this);
+            }
         }
     }
 }

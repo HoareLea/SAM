@@ -18,6 +18,30 @@ namespace SAM.Analytical
             this.materialLibrary = materialLibrary;
         }
 
+        public ConstructionManager(IEnumerable<ApertureConstruction> apertureConstructions, IEnumerable<Construction> constructions, MaterialLibrary materialLibrary)
+        {
+            this.materialLibrary = materialLibrary == null ? null : new MaterialLibrary(materialLibrary);    
+
+            apertureConstructionLibrary = new ApertureConstructionLibrary("Default ApertureConstruction Library");
+            if(apertureConstructions != null)
+            {
+                foreach(ApertureConstruction apertureConstruction in apertureConstructions)
+                {
+                    apertureConstructionLibrary.Add(apertureConstruction);
+                }
+            }
+
+            constructionLibrary = new ConstructionLibrary("Default Construction Library");
+            if (constructionLibrary!= null)
+            {
+                foreach (Construction construction in constructions)
+                {
+                    constructionLibrary.Add(construction);
+                }
+            }
+
+        }
+
         public ConstructionManager(JObject jObject)
         {
             FromJObject(jObject);
@@ -31,6 +55,11 @@ namespace SAM.Analytical
                 constructionLibrary = constructionManager.constructionLibrary?.Clone();
                 materialLibrary = constructionManager.materialLibrary?.Clone();
             }
+        }
+
+        public ConstructionManager()
+        {
+
         }
 
         public List<ApertureConstruction> ApertureConstructions
@@ -54,6 +83,14 @@ namespace SAM.Analytical
             get
             {
                 return materialLibrary?.GetMaterials().ConvertAll(x => x?.Clone());
+            }
+        }
+
+        public MaterialLibrary MaterialLibrary
+        {
+            get
+            {
+                return materialLibrary == null ? null : new MaterialLibrary(materialLibrary);
             }
         }
 
@@ -100,6 +137,21 @@ namespace SAM.Analytical
             }
 
             return constructionLibrary.Add(construction);
+        }
+
+        public List<Construction> GetConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
+        {
+            return constructionLibrary?.GetConstructions(text, textComparisonType, caseSensitive);
+        }
+
+        public List<ApertureConstruction> GetApertureConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
+        {
+            return apertureConstructionLibrary?.GetApertureConstructions(text, textComparisonType, caseSensitive);
+        }
+
+        public IMaterial GetMaterial(string name)
+        {
+            return materialLibrary?.GetMaterial(name);
         }
 
         public bool FromJObject(JObject jObject)
