@@ -73,7 +73,7 @@ namespace SAM.Analytical
                     adjacencyCluster.AddObject(panel);
 
                     List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
-                    if(constructionLayers != null || constructionLayers.Count == 0)
+                    if(constructionLayers == null || constructionLayers.Count == 0)
                     {
                         continue;
                     }
