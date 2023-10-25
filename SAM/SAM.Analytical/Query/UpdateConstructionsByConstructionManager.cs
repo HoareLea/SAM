@@ -81,7 +81,7 @@ namespace SAM.Analytical
                     foreach(ConstructionLayer constructionLayer in constructionLayers)
                     {
                         IMaterial material = constructionManager.GetMaterial(constructionLayer.Name);
-                        if(material != null)
+                        if(material == null)
                         {
                             continue;
                         }
