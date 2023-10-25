@@ -66,7 +66,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return apertureConstructionLibrary?.GetApertureConstructions().ConvertAll(x => x?.Clone());
+                return apertureConstructionLibrary?.GetApertureConstructions()?.ConvertAll(x => x?.Clone());
             }
         }
 
