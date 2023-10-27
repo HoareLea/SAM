@@ -151,6 +151,14 @@ namespace SAM.Core
             return true;
         }
 
+        public int Count
+        {
+            get
+            {
+                return objects == null ? 0 : objects.Count;
+            }
+        }
+
         public T GetObject(string uniqueId)
         {
             if (uniqueId == null || objects == null || objects.Count == 0)
