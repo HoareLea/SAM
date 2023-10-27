@@ -64,5 +64,7 @@ namespace SAM.Analytical
         [ParameterProperties("Lighting Control Function", "Lighting Control Function"), ParameterValue(Core.ParameterType.String)] LightingControlFunction,
 
         [ParameterProperties("NCM Data", "National Calculation Method (NCM) Data"), SAMObjectParameterValue(typeof(NCMData))] NCMData,
+
+        [ParameterProperties("Description", "Description"), ParameterValue(Core.ParameterType.String)] Description,
     }
 }
