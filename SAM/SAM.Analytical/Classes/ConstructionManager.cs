@@ -94,6 +94,36 @@ namespace SAM.Analytical
             }
         }
 
+        public bool Remove(IMaterial material)
+        {
+            if (material == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            return materialLibrary.Remove(material);
+        }
+
+        public bool Remove(ApertureConstruction apertureConstruction)
+        {
+            if (apertureConstruction == null || apertureConstructionLibrary == null)
+            {
+                return false;
+            }
+
+            return apertureConstructionLibrary.Remove(apertureConstruction);
+        }
+
+        public bool Remove(Construction construction)
+        {
+            if (construction == null || constructionLibrary == null)
+            {
+                return false;
+            }
+
+            return constructionLibrary.Remove(construction);
+        }
+
         public bool Add(IMaterial material)
         {
             if(material == null)

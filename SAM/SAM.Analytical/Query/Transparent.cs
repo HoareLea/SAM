@@ -64,5 +64,16 @@ namespace SAM.Analytical
         {
             return Transparent(aperture?.ApertureConstruction, materialLibrary, aperturePart);
         }
+
+        public static bool Transparent(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary)
+        {
+            if(constructionLayers == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            MaterialType materialType = MaterialType(constructionLayers, materialLibrary);
+            return materialType == Core.MaterialType.Transparent;
+        }
     }
 }
