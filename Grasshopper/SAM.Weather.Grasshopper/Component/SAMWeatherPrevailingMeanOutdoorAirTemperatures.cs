@@ -1,11 +1,8 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Weather.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Weather.Grasshopper
 {

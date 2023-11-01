@@ -179,6 +179,11 @@ namespace SAM.Analytical
             return apertureConstructionLibrary?.GetApertureConstructions(text, textComparisonType, caseSensitive);
         }
 
+        public List<ApertureConstruction> GetApertureConstructions(ApertureType apertureType, string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
+        {
+            return apertureConstructionLibrary?.GetApertureConstructions(text, textComparisonType, caseSensitive, apertureType: apertureType);
+        }
+
         public IMaterial GetMaterial(string name)
         {
             return materialLibrary?.GetMaterial(name);

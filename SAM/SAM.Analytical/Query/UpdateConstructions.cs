@@ -5,7 +5,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static AnalyticalModel UpdateConstructionsByConstructionManager(this AnalyticalModel analyticalModel, ConstructionManager constructionManager)
+        public static AnalyticalModel UpdateConstructions(this AnalyticalModel analyticalModel, ConstructionManager constructionManager)
         {
             if (analyticalModel == null || constructionManager == null)
             {
