@@ -140,6 +140,22 @@ namespace SAM.Analytical
             return constructionLayers.ConvertAll(x => x.Thickness).Sum();
         }
 
+        public double GetThickness()
+        {
+            double paneThickness = GetPaneThickness();
+            double frameThickness = GetFrameThickness();
+
+            if(double.IsNaN(paneThickness) && double.IsNaN(frameThickness))
+            {
+                return double.NaN;
+            }
+
+            paneThickness = double.IsNaN(paneThickness) ? 0 : paneThickness;
+            frameThickness = double.IsNaN(frameThickness) ? 0 : frameThickness;
+
+            return System.Math.Max(paneThickness, frameThickness);
+        }
+
         public double GetPaneThickness()
         {
             return GetThickness(AperturePart.Pane);
