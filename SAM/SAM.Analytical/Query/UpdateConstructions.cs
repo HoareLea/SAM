@@ -24,6 +24,8 @@ namespace SAM.Analytical
                 materialLibrary = new MaterialLibrary("Default MaterialLibrary");
             }
 
+            List<Construction> constructions = null;
+
             List<Panel> panels = adjacencyCluster.GetPanels();
             if(panels != null && panels.Count != 0)
             {
@@ -37,7 +39,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    List<Construction> constructions = constructionManager.GetConstructions(construction.Name);
+                    constructions = constructionManager.GetConstructions(construction.Name);
                     if(constructions == null || constructions.Count == 0)
                     {
                         continue;
@@ -88,6 +90,57 @@ namespace SAM.Analytical
 
                         materialLibrary.Add(material);
                     }
+                }
+            }
+
+            constructions = adjacencyCluster.GetObjects<Construction>();
+            if(constructions != null && constructions.Count != 0)
+            {
+                foreach(Construction construction in constructions)
+                {
+                    if(construction == null)
+                    {
+                        continue;
+                    }
+
+                    List<Construction> constructions_Temp = constructionManager.GetConstructions(construction.Name);
+                    if (constructions_Temp == null || constructions_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    Construction construction_Temp = constructions_Temp[0];
+
+                    if (constructions_Temp.Count > 1)
+                    {
+                        if (construction.TryGetValue(ConstructionParameter.DefaultPanelType, out string string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
+                        {
+                            PanelType panelType_Temp = Core.Query.Enum<PanelType>(string_PanelType);
+
+                            foreach (Construction construction_Temp_Temp in constructions_Temp)
+                            {
+                                if (!construction_Temp_Temp.TryGetValue(ConstructionParameter.DefaultPanelType, out string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
+                                {
+                                    continue;
+                                }
+
+                                PanelType panelType = Core.Query.Enum<PanelType>(string_PanelType);
+                                if (panelType == panelType_Temp)
+                                {
+                                    construction_Temp = construction_Temp_Temp;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if(construction_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    construction_Temp = new Construction(construction.Guid, construction_Temp, construction.Name);
+                    adjacencyCluster.AddObject(construction_Temp);
                 }
             }
 
