@@ -37,6 +37,11 @@
                 return new OpaqueMaterial(name, System.Guid.NewGuid(), (OpaqueMaterial)material, displayName_Temp, description_Temp);
             }
 
+            if(material is TransparentMaterial)
+            {
+                return new TransparentMaterial(name, System.Guid.NewGuid(), (TransparentMaterial)material, displayName_Temp, description_Temp);
+            }
+
             throw new System.NotImplementedException();
 
         }

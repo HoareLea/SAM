@@ -24,6 +24,12 @@ namespace SAM.Core
 
         }
 
+        public TransparentMaterial(string name, Guid guid, TransparentMaterial transparentMaterial, string displayName, string description)
+            : base(name, guid, transparentMaterial, displayName, description)
+        {
+
+        }
+
         public TransparentMaterial(Guid guid, string name)
             : base(guid, name)
         {
