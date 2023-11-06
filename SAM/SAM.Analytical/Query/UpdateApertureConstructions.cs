@@ -24,6 +24,8 @@ namespace SAM.Analytical
                 materialLibrary = new MaterialLibrary("Default MaterialLibrary");
             }
 
+            List<ApertureConstruction> apertureConstructions = null;
+
             List<Panel> panels = adjacencyCluster.GetPanels();
             if(panels != null && panels.Count != 0)
             {
@@ -49,7 +51,7 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        List<ApertureConstruction> apertureConstructions = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
+                        apertureConstructions = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
                         if (apertureConstructions == null || apertureConstructions.Count == 0)
                         {
                             continue;
@@ -127,6 +129,57 @@ namespace SAM.Analytical
                     }
 
                     adjacencyCluster.AddObject(panel);
+                }
+            }
+
+            apertureConstructions = adjacencyCluster.GetObjects<ApertureConstruction>();
+            if (apertureConstructions != null && apertureConstructions.Count != 0)
+            {
+                foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+                {
+                    if (apertureConstruction == null)
+                    {
+                        continue;
+                    }
+
+                    List<ApertureConstruction> apertureConstructions_Temp = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
+                    if (apertureConstructions_Temp == null || apertureConstructions_Temp.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    ApertureConstruction apertureConstruction_Temp = apertureConstructions_Temp[0];
+
+                    if (apertureConstructions_Temp.Count > 1)
+                    {
+                        if (apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultPanelType, out string string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
+                        {
+                            PanelType panelType_Temp = Core.Query.Enum<PanelType>(string_PanelType);
+
+                            foreach (ApertureConstruction apertureConstruction_Temp_Temp in apertureConstructions_Temp)
+                            {
+                                if (!apertureConstruction_Temp_Temp.TryGetValue(ApertureConstructionParameter.DefaultPanelType, out string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
+                                {
+                                    continue;
+                                }
+
+                                PanelType panelType = Core.Query.Enum<PanelType>(string_PanelType);
+                                if (panelType == panelType_Temp)
+                                {
+                                    apertureConstruction_Temp = apertureConstruction_Temp_Temp;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    if (apertureConstruction_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    apertureConstruction_Temp = new ApertureConstruction(apertureConstruction.Guid, apertureConstruction_Temp, apertureConstruction.Name);
+                    adjacencyCluster.AddObject(apertureConstruction_Temp);
                 }
             }
 
