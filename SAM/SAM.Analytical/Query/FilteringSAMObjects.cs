@@ -21,16 +21,29 @@ namespace SAM.Analytical
                 result.AddRange(panels);
             }
 
-            List<Aperture> apertures = adjacencyCluster.GetObjects<Aperture>();
-            if (apertures != null)
+            List<Aperture> apertures = adjacencyCluster.GetApertures();
+            if (panels != null)
             {
                 result.AddRange(apertures);
             }
 
-            apertures = adjacencyCluster.GetApertures();
-            if (panels != null)
+            List<Aperture> apertures_Temp = adjacencyCluster.GetObjects<Aperture>();
+            if (apertures_Temp != null)
             {
-                result.AddRange(apertures);
+                foreach(Aperture aperture in apertures_Temp)
+                {
+                    if(aperture == null)
+                    {
+                        continue;
+                    }
+
+                    if(apertures.Find(x => x.Guid == aperture.Guid) != null)
+                    {
+                        continue;
+                    }
+
+                    result.Add(aperture);
+                }
             }
 
             List<InternalCondition> internalConditions = adjacencyCluster.GetInternalConditions(true, true)?.ToList();
