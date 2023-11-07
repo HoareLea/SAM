@@ -54,6 +54,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Base\Category.cs" />
     <Compile Include="Classes\Base\StartupOptions.cs" />
     <Compile Include="Classes\Filter\ComplexReferenceTextFilter.cs" />
     <Compile Include="Classes\Filter\ComplexReferenceNumberFilter.cs" />
@@ -63,6 +64,7 @@
     <Compile Include="Classes\Reference\PathReference.cs" />
     <Compile Include="Classes\Reference\ObjectReference.cs" />
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
+    <Compile Include="Create\Category.cs" />
     <Compile Include="Create\StartupOptions.cs" />
     <Compile Include="Enums\StartupArgument.cs" />
     <Compile Include="Interfaces\Filter\INumberFilter.cs" />
