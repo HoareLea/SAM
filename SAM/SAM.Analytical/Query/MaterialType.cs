@@ -8,23 +8,44 @@ namespace SAM.Analytical
         public static MaterialType MaterialType(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary)
         {
             if (constructionLayers == null || materialLibrary == null)
+            {
                 return Core.MaterialType.Undefined;
+            }
 
-            bool gas = true;
+            HashSet<MaterialType> materialTypes = new HashSet<MaterialType>();
             foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 IMaterial material = constructionLayer.Material(materialLibrary);
-                if (material is OpaqueMaterial)
-                    return Core.MaterialType.Opaque;
+                if(material == null)
+                {
+                    return Core.MaterialType.Undefined;
+                }
 
-                if (material is TransparentMaterial)
-                    gas = false;
+                MaterialType materialType = material.MaterialType();
+                if(materialType == Core.MaterialType.Undefined)
+                {
+                    return Core.MaterialType.Undefined;
+                }
+
+                materialTypes.Add(materialType);
             }
 
-            if (gas)
-                return Core.MaterialType.Gas;
+            if(materialTypes.Contains(Core.MaterialType.Opaque))
+            {
+                return Core.MaterialType.Opaque;
+            }
 
-            return Core.MaterialType.Transparent;
+            if (materialTypes.Contains(Core.MaterialType.Transparent))
+            {
+                return Core.MaterialType.Transparent;
+            }
+
+            if (materialTypes.Contains(Core.MaterialType.Gas))
+            {
+                return Core.MaterialType.Gas;
+            }
+
+            return Core.MaterialType.Undefined;
         }
     }
 }
