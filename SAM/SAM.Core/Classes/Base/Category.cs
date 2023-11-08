@@ -1,5 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -31,6 +32,59 @@ namespace SAM.Core
         public Category(JObject jObject)
         {
             FromJObject(jObject);
+        }
+
+        public string Name
+        {
+            get
+            {
+                return name;
+            }
+        }
+
+        public Category SubCategory
+        {
+            get
+            {
+                return subCategory == null ? null : new Category(subCategory);
+            }
+        }
+
+        public override string ToString()
+        {
+            return name;
+        }
+
+        public string ToString(string separator)
+        {
+            if(separator == null)
+            {
+                separator = string.Empty;
+            }
+
+            List<string> values = new List<string>();
+
+            List<Category> categories = this.SubCategories();
+            if(categories != null)
+            {
+                foreach(Category category in categories)
+                {
+                    string name_Category = category?.Name;
+                    if (name_Category == null)
+                    {
+                        name_Category = string.Empty;
+
+                    }
+
+                    values.Add(name_Category);
+                }    
+            }
+
+            values.Add(name == null ? string.Empty : name);
+
+            values.Reverse();
+
+            return string.Join(separator, values);
         }
 
         public bool FromJObject(JObject jObject)
