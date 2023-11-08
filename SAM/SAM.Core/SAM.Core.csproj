@@ -66,6 +66,7 @@
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\Category.cs" />
     <Compile Include="Create\StartupOptions.cs" />
+    <Compile Include="Enums\Parameter\ParameterizedSAMObjectParameter.cs" />
     <Compile Include="Enums\StartupArgument.cs" />
     <Compile Include="Interfaces\Filter\INumberFilter.cs" />
     <Compile Include="Interfaces\Filter\ITextFilter.cs" />

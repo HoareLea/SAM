@@ -2,10 +2,10 @@
 using SAM.Core;
 using SAM.Core.Attributes;
 
-namespace SAM.Analytical
+namespace SAM.Core
 {
-    [AssociatedTypes(typeof(IAnalyticalObject)), Description("AnalyticalObject Parameter")]
-    public enum AnalyticalObjectParameter
+    [AssociatedTypes(typeof(IParameterizedSAMObject)), Description("ParameterizedSAMObject Parameter")]
+    public enum ParameterizedSAMObjectParameter
     {
         [ParameterProperties("Category", "Category"), SAMObjectParameterValue(typeof(Category))] Category,
     }

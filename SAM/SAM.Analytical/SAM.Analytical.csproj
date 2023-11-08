@@ -167,7 +167,6 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
-    <Compile Include="Enums\Parameter\AnalyticalObjectParameter.cs" />
     <Compile Include="Interfaces\ISection.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
