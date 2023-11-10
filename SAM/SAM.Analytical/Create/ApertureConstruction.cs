@@ -12,5 +12,17 @@ namespace SAM.Analytical
 
             return apertureConstruction;
         }
+
+        public static ApertureConstruction ApertureConstruction(ApertureType apertureType, string name, Construction paneConstruction, Construction frameConstruction = null)
+        {
+            if(apertureType == ApertureType.Undefined || (paneConstruction == null && frameConstruction == null))
+            {
+                return null;
+            }
+
+            ApertureConstruction result = new ApertureConstruction(Guid.NewGuid(), name, apertureType, paneConstruction?.ConstructionLayers, frameConstruction?.ConstructionLayers);
+
+            return result;
+        }
     }
 }

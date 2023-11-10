@@ -168,6 +168,7 @@
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
     <Compile Include="Interfaces\ISection.cs" />
+    <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
     <Compile Include="Query\UpdateApertureConstructions.cs" />
