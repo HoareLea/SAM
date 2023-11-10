@@ -32,7 +32,7 @@ namespace SAM.Analytical
             }
 
             constructionLibrary = new ConstructionLibrary("Default Construction Library");
-            if (constructionLibrary!= null)
+            if (constructions != null)
             {
                 foreach (Construction construction in constructions)
                 {
