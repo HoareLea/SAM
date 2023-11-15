@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -53,7 +53,12 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddNumberParameter("_defaultThickness_", "_defaultThickness_", "Default Thickness [m]", GH_ParamAccess.item, double.NaN);
             inputParamManager.AddNumberParameter("_vapourDiffusionFactor_", "_vapourDiffusionFactor_", "Vapour Diffusion Factor [-]", GH_ParamAccess.item, double.NaN);            
             inputParamManager.AddNumberParameter("_heatTransferCoefficient_", "_heatTransferCoefficient_", "Heat Transfer Coefficient [W/m2K]", GH_ParamAccess.item, double.NaN);
-   }
+            
+            inputParamManager.AddNumberParameter("_conductivity_", "_conductivity_", "Conductivity [W/mK]", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddNumberParameter("_density_", "_density_", "Density [kg/m3]", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddNumberParameter("_specificHeatCapacity_", "_specificHeatCapacity_", "Specific Heat Capacity [J/kgK]", GH_ParamAccess.item, double.NaN);
+            inputParamManager.AddNumberParameter("_dynamicViscosity_", "_dynamicViscosity_", "Dynamic Viscosity [kg/ms]", GH_ParamAccess.item, double.NaN);
+        }
 
         /// <summary>
         /// Registers all the output parameters for this component.
@@ -98,8 +103,20 @@ namespace SAM.Analytical.Grasshopper
             double heatTransferCoefficient = double.NaN;
             dataAccess.GetData(6, ref heatTransferCoefficient);
 
+            double conductivity = double.NaN;
+            dataAccess.GetData(7, ref conductivity);
 
-            dataAccess.SetData(0, new GooMaterial(Create.GasMaterial(name, group, displayName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
+            double density = double.NaN;
+            dataAccess.GetData(8, ref density);
+
+            double specificHeatCapacity = double.NaN;
+            dataAccess.GetData(9, ref specificHeatCapacity);
+
+            double dynamicViscosity = double.NaN;
+            dataAccess.GetData(10, ref dynamicViscosity);
+
+
+            dataAccess.SetData(0, new GooMaterial(Create.GasMaterial(name, group, displayName, description, conductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
         }
     }
 }

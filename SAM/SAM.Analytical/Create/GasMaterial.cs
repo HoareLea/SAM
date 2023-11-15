@@ -4,9 +4,9 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
-        public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient)
+        public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density, double dynamicViscosity, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient)
         {
-            GasMaterial gasMaterial = new GasMaterial(name, group, displayName, description, double.NaN, double.NaN, double.NaN, double.NaN);
+            GasMaterial gasMaterial = new GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity);
             gasMaterial.SetValue(Core.MaterialParameter.DefaultThickness, defaultThickness);
             gasMaterial.SetValue(MaterialParameter.VapourDiffusionFactor, vapourDiffusionFactor);
             gasMaterial.SetValue(GasMaterialParameter.HeatTransferCoefficient, heatTransferCoefficient);
@@ -14,9 +14,9 @@ namespace SAM.Analytical
             return gasMaterial;
         }
 
-        public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient, DefaultGasType defaultGasType)
+        public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density, double dynamicViscosity, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient, DefaultGasType defaultGasType)
         {
-            GasMaterial gasMaterial = GasMaterial(name, group, displayName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+            GasMaterial gasMaterial = GasMaterial(name, group, displayName, description, thermalConductivity,specificHeatCapacity, density,dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
             gasMaterial.SetValue(GasMaterialParameter.DefaultGasType, defaultGasType.Description());
 
             return gasMaterial;

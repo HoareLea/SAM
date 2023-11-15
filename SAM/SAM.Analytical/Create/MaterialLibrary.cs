@@ -25,6 +25,7 @@ namespace SAM.Analytical
             string parameterName_LightTransmittance,
             string parameterName_IsBlind,
             string parameterName_HeatTransferCoefficient,
+            string parameterName_DynamicViscosity,
             string name = null, 
             int namesIndex = 0, 
             int headerCount = 7)
@@ -76,6 +77,7 @@ namespace SAM.Analytical
             int index_LightTransmittance = delimitedFileTable.GetColumnIndex(parameterName_LightTransmittance);
             int index_IsBlind = delimitedFileTable.GetColumnIndex(parameterName_IsBlind);
             int index_HeatTransferCoefficient = delimitedFileTable.GetColumnIndex(parameterName_HeatTransferCoefficient);
+            int index_DynamicViscosity = delimitedFileTable.GetColumnIndex(parameterName_DynamicViscosity);
 
             string opaqueName = typeof(OpaqueMaterial).Name.ToUpper();
             string transparentName = typeof(TransparentMaterial).Name.ToUpper();
@@ -188,14 +190,26 @@ namespace SAM.Analytical
                     double heatTransferCoefficient = double.NaN;
                     delimitedFileTable.TryConvert(i, index_HeatTransferCoefficient, out heatTransferCoefficient);
 
+                    double thermalConductivity = double.NaN;
+                    delimitedFileTable.TryConvert(i, index_ThermalConductivity, out thermalConductivity);
+
+                    double specificHeatCapacity = double.NaN;
+                    delimitedFileTable.TryConvert(i, index_SpecificHeatCapacity, out specificHeatCapacity);
+
+                    double density = double.NaN;
+                    delimitedFileTable.TryConvert(i, index_Density, out density);
+
+                    double dynamicViscosity = double.NaN;
+                    delimitedFileTable.TryConvert(i, index_DynamicViscosity, out dynamicViscosity);
+
                     DefaultGasType defaultGasType = Query.DefaultGasType(materialName, description);
                     if (defaultGasType != DefaultGasType.Undefined)
                     {
-                        material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient, defaultGasType);
+                        material = GasMaterial(materialName, null, materialName, description, thermalConductivity, specificHeatCapacity, density, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient, dynamicViscosity, defaultGasType);
                     }
                     else
                     {
-                        material = GasMaterial(materialName, null, materialName, description, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+                        material = GasMaterial(materialName, null, materialName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
                     }
                 }
 
