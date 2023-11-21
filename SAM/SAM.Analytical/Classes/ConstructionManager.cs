@@ -74,7 +74,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return constructionLibrary?.GetConstructions().ConvertAll(x => x?.Clone());
+                return constructionLibrary?.GetConstructions()?.ConvertAll(x => x?.Clone());
             }
         }
 
@@ -82,7 +82,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return materialLibrary?.GetMaterials().ConvertAll(x => x?.Clone());
+                return materialLibrary?.GetMaterials()?.ConvertAll(x => x?.Clone());
             }
         }
 
