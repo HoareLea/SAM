@@ -118,6 +118,8 @@ namespace SAM.Analytical
                             spaces_Panel = adjacencyCluster.GetSpaces(panel);
                             spaces_Panel?.RemoveAll(x => x != null && x.Guid == space.Guid);
 
+                            //panel.Apertures?.ConvertAll(x => new Aperture(x))
+
                             panel = Create.Panel(Guid.NewGuid(), panel, face3D_Shell, null, true);
                         }
 
@@ -127,6 +129,36 @@ namespace SAM.Analytical
                         }
 
                         spaces_Panel.Add(space_Shell);
+
+                        List<Aperture> apertures = panel.Apertures;
+                        if (apertures != null && apertures.Count != 0)
+                        {
+                            for (int j = 0; j < apertures.Count; j++)
+                            {
+                                Aperture aperture = apertures[j];
+                                if (aperture == null)
+                                {
+                                    continue;
+                                }
+
+                                Guid guid = aperture.Guid;
+
+                                Panel panel_Temp = adjacencyCluster.GetPanel(aperture);
+                                while (panel_Temp != null && panel_Temp.Guid != panel.Guid)
+                                {
+                                    aperture = new Aperture(Guid.NewGuid(), aperture);
+                                    panel_Temp = adjacencyCluster.GetPanel(aperture);
+                                }
+
+                                if(guid == aperture.Guid)
+                                {
+                                    continue;
+                                }
+
+                                panel.RemoveAperture(guid);
+                                panel.AddAperture(aperture);
+                            }
+                        }
 
                         adjacencyCluster.AddObject(panel);
 
