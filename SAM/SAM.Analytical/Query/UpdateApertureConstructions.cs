@@ -93,7 +93,7 @@ namespace SAM.Analytical
                         List<ConstructionLayer> constructionLayers = null;
 
                         constructionLayers = apertureConstruction.FrameConstructionLayers;
-                        if (constructionLayers != null || constructionLayers.Count != 0)
+                        if (constructionLayers != null && constructionLayers.Count != 0)
                         {
                             foreach (ConstructionLayer constructionLayer in constructionLayers)
                             {
@@ -108,7 +108,7 @@ namespace SAM.Analytical
                         }
 
                         constructionLayers = apertureConstruction.PaneConstructionLayers;
-                        if (constructionLayers != null || constructionLayers.Count != 0)
+                        if (constructionLayers != null && constructionLayers.Count != 0)
                         {
                             foreach (ConstructionLayer constructionLayer in constructionLayers)
                             {
