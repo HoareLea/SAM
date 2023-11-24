@@ -1,4 +1,5 @@
-﻿using Rhino;
+﻿using Eto.Forms;
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -39,12 +40,6 @@ namespace SAM.Analytical.Rhino
                 if (panel == null)
                     continue;
 
-                List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
-                if(panels_FixEdges == null || panels_FixEdges.Count == 0)
-                {
-                    panels_FixEdges = new List<Panel>() { panel };
-                }
-
                 PanelType panelType = panel.PanelType;
 
                 Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
@@ -52,11 +47,9 @@ namespace SAM.Analytical.Rhino
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                foreach (Panel panel_FixEdges in panels_FixEdges)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
-                    Guid guid = default;
-                    if (BakeGeometry(panel_FixEdges, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
-                        guids.Add(guid);
+                    guids.AddRange(guids_Panel);
                 }
 
                 List<Aperture> apertures = panel.Apertures;

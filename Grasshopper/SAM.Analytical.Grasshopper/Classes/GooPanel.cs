@@ -126,7 +126,39 @@ namespace SAM.Analytical.Grasshopper
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
-            return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
+            obj_guid = Guid.Empty;
+            if (Value == null)
+            {
+                return false;
+            }
+
+            bool result = Rhino.Modify.BakeGeometry(Value, doc, att, out List<Guid> obj_guids);
+            if(!result)
+            {
+                return false;
+            }
+
+            if(obj_guids == null || obj_guids.Count ==0)
+            {
+                return false;
+            }
+
+            if(obj_guids.Count == 1)
+            {
+                obj_guid = obj_guids[0];
+                return result;
+            }
+
+            int index = doc.Groups.Add(Value.Guid.ToString());
+
+            Group group = doc.Groups.ElementAt(index);
+            foreach(Guid guid in obj_guids)
+            {
+                doc.Groups.AddToGroup(index, guid);
+            }
+
+            obj_guid = group.Id;
+            return result;
         }
 
         public override bool CastFrom(object source)

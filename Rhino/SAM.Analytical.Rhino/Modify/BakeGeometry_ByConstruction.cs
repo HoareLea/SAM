@@ -1,4 +1,5 @@
-﻿using Rhino;
+﻿using Eto.Forms;
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -66,17 +67,9 @@ namespace SAM.Analytical.Rhino
 
                 List<Aperture> apertures = panel.Apertures;
 
-                List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
-                if (panels_FixEdges == null || panels_FixEdges.Count == 0)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
-                    panels_FixEdges = new List<Panel>() { panel };
-                }
-
-                foreach (Panel panel_FixEdges in panels_FixEdges)
-                {
-                    Guid guid = default;
-                    if (BakeGeometry(panel_FixEdges, rhinoDoc, objectAttributes, out guid, cutApertures, tolerance))
-                        guids.Add(guid);
+                    guids.AddRange(guids_Panel);
                 }
 
                 if (apertures != null && apertures.Count != 0)

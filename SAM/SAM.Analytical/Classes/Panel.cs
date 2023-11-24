@@ -150,46 +150,9 @@ namespace SAM.Analytical
         {
         }
 
-        public Face3D GetFace3D(bool cutOpenings = false)
+        public Face3D GetFace3D()
         {
-            Face2D face2D = planarBoundary3D?.GetFace2D();
-            if (face2D == null)
-                return null;
-
-            Plane plane = planarBoundary3D.Plane;
-
-            if(cutOpenings && apertures != null && apertures.Count != 0)
-            {
-                List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-                if(internalEdges == null)
-                {
-                    internalEdges = new List<IClosed2D>();
-                }
-
-                foreach(Aperture aperture in apertures)
-                {
-                    Face3D face3D_Aperture = aperture?.GetFace3D();
-                    if (face3D_Aperture == null)
-                    {
-                        continue;
-                    }
-
-                    IClosed2D internalEdge = plane.Convert(face3D_Aperture)?.ExternalEdge2D;
-                    if(internalEdge == null)
-                    {
-                        continue;
-                    }
-
-                    internalEdges.Add(internalEdge);
-                }
-
-                if(internalEdges != null && internalEdges.Count > 0)
-                {
-                    face2D = Geometry.Planar.Create.Face2D(face2D.ExternalEdge2D, internalEdges);
-                }
-            }
-
-            return plane.Convert(face2D);
+            return planarBoundary3D?.GetFace3D();
         }
 
         public List<Face3D> GetFace3Ds(bool cutOpenings)
@@ -257,13 +220,19 @@ namespace SAM.Analytical
                 return GetArea();
             }
 
-            Face3D face3D = GetFace3D(true);
-            if(face3D == null)
+            List<Face3D> face3Ds = GetFace3Ds(true);
+            if(face3Ds == null)
             {
                 return double.NaN;
             }
 
-            return face3D.GetArea();
+            face3Ds = face3Ds.FindAll(x => x != null);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            return face3Ds.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
         }
 
         public double GetPerimeter()

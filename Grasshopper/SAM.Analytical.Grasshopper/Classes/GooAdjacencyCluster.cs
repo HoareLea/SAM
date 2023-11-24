@@ -221,11 +221,11 @@ namespace SAM.Analytical.Grasshopper
             List<Brep> breps = new List<Brep>();
             foreach(Panel panel in panels)
             {
-                Brep brep = Rhino.Convert.ToRhino(panel);
-                if (brep == null)
+                List<Brep> breps_Panel = Rhino.Convert.ToRhino(panel);
+                if (breps_Panel == null)
                     continue;
 
-                breps.Add(brep);
+                breps.AddRange(breps_Panel);
             }
 
             if (breps == null || breps.Count == 0)
