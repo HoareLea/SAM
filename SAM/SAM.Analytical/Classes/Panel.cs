@@ -150,10 +150,6 @@ namespace SAM.Analytical
         {
         }
 
-        /// <summary>
-        /// Gets Geometrical Representation of Panel (None Analytical Data)
-        /// </summary>
-        /// <returns name="face3D">SAM Geometry Face3D</returns>
         public Face3D GetFace3D(bool cutOpenings = false)
         {
             Face2D face2D = planarBoundary3D?.GetFace2D();
@@ -194,6 +190,46 @@ namespace SAM.Analytical
             }
 
             return plane.Convert(face2D);
+        }
+
+        public List<Face3D> GetFace3Ds(bool cutOpenings)
+        {
+            if (!cutOpenings || apertures == null || apertures.Count == 0)
+            {
+                Face3D face3D = planarBoundary3D?.GetFace3D();
+                return face3D == null ? null : new List<Face3D>() { face3D };
+            }
+
+            Face2D face2D = planarBoundary3D?.GetFace2D();
+            if (face2D == null)
+            {
+                return null;
+            }
+
+            Plane plane = planarBoundary3D.Plane;
+
+
+            List<IClosed2D> internalEdge2Ds = new List<IClosed2D>();
+            foreach (Aperture aperture in apertures)
+            {
+                IClosedPlanar3D closedPlanar3D = aperture?.Face3D?.GetExternalEdge3D();
+                if (closedPlanar3D == null)
+                {
+                    continue;
+                }
+
+                IClosed2D closed2D = plane.Convert(closedPlanar3D);
+                if (closed2D == null)
+                {
+                    continue;
+                }
+
+                internalEdge2Ds.Add(closed2D);
+            }
+
+            List<Face2D> face2Ds = Geometry.Planar.Create.Face2Ds(face2D, internalEdge2Ds);
+
+            return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
 
         public Point3D GetInternalPoint3D(double tolerance = Tolerance.Distance)
