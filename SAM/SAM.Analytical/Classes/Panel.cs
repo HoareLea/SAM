@@ -155,6 +155,48 @@ namespace SAM.Analytical
             return planarBoundary3D?.GetFace3D();
         }
 
+        public Face3D GetFace3D(bool cutOpenings = false)
+        {
+            Face2D face2D = planarBoundary3D?.GetFace2D();
+            if (face2D == null)
+                return null;
+
+            Plane plane = planarBoundary3D.Plane;
+
+            if (cutOpenings && apertures != null && apertures.Count != 0)
+            {
+                List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
+                if (internalEdges == null)
+                {
+                    internalEdges = new List<IClosed2D>();
+                }
+
+                foreach (Aperture aperture in apertures)
+                {
+                    Face3D face3D_Aperture = aperture?.GetFace3D();
+                    if (face3D_Aperture == null)
+                    {
+                        continue;
+                    }
+
+                    IClosed2D internalEdge = plane.Convert(face3D_Aperture)?.ExternalEdge2D;
+                    if (internalEdge == null)
+                    {
+                        continue;
+                    }
+
+                    internalEdges.Add(internalEdge);
+                }
+
+                if (internalEdges != null && internalEdges.Count > 0)
+                {
+                    face2D = Geometry.Planar.Create.Face2D(face2D.ExternalEdge2D, internalEdges);
+                }
+            }
+
+            return plane.Convert(face2D);
+        }
+
         public List<Face3D> GetFace3Ds(bool cutOpenings)
         {
             if (!cutOpenings || apertures == null || apertures.Count == 0)
