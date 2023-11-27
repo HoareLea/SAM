@@ -78,7 +78,7 @@ namespace SAM.Analytical
             foreach(Face3D face3D in face3Ds)
             {
                 List<Face3D> face3Ds_face3D = face3D.FixEdges(tolerance);
-                if (face3Ds == null)
+                if (face3Ds_face3D == null)
                 {
                     continue;
                 }
