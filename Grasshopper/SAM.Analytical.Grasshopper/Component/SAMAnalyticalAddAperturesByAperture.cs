@@ -68,26 +68,8 @@ namespace SAM.Analytical.Grasshopper
         {
             dataAccess.SetData(2, false);
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            AdjacencyCluster adjacencyCluster = null;
-            AnalyticalModel analyticalModel = null;
-            if (sAMObject is AdjacencyCluster)
-            {
-                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-            }
-            else if (sAMObject is AnalyticalModel)
-            {
-                analyticalModel = ((AnalyticalModel)sAMObject);
-                adjacencyCluster = analyticalModel.AdjacencyCluster;
-            }
-
-            if (adjacencyCluster == null)
+            IAnalyticalObject analyticalObject = null;
+            if (!dataAccess.GetData(0, ref analyticalObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -102,9 +84,9 @@ namespace SAM.Analytical.Grasshopper
                 maxDistance = 0.1;
             }
 
-            if (sAMObject is Panel)
+            if (analyticalObject is Panel)
             {
-                Panel panel = Create.Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)analyticalObject);
 
                 List<Aperture> apertures_Result = null;
                 if(apertures != null && apertures.Count != 0)
@@ -123,6 +105,24 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(0, panel);
                 dataAccess.SetDataList(1, apertures_Result?.ConvertAll(x => new GooAperture(x)));
                 dataAccess.SetData(2, apertures_Result != null && apertures_Result.Count != 0);
+                return;
+            }
+
+            AdjacencyCluster adjacencyCluster = null;
+            AnalyticalModel analyticalModel = null;
+            if (analyticalObject is AdjacencyCluster)
+            {
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
+            }
+            else if (analyticalObject is AnalyticalModel)
+            {
+                analyticalModel = ((AnalyticalModel)analyticalObject);
+                adjacencyCluster = analyticalModel.AdjacencyCluster;
+            }
+
+            if (adjacencyCluster == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
