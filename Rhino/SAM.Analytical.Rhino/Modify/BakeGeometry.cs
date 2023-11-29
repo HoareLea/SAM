@@ -21,7 +21,8 @@ namespace SAM.Analytical.Rhino
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
 
-            List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
+            //List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
+            List<Panel> panels_FixEdges = panel.FixEdges(false, tolerance);
             if (panels_FixEdges == null || panels_FixEdges.Count == 0)
             {
                 panels_FixEdges = new List<Panel>() { panel };

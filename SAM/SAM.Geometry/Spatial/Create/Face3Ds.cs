@@ -26,6 +26,28 @@ namespace SAM.Geometry.Spatial
             return face2Ds.ConvertAll(x => new Face3D(plane, x));
         }
 
+        public static List<Face3D> Face3Ds(this Planar.IClosed2D externalEdge2D, IEnumerable<Planar.IClosed2D> internalEdge2Ds, Plane plane, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
+        {
+            if (plane == null || externalEdge2D == null)
+            {
+                return null;
+            }
+
+            List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(externalEdge2D, internalEdge2Ds, edgeOrientationMethod, tolerance);
+            if (face2Ds == null)
+            {
+                return null;
+            }
+
+            List<Face3D> result = new List<Face3D>();
+            if (face2Ds.Count == 0)
+            {
+                return result;
+            }
+
+            return face2Ds.ConvertAll(x => new Face3D(plane, x));
+        }
+
         public static List<Face3D> Face3Ds(this IEnumerable<Polygon3D> polygon3Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon3Ds == null)

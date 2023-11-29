@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -71,38 +72,42 @@ namespace SAM.Geometry.Rhino
         public static global::Rhino.Geometry.Brep ToRhino_Brep(this Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
             if (face3D == null)
-                return null;
-
-            IClosedPlanar3D externalEdge3D = face3D.GetExternalEdge3D();
-            if(externalEdge3D == null || !externalEdge3D.IsValid())
             {
                 return null;
             }
 
-            List<IClosedPlanar3D> edges = new List<IClosedPlanar3D>() { externalEdge3D };
+            return ToRhino_Brep(face3D?.GetExternalEdge3D(), face3D?.GetInternalEdge3Ds(), tolerance);
 
-            List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
-            if (internalEdge3Ds != null && internalEdge3Ds.Count != 0)
-            {
-                internalEdge3Ds.RemoveAll(x => x == null || !x.IsValid());
-                
-                Orientation orientation_Main = externalEdge3D.Orientation();
-                if (orientation_Main != Orientation.Undefined && orientation_Main != Orientation.Collinear)
-                {
-                    for (int i = 0; i < internalEdge3Ds.Count; i++)
-                    {
-                        Orientation orientation = internalEdge3Ds[i].Orientation();
-                        if (orientation != Orientation.Undefined && orientation != Orientation.Collinear)
-                        {
-                            internalEdge3Ds[i].Reverse();
-                        }
-                    }
-                }
+            //IClosedPlanar3D externalEdge3D = face3D.GetExternalEdge3D();
+            //if(externalEdge3D == null || !externalEdge3D.IsValid())
+            //{
+            //    return null;
+            //}
 
-                edges.AddRange(internalEdge3Ds);
-            }
+            //List<IClosedPlanar3D> edges = new List<IClosedPlanar3D>() { externalEdge3D };
 
-            return ToRhino_Brep(edges, tolerance);
+            //List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+            //if (internalEdge3Ds != null && internalEdge3Ds.Count != 0)
+            //{
+            //    internalEdge3Ds.RemoveAll(x => x == null || !x.IsValid());
+
+            //    Orientation orientation_Main = externalEdge3D.Orientation();
+            //    if (orientation_Main != Orientation.Undefined && orientation_Main != Orientation.Collinear)
+            //    {
+            //        for (int i = 0; i < internalEdge3Ds.Count; i++)
+            //        {
+            //            Orientation orientation = internalEdge3Ds[i].Orientation();
+            //            if (orientation != Orientation.Undefined && orientation != Orientation.Collinear)
+            //            {
+            //                internalEdge3Ds[i].Reverse();
+            //            }
+            //        }
+            //    }
+
+            //    edges.AddRange(internalEdge3Ds);
+            //}
+
+            //return ToRhino_Brep(edges, tolerance);
         }
 
         public static global::Rhino.Geometry.Brep ToRhino_Brep(this Triangle3D triangle3D, double tolerance = Core.Tolerance.Distance)
@@ -131,10 +136,82 @@ namespace SAM.Geometry.Rhino
             return breps[0];
         }
 
+        public static global::Rhino.Geometry.Brep ToRhino_Brep(this IClosedPlanar3D externalEdge3D, IEnumerable<IClosedPlanar3D> internalEdge3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if(externalEdge3D == null)
+            {
+                return null;
+            }
+
+            Plane plane = externalEdge3D.GetPlane();
+
+            IClosed2D externalEdge2D = plane.Convert(externalEdge3D);
+
+            List<IClosed2D> internalEdge2Ds = null;
+            if(internalEdge3Ds != null)
+            {
+                internalEdge2Ds = new List<IClosed2D>();
+
+                foreach (IClosedPlanar3D internalEdge3D in internalEdge3Ds)
+                {
+                    IClosed2D internalEdge2D = plane.Convert(plane.Project(internalEdge3D));
+                    if(internalEdge2D != null)
+                    {
+                        internalEdge2Ds.Add(internalEdge2D);
+                    }
+                }
+            }
+
+            List<Face3D> face3Ds = Spatial.Create.Face3Ds(externalEdge2D, internalEdge2Ds, plane, tolerance : tolerance);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<IClosed3D> closed3Ds = new List<IClosed3D>();
+            foreach (Face3D face3D in face3Ds)
+            {
+                List<Face3D> face3Ds_FixEdges = face3D.FixEdges();
+                if(face3Ds_FixEdges == null || face3Ds_FixEdges.Count == 0)
+                {
+                    face3Ds_FixEdges = new List<Face3D>() { face3D };
+                }
+
+                foreach(Face3D face3D_FixEdge in face3Ds_FixEdges)
+                {
+                    IClosedPlanar3D externalEdge3D_Face3D = face3D_FixEdge?.GetExternalEdge3D();
+                    if(externalEdge3D_Face3D != null)
+                    {
+                        closed3Ds.Add(externalEdge3D_Face3D);
+                    }
+
+                    List<IClosedPlanar3D> internalEdge3Ds_Face3D = face3D_FixEdge?.GetInternalEdge3Ds();
+                    if(internalEdge3Ds_Face3D != null)
+                    {
+                        foreach(IClosedPlanar3D internalEdge3D_Face3D in internalEdge3Ds_Face3D)
+                        {
+                            if(internalEdge3D_Face3D == null)
+                            {
+                                continue;
+                            }
+
+                            closed3Ds.Add(internalEdge3D_Face3D);
+                        }
+                    }
+
+                }
+            }
+
+            return ToRhino_Brep(closed3Ds, tolerance);
+
+        }
+
         public static global::Rhino.Geometry.Brep ToRhino_Brep(this IEnumerable<IClosed3D> closed3Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (closed3Ds == null || closed3Ds.Count() == 0)
+            {
                 return null;
+            }
 
             double unitScale = Query.UnitScale();
 
