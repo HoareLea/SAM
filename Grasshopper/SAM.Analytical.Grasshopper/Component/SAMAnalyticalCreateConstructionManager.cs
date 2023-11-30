@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,13 +47,13 @@ namespace SAM.Analytical.Grasshopper
 
                 GooAnalyticalObjectParam analyticalObjectParam;
 
-                analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_constructions", NickName = "_constructions", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.list };
+                analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "constructions_", NickName = "constructions_", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.list, Optional = true };
                 analyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
 
-                analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_apertureConstructions", NickName = "_apertureConstructions", Description = "SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list, Optional = true };
+                analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "apertureConstructions_", NickName = "apertureConstructions_", Description = "SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list, Optional = true };
                 analyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
 
                 GooSAMObjectParam sAMObjectParam = new GooSAMObjectParam() { Name = "_materials", NickName = "_materials", Description = "SAM Materials", Access = GH_ParamAccess.list };
                 sAMObjectParam.DataMapping = GH_DataMapping.Flatten;
@@ -87,12 +87,11 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
             List<IAnalyticalObject> analyticalObjects = null;
 
-            index = Params.IndexOfInputParam("_constructions");
+            index = Params.IndexOfInputParam("constructions_");
             analyticalObjects = new List<IAnalyticalObject>();
-            if (index == -1 || !dataAccess.GetDataList(index, analyticalObjects) || analyticalObjects == null)
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetDataList(index, analyticalObjects);
             }
 
             List<Construction> constructions = new List<Construction>();
@@ -113,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<ApertureConstruction> apertureConstructions = null;
-            index = Params.IndexOfInputParam("_apertureConstructions");
+            index = Params.IndexOfInputParam("apertureConstructions_");
             analyticalObjects = new List<IAnalyticalObject>();
             if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
             {
@@ -133,6 +132,12 @@ namespace SAM.Analytical.Grasshopper
                         ((ConstructionManager)analyticalObject)?.ApertureConstructions?.ForEach(x => apertureConstructions.Add(x));
                     }
                 }
+            }
+
+            if((apertureConstructions == null || apertureConstructions.Count == 0) && (constructions == null || constructions.Count == 0))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
             }
 
             index = Params.IndexOfInputParam("_materials");
