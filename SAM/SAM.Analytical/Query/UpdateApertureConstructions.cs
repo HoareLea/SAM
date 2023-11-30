@@ -51,10 +51,14 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        apertureConstructions = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
-                        if (apertureConstructions == null || apertureConstructions.Count == 0)
+                        apertureConstructions = constructionManager.ApertureConstructions?.FindAll(x => x.ApertureType == apertureConstruction.ApertureType && x.Guid == apertureConstruction.Guid);
+                        if(apertureConstructions == null || apertureConstructions.Count == 0)
                         {
-                            continue;
+                            apertureConstructions = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
+                            if (apertureConstructions == null || apertureConstructions.Count == 0)
+                            {
+                                continue;
+                            }
                         }
 
                         apertureConstruction = apertureConstructions[0];
