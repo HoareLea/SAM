@@ -93,8 +93,13 @@ namespace SAM.Core.Grasshopper
                 target = (Q)Value;
                 return true;
             }
-           
-            
+
+            if (typeof(Q).IsAssignableFrom(Value?.GetType()))
+            {
+                target = (Q)(object)Value;
+                return true;
+            }
+
             return base.CastTo(ref target);
         }
     }
