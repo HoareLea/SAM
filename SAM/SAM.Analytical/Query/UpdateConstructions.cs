@@ -103,10 +103,14 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    List<Construction> constructions_Temp = constructionManager.GetConstructions(construction.Name);
+                    List<Construction> constructions_Temp = constructionManager.Constructions?.FindAll(x => x.Guid == construction.Guid);
                     if (constructions_Temp == null || constructions_Temp.Count == 0)
                     {
-                        continue;
+                        constructions_Temp = constructionManager.GetConstructions(construction.Name);
+                        if (constructions_Temp == null || constructions_Temp.Count == 0)
+                        {
+                            continue;
+                        }
                     }
 
                     Construction construction_Temp = constructions_Temp[0];
