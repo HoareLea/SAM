@@ -24,7 +24,7 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                Face3D face3D_Panel = panel?.GetFace3D(false);
+                Face3D face3D_Panel = panel?.GetFace3D();
                 if(face3D_Panel == null)
                 {
                     continue;

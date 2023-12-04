@@ -19,7 +19,7 @@ namespace SAM.Analytical
                 return new List<Panel>() { panel.Clone() };
             }
 
-            Face3D face3D = panel.GetFace3D(false);
+            Face3D face3D = panel.GetFace3D();
             if(face3D == null)
             {
                 return new List<Panel>() { panel.Clone() };

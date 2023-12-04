@@ -27,15 +27,38 @@ namespace SAM.Analytical.Rhino
 
         public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            Face3D face3D = panel?.GetFace3D(cutApertures);
-            if (face3D == null)
+            List<Face3D> face3Ds = panel?.GetFace3Ds(cutApertures);
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
-            Mesh result = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
+            Mesh result = null;
+            foreach(Face3D face3D in face3Ds)
+            {
+                if(result == null)
+                {
+                    result = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
+                }
+                else
+                {
+                    Mesh mesh_Face3D = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
+                    if (mesh_Face3D != null)
+                    {
+                        result.Append(mesh_Face3D);
+                    }
+                }
+            }
+
+            if(face3Ds.Count > 1)
+            {
+                result.Normals.ComputeNormals();
+            }
+
             if (result == null)
+            {
                 return null;
+            }
 
             result.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
 

@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel.Types;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
+using SAM.Geometry.Grasshopper;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -31,6 +32,31 @@ namespace SAM.Analytical.Grasshopper
             }
 
             return surfaces;
+        }
+
+        public static List<GH_Surface> ToGrasshopper(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            List<Face3D> face3Ds = panel?.GetFace3Ds(cutApertures);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<GH_Surface> result = new List<GH_Surface>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                GH_Surface surface = face3D?.ToGrasshopper(tolerance);
+                if(surface == null)
+                {
+                    continue;
+                }
+
+                result.Add(surface);
+
+                
+            }
+
+            return result;
         }
     }
 }

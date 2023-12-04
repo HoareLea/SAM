@@ -241,7 +241,7 @@ namespace SAM.Analytical
             if (panel == null || apertureConstruction == null)
                 return null;
 
-            Face3D face3D = panel.GetFace3D(false);
+            Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
 
@@ -334,7 +334,7 @@ namespace SAM.Analytical
             if (panel == null || apertureConstruction == null)
                 return null;
 
-            Face3D face3D = panel.GetFace3D(false);
+            Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
 

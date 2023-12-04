@@ -68,17 +68,25 @@ namespace SAM.Analytical
                 return null;
             }
 
-            Face3D face3D = panel.GetFace3D(cutApertures);
-            if(face3D == null)
-            {
-                return null;
-            }
-
-            List<Face3D> face3Ds = face3D.FixEdges(tolerance);
+            List<Face3D> face3Ds = panel.GetFace3Ds(cutApertures);
             if(face3Ds == null)
             {
                 return null;
             }
+
+            List<Face3D> face3Ds_Temp = new List<Face3D>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                List<Face3D> face3Ds_face3D = face3D.FixEdges(tolerance);
+                if (face3Ds_face3D == null)
+                {
+                    continue;
+                }
+
+                face3Ds_Temp.AddRange(face3Ds_face3D);
+            }
+
+            face3Ds = face3Ds_Temp;
 
             List<Panel> result = new List<Panel>();
             foreach(Face3D face3D_Temp in face3Ds)

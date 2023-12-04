@@ -81,7 +81,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                    Panel panel = panels.Find(x => x.GetFace3D().On(point3D, tolerance_Snap));
                     if(panel == null)
                     {
                         offsets.Add(0);
@@ -182,7 +182,7 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                        Panel panel = panels.Find(x => x.GetFace3D().On(point3D, tolerance_Snap));
                         if (panel != null)
                         {
                             continue;
@@ -521,7 +521,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                    Panel panel = panels.Find(x => x.GetFace3D().On(point3D, tolerance_Snap));
                     if (panel == null)
                     {
                         continue;
@@ -713,7 +713,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Panel panel = panels.Find(x => x.GetFace3D(false).On(point3D, tolerance_Snap));
+                    Panel panel = panels.Find(x => x.GetFace3D().On(point3D, tolerance_Snap));
                     if (panel != null)
                     {
                         continue;

@@ -11,7 +11,8 @@ namespace SAM.Geometry.Grasshopper
             if (closed3D == null)
                 return null;
 
-            global::Rhino.Geometry.Brep brep = Rhino.Convert.ToRhino_Brep(new IClosed3D[] { closed3D }, tolerance);
+            //global::Rhino.Geometry.Brep brep = Rhino.Convert.ToRhino_Brep(new IClosed3D[] { closed3D }, tolerance);
+            global::Rhino.Geometry.Brep brep = Rhino.Convert.ToRhino_Brep(closed3D as IClosedPlanar3D, null, tolerance);
             if (brep == null)
                 return null;
 

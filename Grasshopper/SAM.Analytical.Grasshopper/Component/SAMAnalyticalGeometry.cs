@@ -93,13 +93,21 @@ namespace SAM.Analytical.Grasshopper
             List<IGH_Goo> result = new List<IGH_Goo>();
 
             if (sAMObject is Panel)
-                result.Add(((Panel)sAMObject).ToGrasshopper(cutApertures, tolerance));
+            {
+                result.AddRange(((Panel)sAMObject).ToGrasshopper(cutApertures, tolerance));
+            }
             else if (sAMObject is Aperture)
+            {
                 result.AddRange(((Aperture)sAMObject).ToGrasshopper(includeFrame));
+            }
             else if (sAMObject is PlanarBoundary3D)
+            {
                 result.Add(((PlanarBoundary3D)sAMObject).ToGrasshopper());
+            }
             else if(sAMObject is Space)
+            {
                 result.Add(((Space)sAMObject).ToGrasshopper());
+            }
             else if (sAMObject is AdjacencyCluster)
             {
                 List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures, includeFrame, tolerance);

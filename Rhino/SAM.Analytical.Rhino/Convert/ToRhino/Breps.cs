@@ -1,4 +1,5 @@
 ﻿using Rhino.Geometry;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Rhino
@@ -30,11 +31,13 @@ namespace SAM.Analytical.Rhino
                     List<Brep> breps = new List<Brep>();
                     foreach (Panel panel in panels_Related)
                     {
-                        Brep brep = panel.ToRhino(cutApertures, tolerance);
-                        if (brep == null)
+                        List<Brep> breps_Panel = panel.ToRhino(cutApertures, tolerance);
+                        if (breps_Panel == null)
+                        {
                             continue;
+                        }
 
-                        breps.Add(brep);
+                        breps.AddRange(breps_Panel);
 
                         List<Aperture> apertures = panel.Apertures;
                         if (apertures != null)
@@ -60,9 +63,11 @@ namespace SAM.Analytical.Rhino
 
             foreach (Panel panel in panels)
             {
-                Brep brep = panel.ToRhino(cutApertures, tolerance);
-                if (brep == null)
+                List<Brep> breps = panel.ToRhino(cutApertures, tolerance);
+                if (breps == null)
+                {
                     continue;
+                }
 
                 List<Aperture> apertures = panel.Apertures;
                 if(apertures != null)
@@ -73,7 +78,7 @@ namespace SAM.Analytical.Rhino
                     }
                 }
 
-                result.Add(brep);
+                result.AddRange(breps);
             }
 
             return result;
@@ -101,6 +106,29 @@ namespace SAM.Analytical.Rhino
 
             face3Ds = aperture.GetFace3Ds(AperturePart.Pane);
             face3Ds?.ForEach(x => result.Add(Geometry.Rhino.Convert.ToRhino_Brep(x)));
+
+            return result;
+        }
+
+        public static List<Brep> ToRhino(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        {
+            List<Face3D> face3Ds = panel.GetFace3Ds(cutApertures);
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return null;
+            }
+
+            List<Brep> result = new List<Brep>();
+            foreach(Face3D face3D in face3Ds)
+            {
+                Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D, tolerance);
+                if(brep == null)
+                {
+                    continue;
+                }
+
+                result.Add(brep);
+            }
 
             return result;
         }

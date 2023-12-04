@@ -9,17 +9,20 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static bool BakeGeometry(this Panel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static bool BakeGeometry(this Panel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
-            guid = Guid.Empty;
+            guids = null;
 
             if (panel == null || rhinoDoc == null || objectAttributes == null)
+            {
                 return false;
+            }
 
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
             objectAttributes.Name = panel.Name;
 
-            List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
+            //List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
+            List<Panel> panels_FixEdges = panel.FixEdges(false, tolerance);
             if (panels_FixEdges == null || panels_FixEdges.Count == 0)
             {
                 panels_FixEdges = new List<Panel>() { panel };
@@ -27,24 +30,55 @@ namespace SAM.Analytical.Rhino
 
             bool result = true;
 
-            foreach(Panel panel_FixEdges in panels_FixEdges)
+            guids = new List<Guid>();
+
+            foreach (Panel panel_FixEdges in panels_FixEdges)
             {
-                Brep brep = panel.ToRhino(cutApertures, tolerance);
-                if (brep == null)
-                    result = Geometry.Rhino.Modify.BakeGeometry(panel.GetFace3D(), rhinoDoc, objectAttributes, out guid);
+                List<Brep> breps = panel_FixEdges.ToRhino(cutApertures, tolerance);
+                if (breps == null || breps.Count == 0)
+                {
+                    result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.GetFace3D(), rhinoDoc, objectAttributes, out Guid guid);
+                    if (result)
+                    {
+                        guids.Add(guid);
+                    }
+                }
                 else
-                    guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
+                {
+                    foreach (Brep brep in breps)
+                    {
+                        Guid guid = rhinoDoc.Objects.AddBrep(brep, objectAttributes);
+                        if (guid != Guid.Empty)
+                        {
+                            guids.Add(guid);
+                        }
+                    }
+
+                }
             }
 
             if (!result)
+            {
                 return false;
+            }
 
-            GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
-            if (geometryBase != null)
+            if (guids != null && guids.Count != 0)
             {
                 string @string = panel.ToJObject()?.ToString();
                 if (!string.IsNullOrWhiteSpace(@string))
-                    geometryBase.SetUserString("SAM", @string);
+                {
+                    foreach (Guid guid in guids)
+                    {
+                        GeometryBase geometryBase = rhinoDoc.Objects.FindGeometry(guid);
+                        if (geometryBase != null)
+                        {
+
+                            geometryBase.SetUserString("SAM", @string);
+                        }
+                    }
+
+                }
+
             }
 
             return true;
