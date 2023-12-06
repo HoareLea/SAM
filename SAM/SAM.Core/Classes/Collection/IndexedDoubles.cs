@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -28,6 +29,26 @@ namespace SAM.Core
             : base(values)
         {
 
+        }
+
+        public void Sum(IndexedDoubles indexedDoubles)
+        {
+            IEnumerable<int> keys = indexedDoubles?.Keys;
+            if(keys == null)
+            {
+                return;
+            }
+
+            foreach(int index in keys)
+            {
+                double value = indexedDoubles[index];
+                if(double.IsNaN(value) || value == 0)
+                {
+                    continue;
+                }
+
+                this[index] = !TryGetValue(index, out double value_Temp) || double.IsNaN(value_Temp) ? value : value + value_Temp;
+            }
         }
     }
 }
