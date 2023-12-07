@@ -112,7 +112,7 @@ namespace SAM.Geometry.Grasshopper
                     }
                     else if (@object is Polycurve3D)
                     {
-                        if(Spatial.Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D))
+                        if(Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D))
                         {
                             sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D(polyline3D?.ToPolygon3D()) };
                             return true;
@@ -137,6 +137,17 @@ namespace SAM.Geometry.Grasshopper
                     {
                         sAMGeometries = new List<T>() { (T)(object)(Plane)@object };
                         return true;
+                    }
+                }
+                else if(typeof(T) == typeof(ISegmentable3D))
+                {
+                    if (@object is Polycurve3D)
+                    {
+                        if (Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D) && polyline3D != null)
+                        {
+                            sAMGeometries = new List<T>() { (T)(object)polyline3D };
+                            return true;
+                        }
                     }
                 }
 
@@ -207,22 +218,9 @@ namespace SAM.Geometry.Grasshopper
 
             if(@object is Polycurve3D && typeof(T) == typeof(ISegmentable3D))
             {
-                List<ICurve3D> curve3Ds = ((Polycurve3D)@object)?.Explode();
-                if(curve3Ds != null)
+                if (Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D) && polyline3D != null)
                 {
-                    if(sAMGeometries == null)
-                    {
-                        sAMGeometries = new List<T>();
-                    }
-
-                    foreach (ICurve3D curve3D in curve3Ds)
-                    {
-                        if(curve3D is ISegmentable3D)
-                        {
-                            sAMGeometries.Add((T)(object)curve3D);
-                        }
-                    }
-
+                    sAMGeometries = new List<T>() { (T)(object)polyline3D };
                     return true;
                 }
             }

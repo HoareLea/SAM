@@ -50,5 +50,29 @@ namespace SAM.Core
                 this[index] = !TryGetValue(index, out double value_Temp) || double.IsNaN(value_Temp) ? value : value + value_Temp;
             }
         }
+
+        public int GetMaxValueIndex()
+        {
+            IEnumerable<int> keys = Keys;
+
+            int result = -1;
+            double max = double.MinValue;
+            foreach(int key in keys)
+            {
+                double value = this[key];
+                if(double.IsNaN(value))
+                {
+                    continue;
+                }
+
+                if(value > max)
+                {
+                    max = value;
+                    result = key;
+                }
+            }
+
+            return result;
+        }
     }
 }
