@@ -74,5 +74,73 @@ namespace SAM.Core
 
             return result;
         }
+
+        public int GetMinValueIndex()
+        {
+            IEnumerable<int> keys = Keys;
+
+            int result = -1;
+            double min = double.MaxValue;
+            foreach (int key in keys)
+            {
+                double value = this[key];
+                if (double.IsNaN(value))
+                {
+                    continue;
+                }
+
+                if (value < min)
+                {
+                    min = value;
+                    result = key;
+                }
+            }
+
+            return result;
+        }
+
+        public int? GetMinIndex()
+        {
+            IEnumerable<int> keys = Keys;
+            if(keys == null || keys.Count() == 0)
+            {
+                return null;
+            }
+
+            return keys.Min(x => x);
+        }
+
+        public int? GetMaxIndex()
+        {
+            IEnumerable<int> keys = Keys;
+            if (keys == null || keys.Count() == 0)
+            {
+                return null;
+            }
+
+            return keys.Max(x => x);
+        }
+
+        public double GetMaxValue()
+        {
+            int index = GetMaxValueIndex();
+            if(index == -1)
+            {
+                return double.NaN;
+            }
+
+            return this[index];
+        }
+
+        public double GetMinValue()
+        {
+            int index = GetMinValueIndex();
+            if (index == -1)
+            {
+                return double.NaN;
+            }
+
+            return this[index];
+        }
     }
 }
