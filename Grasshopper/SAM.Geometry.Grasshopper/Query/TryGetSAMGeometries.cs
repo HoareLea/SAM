@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel.Types;
+using SAM.Geometry.Spatial;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,16 +29,16 @@ namespace SAM.Geometry.Grasshopper
                     sAMGeometries = new List<T>() { (T)sAMGeometry };
                     return true;
                 }
-                else if (typeof(T) == typeof(Spatial.Face3D))
+                else if (typeof(T) == typeof(Face3D))
                 {
-                    if (sAMGeometry is Spatial.IFace3DObject)
+                    if (sAMGeometry is IFace3DObject)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
+                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)sAMGeometry).Face3D };
                         return true;
                     }
-                    else if (sAMGeometry is Spatial.Shell)
+                    else if (sAMGeometry is Shell)
                     {
-                        List<Spatial.Face3D> face3Ds = ((Spatial.Shell)sAMGeometry).Face3Ds;
+                        List<Face3D> face3Ds = ((Shell)sAMGeometry).Face3Ds;
                         if (face3Ds != null)
                         {
                             sAMGeometries = new List<T>(face3Ds.ConvertAll(x => (T)(object)x));
@@ -45,35 +46,35 @@ namespace SAM.Geometry.Grasshopper
 
                         return true;
                     }
-                    else if (sAMGeometry is Spatial.IClosedPlanar3D)
+                    else if (sAMGeometry is IClosedPlanar3D)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)sAMGeometry) };
+                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry) };
                         return true;
                     }
-                    else if (sAMGeometry is Spatial.IFace3DObject)
+                    else if (sAMGeometry is IFace3DObject)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D };
+                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)sAMGeometry).Face3D };
                         return true;
                     }
-                    else if (sAMGeometry is Spatial.Mesh3D)
+                    else if (sAMGeometry is Mesh3D)
                     {
-                        sAMGeometries = ((Spatial.Mesh3D)sAMGeometry).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
-                        return true;
-                    }
-                }
-                else if (typeof(T) == typeof(Spatial.Point3D))
-                {
-                    if (sAMGeometry is Spatial.Point3D)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((Spatial.Point3D)sAMGeometry) };
+                        sAMGeometries = ((Mesh3D)sAMGeometry).GetTriangles()?.ConvertAll(x => (T)(object)(new Face3D(x)));
                         return true;
                     }
                 }
-                else if (typeof(T) == typeof(Spatial.Plane))
+                else if (typeof(T) == typeof(Point3D))
                 {
-                    if (sAMGeometry is Spatial.Plane)
+                    if (sAMGeometry is Point3D)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)((Spatial.Plane)sAMGeometry) };
+                        sAMGeometries = new List<T>() { (T)(object)((Point3D)sAMGeometry) };
+                        return true;
+                    }
+                }
+                else if (typeof(T) == typeof(Plane))
+                {
+                    if (sAMGeometry is Plane)
+                    {
+                        sAMGeometries = new List<T>() { (T)(object)((Plane)sAMGeometry) };
                         return true;
                     }
                 }
@@ -84,34 +85,34 @@ namespace SAM.Geometry.Grasshopper
             if (objectWrapper.Value is IGH_GeometricGoo)
             {
                 @object = Convert.ToSAM(objectWrapper.Value as dynamic);
-                if (typeof(T) == typeof(Spatial.Face3D))
+                if (typeof(T) == typeof(Face3D))
                 {
-                    if (@object is Spatial.Shell)
+                    if (@object is Shell)
                     {
-                        @object = ((Spatial.Shell)@object).Face3Ds;
+                        @object = ((Shell)@object).Face3Ds;
                     }
-                    else if (@object is Spatial.Mesh3D)
+                    else if (@object is Mesh3D)
                     {
-                        @object = ((Spatial.Mesh3D)@object).GetTriangles().ConvertAll(x => new Spatial.Face3D(x));
+                        @object = ((Mesh3D)@object).GetTriangles().ConvertAll(x => new Face3D(x));
                     }
-                    else if (@object is Spatial.IClosedPlanar3D)
+                    else if (@object is IClosedPlanar3D)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)@object) };
+                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((IClosedPlanar3D)@object) };
                         return true;
                     }
-                    else if (@object is Spatial.IFace3DObject)
+                    else if (@object is IFace3DObject)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)@object).Face3D };
+                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)@object).Face3D };
                         return true;
                     }
-                    else if (@object is Spatial.Mesh3D)
+                    else if (@object is Mesh3D)
                     {
-                        sAMGeometries = ((Spatial.Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
+                        sAMGeometries = ((Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Face3D(x)));
                         return true;
                     }
-                    else if (@object is Spatial.Polycurve3D)
+                    else if (@object is Polycurve3D)
                     {
-                        if(Spatial.Polycurve3D.TryGetPolyline3D((Spatial.Polycurve3D)@object, out Spatial.Polyline3D polyline3D))
+                        if(Spatial.Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D))
                         {
                             sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D(polyline3D?.ToPolygon3D()) };
                             return true;
@@ -122,19 +123,19 @@ namespace SAM.Geometry.Grasshopper
                     }
 
                 }
-                else if(typeof(T) == typeof(Spatial.Point3D))
+                else if(typeof(T) == typeof(Point3D))
                 {
-                    if (@object is Spatial.Point3D)
+                    if (@object is Point3D)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)(Spatial.Point3D)@object };
+                        sAMGeometries = new List<T>() { (T)(object)(Point3D)@object };
                         return true;
                     }
                 }
-                else if (typeof(T) == typeof(Spatial.Plane))
+                else if (typeof(T) == typeof(Plane))
                 {
-                    if (@object is Spatial.Plane)
+                    if (@object is Plane)
                     {
-                        sAMGeometries = new List<T>() { (T)(object)(Spatial.Plane)@object };
+                        sAMGeometries = new List<T>() { (T)(object)(Plane)@object };
                         return true;
                     }
                 }
@@ -145,7 +146,7 @@ namespace SAM.Geometry.Grasshopper
                     IEnumerable<ISAMGeometry> sAMGeometries_Temp = ((IEnumerable)@object).Cast<ISAMGeometry>();
                     if (sAMGeometries_Temp != null && sAMGeometries_Temp.Count() > 0)
                     {
-                        if (typeof(T) == typeof(Spatial.Face3D))
+                        if (typeof(T) == typeof(Face3D))
                         {
                             sAMGeometries = new List<T>();
                             foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
@@ -156,22 +157,22 @@ namespace SAM.Geometry.Grasshopper
                                 }
                                 else
                                 {
-                                    if (sAMGeometry is Spatial.Shell)
+                                    if (sAMGeometry is Shell)
                                     {
-                                        sAMGeometries.AddRange(((Spatial.Shell)sAMGeometry).Face3Ds?.Cast<T>());
+                                        sAMGeometries.AddRange(((Shell)sAMGeometry).Face3Ds?.Cast<T>());
                                     }
-                                    else if (sAMGeometry is Spatial.Mesh3D)
+                                    else if (sAMGeometry is Mesh3D)
                                     {
-                                        sAMGeometries.AddRange(((Spatial.Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Spatial.Face3D(x)).Cast<T>());
+                                        sAMGeometries.AddRange(((Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Face3D(x)).Cast<T>());
                                     }
-                                    else if (sAMGeometry is Spatial.IClosedPlanar3D)
+                                    else if (sAMGeometry is IClosedPlanar3D)
                                     {
-                                        sAMGeometries.Add((T)(object)Spatial.Create.Face3D((Spatial.IClosedPlanar3D)sAMGeometry));
+                                        sAMGeometries.Add((T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry));
                                         return true;
                                     }
-                                    else if (sAMGeometry is Spatial.IFace3DObject)
+                                    else if (sAMGeometry is IFace3DObject)
                                     {
-                                        sAMGeometries.Add((T)(object)((Spatial.IFace3DObject)sAMGeometry).Face3D);
+                                        sAMGeometries.Add((T)(object)((IFace3DObject)sAMGeometry).Face3D);
                                         return true;
                                     }
                                 }
@@ -198,10 +199,32 @@ namespace SAM.Geometry.Grasshopper
                 @object = (@object as dynamic).Value;
             }
 
-            if (@object is Spatial.IFace3DObject && typeof(T) == typeof(Spatial.Face3D))
+            if (@object is IFace3DObject && typeof(T) == typeof(Face3D))
             {
-                sAMGeometries = new List<T>() { (T)(object)((Spatial.IFace3DObject)@object).Face3D };
+                sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)@object).Face3D };
                 return true;
+            }
+
+            if(@object is Polycurve3D && typeof(T) == typeof(ISegmentable3D))
+            {
+                List<ICurve3D> curve3Ds = ((Polycurve3D)@object)?.Explode();
+                if(curve3Ds != null)
+                {
+                    if(sAMGeometries == null)
+                    {
+                        sAMGeometries = new List<T>();
+                    }
+
+                    foreach (ICurve3D curve3D in curve3Ds)
+                    {
+                        if(curve3D is ISegmentable3D)
+                        {
+                            sAMGeometries.Add((T)(object)curve3D);
+                        }
+                    }
+
+                    return true;
+                }
             }
 
             return false;
