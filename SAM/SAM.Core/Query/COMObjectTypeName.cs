@@ -41,7 +41,7 @@ namespace SAM.Core
                 try
                 {
                     //retrieves the documentation string for the specified type description 
-                    typeInfo.GetDocumentation(-1, out typeName, out documentation, out helpContext, out helpFile);
+                    typeInfo?.GetDocumentation(-1, out typeName, out documentation, out helpContext, out helpFile);
                 }
                 catch (Exception)
                 {
