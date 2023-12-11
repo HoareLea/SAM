@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core.Attributes;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -141,6 +142,30 @@ namespace SAM.Core
             }
 
             return this[index];
+        }
+
+        public double GetSum()
+        {
+            IEnumerable<int> keys = Keys;
+            if(keys == null)
+            {
+                return double.NaN;
+            }
+
+
+            double result = 0;
+            foreach(int key in keys)
+            {
+                double value = this[key];
+                if(double.IsNaN(value))
+                {
+                    continue;
+                }
+
+                result += value;
+            }
+
+            return result;
         }
     }
 }

@@ -6,7 +6,7 @@ namespace SAM.Core
 {
     public class IndexedObjects<T> : IJSAMObject, IEnumerable<T>
     {
-        Dictionary<int, T> dictionary;
+        SortedDictionary<int, T> sortedDictionary;
 
         public IndexedObjects()
         {
@@ -22,32 +22,32 @@ namespace SAM.Core
         {
             if(values != null)
             {
-                dictionary = new Dictionary<int, T>();
+                sortedDictionary = new SortedDictionary<int, T>();
 
                 int index = 0;
                 foreach(T value in values)
                 {
-                    dictionary[index] = value;
+                    sortedDictionary[index] = value;
                     index++;
                 }
             }
         }
 
-        public IndexedObjects(Dictionary<int, T> dictionary)
+        public IndexedObjects(SortedDictionary<int, T> dictionary)
         {
             if(dictionary != null)
             {
-                this.dictionary = new Dictionary<int, T>();
+                this.sortedDictionary = new SortedDictionary<int, T>();
                 foreach(KeyValuePair<int, T> keyValuePair in dictionary)
                 {
-                    this.dictionary[keyValuePair.Key] = keyValuePair.Value;
+                    this.sortedDictionary[keyValuePair.Key] = keyValuePair.Value;
                 }
 
             }
         }
 
         public IndexedObjects(IndexedObjects<T> indexedObjects)
-            :this(indexedObjects?.dictionary)
+            :this(indexedObjects?.sortedDictionary)
         {
 
         }
@@ -56,12 +56,12 @@ namespace SAM.Core
         {
             get
             {
-                if(dictionary == null)
+                if(sortedDictionary == null)
                 {
                     return default(T);
                 }
 
-                if(!dictionary.TryGetValue(index, out T value))
+                if(!sortedDictionary.TryGetValue(index, out T value))
                 {
                     return default(T);
                 }
@@ -71,24 +71,24 @@ namespace SAM.Core
 
             set
             {
-                if(dictionary == null)
+                if(sortedDictionary == null)
                 {
-                    dictionary = new Dictionary<int, T>();
+                    sortedDictionary = new SortedDictionary<int, T>();
                 }
 
-                dictionary[index] = value;
+                sortedDictionary[index] = value;
             }
         }
 
         public bool TryGetValue(int index, out T result)
         {
-            if(dictionary == null || !dictionary.ContainsKey(index))
+            if(sortedDictionary == null || !sortedDictionary.ContainsKey(index))
             {
                 result = default(T);
                 return false;
             }
 
-            result = dictionary[index];
+            result = sortedDictionary[index];
             return true;
         }
 
@@ -99,25 +99,25 @@ namespace SAM.Core
 
         public bool Add(int index, T value)
         {
-            if(dictionary == null)
+            if(sortedDictionary == null)
             {
-                dictionary = new Dictionary<int, T>();
+                sortedDictionary = new SortedDictionary<int, T>();
             }
 
-            dictionary[index] = value;
+            sortedDictionary[index] = value;
             return true;
         }
 
         public bool Add(Range<int> range, T value)
         {
-            if(dictionary == null)
+            if(sortedDictionary == null)
             {
-                dictionary = new Dictionary<int, T>();
+                sortedDictionary = new SortedDictionary<int, T>();
             }
 
             for(int i = range.Min; i < range.Max; i++)
             {
-                dictionary[i] = value;
+                sortedDictionary[i] = value;
             }
 
             return true;
@@ -125,19 +125,19 @@ namespace SAM.Core
 
         public bool Remove(int index)
         {
-            if(dictionary == null)
+            if(sortedDictionary == null)
             {
                 return false;
             }
 
-            return dictionary.Remove(index);
+            return sortedDictionary.Remove(index);
         }
 
         public IEnumerable<T> Values
         {
             get
             {
-                return dictionary?.Values;
+                return sortedDictionary?.Values;
             }
         }
 
@@ -145,7 +145,7 @@ namespace SAM.Core
         {
             get
             {
-                return dictionary?.Keys;
+                return sortedDictionary?.Keys;
             }
         }
 
@@ -161,7 +161,7 @@ namespace SAM.Core
                 JArray jArray = jObject.Value<JArray>("Values");
                 if(jArray != null)
                 {
-                    dictionary = new Dictionary<int, T>();
+                    sortedDictionary = new SortedDictionary<int, T>();
                     foreach(JArray jArray_Temp in jArray)
                     {
                         if(jArray_Temp == null || jArray_Temp.Count < 1)
@@ -171,13 +171,13 @@ namespace SAM.Core
 
                         if(jArray_Temp.Count == 1)
                         {
-                            dictionary[(int)jArray_Temp[0]] = default(T);
+                            sortedDictionary[(int)jArray_Temp[0]] = default(T);
                         }
                         else
                         {
                            if(Query.TryConvert(jArray_Temp[1], out T result))
                             {
-                                dictionary[(int)jArray_Temp[0]] = result;
+                                sortedDictionary[(int)jArray_Temp[0]] = result;
                             }
                         }
 
@@ -191,17 +191,17 @@ namespace SAM.Core
 
         public IEnumerator<T> GetEnumerator()
         {
-            return dictionary?.Values?.GetEnumerator();
+            return sortedDictionary?.Values?.GetEnumerator();
         }
 
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
-            if(dictionary != null)
+            if(sortedDictionary != null)
             {
                 JArray jArray = new JArray();
-                foreach(KeyValuePair<int, T> keyValuePair in dictionary)
+                foreach(KeyValuePair<int, T> keyValuePair in sortedDictionary)
                 {
                     JArray jArray_Temp = new JArray();
                     jArray_Temp.Add(keyValuePair.Key);
