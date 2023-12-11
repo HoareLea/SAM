@@ -21,7 +21,9 @@ namespace SAM.Core.Grasshopper
             get
             {
                 if (Value == null)
+                {
                     return "Unknown";
+                }
 
                 return Value.GetType().FullName;
             }
@@ -32,7 +34,9 @@ namespace SAM.Core.Grasshopper
             get
             {
                 if (Value == null)
+                {
                     return "Unknown";
+                }
 
                 return Value.GetType().FullName.Replace(".", " ");
             }
