@@ -24,6 +24,14 @@ namespace SAM.Core.Grasshopper
         {
             return new GooResult(Value);
         }
+
+        public override string TypeName
+        {
+            get
+            {
+                return Value == null ? typeof(IResult).Name : Value.GetType().Name;
+            }
+        }
     }
 
     public class GooResultParam : GH_PersistentParam<GooResult>

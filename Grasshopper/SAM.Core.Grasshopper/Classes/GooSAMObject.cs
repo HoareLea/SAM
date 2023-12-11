@@ -24,6 +24,14 @@ namespace SAM.Core.Grasshopper
         {
             return new GooSAMObject(Value);
         }
+
+        public override string TypeName
+        {
+            get
+            {
+                return Value == null ? typeof(IJSAMObject).Name : Value.GetType().Name;
+            }
+        }
     }
 
     public class GooSAMObjectParam : GH_PersistentParam<GooSAMObject>
