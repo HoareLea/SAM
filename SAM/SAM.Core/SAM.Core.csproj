@@ -65,6 +65,8 @@
     <Compile Include="Classes\Reference\PropertyReference.cs" />
     <Compile Include="Classes\Reference\PathReference.cs" />
     <Compile Include="Classes\Reference\ObjectReference.cs" />
+    <Compile Include="Classes\Relation\SAMObjectRelationCluster.cs" />
+    <Compile Include="Classes\Relation\RelationCluster_NEW.cs" />
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\Category.cs" />
     <Compile Include="Create\StartupOptions.cs" />
