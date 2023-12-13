@@ -1,8 +1,8 @@
 ﻿
 namespace SAM.Core
 {
-    public interface IRelationClusterFilter : IFilter
+    public interface ISAMObjectRelationClusterFilter : IFilter
     {
-        RelationCluster RelationCluster { get; set; }
+        ISAMObjectRelationCluster SAMObjectRelationCluster { get; set; }
     }
 }

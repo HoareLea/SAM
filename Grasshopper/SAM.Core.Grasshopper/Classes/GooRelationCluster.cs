@@ -9,14 +9,14 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooRelationCluster : GooJSAMObject<RelationCluster>
+    public class GooRelationCluster : GooJSAMObject<IRelationCluster>
     {
         public GooRelationCluster()
             : base()
         {
         }
 
-        public GooRelationCluster(RelationCluster relationCluster)
+        public GooRelationCluster(IRelationCluster relationCluster)
             : base(relationCluster)
         {
         }
@@ -44,7 +44,7 @@ namespace SAM.Core.Grasshopper
 
         //Here we control name, nickname, description, category, sub-category as deafult we use typeofclass name
         public GooRelationClusterParam()
-            : base(typeof(RelationCluster).Name, typeof(RelationCluster).Name, typeof(RelationCluster).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(IRelationCluster).Name, typeof(IRelationCluster).Name, typeof(IRelationCluster).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 

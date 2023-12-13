@@ -64,17 +64,17 @@ namespace SAM.Core
             @out.Reverse();
         }
 
-        public static List<object> Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects)
+        public static List<T> Filter<T>(this RelationCluster<T> relationCluster_In, RelationCluster<T> relationCluster_Out, IEnumerable<T> objects)
         {
             if (relationCluster_In == null || objects == null)
                 return null;
 
             if (relationCluster_Out == null)
-                relationCluster_Out = new RelationCluster();
+                relationCluster_Out = new RelationCluster<T>();
 
-            HashSet<object> objects_Out = new ();
+            HashSet<T> objects_Out = new ();
 
-            Filter(relationCluster_In, relationCluster_Out, objects, objects_Out);
+            Filter<T>(relationCluster_In, relationCluster_Out, objects, objects_Out);
 
             return objects_Out.ToList();
         }
@@ -126,24 +126,24 @@ namespace SAM.Core
         }
 
 
-        private static void Filter(this RelationCluster relationCluster_In, RelationCluster relationCluster_Out, IEnumerable<object> objects_In, HashSet<object> objects_Out)
+        private static void Filter<T>(this RelationCluster<T> relationCluster_In, RelationCluster<T> relationCluster_Out, IEnumerable<T> objects_In, HashSet<T> objects_Out)
         {
             if (objects_In == null || relationCluster_In == null || relationCluster_Out == null || objects_Out == null)
                 return;
 
-            HashSet<object> objects_In_New = new ();
-            foreach (object object_In in objects_In)
+            HashSet<T> objects_In_New = new ();
+            foreach (T object_In in objects_In)
             {
-                if (objects_Out.Contains(objects_In))
+                if (objects_Out.Contains(object_In))
                     continue;
 
                 relationCluster_Out.AddObject(object_In);
                 
-                List<object> relatedObjects = relationCluster_In.GetRelatedObjects(object_In);
+                List<T> relatedObjects = relationCluster_In.GetRelatedObjects(object_In);
                 if (relatedObjects == null || relatedObjects.Count == 0)
                     continue;
 
-                foreach(object relatedObject in relatedObjects)
+                foreach(T relatedObject in relatedObjects)
                 {
                     if (objects_Out.Contains(relatedObject))
                         continue;
@@ -158,7 +158,9 @@ namespace SAM.Core
             }
 
             if (objects_In_New != null && objects_In_New.Count != 0)
+            {
                 Filter(relationCluster_In, relationCluster_Out, objects_In_New, objects_Out);
+            }
         }
     }
 }

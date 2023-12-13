@@ -80,11 +80,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster_New.AddObject(space);
 
-                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
+                List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
                 if (relatedObjects == null || relatedObjects.Count == 0)
                     continue;
 
-                foreach(object relatedObject in relatedObjects)
+                foreach(IAnalyticalObject relatedObject in relatedObjects)
                 {
                     if (!adjacencyCluster_New.AddObject(relatedObject))
                         continue;

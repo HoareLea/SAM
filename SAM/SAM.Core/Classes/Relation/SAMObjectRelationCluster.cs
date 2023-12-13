@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class SAMObjectRelationCluster<T> : RelationCluster_NEW<IJSAMObject>, IJSAMObject where T: IJSAMObject
+    public class SAMObjectRelationCluster<T> : RelationCluster<T>, IJSAMObject, ISAMObjectRelationCluster where T: IJSAMObject
     {
         public SAMObjectRelationCluster()
             :base()
@@ -30,27 +30,30 @@ namespace SAM.Core
         {
             if(deepClone)
             {
-                List<Type> types = GetTypes();
-                if (types != null)
+                List<T> objects = GetObjects();
+                if (objects != null)
                 {
-                    foreach(Type type in types)
+                    foreach (object @object in objects)
                     {
-                        List<IJSAMObject> jSAMObjects = GetObjects(type);
-                        if(jSAMObjects != null)
+                        if (@object is IJSAMObject)
                         {
-                            foreach(IJSAMObject jSAMObject in jSAMObjects)
-                            {
-                                AddObject(jSAMObject.Clone());
-                            }
+                            AddObject(((T)@object).Clone());
                         }
                     }
                 }
             }
         }
 
-        public SAMObjectRelationCluster<T> Clone(bool deepClone)
+        public virtual bool TryGetValues(IJSAMObject @object, IComplexReference complexReference, out List<object> values)
         {
-            return new SAMObjectRelationCluster<T> (this, deepClone);
+            values = null;
+
+            if (!(@object is T))
+            {
+                return false;
+            }
+
+            return base.TryGetValues((T)@object, complexReference, out values);
         }
     }
 }

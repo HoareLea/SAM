@@ -175,7 +175,7 @@ namespace SAM.Analytical
                 result.Add(panel_New);
             }
 
-            List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
+            List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
 
             if (face2Ds.Count == 0)
             {
@@ -207,7 +207,7 @@ namespace SAM.Analytical
 
                 if (relatedObjects != null)
                 {
-                    foreach (object relatedObject in relatedObjects)
+                    foreach (IAnalyticalObject relatedObject in relatedObjects)
                     {
                         adjacencyCluster.AddRelation(panel_New, relatedObject);
                     }

@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
-    public class AdjacencyCluster : Core.RelationCluster, IAnalyticalObject
+    public class AdjacencyCluster : SAMObjectRelationCluster<IAnalyticalObject>, IAnalyticalObject
     {        
         public AdjacencyCluster()
             : base()
@@ -25,11 +26,6 @@ namespace SAM.Analytical
             : base(jObject)
         {
 
-        }
-
-        public override Core.RelationCluster Clone()
-        {
-            return new AdjacencyCluster(this);
         }
 
         public override int Count<T>()
@@ -94,20 +90,20 @@ namespace SAM.Analytical
                 if (!result.AddObject(new Space(space)))
                     continue;
 
-                List<object> relatedObjects = GetRelatedObjects(space);
+                List<IAnalyticalObject> relatedObjects = GetRelatedObjects(space);
                 if (relatedObjects == null)
                     continue;
 
-                foreach (object relatedObject in relatedObjects)
+                foreach (IAnalyticalObject relatedObject in relatedObjects)
                 {
                     if (relatedObject == null)
                         continue;
 
-                    object relatedObject_Temp = relatedObject;
+                    IAnalyticalObject relatedObject_Temp = relatedObject;
 
-                    if (relatedObject_Temp is Core.IJSAMObject)
+                    if (relatedObject_Temp is IJSAMObject)
                     {
-                        relatedObject_Temp = Core.Query.Clone((Core.IJSAMObject)relatedObject_Temp);
+                        relatedObject_Temp = Core.Query.Clone(relatedObject_Temp);
                     }
 
                     if (!result.AddObject(relatedObject_Temp))
@@ -396,7 +392,7 @@ namespace SAM.Analytical
             return panels.FindAll(x => Ground(x));
         }
 
-        public override int GetIndex(object @object)
+        public override int GetIndex(IAnalyticalObject @object)
         {
             int result = base.GetIndex(@object);
 
@@ -667,7 +663,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetResults<T>(Core.IJSAMObject jSAMObject, string source = null) where T : Core.Result
+        public List<T> GetResults<T>(IAnalyticalObject jSAMObject, string source = null) where T : Result, IAnalyticalObject
         {
             List<T> result = GetRelatedObjects<T>(jSAMObject);
             if (result == null)

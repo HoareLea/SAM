@@ -50,15 +50,19 @@ namespace SAM.Analytical
                     if (panels_Split == null || panels_Split.Count < 2)
                         continue;
 
-                    List<object> relatedObjects = result.GetRelatedObjects(panel); 
+                    List<IAnalyticalObject> relatedObjects = result.GetRelatedObjects(panel); 
 
                     foreach(Panel panel_Split in panels_Split)
                     {
                         result.AddObject(panel_Split);
 
                         if(relatedObjects != null && relatedObjects.Count > 0)
-                            foreach (object relatedObject in relatedObjects)
+                        {
+                            foreach (IAnalyticalObject relatedObject in relatedObjects)
+                            {
                                 result.AddRelation(panel_Split, relatedObject);
+                            }
+                        }
                     }
                 }
             }

@@ -72,7 +72,7 @@ namespace SAM.Core.Grasshopper
         {
             int index = -1;
 
-            RelationCluster relationCluster = null;
+            IRelationCluster relationCluster = null;
             index = Params.IndexOfInputParam("_relationCluster");
             if (index == -1 || !dataAccess.GetData(index, ref relationCluster) || relationCluster == null)
             {
@@ -108,9 +108,9 @@ namespace SAM.Core.Grasshopper
 
             List<object> result = null;
             if (type == null)
-                result = relationCluster.GetRelatedObjects(sAMObject);
+                result = (relationCluster as dynamic).GetRelatedObjects(sAMObject);
             else
-                result = relationCluster.GetRelatedObjects(sAMObject, type);
+                result = (relationCluster as dynamic).GetRelatedObjects(sAMObject, type);
 
             index = Params.IndexOfOutputParam("Objects");
             if (index != -1)

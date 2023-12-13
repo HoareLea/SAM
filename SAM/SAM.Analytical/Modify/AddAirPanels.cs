@@ -193,7 +193,7 @@ namespace SAM.Analytical
 
                 Space space_Old = tuple.Item1;
 
-                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
+                List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
                 adjacencyCluster.RemoveObject<Space>(space_Old.Guid);
 
                 foreach(Tuple<Space, List<Panel>> tuple_Space_New in tuple.Item2)
@@ -204,7 +204,7 @@ namespace SAM.Analytical
 
                     if(relatedObjects != null)
                     {
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (IAnalyticalObject relatedObject in relatedObjects)
                         {
                             if (relatedObject is Panel)
                             {

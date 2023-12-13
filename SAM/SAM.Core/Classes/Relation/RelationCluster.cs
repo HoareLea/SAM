@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
-    public class RelationCluster : SAMObject, IJSAMObject
+    public class RelationCluster<X> : SAMObject, IRelationCluster
     {
-        private Dictionary<string, Dictionary<Guid, object>> dictionary_Objects;
+        private Dictionary<string, Dictionary<Guid, X>> dictionary_Objects;
         private Dictionary<string, Dictionary<Guid, HashSet<Guid>>> dictionary_Relations;
 
         public RelationCluster()
         {
-            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, X>>();
             dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
         }
 
@@ -22,14 +22,14 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
-        public RelationCluster(RelationCluster relationCluster)
+        public RelationCluster(RelationCluster<X> relationCluster)
             : base(relationCluster)
         {
-            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
-            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, X>>();
+            foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_1 in relationCluster.dictionary_Objects)
             {
-                Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
-                foreach (KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                Dictionary<Guid, X> dictionary = new Dictionary<Guid, X>();
+                foreach (KeyValuePair<Guid, X> keyValuePair_2 in keyValuePair_1.Value)
                     dictionary[keyValuePair_2.Key] = keyValuePair_2.Value;
 
                 dictionary_Objects[keyValuePair_1.Key] = dictionary;
@@ -58,7 +58,7 @@ namespace SAM.Core
         /// <param name="object_1">First Object</param>
         /// <param name="object_2">Second Object</param>
         /// <returns>true if objects and relations sucessfully added</returns>
-        public bool Add(object object_1, object object_2)
+        public bool Add(X object_1, X object_2)
         {
             if (!IsValid(object_1) || !IsValid(object_2))
                 return false;
@@ -111,7 +111,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool AddRelation(object object_1, object object_2)
+        public bool AddRelation(X object_1, X object_2)
         {
             if (!IsValid(object_1) || !IsValid(object_2))
                 return false;
@@ -182,7 +182,7 @@ namespace SAM.Core
             return guids.Remove(guid_2);
         }
 
-        public bool AddObject(object @object)
+        public bool AddObject(X @object)
         {
             if (!IsValid(@object))
                 return false;
@@ -190,34 +190,38 @@ namespace SAM.Core
             return TryAddObject(@object, out string typeName, out Guid guid);
         }
 
-        public bool AddObjects<T>(IEnumerable<T> objects)
+        public bool AddObjects<T>(IEnumerable<T> objects) where T : X
         {
             if (objects == null)
+            {
                 return false;
+            }
 
             foreach (T @object in objects)
+            {
                 AddObject(@object);
+            }
 
             return true;
         }
 
-        public bool Join(RelationCluster relationCluster)
+        public bool Join(RelationCluster<X> relationCluster)
         {
             if (relationCluster == null)
                 return false;
 
-            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_1 in relationCluster.dictionary_Objects)
+            foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_1 in relationCluster.dictionary_Objects)
             {
-                foreach (KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                foreach (KeyValuePair<Guid, X> keyValuePair_2 in keyValuePair_1.Value)
                 {
                     if (!AddObject(keyValuePair_2.Value))
                         continue;
 
-                    List<object> relatedObjects = relationCluster.GetRelatedObjects(keyValuePair_2.Value);
+                    List<X> relatedObjects = relationCluster.GetRelatedObjects(keyValuePair_2.Value);
                     if (relatedObjects == null)
                         continue;
 
-                    foreach (object relatedObject in relatedObjects)
+                    foreach (X relatedObject in relatedObjects)
                     {
                         if (!AddObject(relatedObject))
                             continue;
@@ -231,7 +235,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool Contains(object @object)
+        public bool Contains(X @object)
         {
             if (!IsValid(@object))
                 return false;
@@ -256,7 +260,7 @@ namespace SAM.Core
             return false;
         }
 
-        public bool TryAddObject(object @object, out string typeName, out Guid guid)
+        public bool TryAddObject(X @object, out string typeName, out Guid guid)
         {
             typeName = null;
             guid = Guid.Empty;
@@ -266,9 +270,9 @@ namespace SAM.Core
 
             typeName = @object.GetType().FullName;
 
-            if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary))
+            if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, X> dictionary))
             {
-                dictionary = new Dictionary<Guid, object>();
+                dictionary = new Dictionary<Guid, X>();
                 dictionary_Objects[typeName] = dictionary;
             }
 
@@ -278,7 +282,7 @@ namespace SAM.Core
 
             if (guid == Guid.Empty)
             {
-                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                foreach (KeyValuePair<Guid, X> keyValuePair in dictionary)
                     if (@object.Equals(keyValuePair.Value))
                     {
                         guid = keyValuePair.Key;
@@ -293,7 +297,7 @@ namespace SAM.Core
             return true;
         }
 
-        public bool TryRemoveObject(object @object, out string typeName, out Guid guid)
+        public bool TryRemoveObject(X @object, out string typeName, out Guid guid)
         {
             typeName = null;
             guid = Guid.Empty;
@@ -303,10 +307,10 @@ namespace SAM.Core
 
             typeName = @object.GetType().FullName;
 
-            Dictionary<Guid, object> dictionary = null;
+            Dictionary<Guid, X> dictionary = null;
             if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
             {
-                dictionary = new Dictionary<Guid, object>();
+                dictionary = new Dictionary<Guid, X>();
                 dictionary_Objects[typeName] = dictionary;
             }
 
@@ -316,7 +320,7 @@ namespace SAM.Core
 
             if (guid == Guid.Empty)
             {
-                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                foreach (KeyValuePair<Guid, X> keyValuePair in dictionary)
                     if (@object.Equals(keyValuePair.Value))
                     {
                         guid = keyValuePair.Key;
@@ -330,12 +334,14 @@ namespace SAM.Core
             return dictionary.Remove(guid);
         }
 
-        public Guid GetGuid(object @object)
+        public Guid GetGuid(X @object)
         {
             if (!IsValid(@object))
+            {
                 return Guid.Empty;
+            }
 
-            Dictionary<Guid, object> dictionary;
+            Dictionary<Guid, X> dictionary;
             if (!dictionary_Objects.TryGetValue(@object.GetType().FullName, out dictionary))
                 return Guid.Empty;
 
@@ -350,7 +356,7 @@ namespace SAM.Core
             }
             else
             {
-                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+                foreach (KeyValuePair<Guid, X> keyValuePair in dictionary)
                     if (@object.Equals(keyValuePair.Value))
                         return keyValuePair.Key;
             }
@@ -368,9 +374,9 @@ namespace SAM.Core
                 }
 
                 HashSet<Guid> result = new HashSet<Guid>();
-                foreach(KeyValuePair< string, Dictionary<Guid, object>> keyValuePair_1 in dictionary_Objects)
+                foreach(KeyValuePair< string, Dictionary<Guid, X>> keyValuePair_1 in dictionary_Objects)
                 {
-                    foreach(KeyValuePair<Guid, object> keyValuePair_2 in keyValuePair_1.Value)
+                    foreach(KeyValuePair<Guid, X> keyValuePair_2 in keyValuePair_1.Value)
                     {
                         result.Add(keyValuePair_2.Key);
                     }
@@ -380,7 +386,7 @@ namespace SAM.Core
             }
         }
 
-        public List<object> GetObjects(IEnumerable<Guid> guids)
+        public List<X> GetObjects(IEnumerable<Guid> guids)
         {
             if (guids == null)
                 return null;
@@ -388,14 +394,13 @@ namespace SAM.Core
             List<Guid> guids_Temp = new List<Guid>(guids);
             guids_Temp.RemoveAll(x => x == Guid.Empty);
 
-            List<object> result = new List<object>();
-            foreach (Dictionary<Guid, object> dictionary_Temp in dictionary_Objects.Values)
+            List<X> result = new List<X>();
+            foreach (Dictionary<Guid, X> dictionary_Temp in dictionary_Objects.Values)
             {
                 List<Guid> guids_Remove = new List<Guid>();
                 foreach (Guid guid_Temp in guids_Temp)
                 {
-                    object object_Temp = null;
-                    if (!dictionary_Temp.TryGetValue(guid_Temp, out object_Temp))
+                    if (!dictionary_Temp.TryGetValue(guid_Temp, out X object_Temp))
                         continue;
 
                     if (object_Temp == null)
@@ -455,7 +460,7 @@ namespace SAM.Core
             return result;
         }
 
-        private List<object> GetObjects(ObjectReference objectReference, object parent = null)
+        private List<X> GetObjects(ObjectReference objectReference, X parent = default(X))
         {
             if (objectReference == null)
             {
@@ -464,7 +469,7 @@ namespace SAM.Core
 
             Type type = objectReference.Type;
 
-            List<object> objects = null;
+            List<X> objects = null;
             if(parent == null)
             {
                 objects = type != null ? GetObjects(type) : GetObjects();
@@ -487,12 +492,12 @@ namespace SAM.Core
                 {
                     if(Guid.TryParse(referenceString, out Guid guid))
                     {
-                        foreach(object @object in objects)
+                        foreach(X @object in objects)
                         {
                             Guid guid_Temp = GetGuid(@object);
                             if(guid_Temp == guid)
                             {
-                                return new List<object>() { @object };
+                                return new List<X>() { @object };
                             }
                         }
                     }
@@ -500,15 +505,15 @@ namespace SAM.Core
                     {
                         if(@int != -1 && objects.Count > @int)
                         {
-                            return new List<object>() { objects[@int] };
+                            return new List<X>() { objects[@int] };
                         }
                     }
                     else if(referenceString.StartsWith(@"""") && referenceString.EndsWith(@""""))
                     {
                         referenceString = referenceString.Substring(1, referenceString.Length - 2);
 
-                        List<object> result = new List<object>();
-                        foreach (object @object in objects)
+                        List<X> result = new List<X>();
+                        foreach (X @object in objects)
                         {
                             SAMObject sAMObject = @object as SAMObject;
                             if(sAMObject == null)
@@ -531,26 +536,26 @@ namespace SAM.Core
             return objects;
         }
 
-        public List<object> GetObjects(string typeName)
+        public List<X> GetObjects(string typeName)
         {
             if (!dictionary_Objects.ContainsKey(typeName))
                 return null;
 
-            List<object> result = new List<object>();
-            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary_Objects[typeName])
+            List<X> result = new List<X>();
+            foreach (KeyValuePair<Guid, X> keyValuePair in dictionary_Objects[typeName])
                 result.Add(keyValuePair.Value);
 
             return result;
         }
 
-        public List<T> GetObjects<T>(string typeName)
+        public List<T> GetObjects<T>(string typeName) where T: X
         {
             if (!dictionary_Objects.ContainsKey(typeName))
             {
                 return null;
             }
 
-            List<object> objects = GetObjects(typeName);
+            List<X> objects = GetObjects(typeName);
             if(objects == null)
             {
                 return null;
@@ -568,7 +573,7 @@ namespace SAM.Core
             return result;
         }
 
-        public List<object> GetObjects(Type type)
+        public List<X> GetObjects(Type type)
         {
             if (dictionary_Objects == null)
                 return null;
@@ -582,10 +587,10 @@ namespace SAM.Core
                 return null;
             }
 
-            List<object> result = new List<object>();
+            List<X> result = new List<X>();
             foreach (string typeName in typeNames)
             {
-                List<object> objects = GetObjects<object>(typeName);
+                List<X> objects = GetObjects<X>(typeName);
                 if (objects != null && objects.Count != 0)
                 {
                     result.AddRange(objects);
@@ -595,47 +600,40 @@ namespace SAM.Core
             return result;
         }
 
-        public List<object> GetObjects()
+        public List<X> GetObjects()
         {
             if (dictionary_Objects == null)
                 return null;
 
-            List<object> result = new List<object>();
-            foreach (Dictionary<Guid, object> dictionary in dictionary_Objects.Values)
-                foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+            List<X> result = new List<X>();
+            foreach (Dictionary<Guid, X> dictionary in dictionary_Objects.Values)
+            {
+                foreach (KeyValuePair<Guid, X> keyValuePair in dictionary)
+                {
                     result.Add(keyValuePair.Value);
+                }
+            }
 
             return result;
         }
 
-        public List<T> GetObjects<T>()
+        public List<T> GetObjects<T>() where T: X
         {
-            //List<string> typeNames = GetTypeNames(typeof(T));
-            //if (typeNames == null || typeNames.Count == 0)
-            //{
-            //    return null;
-            //}
-
-            //List<T> result = new List<T>();
-            //foreach (string typeName in typeNames)
-            //{
-            //    List<T> objects = GetObjects<T>(typeName);
-            //    if (objects != null && objects.Count != 0)
-            //    {
-            //        result.AddRange(objects);
-            //    }
-            //}
-
-            //return result;
-
-            List<object> objects = GetObjects(typeof(T));
+            List<X> objects = GetObjects(typeof(T));
             if (objects == null)
+            {
                 return null;
+            }
 
             List<T> result = new List<T>();
-            foreach (object @object in objects)
+            foreach (X @object in objects)
+            {
                 if (@object is T)
+                {
                     result.Add((T)@object);
+                }
+
+            }
 
             return result;
         }
@@ -674,7 +672,7 @@ namespace SAM.Core
             return result;
         }
 
-        public T GetObject<T>(params Func<T, bool>[] functions)
+        public T GetObject<T>(params Func<T, bool>[] functions) where T:X
         {
             List<T> objects = null;
 
@@ -709,21 +707,23 @@ namespace SAM.Core
             return default;
         }
 
-        public object GetObject(Guid guid)
+        public X GetObject(Guid guid)
         {
             if (guid == Guid.Empty)
-                return null;
+                return default(X);
 
-            foreach (Dictionary<Guid, object> dictionary_Temp in dictionary_Objects.Values)
+            foreach (Dictionary<Guid, X> dictionary_Temp in dictionary_Objects.Values)
             {
-                if (dictionary_Temp.TryGetValue(guid, out object object_Temp) && object_Temp != null)
+                if (dictionary_Temp.TryGetValue(guid, out X object_Temp) && object_Temp != null)
+                {
                     return object_Temp;
+                }
             }
 
-            return null;
+            return default(X);
         }
 
-        public T GetObject<T>(Guid guid)
+        public T GetObject<T>(Guid guid) where T: X
         {
             object @object = GetObject(typeof(T), guid);
             if (@object == null)
@@ -732,32 +732,32 @@ namespace SAM.Core
             return (T)@object;
         }
 
-        public object GetObject(Type type, Guid guid)
+        public X GetObject(Type type, Guid guid)
         {
-            return GetObject(type, guid, out Dictionary<Guid, object> dictionary, out string typeName);
+            return GetObject(type, guid, out Dictionary<Guid, X> dictionary, out string typeName);
         }
 
-        private object GetObject(Type type, Guid guid, out Dictionary<Guid, object> dictionary, out string typeName)
+        private X GetObject(Type type, Guid guid, out Dictionary<Guid, X> dictionary, out string typeName)
         {
             dictionary = null;
             typeName = null;
 
             if (!IsValid(type))
             {
-                return null;
+                return default(X);
             }
 
             if (dictionary_Objects == null)
             {
-                return null;
+                return default(X);
             }
 
             string fullName = type.FullName;
             if (fullName != null)
             {
-                if (dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, object> dictionary_Temp) && dictionary_Temp != null)
+                if (dictionary_Objects.TryGetValue(fullName, out Dictionary<Guid, X> dictionary_Temp) && dictionary_Temp != null)
                 {
-                    if (dictionary_Temp.TryGetValue(guid, out object result) && result != null)
+                    if (dictionary_Temp.TryGetValue(guid, out X result) && result != null)
                     {
                         if (type.IsAssignableFrom(result.GetType()))
                         {
@@ -774,9 +774,9 @@ namespace SAM.Core
             {
                 foreach (string typeName_Temp in typeNames)
                 {
-                    if (dictionary_Objects.TryGetValue(typeName_Temp, out Dictionary<Guid, object> dictionary_Temp) && dictionary_Temp != null)
+                    if (dictionary_Objects.TryGetValue(typeName_Temp, out Dictionary<Guid, X> dictionary_Temp) && dictionary_Temp != null)
                     {
-                        if (dictionary_Temp.TryGetValue(guid, out object result) && result != null)
+                        if (dictionary_Temp.TryGetValue(guid, out X result) && result != null)
                         {
                             if (type.IsAssignableFrom(result.GetType()))
                             {
@@ -789,28 +789,28 @@ namespace SAM.Core
                 }
             }
 
-            return null;
+            return default;
         }
 
         public string GetTypeName(Guid guid)
         {
-            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair in dictionary_Objects)
+            foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair in dictionary_Objects)
                 if (keyValuePair.Value.ContainsKey(guid))
                     return keyValuePair.Key;
 
             return null;
         }
 
-        public List<object> GetRelatedObjects(Guid guid)
+        public List<X> GetRelatedObjects(Guid guid)
         {
-            object @object = GetObject(guid);
+            X @object = GetObject(guid);
             if (@object == null)
                 return null;
 
             return GetRelatedObjects(@object);
         }
 
-        public List<object> GetRelatedObjects(LogicalOperator logicalOperator, params Guid[] guids)
+        public List<X> GetRelatedObjects(LogicalOperator logicalOperator, params Guid[] guids)
         {
             if(guids == null)
             {
@@ -819,11 +819,11 @@ namespace SAM.Core
 
             if(guids.Length == 0)
             {
-                return new List<object>();
+                return new List<X>();
             }
 
-            Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
-            List<object> relatedObjects = null;
+            Dictionary<Guid, X> dictionary = new Dictionary<Guid, X>();
+            List<X> relatedObjects = null;
 
             switch (logicalOperator)
             {
@@ -848,7 +848,7 @@ namespace SAM.Core
                             continue;
                         }
 
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (X relatedObject in relatedObjects)
                         {
                             Guid guid_RelatedObject = GetGuid(relatedObject);
                             if (dictionary.ContainsKey(guid_RelatedObject))
@@ -867,10 +867,10 @@ namespace SAM.Core
                     relatedObjects = GetRelatedObjects(guids[0]);
                     if (relatedObjects == null || relatedObjects.Count == 0)
                     {
-                        return new List<object>();
+                        return new List<X>();
                     }
 
-                    foreach (object relatedObject in relatedObjects)
+                    foreach (X relatedObject in relatedObjects)
                     {
                         Guid guid_RelatedObject = GetGuid(relatedObject);
                         if (dictionary.ContainsKey(guid_RelatedObject))
@@ -886,11 +886,11 @@ namespace SAM.Core
                         relatedObjects = GetRelatedObjects(guids[i]);
                         if (relatedObjects == null || relatedObjects.Count == 0)
                         {
-                            return new List<object>();
+                            return new List<X>();
                         }
 
                         HashSet<Guid> guids_RelatedObject = new HashSet<Guid>();
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (X relatedObject in relatedObjects)
                         {
                             guids_RelatedObject.Add(GetGuid(relatedObject));
                         }
@@ -906,7 +906,7 @@ namespace SAM.Core
 
                         if(dictionary.Count == 0)
                         {
-                            return new List<object>();
+                            return new List<X>();
                         }
                     }
 
@@ -922,7 +922,7 @@ namespace SAM.Core
                             continue;
                         }
 
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (X relatedObject in relatedObjects)
                         {
                             Guid guid_RelatedObject = GetGuid(relatedObject);
                             if (dictionary.ContainsKey(guid_RelatedObject))
@@ -940,9 +940,9 @@ namespace SAM.Core
             return dictionary.Values?.ToList();
         }
 
-        public List<T> GetRelatedObjects<T>(LogicalOperator logicalOperator, params Guid[] guids)
+        public List<T> GetRelatedObjects<T>(LogicalOperator logicalOperator, params Guid[] guids) where T: X
         {
-            List<object> objects = GetRelatedObjects(logicalOperator, guids);
+            List<X> objects = GetRelatedObjects(logicalOperator, guids);
             if (objects == null)
                 return null;
 
@@ -954,10 +954,10 @@ namespace SAM.Core
             return result;
         }
 
-        public List<object> GetRelatedObjects(object @object)
+        public List<X> GetRelatedObjects(X @object)
         {
             if (@object is Guid)
-                return GetRelatedObjects((Guid)@object);
+                return GetRelatedObjects((Guid)(object)@object);
 
             if (!IsValid(@object))
                 return null;
@@ -979,37 +979,37 @@ namespace SAM.Core
             return GetObjects(guids);
         }
 
-        public List<object> GetRelatedObjects(object @object, Type type)
+        public List<X> GetRelatedObjects(X @object, Type type)
         {
-            List<object> objects = GetRelatedObjects(@object);
+            List<X> objects = GetRelatedObjects(@object);
             if (objects == null || objects.Count == 0)
                 return objects;
 
             return objects.FindAll(x => x != null && type.IsAssignableFrom(x.GetType()));
         }
 
-        public List<T> GetRelatedObjects<T>(object @object)
+        public List<T> GetRelatedObjects<T>(X @object) where T : X
         {
-            List<object> objects = GetRelatedObjects(@object);
+            List<X> objects = GetRelatedObjects(@object);
             if (objects == null)
                 return null;
 
             List<T> result = new List<T>();
-            foreach (object object_Temp in objects)
+            foreach (X object_Temp in objects)
                 if (object_Temp is T)
                     result.Add((T)object_Temp);
 
             return result;
         }
 
-        public virtual int GetIndex(object @object)
+        public virtual int GetIndex(X @object)
         {
             if (@object == null)
             {
                 return -1;
             }
 
-            object object_Temp = @object;
+            X object_Temp = @object;
             if (@object is Guid)
             {
                 object_Temp = GetObject(Guid);
@@ -1181,12 +1181,7 @@ namespace SAM.Core
             return type != null;
         }
 
-        public virtual RelationCluster Clone()
-        {
-            return new RelationCluster(this);
-        }
-
-        public bool IsValid(object @object)
+        public bool IsValid(X @object)
         {
             if (@object == null)
                 return false;
@@ -1201,12 +1196,12 @@ namespace SAM.Core
                 return null;
 
             JArray jArray_Objects = new JArray();
-            foreach (KeyValuePair<string, Dictionary<Guid, object>> keyValuePair_Type in dictionary_Objects)
+            foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_Type in dictionary_Objects)
             {
                 JObject jObject_Objects = new JObject();
                 jObject_Objects.Add("Key", keyValuePair_Type.Key);
                 JArray jArray = new JArray();
-                foreach (KeyValuePair<Guid, object> keyValuePair in keyValuePair_Type.Value)
+                foreach (KeyValuePair<Guid, X> keyValuePair in keyValuePair_Type.Value)
                 {
                     JObject jObject_Temp = new JObject();
                     jObject_Temp.Add("Key", keyValuePair.Key);
@@ -1264,7 +1259,7 @@ namespace SAM.Core
             if (!base.FromJObject(jObject))
                 return false;
 
-            dictionary_Objects = new Dictionary<string, Dictionary<Guid, object>>();
+            dictionary_Objects = new Dictionary<string, Dictionary<Guid, X>>();
             dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
 
             JArray jArray_Objects = jObject.Value<JArray>("Objects");
@@ -1280,7 +1275,7 @@ namespace SAM.Core
                     if (jArray == null)
                         continue;
 
-                    List<Tuple<Guid, object>> tuples = Enumerable.Repeat(new Tuple<Guid, object>(Guid.Empty, null), jArray.Count).ToList();
+                    List<Tuple<Guid, X>> tuples = Enumerable.Repeat(new Tuple<Guid, X>(Guid.Empty, default(X)), jArray.Count).ToList();
                     Parallel.For(0, jArray.Count, (int i) => 
                     {
                         JObject jObject_Temp = jArray[i] as JObject;
@@ -1319,17 +1314,17 @@ namespace SAM.Core
                                 break;
                         }
 
-                        if(@object == null)
+                        if(@object == null && @object is X)
                         {
                             return;
                         }
 
-                        tuples[i] = new Tuple<Guid, object>(guid, @object);
+                        tuples[i] = new Tuple<Guid, X>(guid, (X)@object);
 
                     });
 
-                    Dictionary<Guid, object> dictionary = new Dictionary<Guid, object>();
-                    foreach(Tuple<Guid, object> tuple in tuples)
+                    Dictionary<Guid, X> dictionary = new Dictionary<Guid, X>();
+                    foreach(Tuple<Guid, X> tuple in tuples)
                     {
                         if(tuple.Item1 == Guid.Empty && tuple.Item2 == null)
                         {
@@ -1390,16 +1385,16 @@ namespace SAM.Core
                 return false;
             }
 
-            object @object = GetObject(type, guid, out Dictionary<Guid, object> dictionary_Object, out string typeName);
+            X @object = GetObject(type, guid, out Dictionary<Guid, X> dictionary_Object, out string typeName);
             if(@object == null)
             {
                 return false;
             }
 
-            List<object> relatedObjects = GetRelatedObjects(@object);
+            List<X> relatedObjects = GetRelatedObjects(@object);
             if (relatedObjects != null && relatedObjects.Count != 0)
             {
-                foreach (object relatedObject in relatedObjects)
+                foreach (X relatedObject in relatedObjects)
                 {
                     RemoveRelation(@object, relatedObject);
                 }
@@ -1413,7 +1408,7 @@ namespace SAM.Core
             return dictionary_Object.Remove(guid);
         }
 
-        public bool RemoveAll<T>()
+        public bool RemoveAll<T>() where T: X
         {
             List<T> ts = GetObjects<T>();
             if(ts == null || ts.Count == 0)
@@ -1439,7 +1434,7 @@ namespace SAM.Core
             return RemoveObject(typeof(T), guid);
         }
 
-        public bool RemoveRelation(object object_1, object object_2)
+        public bool RemoveRelation(X object_1, X object_2)
         {
             if (!IsValid(object_1) || !IsValid(object_2))
                 return false;
@@ -1467,10 +1462,10 @@ namespace SAM.Core
 
         public List<object> GetValues(IComplexReference complexReference)
         {
-            return GetValues(complexReference, null);
+            return GetValues(complexReference, default);
         }
 
-        private List<object> GetValues(IComplexReference complexReference, object parent)
+        private List<object> GetValues(IComplexReference complexReference, X parent)
         {
             if (complexReference == null)
             {
@@ -1488,7 +1483,7 @@ namespace SAM.Core
             {
                 if (parent == null)
                 {
-                    objects = GetObjects(objectReference);
+                    objects = GetObjects(objectReference)?.ConvertAll(x => x as object);
                 }
                 else if (string.IsNullOrEmpty(objectReference.TypeName) && (objectReference.Reference == null || !objectReference.Reference.HasValue))
                 {
@@ -1500,7 +1495,7 @@ namespace SAM.Core
                 }
                 else
                 {
-                    objects = GetObjects(objectReference, parent);
+                    objects = GetObjects(objectReference, parent)?.ConvertAll(x => x as object); ;
                 }
 
                 if (objects == null || objects.Count == 0)
@@ -1527,7 +1522,7 @@ namespace SAM.Core
             }
             else
             {
-                objects = GetObjects(objectReference, parent);
+                objects = GetObjects(objectReference, parent)?.ConvertAll(x => x as object); ;
             }
 
             if (objects == null || objects.Count == 0)
@@ -1547,11 +1542,15 @@ namespace SAM.Core
                     List<object> objects_Temp = new List<object>();
                     foreach (object @object in objects)
                     {
-                        List<object> objects_Temp_Temp = GetValues(pathReference, @object);
-                        if (objects_Temp_Temp != null)
+                        if(@object is X)
                         {
-                            objects_Temp.AddRange(objects_Temp_Temp);
+                            List<object> objects_Temp_Temp = GetValues(pathReference, (X)@object);
+                            if (objects_Temp_Temp != null)
+                            {
+                                objects_Temp.AddRange(objects_Temp_Temp);
+                            }
                         }
+
                     }
 
                     objects = objects_Temp;
@@ -1561,7 +1560,7 @@ namespace SAM.Core
             return objects;
         }
 
-        public bool TryGetValues(object @object, IComplexReference complexReference, out List<object> values)
+        public bool TryGetValues(X @object, IComplexReference complexReference, out List<object> values)
         {
             values = null;
             if (complexReference == null || @object == null)
@@ -1606,7 +1605,7 @@ namespace SAM.Core
                 return false;
             }
 
-            if (objects.Find(x => GetGuid(x) == guid) == null)
+            if (objects.Find(x => x is X && GetGuid((X)x) == guid) == null)
             {
                 return false;
             }

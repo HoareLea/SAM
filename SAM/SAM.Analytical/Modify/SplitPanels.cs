@@ -61,10 +61,10 @@ namespace SAM.Analytical
 
                     if(i > 0)
                     {
-                        List<object> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
+                        List<IAnalyticalObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
                         if(objects != null)
                         {
-                            foreach(object @object in objects)
+                            foreach(IAnalyticalObject @object in objects)
                             {
                                 adjacencyCluster.AddRelation(panel_New, @object);
                             }
@@ -155,10 +155,10 @@ namespace SAM.Analytical
 
                     if (i > 0)
                     {
-                        List<object> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
+                        List<IAnalyticalObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
                         if (objects != null)
                         {
-                            foreach (object @object in objects)
+                            foreach (IAnalyticalObject @object in objects)
                             {
                                 adjacencyCluster.AddRelation(panel_New, @object);
                             }

@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -201,12 +201,11 @@ namespace SAM.Analytical.Grasshopper
                                 adjacencyCluster.AddObject(internalCondition);
                             }
                         }
-                        else if (adjacencyCluster.IsValid(sAMObject_Temp))
+                        else if (sAMObject_Temp is IAnalyticalObject && adjacencyCluster.IsValid((IAnalyticalObject)sAMObject_Temp))
                         {
-                            adjacencyCluster.AddObject(sAMObject_Temp);
+                            adjacencyCluster.AddObject((IAnalyticalObject)sAMObject_Temp);
                         }
                     }
-                    
                     
                     if (sAMObject is AnalyticalModel)
                     {

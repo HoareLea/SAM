@@ -16,7 +16,7 @@ namespace SAM.Analytical
         private Location location;
         private Address address;
         private Terrain terrain;
-        private RelationCluster relationCluster;
+        private SAMObjectRelationCluster<IJSAMObject> relationCluster;
         private MaterialLibrary materialLibrary;
         private ProfileLibrary profileLibrary;
 
@@ -40,21 +40,7 @@ namespace SAM.Analytical
             terrain = buildingModel.terrain?.Clone();
             materialLibrary = buildingModel.materialLibrary?.Clone();
 
-            relationCluster = buildingModel.relationCluster?.Clone();
-
-            List<object> objects = relationCluster?.GetObjects();
-            if (objects != null)
-            {
-                foreach (object @object in objects)
-                {
-                    if(@object is IJSAMObject)
-                    {
-                        relationCluster.AddObject(((IJSAMObject)@object).Clone());
-                    }
-                }
-            }
-
-
+            relationCluster = buildingModel.relationCluster == null ? null : new SAMObjectRelationCluster<IJSAMObject>(buildingModel.relationCluster, true);
         }
 
         public BuildingModel(string description, Location location, Address address, Terrain terrain, MaterialLibrary materialLibrary, ProfileLibrary profileLibrary)
@@ -296,7 +282,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<object> objects = null;
+            List<IJSAMObject> objects = null;
             if(type == null)
             {
                 objects = relationCluster?.GetRelatedObjects(jSAMObject);
@@ -1529,7 +1515,7 @@ namespace SAM.Analytical
             }
 
             if (relationCluster == null)
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
 
             IPartition partition_Temp = partition.Clone();
 
@@ -1605,7 +1591,7 @@ namespace SAM.Analytical
             }
 
             if (relationCluster == null)
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
 
             Space space_Temp = new Space(space);
 
@@ -1852,7 +1838,7 @@ namespace SAM.Analytical
 
             if(relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             relationCluster.AddObject(hostPartitionType_Temp);
@@ -1880,7 +1866,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             relationCluster.AddObject(openingType_Temp);
@@ -1925,7 +1911,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             relationCluster.AddObject(mechanicalSystemType_Temp);
@@ -1951,7 +1937,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             BuildingModelSimulationResult buildingModelSimulationResult_Temp = new BuildingModelSimulationResult(buildingModelSimulationResult);
@@ -1968,7 +1954,7 @@ namespace SAM.Analytical
 
             if(relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             MechanicalSystem machanicalSystem_Temp = mechanicalSystem.Clone();
@@ -2019,7 +2005,7 @@ namespace SAM.Analytical
 
             if(relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             bool result = relationCluster.AddObject(spaceSimulationResult);
@@ -2048,7 +2034,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             bool result = relationCluster.AddObject(spaceSimulationResult);
@@ -2078,7 +2064,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             PartitionSimulationResult partitionSimulationResult_Temp = new PartitionSimulationResult(partitionSimulationResult);
@@ -2109,7 +2095,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             PartitionSimulationResult partitionSimulationResult_Temp = new PartitionSimulationResult(partitionSimulationResult);
@@ -2141,7 +2127,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             OpeningSimulationResult openingSimulationResult_Temp = new OpeningSimulationResult(openingSimulationResult);
@@ -2184,7 +2170,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             OpeningSimulationResult openingSimulationResult_Temp = new OpeningSimulationResult(openingSimulationResult);
@@ -2224,7 +2210,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             bool result = relationCluster.AddObject(zoneSimulationResult);
@@ -2254,7 +2240,7 @@ namespace SAM.Analytical
 
             if (relationCluster == null)
             {
-                relationCluster = new RelationCluster();
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>();
             }
 
             bool added = relationCluster.AddObject(result_Temp);
@@ -2381,7 +2367,7 @@ namespace SAM.Analytical
                 address = new Address(jObject.Value<JObject>("Address"));
 
             if (jObject.ContainsKey("RelationCluster"))
-                relationCluster = new RelationCluster(jObject.Value<JObject>("RelationCluster"));
+                relationCluster = new SAMObjectRelationCluster<IJSAMObject>(jObject.Value<JObject>("RelationCluster"));
 
             if (jObject.ContainsKey("Terrain"))
                 terrain = Core.Create.IJSAMObject<Terrain>(jObject.Value<JObject>("Terrain"));

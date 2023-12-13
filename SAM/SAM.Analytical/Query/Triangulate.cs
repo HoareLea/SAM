@@ -123,7 +123,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    List<object> relatedObjects = result.GetRelatedObjects(panel); 
+                    List<IAnalyticalObject> relatedObjects = result.GetRelatedObjects(panel); 
 
                     foreach(Panel panel_Temp in panels_Temp)
                     {
@@ -145,8 +145,13 @@ namespace SAM.Analytical
                         result.AddObject(panel_Temp);
 
                         if(relatedObjects != null && relatedObjects.Count > 0)
-                            foreach (object relatedObject in relatedObjects)
+                        {
+                            foreach (IAnalyticalObject relatedObject in relatedObjects)
+                            {
                                 result.AddRelation(panel_Temp, relatedObject);
+                            }
+
+                        }
                     }
                 }
             }
