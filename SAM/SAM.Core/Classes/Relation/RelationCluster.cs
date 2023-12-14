@@ -6,6 +6,33 @@ using System.Threading.Tasks;
 
 namespace SAM.Core
 {
+    public class RelationCluster : RelationCluster<object>
+    {
+        public RelationCluster()
+            : base()
+        {
+
+        }
+
+        public RelationCluster(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public RelationCluster(RelationCluster relationCluster)
+            : base(relationCluster)
+        {
+
+        }
+
+        public RelationCluster(IRelationCluster relationCluster)
+            : base(relationCluster)
+        {
+
+        }
+    }
+
     public class RelationCluster<X> : SAMObject, IRelationCluster
     {
         private Dictionary<string, Dictionary<Guid, X>> dictionary_Objects;
@@ -50,6 +77,12 @@ namespace SAM.Core
 
                 dictionary_Relations[keyValuePair_1.Key] = dictionary;
             }
+        }
+
+        public RelationCluster(IRelationCluster relationCluster)
+            : this(relationCluster?.Cast<X>())
+        {
+            
         }
 
         /// <summary>
@@ -180,6 +213,62 @@ namespace SAM.Core
             }
 
             return guids.Remove(guid_2);
+        }
+
+        public RelationCluster<T> Cast<T>()
+        {
+            RelationCluster<T> result = new RelationCluster<T>();
+
+            result.dictionary_Objects = new Dictionary<string, Dictionary<Guid, T>>();
+            foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_1 in dictionary_Objects)
+            {
+                Dictionary<Guid, T> dictionary = new Dictionary<Guid, T>();
+                foreach (KeyValuePair<Guid, X> keyValuePair_2 in keyValuePair_1.Value)
+                {
+                    if(keyValuePair_2.Value is T)
+                    {
+                        dictionary[keyValuePair_2.Key] = (T)(object)keyValuePair_2.Value;
+                    }
+
+                }
+
+                if(dictionary.Count != 0)
+                {
+                    result.dictionary_Objects[keyValuePair_1.Key] = dictionary;
+                }
+            }
+
+            result.dictionary_Relations = new Dictionary<string, Dictionary<Guid, HashSet<Guid>>>();
+            foreach (KeyValuePair<string, Dictionary<Guid, HashSet<Guid>>> keyValuePair_1 in dictionary_Relations)
+            {
+                if(!result.dictionary_Objects.ContainsKey(keyValuePair_1.Key))
+                {
+                    continue;
+                }
+
+                Dictionary<Guid, HashSet<Guid>> dictionary = new Dictionary<Guid, HashSet<Guid>>();
+                foreach (KeyValuePair<Guid, HashSet<Guid>> keyValuePair_2 in keyValuePair_1.Value)
+                {
+                    HashSet<Guid> guids = new HashSet<Guid>();
+                    foreach (Guid guid in keyValuePair_2.Value)
+                    {
+                        if(result.Contains<T>(guid))
+                        {
+                            guids.Add(guid);
+                        }
+                    }
+
+                    dictionary[keyValuePair_2.Key] = guids;
+                }
+
+                if(dictionary.Count != 0)
+                {
+                    result.dictionary_Relations[keyValuePair_1.Key] = dictionary;
+                }
+            }
+
+            return result;
+
         }
 
         public bool AddObject(X @object)

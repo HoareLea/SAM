@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 
 namespace SAM.Core
-{
+{   
     public abstract class RelationModel<T>
     {
         private Dictionary<Reference, T> dictionary;
