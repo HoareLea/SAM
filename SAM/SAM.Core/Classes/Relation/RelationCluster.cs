@@ -727,7 +727,7 @@ namespace SAM.Core
             return result;
         }
 
-        public List<T> GetObjects<T>(params Func<T, bool>[] functions)
+        public List<T> GetObjects<T>(params Func<T, bool>[] functions) where T : X
         {
             if (functions == null)
             {
