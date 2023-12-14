@@ -7,7 +7,7 @@ namespace SAM.Core
     {
         public static List<string> Descriptions<T>(params T[] excluded) where T: Enum
         {
-            List<T> enums = Query.Enums<T>(excluded);
+            List<T> enums = Enums(excluded);
             if(enums == null)
             {
                 return null;
@@ -16,7 +16,7 @@ namespace SAM.Core
             List<string> result = new List<string>();
             for (int i = 0; i < enums.Count; i++)
             {
-                result.Add(Query.Description(enums[i]));
+                result.Add(Description(enums[i]));
             }
 
             return result;

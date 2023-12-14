@@ -318,9 +318,9 @@ namespace SAM.Analytical
             return profileLibrary.Add(profile.Clone());
         }
 
-        public bool AddResult<T>(IAnalyticalResult analyticalResult, Guid guid) where T : IAnalyticalObject
+        public bool AddResult<T>(IResult result, Guid guid) where T : IJSAMObject
         {
-            IAnalyticalResult result_Temp = analyticalResult?.Clone();
+            IResult result_Temp = result?.Clone();
             if (result_Temp == null)
             {
                 return false;
@@ -503,17 +503,17 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetPanels()?.FindAll(x => func.Invoke(x)).ConvertAll(x => new Panel(x));
         }
 
-        public List<T> GetRelatedObjects<T>(IAnalyticalObject analyticalObject) where T : IAnalyticalObject
+        public List<T> GetRelatedObjects<T>(IJSAMObject sAMObject) where T : IJSAMObject
         {
-            if (analyticalObject == null)
+            if (sAMObject == null)
             {
                 return null;
             }
 
-            return adjacencyCluster?.GetRelatedObjects<T>(analyticalObject)?.ConvertAll(x => Core.Query.Clone(x));
+            return adjacencyCluster?.GetRelatedObjects<T>(sAMObject)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
-        public List<T> GetResults<T>(IAnalyticalObject jSAMObject) where T : IAnalyticalResult
+        public List<T> GetResults<T>(IJSAMObject jSAMObject) where T : IResult
         {
             if (jSAMObject == null)
             {

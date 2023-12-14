@@ -116,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("Objects");
             if(index != -1)
             {
-                List<IAnalyticalObject> result = null;
+                List<IJSAMObject> result = null;
 
                 if (type == null)
                     result = adjacencyCluster.GetObjects();

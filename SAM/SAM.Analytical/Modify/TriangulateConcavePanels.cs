@@ -33,7 +33,7 @@ namespace SAM.Analytical
 
                 triangulatedPanels.Add(panel);
 
-                List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
+                List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
 
                 foreach (Panel panel_Temp in panels_Triangulate)
                 {
@@ -48,7 +48,7 @@ namespace SAM.Analytical
 
                     if (relatedObjects != null && relatedObjects.Count > 0)
                     {
-                        foreach (IAnalyticalObject relatedObject in relatedObjects)
+                        foreach (IJSAMObject relatedObject in relatedObjects)
                         {
                             adjacencyCluster.AddRelation(panel_Temp, relatedObject);
                         }

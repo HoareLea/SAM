@@ -124,7 +124,7 @@ namespace SAM.Core
                 JArray jArray = jObject.Value<JArray>("Types");
                 foreach (string typeName in jArray)
                 {
-                    Type type = Core.Query.Type(typeName, true);
+                    Type type = Query.Type(typeName, true);
                     if (type == null)
                     {
                         types.Add(typeName);
@@ -142,7 +142,7 @@ namespace SAM.Core
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
-            jObject.Add("_type", Core.Query.FullTypeName(this));
+            jObject.Add("_type", Query.FullTypeName(this));
 
             if (types != null)
             {
@@ -152,7 +152,7 @@ namespace SAM.Core
                     string typeName = null;
                     if (@object is Type)
                     {
-                        typeName = Core.Query.FullTypeName((Type)@object);
+                        typeName = Query.FullTypeName((Type)@object);
                     }
                     else if (@object is string)
                     {

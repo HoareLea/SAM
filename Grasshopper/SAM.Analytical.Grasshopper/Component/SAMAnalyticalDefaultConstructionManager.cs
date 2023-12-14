@@ -71,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
 
             int index = Params.IndexOfOutputParam("constructionManager");
             if (index != -1)
-                dataAccess.SetData(index, new GooConstructionManager(SAM.Analytical.Query.DefaultConstructionManager()));
+                dataAccess.SetData(index, new GooConstructionManager(Analytical.Query.DefaultConstructionManager()));
         }
     }
 }

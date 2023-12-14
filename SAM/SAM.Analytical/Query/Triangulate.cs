@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -123,7 +124,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    List<IAnalyticalObject> relatedObjects = result.GetRelatedObjects(panel); 
+                    List<IJSAMObject> relatedObjects = result.GetRelatedObjects(panel); 
 
                     foreach(Panel panel_Temp in panels_Temp)
                     {
@@ -146,7 +147,7 @@ namespace SAM.Analytical
 
                         if(relatedObjects != null && relatedObjects.Count > 0)
                         {
-                            foreach (IAnalyticalObject relatedObject in relatedObjects)
+                            foreach (IJSAMObject relatedObject in relatedObjects)
                             {
                                 result.AddRelation(panel_Temp, relatedObject);
                             }

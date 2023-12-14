@@ -120,12 +120,12 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<IAnalyticalObject> result = type == null ? adjacencyCluster.GetRelatedObjects(analyticalObject) : adjacencyCluster.GetRelatedObjects(analyticalObject, type);
+            List<IJSAMObject> result = type == null ? adjacencyCluster.GetRelatedObjects(analyticalObject) : adjacencyCluster.GetRelatedObjects(analyticalObject, type);
 
             index = Params.IndexOfInputParam("_secondAnalyticalObject");
             if(index != -1 && dataAccess.GetData(index, ref analyticalObject) && analyticalObject != null)
             {
-                List<IAnalyticalObject> result_Temp = null;
+                List<IJSAMObject> result_Temp = null;
 
                 if (type == null)
                     result_Temp = adjacencyCluster.GetRelatedObjects(analyticalObject);

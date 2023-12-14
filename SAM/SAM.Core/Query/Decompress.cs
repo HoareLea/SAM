@@ -51,7 +51,7 @@ namespace SAM.Core
                 return null;
             }
 
-            return SAM.Core.Convert.ToSAM<T>(string_Decompress);
+            return Convert.ToSAM<T>(string_Decompress);
         }
     }
 }

@@ -9,7 +9,7 @@
                 return null;
             }
 
-            return new Line2D(origin, Create.Vector2D(angle));
+            return new Line2D(origin, Vector2D(angle));
 
         }
     }

@@ -51,7 +51,7 @@ namespace SAM.Core
 
         public static string Compress<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject 
         {
-            string json = SAM.Core.Convert.ToString(jSAMObjects);
+            string json = Convert.ToString(jSAMObjects);
             if(string.IsNullOrEmpty(json))
             {
                 return json;

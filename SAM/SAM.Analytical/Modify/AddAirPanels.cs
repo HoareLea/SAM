@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -193,7 +194,7 @@ namespace SAM.Analytical
 
                 Space space_Old = tuple.Item1;
 
-                List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
+                List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
                 adjacencyCluster.RemoveObject<Space>(space_Old.Guid);
 
                 foreach(Tuple<Space, List<Panel>> tuple_Space_New in tuple.Item2)
@@ -204,7 +205,7 @@ namespace SAM.Analytical
 
                     if(relatedObjects != null)
                     {
-                        foreach (IAnalyticalObject relatedObject in relatedObjects)
+                        foreach (IJSAMObject relatedObject in relatedObjects)
                         {
                             if (relatedObject is Panel)
                             {

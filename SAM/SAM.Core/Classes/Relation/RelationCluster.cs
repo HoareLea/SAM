@@ -1569,7 +1569,7 @@ namespace SAM.Core
             }
 
             Guid guid = GetGuid(@object);
-            if (guid == null || guid == System.Guid.Empty)
+            if (guid == null || guid == Guid.Empty)
             {
                 return false;
             }

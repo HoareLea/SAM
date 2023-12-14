@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -175,7 +176,7 @@ namespace SAM.Analytical
                 result.Add(panel_New);
             }
 
-            List<IAnalyticalObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
+            List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
 
             if (face2Ds.Count == 0)
             {
@@ -207,7 +208,7 @@ namespace SAM.Analytical
 
                 if (relatedObjects != null)
                 {
-                    foreach (IAnalyticalObject relatedObject in relatedObjects)
+                    foreach (IJSAMObject relatedObject in relatedObjects)
                     {
                         adjacencyCluster.AddRelation(panel_New, relatedObject);
                     }
