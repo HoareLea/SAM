@@ -74,7 +74,7 @@
     <Compile Include="Enums\StartupArgument.cs" />
     <Compile Include="Interfaces\Filter\INumberFilter.cs" />
     <Compile Include="Interfaces\Filter\ITextFilter.cs" />
-    <Compile Include="Interfaces\Filter\IRelationClusterFilter.cs" />
+    <Compile Include="Interfaces\Filter\ISAMObjectRelationClusterFilter.cs" />
     <Compile Include="Interfaces\Reference\IComplexReference.cs" />
     <Compile Include="Interfaces\Reference\IReference.cs" />
     <Compile Include="Interfaces\Relation\IRelationCluster.cs" />
