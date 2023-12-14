@@ -810,6 +810,15 @@ namespace SAM.Core
             return GetRelatedObjects(@object);
         }
 
+        public List<T> GetRelatedObjects<T>(Guid guid) where T : X
+        {
+            X @object = GetObject(guid);
+            if (@object == null)
+                return null;
+
+            return GetRelatedObjects<T>(@object);
+        }
+
         public List<X> GetRelatedObjects(LogicalOperator logicalOperator, params Guid[] guids)
         {
             if(guids == null)
