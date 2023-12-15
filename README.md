@@ -30,59 +30,62 @@ For more information about SAM, please visit our [wiki](https://github.com/Hoare
 
 ## License
 
-SAM is free software licensed under the GNU Lesser General Public License. Each contributor holds copyright over their respective contributions. The project versioning (Git) records all such contribution source information. See [LICENSE](https://github.com/HoareLea/SAM_gbXML/blob/master/LICENSE) and [COPYRIGHT_HEADER](https://github.com/HoareLea/SAM/blob/master/COPYRIGHT_HEADER.txt) for more details.
+SAM is free software licensed under the GNU Lesser General Public License. Each contributor holds a copyright over their respective contributions. The project versioning (Git) records all such contribution source information. See [LICENSE](https://github.com/HoareLea/SAM_gbXML/blob/master/LICENSE) and [COPYRIGHT_HEADER](https://github.com/HoareLea/SAM/blob/master/COPYRIGHT_HEADER.txt) for more details.
 
 ## Included Repositories that link with SAM
 
-* https://github.com/HoareLea/SAM
-* https://github.com/HoareLea/SAM_Topologic
-* https://github.com/HoareLea/SAM_Revit
-* https://github.com/HoareLea/SAM_Revit_UI
-* https://github.com/HoareLea/SAM_Tas
-* https://github.com/HoareLea/SAM_gbXML
-* https://github.com/HoareLea/SAM_UI
-* https://github.com/HoareLea/SAM_SolarCalculator
-* https://github.com/HoareLea/SAM_Windows
-* https://github.com/HoareLea/SAM_OpenStudio
-* https://github.com/HoareLea/SAM
-* https://github.com/HoareLea/SAM_Excel
-* https://github.com/HoareLea/SAM_Rhino_UI
-* https://github.com/HoareLea/SAM_LadybugTools
-* https://github.com/HoareLea/SAM_Mollier
-* https://github.com/HoareLea/SAM_Psychrometrics
-* https://github.com/HoareLea/SAM_SQLite
-* https://github.com/HoareLea/SAM_GEM
-* https://github.com/HoareLea/SAM_IFC
-* https://github.com/HoareLea/SAM_BHoM
-* https://github.com/HoareLea/SAM_Systems
+1. https://github.com/HoareLea/SAM
+2. https://github.com/HoareLea/SAM_BHoM
+3. https://github.com/HoareLea/SAM_Excel
+4. https://github.com/HoareLea/SAM_gbXML
+5. https://github.com/HoareLea/SAM_GEM
+6. https://github.com/HoareLea/SAM_IFC
+7. https://github.com/HoareLea/SAM_LadybugTools
+8. https://github.com/HoareLea/SAM_Mollier
+9. https://github.com/HoareLea/SAM_OpenStudio
+10. https://github.com/HoareLea/SAM_Psychrometrics
+11. https://github.com/HoareLea/SAM_Revit
+12. https://github.com/HoareLea/SAM_Revit_UI
+12. https://github.com/HoareLea/SAM_Rhino_UI
+14. https://github.com/HoareLea/SAM_SQLite
+15. https://github.com/HoareLea/SAM_SolarCalculator
+16. https://github.com/HoareLea/SAM_Systems
+17. https://github.com/HoareLea/SAM_Tas
+18. https://github.com/HoareLea/SAM_Topologic
+19. https://github.com/HoareLea/SAM_UI
+20. https://github.com/HoareLea/SAM_Windows
 
 
 ## Build order
 
 1. SAM.sln
-2. SAM_Psychrometrics.sln
-3. SAM_Mollier.sln
-4. SAM_Windows.sln
-5. SAM_Topologic.sln
-6. SAM_Acoustic.sln
-7. SAM_BHom.sln
-8. SAM_gbXML.sln
-9. SAM_GEM.sln
-10. SAM_LadybugTools.sln
-11. SAM_Solver.sln
-12. SAM_SolarCalculator.sln
-13. SAM_Tas.sln
-14. SAM_Excel.sln
-15. SAM_SQLite.sln
-16. SAM_OpenStudio.sln
-17. SAM_Origin.sln
-18. SAM_Revit.sln (Release2020)
-19. SAM_Revit.sln (Release2021)
-20. SAM_Revit.sln (Release2022)
-21. SAM_Revit.sln (Release2023)
-22. SAM_UI.sln
-23. SAM_Rhino_UI.sln
-24. SAM_Revit_UI.sln (Release2020)
-25. SAM_Revit_UI.sln (Release2021)
-26. SAM_Revit_UI.sln (Release2022)
-27. SAM_Revit_UI.sln (Release2023)
+2. SAM_Systems
+3. SAM_Psychrometrics.sln
+4. SAM_Mollier.sln
+5. SAM_Windows.sln
+6. SAM_IFC
+7. SAM_Topologic.sln
+8. SAM_Acoustic.sln
+9. SAM_BHom.sln
+10. SAM_gbXML.sln
+11. SAM_GEM.sln
+12. SAM_LadybugTools.sln
+13. SAM_Solver.sln
+14. SAM_SolarCalculator.sln
+15. SAM_Tas.sln
+16. SAM_Excel.sln
+17. SAM_SQLite.sln
+18. SAM_OpenStudio.sln
+19. SAM_Origin.sln
+20. SAM_Revit.sln (Release2020)
+21. SAM_Revit.sln (Release2021)
+22. SAM_Revit.sln (Release2022)
+23. SAM_Revit.sln (Release2023)
+24. SAM_Revit.sln (Release2024)
+25. SAM_UI.sln
+26. SAM_Rhino_UI.sln
+27. SAM_Revit_UI.sln (Release2020)
+28. SAM_Revit_UI.sln (Release2021)
+29. SAM_Revit_UI.sln (Release2022)
+30. SAM_Revit_UI.sln (Release2023)
+31. SAM_Revit_UI.sln (Release2024)
