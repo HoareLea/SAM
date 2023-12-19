@@ -30,7 +30,9 @@ namespace SAM.Math
         {
             Matrix4D matrix4D = new Matrix4D();
             for (int i = 0; i < 4; i++)
+            {
                 matrix4D[i, i] = 1;
+            }
 
             return matrix4D;
         }

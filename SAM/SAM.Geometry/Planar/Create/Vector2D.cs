@@ -46,5 +46,16 @@
 
             return vector2D * length;
         }
+
+        public static Vector2D Vector2D(this Math.Matrix matrix)
+        {
+            if (matrix == null)
+                return null;
+
+            if (matrix.RowCount() < 2 || matrix.ColumnCount() < 1)
+                return null;
+
+            return new Vector2D(matrix[0, 0], matrix[1, 0]);
+        }
     }
 }

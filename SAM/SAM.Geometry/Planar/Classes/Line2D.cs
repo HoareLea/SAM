@@ -161,5 +161,13 @@ namespace SAM.Geometry.Planar
             return segment2D.On(point2D, tolerance) ? point2D : null;
 
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            Point2D origin_New = Query.Transform(origin, transform2D);
+            Vector2D vector_New = Query.Transform(vector, transform2D);
+
+            return new Line2D(origin_New, vector_New);
+        }
     }
 }

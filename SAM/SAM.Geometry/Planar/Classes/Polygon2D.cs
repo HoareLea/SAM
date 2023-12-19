@@ -330,5 +330,10 @@ namespace SAM.Geometry.Planar
         {
             return Query.Trim(this, parameter, inverted);
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }

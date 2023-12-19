@@ -410,5 +410,15 @@ namespace SAM.Geometry.Planar
         {
             return string.Format("{0}(X={1},Y={2})", GetType().Name, coordinates[0], coordinates[1]);
         }
+
+        public Math.Matrix GetArgumentedMatrix()
+        {
+            return new Math.Matrix(new double[,] { { coordinates[0] }, { coordinates[1] }, { 0 } });
+        }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }

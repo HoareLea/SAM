@@ -640,5 +640,10 @@ namespace SAM.Geometry.Planar
 
             return new Segment2D(Start, point2D);
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }
