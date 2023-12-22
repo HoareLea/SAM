@@ -266,25 +266,37 @@ namespace SAM.Core
 
         public bool Contains(X @object)
         {
-            if (!IsValid(@object))
+            if (@object == null || !IsValid(@object))
+            {
                 return false;
+            }
 
             string typeName = @object.GetType().FullName;
 
-            Dictionary<Guid, object> dictionary = null;
+            Dictionary<Guid, X> dictionary = null;
             if (!dictionary_Objects.TryGetValue(typeName, out dictionary))
+            {
                 return false;
+            }
 
             Guid guid = Guid.Empty;
             if (@object is ISAMObject)
+            {
                 guid = ((ISAMObject)@object).Guid;
+            }
 
             if (guid != Guid.Empty)
+            {
                 return dictionary.ContainsKey(guid);
+            }
 
-            foreach (KeyValuePair<Guid, object> keyValuePair in dictionary)
+            foreach (KeyValuePair<Guid, X> keyValuePair in dictionary)
+            {
                 if (@object.Equals(keyValuePair.Value))
+                {
                     return true;
+                }
+            }
 
             return false;
         }
@@ -1578,6 +1590,31 @@ namespace SAM.Core
             return default;
         }
 
+        public List<T> GetObjects<T>(ObjectReference objectReference) where T: X
+        {
+            if (objectReference == null)
+            {
+                return null;
+            }
+
+            List<X> objects = GetObjects(objectReference, default);
+            if(objects == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(X @object in objects)
+            {
+                if(@object is T)
+                {
+                    result.Add((T)@object);
+                }
+            }
+
+            return result;
+        }
+        
         private List<X> GetObjects(ObjectReference objectReference, X parent = default(X))
         {
             if (objectReference == null)
