@@ -105,6 +105,7 @@
     <Compile Include="Component\SAMAnalyticalCreateConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalGetValuesByReference.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManagerAndPanels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />

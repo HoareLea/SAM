@@ -189,6 +189,32 @@ namespace SAM.Analytical
             return materialLibrary?.GetMaterial(name);
         }
 
+        public List<T> GetMaterials<T>(Construction construction) where T: IMaterial
+        {
+            if(construction == null || materialLibrary == null)
+            {
+                return null;
+            }
+
+            List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
+            if(constructionLayers == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            {
+                IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                if(material is T)
+                {
+                    result.Add((T)material);
+                }
+            }
+
+            return result;
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if(jObject == null)
