@@ -82,6 +82,7 @@
     <Compile Include="Query\Categories.cs" />
     <Compile Include="Query\Graft.cs" />
     <Compile Include="Query\IndexOf.cs" />
+    <Compile Include="Query\GetMethodInfo.cs" />
     <Compile Include="Query\ShortText.cs" />
     <Compile Include="Query\QuotedText.cs" />
     <Compile Include="Query\Descriptions.cs" />
