@@ -243,8 +243,10 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (Panel panel in panels)
                 {
-                    if (panel.PanelType != PanelType.WallExternal)
+                    if (panel.PanelType != PanelType.WallExternal || panel.Adiabatic())
+                    {
                         continue;
+                    }
 
                     Panel panel_New = Create.Panel(panel);
 
