@@ -20,5 +20,42 @@ namespace SAM.Analytical
 
             return new ConstructionManager(apertureConstructions, constructions, materialLibrary);
         }
+
+        public static ConstructionManager ConstructionManager(ConstructionManager constructionManager, Dictionary<PanelType, Construction> constructionDictionary, Dictionary<PanelType, ApertureConstruction> apertureConctructionDictionary)
+        {
+            ConstructionManager result = constructionManager == null ? new ConstructionManager() : new ConstructionManager(constructionManager);
+
+            if(constructionDictionary != null)
+            {
+                foreach(KeyValuePair<PanelType, Construction> keyValuePair in constructionDictionary)
+                {
+                    if(keyValuePair.Value == null)
+                    {
+                        continue;
+                    }
+
+                    result.GetConstructions(keyValuePair.Key)?.ForEach(x => result.Remove(x));
+
+                    result.Add(keyValuePair.Value, keyValuePair.Key);
+                }
+            }
+
+            if (apertureConctructionDictionary != null)
+            {
+                foreach (KeyValuePair<PanelType, ApertureConstruction> keyValuePair in apertureConctructionDictionary)
+                {
+                    if (keyValuePair.Value == null)
+                    {
+                        continue;
+                    }
+
+                    result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key)?.ForEach(x => result.Remove(x));
+
+                    result.Add(keyValuePair.Value, keyValuePair.Key);
+                }
+            }
+
+            return result;
+        }
     }
 }
