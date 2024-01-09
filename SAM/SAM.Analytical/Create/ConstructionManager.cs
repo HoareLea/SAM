@@ -51,7 +51,7 @@ namespace SAM.Analytical
                     }
 
                     result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key)?.ForEach(x => result.Remove(x));
-
+                    
                     result.Add(keyValuePair.Value, keyValuePair.Key);
                 }
             }

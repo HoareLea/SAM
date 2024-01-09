@@ -229,30 +229,40 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("doorExternal_");
             if (index != -1 && dataAccess.GetData(index, ref apertureConstruction) && apertureConstruction != null)
             {
+                apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Door);
+
                 apertureConstructionDictionary[PanelType.WallExternal] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("doorInternal_");
             if (index != -1 && dataAccess.GetData(index, ref apertureConstruction) && apertureConstruction != null)
             {
+                apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Door);
+
                 apertureConstructionDictionary[PanelType.WallInternal] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("skylight_");
             if (index != -1 && dataAccess.GetData(index, ref apertureConstruction) && apertureConstruction != null)
             {
+                apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
+
                 apertureConstructionDictionary[PanelType.Roof] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("windowExternal_");
             if (index != -1 && dataAccess.GetData(index, ref apertureConstruction) && apertureConstruction != null)
             {
+                apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
+
                 apertureConstructionDictionary[PanelType.WallExternal] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("windowInternal_");
             if (index != -1 && dataAccess.GetData(index, ref apertureConstruction) && apertureConstruction != null)
             {
+                apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
+                
                 apertureConstructionDictionary[PanelType.WallInternal] = apertureConstruction;
             }
 
