@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Core;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -21,7 +22,7 @@ namespace SAM.Analytical
             return new ConstructionManager(apertureConstructions, constructions, materialLibrary);
         }
 
-        public static ConstructionManager ConstructionManager(ConstructionManager constructionManager, Dictionary<PanelType, Construction> constructionDictionary, Dictionary<PanelType, ApertureConstruction> apertureConctructionDictionary)
+        public static ConstructionManager ConstructionManager(ConstructionManager constructionManager, Dictionary<PanelType, Construction> constructionDictionary, Dictionary<PanelType, ApertureConstruction> apertureConctructionDictionary, IEnumerable<IMaterial> materials)
         {
             ConstructionManager result = constructionManager == null ? new ConstructionManager() : new ConstructionManager(constructionManager);
 
@@ -52,6 +53,19 @@ namespace SAM.Analytical
                     result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key)?.ForEach(x => result.Remove(x));
 
                     result.Add(keyValuePair.Value, keyValuePair.Key);
+                }
+            }
+
+            if(materials != null)
+            {
+                foreach(IMaterial material in materials)
+                {
+                    if(material == null)
+                    {
+                        continue;
+                    }
+
+                    result.Add(material);
                 }
             }
 

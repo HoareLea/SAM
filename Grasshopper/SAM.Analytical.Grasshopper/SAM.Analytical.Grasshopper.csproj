@@ -100,11 +100,13 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveFromConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalDefaultConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalGetValuesByReference.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManagerAndPanels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
