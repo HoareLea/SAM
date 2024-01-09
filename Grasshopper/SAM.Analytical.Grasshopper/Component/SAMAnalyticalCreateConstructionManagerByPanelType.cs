@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                GooConstructionManagerParam gooConstructionManagerParam = new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructions_", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.list, Optional = true };
+                GooConstructionManagerParam gooConstructionManagerParam = new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooConstructionManagerParam, ParamVisibility.Binding));
 
                 GooConstructionParam gooConstructionParam;
@@ -94,16 +94,16 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 gooApertureConstructionParam = new GooApertureConstructionParam() { Name = "doorInternal_", NickName = "doorInternal_", Description = "SAM Analytical Construction for door internal", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(gooConstructionParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 gooApertureConstructionParam = new GooApertureConstructionParam() { Name = "skylight_", NickName = "skylight_", Description = "SAM Analytical ApertureConstruction for skylight", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(gooConstructionParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 gooApertureConstructionParam = new GooApertureConstructionParam() { Name = "windowExternal_", NickName = "windowExternal_", Description = "SAM Analytical ApertureConstruction for window external", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(gooConstructionParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 gooApertureConstructionParam = new GooApertureConstructionParam() { Name = "windowInternal_", NickName = "windowInternal_", Description = "SAM Analytical ApertureConstruction for window internal", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(gooConstructionParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 GooSAMObjectParam sAMObjectParam = new GooSAMObjectParam() { Name = "materials_", NickName = "materials_", Description = "SAM Materials", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(sAMObjectParam, ParamVisibility.Binding));
@@ -268,27 +268,35 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("materials_");
             List<ISAMObject> sAMObjects = new List<ISAMObject>();
-            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null)
+            if (index == -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetDataList(index, sAMObjects);
             }
 
             List<IMaterial> materials = new List<IMaterial>();
-            foreach (ISAMObject sAMObject in sAMObjects)
+
+            if(sAMObjects != null)
             {
-                if (sAMObject is MaterialLibrary)
+                foreach (ISAMObject sAMObject in sAMObjects)
                 {
-                    ((MaterialLibrary)sAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
+                    if (sAMObject is MaterialLibrary)
+                    {
+                        ((MaterialLibrary)sAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
+                    }
+                    else if (sAMObject is IMaterial)
+                    {
+                        materials.Add((IMaterial)sAMObject);
+                    }
+                    else if (sAMObject is ConstructionManager)
+                    {
+                        ((ConstructionManager)sAMObject)?.Materials?.ForEach(x => materials.Add(x));
+                    }
                 }
-                else if (sAMObject is IMaterial)
-                {
-                    materials.Add((IMaterial)sAMObject);
-                }
-                else if (sAMObject is ConstructionManager)
-                {
-                    ((ConstructionManager)sAMObject)?.Materials?.ForEach(x => materials.Add(x));
-                }
+            }
+
+            if(materials != null && materials.Count == 0)
+            {
+                materials = null;
             }
 
             constructionManager = Create.ConstructionManager(constructionManager, constructionDictionary, apertureConstructionDictionary, materials);

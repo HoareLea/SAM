@@ -214,7 +214,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Construction> result = new List<Construction>(constructions);
+            List<Construction> result = new List<Construction>();
             foreach(Construction construction in constructions)
             {
                 if(construction == null)
@@ -259,7 +259,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<ApertureConstruction> result = new List<ApertureConstruction>(apertureConstructions);
+            List<ApertureConstruction> result = new List<ApertureConstruction>();
             foreach (ApertureConstruction apertureConstruction in apertureConstructions)
             {
                 if (apertureConstruction == null)
