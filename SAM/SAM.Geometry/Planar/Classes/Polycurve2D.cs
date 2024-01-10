@@ -130,5 +130,10 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(curves.ConvertAll(x => x.GetStart()));
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            throw new System.Exception();
+        }
     }
 }

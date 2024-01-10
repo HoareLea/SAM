@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
         //    return result;
         //}
 
-        public static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Tolerance.MicroDistance)
         {
             if(polygon2D_1 == null || polygon2D_2 == null)
             {
@@ -52,7 +52,7 @@ namespace SAM.Geometry.Planar
             return Union(new Polygon2D[] { polygon2D_1, polygon2D_2 }, tolerance);
         }
 
-        public static List<Polygon2D> Union(this IEnumerable<Polygon2D> polygon2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Polygon2D> Union(this IEnumerable<Polygon2D> polygon2Ds, double tolerance = Tolerance.MicroDistance)
         {
             if (polygon2Ds == null)
                 return null;
@@ -164,7 +164,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Segment2D> Union(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Union(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Tolerance.MicroDistance)
         {
             if (segment2D_1 == null || segment2D_2 == null)
                 return null;
@@ -189,7 +189,7 @@ namespace SAM.Geometry.Planar
             return new List<Segment2D>() { new Segment2D(point2D_1, point2D_2) };
         }
 
-        public static List<Segment2D> Union(this IEnumerable<Segment2D> segment2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Segment2D> Union(this IEnumerable<Segment2D> segment2Ds, double tolerance = Tolerance.MicroDistance)
         {
             if (segment2Ds == null)
                 return null;
@@ -217,7 +217,7 @@ namespace SAM.Geometry.Planar
             throw new NotImplementedException();
         }
 
-        public static List<Face2D> Union(this IEnumerable<Face2D> face2Ds, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Face2D> Union(this IEnumerable<Face2D> face2Ds, double tolerance = Tolerance.MicroDistance)
         {
             if (face2Ds == null)
                 return null;
@@ -248,7 +248,7 @@ namespace SAM.Geometry.Planar
             return polygons.ConvertAll(x => x.ToSAM(tolerance));
         }
 
-        public static List<Face2D> Union(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Face2D> Union(this Face2D face2D_1, Face2D face2D_2, double tolerance = Tolerance.MicroDistance)
         {
             Polygon polygon_1 = face2D_1?.ToNTS(tolerance);
             if (polygon_1 == null)

@@ -60,7 +60,7 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            RelationCluster relationCluster = null;
+            IRelationCluster relationCluster = null;
 
             if (!dataAccess.GetData(0, ref relationCluster))
             {
@@ -75,10 +75,12 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            RelationCluster relationCluster_Result = relationCluster.Clone();
+            IRelationCluster relationCluster_Result = relationCluster.Clone();
 
             foreach(SAMObject sAMObject in sAMObjects)
-                relationCluster_Result.AddObject(sAMObject);
+            {
+                (relationCluster_Result as dynamic).AddObject(sAMObject);
+            }
 
 
             dataAccess.SetData(0, relationCluster_Result);

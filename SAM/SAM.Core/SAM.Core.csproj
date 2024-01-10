@@ -65,6 +65,8 @@
     <Compile Include="Classes\Reference\PropertyReference.cs" />
     <Compile Include="Classes\Reference\PathReference.cs" />
     <Compile Include="Classes\Reference\ObjectReference.cs" />
+    <Compile Include="Classes\Relation\SAMObjectRelationCluster.cs" />
+    <Compile Include="Classes\Relation\RelationCluster.cs" />
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\Category.cs" />
     <Compile Include="Create\StartupOptions.cs" />
@@ -72,12 +74,15 @@
     <Compile Include="Enums\StartupArgument.cs" />
     <Compile Include="Interfaces\Filter\INumberFilter.cs" />
     <Compile Include="Interfaces\Filter\ITextFilter.cs" />
-    <Compile Include="Interfaces\Filter\IRelationClusterFilter.cs" />
+    <Compile Include="Interfaces\Filter\ISAMObjectRelationClusterFilter.cs" />
     <Compile Include="Interfaces\Reference\IComplexReference.cs" />
     <Compile Include="Interfaces\Reference\IReference.cs" />
+    <Compile Include="Interfaces\Relation\IRelationCluster.cs" />
+    <Compile Include="Interfaces\Relation\ISAMObjectRelationCluster.cs" />
     <Compile Include="Query\Categories.cs" />
     <Compile Include="Query\Graft.cs" />
     <Compile Include="Query\IndexOf.cs" />
+    <Compile Include="Query\GetMethodInfo.cs" />
     <Compile Include="Query\ShortText.cs" />
     <Compile Include="Query\QuotedText.cs" />
     <Compile Include="Query\Descriptions.cs" />
@@ -216,7 +221,6 @@
     <Compile Include="Classes\Log\Log.cs" />
     <Compile Include="Classes\Log\LogRecord.cs" />
     <Compile Include="Classes\Relation\TypeMap.cs" />
-    <Compile Include="Classes\Relation\RelationCluster.cs" />
     <Compile Include="Convert\ToCsv\String.cs" />
     <Compile Include="Convert\ToList\List.cs" />
     <Compile Include="Create\Object.cs" />

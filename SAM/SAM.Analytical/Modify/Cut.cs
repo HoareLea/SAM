@@ -56,7 +56,7 @@ namespace SAM.Analytical
                 List<Panel> panels_Cut = panel.Cut(plane, tolerance);
                 if (panels_Cut != null && panels_Cut.Count > 1)
                 {
-                    List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
+                    List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(panel);
                     if (adjacencyCluster.RemoveObject<Panel>(panel.Guid))
                     {
                         foreach (Panel panel_Cut in panels_Cut)

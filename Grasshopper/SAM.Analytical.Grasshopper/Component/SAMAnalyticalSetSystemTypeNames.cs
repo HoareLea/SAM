@@ -177,6 +177,10 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            if(adjacencyCluster != null)
+            {
+                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+            }
 
             for (int i = 0; i < spaces.Count; i++)
             {
@@ -190,6 +194,8 @@ namespace SAM.Analytical.Grasshopper
                 {
                     continue;
                 }
+
+                space = new Space(space);
 
                 InternalCondition internalCondition = space.InternalCondition;
                 if(internalCondition == null)

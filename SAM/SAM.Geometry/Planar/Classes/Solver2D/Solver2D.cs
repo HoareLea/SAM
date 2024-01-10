@@ -205,7 +205,7 @@ namespace SAM.Geometry.Planar
             {
                 return calculatedRectangle;
             }
-            if (System.Math.Abs(defaultRectangle.Width - calculatedRectangle.Width) < SAM.Core.Tolerance.MacroDistance)
+            if (System.Math.Abs(defaultRectangle.Width - calculatedRectangle.Width) < Core.Tolerance.MacroDistance)
             {
                 return calculatedRectangle;
             }

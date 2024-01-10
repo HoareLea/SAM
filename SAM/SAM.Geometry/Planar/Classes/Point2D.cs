@@ -382,5 +382,15 @@ namespace SAM.Geometry.Planar
         {
             return new Vector2D(coordinates[0] - point2D[0], coordinates[1] - point2D[1]);
         }
+
+        public Math.Matrix GetArgumentedMatrix()
+        {
+            return new Math.Matrix(new double[,] { { coordinates[0] }, { coordinates[1] }, { 1 } });
+        }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }

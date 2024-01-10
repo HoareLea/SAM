@@ -163,5 +163,10 @@ namespace SAM.Geometry.Planar
 
             return jObject;
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }

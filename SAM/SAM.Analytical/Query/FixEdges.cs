@@ -43,14 +43,14 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<object> relatedObjects = result.GetRelatedObjects<object>(panels[i]);
+                List<IAnalyticalObject> relatedObjects = result.GetRelatedObjects<IAnalyticalObject>(panels[i]);
 
                 foreach (Panel panel_FixEdge in panels_Temp)
                 {
                     result.AddObject(panel_FixEdge);
                     if (relatedObjects != null)
                     {
-                        foreach (object relatedObject in relatedObjects)
+                        foreach (IAnalyticalObject relatedObject in relatedObjects)
                         {
                             result.AddRelation(panel_FixEdge, relatedObject);
                         }

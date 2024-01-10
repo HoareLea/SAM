@@ -4,7 +4,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<T> Systems<T>(this AdjacencyCluster adjacencyCluster, Space space) where T : Core.ISystem
+        public static List<T> Systems<T>(this AdjacencyCluster adjacencyCluster, Space space) where T : MechanicalSystem
         {
             if(adjacencyCluster == null || space == null)
             {
@@ -14,7 +14,7 @@ namespace SAM.Analytical
             return adjacencyCluster.GetRelatedObjects<T>(space);
         }
 
-        public static List<T> Systems<T>(this AnalyticalModel analyticalModel, Space space) where T : Core.ISystem
+        public static List<T> Systems<T>(this AnalyticalModel analyticalModel, Space space) where T : MechanicalSystem
         {
             if (analyticalModel == null || space == null)
             {

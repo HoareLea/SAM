@@ -1,7 +1,9 @@
-﻿namespace SAM.Geometry.Planar
+﻿using SAM.Geometry.Spatial;
+
+namespace SAM.Geometry.Planar
 {
     public interface ISAMGeometry2D : ISAMGeometry
     {
-
+        ISAMGeometry2D GetTransformed(Transform2D transform2D);
     }
 }

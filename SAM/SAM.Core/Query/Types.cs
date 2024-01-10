@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -29,6 +30,48 @@ namespace SAM.Core
             }
 
             Types(relationFilter_Temp, types);
+        }
+
+        public static List<Type> Types(object @object, string path)
+        {
+            if(@object == null || string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
+            {
+                return null;
+            }
+
+            Assembly assembly = null;
+
+            try
+            {
+                assembly = Assembly.LoadFile(path);
+            }
+            catch
+            {
+                return null;
+            }
+
+            if(assembly == null)
+            {
+                return null;
+            }
+
+            List<Type> result = new List<Type>();
+
+            Type[] types = assembly.GetTypes();
+            if(types == null || types.Length == 0)
+            {
+                return result;
+            }
+
+            foreach (Type type in types)
+            {
+                if(type.IsInstanceOfType(@object))
+                {
+                    result.Add(type);
+                }
+            }
+
+            return result;
         }
     }
 }

@@ -123,5 +123,49 @@ namespace SAM.Core
 
             return string.Join("::", values);
         }
+
+        public override bool Equals(object obj)
+        {
+            if(ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+
+            bool result = base.Equals(obj);
+            if(!result)
+            {
+                return result;
+            }
+
+            PropertyReference propertyReference = obj as PropertyReference;
+            if(propertyReference == null)
+            {
+                result = false;
+                return result;
+            }
+
+            return propertyReference.PropertyName == propertyName;
+
+        }
+
+        public static bool operator ==(PropertyReference propertyReference_1, PropertyReference propertyReference_2)
+        {
+            if (ReferenceEquals(propertyReference_1, null) && ReferenceEquals(propertyReference_2, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(propertyReference_1, null) || ReferenceEquals(propertyReference_2, null))
+            {
+                return false;
+            }
+
+            return propertyReference_1.Equals(propertyReference_2);
+        }
+
+        public static bool operator !=(PropertyReference propertyReference_1, PropertyReference propertyReference_2)
+        {
+            return !(propertyReference_1 == propertyReference_2);
+        }
     }
 }

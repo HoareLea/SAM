@@ -248,5 +248,10 @@ namespace SAM.Geometry.Planar
             List<IClosed2D> edges_Excluded = null;
             return Create(edges, out edges_Excluded, edgeOrientationMethod, tolerance);
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            return Query.Transform(this, transform2D);
+        }
     }
 }

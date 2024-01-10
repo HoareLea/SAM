@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -68,25 +68,25 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects))
+            List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
+            if (!dataAccess.GetDataList(1, analyticalObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster_Result = adjacencyCluster.Clone() as AdjacencyCluster;
+            AdjacencyCluster adjacencyCluster_Result = adjacencyCluster.Clone();
 
             List<bool> successfuls = new List<bool>();
-            foreach(SAMObject sAMObject in sAMObjects)
+            foreach(IAnalyticalObject analyticalObject in analyticalObjects)
             {
-                if(!adjacencyCluster.Contains(sAMObject))
+                if(!adjacencyCluster.Contains(analyticalObject))
                 {
                     successfuls.Add(false);
                     continue;
                 }
 
-                successfuls.Add(adjacencyCluster_Result.AddObject(sAMObject));
+                successfuls.Add(adjacencyCluster_Result.AddObject(analyticalObject));
             }
 
             dataAccess.SetData(0, adjacencyCluster_Result);

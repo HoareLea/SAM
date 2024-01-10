@@ -53,6 +53,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\Face.cs" />
+    <Compile Include="Planar\Classes\CoordinateSystem2D.cs" />
+    <Compile Include="Planar\Classes\SAMGeometry2DGroup.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2DSettings.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2DData.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2D.cs" />
@@ -92,8 +94,10 @@
     <Compile Include="Planar\Classes\ConvexHullComparer.cs" />
     <Compile Include="Planar\Classes\Mesh2D.cs" />
     <Compile Include="Planar\Classes\Solver2D\Solver2DResult.cs" />
+    <Compile Include="Planar\Classes\Transform2D.cs" />
     <Compile Include="Planar\Create\Line2D.cs" />
     <Compile Include="Planar\Create\Mesh2D.cs" />
+    <Compile Include="Planar\Create\Point2D.cs" />
     <Compile Include="Planar\Create\Polygon2D.cs" />
     <Compile Include="Planar\Create\Segment2D.cs" />
     <Compile Include="Planar\Create\Vector2D.cs" />
@@ -106,6 +110,7 @@
     <Compile Include="Planar\Query\DiagonalLength.cs" />
     <Compile Include="Planar\Query\FilterRelevant.cs" />
     <Compile Include="Planar\Query\SplitByInternalEdges.cs" />
+    <Compile Include="Planar\Query\Transform.cs" />
     <Compile Include="Planar\Query\TriangulateByNTS.cs" />
     <Compile Include="Planar\Query\WorkGeometry.cs" />
     <Compile Include="Planar\Query\Vector2D.cs" />

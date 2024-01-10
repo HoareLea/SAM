@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -80,11 +81,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster_New.AddObject(space);
 
-                List<object> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
+                List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space);
                 if (relatedObjects == null || relatedObjects.Count == 0)
                     continue;
 
-                foreach(object relatedObject in relatedObjects)
+                foreach(IJSAMObject relatedObject in relatedObjects)
                 {
                     if (!adjacencyCluster_New.AddObject(relatedObject))
                         continue;

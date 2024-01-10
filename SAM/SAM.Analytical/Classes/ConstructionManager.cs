@@ -6,6 +6,9 @@ namespace SAM.Analytical
 {
     public class ConstructionManager : IJSAMObject, IAnalyticalObject
     {
+        public string Name { get; set; }
+        public string Description { get; set; }
+
         private ApertureConstructionLibrary apertureConstructionLibrary;
         private ConstructionLibrary constructionLibrary;
         
@@ -54,6 +57,9 @@ namespace SAM.Analytical
                 apertureConstructionLibrary = constructionManager.apertureConstructionLibrary?.Clone();
                 constructionLibrary = constructionManager.constructionLibrary?.Clone();
                 materialLibrary = constructionManager.materialLibrary?.Clone();
+
+                Name = constructionManager.Name;
+                Description = constructionManager.Description;
             }
         }
 
@@ -169,9 +175,70 @@ namespace SAM.Analytical
             return constructionLibrary.Add(construction);
         }
 
+        public bool Add(Construction construction, PanelType panelType)
+        {
+            if(construction == null)
+            {
+                return false;
+            }
+
+            Construction construction_New = new Construction(construction);
+            construction_New.SetValue(ConstructionParameter.DefaultPanelType, panelType);
+
+            return Add(construction_New);
+        }
+
+        public bool Add(ApertureConstruction apertureConstruction, PanelType panelType)
+        {
+            if (apertureConstruction == null)
+            {
+                return false;
+            }
+
+            ApertureConstruction apertureConstruction_New = new ApertureConstruction(apertureConstruction);
+            apertureConstruction_New.SetValue(ApertureConstructionParameter.DefaultPanelType, panelType);
+
+            return Add(apertureConstruction_New);
+        }
+
         public List<Construction> GetConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
         {
             return constructionLibrary?.GetConstructions(text, textComparisonType, caseSensitive);
+        }
+
+        public List<Construction> GetConstructions(PanelType panelType)
+        {
+            List<Construction> constructions = constructionLibrary?.GetConstructions();
+            if (constructions == null)
+            {
+                return null;
+            }
+
+            List<Construction> result = new List<Construction>();
+            foreach(Construction construction in constructions)
+            {
+                if(construction == null)
+                {
+                    continue;
+                }
+
+                if(!construction.TryGetValue(ConstructionParameter.DefaultPanelType, out string panelTypeString) || string.IsNullOrWhiteSpace(panelTypeString))
+                {
+                    continue;
+                }
+
+                if(!Core.Query.TryGetEnum(panelTypeString, out PanelType panelType_Temp))
+                {
+                    continue;
+                }
+
+                if(panelType_Temp == panelType)
+                {
+                    result.Add(construction);
+                }
+            }
+
+            return result;
         }
 
         public List<ApertureConstruction> GetApertureConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
@@ -184,9 +251,75 @@ namespace SAM.Analytical
             return apertureConstructionLibrary?.GetApertureConstructions(text, textComparisonType, caseSensitive, apertureType: apertureType);
         }
 
+        public List<ApertureConstruction> GetApertureConstructions(ApertureType apertureType, PanelType panelType)
+        {
+            List<ApertureConstruction> apertureConstructions = apertureConstructionLibrary?.GetApertureConstructions();
+            if (apertureConstructions == null)
+            {
+                return null;
+            }
+
+            List<ApertureConstruction> result = new List<ApertureConstruction>();
+            foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+            {
+                if (apertureConstruction == null)
+                {
+                    continue;
+                }
+
+                if (apertureConstruction.ApertureType != apertureType)
+                {
+                    continue;
+                }
+
+                if (!apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultPanelType, out string panelTypeString) || string.IsNullOrWhiteSpace(panelTypeString))
+                {
+                    continue;
+                }
+
+                if (!Core.Query.TryGetEnum(panelTypeString, out PanelType panelType_Temp))
+                {
+                    continue;
+                }
+
+                if (panelType_Temp == panelType)
+                {
+                    result.Add(apertureConstruction);
+                }
+            }
+
+            return result;
+        }
+
         public IMaterial GetMaterial(string name)
         {
             return materialLibrary?.GetMaterial(name);
+        }
+
+        public List<T> GetMaterials<T>(Construction construction) where T: IMaterial
+        {
+            if(construction == null || materialLibrary == null)
+            {
+                return null;
+            }
+
+            List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
+            if(constructionLayers == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            {
+                IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                if(material is T)
+                {
+                    result.Add((T)material);
+                }
+            }
+
+            return result;
         }
 
         public bool FromJObject(JObject jObject)
@@ -196,7 +329,17 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if(jObject.ContainsKey("ApertureConstructionLibrary"))
+            if(jObject.ContainsKey("Name"))
+            {
+                Name = jObject.Value<string>("Name");
+            }
+
+            if (jObject.ContainsKey("Description"))
+            {
+                Description = jObject.Value<string>("Description");
+            }
+
+            if (jObject.ContainsKey("ApertureConstructionLibrary"))
             {
                 apertureConstructionLibrary = Core.Query.IJSAMObject<ApertureConstructionLibrary>(jObject.Value<JObject>("ApertureConstructionLibrary"));
             }
@@ -218,6 +361,16 @@ namespace SAM.Analytical
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
+
+            if (Name != null)
+            {
+                jObject.Add("Name", Name);
+            }
+
+            if (Description != null)
+            {
+                jObject.Add("Description", Description);
+            }
 
             if (apertureConstructionLibrary != null)
             {

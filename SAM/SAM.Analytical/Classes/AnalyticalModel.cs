@@ -318,7 +318,7 @@ namespace SAM.Analytical
             return profileLibrary.Add(profile.Clone());
         }
 
-        public bool AddResult<T>(IResult result, Guid guid) where T : SAMObject
+        public bool AddResult<T>(IResult result, Guid guid) where T : IJSAMObject
         {
             IResult result_Temp = result?.Clone();
             if (result_Temp == null)
@@ -503,24 +503,24 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetPanels()?.FindAll(x => func.Invoke(x)).ConvertAll(x => new Panel(x));
         }
 
-        public List<T> GetRelatedObjects<T>(IJSAMObject jSAMObject) where T : IJSAMObject
+        public List<T> GetRelatedObjects<T>(IJSAMObject sAMObject) where T : IJSAMObject
         {
-            if (jSAMObject == null)
+            if (sAMObject == null)
             {
                 return null;
             }
 
-            return adjacencyCluster?.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => Core.Query.Clone(x));
+            return adjacencyCluster?.GetRelatedObjects<T>(sAMObject)?.ConvertAll(x => Core.Query.Clone(x));
         }
 
-        public List<T> GetResults<T>(IJSAMObject jSAMObject) where T : Result
+        public List<T> GetResults<T>(IJSAMObject jSAMObject) where T : IResult
         {
             if (jSAMObject == null)
             {
                 return null;
             }
 
-            return adjacencyCluster.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => x?.Clone());
+            return adjacencyCluster.GetRelatedObjects<T>(jSAMObject)?.ConvertAll(x => x.Clone());
         }
 
         public List<T> GetResults<T>(string source = null) where T : Result

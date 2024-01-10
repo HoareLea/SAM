@@ -173,5 +173,17 @@ namespace SAM.Geometry.Planar
 
             return jObject;
         }
+
+        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        {
+            Point2D center_New = Query.Transform(center, transform2D);
+
+            Vector2D vector2D_Height = heightDirection * height;
+            Vector2D vector2D_Width = WidthDirection * width;
+
+            vector2D_Height = Query.Transform(vector2D_Height, transform2D);
+
+            return new Ellipse2D(center_New, vector2D_Width.Length, vector2D_Height.Length, vector2D_Height.Unit);
+        }
     }
 }

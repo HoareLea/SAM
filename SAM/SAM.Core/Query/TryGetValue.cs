@@ -236,15 +236,27 @@ namespace SAM.Core
             value = null;
 
             if (string.IsNullOrWhiteSpace(name) || @object == null)
+            {
                 return false;
+            }
 
             PropertyInfo[] propertyInfos = @object.GetType().GetProperties();
             foreach (PropertyInfo propertyInfo in propertyInfos)
             {
-                if (propertyInfo.Name.Equals(name) && propertyInfo.GetMethod != null)
+                if (!propertyInfo.Name.Equals(name) )
                 {
-                    if (TryGetValue_Method(@object, propertyInfo.GetMethod, out value))
-                        return true;
+                    continue;
+                }
+
+                MethodInfo methodInfo = Query.GetMethodInfo(propertyInfo);
+                if (methodInfo == null)
+                {
+                    continue;
+                }
+
+                if (TryGetValue_Method(@object, methodInfo, out value))
+                {
+                    return true;
                 }
             }
 

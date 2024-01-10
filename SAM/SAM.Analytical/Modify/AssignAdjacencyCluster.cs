@@ -23,9 +23,9 @@ namespace SAM.Analytical
             {
                 ((IAdjacencyClusterFilter)filter).AdjacencyCluster = adjacencyCluster;
             }
-            else if (filter is IRelationClusterFilter)
+            else if (filter is ISAMObjectRelationClusterFilter)
             {
-                ((IRelationClusterFilter)filter).RelationCluster = adjacencyCluster;
+                ((ISAMObjectRelationClusterFilter)filter).SAMObjectRelationCluster = adjacencyCluster;
             }
         }
     }

@@ -79,6 +79,32 @@ namespace SAM.Core
             return ToString().GetHashCode();
         }
 
+        public override bool Equals(object obj)
+        {
+            if(ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+
+            ObjectReference objectReference = obj as ObjectReference;
+            if(objectReference == null)
+            {
+                return false;
+            }
+
+            if (typeName != objectReference.typeName)
+            {
+                return false;
+            }
+
+            if (reference != objectReference.reference)
+            {
+                return false;
+            }
+
+            return true;
+        }
+
         public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -151,6 +177,26 @@ namespace SAM.Core
             {
                 typeName = Query.FullTypeName(value);
             }
+        }
+
+        public static bool operator ==(ObjectReference objectReference_1, ObjectReference objectReference_2)
+        {
+            if(ReferenceEquals( objectReference_1, null) && ReferenceEquals( objectReference_2, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(objectReference_1, null) || ReferenceEquals(objectReference_2, null))
+            {
+                return false;
+            }
+
+            return objectReference_1.Equals(objectReference_2);
+        }
+
+        public static bool operator !=(ObjectReference objectReference_1, ObjectReference objectReference_2)
+        {
+            return !(objectReference_1 == objectReference_2);
         }
     }
 }

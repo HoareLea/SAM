@@ -170,7 +170,7 @@ namespace SAM.Geometry.Planar
             rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector.GetNegated());
             rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector.GetNegated());
 
-            return Create.Rectangle2D(rectanglePoints);
+            return Rectangle2D(rectanglePoints);
         }
     }
 }

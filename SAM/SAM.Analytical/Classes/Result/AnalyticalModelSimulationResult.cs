@@ -4,7 +4,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class AnalyticalModelSimulationResult : Result
+    public class AnalyticalModelSimulationResult : Result, IAnalyticalResult
     {
         public AnalyticalModelSimulationResult(string name, string source, string reference)
             : base(name, source, reference)

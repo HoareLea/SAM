@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -61,10 +62,10 @@ namespace SAM.Analytical
 
                     if(i > 0)
                     {
-                        List<object> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
+                        List<IJSAMObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
                         if(objects != null)
                         {
-                            foreach(object @object in objects)
+                            foreach(IJSAMObject @object in objects)
                             {
                                 adjacencyCluster.AddRelation(panel_New, @object);
                             }
@@ -153,12 +154,12 @@ namespace SAM.Analytical
 
                     adjacencyCluster.AddObject(panel_New);
 
-                    if (i > 0)
+                    if (i > 0)  
                     {
-                        List<object> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
+                        List<IJSAMObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
                         if (objects != null)
                         {
-                            foreach (object @object in objects)
+                            foreach (IJSAMObject @object in objects)
                             {
                                 adjacencyCluster.AddRelation(panel_New, @object);
                             }

@@ -119,5 +119,65 @@ namespace SAM.Core
 
             return result;
         }
+
+        public override bool Equals(object obj)
+        {
+            if(ReferenceEquals(obj, null))
+            {
+                return false;
+            }
+
+            PathReference pathReference = obj as PathReference;
+            if (pathReference == null)
+            {
+                return false;
+            }
+
+            List<ObjectReference> objectReferences_Temp = pathReference.objectReferences;
+            if((objectReferences == null || objectReferences.Count == 0 ) && (objectReferences_Temp == null || objectReferences_Temp.Count == 0))
+            {
+                return true;
+            }
+
+            if (objectReferences == null || objectReferences.Count == 0 || objectReferences_Temp == null || objectReferences_Temp.Count == 0)
+            {
+                return false;
+            }
+
+            if(objectReferences.Count != objectReferences_Temp.Count)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < objectReferences.Count; i++)
+            {
+                if (objectReferences[i] != objectReferences_Temp[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        public static bool operator ==(PathReference pathReference_1, PathReference pathReference_2)
+        {
+            if (ReferenceEquals(pathReference_1, null) && ReferenceEquals(pathReference_2, null))
+            {
+                return true;
+            }
+
+            if (ReferenceEquals(pathReference_1, null) || ReferenceEquals(pathReference_2, null))
+            {
+                return false;
+            }
+
+            return pathReference_1.Equals(pathReference_2);
+        }
+
+        public static bool operator !=(PathReference pathReference_1, PathReference pathReference_2)
+        {
+            return !(pathReference_1 == pathReference_2);
+        }
     }
 }

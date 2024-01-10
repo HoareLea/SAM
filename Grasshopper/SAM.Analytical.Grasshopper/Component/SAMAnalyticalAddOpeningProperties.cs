@@ -64,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "factors_", NickName = "factors_", Description = "Factors", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles\nSchedule in Tas so 24h bool", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
 
                 return result.ToArray();

@@ -262,14 +262,14 @@ namespace SAM.Core
             return graphNodes.GetEnumerator();
         }
 
-        public RelationCluster GetRelationCluster()
+        public RelationCluster<object> GetRelationCluster()
         {
             return GetRelationCluster<object, object>();
         }
 
-        public RelationCluster GetRelationCluster<X, Z>()
+        public RelationCluster<object> GetRelationCluster<X, Z>()
         {
-            RelationCluster result = new RelationCluster();
+            RelationCluster<object> result = new RelationCluster<object>();
             foreach (GraphNode graphNode in graphNodes)
             {
                 if (!(graphNode.Object is X))

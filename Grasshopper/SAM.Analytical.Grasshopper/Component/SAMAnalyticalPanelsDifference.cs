@@ -108,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
 
             for (int i=0; i < panels.Count; i++)
             {
-                List<Panel> panels_Difference = SAM.Analytical.Query.Difference(panels[i], cuttingPanels, tolerance_Distance: tolerance);
+                List<Panel> panels_Difference = Analytical.Query.Difference(panels[i], cuttingPanels, tolerance_Distance: tolerance);
                 if(panels_Difference == null || panels_Difference.Count == 0)
                 {
                     continue;
