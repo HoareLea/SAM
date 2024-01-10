@@ -322,6 +322,46 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<T> GetMaterials<T>(ApertureConstruction apertureConstruction) where T : IMaterial
+        {
+            if (apertureConstruction == null || materialLibrary == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+
+            List<ConstructionLayer> constructionLayers = null;
+
+           constructionLayers = apertureConstruction.FrameConstructionLayers;
+            if (constructionLayers != null)
+            {
+                foreach (ConstructionLayer constructionLayer in constructionLayers)
+                {
+                    IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                    if (material is T && result.Find(x => x.Name == material.Name) == null)
+                    {
+                        result.Add((T)material);
+                    }
+                }
+            }
+
+            constructionLayers = apertureConstruction.PaneConstructionLayers;
+            if (constructionLayers != null)
+            {
+                foreach (ConstructionLayer constructionLayer in constructionLayers)
+                {
+                    IMaterial material = materialLibrary.GetMaterial(constructionLayer.Name);
+                    if (material is T && result.Find(x => x.Name == material.Name) == null)
+                    {
+                        result.Add((T)material);
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public bool FromJObject(JObject jObject)
         {
             if(jObject == null)

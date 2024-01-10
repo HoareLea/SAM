@@ -268,7 +268,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("materials_");
             List<ISAMObject> sAMObjects = new List<ISAMObject>();
-            if (index == -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, sAMObjects);
             }
