@@ -17,6 +17,16 @@
             return new global::Rhino.Display.DisplayMaterial(color);
         }
 
+        public static global::Rhino.Display.DisplayMaterial DisplayMaterial(this BoundaryType boundaryType)
+        {
+            System.Drawing.Color color = Analytical.Query.Color(boundaryType);
+
+            if (color == System.Drawing.Color.Empty)
+                return null;
+
+            return new global::Rhino.Display.DisplayMaterial(color);
+        }
+
         public static global::Rhino.Display.DisplayMaterial DisplayMaterial(this ApertureType apertureType)
         {
             System.Drawing.Color color = Analytical.Query.Color(apertureType);

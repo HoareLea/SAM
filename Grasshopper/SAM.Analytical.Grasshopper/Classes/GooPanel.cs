@@ -19,7 +19,9 @@ namespace SAM.Analytical.Grasshopper
 {
     public class GooPanel : GooJSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
     {
-        public bool ShowAll = true;
+        public BoundaryType? BoundaryType { get; }  = null;
+        
+        public bool ShowAll { get; set; }  = true;
         
         public GooPanel()
             : base()
@@ -29,6 +31,12 @@ namespace SAM.Analytical.Grasshopper
         public GooPanel(Panel panel)
             : base(panel)
         {
+        }
+
+        public GooPanel(Panel panel, BoundaryType? boundaryType)
+            : base(panel)
+        {
+            BoundaryType = boundaryType;
         }
 
         public BoundingBox ClippingBox
@@ -44,7 +52,10 @@ namespace SAM.Analytical.Grasshopper
 
         public override IGH_Goo Duplicate()
         {
-            return new GooPanel(Value);
+            GooPanel result = new GooPanel(Value, BoundaryType);
+            result.ShowAll = ShowAll;
+
+            return result;
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
@@ -80,31 +91,38 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value == null)
-                return;
-
-            Face3D face3D = Value.GetFace3D();
+            Face3D face3D = Value?.GetFace3D();
             if (face3D == null)
+            {
                 return;
+            }
 
             if(!ShowAll)
             {
                 Point3D point3D_CameraLocation = Geometry.Rhino.Convert.ToSAM(RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation);
                 if (point3D_CameraLocation == null)
+                {
                     return;
+                }
 
                 double distance = face3D.Distance(point3D_CameraLocation);
                 if (distance < 8 || distance > 15)
+                {
                     return;
+                }
             }
 
-            global::Rhino.Display.DisplayMaterial displayMaterial = Query.DisplayMaterial(Value.PanelType);
+            global::Rhino.Display.DisplayMaterial displayMaterial = BoundaryType != null && BoundaryType.HasValue ? Query.DisplayMaterial(BoundaryType.Value) : Query.DisplayMaterial(Value.PanelType);
             if (displayMaterial == null)
+            {
                 displayMaterial = args.Material;
+            }
 
             Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
             if (brep == null)
+            {
                 return;
+            }
 
             args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
@@ -112,15 +130,19 @@ namespace SAM.Analytical.Grasshopper
             if (apertures != null)
             {
                 foreach (Aperture aperture in apertures)
+                {
                     foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
                     {
                         global::Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
                         if (displayMaterial_Aperture == null)
+                        {
                             displayMaterial_Aperture = args.Material;
+                        }
 
                         GooSAMGeometry gooSAMGeometry_Aperture = new GooSAMGeometry(closedPlanar3D);
                         gooSAMGeometry_Aperture.DrawViewportMeshes(args, displayMaterial_Aperture);
                     }
+                }
             }
         }
 

@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
                 index = Params.IndexOfOutputParam(keyValuePair.Key.ToString());
                 if (index != -1)
                 {
-                    dataAccess.SetDataList(index, keyValuePair.Value);
+                    dataAccess.SetDataList(index, keyValuePair.Value?.ConvertAll(x => new GooPanel(x, keyValuePair.Key)));
                 }
             }
         }
