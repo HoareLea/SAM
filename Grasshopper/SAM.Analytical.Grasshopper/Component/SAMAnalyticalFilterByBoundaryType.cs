@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach (BoundaryType boundaryType in Enum.GetValues(typeof(BoundaryType)))
                 {
-                    result.Add(new GH_SAMParam(new GooPanelParam() { Name = boundaryType.ToString(), NickName = boundaryType.ToString(), Description = string.Format("SAM Analytical {0} Panels", Core.Query.Description(boundaryType)), Access = GH_ParamAccess.list }, boundaryType == BoundaryType.Exposed || boundaryType == BoundaryType.Linked ? ParamVisibility.Binding : ParamVisibility.Voluntary));
+                    result.Add(new GH_SAMParam(new GooPanelParam() { Name = boundaryType.ToString(), NickName = boundaryType.ToString(), Description = string.Format("SAM Analytical {0} Panels", Core.Query.Description(boundaryType)), Access = GH_ParamAccess.list }, ParamVisibility.Mandatory));
                 }
 
                 return result.ToArray();
