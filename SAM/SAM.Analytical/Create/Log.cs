@@ -762,7 +762,48 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
-            Core.Modify.AddRange(result, space.InternalCondition?.Log(profileLibrary));
+            InternalCondition internalCondition = space.InternalCondition;
+
+            Core.Modify.AddRange(result, internalCondition?.Log(profileLibrary));
+
+            Dictionary<ProfileType, string> dictionary = internalCondition?.GetProfileTypeDictionary();
+            if (dictionary != null)
+            {
+                foreach (ProfileType profileType in Enum.GetValues(typeof(ProfileType)))
+                {
+                    if (profileType == ProfileType.Undefined || profileType == ProfileType.Other)
+                    {
+                        continue;
+                    }
+
+                    switch(profileType)
+                    {
+                        case ProfileType.Ventilation:
+                            if (internalCondition.TryGetValue(InternalConditionParameter.VentilationSystemTypeName, out string ventilationSystemTypeName))
+                            {
+                                if (ventilationSystemTypeName == "EOC" || ventilationSystemTypeName == "EOL")
+                                {
+                                    double supplyAirFlow = Query.CalculatedSupplyAirFlow(space);
+                                    if (supplyAirFlow > 0)
+                                    {
+                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, supplyAirFlow);
+                                    }
+                                }
+
+                                if (ventilationSystemTypeName == "NV" || ventilationSystemTypeName == "UV")
+                                {
+                                    double supplyAirFlow = Query.CalculatedSupplyAirFlow(space);
+                                    double exhaustAirFlow = Query.CalculatedExhaustAirFlow(space);
+                                    if (supplyAirFlow > 0 || exhaustAirFlow > 0)
+                                    {
+                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3} and exhaust air flow is {4}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, supplyAirFlow, exhaustAirFlow);
+                                    }
+                                }
+                            }
+                            break;
+                    }
+                }
+            }
 
             return result;
         }
@@ -810,6 +851,34 @@ namespace SAM.Analytical
 
                 switch (profileType)
                 {
+                    case ProfileType.Cooling:
+                        if (internalCondition.TryGetValue(InternalConditionParameter.CoolingSystemTypeName, out string coolingSystemTypeName))
+                        {
+                            if(coolingSystemTypeName == "UC")
+                            {
+                                double coolingDesignTemperature = Query.CoolingDesignTemperature(internalCondition, profileLibrary);
+                                if (coolingDesignTemperature <= 50)
+                                {
+                                    result.Add("{0} InternalCondition (Guid: {1}) Your Cooling System is {2} but setpoint is {3}", LogRecordType.Warning, name, internalCondition.Guid, coolingSystemTypeName, coolingDesignTemperature);
+                                }
+                            }
+                        }
+                        break;
+
+                    case ProfileType.Heating:
+                        if (internalCondition.TryGetValue(InternalConditionParameter.HeatingSystemTypeName, out string heatingSystemTypeName))
+                        {
+                            if (heatingSystemTypeName == "UH")
+                            {
+                                double heatingDesignTemperature = Query.HeatingDesignTemperature(internalCondition, profileLibrary);
+                                if (heatingDesignTemperature > 0)
+                                {
+                                    result.Add("{0} InternalCondition (Guid: {1}) Your Heating System is {2} but setpoint is {3}", LogRecordType.Warning, name, internalCondition.Guid, heatingSystemTypeName, heatingDesignTemperature);
+                                }
+                            }
+                        }
+                        break;
+
                     case ProfileType.EquipmentLatent:
 
                         if (!internalCondition.TryGetValue(InternalConditionParameter.EquipmentLatentGain, out value_1))
