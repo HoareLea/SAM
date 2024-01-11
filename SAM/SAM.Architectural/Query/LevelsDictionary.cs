@@ -4,7 +4,7 @@ namespace SAM.Architectural
 {
     public static partial class Query
     {
-        public static Dictionary<Level, List<T>> LevelsDictionary<T>(this List<T> face3DObjects, double tolerance = Core.Tolerance.MacroDistance) where T : Geometry.Spatial.IFace3DObject
+        public static Dictionary<Level, List<T>> LevelsDictionary<T>(this List<T> face3DObjects, double tolerance = Core.Tolerance.MacroDistance) where T : Geometry.Object.Spatial.IFace3DObject
         {
             if (face3DObjects == null)
             {

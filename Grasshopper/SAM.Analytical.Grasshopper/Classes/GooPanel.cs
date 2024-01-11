@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {

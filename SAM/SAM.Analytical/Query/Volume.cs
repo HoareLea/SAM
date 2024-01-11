@@ -45,7 +45,7 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double elevation_Min = MinElevation(panels);
-            double elevation_Max = Geometry.Spatial.Query.MaxElevation(panels);
+            double elevation_Max = Geometry.Object.Spatial.Query.MaxElevation(panels);
 
             return area * (elevation_Max - elevation_Min);
         }

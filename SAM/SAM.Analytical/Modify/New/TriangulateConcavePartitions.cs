@@ -9,7 +9,7 @@ namespace SAM.Analytical
         {
             triangulatedPartitions = null;
 
-            List<IPartition> partitions = buildingModel?.GetObjects<IPartition>(x => x != null && Geometry.Spatial.Query.Concave(x));
+            List<IPartition> partitions = buildingModel?.GetObjects<IPartition>(x => x != null && Geometry.Object.Spatial.Query.Concave(x));
             if(partitions == null)
             {
                 return null;

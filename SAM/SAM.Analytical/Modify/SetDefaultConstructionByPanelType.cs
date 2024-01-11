@@ -79,7 +79,7 @@ namespace SAM.Analytical
                             panelType = PanelType.Roof;
                             break;
                         case PanelType.Wall:
-                            elevation = Geometry.Spatial.Query.MaxElevation(panel);
+                            elevation = Geometry.Object.Spatial.Query.MaxElevation(panel);
 
                             if (elevation <= 0)
                             {
@@ -105,7 +105,7 @@ namespace SAM.Analytical
                             PanelType panelType_Normal = Query.PanelType(panel.Normal);
                             if (panelType_Normal == PanelType.Floor)
                             {
-                                elevation = Geometry.Spatial.Query.MaxElevation(panel);
+                                elevation = Geometry.Object.Spatial.Query.MaxElevation(panel);
 
                                 if (elevation == 0)
                                 {

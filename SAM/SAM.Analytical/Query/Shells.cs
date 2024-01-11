@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 

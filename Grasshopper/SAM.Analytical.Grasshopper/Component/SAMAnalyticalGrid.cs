@@ -124,7 +124,7 @@ namespace SAM.Analytical.Grasshopper
                 y = 0.2;
 
 
-            List<Geometry.Spatial.Segment3D> segment3Ds = Geometry.Spatial.Query.Grid(panels, x, y, plane, origin, Tolerance.Angle, Tolerance.Distance, true);
+            List<Geometry.Spatial.Segment3D> segment3Ds = Geometry.Object.Spatial.Query.Grid(panels, x, y, plane, origin, Tolerance.Angle, Tolerance.Distance, true);
 
             dataAccess.SetDataList(0, segment3Ds?.ConvertAll(segment2D => Geometry.Rhino.Convert.ToRhino_Line(segment2D)));
         }

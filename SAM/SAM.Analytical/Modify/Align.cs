@@ -2,6 +2,7 @@
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical
 {
@@ -196,7 +197,7 @@ namespace SAM.Analytical
 
                 panels_Temp = new List<Panel>(panels);
                 panels_Temp.Remove(panel);
-                Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = Geometry.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
+                Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = Geometry.Object.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
 
                 panel = new Panel(panel); 
                 panel.Move(vector3D);
@@ -210,7 +211,7 @@ namespace SAM.Analytical
                     panels_Temp = new List<Panel>(panels);
                     panels_Temp.Remove(panel);
 
-                    Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected_New = Geometry.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
+                    Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected_New = Geometry.Object.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
 
                     foreach (Panel panel_Connected in panels_Connected.Keys)
                     {

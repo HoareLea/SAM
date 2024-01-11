@@ -6,7 +6,7 @@ namespace SAM.Analytical
     {
         public static double Azimuth(this IPartition partition)
         {
-            return Geometry.Spatial.Query.Azimuth(partition, Vector3D.WorldY);
+            return Geometry.Object.Spatial.Query.Azimuth(partition, Vector3D.WorldY);
         }
     }
 }

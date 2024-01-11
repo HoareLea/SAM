@@ -96,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                Geometry.Spatial.Rectangle3D rectangle3D = Geometry.Spatial.Query.MaxRectangle3D(panel);
+                Geometry.Spatial.Rectangle3D rectangle3D = Geometry.Object.Spatial.Query.MaxRectangle3D(panel);
                 if(rectangle3D == null || rectangle3D.Width < panelMinDimension || rectangle3D.Height < panelMinDimension)
                 {
                     objects_Out.Add(panel);
@@ -114,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
 
                 foreach(Aperture aperture in apertures)
                 {
-                    rectangle3D = Geometry.Spatial.Query.MaxRectangle3D(aperture);
+                    rectangle3D = Geometry.Object.Spatial.Query.MaxRectangle3D(aperture);
                     if (rectangle3D == null || rectangle3D.Width < apertureMinDimension || rectangle3D.Height < apertureMinDimension)
                     {
                         objects_Out.Add(aperture);

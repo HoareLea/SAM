@@ -7,6 +7,7 @@ using System.Linq;
 
 using SAM.Architectural;
 using System.Threading.Tasks;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical
 {

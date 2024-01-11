@@ -3,6 +3,7 @@ using SAM.Geometry.Spatial;
 using SAM.Geometry.Planar;
 using System;
 using System.Linq;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical
 {

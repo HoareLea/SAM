@@ -19,7 +19,7 @@ namespace SAM.Analytical
             List<Panel> result = new List<Panel>();
             foreach (Panel panel in panels)
             {
-                if(!Geometry.Spatial.Query.Concave(panel))
+                if(!Geometry.Object.Spatial.Query.Concave(panel))
                 {
                     continue;
                 }

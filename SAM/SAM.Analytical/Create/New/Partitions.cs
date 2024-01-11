@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Geometry.Object.Spatial;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
@@ -85,7 +86,7 @@ namespace SAM.Analytical
 
                 List<Face2D> face2Ds_Difference = new List<Face2D>() { face2D };
 
-                List<IPartition> partitions_Face3D = Geometry.Spatial.Query.Face3DObjectsByFace3D(partitions, face3D, tolerance_Distance, tolerance_Snap, tolerance_Angle, tolerance_Distance);
+                List<IPartition> partitions_Face3D = Geometry.Object.Spatial.Query.Face3DObjectsByFace3D(partitions, face3D, tolerance_Distance, tolerance_Snap, tolerance_Angle, tolerance_Distance);
                 if (partitions_Face3D != null && partitions_Face3D.Count != 0)
                 {
                     existingPartitions.AddRange(partitions_Face3D);

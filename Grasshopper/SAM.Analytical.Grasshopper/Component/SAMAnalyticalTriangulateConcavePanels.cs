@@ -155,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                 else if(sAMObjects[i] is Panel)
                 {
                     Panel panel = (Panel)sAMObjects[i];
-                    if(Geometry.Spatial.Query.Concave(panel))
+                    if(Geometry.Object.Spatial.Query.Concave(panel))
                     {
                         List<Panel> panels = panel.Triangulate(tolerance);
                         if(panels != null)
@@ -170,7 +170,7 @@ namespace SAM.Analytical.Grasshopper
                 else if (sAMObjects[i] is IPartition)
                 {
                     IPartition partition = (IPartition)sAMObjects[i];
-                    if (Geometry.Spatial.Query.Concave(partition))
+                    if (Geometry.Object.Spatial.Query.Concave(partition))
                     {
                         List<IPartition> partitions = partition.Triangulate(tolerance);
                         if (partitions != null)

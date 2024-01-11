@@ -7,6 +7,7 @@ using SAM.Geometry.Spatial;
 using SAM.Architectural.Grasshopper;
 using SAM.Architectural;
 using System.Linq;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {

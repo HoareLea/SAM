@@ -129,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Panel> panels_Temp = null;
 
-                if (!Geometry.Spatial.Query.Horizontal(panels[i], tolerance))
+                if (!Geometry.Object.Spatial.Query.Horizontal(panels[i], tolerance))
                 {
                     Panel panel_Temp = Create.Panel(panels[i]);
 

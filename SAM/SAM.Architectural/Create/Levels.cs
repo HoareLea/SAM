@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Geometry.Object.Spatial;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Architectural

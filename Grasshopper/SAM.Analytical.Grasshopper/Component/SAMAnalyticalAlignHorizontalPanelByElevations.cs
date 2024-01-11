@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
 
             panel = Create.Panel(panel);
 
-            bool horizontal = Geometry.Spatial.Query.Horizontal(panel, tolerance);
+            bool horizontal = Geometry.Object.Spatial.Query.Horizontal(panel, tolerance);
 
             if(horizontal || (!horizontal && projectOnElevation))
             {

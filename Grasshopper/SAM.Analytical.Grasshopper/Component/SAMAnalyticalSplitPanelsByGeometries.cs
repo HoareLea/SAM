@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;

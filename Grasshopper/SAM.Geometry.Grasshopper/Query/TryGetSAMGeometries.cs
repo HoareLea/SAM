@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel.Types;
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
 using System.Collections;
 using System.Collections.Generic;

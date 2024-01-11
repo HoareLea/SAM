@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using SAM.Geometry.Grasshopper;
 using Grasshopper.Kernel.Types;
 using System.Linq;
+using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -126,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
 
             if(elevations == null || elevations.Count == 0)
             {
-                List<Panel> panels_Horizontal = panels.FindAll(x => Geometry.Spatial.Query.Horizontal(x, tolerance));
+                List<Panel> panels_Horizontal = panels.FindAll(x => Geometry.Object.Spatial.Query.Horizontal(x, tolerance));
                 
                 Dictionary<double, List<Panel>> elevationDictionary = panels_Horizontal.ElevationDictionary(tolerance);
                 elevations = elevationDictionary.Keys.ToList();

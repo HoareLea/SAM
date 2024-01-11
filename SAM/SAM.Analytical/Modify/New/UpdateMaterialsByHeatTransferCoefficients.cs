@@ -52,7 +52,7 @@ namespace SAM.Analytical
                         if (hostPartition == null)
                             continue;
 
-                        double tilt = System.Math.Round(Geometry.Spatial.Query.Tilt(hostPartition), 0) * System.Math.PI / 180;
+                        double tilt = System.Math.Round(Geometry.Object.Spatial.Query.Tilt(hostPartition), 0) * System.Math.PI / 180;
 
                         List<IHostPartition> hostPartitions_Tilt = null;
                         if (!dictionary.TryGetValue(tilt, out hostPartitions_Tilt))
@@ -124,7 +124,7 @@ namespace SAM.Analytical
                     {
                         double area_Panel = hostPartition.Face3D.GetArea();
 
-                        tilt += Geometry.Spatial.Query.Tilt(hostPartition) * System.Math.PI / 180 * area_Panel;
+                        tilt += Geometry.Object.Spatial.Query.Tilt(hostPartition) * System.Math.PI / 180 * area_Panel;
                         area += area_Panel;
                     }
 
@@ -188,7 +188,7 @@ namespace SAM.Analytical
                         if (opening == null)
                             continue;
 
-                        double tilt = System.Math.Round(Geometry.Spatial.Query.Tilt(opening), 0) * System.Math.PI / 180;
+                        double tilt = System.Math.Round(Geometry.Object.Spatial.Query.Tilt(opening), 0) * System.Math.PI / 180;
 
                         List<IOpening> opening_Tilt = null;
                         if (!dictionary.TryGetValue(tilt, out opening_Tilt))
