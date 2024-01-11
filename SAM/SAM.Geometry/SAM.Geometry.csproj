@@ -111,7 +111,10 @@
     <Compile Include="Object\Base\Query\DefaultPointAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultSurfaceAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultTextAppearance.cs" />
+    <Compile Include="Object\Planar\Classes\Segment2DObject.cs" />
+    <Compile Include="Object\Planar\Interfaces\IPolyline2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IBoundable2DObject.cs" />
+    <Compile Include="Object\Planar\Interfaces\ISegment2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IFace2DObject.cs" />
     <Compile Include="Geometry\Planar\Modify\MergeOverlaps.cs" />
     <Compile Include="Geometry\Planar\Modify\RemoveSimilar.cs" />
@@ -125,6 +128,7 @@
     <Compile Include="Geometry\Planar\Query\WorkGeometry.cs" />
     <Compile Include="Geometry\Planar\Query\Vector2D.cs" />
     <Compile Include="Object\Base\Query\ISAMGeometryObject.cs" />
+    <Compile Include="Object\Planar\Classes\Polyline2DObject.cs" />
     <Compile Include="Object\Spatial\Classes\BoundingBox3DObject.cs" />
     <Compile Include="Object\Spatial\Classes\ExtrusionObject.cs" />
     <Compile Include="Object\Spatial\Classes\Face3DObject.cs" />
