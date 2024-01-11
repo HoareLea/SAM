@@ -191,7 +191,7 @@ namespace SAM.Analytical
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
                 Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
 
-                List<Polygon> polygons = Geometry.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
+                List<Polygon> polygons = Geometry.Planar.Convert.ToNTS_Polygons(polygons_Temp, tolerance);
                 if (polygons != null || polygons.Count > 0)
                 {
                     Dictionary<Construction, List<Tuple<Panel, Polygon>>> dictionary = new Dictionary<Construction, List<Tuple<Panel, Polygon>>>();

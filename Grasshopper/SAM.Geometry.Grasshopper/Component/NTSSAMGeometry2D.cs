@@ -65,7 +65,7 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            List<ISAMGeometry2D> geometry2Ds = Geometry.Convert.ToSAM<ISAMGeometry2D>(lines_NTS);
+            List<ISAMGeometry2D> geometry2Ds = Planar.Convert.ToSAM<ISAMGeometry2D>(lines_NTS);
             if(geometry2Ds == null)
                 dataAccess.SetDataList(0, null);
             else

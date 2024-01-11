@@ -78,7 +78,7 @@ namespace SAM.Geometry.Planar
             if (point2D_Start_Temp == null || point2D_End_Temp == null)
                 return null;
 
-            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = Geometry.Create.AdjacencyGraph(segment2Ds);
+            AdjacencyGraph<Point2D, Edge<Point2D>> adjacencyGraph = Create.AdjacencyGraph(segment2Ds);
 
             AStarShortestPathAlgorithm<Point2D, Edge<Point2D>> aStarShortestPathAlgorithm = new AStarShortestPathAlgorithm<Point2D, Edge<Point2D>>(adjacencyGraph, edge => edge.Source.Distance(edge.Target), point2D => point2D.Distance(point2D_Start_Temp));
 

@@ -1,6 +1,7 @@
 ﻿using NetTopologySuite.Geometries;
 using NetTopologySuite.Simplify;
 using SAM.Core;
+using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Spatial
 {
