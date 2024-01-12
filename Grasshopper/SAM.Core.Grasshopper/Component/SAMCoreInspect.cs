@@ -1,5 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
 using SAM.Core.Grasshopper.Properties;
@@ -245,17 +246,30 @@ namespace SAM.Core.Grasshopper
 
             for (int i = 0; i < Params.Output.Count; ++i)
             {
+                string name = Params.Output[i]?.Name;
+                if(string.IsNullOrEmpty(name))
+                {
+                    continue;
+                }
+
                 GooObjectParam gooParameterParam = Params.Output[i] as GooObjectParam;
                 if (gooParameterParam == null)
-                    gooParameterParam = new GooObjectParam(Params.Output[i].Name);
+                {
+                    gooParameterParam = new GooObjectParam(name);
+                    Params.Output[i] = gooParameterParam;
+                }
 
                 if (gooParameterParam == null || string.IsNullOrWhiteSpace(gooParameterParam.Name))
+                {
                     continue;
+                }
 
                 if (@object is Rhino.Geometry.GeometryBase)
                 {
                     if (((Rhino.Geometry.GeometryBase)@object).Disposed)
+                    {
                         break;
+                    }
                 }
 
                 object result = null;
@@ -272,26 +286,59 @@ namespace SAM.Core.Grasshopper
                 }
                 else if (result is IEnumerable && !result.GetType().Namespace.StartsWith("SAM.") && !(result is string))
                 {
-                    List<GooObject> objects = new List<GooObject>();
-                    foreach (object object_Result in (IEnumerable)result)
+                    List<object> values = new List<object>();
+                    foreach (object value in (IEnumerable)result)
                     {
-                        objects.Add(new GooObject(object_Result));
+                        values.Add(value);
+                    }
+
+                    for (int j = 0; j < values.Count; j++)
+                    {
+                        if (values[j] is bool)
+                        {
+                            values[j] = new GH_Boolean((bool)values[j]);
+                        }
+                        else if (values[j] is Enum)
+                        {
+                            values[j] = new GooObject(values[j].ToString());
+                        }
+                        else if (values[j] is string)
+                        {
+                            values[j] = new GH_String((string)values[j]);
+                        }
+                        else if (values[j] is DateTime)
+                        {
+                            values[j] = new GH_Time((DateTime)values[j]);
+                        }
+                        else if(Core.Query.IsNumeric(values[j]))
+                        {
+                            if (!Core.Query.TryConvert(values[j], out double @double))
+                            {
+                                @double = double.NaN;
+                            }
+
+                            values[j] = new GH_Number(@double);
+                        }
+                        else
+                        {
+                            values[j] = new GooObject(values[j]);
+                        }
                     }
 
                     if(gooParameterParam.Access == GH_ParamAccess.item)
                     {
-                        if(objects.Count == 0)
+                        if(values.Count == 0)
                         {
                             dataAccess.SetData(i, null);
                         }
                         else
                         {
-                            dataAccess.SetDataList(i, objects);
+                            dataAccess.SetDataList(i, values);
                         }
                     }
                     else if (gooParameterParam.Access == GH_ParamAccess.list)
                     {
-                        dataAccess.SetDataList(i, objects);
+                        dataAccess.SetDataList(i, values);
                     }
 
                     

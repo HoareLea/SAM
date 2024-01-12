@@ -10,8 +10,15 @@ namespace SAM.Core.Grasshopper
     public class GooObject : GH_Goo<object>
     {
         public GooObject(object value)
+            :base(value)
         {
             Value = value;
+        }
+
+        public GooObject()
+            : base()
+        {
+
         }
 
         public override bool IsValid => true;
