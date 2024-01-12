@@ -7,7 +7,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Planar Point
     /// </summary>
-    public class Point2D : SAMGeometry, ISAMGeometry2D, IPoint
+    public class Point2D : SAMGeometry, ISAMGeometry2D, IPoint, IMovable2D<Point2D>
     {
         private double[] coordinates = new double[2] { 0, 0 };
 
@@ -208,6 +208,18 @@ namespace SAM.Geometry.Planar
             return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
         }
 
+        public bool Move(Vector2D vector2D)
+        {
+            if (coordinates == null || vector2D == null)
+            {
+                return false;
+            }
+
+            coordinates[0] += vector2D[0];
+            coordinates[1] += vector2D[1];
+            return true;
+        }
+
         public Point2D GetScaled(Point2D point2D, double factor)
         {
             if (point2D == null)
@@ -279,12 +291,6 @@ namespace SAM.Geometry.Planar
         public void Mirror(Segment2D segment2D)
         {
             Move(new Vector2D(segment2D.Project(this), this));
-        }
-
-        public void Move(Vector2D vector2D)
-        {
-            coordinates[0] += vector2D[0];
-            coordinates[1] += vector2D[1];
         }
 
         public void Round(int decimals = Core.Rounding.Distance)

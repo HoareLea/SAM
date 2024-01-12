@@ -52,6 +52,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\Planar\Interfaces\IMovable2D.cs" />
     <Compile Include="Object\Base\Classes\Appearance\Appearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\CurveAppearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\PointAppearance.cs" />

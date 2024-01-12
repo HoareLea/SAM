@@ -165,7 +165,6 @@ namespace SAM.Geometry.Spatial
 
         }
 
-
         public bool InRange(Face3D face3D, double tolerance = Core.Tolerance.Distance)
         {
             Plane plane_2 = face3D?.plane;

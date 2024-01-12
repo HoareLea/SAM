@@ -244,6 +244,21 @@ namespace SAM.Geometry.Planar
             return new Polyline2D(points.ConvertAll(x => (Point2D)x.GetMoved(vector2D)));
         }
 
+        public bool Move(Vector2D vector2D)
+        {
+            if (vector2D == null || points == null)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < points.Count; i++)
+            {
+                points[i]?.Move(vector2D);
+            }
+
+            return true;
+        }
+
         public double GetParameter(Point2D point2D, bool inverted = false, double tolerance = Core.Tolerance.Distance)
         {
             return Query.Parameter(this, point2D, inverted, tolerance);

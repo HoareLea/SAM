@@ -11,14 +11,14 @@ namespace SAM.Geometry.Planar
 
         public CoordinateSystem2D(Point2D origin, Vector2D axisX, Vector2D axisY)
         {
-            this.origin = origin;
-            this.axisX = axisX;
-            this.axisY = axisY;
+            this.origin = origin == null ? null : new Point2D(origin);
+            this.axisX = axisX == null ? null : new Vector2D(axisX);
+            this.axisY = axisY == null ? null : new Vector2D(axisY);
         }
 
         public CoordinateSystem2D(Point2D origin)
         {
-            this.origin = origin;
+            this.origin = origin == null ? null : new Point2D(origin);
             axisX = Vector2D.WorldX;
             axisY = Vector2D.WorldY;
         }
@@ -67,6 +67,23 @@ namespace SAM.Geometry.Planar
             {
                 return origin == null ? null : new Point2D(origin);
             }
+        }
+
+        public CoordinateSystem2D GetMoved(Vector2D vector2D)
+        {
+            return new CoordinateSystem2D(origin.GetMoved(vector2D), axisX, axisY);
+        }
+
+        public bool Move(Vector2D vector2D)
+        {
+            if(origin == null || vector2D == null)
+            {
+                return false;
+            }
+
+            origin.Move(vector2D);
+
+            return true;
         }
 
         public bool IsValid()
@@ -120,6 +137,25 @@ namespace SAM.Geometry.Planar
             }
 
             return result;
+        }
+
+        public CoordinateSystem2D GetTransformed(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return null;
+            }
+
+            Point2D origin_New = origin?.Transform(transform2D);
+            Vector2D axisX_New = axisX?.Transform(transform2D);
+            Vector2D axisY_New = axisY?.Transform(transform2D);
+
+            return new CoordinateSystem2D(origin_New, axisX_New, axisY_New);
+        }
+
+        public CoordinateSystem2D Clone()
+        {
+            return new CoordinateSystem2D(origin, axisX, axisY);
         }
 
         public static CoordinateSystem2D World
