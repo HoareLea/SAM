@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core
 {
-    public class IndexedObjects<T> : IJSAMObject, IEnumerable<T>
+    public class IndexedObjects<T> : IIndexedObjects<T>
     {
         SortedDictionary<int, T> sortedDictionary;
 

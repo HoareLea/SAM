@@ -72,6 +72,7 @@
     <Compile Include="Create\StartupOptions.cs" />
     <Compile Include="Enums\Parameter\ParameterizedSAMObjectParameter.cs" />
     <Compile Include="Enums\StartupArgument.cs" />
+    <Compile Include="Interfaces\Collection\IIndexedObjects.cs" />
     <Compile Include="Interfaces\Filter\INumberFilter.cs" />
     <Compile Include="Interfaces\Filter\ITextFilter.cs" />
     <Compile Include="Interfaces\Filter\ISAMObjectRelationClusterFilter.cs" />
