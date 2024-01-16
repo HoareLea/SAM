@@ -77,7 +77,10 @@
     <Compile Include="Classes\GooRelationCluster.cs" />
     <Compile Include="Classes\GooJSAMObject.cs" />
     <Compile Include="Classes\GooObject.cs" />
+    <Compile Include="Component\SAMCoreCombineType.cs" />
+    <Compile Include="Component\SAMCorePeriod.cs" />
     <Compile Include="Component\SAMCoreAddMaterials.cs" />
+    <Compile Include="Component\SAMCoreCombineValues.cs" />
     <Compile Include="Component\SAMCoreTextMapValues.cs" />
     <Compile Include="Component\SAMCoreReplaceByGuid.cs" />
     <Compile Include="Component\SAMCoreCopyMaterials.cs" />

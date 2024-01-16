@@ -35,5 +35,22 @@ namespace SAM.Core
 
             return Period(values.Count());
         }
+
+        public static Period Period(this IndexedDoubles indexedDoubles)
+        {
+            if(indexedDoubles == null)
+            {
+                return Core.Period.Undefined;
+            }
+
+            IEnumerable<int> keys = indexedDoubles.Keys;
+            if(keys == null)
+            {
+                return Core.Period.Undefined;
+            }
+
+            return Period(keys.Count());
+
+        }
     }
 }

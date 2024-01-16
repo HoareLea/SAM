@@ -133,6 +133,32 @@ namespace SAM.Core
             return sortedDictionary.Remove(index);
         }
 
+        public bool ContainsIndex(int index)
+        {
+            if(sortedDictionary == null || index == -1)
+            {
+                return false;
+            }
+
+            foreach(int index_Temp in sortedDictionary.Keys)
+            {
+                if(index == index_Temp)
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public int Count
+        {
+            get
+            {
+                return sortedDictionary == null ? -1 : sortedDictionary.Count;
+            }
+        }
+
         public IEnumerable<T> Values
         {
             get
