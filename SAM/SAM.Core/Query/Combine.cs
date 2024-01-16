@@ -107,6 +107,11 @@ namespace SAM.Core
                 return null;
             }
 
+            if(period_Destination == period_Source)
+            {
+                return new IndexedDoubles(indexedDoubles);
+            }
+
             int count = Count(period_Destination, period_Source);
             if(count == -1)
             {

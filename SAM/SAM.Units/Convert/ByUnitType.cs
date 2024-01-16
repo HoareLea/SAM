@@ -66,6 +66,17 @@
                     {
                         case UnitType.GramPerKilogram:
                             return value * 1000;
+
+                        case UnitType.GramPerGram:
+                            return value;
+                    }
+                    break;
+
+                case UnitType.GramPerGram:
+                    switch (to)
+                    {
+                        case UnitType.GramPerKilogram:
+                            return value / 1000;
                     }
                     break;
 
@@ -74,6 +85,9 @@
                     {
                         case UnitType.KilogramPerKilogram:
                             return value / 1000;
+
+                        case UnitType.GramPerGram:
+                            return value * 1000;
                     }
                     break;
 

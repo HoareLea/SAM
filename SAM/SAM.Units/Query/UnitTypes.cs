@@ -34,11 +34,13 @@ namespace SAM.Units
                     {
                         result.Add(Units.UnitType.KilogramPerKilogram);
                         result.Add(Units.UnitType.GramPerKilogram);
+                        result.Add(Units.UnitType.GramPerGram);
                     }
                     else if (unitStyles.Contains(UnitStyle.SI))
                     {
                         result.Add(Units.UnitType.KilogramPerKilogram);
                         result.Add(Units.UnitType.GramPerKilogram);
+                        result.Add(Units.UnitType.GramPerGram);
                     }
                     else if (unitStyles.Contains(UnitStyle.Imperial))
                     {

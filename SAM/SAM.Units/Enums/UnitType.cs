@@ -30,5 +30,8 @@ namespace SAM.Units
         [Abbreviation("J")] [Description("Jule")] Jule,
         [Abbreviation("W")] [Description("Watt")] Watt,
         [Abbreviation("kW")] [Description("Kliowatt")] Kilowatt,
+        [Abbreviation("l/s")][Description("Liters Per Second")] LitersPerSecond,
+        [Abbreviation("N/m2")][Description("Newton Per Squere Meter")] NewtonPerSquereMeter,
+        [Abbreviation("g/g")][Description("Gram Per Gram")] GramPerGram,
     }
 }
