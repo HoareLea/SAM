@@ -9,5 +9,6 @@ namespace SAM.Core
         [Description("Hourly")] Hourly,
         [Description("Daily")] Daily,
         [Description("Weekly")] Weekly,
+        [Description("Monthly")] Monthly,
     }
 }

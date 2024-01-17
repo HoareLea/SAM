@@ -17,6 +17,20 @@
         {
             switch (period_Destination)
             {
+                case Core.Period.Monthly:
+                    switch (period_Source)
+                    {
+                        case Core.Period.Hourly:
+                            return 720;
+
+                        case Core.Period.Daily:
+                            return 30;
+
+                        case Core.Period.Weekly:
+                            return 4;
+                    }
+                    break;
+
                 case Core.Period.Weekly:
                     switch (period_Source)
                     {

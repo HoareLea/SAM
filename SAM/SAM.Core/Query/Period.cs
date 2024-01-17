@@ -20,9 +20,13 @@ namespace SAM.Core
             {
                 return Core.Period.Daily;
             }
-            else
+            else if(count > 12)
             {
                 return Core.Period.Weekly;
+            }
+            else
+            {
+                return Core.Period.Monthly;
             }
         }
 
