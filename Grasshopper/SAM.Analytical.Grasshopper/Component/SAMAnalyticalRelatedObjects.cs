@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,8 +45,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as Space, Panel etc.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_secondAnalyticalObject", NickName = "_secondAnalyticalObject", Description = "SAM Analytical Object such as Space, Panel etc.", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_object", NickName = "_object", Description = "SAM Object such as Space, Panel etc.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_secondObject", NickName = "_secondObject", Description = "SAM Object such as Space, Panel etc.", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "type_", NickName = "type_", Description = "Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -60,7 +60,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "objects", NickName = "objects", Description = "Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "objects", NickName = "objects", Description = "Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -95,8 +95,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_analyticalObject");
-            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
+            IJSAMObject sAMObject;
+
+            index = Params.IndexOfInputParam("_object");
+            sAMObject = null;
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -120,17 +123,18 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<IJSAMObject> result = type == null ? adjacencyCluster.GetRelatedObjects(analyticalObject) : adjacencyCluster.GetRelatedObjects(analyticalObject, type);
+            List<IJSAMObject> result = type == null ? adjacencyCluster.GetRelatedObjects(sAMObject) : adjacencyCluster.GetRelatedObjects(sAMObject, type);
 
-            index = Params.IndexOfInputParam("_secondAnalyticalObject");
-            if(index != -1 && dataAccess.GetData(index, ref analyticalObject) && analyticalObject != null)
+            index = Params.IndexOfInputParam("_secondObject");
+            sAMObject = null;
+            if (index != -1 && dataAccess.GetData(index, ref sAMObject) && sAMObject != null)
             {
                 List<IJSAMObject> result_Temp = null;
 
                 if (type == null)
-                    result_Temp = adjacencyCluster.GetRelatedObjects(analyticalObject);
+                    result_Temp = adjacencyCluster.GetRelatedObjects(sAMObject);
                 else
-                    result_Temp = adjacencyCluster.GetRelatedObjects(analyticalObject, type);
+                    result_Temp = adjacencyCluster.GetRelatedObjects(sAMObject, type);
 
                 if(result_Temp != null)
                 {
