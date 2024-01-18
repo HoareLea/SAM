@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreCombineValues : GH_SAMVariableOutputParameterComponent
+    public class SAMCoreCombineResults : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,9 +31,9 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMCoreCombineValues()
-          : base("SAMCore.CombineValues", "SAMCore.CombineValues",
-              "Combine Values",
+        public SAMCoreCombineResults()
+          : base("SAMCore.CombineResults", "SAMCore.CombineResults",
+              "Combine Results \nInspect output to get values",
               "SAM", "Core")
         {
         }
@@ -45,7 +45,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "_values", NickName = "_values", Description = "Values (IndexedDoubles)", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "_results", NickName = "_results", Description = "Results (IndexedDoubles) \nuse SAMAnalytical.SystemResultValues", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_period", NickName = "_period", Description = "Period", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_combineType", NickName = "_combineType", Description = "CombineType", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
@@ -58,7 +58,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "values", NickName = "values", Description = "Values (IndexedDoubles)", Access = GH_ParamAccess.item }, ParamVisibility.Binding));;
+                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "results", NickName = "results", Description = "Results (IndexedDoubles) \nInspec to get values", Access = GH_ParamAccess.item }, ParamVisibility.Binding));;
                 return result.ToArray();
             }
         }
@@ -73,7 +73,7 @@ namespace SAM.Core.Grasshopper
         {
             int index;
 
-            index = Params.IndexOfInputParam("_values");
+            index = Params.IndexOfInputParam("_results");
             
             IIndexedObjects indexedObjects = null;
             if (index == -1 || !dataAccess.GetData(index, ref indexedObjects) || indexedObjects == null)
@@ -124,7 +124,7 @@ namespace SAM.Core.Grasshopper
 
             IndexedDoubles result = indexedDoubles.Combine(period, combineType);
 
-            index = Params.IndexOfOutputParam("values");
+            index = Params.IndexOfOutputParam("results");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooIndexedObjects(result));
