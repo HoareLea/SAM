@@ -103,7 +103,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            DateTime dateTime = new DateTime(year, 1, 1).AddDays(dayOfYear).AddHours(hour);
+            DateTime dateTime = new DateTime(year, 1, 1).AddDays(dayOfYear - 1).AddHours(hour);
 
             index = Params.IndexOfOutputParam("dateTime");
             if (index != -1)
