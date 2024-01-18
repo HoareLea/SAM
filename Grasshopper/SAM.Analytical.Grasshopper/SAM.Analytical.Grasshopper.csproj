@@ -198,7 +198,7 @@
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateOccupancy.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateFloorArea.cs" />
-    <Compile Include="Component\SAMAnalyticalIndexToDateTime.cs" />
+    <Compile Include="Component\SAMAnalyticalHourOfYearToDateTime.cs" />
     <Compile Include="Component\SAMAnalyticalFixNames.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
     <Compile Include="Component\SAMAnalyticalGetZonesBySpace.cs" />
