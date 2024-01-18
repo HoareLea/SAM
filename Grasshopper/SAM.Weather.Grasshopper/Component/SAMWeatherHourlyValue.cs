@@ -16,7 +16,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,7 @@ namespace SAM.Weather.Grasshopper
         {
             inputParamManager.AddParameter(new GooWeatherObjectParam(), "_weatherObject", "_weatherObject", "SAM WeatherObject", GH_ParamAccess.item);
             inputParamManager.AddGenericParameter("_weatherDataType", "_weatherDataType", "Weather Data Type", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_index", "_index", "Hour Index", GH_ParamAccess.item);
+            inputParamManager.AddIntegerParameter("_hourOfYear", "_hourOfYear", "Hour of Year Index [0-8759]", GH_ParamAccess.item);
         }
 
         /// <summary>

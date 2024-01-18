@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Weather.Grasshopper
 {
-    public class SAMWeatherWeatherHoursByIndexes : GH_SAMVariableOutputParameterComponent
+    public class SAMWeatherWeatherHoursByHourOfYear : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -16,7 +16,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -26,9 +26,9 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMWeatherWeatherHoursByIndexes()
-          : base("SAMWeather.WeatherHoursByIndexes", "SAMWeather.WeatherHoursByIndexes",
-              "Gets WeatherHours By Indexes",
+        public SAMWeatherWeatherHoursByHourOfYear()
+          : base("SAMWeather.WeatherHoursByHourOfYear", "SAMWeather.WeatherHoursByHourOfYear",
+              "Gets WeatherHours By Hour Of Year",
               "SAM", "Weather")
         {
         }
@@ -42,7 +42,7 @@ namespace SAM.Weather.Grasshopper
                 GooWeatherObjectParam weatherObjectParam = new GooWeatherObjectParam() { Name = "weatherObject", NickName = "weatherObject", Description = "SAM Weather Object", Access = GH_ParamAccess.item, Optional = false };
                 result.Add(new GH_SAMParam(weatherObjectParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Integer @integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_indexes", NickName = "_indexes", Description = "Indexes", Access = GH_ParamAccess.list, Optional = false };
+                global::Grasshopper.Kernel.Parameters.Param_Integer @integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_hourOfYear", NickName = "_hourOfYear", Description = "Hour Of Year Indexes [0-8759]", Access = GH_ParamAccess.list, Optional = false };
                 result.Add(new GH_SAMParam(@integer, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -57,7 +57,7 @@ namespace SAM.Weather.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "weatherHours", NickName = "weatherHours", Description = "SAM Weather Hours", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "weatherHours", NickName = "weatherHours", Description = "SAM Weather Hours incepect to access values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -82,7 +82,7 @@ namespace SAM.Weather.Grasshopper
             }
 
             List<int> indexes = null;
-            index = Params.IndexOfInputParam("_indexes");
+            index = Params.IndexOfInputParam("_hourOfYear");
             if (index != -1)
             {
                 indexes = new List<int>();

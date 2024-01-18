@@ -59,7 +59,7 @@
     <Compile Include="Component\SAMWeatherHourlyValue.cs" />
     <Compile Include="Component\SAMWeatherPrevailingMeanOutdoorAirTemperatures.cs" />
     <Compile Include="Component\SAMWeatherWeatherHoursByPercentage.cs" />
-    <Compile Include="Component\SAMWeatherWeatherHoursByIndexes.cs" />
+    <Compile Include="Component\SAMWeatherWeatherHoursByHourOfYear.cs" />
     <Compile Include="Component\SAMWeatherLoadWeatherData.cs" />
     <Compile Include="Component\SAMWeatherWeatherDataType.cs" />
     <Compile Include="Kernel\AssemblyInfo.cs" />
