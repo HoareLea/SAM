@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooAdjacencyCluster.cs" />
+    <Compile Include="Classes\GooAirMovement.cs" />
     <Compile Include="Classes\GooSection.cs" />
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooAnalyticalModel.cs" />
@@ -101,6 +102,8 @@
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelType.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateIZAMBySpaces.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateIZAMBySetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveFromConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionManager.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionManager.cs" />
@@ -196,7 +199,7 @@
     <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
     <Compile Include="Component\SAMAnalyticalAddMechanicalSystems.cs" />
     <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalCalculateOccupancy.cs" />
+    <Compile Include="Component\SAMAnalyticalCreateIZAM.cs" />
     <Compile Include="Component\SAMAnalyticalCalculateFloorArea.cs" />
     <Compile Include="Component\SAMAnalyticalHourOfYearToDateTime.cs" />
     <Compile Include="Component\SAMAnalyticalFixNames.cs" />

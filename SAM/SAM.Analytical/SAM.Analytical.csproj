@@ -48,6 +48,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\AdjacencyCluster.cs" />
+    <Compile Include="Classes\AirMovement\AirHandlingUnitAirMovement.cs" />
     <Compile Include="Classes\AnalyticalEquipment\ComplexEquipmentModel.cs" />
     <Compile Include="Classes\AnalyticalEquipment\Coil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\ComplexEquipment.cs" />
@@ -62,6 +63,7 @@
     <Compile Include="Classes\AnalyticalEquipment\HeatingCoil.cs" />
     <Compile Include="Classes\AnalyticalEquipment\CoolingCoil.cs" />
     <Compile Include="Classes\ConstructionManager.cs" />
+    <Compile Include="Classes\AirMovement\SpaceAirMovement.cs" />
     <Compile Include="Classes\NCM\NCMNameCollection.cs" />
     <Compile Include="Classes\NCM\NCMName.cs" />
     <Compile Include="Classes\Filter\ApertureApertureConstructionFilter.cs" />
@@ -167,6 +169,8 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Modify\AddAirMovementObjects.cs" />
+    <Compile Include="Interfaces\IAirMovementObject.cs" />
     <Compile Include="Interfaces\IAnalyticalResult.cs" />
     <Compile Include="Interfaces\ISection.cs" />
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />

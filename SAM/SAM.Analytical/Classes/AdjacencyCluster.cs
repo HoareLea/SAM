@@ -910,10 +910,11 @@ namespace SAM.Analytical
                 typeof(Construction).IsAssignableFrom(type) ||
                 typeof(ApertureConstruction).IsAssignableFrom(type) ||
                 typeof(MechanicalSystemType).IsAssignableFrom(type) ||
-                typeof(Core.ISAMInstance).IsAssignableFrom(type) ||
-                typeof(Core.ISAMType).IsAssignableFrom(type) ||
-                typeof(Core.Result).IsAssignableFrom(type) ||
+                typeof(ISAMInstance).IsAssignableFrom(type) ||
+                typeof(ISAMType).IsAssignableFrom(type) ||
+                typeof(Result).IsAssignableFrom(type) ||
                 typeof(IAnalyticalEquipment).IsAssignableFrom(type) ||
+                typeof(IAirMovementObject).IsAssignableFrom(type) ||
                 typeof(DesignDay).IsAssignableFrom(type);
         }
 
