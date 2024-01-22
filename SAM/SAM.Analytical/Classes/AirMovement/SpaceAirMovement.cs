@@ -5,14 +5,14 @@ namespace SAM.Analytical
 {
     public class SpaceAirMovement : SAMObject, IAirMovementObject
     {
-        private Profile airflow;
+        private Profile airFlow;
         private string from;
         private string to;
         
-        public SpaceAirMovement(string name, Profile airflow, string from, string to)
+        public SpaceAirMovement(string name, Profile airFlow, string from, string to)
             : base(name)
         {
-            this.airflow = airflow == null ? null : new Profile(airflow);
+            this.airFlow = airFlow == null ? null : new Profile(airFlow);
             this.from = from;
             this.to = to;
         }
@@ -20,7 +20,7 @@ namespace SAM.Analytical
         public SpaceAirMovement(string name, double airflow, string from, string to)
             : base(name)
         {
-            this.airflow = new Profile(name, ProfileType.Ventilation, new double[] { airflow });
+            this.airFlow = new Profile(name, ProfileType.Ventilation, new double[] { airflow });
             this.from = from;
             this.to = to;
         }
@@ -30,7 +30,7 @@ namespace SAM.Analytical
         {
             if(spaceAirMovement != null)
             {
-                airflow = spaceAirMovement.airflow == null ? null : new Profile(spaceAirMovement.airflow);
+                airFlow = spaceAirMovement.airFlow == null ? null : new Profile(spaceAirMovement.airFlow);
                 from = spaceAirMovement.from;
                 to = spaceAirMovement.to;
             }
@@ -42,11 +42,11 @@ namespace SAM.Analytical
 
         }
 
-        public Profile Airflow
+        public Profile AirFlow
         {
             get
             {
-                return airflow == null ? null : new Profile(airflow);
+                return airFlow == null ? null : new Profile(airFlow);
             }
         }
 
@@ -73,9 +73,9 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if(jObject.ContainsKey("Airflow"))
+            if(jObject.ContainsKey("AirFlow"))
             {
-                airflow = new Profile(jObject.Value<JObject>("Airflow"));
+                airFlow = new Profile(jObject.Value<JObject>("Airflow"));
             }
 
             if (jObject.ContainsKey("From"))
@@ -99,9 +99,9 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(airflow != null)
+            if(airFlow != null)
             {
-                jObject.Add("Airflow", airflow.ToJObject());
+                jObject.Add("AirFlow", airFlow.ToJObject());
             }
 
             if (from != null)

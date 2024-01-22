@@ -4,6 +4,7 @@ using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Remoting.Messaging;
 
 namespace SAM.Analytical
 {
@@ -35,6 +36,21 @@ namespace SAM.Analytical
             : base(name)
         {
             this.category = category;
+        }
+
+        public Profile(string name, string category, IndexedDoubles indexedDoubles)
+            : base(name)
+        {
+            this.category = category;
+
+            IEnumerable<int> indexes = indexedDoubles?.Keys;
+            if (indexes != null)
+            {
+                foreach(int index in indexes)
+                {
+                    Add(index, indexedDoubles[index]);
+                }
+            }
         }
 
         public Profile(string name, ProfileType profileType)
@@ -160,16 +176,40 @@ namespace SAM.Analytical
         {
         }
 
+        public Profile Combine(Profile profile)
+        {
+            if(profile == null)
+            {
+                return new Profile(this);
+            }
+
+            if(values == null)
+            {
+                return new Profile(profile);
+            }
+
+            IndexedDoubles indexedDoubles = GetIndexedDoubles();
+            indexedDoubles.Sum(profile.GetIndexedDoubles());
+
+            return new Profile(name, category, indexedDoubles);
+        }
+
         public bool Update(IEnumerable<double> values)
         {
             if (values == null)
+            {
                 return false;
+            }
 
             if (this.values == null)
+            {
                 this.values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+            }
 
             for (int i = 0; i < values.Count(); i++)
+            {
                 this.values[i] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, values.ElementAt(i));
+            }
 
             return true;
         }
@@ -464,6 +504,31 @@ namespace SAM.Analytical
 
             for (int i = 0; i < result.Length; i++)
                 result[i] = this[min + i];
+
+            return result;
+        }
+
+        public IndexedDoubles GetIndexedDoubles()
+        {
+            if (values == null)
+            {
+                return null;
+            }
+
+            IndexedDoubles result = new IndexedDoubles();
+
+            if (values.Count == 0)
+            {
+                return result;
+            }
+
+            int max = Max;
+            int min = Min;
+
+            for (int i = min; i < max; i++)
+            {
+                result[i] = this[i];
+            }
 
             return result;
         }
