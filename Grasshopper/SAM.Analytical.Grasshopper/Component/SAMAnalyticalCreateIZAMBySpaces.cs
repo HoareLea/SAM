@@ -178,8 +178,6 @@ namespace SAM.Analytical.Grasshopper
                         adjacencyCluster.AddRelation(spaceAirMovement, from);
                         adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);
 
-                        airMovementObjects.Add(spaceAirMovement);
-
                         if(from is AirHandlingUnit)
                         {
                             spaceAirMovement = new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(space_Temp).ToString(), null);
@@ -207,7 +205,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("iZAMs");
             if (index != -1)
             {
-                dataAccess.SetData(index, airMovementObjects);
+                dataAccess.SetDataList(index, airMovementObjects);
             }
         }
     }

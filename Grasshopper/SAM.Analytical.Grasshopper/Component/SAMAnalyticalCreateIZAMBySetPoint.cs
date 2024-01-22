@@ -136,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<IAirMovementObject> airMovementObjects = null;
+            AirHandlingUnitAirMovement airHandlingUnitAirMovement = null;
 
             if (sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
             {
@@ -160,7 +160,7 @@ namespace SAM.Analytical.Grasshopper
                     Profile humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, new double[] { humidity - (humidityRange / 2) });
                     Profile dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, new double[] { humidity + (humidityRange / 2) });
 
-                    AirHandlingUnitAirMovement airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification);
+                    airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification);
                     adjacencyCluster.AddObject(airHandlingUnitAirMovement);
 
                     adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitAirMovement);
@@ -182,7 +182,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("iZAM");
             if (index != -1)
             {
-                dataAccess.SetData(index, airMovementObjects);
+                dataAccess.SetData(index, airHandlingUnitAirMovement);
             }
         }
     }

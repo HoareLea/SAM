@@ -105,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("iZAMs");
             if (index != -1)
             {
-                dataAccess.SetData(index, airMovementObjects);
+                dataAccess.SetDataList(index, airMovementObjects);
             }
         }
     }
