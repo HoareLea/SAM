@@ -69,7 +69,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateIZAMBySetPoint()
           : base("SAMAnalytical.CreateIZAMBySetPoint", "SAMAnalytical.CreateIZAMBySetPoint",
-              "Calculates Air Movement Objects",
+              "Create IZAM AHU object to calculate Inter Zone Air Movement" +
+                "\n Inter Zone Air Movements also know as IZAM’s are used to model air flow in and out of a zone. " +
+                "IZAM’s can be set up to create an air flow that can come from outside or from another zone, " +
+                "it can also be set up to create an air flow from the zone to outside." + 
+                "\nhttps://docs.edsl.net/tbd/CoreConcepts/IZAMs.html",
               "SAM", "Analytical")
         {
         }

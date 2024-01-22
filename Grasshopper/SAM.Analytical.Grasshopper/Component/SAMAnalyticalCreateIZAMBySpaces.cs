@@ -37,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_source", NickName = "_source", Description = "SAM Analytical Source such as AirHandlingUnit or AirHandlingUnitAirMovement", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_source", NickName = "_source", Description = "SAM Analytical Source such as AirHandlingUnit or iZAM AirHandlingUnitAirMovement", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "flowRates_", NickName = "flowRates_", Description = "Flow Rates", Access = GH_ParamAccess.item };
