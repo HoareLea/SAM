@@ -525,7 +525,7 @@ namespace SAM.Analytical
             int max = Max;
             int min = Min;
 
-            for (int i = min; i < max; i++)
+            for (int i = min; i <= max; i++)
             {
                 result[i] = this[i];
             }

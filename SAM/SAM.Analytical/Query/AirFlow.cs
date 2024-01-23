@@ -44,7 +44,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                result.Combine(profile);
+                result = result.Combine(profile);
             }
 
 
