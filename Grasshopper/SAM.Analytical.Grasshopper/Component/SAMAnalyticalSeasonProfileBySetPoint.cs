@@ -36,7 +36,11 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSeasonProfileBySetPoint()
           : base("SAMAnalytical.SeasonProfileBySetPoint", "SAMAnalytical.SeasonProfileBySetPoint",
-              "Gets Analytical Season Profile By Set Point",
+              "Gets Analytical Season Profile By Set Point" +
+               "\nSeasonType.Heating] = temperature <= heatingTemperature" +
+               "\nSeasonType.FreeCooling] = temperature > heatingTemperature && temperature <= coolingTemperature" +
+               "\nSeasonType.Cooling] = temperature > coolingTemperature" +
+               "\nWe calculate average temperature for each day and operate on days data",
               "SAM", "Analytical")
         {
         }
