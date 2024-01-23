@@ -525,7 +525,7 @@ namespace SAM.Analytical
             int max = Max;
             int min = Min;
 
-            for (int i = min; i <= max; i++)
+            for (int i = min; i < max; i++)
             {
                 result[i] = this[i];
             }
@@ -730,17 +730,23 @@ namespace SAM.Analytical
             get
             {
                 if (values == null || values.Count == 0)
+                {
                     return int.MaxValue;
+                }
 
-                int result = values.Last().Key;
+                int result = values.Last().Key + 1;
 
                 foreach(Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
                 {
                     if (tuple.Item1 == null)
+                    {
                         continue;
+                    }
 
                     if (tuple.Item1.Max > result)
+                    {
                         result = tuple.Item1.Max;
+                    }
                 }
 
                 return result;

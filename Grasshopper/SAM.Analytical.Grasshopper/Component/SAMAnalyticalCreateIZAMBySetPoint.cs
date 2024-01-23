@@ -161,8 +161,14 @@ namespace SAM.Analytical.Grasshopper
 
                     Profile heating = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Heating), ProfileType.Heating, new double[] { temperature - (temperatureRange / 2) });
                     Profile cooling = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Cooling), ProfileType.Cooling, new double[] { temperature + (temperatureRange / 2) });
-                    Profile humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, new double[] { humidity - (humidityRange / 2) });
-                    Profile dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, new double[] { humidity + (humidityRange / 2) });
+
+                    Profile humidification = null;
+                    Profile dehumidification = null;
+                    if (!double.IsNaN(humidityRange) && !double.IsNaN(humidity))
+                    {
+                        humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, new double[] { humidity - (humidityRange / 2) });
+                        dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, new double[] { humidity + (humidityRange / 2) });
+                    }
 
                     airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification);
                     adjacencyCluster.AddObject(airHandlingUnitAirMovement);
