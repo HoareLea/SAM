@@ -176,6 +176,7 @@
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
+    <Compile Include="Query\AirFlow.cs" />
     <Compile Include="Query\UpdateApertureConstructions.cs" />
     <Compile Include="Query\UpdateConstructions.cs" />
     <Compile Include="Query\DefaultConstructionManager.cs" />
