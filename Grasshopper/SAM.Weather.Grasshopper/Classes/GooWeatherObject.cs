@@ -45,7 +45,7 @@ namespace SAM.Weather.Grasshopper
         void IGH_PreviewObject.DrawViewportWires(IGH_PreviewArgs args) => Preview_DrawWires(args);
 
         public GooWeatherObjectParam()
-            : base(typeof(WeatherYear).Name, typeof(IWeatherObject).Name, typeof(IWeatherObject).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(IWeatherObject).Name, typeof(IWeatherObject).Name, typeof(IWeatherObject).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 

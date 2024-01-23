@@ -36,8 +36,22 @@ namespace SAM.Weather
             }
 
             return new Range<double>(lowerLimit, upperLimit);
+        }
 
+        public static Range<double> DryBulbTemperatureRange(this WeatherHour weatherHour)
+        {
+            if(weatherHour == null)
+            {
+                return null;
+            }
 
+            double dryBulbTemperature = weatherHour[WeatherDataType.DryBulbTemperature];
+            if(double.IsNaN(dryBulbTemperature))
+            {
+                return null;
+            }
+
+            return DryBulbTemperatureRange(dryBulbTemperature);
         }
     }
 }

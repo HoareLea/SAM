@@ -56,6 +56,7 @@
     <Compile Include="Classes\GooWeatherObject.cs" />
     <Compile Include="Classes\GooWeatherYear.cs" />
     <Compile Include="Classes\GooWeatherData.cs" />
+    <Compile Include="Component\SAMWeatherAdaptiveSetpointACCI.cs" />
     <Compile Include="Component\SAMWeatherHourlyValue.cs" />
     <Compile Include="Component\SAMWeatherPrevailingMeanOutdoorAirTemperatures.cs" />
     <Compile Include="Component\SAMWeatherWeatherHoursByPercentage.cs" />
