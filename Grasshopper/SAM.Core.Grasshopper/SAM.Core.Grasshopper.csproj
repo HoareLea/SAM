@@ -78,6 +78,7 @@
     <Compile Include="Classes\GooJSAMObject.cs" />
     <Compile Include="Classes\GooObject.cs" />
     <Compile Include="Component\SAMCoreCombineType.cs" />
+    <Compile Include="Component\SAMCoreNumberFilter.cs" />
     <Compile Include="Component\SAMCoreDateTimeToHourOfYear.cs" />
     <Compile Include="Component\SAMCoreDayOfYearToHourOfYear.cs" />
     <Compile Include="Component\SAMCorePeriod.cs" />
