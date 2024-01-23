@@ -2,6 +2,7 @@
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
@@ -44,7 +45,7 @@ namespace SAM.Core.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values", NickName = "_values", Description = "Input values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_comparisonValue ", NickName = "_comparisonValue", Description = "Comparison Value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_comparisonValues", NickName = "_comparisonValues", Description = "Comparison Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_numberComparisonType", NickName = "_numberComparisonType", Description = "NumberComparisonType", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "valueTrue_", NickName = "valueTrue_", Description = "Value true", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "valueFalse_", NickName = "valueFalse_", Description = "Value false", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
@@ -84,13 +85,15 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            double value = double.NaN;
-            if (index == -1 || !dataAccess.GetData(index, ref value) || double.IsNaN(value))
+            index = Params.IndexOfInputParam("_comparisonValues");
+            List<double> comparisonValues = new List<double>();
+            if (index == -1 || !dataAccess.GetDataList(index, comparisonValues) || comparisonValues == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_numberComparisonType");
             string text = null;
             if (index == -1 || !dataAccess.GetData(index, ref text) || string.IsNullOrWhiteSpace(text))
             {
@@ -129,7 +132,9 @@ namespace SAM.Core.Grasshopper
             List<int> falses = new List<int>();
             for (int i = 0; i < values.Count; i++)
             {
-                bool @bool = Core.Query.Compare(value, values[i], numberComparisonType);
+                double comparisonValue = comparisonValues.Count > i ? comparisonValues[i] : comparisonValues.Last();
+
+                bool @bool = Core.Query.Compare(comparisonValue, values[i], numberComparisonType);
                 result.Add(@bool);
 
                 List<int> indexes = @bool ? trues : falses;
