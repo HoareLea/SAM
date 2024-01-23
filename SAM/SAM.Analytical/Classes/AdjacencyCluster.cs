@@ -663,7 +663,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : Result, IAnalyticalObject
+        public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : IResult
         {
             List<T> result = GetRelatedObjects<T>(jSAMObject);
             if (result == null)
