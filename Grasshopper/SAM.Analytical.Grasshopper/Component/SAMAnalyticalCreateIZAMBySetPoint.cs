@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -41,14 +42,14 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tempAccuracies_", NickName = "_tempAccuracies_", Description = "Temperature Accuracy", Access = GH_ParamAccess.list };
-                number.SetPersistentData(new List<double> { 1.5 });
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(1.5) });
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidities", NickName = "_humidity", Description = "Humidity", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityAccuracies_", NickName = "_humidityAccuracy_", Description = "HumidityAccuracy", Access = GH_ParamAccess.list };
-                number.SetPersistentData(new List<double> { 10 });
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(10) });
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -173,7 +174,7 @@ namespace SAM.Analytical.Grasshopper
                     {
                         double temperature = temperatures[i];
 
-                        double temperatureRange = temperatureRanges.Count < i ? temperatureRanges[i] : temperatureRanges.Last();
+                        double temperatureRange = temperatureRanges.Count > i ? temperatureRanges[i] : temperatureRanges.Last();
 
                         hetaingTemperatures.Add(temperature - (temperatureRange / 2));
                         coolingTemperatures.Add(temperature + (temperatureRange / 2));
@@ -193,7 +194,7 @@ namespace SAM.Analytical.Grasshopper
                         {
                             double humidity = humidities[i];
 
-                            double humidityRange = humidityRanges.Count < i ? humidityRanges[i] : humidityRanges.Last();
+                            double humidityRange = humidityRanges.Count > i ? humidityRanges[i] : humidityRanges.Last();
 
                             humidifications.Add(humidity - (humidityRange / 2));
                             dehumidifications.Add(humidity + (humidityRange / 2));
