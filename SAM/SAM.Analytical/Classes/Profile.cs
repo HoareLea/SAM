@@ -1,10 +1,12 @@
 ﻿using Newtonsoft.Json.Linq;
+using QuickGraph.Predicates;
 using SAM.Core;
 using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Remoting.Messaging;
+using System.Threading;
 
 namespace SAM.Analytical
 {
@@ -176,70 +178,110 @@ namespace SAM.Analytical
         {
         }
 
-        public Profile Combine(Profile profile)
+        public void Sum(double value)
         {
-            if(profile == null)
-            {
-                return new Profile(this);
-            }
+            Update((x, y) => x + y, value);
+        }
 
-            if(values == null)
-            {
-                return new Profile(profile);
-            }
-
-            IndexedDoubles indexedDoubles = GetIndexedDoubles();
-            indexedDoubles.Sum(profile.GetIndexedDoubles());
-
-            return new Profile(name, category, indexedDoubles);
+        public void Sum(Profile profile)
+        {
+            Update((x, y) => x + y, profile);
         }
 
         public void Multiply(double value)
         {
-            if(values == null || double.IsNaN(value))
+            Update((x, y) => x * y, value);
+        }
+
+        public void Multiply(Profile profile)
+        {
+            Update((x, y) => x * y, profile);
+        }
+
+        public void Divide(double value)
+        {
+            Update((x, y) => x / y, value);
+        }
+
+        public void Divide(Profile profile)
+        {
+            Update((x, y) => x / y, profile);
+        }
+
+        public bool Update(Func<double, double, double> func, double value)
+        {
+            if (values == null || double.IsNaN(value) || func == null)
             {
-                return;
+                return false;
             }
 
             List<int> keys = values.Keys?.ToList();
             foreach (int key in keys)
             {
                 Tuple<Range<int>, AnyOf<double, Profile>> tuple = values[key];
-                if(tuple == null)
+                if (tuple == null)
                 {
                     continue;
                 }
 
                 object @object = tuple?.Item2?.Value;
-                if(@object == null)
+                if (@object == null)
                 {
                     continue;
                 }
 
                 if (@object is double)
                 {
-                    values[key] = new Tuple<Range<int>, AnyOf<double, Profile>>(tuple.Item1, ((double)@object) * value);
+                    values[key] = new Tuple<Range<int>, AnyOf<double, Profile>>(tuple.Item1, func.Invoke((double)@object, value));
                 }
-                else if(@object is Profile)
+                else if (@object is Profile)
                 {
                     Profile profile = new Profile((Profile)@object);
                     profile.Multiply(value);
                     values[key] = new Tuple<Range<int>, AnyOf<double, Profile>>(tuple.Item1, profile);
                 }
             }
+
+            return true;
         }
 
-        public void Divide(double value)
+        public bool Update(Func<double, double, double> func, Profile profile)
         {
-            if (double.IsNaN(value) || values == null)
+            if (profile == null || values == null)
             {
-                return;
+                return false;
             }
 
-            Multiply(1 / value);
+            int max_1 = Max;
+            int max_2 = profile.Max;
+
+            int min_1 = Min;
+            int min_2 = profile.Min;
+
+            int max = System.Math.Max(max_1, max_2);
+            int min = System.Math.Max(min_1, min_2);
+
+            IndexedDoubles indexedDoubles = new IndexedDoubles();
+            for (int i = min; i <= max; i++)
+            {
+                indexedDoubles[i] = func.Invoke(this[i], profile[i]);
+            }
+
+            values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
+
+            IEnumerable<int> indexes = indexedDoubles?.Keys;
+            if (indexes != null)
+            {
+                foreach (int index in indexes)
+                {
+                    Add(index, indexedDoubles[index]);
+                }
+            }
+
+            return true;
         }
 
-        public double GetMax()
+        private double GetMaxValue()
         {
             if (values == null)
             {
@@ -271,7 +313,7 @@ namespace SAM.Analytical
                 }
                 else if (@object is Profile)
                 {
-                    value = ((Profile)@object).GetMax();
+                    value = ((Profile)@object).GetMaxValue();
 
                 }
 
@@ -282,6 +324,56 @@ namespace SAM.Analytical
             }
 
             if(result == double.MinValue)
+            {
+                return double.NaN;
+            }
+
+            return result;
+        }
+
+        private double GetMinValue()
+        {
+            if (values == null)
+            {
+                return double.NaN;
+            }
+
+            double result = double.MaxValue;
+
+            IEnumerable<int> keys = values.Keys;
+            foreach (int key in keys)
+            {
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = values[key];
+                if (tuple == null)
+                {
+                    continue;
+                }
+
+                object @object = tuple?.Item2?.Value;
+                if (@object == null)
+                {
+                    continue;
+                }
+
+                double value = double.NaN;
+
+                if (@object is double)
+                {
+                    value = (double)@object;
+                }
+                else if (@object is Profile)
+                {
+                    value = ((Profile)@object).GetMaxValue();
+
+                }
+
+                if (value < result)
+                {
+                    result = value;
+                }
+            }
+
+            if (result == double.MaxValue)
             {
                 return double.NaN;
             }
@@ -867,11 +959,7 @@ namespace SAM.Analytical
         {
             get
             {
-                double[] values = GetValues();
-                if (values == null || values.Length == 0)
-                    return double.NaN;
-
-                return values.Max();
+                return GetMaxValue();
             }
         }
 
@@ -879,11 +967,7 @@ namespace SAM.Analytical
         {
             get
             {
-                double[] values = GetValues();
-                if (values == null || values.Length == 0)
-                    return double.NaN;
-
-                return values.Min();
+                return GetMinValue();
             }
         }
 
@@ -946,8 +1030,27 @@ namespace SAM.Analytical
             {
                 Profile profile;
                 double result;
-                if (!TryGetValue(index, out profile, out result))
+
+                int max = Max;
+                int min = Min;
+
+                int count = max - min + 1;
+
+                int index_Temp = index;
+                while(index_Temp > max)
+                {
+                    index_Temp -= count;
+                }
+
+                while(index_Temp < min)
+                {
+                    index_Temp += count;
+                }
+
+                if (!TryGetValue(index_Temp, out profile, out result))
+                {
                     return double.NaN;
+                }
 
                 return result;
             }
