@@ -617,7 +617,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            int max = Max;
+            int max = Max + 1;
             int min = Min;
 
             for (int i = min; i < max; i++)
