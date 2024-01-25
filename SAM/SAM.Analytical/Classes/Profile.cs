@@ -201,7 +201,7 @@ namespace SAM.Analytical
                 return;
             }
 
-            IEnumerable<int> keys = values.Keys;
+            List<int> keys = values.Keys?.ToList();
             foreach (int key in keys)
             {
                 Tuple<Range<int>, AnyOf<double, Profile>> tuple = values[key];
@@ -829,7 +829,11 @@ namespace SAM.Analytical
                     return int.MaxValue;
                 }
 
-                int result = values.Last().Key + 1;
+                int result = values.Last().Key;
+                //if(values.Count == 1)
+                //{
+                //    result++;
+                //}
 
                 foreach(Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
                 {

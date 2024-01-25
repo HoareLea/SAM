@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,7 +27,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalAirflow()
           : base("SAMAnalytical.Airflow", "SAMAnalytical.Airflow",
-              "Calculates Exhaust and Supply Airflow",
+              "Calculates Exhaust and Supply Airflow from Internal Condition ONLY"+
+              "Calculated Exhaust/Supply Air Flow [m3/s] for IC inside Space.as Sum of ExhaustAirFlowPerPerson, ExhaustAirFlowPerArea, ExhaustAirFlow and ExhaustAirChangesPerHour",
               "SAM", "Analytical")
         {
         }

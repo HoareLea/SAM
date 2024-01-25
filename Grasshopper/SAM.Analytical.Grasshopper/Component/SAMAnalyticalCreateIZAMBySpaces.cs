@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
 
                     if (from is AirHandlingUnit)
                     {
-                        spaceAirMovement = new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(space_Temp).ToString(), null);
+                        spaceAirMovement = profile == null ? new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(space_Temp).ToString(), null) : new SpaceAirMovement(space_Temp.Name, airFlow, profile, new ObjectReference(space_Temp).ToString(), null);
                         adjacencyCluster.AddObject(spaceAirMovement);
 
                         adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);

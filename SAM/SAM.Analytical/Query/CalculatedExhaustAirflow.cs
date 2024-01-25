@@ -5,7 +5,7 @@ namespace SAM.Analytical
     public static partial class Query
     {
         /// <summary>
-        /// Calculated Exhaust Air Flow [m3/s] for Space. Sum of ExhaustAirFlowPerPerson, ExhaustAirFlowPerArea, ExhaustAirFlow and ExhaustAirChangesPerHour
+        /// Calculated Exhaust Air Flow [m3/s] for IC inside Space.as Sum of ExhaustAirFlowPerPerson, ExhaustAirFlowPerArea, ExhaustAirFlow and ExhaustAirChangesPerHour
         /// </summary>
         /// <param name="space">Space</param>
         /// <returns>Exhaust Air Flow [m3/s]</returns>
