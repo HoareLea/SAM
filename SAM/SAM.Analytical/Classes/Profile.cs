@@ -194,6 +194,101 @@ namespace SAM.Analytical
             return new Profile(name, category, indexedDoubles);
         }
 
+        public void Multiply(double value)
+        {
+            if(values == null || double.IsNaN(value))
+            {
+                return;
+            }
+
+            IEnumerable<int> keys = values.Keys;
+            foreach (int key in keys)
+            {
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = values[key];
+                if(tuple == null)
+                {
+                    continue;
+                }
+
+                object @object = tuple?.Item2?.Value;
+                if(@object == null)
+                {
+                    continue;
+                }
+
+                if (@object is double)
+                {
+                    values[key] = new Tuple<Range<int>, AnyOf<double, Profile>>(tuple.Item1, ((double)@object) * value);
+                }
+                else if(@object is Profile)
+                {
+                    Profile profile = new Profile((Profile)@object);
+                    profile.Multiply(value);
+                    values[key] = new Tuple<Range<int>, AnyOf<double, Profile>>(tuple.Item1, profile);
+                }
+            }
+        }
+
+        public void Divide(double value)
+        {
+            if (double.IsNaN(value) || values == null)
+            {
+                return;
+            }
+
+            Multiply(1 / value);
+        }
+
+        public double GetMax()
+        {
+            if (values == null)
+            {
+                return double.NaN;
+            }
+
+            double result = double.MinValue;
+
+            IEnumerable<int> keys = values.Keys;
+            foreach (int key in keys)
+            {
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = values[key];
+                if (tuple == null)
+                {
+                    continue;
+                }
+
+                object @object = tuple?.Item2?.Value;
+                if (@object == null)
+                {
+                    continue;
+                }
+
+                double value = double.NaN;
+
+                if (@object is double)
+                {
+                    value =(double)@object;
+                }
+                else if (@object is Profile)
+                {
+                    value = ((Profile)@object).GetMax();
+
+                }
+
+                if(value > result)
+                {
+                    result = value;
+                }
+            }
+
+            if(result == double.MinValue)
+            {
+                return double.NaN;
+            }
+
+            return result;
+        }
+
         public bool Update(IEnumerable<double> values)
         {
             if (values == null)
