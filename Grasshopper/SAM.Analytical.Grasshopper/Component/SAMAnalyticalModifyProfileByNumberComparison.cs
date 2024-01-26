@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,6 +47,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile", NickName = "_profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_profileAsYearlyProfile_", NickName = "_profileAsYearlyProfile_", Description = "Profile As Yearly Profile", Access = GH_ParamAccess.item };
+                boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
+                
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "name_", NickName = "name_", Description = "Profile Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_values", NickName = "_values", Description = "Values or Profile", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_numberComparisonType", NickName = "_numberComparisonType", Description = "NumberComparisonType", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -89,6 +94,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            index = Params.IndexOfInputParam("_profileAsYearlyProfile_");
+            bool convertToYearlyProfile = true;
+            if (index == -1 || !dataAccess.GetData(index, ref convertToYearlyProfile))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            if(convertToYearlyProfile)
+            {
+                profile = new Profile(profile, new IndexedDoubles(profile.GetYearlyValues()));
             }
 
             index = Params.IndexOfInputParam("name_");
