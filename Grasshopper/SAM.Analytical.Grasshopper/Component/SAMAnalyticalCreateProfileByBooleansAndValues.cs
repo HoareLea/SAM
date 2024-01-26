@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalProfileByBools : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateProfileByBooleansAndValues : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +28,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalProfileByBools()
-          : base("SAMAnalytical.ProfileByBools", "SAMAnalytical.ProfileByBools",
-              "Profile By Bools",
+        public SAMAnalyticalCreateProfileByBooleansAndValues()
+          : base("SAMAnalytical.CreateProfileByBooleansAndValues", "SAMAnalytical.CreateProfileByBooleansAndValues",
+              "Create Profile By Bools and Values",
               "SAM", "Analytical1")
         {
         }

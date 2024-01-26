@@ -170,6 +170,21 @@ namespace SAM.Analytical
             }
         }
 
+        public Profile(Profile profile, IndexedDoubles indexedDoubles)
+            :base(profile)
+        {
+            category = profile?.category;
+
+            IEnumerable<int> indexes = indexedDoubles?.Keys;
+            if (indexes != null)
+            {
+                foreach (int index in indexes)
+                {
+                    Add(index, indexedDoubles[index]);
+                }
+            }
+        }
+
         public Profile(JObject jObject)
             : base(jObject)
         {

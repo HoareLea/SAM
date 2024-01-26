@@ -1,15 +1,8 @@
-﻿using Eto.Forms;
-using Grasshopper.Kernel;
-using MathNet.Numerics.Distributions;
-using MathNet.Numerics.Providers.LinearAlgebra;
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using System.Data;
-using System.IO;
-using System.Runtime.ConstrainedExecution;
-using System.Security.Cryptography;
 
 namespace SAM.Analytical.Grasshopper
 {
