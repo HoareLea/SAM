@@ -275,6 +275,9 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            Profile profile_1 = new Profile(profile, indexedDoubles_1);
+            Profile profile_2 = new Profile(profile, indexedDoubles_2);
+
             IndexedDoubles indexedDoubles = !double.IsNaN(valueTrue) || !double.IsNaN(valueFalse) ? new IndexedDoubles() : null;
             List<int> indexesTrue = new List<int>();
             List<int> indexesFalse = new List<int>();
@@ -285,13 +288,13 @@ namespace SAM.Analytical.Grasshopper
                     indexedDoubles[i] = profile[i];
                 }
 
-                double value_1 = indexedDoubles_1[i];
+                double value_1 = profile_1[i];
                 if(double.IsNaN(value_1))
                 {
                     continue;
                 }
 
-                double value_2 = indexedDoubles_2[i];
+                double value_2 = profile_2[i];
                 if (double.IsNaN(value_2))
                 {
                     continue;
