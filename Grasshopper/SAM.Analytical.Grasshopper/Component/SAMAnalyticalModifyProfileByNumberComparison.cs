@@ -262,7 +262,10 @@ namespace SAM.Analytical.Grasshopper
             List<int> indexesFalse = new List<int>();
             for (int i = profile.Min; i <= profile.Max; i++)
             {
-                indexedDoubles[i] = profile[i];
+                if(indexedDoubles != null)
+                {
+                    indexedDoubles[i] = profile[i];
+                }
 
                 double value_1 = indexedDoubles_1[i];
                 if(double.IsNaN(value_1))
@@ -306,10 +309,23 @@ namespace SAM.Analytical.Grasshopper
                 profile = new Profile(profile, indexedDoubles);
             }
 
+
             index = Params.IndexOfOutputParam("profile");
             if (index != -1)
             {
                 dataAccess.SetData(index, profile);
+            }
+
+            index = Params.IndexOfOutputParam("indexesTrue");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, indexesTrue);
+            }
+
+            index = Params.IndexOfOutputParam("indexesFalse");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, indexesFalse);
             }
         }
     }
