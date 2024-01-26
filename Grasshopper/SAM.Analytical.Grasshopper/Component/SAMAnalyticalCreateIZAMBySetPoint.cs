@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,10 @@ namespace SAM.Analytical.Grasshopper
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityAccuracies_", NickName = "_humidityAccuracy_", Description = "HumidityAccuracy", Access = GH_ParamAccess.list };
                 number.SetPersistentData(new List<GH_Number> { new GH_Number(10) });
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_densities_", NickName = "_densities_", Description = "Densities", Access = GH_ParamAccess.list };
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(FluidProperty.Air.Density) });
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -147,6 +151,22 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            List<double> densities = null;
+            index = Params.IndexOfInputParam("_densities_");
+            if(index != -1)
+            {
+                densities = new List<double>();
+                if(!dataAccess.GetDataList(index, densities))
+                {
+                    densities = null;
+                }
+            }
+
+            if(densities == null)
+            {
+                densities = new List<double>() { FluidProperty.Air.Density };
+            }
+
             AirHandlingUnitAirMovement airHandlingUnitAirMovement = null;
 
             if (sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
@@ -159,8 +179,6 @@ namespace SAM.Analytical.Grasshopper
 
                 if(adjacencyCluster != null)
                 {
-
-
                     AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObjects<AirHandlingUnit>()?.Find(x => x.Name == name);
                     if(airHandlingUnit == null)
                     {
@@ -205,7 +223,9 @@ namespace SAM.Analytical.Grasshopper
                         dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, dehumidifications);
                     }
 
-                    airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification);
+                    Profile density = new Profile(string.Format("{0} Air Density", airHandlingUnit.Name), densities);
+
+                    airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification, density);
                     adjacencyCluster.AddObject(airHandlingUnitAirMovement);
 
                     adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitAirMovement);

@@ -41,7 +41,14 @@ namespace SAM.Analytical
                 Profile profile_SpaceAirMovement = spaceAirMovement.Profile;
                 profile_SpaceAirMovement.Multiply(spaceAirMovement.AirFlow);
 
-                profile = profile == null ? profile_SpaceAirMovement : profile.Combine(profile_SpaceAirMovement);
+                if(profile == null)
+                {
+                    profile = profile_SpaceAirMovement;
+                }
+                else
+                {
+                    profile.Sum(profile_SpaceAirMovement);
+                }
             }
 
             if(profile == null)
@@ -49,7 +56,7 @@ namespace SAM.Analytical
                 return double.NaN;
             }
 
-            double result = profile.GetMax();
+            double result = profile.MaxValue;
             profile.Divide(result);
 
             return result;
