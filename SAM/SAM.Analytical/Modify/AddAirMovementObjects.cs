@@ -1,5 +1,4 @@
-﻿using NetTopologySuite.Densify;
-using SAM.Core;
+﻿using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical

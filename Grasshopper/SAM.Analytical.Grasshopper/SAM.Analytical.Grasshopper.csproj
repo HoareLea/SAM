@@ -101,6 +101,11 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalProfileBySpace.cs" />
+    <Compile Include="Component\SAMAnalyticalProfileByBools.cs" />
+    <Compile Include="Component\SAMAnalyticalProfileSum.cs" />
+    <Compile Include="Component\SAMAnalyticalProfileDivide.cs" />
+    <Compile Include="Component\SAMAnalyticalProfileMultiply.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalCreateIZAMBySpaces.cs" />
     <Compile Include="Component\SAMAnalyticalCreateIZAMBySetPoint.cs" />

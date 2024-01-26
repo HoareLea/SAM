@@ -1,5 +1,4 @@
 ﻿using QuickGraph;
-using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar

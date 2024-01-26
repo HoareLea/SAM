@@ -1,6 +1,4 @@
-﻿using SAM.Geometry.Spatial;
-
-namespace SAM.Geometry.Planar
+﻿namespace SAM.Geometry.Planar
 {
     public interface ISAMGeometry2D : ISAMGeometry
     {

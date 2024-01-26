@@ -1,5 +1,4 @@
 ﻿using SAM.Geometry.Spatial;
-using System.Linq;
 
 namespace SAM.Geometry.Object.Spatial
 {

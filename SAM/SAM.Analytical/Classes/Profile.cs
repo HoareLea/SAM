@@ -1,12 +1,9 @@
 ﻿using Newtonsoft.Json.Linq;
-using QuickGraph.Predicates;
 using SAM.Core;
 using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.Remoting.Messaging;
-using System.Threading;
 
 namespace SAM.Analytical
 {
