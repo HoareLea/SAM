@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileBySpace()
           : base("SAMAnalytical.ProfileBySpace", "SAMAnalytical.ProfileBySpace",
               "Profile By Space",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical1")
         {
         }
 
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_profileType", NickName = "_profileType", Description = "Profile Type", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();

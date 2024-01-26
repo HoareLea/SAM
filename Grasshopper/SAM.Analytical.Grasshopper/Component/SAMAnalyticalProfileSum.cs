@@ -31,8 +31,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalProfileSum()
           : base("SAMAnalytical.ProfileSum", "SAMAnalytical.ProfileSum",
-              "Sum Profile",
-              "SAM WIP", "Analytical")
+              "Sum Profile by Value or Profile",
+              "SAM", "Analytical1")
         {
         }
 
@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "_profile", NickName = "_profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_value", NickName = "_value", Description = "Value", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_value", NickName = "_value", Description = "Value or Profile ", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
 
                 return result.ToArray();
             }

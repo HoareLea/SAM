@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileByBools()
           : base("SAMAnalytical.ProfileByBools", "SAMAnalytical.ProfileByBools",
               "Profile By Bools",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical1")
         {
         }
 
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_name", NickName = "_name", Description = "Profile Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "category_", NickName = "category_", Description = "Profile Category", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_bools", NickName = "_bools", Description = "Bools", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_bools", NickName = "_bools", Description = "Bools as value or list", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
