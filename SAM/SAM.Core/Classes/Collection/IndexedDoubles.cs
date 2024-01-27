@@ -98,28 +98,6 @@ namespace SAM.Core
             return result;
         }
 
-        public int? GetMinIndex()
-        {
-            IEnumerable<int> keys = Keys;
-            if(keys == null || keys.Count() == 0)
-            {
-                return null;
-            }
-
-            return keys.Min(x => x);
-        }
-
-        public int? GetMaxIndex()
-        {
-            IEnumerable<int> keys = Keys;
-            if (keys == null || keys.Count() == 0)
-            {
-                return null;
-            }
-
-            return keys.Max(x => x);
-        }
-
         public double GetMaxValue()
         {
             int index = GetMaxValueIndex();

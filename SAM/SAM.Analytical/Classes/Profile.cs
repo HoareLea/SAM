@@ -690,22 +690,49 @@ namespace SAM.Analytical
 
         public double[] GetValues()
         {
-            if (values == null)
-                return null;
+            return GetIndexedDoubles().Values?.ToArray();
 
-            if (values.Count == 0)
-                return new double[0];
-            
-            int max = Max;
-            int min = Min;
+            //if (values == null)
+            //    return null;
 
-            double[] result = max == min ? new double[1] : new double[max - min + 1];
+            //if (values.Count == 0)
+            //    return new double[0];
 
-            for (int i = 0; i < result.Length; i++)
-                result[i] = this[min + i];
+            //int max = Max;
+            //int min = Min;
 
-            return result;
+            //double[] result = max == min ? new double[1] : new double[max - min + 1];
+
+            //for (int i = 0; i < result.Length; i++)
+            //    result[i] = this[min + i];
+
+            //return result;
         }
+
+        //public IndexedDoubles GetIndexedDoubles()
+        //{
+        //    if (values == null)
+        //    {
+        //        return null;
+        //    }
+
+        //    IndexedDoubles result = new IndexedDoubles();
+
+        //    if (values.Count == 0)
+        //    {
+        //        return result;
+        //    }
+
+        //    int max = Max + 1;
+        //    int min = Min;
+
+        //    for (int i = min; i < max; i++)
+        //    {
+        //        result[i] = this[i];
+        //    }
+
+        //    return result;
+        //}
 
         public IndexedDoubles GetIndexedDoubles()
         {
@@ -715,18 +742,83 @@ namespace SAM.Analytical
             }
 
             IndexedDoubles result = new IndexedDoubles();
-
             if (values.Count == 0)
             {
                 return result;
             }
 
-            int max = Max + 1;
-            int min = Min;
-
-            for (int i = min; i < max; i++)
+            foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
             {
-                result[i] = this[i];
+                Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
+
+                if (tuple == null)
+                {
+                    continue;
+                }
+
+                object @object = tuple.Item2?.Value;
+                if(@object == null)
+                {
+                    continue;
+                }
+
+                Range<int> range = tuple.Item1;
+                if(range == null)
+                {
+                    if (@object is double)
+                    {
+                        result[keyValuePair.Key] = (double)@object;
+                    }
+                    else if(@object is Profile)
+                    {
+                        IndexedDoubles indexedDoubles = ((Profile)@object).GetIndexedDoubles();
+                        if(indexedDoubles != null)
+                        {
+                            IEnumerable<int> keys = indexedDoubles.Keys;
+                            if(keys != null)
+                            {
+                                foreach (int key in keys)
+                                {
+                                    result[keyValuePair.Key + key] = indexedDoubles[key];
+                                }
+                            }
+                        }
+                    }
+
+                    continue;
+                }
+
+
+                if (@object is double)
+                {
+                    result.Add(range, (double)@object);
+                }
+                else
+                {
+                    IndexedDoubles indexedDoubles = ((Profile)@object).GetIndexedDoubles();
+                    if (indexedDoubles != null)
+                    {
+                        IEnumerable<int> keys = indexedDoubles.Keys;
+                        if (keys != null)
+                        {
+                            foreach (int key in keys)
+                            {
+                                int index = keyValuePair.Key + key;
+                                if(index < range.Min)
+                                {
+                                    continue;
+                                }
+
+                                if (key > range.Max)
+                                {
+                                    break;
+                                }
+
+                                result[keyValuePair.Key + key] = indexedDoubles[key];
+                            }
+                        }
+                    }
+                }
             }
 
             return result;
@@ -739,94 +831,129 @@ namespace SAM.Analytical
                 return null;
             }
 
-            return GetValues(range.Min, range.Count());
-        }
-
-        public double[] GetValues(int index, int count)
-        {
-            if(index == -1 || count < 1)
+            IndexedDoubles indexedDoubles = GetIndexedDoubles();
+            if(indexedDoubles == null)
             {
                 return null;
             }
 
-            double[] result = new double[count];
-            int max = index + count - 1;
-            for (int i = 0; i < count; i++)
+            int max = indexedDoubles.GetMaxIndex().Value;
+            int min = indexedDoubles.GetMinIndex().Value;
+
+            Range<int> range_Temp = new Range<int>(max, min);
+
+            int count = max - min + 1;
+
+            List<double> values = new List<double>();
+            for (int i = range.Min; i <= range.Max; i++)
             {
-                result[i] = this[index + i];
+                int index = Core.Query.BoundedIndex(range_Temp, i);
+
+                values.Add(indexedDoubles[index]);
             }
 
-            return result;
+            return values.ToArray();
+
+            //if (range == null)
+            //{
+            //    return null;
+            //}
+
+            //return GetValues(range.Min, range.Count());
+        }
+
+        public double[] GetValues(int index, int count)
+        {
+            return GetValues(new Range<int>(index, index + count - 1));
+
+            //if(index == -1 || count < 1)
+            //{
+            //    return null;
+            //}
+
+            //double[] result = new double[count];
+            //int max = index + count - 1;
+            //for (int i = 0; i < count; i++)
+            //{
+            //    result[i] = this[index + i];
+            //}
+
+            //return result;
         }
 
         public double[] GetYearlyValues()
         {
-            int max = Max;
-            int min = Min;
+            return GetValues(new Range<int>(0, 8759));
 
-            double[] result = new double[8760];
 
-            for(int i = min; i <= max; i++)
-            {
-                if (i >= result.Length)
-                    break;
+            //int max = Max;
+            //int min = Min;
+
+            //double[] result = new double[8760];
+
+            //for(int i = min; i <= max; i++)
+            //{
+            //    if (i >= result.Length)
+            //        break;
                 
-                result[i] = this[i];
-            }
+            //    result[i] = this[i];
+            //}
                 
 
-            int index;
+            //int index;
 
-            index = min;
-            for(int i= max + 1; i < 8760; i++)
-            {
-                result[i] = result[index];
-                index++;
-            }
+            //index = min;
+            //for(int i= max + 1; i < 8760; i++)
+            //{
+            //    result[i] = result[index];
+            //    index++;
+            //}
 
-            index = max;
-            for (int i = min - 1; i >= 0; i--)
-            {
-                result[i] = result[index];
-                index--;
-            }
+            //index = max;
+            //for (int i = min - 1; i >= 0; i--)
+            //{
+            //    result[i] = result[index];
+            //    index--;
+            //}
 
-            return result;
+            //return result;
         }
 
         public double[] GetDailyValues()
         {
-            int max = Max;
-            int min = Min;
+            return GetValues(new Range<int>(0, 23));
 
-            double[] result = new double[24];
+            //int max = Max;
+            //int min = Min;
 
-            for (int i = min; i <= max; i++)
-            {
-                if (i >= result.Length)
-                    break;
+            //double[] result = new double[24];
 
-                result[i] = this[i];
-            }
-                
+            //for (int i = min; i <= max; i++)
+            //{
+            //    if (i >= result.Length)
+            //        break;
 
-            int index;
+            //    result[i] = this[i];
+            //}
 
-            index = min;
-            for (int i = max + 1; i < 24; i++)
-            {
-                result[i] = result[index];
-                index++;
-            }
 
-            index = max;
-            for (int i = min - 1; i >= 0; i--)
-            {
-                result[i] = result[index];
-                index--;
-            }
+            //int index;
 
-            return result;
+            //index = min;
+            //for (int i = max + 1; i < 24; i++)
+            //{
+            //    result[i] = result[index];
+            //    index++;
+            //}
+
+            //index = max;
+            //for (int i = min - 1; i >= 0; i--)
+            //{
+            //    result[i] = result[index];
+            //    index--;
+            //}
+
+            //return result;
         }
 
         public Profile[] GetProfiles()
@@ -1018,7 +1145,6 @@ namespace SAM.Analytical
                         return true;
                     }
                         
-
                     Profile profile_Temp = @object as Profile;
                     if (profile_Temp == null)
                         continue;
@@ -1054,7 +1180,7 @@ namespace SAM.Analytical
                     index_Temp -= count;
                 }
 
-                while(index_Temp < min)
+                while (index_Temp < min)
                 {
                     index_Temp += count;
                 }
