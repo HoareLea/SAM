@@ -2,9 +2,7 @@
 using Grasshopper.Kernel.Types;
 using Rhino.Runtime.InteropWrappers;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Spatial;
 using SAM.Weather;
 using SAM.Weather.Grasshopper;
 using System;
@@ -22,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -67,8 +65,9 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "indoorComfortTemperatures", NickName = "indoorComfortTemperatures", Description = "SAM Indoor Comfort Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "runningMeanTemperatures", NickName = "runningMeanTemperatures", Description = "SAM Running Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "dailyAverageTemperatures", NickName = "dailyAverageTemperatures", Description = "Daily Average Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "indoorComfortTemperatures", NickName = "indoorComfortTemperatures", Description = "Indoor Comfort Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "runningMeanTemperatures", NickName = "runningMeanTemperatures", Description = "Running Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -108,9 +107,16 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> indoorComfortTemperatures = new List<double>();
             List<double> runningMeanTemperatures = new List<double>();
+            List<double> dailyAverageTemperatures = new List<double>();
 
             foreach(WeatherYear weatherYear in weatherData.WeatherYears)
             {
+                List<double> dailyAverageTemperatures_Temp = weatherYear?.WeatherDays.ConvertAll(x => x.Average(WeatherDataType.DryBulbTemperature));
+                if(dailyAverageTemperatures_Temp != null)
+                {
+                    dailyAverageTemperatures.AddRange(dailyAverageTemperatures_Temp);
+                }
+                
                 List<double> indoorComfortTemperatures_Temp = Analytical.Query.IndoorComfortTemperatures(weatherYear, tM52BuildingCategory);
                 if(indoorComfortTemperatures_Temp != null)
                 {
@@ -122,6 +128,12 @@ namespace SAM.Analytical.Grasshopper
                 {
                     runningMeanTemperatures.AddRange(runningMeanTemperatures_Temp);
                 }
+            }
+
+            index = Params.IndexOfOutputParam("dailyAverageTemperatures");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, dailyAverageTemperatures);
             }
 
             index = Params.IndexOfOutputParam("indoorComfortTemperatures");
