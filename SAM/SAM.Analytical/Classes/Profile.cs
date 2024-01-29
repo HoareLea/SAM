@@ -757,29 +757,34 @@ namespace SAM.Analytical
                 }
 
                 object @object = tuple.Item2?.Value;
-                if(@object == null)
+                if (@object == null)
                 {
                     continue;
                 }
 
                 Range<int> range = tuple.Item1;
-                if(range == null)
+                if (range == null)
                 {
                     if (@object is double)
                     {
                         result[keyValuePair.Key] = (double)@object;
                     }
-                    else if(@object is Profile)
+                    else if (@object is Profile)
                     {
                         IndexedDoubles indexedDoubles = ((Profile)@object).GetIndexedDoubles();
-                        if(indexedDoubles != null)
+                        if (indexedDoubles != null)
                         {
                             IEnumerable<int> keys = indexedDoubles.Keys;
-                            if(keys != null)
+                            if (keys != null)
                             {
                                 foreach (int key in keys)
                                 {
-                                    result[keyValuePair.Key + key] = indexedDoubles[key];
+                                    int index = keyValuePair.Key + key;
+                                    if (result.Contains(index))
+                                    {
+                                        continue;
+                                    }
+                                    result[index] = indexedDoubles[key];
                                 }
                             }
                         }
@@ -804,7 +809,12 @@ namespace SAM.Analytical
                             foreach (int key in keys)
                             {
                                 int index = keyValuePair.Key + key;
-                                if(index < range.Min)
+                                if (index < range.Min)
+                                {
+                                    continue;
+                                }
+
+                                if (result.Contains(index))
                                 {
                                     continue;
                                 }
@@ -814,7 +824,7 @@ namespace SAM.Analytical
                                     break;
                                 }
 
-                                result[keyValuePair.Key + key] = indexedDoubles[key];
+                                result[index] = indexedDoubles[key];
                             }
                         }
                     }
@@ -1116,7 +1126,9 @@ namespace SAM.Analytical
             value = double.NaN;
 
             if (values == null || values.Count == 0)
+            {
                 return false;
+            }
 
             int max = Max + 1;
             int index_Temp = index >= max ? index % max : index;
@@ -1124,12 +1136,16 @@ namespace SAM.Analytical
             foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
             {
                 if (keyValuePair.Key > index_Temp)
+                {
                     return false;
+                }
 
                 Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
 
                 if (tuple == null)
+                {
                     continue;
+                }
 
                 Range<int> range = tuple.Item1;
 
@@ -1137,7 +1153,9 @@ namespace SAM.Analytical
                 {
                     object @object = tuple.Item2?.Value;
                     if (@object == null)
+                    {
                         continue;
+                    }
 
                     if (@object is double)
                     {
@@ -1147,11 +1165,15 @@ namespace SAM.Analytical
                         
                     Profile profile_Temp = @object as Profile;
                     if (profile_Temp == null)
+                    {
                         continue;
+                    }
 
                     double result = profile_Temp[index_Temp - keyValuePair.Key];
                     if (double.IsNaN(result))
+                    {
                         continue;
+                    }
 
                     value = result;
                     profile = profile_Temp;
