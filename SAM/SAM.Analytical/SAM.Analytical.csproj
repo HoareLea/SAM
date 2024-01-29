@@ -169,6 +169,7 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Enums\TM52BuildingCategory.cs" />
     <Compile Include="Modify\AddAirMovementObjects.cs" />
     <Compile Include="Interfaces\IAirMovementObject.cs" />
     <Compile Include="Interfaces\IAnalyticalResult.cs" />
@@ -176,7 +177,9 @@
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
+    <Compile Include="Query\IndoorComfortTemperatures.cs" />
     <Compile Include="Query\AirFlow.cs" />
+    <Compile Include="Query\TemperatureRange.cs" />
     <Compile Include="Query\UpdateApertureConstructions.cs" />
     <Compile Include="Query\UpdateConstructions.cs" />
     <Compile Include="Query\DefaultConstructionManager.cs" />

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Configuration;
-
-namespace SAM.Core
+﻿namespace SAM.Core
 {
     public static partial class Query
     {
@@ -34,6 +31,24 @@ namespace SAM.Core
             }
 
             return int.MinValue;
+        }
+
+        /// <summary>
+        /// Bounded index between 0 and count - 1
+        /// </summary>
+        /// <param name="count">Items count</param>
+        /// <param name="index">Index</param>
+        /// <returns>BoundedIndex</returns>
+        public static int BoundedIndex(this int count, int index)
+        {
+            int max = count - 1;
+
+            if(max < 0)
+            {
+                return int.MinValue;
+            }
+
+            return BoundedIndex(new Range<int>(0, max), index);
         }
     }
 }
