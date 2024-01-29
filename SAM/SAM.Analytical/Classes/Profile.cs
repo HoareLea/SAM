@@ -780,7 +780,7 @@ namespace SAM.Analytical
                                 foreach (int key in keys)
                                 {
                                     int index = keyValuePair.Key + key;
-                                    if (result.Contains(index))
+                                    if (result.ContainsIndex(index))
                                     {
                                         continue;
                                     }
@@ -814,7 +814,7 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
-                                if (result.Contains(index))
+                                if (result.ContainsIndex(index))
                                 {
                                     continue;
                                 }
