@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalIndoorComfortTemperatures()
           : base("SAMAnalytical.IndoorComfortTemperatures", "SAMAnalytical.IndoorComfortTemperatures",
               "Indoor Comfort Temperatures",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical1")
         {
         }
 
@@ -65,9 +65,9 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "dailyAverageTemperatures", NickName = "dailyAverageTemperatures", Description = "Daily Average Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "dailyAverageTemperatures", NickName = "dailyAverageTemperatures", Description = "The average external drybulb temperature for the day Ted", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "indoorComfortTemperatures", NickName = "indoorComfortTemperatures", Description = "Indoor Comfort Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "runningMeanTemperatures", NickName = "runningMeanTemperatures", Description = "Running Temperatures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "runningMeanTemperatures", NickName = "runningMeanTemperatures", Description = "External running mean temperature\n *Trm exponentially weighted running mean of the daily mean outdoor air temperature", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
