@@ -132,10 +132,12 @@
     <Compile Include="Classes\New\Window.cs" />
     <Compile Include="Classes\New\WindowType.cs" />
     <Compile Include="Classes\Result\AnalyticalModelSimulationResult.cs" />
+    <Compile Include="Classes\Result\SpaceTM52Result.cs" />
     <Compile Include="Classes\Result\SurfaceSimulationResult.cs" />
     <Compile Include="Classes\Result\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\Result\ZoneSimulationResult.cs" />
     <Compile Include="Classes\DesignDay.cs" />
+    <Compile Include="Classes\DailyWeightedExceedance.cs" />
     <Compile Include="Classes\TM59Manager.cs" />
     <Compile Include="Classes\Zone.cs" />
     <Compile Include="Classes\Result\SpaceSimulationResult.cs" />
