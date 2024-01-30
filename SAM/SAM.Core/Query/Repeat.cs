@@ -34,7 +34,7 @@ namespace SAM.Core
                 return null;
             }
 
-            List<T> result = null;
+            List<T> result = new List<T>();
             foreach (T value in values)
             {
                 for (int i = 0; i < count; i++)
