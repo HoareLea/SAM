@@ -146,8 +146,8 @@ namespace SAM.Analytical
 
             foreach(int occupiedHourIndex in occupiedHourIndices)
             {
-                int boundedIndex = Core.Query.BoundedIndex(23, occupiedHourIndex);
-                int dayIndex = System.Convert.ToInt32(occupiedHourIndex / 23);
+                int boundedIndex = Core.Query.BoundedIndex(24, occupiedHourIndex);
+                int dayIndex = System.Convert.ToInt32(occupiedHourIndex / 24);
 
                 if(!result.TryGetValue(dayIndex, out HashSet<int> dailyHourIndexes) || dailyHourIndexes == null)
                 {
@@ -177,7 +177,7 @@ namespace SAM.Analytical
                 IndexedDoubles temperatureDifferences = new IndexedDoubles();
                 foreach (int hourIndex in keyValuePair.Value)
                 {
-                    double temperatureDifference = GetTemperatureDifference(dayIndex + hourIndex);
+                    double temperatureDifference = GetTemperatureDifference((dayIndex * 24) + hourIndex);
                     temperatureDifferences.Add(hourIndex, temperatureDifference);
                 }
 
@@ -187,8 +187,26 @@ namespace SAM.Analytical
             return result;
         }
 
+        public int GetDailyWeightedExceedanceStartHourIndex()
+        {
+            GetDailyWeightedExceedance(out DailyWeightedExceedance dailyWeightedExceedance);
+            if(dailyWeightedExceedance == null)
+            {
+                return -1;
+            }
+
+            return dailyWeightedExceedance.StartHourIndex;
+        }
+        
         public double GetDailyWeightedExceedance()
         {
+            return GetDailyWeightedExceedance(out DailyWeightedExceedance dailyWeightedExceedance);
+        }
+
+        public double GetDailyWeightedExceedance(out DailyWeightedExceedance dailyWeightedExceedance)
+        {
+            dailyWeightedExceedance = null;
+
             List<DailyWeightedExceedance> dailyWeightedExceedances = GetDailyWeightedExceedances();
             if(dailyWeightedExceedances == null)
             {
@@ -201,17 +219,18 @@ namespace SAM.Analytical
             }
 
             double result = double.MinValue;
-            foreach(DailyWeightedExceedance dailyWeightedExceedance in dailyWeightedExceedances)
+            foreach(DailyWeightedExceedance dailyWeightedExceedance_Temp in dailyWeightedExceedances)
             {
-                if(dailyWeightedExceedance == null)
+                if(dailyWeightedExceedance_Temp == null)
                 {
                     continue;
                 }
 
-                double weightedExceedance = dailyWeightedExceedance.WeightedExceedance;
+                double weightedExceedance = dailyWeightedExceedance_Temp.WeightedExceedance;
                 if(weightedExceedance > result)
                 {
                     result = weightedExceedance;
+                    dailyWeightedExceedance = dailyWeightedExceedance_Temp;
                 }
             }
 
@@ -225,7 +244,7 @@ namespace SAM.Analytical
 
         public double GetMaxTemperatureDifference()
         {
-            int hourIndex = GetHourIndexMaxTemperatureDifference();
+            int hourIndex = GetMaxTemperatureDifferenceHourIndex();
             if(hourIndex == -1)
             {
                 return double.NaN;
@@ -234,7 +253,7 @@ namespace SAM.Analytical
             return GetTemperatureDifference(hourIndex);
         }
 
-        public int GetHourIndexMaxTemperatureDifference()
+        public int GetMaxTemperatureDifferenceHourIndex()
         {
             IndexedDoubles temperatureDifferences = GetTemperatureDifferences();
             if(temperatureDifferences == null || temperatureDifferences.Count == 0)
