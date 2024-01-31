@@ -106,6 +106,24 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<double> GetTemperatureDifferencesExceedingComfortRange()
+        {
+            HashSet<int> hourIndicesExceedingComfortRange = GetHourIndicesExceedingComfortRange();
+            if(hourIndicesExceedingComfortRange == null)
+            {
+                return null;
+            }
+
+            List<double> result = new List<double>();
+            foreach(int hourIndex in hourIndicesExceedingComfortRange)
+            {
+                result.Add(GetTemperatureDifference(hourIndex));
+            }
+
+
+            return result;
+        }
+
         public int GetHoursExceedingComfortRange()
         {
             HashSet<int> indexes = GetHourIndicesExceedingComfortRange();
@@ -117,7 +135,7 @@ namespace SAM.Analytical
             return indexes.Count();
         }
 
-        public Dictionary<int, HashSet<int>> GetDailyHourIndicesDictionary()
+        private Dictionary<int, HashSet<int>> GetDailyHourIndicesDictionary()
         {
             if(occupiedHourIndices == null)
             {
@@ -143,7 +161,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<DailyWeightedExceedance> GetDailyWeightedExceedances()
+        private List<DailyWeightedExceedance> GetDailyWeightedExceedances()
         {
             Dictionary<int, HashSet<int>> dailyHourIndicesDictionary = GetDailyHourIndicesDictionary();
             if(dailyHourIndicesDictionary == null)
@@ -167,6 +185,58 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public double GetDailyWeightedExceedance()
+        {
+            List<DailyWeightedExceedance> dailyWeightedExceedances = GetDailyWeightedExceedances();
+            if(dailyWeightedExceedances == null)
+            {
+                return double.NaN;
+            }
+
+            if(dailyWeightedExceedances.Count == 0)
+            {
+                return 0;
+            }
+
+            double result = double.MinValue;
+            foreach(DailyWeightedExceedance dailyWeightedExceedance in dailyWeightedExceedances)
+            {
+                if(dailyWeightedExceedance == null)
+                {
+                    continue;
+                }
+
+                double weightedExceedance = dailyWeightedExceedance.WeightedExceedance;
+                if(weightedExceedance > result)
+                {
+                    result = weightedExceedance;
+                }
+            }
+
+            if(result == double.MinValue)
+            {
+                return 0;
+            }
+
+            return result;
+        }
+
+        public IndexedDoubles MaximumAcceptableTemperatures
+        {
+            get
+            {
+                return maximumAcceptableTemperatures == null ? null : new IndexedDoubles(maximumAcceptableTemperatures);
+            }
+        }
+
+        public IndexedDoubles OperativeTemperatures
+        {
+            get
+            {
+                return operativeTemperatures == null ? null : new IndexedDoubles(operativeTemperatures);
+            }
         }
 
         public bool Criterion1
