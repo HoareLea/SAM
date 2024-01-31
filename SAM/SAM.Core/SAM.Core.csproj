@@ -86,6 +86,7 @@
     <Compile Include="Query\Categories.cs" />
     <Compile Include="Query\Combine.cs" />
     <Compile Include="Query\BoundedIndex.cs" />
+    <Compile Include="Query\DayOfYear.cs" />
     <Compile Include="Query\Period.cs" />
     <Compile Include="Query\Graft.cs" />
     <Compile Include="Query\IndexOf.cs" />

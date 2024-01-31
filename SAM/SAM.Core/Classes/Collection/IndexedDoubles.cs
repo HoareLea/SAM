@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Core
 {
@@ -26,6 +25,18 @@ namespace SAM.Core
 
         public IndexedDoubles(IEnumerable<double> values)
             : base(values)
+        {
+
+        }
+
+        public IndexedDoubles(IEnumerable<double> values, int startIndex)
+            : base(values, startIndex)
+        {
+
+        }
+
+        public IndexedDoubles(int startIndex, int count, double value)
+            : base(startIndex, count, value)
         {
 
         }

@@ -6,7 +6,7 @@ namespace SAM.Weather
 {
     public static partial class Query
     {
-        public static double RunningMeanDryBulbTemperature(IEnumerable<double> dailyMeanDryBulbOutdoorTemperatures, int dayIndex, double factor = 3.8)
+        public static double ApproximateRunningMeanDryBulbTemperature(IEnumerable<double> dailyMeanDryBulbOutdoorTemperatures, int dayIndex)
         {
             if (dayIndex == -1 || dailyMeanDryBulbOutdoorTemperatures == null || dailyMeanDryBulbOutdoorTemperatures.Count() == 0)
             {
@@ -28,7 +28,7 @@ namespace SAM.Weather
                 values.Add(dryBulbTemperature * factors[i - 1]);
             }
 
-            return values.Sum() / factor;
+            return values.Sum() / 3.8;
         }
     }
 }

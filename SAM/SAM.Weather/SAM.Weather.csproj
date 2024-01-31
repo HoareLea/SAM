@@ -104,7 +104,7 @@
     <Compile Include="Query\Compare.cs" />
     <Compile Include="Query\DayIndex.cs" />
     <Compile Include="Query\RunningMeanDryBulbTemperatures.cs" />
-    <Compile Include="Query\RunningMeanDryBulbTemperature.cs" />
+    <Compile Include="Query\ApproximateRunningMeanDryBulbTemperature.cs" />
     <Compile Include="Query\DryBulbTemperatureRange.cs" />
     <Compile Include="Query\DryBulbTemperatureRanges.cs" />
     <Compile Include="Query\MaxValue.cs" />

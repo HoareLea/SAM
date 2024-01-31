@@ -34,6 +34,21 @@ namespace SAM.Core
             }
         }
 
+        public IndexedObjects(IEnumerable<T> values, int startIndex)
+        {
+            if (values != null)
+            {
+                sortedDictionary = new SortedDictionary<int, T>();
+
+                int index = startIndex;
+                foreach (T value in values)
+                {
+                    sortedDictionary[index] = value;
+                    index++;
+                }
+            }
+        }
+
         public IndexedObjects(SortedDictionary<int, T> dictionary)
         {
             if(dictionary != null)
@@ -51,6 +66,17 @@ namespace SAM.Core
             :this(indexedObjects?.sortedDictionary)
         {
 
+        }
+
+        public IndexedObjects(int startIndex, int count, T value)
+        {
+            sortedDictionary = new SortedDictionary<int, T>();
+
+            int end = startIndex + count;
+            for (int i = startIndex; i < end; i++)
+            {
+                sortedDictionary[i] = value;
+            }
         }
 
         public T this[int index]
