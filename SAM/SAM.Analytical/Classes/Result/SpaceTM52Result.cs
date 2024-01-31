@@ -223,6 +223,29 @@ namespace SAM.Analytical
             return result;
         }
 
+        public double GetMaxTemperatureDifference()
+        {
+            int hourIndex = GetHourIndexMaxTemperatureDifference();
+            if(hourIndex == -1)
+            {
+                return double.NaN;
+            }
+
+            return GetTemperatureDifference(hourIndex);
+        }
+
+        public int GetHourIndexMaxTemperatureDifference()
+        {
+            IndexedDoubles temperatureDifferences = GetTemperatureDifferences();
+            if(temperatureDifferences == null || temperatureDifferences.Count == 0)
+            {
+                return -1;
+            }
+
+            return temperatureDifferences.GetMaxValueIndex();
+
+        }
+
         public IndexedDoubles MaximumAcceptableTemperatures
         {
             get
