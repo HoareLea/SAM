@@ -278,7 +278,7 @@ namespace SAM.Analytical
             int result = 0;
             foreach (double value in values)
             {
-                if (value > 4)
+                if (value >= 4)
                 {
                     result++;
                 }
@@ -301,7 +301,7 @@ namespace SAM.Analytical
             foreach(int key in keys)
             {
                 double value = temperatureDifferences[key];
-                if(value > 4)
+                if(value >= 4)
                 {
                     result.Add(key);
                 }
@@ -373,7 +373,7 @@ namespace SAM.Analytical
 
                 foreach (double value in values)
                 {
-                    if(value > 4)
+                    if(value >= 4)
                     {
                         return false;
                     }
