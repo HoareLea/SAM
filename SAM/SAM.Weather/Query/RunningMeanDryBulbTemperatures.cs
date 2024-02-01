@@ -141,7 +141,31 @@ namespace SAM.Weather
 
             //}
 
-            return result;
+            int max = endDayIndex_Temp + 1;
+
+            int startDayBoundedIndex = Core.Query.BoundedIndex(max, startDayIndex);
+            int endDayBoundedIndex = Core.Query.BoundedIndex(max, endDayIndex);
+
+            if(startDayBoundedIndex > endDayBoundedIndex)
+            {
+                List<double> runningMeanDryBulbTemperatures = new List<double>();
+
+                for(int i = startDayBoundedIndex; i < result.Count; i++)
+                {
+                    runningMeanDryBulbTemperatures.Add(result[i]);
+                }
+
+                for(int i = 0; i < max; i++)
+                {
+                    runningMeanDryBulbTemperatures.Add(result[i]);
+                }
+
+                return runningMeanDryBulbTemperatures;
+            }
+            else
+            {
+                return result.GetRange(startDayBoundedIndex, max - startDayBoundedIndex);
+            }
         }
     }
 }
