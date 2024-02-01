@@ -84,9 +84,10 @@ namespace SAM.Weather
                 return result;
             }
 
-            int startDayIndex_Temp = Core.Query.BoundedIndex(count, startDayIndex);
-            int endDayIndex_Temp = Core.Query.BoundedIndex(count, endDayIndex);
+            int startDayIndex_Temp = 0; //Core.Query.BoundedIndex(count, startDayIndex);
+            int endDayIndex_Temp = 364; //Core.Query.BoundedIndex(count, endDayIndex);
 
+            //OPTION 1
             List<double> dryBulbTemperatures = new List<double>();
             int index = startDayIndex_Temp - 7;
             for (int i = index; i < startDayIndex_Temp; i++)
@@ -104,13 +105,41 @@ namespace SAM.Weather
 
             double runningMeanDryBulbTemperature = ApproximateRunningMeanDryBulbTemperature(dryBulbTemperatures, 7);
 
-            for(int i = startDayIndex_Temp; i <= endDayIndex_Temp; i++)
+            for (int i = startDayIndex_Temp; i <= endDayIndex_Temp; i++)
             {
                 int boundedIndex = Core.Query.BoundedIndex(count, i - 1);
 
                 runningMeanDryBulbTemperature = (0.2 * weatherDays.ElementAt(boundedIndex).Average(WeatherDataType.DryBulbTemperature)) + (0.8 * runningMeanDryBulbTemperature);
                 result.Add(runningMeanDryBulbTemperature);
             }
+
+
+            //OPTION 2
+            //List<double> dryBulbTemperatures = new List<double>();
+            //int index = startDayIndex_Temp - 6;
+            //for (int i = index; i <= startDayIndex_Temp; i++)
+            //{
+            //    int boundedIndex = Core.Query.BoundedIndex(count, i);
+
+            //    double dryBulbTempearture = weatherDays.ElementAt(boundedIndex).Average(WeatherDataType.DryBulbTemperature);
+            //    if (double.IsNaN(dryBulbTempearture))
+            //    {
+            //        return result;
+            //    }
+
+            //    dryBulbTemperatures.Add(dryBulbTempearture);
+            //}
+
+            //double runningMeanDryBulbTemperature = ApproximateRunningMeanDryBulbTemperature(dryBulbTemperatures, 7);
+            //result.Add(runningMeanDryBulbTemperature);
+
+            //for (int i = startDayIndex_Temp + 1; i <= endDayIndex_Temp; i++)
+            //{
+            //    int boundedIndex = Core.Query.BoundedIndex(count, i - 1);
+
+            //    runningMeanDryBulbTemperature = (0.2 * weatherDays.ElementAt(boundedIndex).Average(WeatherDataType.DryBulbTemperature)) + (0.8 * runningMeanDryBulbTemperature);
+
+            //}
 
             return result;
         }
