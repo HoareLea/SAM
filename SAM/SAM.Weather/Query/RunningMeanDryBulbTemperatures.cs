@@ -106,7 +106,9 @@ namespace SAM.Weather
 
             for(int i = startDayIndex_Temp; i <= endDayIndex_Temp; i++)
             {
-                runningMeanDryBulbTemperature = (0.2 * weatherDays.ElementAt(i).Average(WeatherDataType.DryBulbTemperature)) + (0.8 * runningMeanDryBulbTemperature);
+                int boundedIndex = Core.Query.BoundedIndex(count, i - 1);
+
+                runningMeanDryBulbTemperature = (0.2 * weatherDays.ElementAt(boundedIndex).Average(WeatherDataType.DryBulbTemperature)) + (0.8 * runningMeanDryBulbTemperature);
                 result.Add(runningMeanDryBulbTemperature);
             }
 
