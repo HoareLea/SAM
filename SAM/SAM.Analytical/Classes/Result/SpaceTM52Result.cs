@@ -265,6 +265,50 @@ namespace SAM.Analytical
 
         }
 
+        public int GetHoursExceedingAbsoluteLimit()
+        {
+            IndexedDoubles temperatureDifferences = GetTemperatureDifferences();
+
+            IEnumerable<double> values = temperatureDifferences?.Values;
+            if (values == null || values.Count() == 0)
+            {
+                return -1;
+            }
+
+            int result = 0;
+            foreach (double value in values)
+            {
+                if (value > 4)
+                {
+                    result++;
+                }
+            }
+
+            return result;
+        }
+
+        public List<int> GetHourIndicesExceedingAbsoluteLimit()
+        {
+            IndexedDoubles temperatureDifferences = GetTemperatureDifferences();
+
+            IEnumerable<int> keys = temperatureDifferences?.Keys;
+            if(keys == null)
+            {
+                return null;
+            }
+
+            List<int> result = new List<int>();
+            foreach(int key in keys)
+            {
+                double value = temperatureDifferences[key];
+                if(value > 4)
+                {
+                    result.Add(key);
+                }
+            }
+            return result;
+        }
+
         public IndexedDoubles MaximumAcceptableTemperatures
         {
             get
