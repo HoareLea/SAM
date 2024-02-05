@@ -7,12 +7,12 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static List<double> IndoorComfortTemperatures(this WeatherYear weatherYear, TM52BuildingCategory tM52BuildingCategory, int startDayIndex, int endDayIndex, double acceptableTemperatureDifference = double.NaN)
+        public static List<double> MaxIndoorComfortTemperatures(this WeatherYear weatherYear, TM52BuildingCategory tM52BuildingCategory, int startDayIndex, int endDayIndex, double acceptableTemperatureDifference = double.NaN)
         {
-            return IndoorComfortTemperatures(weatherYear?.WeatherDays, tM52BuildingCategory, startDayIndex, endDayIndex, acceptableTemperatureDifference);
+            return MaxIndoorComfortTemperatures(weatherYear?.WeatherDays, tM52BuildingCategory, startDayIndex, endDayIndex, acceptableTemperatureDifference);
         }
 
-        public static List<double> IndoorComfortTemperatures(this WeatherYear weatherYear, TM52BuildingCategory tM52BuildingCategory, double acceptableTemperatureDifference = double.NaN)
+        public static List<double> MaxIndoorComfortTemperatures(this WeatherYear weatherYear, TM52BuildingCategory tM52BuildingCategory, double acceptableTemperatureDifference = double.NaN)
         {
             List<WeatherDay> weatherDays = weatherYear?.WeatherDays;
             if(weatherDays == null || weatherDays.Count == 0)
@@ -20,10 +20,10 @@ namespace SAM.Analytical
                 return null;
             }
 
-            return IndoorComfortTemperatures(weatherDays, tM52BuildingCategory, 0, weatherDays.Count - 1, acceptableTemperatureDifference);
+            return MaxIndoorComfortTemperatures(weatherDays, tM52BuildingCategory, 0, weatherDays.Count - 1, acceptableTemperatureDifference);
         }
 
-        public static List<double> IndoorComfortTemperatures(this IEnumerable<WeatherDay> weatherDays, TM52BuildingCategory tM52BuildingCategory, int startDayIndex, int endDayIndex, double acceptableTemperatureDifference = double.NaN)
+        public static List<double> MaxIndoorComfortTemperatures(this IEnumerable<WeatherDay> weatherDays, TM52BuildingCategory tM52BuildingCategory, int startDayIndex, int endDayIndex, double acceptableTemperatureDifference = double.NaN)
         {
             if(weatherDays == null || weatherDays.Count() == 0)
             {

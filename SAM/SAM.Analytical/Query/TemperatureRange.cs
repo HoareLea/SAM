@@ -14,16 +14,16 @@ namespace SAM.Analytical
             switch(tM52BuildingCategory)
             {
                 case TM52BuildingCategory.CategoryI:
-                    return new Range<double>(-2, 2);
+                    return new Range<double>(-3, 2);
 
                 case TM52BuildingCategory.CategoryII:
-                    return new Range<double>(-3, 3);
+                    return new Range<double>(-4, 3);
 
                 case TM52BuildingCategory.CategoryIII:
-                    return new Range<double>(-4, 4);
+                    return new Range<double>(-5, 4);
 
                 case TM52BuildingCategory.CategoryIV:
-                    return new Range<double>(-5, 5);
+                    return new Range<double>(-6, 5);
             }
 
             return null;

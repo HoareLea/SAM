@@ -179,7 +179,8 @@
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
-    <Compile Include="Query\IndoorComfortTemperatures.cs" />
+    <Compile Include="Query\MinIndoorComfortTemperatures.cs" />
+    <Compile Include="Query\MaxIndoorComfortTemperatures.cs" />
     <Compile Include="Query\AirFlow.cs" />
     <Compile Include="Query\TemperatureRange.cs" />
     <Compile Include="Query\UpdateApertureConstructions.cs" />
