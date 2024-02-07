@@ -191,6 +191,7 @@
     <Compile Include="Interfaces\IAnalyticalResult.cs" />
     <Compile Include="Interfaces\ISection.cs" />
     <Compile Include="Modify\AddResults.cs" />
+    <Compile Include="Modify\RemoveAirMovementObjects.cs" />
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
