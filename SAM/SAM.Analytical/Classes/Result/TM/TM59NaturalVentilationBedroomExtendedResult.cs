@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public abstract class TM59NaturalVentilationBedroomExtendedResult : TM59NaturalVentilationExtendedResult
+    public class TM59NaturalVentilationBedroomExtendedResult : TM59NaturalVentilationExtendedResult
     {
         public TM59NaturalVentilationBedroomExtendedResult(string name, string source, string reference, HashSet<int> occupiedHourIndices, IndexedDoubles minAcceptableTemperatures, IndexedDoubles maxAcceptableTemperatures, IndexedDoubles operativeTemperatures)
             : base(name, source, reference, occupiedHourIndices, minAcceptableTemperatures, maxAcceptableTemperatures, operativeTemperatures, TM59SpaceApplication.Sleeping)
