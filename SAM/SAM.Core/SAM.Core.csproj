@@ -67,6 +67,7 @@
     <Compile Include="Classes\Reference\ObjectReference.cs" />
     <Compile Include="Classes\Relation\SAMObjectRelationCluster.cs" />
     <Compile Include="Classes\Relation\RelationCluster.cs" />
+    <Compile Include="Convert\ToSAM\ObjectReference.cs" />
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\Category.cs" />
     <Compile Include="Create\IndexedDoubles.cs" />
@@ -87,6 +88,8 @@
     <Compile Include="Query\Combine.cs" />
     <Compile Include="Query\BoundedIndex.cs" />
     <Compile Include="Query\DayOfYear.cs" />
+    <Compile Include="Query\HourOfDay.cs" />
+    <Compile Include="Query\HoursOfYear.cs" />
     <Compile Include="Query\Period.cs" />
     <Compile Include="Query\Graft.cs" />
     <Compile Include="Query\IndexOf.cs" />

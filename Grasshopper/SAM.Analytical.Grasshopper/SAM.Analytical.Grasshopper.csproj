@@ -101,6 +101,9 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalAddResults.cs" />
+    <Compile Include="Component\SAMAnalyticalHourlyValues.cs" />
+    <Compile Include="Component\SAMAnalyticalTM52SpaceExtendedResultByDayOfYears.cs" />
     <Compile Include="Component\SAMAnalyticalTM52BuildingCategory.cs" />
     <Compile Include="Component\SAMAnalyticalDailyIndoorComfortTemperatures.cs" />
     <Compile Include="Component\SAMAnalyticalProfileBySpace.cs" />
