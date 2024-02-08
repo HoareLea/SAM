@@ -48,10 +48,10 @@ namespace SAM.Core
                         assemblyName = assemblyName.ToUpper();
                     }
 
-                    System.Reflection.Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
+                    Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
                     if (assemblies != null)
                     {
-                        foreach (System.Reflection.Assembly assembly in assemblies)
+                        foreach (Assembly assembly in assemblies)
                         {
                             string assemblyName_Temp = assembly?.GetName()?.Name?.Trim();
                             if (assemblyName_Temp == null)

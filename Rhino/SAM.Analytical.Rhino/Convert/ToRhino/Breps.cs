@@ -95,11 +95,11 @@ namespace SAM.Analytical.Rhino
 
             if (!includeFrame)
             {
-                result.Add(Geometry.Rhino.Convert.ToRhino_Brep(new Geometry.Spatial.Face3D(aperture?.GetExternalEdge3D())));
+                result.Add(Geometry.Rhino.Convert.ToRhino_Brep(new Face3D(aperture?.GetExternalEdge3D())));
                 return result;
             }
 
-            List<Geometry.Spatial.Face3D> face3Ds = null;
+            List<Face3D> face3Ds = null;
 
             face3Ds = aperture.GetFace3Ds(AperturePart.Frame);
             face3Ds?.ForEach(x => result.Add(Geometry.Rhino.Convert.ToRhino_Brep(x)));

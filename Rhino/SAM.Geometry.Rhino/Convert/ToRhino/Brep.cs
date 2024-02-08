@@ -223,8 +223,8 @@ namespace SAM.Geometry.Rhino
                     Polygon3D polygon3D = (Polygon3D)closed3D;
 
                     Plane plane = polygon3D.GetPlane();
-                    Planar.Polygon2D polygon2D = plane.Convert(polygon3D);
-                    List<Planar.Polygon2D> polygon2Ds = Planar.Query.FixEdges(polygon2D, tolerance);
+                    Polygon2D polygon2D = plane.Convert(polygon3D);
+                    List<Polygon2D> polygon2Ds = Planar.Query.FixEdges(polygon2D, tolerance);
                     if (polygon2Ds == null)
                     {
                         polylineCurves.Add(polygon3D.GetCurves().ToRhino_PolylineCurve());

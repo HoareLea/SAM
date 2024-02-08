@@ -101,6 +101,7 @@
     <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
+    <Compile Include="Component\SAMAnalyticalRemoveAirMovementObjects.cs" />
     <Compile Include="Component\SAMAnalyticalAddResults.cs" />
     <Compile Include="Component\SAMAnalyticalHourlyValues.cs" />
     <Compile Include="Component\SAMAnalyticalTM52SpaceExtendedResultByDayOfYears.cs" />

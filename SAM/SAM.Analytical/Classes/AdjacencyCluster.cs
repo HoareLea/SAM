@@ -679,7 +679,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetResults<T>(string source = null) where T : Core.Result
+        public List<T> GetResults<T>(string source = null) where T : Result
         {
             List<T> result = GetObjects<T>();
             if (result == null)

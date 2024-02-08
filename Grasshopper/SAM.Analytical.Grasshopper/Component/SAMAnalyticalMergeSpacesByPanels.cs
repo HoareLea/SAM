@@ -83,6 +83,19 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
+            index = Params.IndexOfInputParam("run_");
+            bool run = false;
+            if (!dataAccess.GetData(index, ref run))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            if (!run)
+            {
+                return;
+            }
+
             index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
             if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
