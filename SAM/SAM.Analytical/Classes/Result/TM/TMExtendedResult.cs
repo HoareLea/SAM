@@ -234,14 +234,14 @@ namespace SAM.Analytical
             }
         }
 
-        public TMExtendedResult(string name, string source, string reference)
-            : base(name, source, reference)
+        public TMExtendedResult(string name, string source, string reference, TM52BuildingCategory tM52BuildingCategory)
+            : base(name, source, reference, tM52BuildingCategory)
         {
 
         }
 
-        public TMExtendedResult(string name, string source, string reference, HashSet<int> occupiedHourIndices, IndexedDoubles minAcceptableTemperatures, IndexedDoubles maxAcceptableTemperatures, IndexedDoubles operativeTemperatures)
-            : base(name, source, reference)
+        public TMExtendedResult(string name, string source, string reference, TM52BuildingCategory tM52BuildingCategory, HashSet<int> occupiedHourIndices, IndexedDoubles minAcceptableTemperatures, IndexedDoubles maxAcceptableTemperatures, IndexedDoubles operativeTemperatures)
+            : base(name, source, reference, tM52BuildingCategory)
         {
             this.occupiedHourIndices = occupiedHourIndices == null ? null : new HashSet<int>(occupiedHourIndices);
             this.minAcceptableTemperatures = minAcceptableTemperatures == null ? null : new IndexedDoubles(minAcceptableTemperatures);
@@ -249,8 +249,8 @@ namespace SAM.Analytical
             this.operativeTemperatures = operativeTemperatures == null ? null : new IndexedDoubles(operativeTemperatures);
         }
 
-        public TMExtendedResult(Guid guid, string name, string source, string reference)
-            : base(guid, name, source, reference)
+        public TMExtendedResult(Guid guid, string name, string source, string reference,TM52BuildingCategory tM52BuildingCategory)
+            : base(guid, name, source, reference, tM52BuildingCategory)
         {
 
         }

@@ -12,7 +12,8 @@ namespace SAM.Analytical
         public TM59NaturalVentilationBedroomResult(
             string name, 
             string source, 
-            string reference, 
+            string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours, 
             int maxExceedableHours,
             int hoursExceedingComfortRange,
@@ -20,7 +21,7 @@ namespace SAM.Analytical
             int maxExceedableNightHours,
             int nightHoursNumberExceeding26,
             bool pass)
-            : base(name, source, reference, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
+            : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
         {
             this.annualNightOccupiedHours = annualNightOccupiedHours;
             this.maxExceedableNightHours = maxExceedableNightHours;
@@ -32,6 +33,7 @@ namespace SAM.Analytical
             string name, 
             string source, 
             string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
             int maxExceedableHours,
             int hoursExceedingComfortRange,
@@ -39,7 +41,7 @@ namespace SAM.Analytical
             int maxExceedableNightHours,
             int nightHoursNumberExceeding26,
             bool pass)
-            : base(guid, name, source, reference, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
+            : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
         {
             this.annualNightOccupiedHours = annualNightOccupiedHours;
             this.maxExceedableNightHours = maxExceedableNightHours;

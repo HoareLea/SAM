@@ -250,20 +250,20 @@ namespace SAM.Analytical
             }
         }
 
-        public TM52ExtendedResult(string name, string source, string reference)
-            : base(name, source, reference)
+        public TM52ExtendedResult(string name, string source, string reference, TM52BuildingCategory tM52BuildingCategory)
+            : base(name, source, reference, tM52BuildingCategory)
         {
 
         }
 
-        public TM52ExtendedResult(string name, string source, string reference, HashSet<int> occupiedHourIndices, IndexedDoubles minAcceptableTemperatures, IndexedDoubles maxAcceptableTemperatures, IndexedDoubles operativeTemperatures)
-            : base(name, source, reference, occupiedHourIndices, minAcceptableTemperatures, maxAcceptableTemperatures, operativeTemperatures)
+        public TM52ExtendedResult(string name, string source, string reference, TM52BuildingCategory tM52BuildingCategory, HashSet<int> occupiedHourIndices, IndexedDoubles minAcceptableTemperatures, IndexedDoubles maxAcceptableTemperatures, IndexedDoubles operativeTemperatures)
+            : base(name, source, reference, tM52BuildingCategory, occupiedHourIndices, minAcceptableTemperatures, maxAcceptableTemperatures, operativeTemperatures)
         {
 
         }
 
-        public TM52ExtendedResult(Guid guid, string name, string source, string reference)
-            : base(guid, name, source, reference)
+        public TM52ExtendedResult(Guid guid, string name, string source, string reference, TM52BuildingCategory tM52BuildingCategory)
+            : base(guid, name, source, reference, tM52BuildingCategory)
         {
 
         }

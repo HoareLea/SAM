@@ -10,12 +10,13 @@ namespace SAM.Analytical
         public TM59CorridorResult(
             string name, 
             string source, 
-            string reference, 
+            string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours, 
             int maxExceedableHours,
             int hoursExceeding28,
             bool pass)
-            : base(name, source, reference, occupiedHours, maxExceedableHours, pass, TM59SpaceApplication.Undefined)
+            : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, TM59SpaceApplication.Undefined)
         {
             this.hoursExceeding28 = hoursExceeding28;
         }
@@ -25,11 +26,12 @@ namespace SAM.Analytical
             string name, 
             string source, 
             string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
             int maxExceedableHours,
             int hoursExceeding28,
             bool pass)
-            : base(guid, name, source, reference, occupiedHours, maxExceedableHours, pass, TM59SpaceApplication.Undefined)
+            : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, TM59SpaceApplication.Undefined)
         {
             this.hoursExceeding28 = hoursExceeding28;
         }

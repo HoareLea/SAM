@@ -10,13 +10,14 @@ namespace SAM.Analytical
         public TM59MechanicalVentilationResult(
             string name, 
             string source, 
-            string reference, 
+            string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours, 
             int maxExceedableHours,
             int hoursExceeding26,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
-            : base(name, source, reference, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
+            : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
         {
             this.hoursExceeding26 = hoursExceeding26;
         }
@@ -26,12 +27,13 @@ namespace SAM.Analytical
             string name, 
             string source, 
             string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
             int maxExceedableHours,
             int hoursExceeding26,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
-            : base(guid, name, source, reference, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
+            : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
         {
             this.hoursExceeding26 = hoursExceeding26;
         }

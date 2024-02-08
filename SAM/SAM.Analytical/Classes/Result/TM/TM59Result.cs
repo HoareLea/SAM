@@ -16,12 +16,13 @@ namespace SAM.Analytical
         public TM59Result(
             string name, 
             string source, 
-            string reference, 
+            string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours, 
             int maxExceedableHours,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
-            : base(name, source, reference)
+            : base(name, source, reference, tM52BuildingCategory)
         {
             this.occupiedHours = occupiedHours;
             this.maxExceedableHours = maxExceedableHours;
@@ -34,11 +35,12 @@ namespace SAM.Analytical
             string name, 
             string source, 
             string reference,
+            TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
             int maxExceedableHours,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
-            : base(guid, name, source, reference)
+            : base(guid, name, source, reference, tM52BuildingCategory)
         {
             this.occupiedHours = occupiedHours;
             this.maxExceedableHours = maxExceedableHours;
