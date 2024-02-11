@@ -32,6 +32,16 @@ namespace SAM.Core.Grasshopper
                 return Value == null ? typeof(IJSAMObject).Name : Value.GetType().Name;
             }
         }
+
+        public override bool CastFrom(object source)
+        {
+            return base.CastFrom(source);
+        }
+
+        public override bool CastTo<Y>(ref Y target)
+        {
+            return base.CastTo(ref target);
+        }
     }
 
     public class GooSAMObjectParam : GH_PersistentParam<GooSAMObject>

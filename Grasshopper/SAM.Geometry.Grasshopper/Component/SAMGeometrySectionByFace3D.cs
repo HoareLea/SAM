@@ -9,7 +9,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometrySection : GH_SAMVariableOutputParameterComponent
+    public class SAMGeometrySectionByFace3D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,8 +29,8 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMGeometrySection()
-          : base("SAMGeometry.Section", "SAMGeometry.Section",
+        public SAMGeometrySectionByFace3D()
+          : base("SAMGeometry.SectionByFace3D", "SAMGeometry.SectionByFace3D",
               "Create Section ",
               "SAM", "Geometry")
         {
