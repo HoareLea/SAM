@@ -19,7 +19,7 @@ namespace SAM.Core
             return result;
         }
 
-        public static List<List<T>> Permutations<T>(this IEnumerable<T> @in, bool unique) where T : IComparable
+        public static List<List<T>> Permutations<T>(this IEnumerable<T> @in, bool unique, Func<T, T, bool> equatableFunc = null) where T : IComparable
         {
             List<List<T>> result = Permutations<T>(@in);
             if (!unique)
@@ -40,7 +40,7 @@ namespace SAM.Core
                 result_New.Add(values);
                 for (int i = result.Count - 1; i >= 0; i--)
                 {
-                    if (Similar<T>(values, result[i]))
+                    if (Similar<T>(values, result[i], equatableFunc))
                     {
                         result.RemoveAt(i);
                     }
