@@ -25,8 +25,6 @@ namespace SAM.Analytical
                     result_Temp = result;
                 }
 
-                adjacencyCluster.AddObject(result_Temp);
-
                 if(simplify)
                 {
                     if(result_Temp is TM52ExtendedResult)
@@ -34,6 +32,8 @@ namespace SAM.Analytical
                         result_Temp = ((TM52ExtendedResult)result_Temp).Simplify();
                     }
                 }
+                
+                adjacencyCluster.AddObject(result_Temp);
                 
                 if (result_Temp is SpaceSimulationResult)
                 {
@@ -185,7 +185,7 @@ namespace SAM.Analytical
                     if (space == null)
                     {
                         ObjectReference objectReference = Core.Convert.ComplexReference<ObjectReference>(tMSpaceResult.Reference);
-                        if (objectReference != null)
+                        if (objectReference != null && objectReference.Reference != null)
                         {
                             space = adjacencyCluster?.GetObjects<Space>(objectReference)?.FirstOrDefault();
                         }
