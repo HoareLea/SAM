@@ -116,7 +116,10 @@ namespace SAM.Analytical.Grasshopper
             List<int> occupiedHourIndices = new List<int>(tMExtendedResult.OccupiedHourIndices);
             int occupiedHours = tMExtendedResult.OccupiedHours;
             int maxExceedableHours = tMExtendedResult.MaxExceedableHours;
-            List<int> occupiedHourIndicesExceedingComfortRange = new List<int>(tMExtendedResult.GetOccupiedHourIndicesExceedingComfortRange());
+
+            HashSet<int> occupiedHourIndicesExceedingComfortRange_Temp = tMExtendedResult.GetOccupiedHourIndicesExceedingComfortRange();
+
+            List<int> occupiedHourIndicesExceedingComfortRange = occupiedHourIndicesExceedingComfortRange_Temp == null ? new List<int>() : new List<int>(occupiedHourIndicesExceedingComfortRange_Temp);
             int occupiedHoursExceedingComfortRange = tMExtendedResult.GetOccupiedHoursExceedingComfortRange();
 
             HashSet<int> hoursOfYear = Core.Query.HoursOfYear(dayOfYear);

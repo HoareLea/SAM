@@ -1,4 +1,6 @@
-﻿namespace SAM.Analytical
+﻿using System.Collections.Generic;
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -13,6 +15,8 @@
             {
                 TM52ExtendedResult tM52ExtendedResult = (TM52ExtendedResult)tMExtendedResult;
 
+                List<int> occupiedHourIndicesExceedingAbsoluteLimit = tM52ExtendedResult.GetOccupiedHourIndicesExceedingAbsoluteLimit();
+
                 return new TM52Result(
                     tM52ExtendedResult.Name, 
                     tM52ExtendedResult.Source, 
@@ -22,8 +26,8 @@
                     tM52ExtendedResult.MaxExceedableHours, 
                     tM52ExtendedResult.GetOccupiedHoursExceedingComfortRange(), 
                     tM52ExtendedResult.GetOccupiedDailyWeightedExceedance(),
-                    tM52ExtendedResult.GetOccupiedHourIndicesExceedingAbsoluteLimit().Count,
-                    tM52ExtendedResult.Pass);
+                    occupiedHourIndicesExceedingAbsoluteLimit == null ? 0 : occupiedHourIndicesExceedingAbsoluteLimit.Count,
+                    tM52ExtendedResult.Pass);;
             }
 
             if(tMExtendedResult is TM59CorridorExtendedResult)
