@@ -95,7 +95,7 @@ namespace SAM.Analytical
 
         public int GetSummerMaxExceedableHours()
         {
-            return System.Convert.ToInt32(System.Math.Truncate(GetSummerOccupiedHours() * 0.01));
+            return System.Convert.ToInt32(System.Math.Truncate(GetSummerOccupiedHours() * 0.03));
         }
 
         public int GetNightHoursNumberExceeding26()
