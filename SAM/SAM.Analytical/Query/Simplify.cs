@@ -58,7 +58,7 @@ namespace SAM.Analytical
                     tM59NaturalVentilationBedroomExtendedResult.MaxExceedableHours,
                     tM59NaturalVentilationBedroomExtendedResult.GetOccupiedHoursExceedingComfortRange(),
                     tM59NaturalVentilationBedroomExtendedResult.GetAnnualNightOccupiedHours(),
-                    tM59NaturalVentilationBedroomExtendedResult.GetMaxExceedableNightHours(),
+                    tM59NaturalVentilationBedroomExtendedResult.GetAnnualMaxExceedableNightHours(),
                     tM59NaturalVentilationBedroomExtendedResult.GetNightHoursNumberExceeding26(),
                     tM59NaturalVentilationBedroomExtendedResult.Pass);
             }
