@@ -31,12 +31,6 @@ namespace SAM.Analytical
 
         public int GetHoursNumberExceeding28()
         {
-            HashSet<int> occupiedHourIndices = OccupiedHourIndices;
-            if (occupiedHourIndices == null)
-            {
-                return -1;
-            }
-
             IndexedDoubles operativeTemperatures = OperativeTemperatures;
             if (operativeTemperatures == null)
             {
@@ -44,9 +38,8 @@ namespace SAM.Analytical
             }
 
             int count = 0;
-            foreach (int occupiedHourIndex in occupiedHourIndices)
+            foreach (double operativeTemperature in operativeTemperatures)
             {
-                double operativeTemperature = operativeTemperatures[occupiedHourIndex];
                 if (operativeTemperature > 28)
                 {
                     count++;
@@ -54,6 +47,21 @@ namespace SAM.Analytical
             }
 
             return count;
+        }
+
+        public override int MaxExceedableHours
+        {
+            get
+            {
+                IndexedDoubles operativeTemperatures = OperativeTemperatures;
+                if (operativeTemperatures == null)
+                {
+                    return -1;
+                }
+
+                int count = operativeTemperatures.GetMaxIndex().Value - operativeTemperatures.GetMinIndex().Value + 1;
+                return System.Convert.ToInt32(System.Math.Truncate(count * ExceedanceFactor));
+            }
         }
 
         public override bool Criterion1
