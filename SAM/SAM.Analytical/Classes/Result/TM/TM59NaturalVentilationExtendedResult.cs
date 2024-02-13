@@ -29,6 +29,36 @@ namespace SAM.Analytical
         {
         }
 
+        public HashSet<int> GetSummerOccupiedHourIndices()
+        {
+            HashSet<int> occupiedHourIndices = OccupiedHourIndices;
+            if (occupiedHourIndices == null)
+            {
+                return null;
+            }
+
+            HashSet<int> result = new HashSet<int>();
+            foreach (int occupiedHourIndex in occupiedHourIndices)
+            {
+                if (occupiedHourIndex >= HourOfYear.SummerStartIndex && occupiedHourIndex <= HourOfYear.SummerEndIndex)
+                {
+                    result.Add(occupiedHourIndex);
+                }
+            }
+
+            return result;
+        }
+
+        public int GetSummerOccupiedHours()
+        {
+            return GetSummerOccupiedHourIndices().Count;
+        }
+
+        public int GetSummerMaxExceedableHours()
+        {
+            return System.Convert.ToInt32(System.Math.Truncate(GetSummerOccupiedHours() * 0.03));
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

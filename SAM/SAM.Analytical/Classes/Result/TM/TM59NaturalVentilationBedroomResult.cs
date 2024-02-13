@@ -6,8 +6,7 @@ namespace SAM.Analytical
     public class TM59NaturalVentilationBedroomResult : TM59NaturalVentilationResult
     {
         private int annualNightOccupiedHours;
-        private int summerOccupiedHours;
-        private int maxExceedableSummerHours;
+
         private int maxExceedableNightHours;
         private int nightHoursNumberExceeding26;
 
@@ -25,13 +24,11 @@ namespace SAM.Analytical
             int maxExceedableNightHours,
             int nightHoursNumberExceeding26,
             bool pass)
-            : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
+            : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, summerOccupiedHours, maxExceedableSummerHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
         {
             this.annualNightOccupiedHours = annualNightOccupiedHours;
-            this.summerOccupiedHours = summerOccupiedHours;
             this.maxExceedableNightHours = maxExceedableNightHours;
             this.nightHoursNumberExceeding26 = nightHoursNumberExceeding26;
-            this.maxExceedableSummerHours = maxExceedableSummerHours;
         }
 
         public TM59NaturalVentilationBedroomResult(
@@ -49,13 +46,11 @@ namespace SAM.Analytical
             int maxExceedableNightHours,
             int nightHoursNumberExceeding26,
             bool pass)
-            : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
+            : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, summerOccupiedHours, maxExceedableSummerHours, hoursExceedingComfortRange, pass, TM59SpaceApplication.Sleeping)
         {
             this.annualNightOccupiedHours = annualNightOccupiedHours;
             this.maxExceedableNightHours = maxExceedableNightHours;
             this.nightHoursNumberExceeding26 = nightHoursNumberExceeding26;
-            this.summerOccupiedHours = summerOccupiedHours;
-            this.maxExceedableSummerHours = maxExceedableSummerHours;
         }
 
         public int AnnualNightOccupiedHours
@@ -82,22 +77,6 @@ namespace SAM.Analytical
             }
         }
 
-        public int SummerOccupiedHours
-        {
-            get
-            {
-                return summerOccupiedHours;
-            }
-        }
-
-        public int MaxExceedableSummerHours
-        {
-            get
-            {
-                return maxExceedableSummerHours;
-            }
-        }
-
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -108,16 +87,6 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("AnnualNightOccupiedHours"))
             {
                 annualNightOccupiedHours = jObject.Value<int>("AnnualNightOccupiedHours");
-            }
-
-            if (jObject.ContainsKey("MaxExceedableSummerHours"))
-            {
-                maxExceedableSummerHours = jObject.Value<int>("MaxExceedableSummerHours");
-            }
-
-            if (jObject.ContainsKey("SummerOccupiedHours"))
-            {
-                summerOccupiedHours = jObject.Value<int>("SummerOccupiedHours");
             }
 
             if (jObject.ContainsKey("MaxExceedableNightHours"))
@@ -144,16 +113,6 @@ namespace SAM.Analytical
             if (annualNightOccupiedHours != int.MinValue)
             {
                 result.Add("AnnualNightOccupiedHours", annualNightOccupiedHours);
-            }
-
-            if (maxExceedableSummerHours != int.MinValue)
-            {
-                result.Add("MaxExceedableSummerHours", maxExceedableSummerHours);
-            }
-
-            if (summerOccupiedHours != int.MinValue)
-            {
-                result.Add("SummerOccupiedHours", summerOccupiedHours);
             }
 
             if (maxExceedableNightHours != int.MinValue)

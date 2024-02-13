@@ -6,6 +6,8 @@ namespace SAM.Analytical
     public class TM59NaturalVentilationResult : TM59Result
     {
         private int hoursExceedingComfortRange;
+        private int summerOccupiedHours;
+        private int maxExceedableSummerHours;
 
         public TM59NaturalVentilationResult(
             string name, 
@@ -14,12 +16,16 @@ namespace SAM.Analytical
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours, 
             int maxExceedableHours,
+            int summerOccupiedHours,
+            int maxExceedableSummerHours,
             int hoursExceedingComfortRange,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
             : base(name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
         {
             this.hoursExceedingComfortRange = hoursExceedingComfortRange;
+            this.summerOccupiedHours = summerOccupiedHours;
+            this.maxExceedableSummerHours = maxExceedableSummerHours;
         }
 
         public TM59NaturalVentilationResult(
@@ -30,12 +36,16 @@ namespace SAM.Analytical
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
             int maxExceedableHours,
+            int summerOccupiedHours,
+            int maxExceedableSummerHours,
             int hoursExceedingComfortRange,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
             : base(guid, name, source, reference, tM52BuildingCategory, occupiedHours, maxExceedableHours, pass, tM59SpaceApplications)
         {
             this.hoursExceedingComfortRange = hoursExceedingComfortRange;
+            this.summerOccupiedHours = summerOccupiedHours;
+            this.maxExceedableSummerHours = maxExceedableSummerHours;
         }
 
         public int HoursExceedingComfortRange
@@ -43,6 +53,22 @@ namespace SAM.Analytical
             get
             {
                 return hoursExceedingComfortRange;
+            }
+        }
+
+        public int SummerOccupiedHours
+        {
+            get
+            {
+                return summerOccupiedHours;
+            }
+        }
+
+        public int MaxExceedableSummerHours
+        {
+            get
+            {
+                return maxExceedableSummerHours;
             }
         }
 
@@ -56,6 +82,16 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("HoursExceedingComfortRange"))
             {
                 hoursExceedingComfortRange = jObject.Value<int>("HoursExceedingComfortRange");
+            }
+
+            if (jObject.ContainsKey("SummerOccupiedHours"))
+            {
+                summerOccupiedHours = jObject.Value<int>("SummerOccupiedHours");
+            }
+
+            if (jObject.ContainsKey("MaxExceedableSummerHours"))
+            {
+                maxExceedableSummerHours = jObject.Value<int>("MaxExceedableSummerHours");
             }
 
             return true;
@@ -72,6 +108,16 @@ namespace SAM.Analytical
             if (hoursExceedingComfortRange != int.MinValue)
             {
                 result.Add("HoursExceedingComfortRange", hoursExceedingComfortRange);
+            }
+
+            if (summerOccupiedHours != int.MinValue)
+            {
+                result.Add("SummerOccupiedHours", summerOccupiedHours);
+            }
+
+            if (maxExceedableSummerHours != int.MinValue)
+            {
+                result.Add("MaxExceedableSummerHours", maxExceedableSummerHours);
             }
 
             return result;

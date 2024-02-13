@@ -75,10 +75,11 @@ namespace SAM.Analytical
                     tM59NaturalVentilationExtendedResult.Reference,
                     tM59NaturalVentilationExtendedResult.TM52BuildingCategory,
                     tM59NaturalVentilationExtendedResult.OccupiedHours,
+                    tM59NaturalVentilationExtendedResult.GetSummerOccupiedHours(),
+                    tM59NaturalVentilationExtendedResult.GetSummerMaxExceedableHours(),
                     tM59NaturalVentilationExtendedResult.MaxExceedableHours,
                     tM59NaturalVentilationExtendedResult.GetOccupiedHoursExceedingComfortRange(),
                     tM59NaturalVentilationExtendedResult.Pass);
-
             }
 
             if (tMExtendedResult is TM59MechanicalVentilationExtendedResult)
