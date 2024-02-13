@@ -13,6 +13,6 @@
         /// <summary>
         /// Summer end hour Of the year index
         /// </summary>
-        public const int SummerEndIndex = 6528;
+        public const int SummerEndIndex = 6551;
     }
 }
