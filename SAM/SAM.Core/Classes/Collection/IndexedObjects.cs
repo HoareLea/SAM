@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -33,6 +34,21 @@ namespace SAM.Core
             }
         }
 
+        public IndexedObjects(IEnumerable<T> values, int startIndex)
+        {
+            if (values != null)
+            {
+                sortedDictionary = new SortedDictionary<int, T>();
+
+                int index = startIndex;
+                foreach (T value in values)
+                {
+                    sortedDictionary[index] = value;
+                    index++;
+                }
+            }
+        }
+
         public IndexedObjects(SortedDictionary<int, T> dictionary)
         {
             if(dictionary != null)
@@ -50,6 +66,17 @@ namespace SAM.Core
             :this(indexedObjects?.sortedDictionary)
         {
 
+        }
+
+        public IndexedObjects(int startIndex, int count, T value)
+        {
+            sortedDictionary = new SortedDictionary<int, T>();
+
+            int end = startIndex + count;
+            for (int i = startIndex; i < end; i++)
+            {
+                sortedDictionary[i] = value;
+            }
         }
 
         public T this[int index]
@@ -97,6 +124,57 @@ namespace SAM.Core
             return this[index];
         }
 
+        public List<T> GetValues(Range<int> range)
+        {
+            if(range == null || sortedDictionary == null)
+            {
+                return null;
+            }
+
+            List<T> result = new List<T>();
+            for(int i = range.Min; i <= range.Max; i++)
+            {
+                if (!sortedDictionary.TryGetValue(i, out T value))
+                {
+                    value = default(T);
+                }
+
+                result.Add(value);
+            }
+
+            return result;
+        }
+
+        public List<T> GetValues(Range<int> range, bool bounded)
+        {
+            if (range == null || sortedDictionary == null)
+            {
+                return null;
+            }
+
+            if (!bounded)
+            {
+                return GetValues(range);
+            }
+
+            Range<int> range_Temp = new Range<int>(GetMinIndex().Value, GetMaxIndex().Value);
+
+            List<T> result = new List<T>();
+            for (int i = range.Min; i <= range.Max; i++)
+            {
+                int index = Query.BoundedIndex(range_Temp, i);
+
+                if (!sortedDictionary.TryGetValue(index, out T value))
+                {
+                    value = default(T);
+                }
+
+                result.Add(value);
+            }
+
+            return result;
+        }
+
         public bool Add(int index, T value)
         {
             if(sortedDictionary == null)
@@ -115,7 +193,7 @@ namespace SAM.Core
                 sortedDictionary = new SortedDictionary<int, T>();
             }
 
-            for(int i = range.Min; i < range.Max; i++)
+            for(int i = range.Min; i <= range.Max; i++)
             {
                 sortedDictionary[i] = value;
             }
@@ -255,6 +333,28 @@ namespace SAM.Core
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
+        }
+
+        public int? GetMinIndex()
+        {
+            IEnumerable<int> keys = Keys;
+            if (keys == null || keys.Count() == 0)
+            {
+                return null;
+            }
+
+            return keys.Min(x => x);
+        }
+
+        public int? GetMaxIndex()
+        {
+            IEnumerable<int> keys = Keys;
+            if (keys == null || keys.Count() == 0)
+            {
+                return null;
+            }
+
+            return keys.Max(x => x);
         }
     }
 }

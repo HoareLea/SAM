@@ -17,7 +17,7 @@ namespace SAM.Analytical
 
             List<ApertureConstruction> apertureConstructions = adjacencyCluster.GetApertureConstructions();
 
-            Core.MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
+            MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
 
             return new ConstructionManager(apertureConstructions, constructions, materialLibrary);
         }

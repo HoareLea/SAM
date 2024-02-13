@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Core
 {
@@ -26,6 +25,18 @@ namespace SAM.Core
 
         public IndexedDoubles(IEnumerable<double> values)
             : base(values)
+        {
+
+        }
+
+        public IndexedDoubles(IEnumerable<double> values, int startIndex)
+            : base(values, startIndex)
+        {
+
+        }
+
+        public IndexedDoubles(int startIndex, int count, double value)
+            : base(startIndex, count, value)
         {
 
         }
@@ -96,28 +107,6 @@ namespace SAM.Core
             }
 
             return result;
-        }
-
-        public int? GetMinIndex()
-        {
-            IEnumerable<int> keys = Keys;
-            if(keys == null || keys.Count() == 0)
-            {
-                return null;
-            }
-
-            return keys.Min(x => x);
-        }
-
-        public int? GetMaxIndex()
-        {
-            IEnumerable<int> keys = Keys;
-            if (keys == null || keys.Count() == 0)
-            {
-                return null;
-            }
-
-            return keys.Max(x => x);
         }
 
         public double GetMaxValue()

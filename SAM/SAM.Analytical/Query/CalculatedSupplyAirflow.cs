@@ -1,13 +1,11 @@
-﻿using SAM.Core;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
         /// <summary>
-        /// Calculated Supply Air Flow [m3/s] for Space. Sum of SupplyAirFlowPerPerson, SupplyAirFlowPerArea, SupplyAirFlow and SupplyAirChangesPerHour
+        /// Calculated Supply Air Flow [m3/s] for IC inside Space.as Sum of SupplyAirFlowPerPerson, SupplyAirFlowPerArea, SupplyAirFlow and SupplyAirChangesPerHour
         /// </summary>
         /// <param name="space">Space</param>
         /// <returns>Supply Air Flow [m3/s]</returns>

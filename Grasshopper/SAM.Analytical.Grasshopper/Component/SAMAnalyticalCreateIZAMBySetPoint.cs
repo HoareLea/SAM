@@ -1,9 +1,11 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -17,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,18 +38,22 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_setPoint", NickName = "_setPoint", Description = "Set Point", Access = GH_ParamAccess.item };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_setPoints", NickName = "_setPoints", Description = "Set Points", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tempAccuracy_", NickName = "_tempAccuracy_", Description = "Temperature Accuracy", Access = GH_ParamAccess.item };
-                number.SetPersistentData(1.5);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tempAccuracies_", NickName = "_tempAccuracies_", Description = "Temperature Accuracy", Access = GH_ParamAccess.list };
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(1.5) });
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidity", NickName = "_humidity", Description = "Humidity", Access = GH_ParamAccess.item };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidities", NickName = "_humidity", Description = "Humidity", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityAccuracy_", NickName = "_humidityAccuracy_", Description = "HumidityAccuracy", Access = GH_ParamAccess.item };
-                number.SetPersistentData(10);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_humidityAccuracies_", NickName = "_humidityAccuracy_", Description = "HumidityAccuracy", Access = GH_ParamAccess.list };
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(10) });
+                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_densities_", NickName = "_densities_", Description = "Densities", Access = GH_ParamAccess.list };
+                number.SetPersistentData(new List<GH_Number> { new GH_Number(FluidProperty.Air.Density) });
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -104,40 +110,61 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            double temperature = double.NaN;
-            index = Params.IndexOfInputParam("_setPoint");
-            if (index == -1 || !dataAccess.GetData(index, ref temperature) || double.IsNaN(temperature))
+            List<double> temperatures = new List<double>();
+            index = Params.IndexOfInputParam("_setPoints");
+            if (index == -1 || !dataAccess.GetDataList(index, temperatures) || temperatures == null || temperatures.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double temperatureRange = double.NaN;
-            index = Params.IndexOfInputParam("_tempAccuracy_");
-            if (index == -1 || !dataAccess.GetData(index, ref temperatureRange) || double.IsNaN(temperatureRange))
+            List<double> temperatureRanges = new List<double>();
+            index = Params.IndexOfInputParam("_tempAccuracies_");
+            if (index == -1 || !dataAccess.GetDataList(index, temperatureRanges) || temperatureRanges.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double humidity = double.NaN;
-            double humidityRange = double.NaN;
+            List<double> humidities = null;
+            List<double> humidityRanges = null;
 
-            index = Params.IndexOfInputParam("_humidity");
+            index = Params.IndexOfInputParam("_humidities");
+            if (index != -1)
+            {
+                humidities = new List<double>();
+                if (!dataAccess.GetDataList(index, humidities))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+
+                index = Params.IndexOfInputParam("_humidityAccuracies_");
+                if (index != -1)
+                {
+                    humidityRanges = new List<double>();
+                    if (!dataAccess.GetDataList(index, humidityRanges))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+                }
+            }
+
+            List<double> densities = null;
+            index = Params.IndexOfInputParam("_densities_");
             if(index != -1)
             {
-                if(!dataAccess.GetData(index, ref humidity))
+                densities = new List<double>();
+                if(!dataAccess.GetDataList(index, densities))
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
+                    densities = null;
                 }
+            }
 
-                index = Params.IndexOfInputParam("_humidityAccuracy_");
-                if (!dataAccess.GetData(index, ref humidityRange))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
+            if(densities == null)
+            {
+                densities = new List<double>() { FluidProperty.Air.Density };
             }
 
             AirHandlingUnitAirMovement airHandlingUnitAirMovement = null;
@@ -155,22 +182,50 @@ namespace SAM.Analytical.Grasshopper
                     AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObjects<AirHandlingUnit>()?.Find(x => x.Name == name);
                     if(airHandlingUnit == null)
                     {
-                        airHandlingUnit = new AirHandlingUnit(name, temperature - (temperatureRange / 2), temperature + (temperatureRange / 2));
+                        airHandlingUnit = new AirHandlingUnit(name, temperatures.Average() - (temperatureRanges.Average() / 2), temperatures.Average() + (temperatureRanges.Average() / 2));
                         adjacencyCluster.AddObject(airHandlingUnit);
                     }
 
-                    Profile heating = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Heating), ProfileType.Heating, new double[] { temperature - (temperatureRange / 2) });
-                    Profile cooling = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Cooling), ProfileType.Cooling, new double[] { temperature + (temperatureRange / 2) });
+                    List<double> hetaingTemperatures = new List<double>();
+                    List<double> coolingTemperatures = new List<double>();
+                    for (int i = 0; i < temperatures.Count; i++)
+                    {
+                        double temperature = temperatures[i];
+
+                        double temperatureRange = temperatureRanges.Count > i ? temperatureRanges[i] : temperatureRanges.Last();
+
+                        hetaingTemperatures.Add(temperature - (temperatureRange / 2));
+                        coolingTemperatures.Add(temperature + (temperatureRange / 2));
+                    }
+
+
+                    Profile heating = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Heating), ProfileType.Heating, hetaingTemperatures);
+                    Profile cooling = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Cooling), ProfileType.Cooling, coolingTemperatures);
 
                     Profile humidification = null;
                     Profile dehumidification = null;
-                    if (!double.IsNaN(humidityRange) && !double.IsNaN(humidity))
+                    if (humidityRanges != null && humidityRanges.Count != 0 && humidities != null && humidities.Count != 0)
                     {
-                        humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, new double[] { humidity - (humidityRange / 2) });
-                        dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, new double[] { humidity + (humidityRange / 2) });
+                        List<double> humidifications = new List<double>();
+                        List<double> dehumidifications = new List<double>();
+                        for (int i = 0; i < humidities.Count; i++)
+                        {
+                            double humidity = humidities[i];
+
+                            double humidityRange = humidityRanges.Count > i ? humidityRanges[i] : humidityRanges.Last();
+
+                            humidifications.Add(humidity - (humidityRange / 2));
+                            dehumidifications.Add(humidity + (humidityRange / 2));
+                        }
+
+
+                        humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, humidifications);
+                        dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, dehumidifications);
                     }
 
-                    airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification);
+                    Profile density = new Profile(string.Format("{0} Air Density", airHandlingUnit.Name), densities);
+
+                    airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(name, heating, cooling, humidification, dehumidification, density);
                     adjacencyCluster.AddObject(airHandlingUnitAirMovement);
 
                     adjacencyCluster.AddRelation(airHandlingUnit, airHandlingUnitAirMovement);

@@ -137,7 +137,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if(sAMObjects[i] is AdjacencyCluster)
                 {
-                    AdjacencyCluster adjacencyCluster = ((AdjacencyCluster)sAMObjects[i]).Clone<AdjacencyCluster>();
+                    AdjacencyCluster adjacencyCluster = ((AdjacencyCluster)sAMObjects[i]).Clone();
 
                     List<Panel> newPanels = Analytical.Modify.TriangulateConcavePanels(adjacencyCluster, out List<Panel> oldPanels, tolerance);
                     if (newPanels != null)

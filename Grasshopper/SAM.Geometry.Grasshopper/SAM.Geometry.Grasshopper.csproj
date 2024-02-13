@@ -60,7 +60,9 @@
     <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
     <Compile Include="Component\GeometryCreateShell.cs" />
     <Compile Include="Component\GeometryGetShellsByPoint3Ds.cs" />
-    <Compile Include="Component\SAMGeometrySection.cs" />
+    <Compile Include="Component\SAMGeometryThinnessRatio.cs" />
+    <Compile Include="Component\SAMGeometrySectionByShell.cs" />
+    <Compile Include="Component\SAMGeometrySectionByFace3D.cs" />
     <Compile Include="Component\SAMGeometryCreateShellsByElevations.cs" />
     <Compile Include="Component\SAMGeometryIsClosed.cs" />
     <Compile Include="Component\SAMGeometryShellIntersection.cs" />

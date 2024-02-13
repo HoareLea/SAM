@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Rhino.Commands;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -19,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,15 +32,11 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_source", NickName = "_source", Description = "SAM Analytical Source such as AirHandlingUnit or iZAM AirHandlingUnitAirMovement", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-
-                global::Grasshopper.Kernel.Parameters.Param_Number number = null;
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "flowRates_", NickName = "flowRates_", Description = "Flow Rates", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
                 boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_override_", NickName = "_override_", Description = "Override existing", Access = GH_ParamAccess.item };
@@ -57,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAirMovementObjectParam() { Name = "iZAMs", NickName = "iZAMs", Description = "SAM Air Movement Objects (IZAM)", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -77,15 +72,15 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = Params.IndexOfInputParam("_analytical");
+            index = Params.IndexOfInputParam("_analyticalModel");
             if(index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            AnalyticalModel analyticalModel = null;
+            if (!dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -107,13 +102,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("flowRates_");
-            List<double> flowRates = new List<double>();
-            if (index == -1 || !dataAccess.GetDataList(index, flowRates) || flowRates == null || flowRates.Count == 0)
-            {
-                flowRates = null;
-            }
-
             bool @override = true;
             if (index == -1 || !dataAccess.GetData(index, ref @override))
             {
@@ -122,84 +110,69 @@ namespace SAM.Analytical.Grasshopper
 
             List<IAirMovementObject> airMovementObjects = null;
 
-            if (sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
+            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+
+            ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
+
+            SAMObject from = analyticalObject as SAMObject;
+            if (from is AirHandlingUnitAirMovement)
             {
-                AdjacencyCluster adjacencyCluster = null;
-                if(sAMObject is AnalyticalModel)
-                    adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                else if(sAMObject is AdjacencyCluster)
-                    adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
-
-                SAMObject from = analyticalObject as SAMObject;
-                if(from is AirHandlingUnitAirMovement)
-                {
-                    from = adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(from.Guid)?.FirstOrDefault();
-                }
-
-                if(!(from is Space || from is AirHandlingUnit))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
-
-
-                if (adjacencyCluster != null)
-                {
-                    airMovementObjects = new List<IAirMovementObject>();
-
-                    for (int i = 0; i < spaces.Count; i++)
-                    {
-                        if (spaces[i] == null)
-                        {
-                            continue;
-                        }
-
-                        Space space_Temp = adjacencyCluster.GetObject<Space>(spaces[i].Guid);
-                        if (space_Temp == null)
-                        {
-                            continue;
-                        }
-
-                        double airFlow = double.NaN;
-                        if(flowRates != null && flowRates.Count < i)
-                        {
-                            airFlow = flowRates.Count < i ? flowRates[i] : flowRates.Last();
-                        }
-
-                        if(double.IsNaN(airFlow))
-                        {
-                            airFlow = space_Temp.CalculatedSupplyAirFlow();
-                        }
-
-                        SpaceAirMovement spaceAirMovement = new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(from).ToString(), new ObjectReference(space_Temp).ToString());
-                        adjacencyCluster.AddObject(spaceAirMovement);
-                        airMovementObjects.Add(spaceAirMovement);
-
-                        adjacencyCluster.AddRelation(spaceAirMovement, from);
-                        adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);
-
-                        if(from is AirHandlingUnit)
-                        {
-                            spaceAirMovement = new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(space_Temp).ToString(), null);
-                            adjacencyCluster.AddObject(spaceAirMovement);
-
-                            adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);
-                            airMovementObjects.Add(spaceAirMovement);
-                        }
-
-                    }
-
-                    if (sAMObject is AnalyticalModel)
-                        sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
-                    else if (sAMObject is AdjacencyCluster)
-                        sAMObject = adjacencyCluster;
-                }
+                from = adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(from.Guid)?.FirstOrDefault();
             }
 
-            index = Params.IndexOfOutputParam("analytical");
+            if (!(from is Space || from is AirHandlingUnit))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+
+            if (adjacencyCluster != null)
+            {
+                airMovementObjects = new List<IAirMovementObject>();
+
+                for (int i = 0; i < spaces.Count; i++)
+                {
+                    if (spaces[i] == null)
+                    {
+                        continue;
+                    }
+
+                    Space space_Temp = adjacencyCluster.GetObject<Space>(spaces[i].Guid);
+                    if (space_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    double airFlow = space_Temp.CalculatedSupplyAirFlow();
+
+                    Profile profile = space_Temp.InternalCondition?.GetProfile(ProfileType.Ventilation, profileLibrary);
+
+                    SpaceAirMovement spaceAirMovement = profile == null ? new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(from).ToString(), new ObjectReference(space_Temp).ToString()) : new SpaceAirMovement(space_Temp.Name, airFlow, profile, new ObjectReference(from).ToString(), new ObjectReference(space_Temp).ToString());
+                    adjacencyCluster.AddObject(spaceAirMovement);
+                    airMovementObjects.Add(spaceAirMovement);
+
+                    adjacencyCluster.AddRelation(spaceAirMovement, from);
+                    adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);
+
+                    if (from is AirHandlingUnit)
+                    {
+                        spaceAirMovement = profile == null ? new SpaceAirMovement(space_Temp.Name, airFlow, new ObjectReference(space_Temp).ToString(), null) : new SpaceAirMovement(space_Temp.Name, airFlow, profile, new ObjectReference(space_Temp).ToString(), null);
+                        adjacencyCluster.AddObject(spaceAirMovement);
+
+                        adjacencyCluster.AddRelation(spaceAirMovement, space_Temp);
+                        airMovementObjects.Add(spaceAirMovement);
+                    }
+
+                }
+
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
+
+            index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)
             {
-                dataAccess.SetData(index, sAMObject);
+                dataAccess.SetData(index, analyticalModel);
             }
 
             index = Params.IndexOfOutputParam("iZAMs");

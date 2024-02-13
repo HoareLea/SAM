@@ -74,7 +74,7 @@ namespace SAM.Core
 
             HashSet<T> objects_Out = new ();
 
-            Filter<T>(relationCluster_In, relationCluster_Out, objects, objects_Out);
+            Filter(relationCluster_In, relationCluster_Out, objects, objects_Out);
 
             return objects_Out.ToList();
         }

@@ -8,5 +8,10 @@ namespace SAM.Core
         {
             return ((dateTime.DayOfYear - 1) * 24) + dateTime.Hour;
         }
+
+        public static int HourOfYear(int dayOfYear, int hourOfDay = 0)
+        {
+            return (dayOfYear * 24) + hourOfDay;
+        }
     }
 }

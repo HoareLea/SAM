@@ -1,6 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino.Commands;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;

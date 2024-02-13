@@ -5,14 +5,16 @@ namespace SAM.Analytical
 {
     public class SpaceAirMovement : SAMObject, IAirMovementObject
     {
-        private Profile airFlow;
+        private Profile profile;
+        private double airFlow;
         private string from;
         private string to;
         
-        public SpaceAirMovement(string name, Profile airFlow, string from, string to)
+        public SpaceAirMovement(string name, double airFlow, Profile profile, string from, string to)
             : base(name)
         {
-            this.airFlow = airFlow == null ? null : new Profile(airFlow);
+            this.profile = profile == null ? null : new Profile(profile);
+            this.airFlow = airFlow;
             this.from = from;
             this.to = to;
         }
@@ -20,7 +22,8 @@ namespace SAM.Analytical
         public SpaceAirMovement(string name, double airflow, string from, string to)
             : base(name)
         {
-            this.airFlow = new Profile(name, ProfileType.Ventilation, new double[] { airflow });
+            this.airFlow = airflow;
+            this.profile = new Profile(name, ProfileType.Ventilation, new double[] { 1 });
             this.from = from;
             this.to = to;
         }
@@ -30,7 +33,8 @@ namespace SAM.Analytical
         {
             if(spaceAirMovement != null)
             {
-                airFlow = spaceAirMovement.airFlow == null ? null : new Profile(spaceAirMovement.airFlow);
+                profile = spaceAirMovement.profile == null ? null : new Profile(spaceAirMovement.profile);
+                airFlow = spaceAirMovement.airFlow;
                 from = spaceAirMovement.from;
                 to = spaceAirMovement.to;
             }
@@ -42,11 +46,19 @@ namespace SAM.Analytical
 
         }
 
-        public Profile AirFlow
+        public Profile Profile
         {
             get
             {
-                return airFlow == null ? null : new Profile(airFlow);
+                return profile == null ? null : new Profile(profile);
+            }
+        }
+
+        public double AirFlow
+        {
+            get
+            {
+                return airFlow;
             }
         }
 
@@ -75,7 +87,12 @@ namespace SAM.Analytical
 
             if(jObject.ContainsKey("AirFlow"))
             {
-                airFlow = new Profile(jObject.Value<JObject>("Airflow"));
+                airFlow = jObject.Value<double>("AirFlow");
+            }
+
+            if (jObject.ContainsKey("Profile"))
+            {
+                profile = new Profile(jObject.Value<JObject>("Profile"));
             }
 
             if (jObject.ContainsKey("From"))
@@ -99,9 +116,14 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(airFlow != null)
+            if(!double.IsNaN(airFlow))
             {
-                jObject.Add("AirFlow", airFlow.ToJObject());
+                jObject.Add("AirFlow", airFlow);
+            }
+
+            if (profile != null)
+            {
+                jObject.Add("Profile", profile.ToJObject());
             }
 
             if (from != null)

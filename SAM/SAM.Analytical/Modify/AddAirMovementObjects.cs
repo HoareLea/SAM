@@ -5,8 +5,9 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<IAirMovementObject> AddAirMovementObjects(this AdjacencyCluster adjacencyCluster)
+        public static List<IAirMovementObject> AddAirMovementObjects(this AnalyticalModel analyticalModel)
         {
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
             if(adjacencyCluster == null)
             {
                 return null;
@@ -23,6 +24,8 @@ namespace SAM.Analytical
             {
                 return null;
             }
+
+            ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
             List<IAirMovementObject> result = new List<IAirMovementObject>();
 
@@ -56,18 +59,20 @@ namespace SAM.Analytical
                         {
                             double airflow = space.CalculatedSupplyAirFlow();
 
+                            Profile profile = space.InternalCondition?.GetProfile(ProfileType.Ventilation, profileLibrary);
+
                             ObjectReference objectReference_Space = new ObjectReference(space);
 
                             SpaceAirMovement spaceAirMovement = null;
 
-                            spaceAirMovement = new SpaceAirMovement(space.Name, airflow, objectReference_AirHandlingUnit.ToString(), objectReference_Space.ToString());
+                            spaceAirMovement = profile == null ? new SpaceAirMovement(space.Name, airflow, objectReference_AirHandlingUnit.ToString(), objectReference_Space.ToString()) : new SpaceAirMovement(space.Name, airflow, profile, objectReference_AirHandlingUnit.ToString(), objectReference_Space.ToString());
                             adjacencyCluster.AddObject(spaceAirMovement);
                             result.Add(spaceAirMovement);
 
                             adjacencyCluster.AddRelation(spaceAirMovement, airHandlingUnit);
                             adjacencyCluster.AddRelation(spaceAirMovement, space);
 
-                            spaceAirMovement = new SpaceAirMovement(space.Name, airflow, objectReference_Space.ToString(), null);
+                            spaceAirMovement = profile == null ? new SpaceAirMovement(space.Name, airflow, objectReference_Space.ToString(), null) : new SpaceAirMovement(space.Name, airflow, profile, objectReference_Space.ToString(), null);
                             adjacencyCluster.AddObject(spaceAirMovement);
 
                             adjacencyCluster.AddRelation(spaceAirMovement, space);
@@ -77,12 +82,21 @@ namespace SAM.Analytical
                 }
             }
 
-            foreach(AirHandlingUnit airHandlingUnit in airHandlingUnits)
+            List<double> densities = new List<double>() { FluidProperty.Air.Density };
+            List<double> humidifications = new List<double>() { 100 };
+            List<double> dehumidifications = new List<double>() { 0 };
+
+            foreach (AirHandlingUnit airHandlingUnit in airHandlingUnits)
             {
                 Profile profile_Heating = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Heating), ProfileType.Heating, new double[] { airHandlingUnit.WinterSupplyTemperature });
                 Profile profile_Cooling = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Cooling), ProfileType.Cooling, new double[] { airHandlingUnit.SummerSupplyTemperature });
 
-                AirHandlingUnitAirMovement airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(airHandlingUnit.Name, profile_Heating, profile_Cooling, null, null);
+
+                Profile density = new Profile(string.Format("{0} Air Density", airHandlingUnit.Name), densities);
+                Profile humidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Humidification), ProfileType.Humidification, humidifications);
+                Profile dehumidification = new Profile(string.Format("{0} {1}", airHandlingUnit.Name, ProfileType.Dehumidification), ProfileType.Dehumidification, dehumidifications);
+
+                AirHandlingUnitAirMovement airHandlingUnitAirMovement = new AirHandlingUnitAirMovement(airHandlingUnit.Name, profile_Heating, profile_Cooling, humidification, dehumidification, density);
 
                 adjacencyCluster.AddObject(airHandlingUnitAirMovement);
                 result.Add(airHandlingUnitAirMovement);

@@ -132,10 +132,25 @@
     <Compile Include="Classes\New\Window.cs" />
     <Compile Include="Classes\New\WindowType.cs" />
     <Compile Include="Classes\Result\AnalyticalModelSimulationResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59CorridorResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59NaturalVentilationResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59NaturalVentilationBedroomResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59MechanicalVentilationResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59Result.cs" />
+    <Compile Include="Classes\Result\TM\TM59CorridorExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59NaturalVentilationBedroomExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59MechanicalVentilationExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59NaturalVentilationExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM59ExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM52Result.cs" />
+    <Compile Include="Classes\Result\TM\TMResult.cs" />
+    <Compile Include="Classes\Result\TM\TMExtendedResult.cs" />
+    <Compile Include="Classes\Result\TM\TM52ExtendedResult.cs" />
     <Compile Include="Classes\Result\SurfaceSimulationResult.cs" />
     <Compile Include="Classes\Result\AdjacencyClusterSimulationResult.cs" />
     <Compile Include="Classes\Result\ZoneSimulationResult.cs" />
     <Compile Include="Classes\DesignDay.cs" />
+    <Compile Include="Classes\DailyWeightedExceedance.cs" />
     <Compile Include="Classes\TM59Manager.cs" />
     <Compile Include="Classes\Zone.cs" />
     <Compile Include="Classes\Result\SpaceSimulationResult.cs" />
@@ -169,14 +184,22 @@
     <Compile Include="Create\ApertureConstruction.cs" />
     <Compile Include="Create\AdjacencyCluster.cs" />
     <Compile Include="Create\Apertures.cs" />
+    <Compile Include="Create\TM52ExtendedResult.cs" />
+    <Compile Include="Enums\TM52BuildingCategory.cs" />
     <Compile Include="Modify\AddAirMovementObjects.cs" />
     <Compile Include="Interfaces\IAirMovementObject.cs" />
     <Compile Include="Interfaces\IAnalyticalResult.cs" />
     <Compile Include="Interfaces\ISection.cs" />
+    <Compile Include="Modify\AddResults.cs" />
+    <Compile Include="Modify\RemoveAirMovementObjects.cs" />
     <Compile Include="Modify\RemoveUnusedMaterials.cs" />
     <Compile Include="Modify\AssignMechanicalSystem.cs" />
     <Compile Include="Create\ConstructionManager.cs" />
+    <Compile Include="Query\Simplify.cs" />
+    <Compile Include="Query\MinIndoorComfortTemperatures.cs" />
+    <Compile Include="Query\MaxIndoorComfortTemperatures.cs" />
     <Compile Include="Query\AirFlow.cs" />
+    <Compile Include="Query\TemperatureRange.cs" />
     <Compile Include="Query\UpdateApertureConstructions.cs" />
     <Compile Include="Query\UpdateConstructions.cs" />
     <Compile Include="Query\DefaultConstructionManager.cs" />
@@ -648,6 +671,8 @@
     <Compile Include="Query\PanelType.cs" />
     <Compile Include="Classes\Space.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Variables\AirProperty.cs" />
+    <Compile Include="Variables\HourOfYear.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\SAM.Architectural\SAM.Architectural.csproj">

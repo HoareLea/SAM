@@ -1,14 +1,11 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Weather.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Spatial;
 using SAM.Weather.Grasshopper;
 using System;
 using System.Collections.Generic;
 using SAM.Weather;
-using Rhino.UI;
 
 namespace SAM.Analytical.Grasshopper
 {

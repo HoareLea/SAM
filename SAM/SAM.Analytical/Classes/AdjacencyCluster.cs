@@ -663,7 +663,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : Result, IAnalyticalObject
+        public List<T> GetResults<T>(IJSAMObject jSAMObject, string source = null) where T : IResult
         {
             List<T> result = GetRelatedObjects<T>(jSAMObject);
             if (result == null)
@@ -679,7 +679,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetResults<T>(string source = null) where T : Core.Result
+        public List<T> GetResults<T>(string source = null) where T : Result
         {
             List<T> result = GetObjects<T>();
             if (result == null)

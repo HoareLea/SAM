@@ -1,6 +1,5 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -17,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -41,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAirMovementObjectParam() { Name = "iZAMs", NickName = "iZAMs", Description = "SAM Air Movement Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -61,45 +60,28 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            index = Params.IndexOfInputParam("_analytical");
+            index = Params.IndexOfInputParam("_analyticalModel");
             if(index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            AnalyticalModel analyticalModel = null;
+            if (!dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<IAirMovementObject> airMovementObjects = null;
+            analyticalModel = new AnalyticalModel(analyticalModel);
 
-            if (sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
-            {
-                AdjacencyCluster adjacencyCluster = null;
-                if(sAMObject is AnalyticalModel)
-                    adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                else if(sAMObject is AdjacencyCluster)
-                    adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+            List<IAirMovementObject> airMovementObjects = analyticalModel.AddAirMovementObjects();
 
-                if(adjacencyCluster != null)
-                {
-                    airMovementObjects = adjacencyCluster.AddAirMovementObjects();
-
-                    if (sAMObject is AnalyticalModel)
-                        sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
-                    else if (sAMObject is AdjacencyCluster)
-                        sAMObject = adjacencyCluster;
-                }
-            }
-
-            index = Params.IndexOfOutputParam("analytical");
+            index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)
             {
-                dataAccess.SetData(index, sAMObject);
+                dataAccess.SetData(index, analyticalModel);
             }
 
             index = Params.IndexOfOutputParam("iZAMs");

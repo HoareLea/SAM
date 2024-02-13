@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
-using SAM.Geometry.Spatial;
 using SAM.Math;
 
 namespace SAM.Geometry.Planar

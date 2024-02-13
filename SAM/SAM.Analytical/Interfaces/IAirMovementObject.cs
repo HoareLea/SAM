@@ -1,6 +1,4 @@
-﻿using SAM.Core;
-
-namespace SAM.Analytical
+﻿namespace SAM.Analytical
 {
     public interface IAirMovementObject : IAnalyticalObject
     {
