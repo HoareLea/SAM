@@ -95,6 +95,14 @@ namespace SAM.Analytical
             return count;
         }
 
+        public bool Criterion2
+        {
+            get
+            {
+                return GetAnnualMaxExceedableNightHours() >= GetNightHoursNumberExceeding26();
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
