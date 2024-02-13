@@ -19,7 +19,7 @@ namespace SAM.Analytical
         {
             if (tM59SpaceExtendedResult != null)
             {
-                tM59SpaceApplications = tM59SpaceExtendedResult.tM59SpaceApplications == null ? null : new HashSet<TM59SpaceApplication>(tM59SpaceApplications);
+                tM59SpaceApplications = tM59SpaceExtendedResult.tM59SpaceApplications == null ? null : new HashSet<TM59SpaceApplication>(tM59SpaceExtendedResult.tM59SpaceApplications);
             }
         }
 
