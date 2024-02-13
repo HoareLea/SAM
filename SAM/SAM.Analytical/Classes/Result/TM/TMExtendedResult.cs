@@ -48,7 +48,7 @@ namespace SAM.Analytical
         {
             get
             {
-                return System.Convert.ToInt32(System.Math.Round(OccupiedHours * exceedanceFactor));
+                return System.Convert.ToInt32(System.Math.Truncate(OccupiedHours * exceedanceFactor));
             }
         }
 
