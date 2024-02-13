@@ -54,22 +54,23 @@ namespace SAM.Analytical
 
         public HashSet<int> GetOccupiedHourIndicesExceedingComfortRange()
         {
-            IndexedDoubles occpiedTemperatureDifferences = GetOccupiedTemperatureDifferences();
-            if (occpiedTemperatureDifferences == null)
-            {
-                return null;
-            }
-
-            IEnumerable<int> keys = occpiedTemperatureDifferences.Keys;
-            if (keys == null)
+            IndexedDoubles occupiedTemperatureDifferences = GetOccupiedTemperatureDifferences();
+            if (occupiedTemperatureDifferences == null)
             {
                 return null;
             }
 
             HashSet<int> result = new HashSet<int>();
+
+            IEnumerable<int> keys = occupiedTemperatureDifferences.Keys;
+            if (keys == null)
+            {
+                return result;
+            }
+
             foreach (int key in keys)
             {
-                if (occpiedTemperatureDifferences[key] >= 1)
+                if (occupiedTemperatureDifferences[key] >= 1)
                 {
                     result.Add(key);
                 }
