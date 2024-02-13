@@ -160,11 +160,15 @@ namespace SAM.Analytical
         public int GetOccupiedHoursExceedingAbsoluteLimit()
         {
             IndexedDoubles occupiedTemperatureDifferences = GetOccupiedTemperatureDifferences();
+            if(occupiedTemperatureDifferences == null)
+            {
+                return -1;
+            }
 
             IEnumerable<double> values = occupiedTemperatureDifferences?.Values;
             if (values == null || values.Count() == 0)
             {
-                return -1;
+                return 0;
             }
 
             int result = 0;
@@ -206,9 +210,14 @@ namespace SAM.Analytical
             get
             {
                 List<DailyWeightedExceedance> occupiedDailyWeightedExceedances = GetOccupiedDailyWeightedExceedances();
-                if(occupiedDailyWeightedExceedances == null || occupiedDailyWeightedExceedances.Count == 0)
+                if(occupiedDailyWeightedExceedances == null)
                 {
                     return false;
+                }
+
+                if (occupiedDailyWeightedExceedances.Count == 0)
+                {
+                    return true;
                 }
 
                 return occupiedDailyWeightedExceedances.FindIndex(x => x.Exceed) == -1;
@@ -220,11 +229,15 @@ namespace SAM.Analytical
             get
             {
                 IndexedDoubles occupiedTemperatureDifferences = GetOccupiedTemperatureDifferences();
-
-                IEnumerable<double> values = occupiedTemperatureDifferences?.Values;
-                if(values == null || values.Count() == 0)
+                if(occupiedTemperatureDifferences == null)
                 {
                     return false;
+                }
+
+                IEnumerable<double> values = occupiedTemperatureDifferences.Values;
+                if(values == null || values.Count() == 0)
+                {
+                    return true;
                 }
 
                 foreach (double value in values)

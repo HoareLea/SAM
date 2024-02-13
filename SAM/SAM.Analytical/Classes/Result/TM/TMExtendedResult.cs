@@ -223,6 +223,11 @@ namespace SAM.Analytical
                     return false;
                 }
 
+                if(hoursExceedingComfortRange == 0)
+                {
+                    return true;
+                }
+
                 return hoursExceedingComfortRange < maxExceedableHours;
             }
         }
