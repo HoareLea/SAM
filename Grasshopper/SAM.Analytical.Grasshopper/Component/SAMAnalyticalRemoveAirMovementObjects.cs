@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,6 +48,10 @@ namespace SAM.Analytical.Grasshopper
 
                 Param_Boolean paramBoolean;
 
+                paramBoolean = new Param_Boolean() { Name = "removeAHU_", NickName = "removeAHU_", Description = "Remove AHU", Access = GH_ParamAccess.item, Optional = true };
+                paramBoolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
+
                 paramBoolean = new Param_Boolean() { Name = "run_", NickName = "run_", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
                 paramBoolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
@@ -65,6 +69,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Guid { Name = "guids", NickName = "guids", Description = "Guids of removed objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Boolean() { Name = "successful", NickName = "successful", Description = "Successful", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -102,30 +107,72 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            bool removeAHU = false;
+            index = Params.IndexOfInputParam("removeAHU_");
+            if(index != -1)
+            {
+                if(!dataAccess.GetData(index, ref removeAHU))
+                {
+                    removeAHU = false;
+                }
+            }
+
             bool successful = false;
+            List<Guid> guids = new List<Guid>();
+
+            AdjacencyCluster adjacencyCluster = null;
+
             if (analyticalObject is AdjacencyCluster)
             {
-                AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
 
-                List<Guid> guids = adjacencyCluster.RemoveAirMovementObjects<IAirMovementObject>();
+                guids = adjacencyCluster.RemoveAirMovementObjects<IAirMovementObject>();
                 successful = guids != null && guids.Count != 0;
             }
             else if(analyticalObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = (AnalyticalModel)analyticalObject;
 
-                AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+                adjacencyCluster = analyticalModel.AdjacencyCluster;
                 if(adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
+                }
+            }
 
-                    List<Guid> guids = adjacencyCluster.RemoveAirMovementObjects<IAirMovementObject>();
-                    successful = guids != null && guids.Count != 0;
-
-                    if(successful)
+            if(adjacencyCluster != null)
+            {
+                if (removeAHU)
+                {
+                    List<AirHandlingUnitAirMovement> airHandlingUnitAirMovements = adjacencyCluster.GetObjects<AirHandlingUnitAirMovement>();
+                    if (airHandlingUnitAirMovements != null)
                     {
-                        analyticalObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                        foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in airHandlingUnitAirMovements)
+                        {
+                            List<AirHandlingUnit> airHandlingUnits = adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(airHandlingUnitAirMovement);
+                            if (airHandlingUnits != null)
+                            {
+                                List<Guid> guids_AirHandlingUnits = adjacencyCluster.Remove(airHandlingUnits);
+                                if (guids_AirHandlingUnits != null)
+                                {
+                                    guids.AddRange(guids_AirHandlingUnits);
+                                }
+                            }
+                        }
                     }
+                }
+
+                List<Guid> guids_RemoveAirMovementObject = adjacencyCluster.RemoveAirMovementObjects<IAirMovementObject>();
+                if (guids_RemoveAirMovementObject != null)
+                {
+                    guids.AddRange(guids_RemoveAirMovementObject);
+                }
+
+                successful = guids != null && guids.Count != 0;
+
+                if (successful && analyticalObject is AnalyticalModel)
+                {
+                    analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
                 }
             }
 
@@ -133,6 +180,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetData(index, analyticalObject);
+            }
+
+            index = Params.IndexOfOutputParam("guids");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, guids);
             }
 
             index = Params.IndexOfOutputParam("successful");
