@@ -297,6 +297,47 @@ namespace SAM.Weather
             }
         }
 
+        public IndexedDoubles GetIndexedDoubles(string name)
+        {
+            if(this.weatherYears == null)
+            {
+                return null;
+            }
+
+            IndexedDoubles result = new IndexedDoubles();
+
+            List<WeatherYear> weatherYears = new List<WeatherYear>(this.weatherYears);
+            weatherYears.RemoveAll(x => x == null);
+            weatherYears.Sort((x, y) => x.Year.CompareTo(y.Year));
+
+            if(weatherYears == null || weatherYears.Count == 0)
+            {
+                return result;
+            }
+
+            DateTime dateTime = new DateTime(weatherYears[0].Year, DateTime.MaxValue.Month, DateTime.MaxValue.Day);
+
+            foreach (WeatherYear weatherYear in weatherYears)
+            {
+                DateTime dateTime_Temp = new DateTime(weatherYear.Year, DateTime.MaxValue.Month, DateTime.MaxValue.Day);
+
+                int index = (int)(dateTime_Temp - dateTime).TotalHours;
+
+                IndexedDoubles indexedDoubles = weatherYear.GetIndexedDoubles(name);
+                foreach(int key in indexedDoubles.Keys)
+                {
+                    result[index + key] = indexedDoubles[key];
+                }
+            }
+
+            return result;
+        }
+
+        public IndexedDoubles GetIndexedDoubles(WeatherDataType weatherDataType)
+        {
+            return GetIndexedDoubles(weatherDataType.ToString());
+        }
+
         /// <summary>
         /// Gets a list of WeatherYear objects.
         /// </summary>

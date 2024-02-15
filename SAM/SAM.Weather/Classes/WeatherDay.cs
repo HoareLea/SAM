@@ -281,7 +281,28 @@ namespace SAM.Weather
         /// <returns>A list of double values.</returns>
         public List<double> GetValues(WeatherDataType weatherDataType)
         {
-            return this[weatherDataType]?.ToList();
+            return GetValues(weatherDataType.ToString());
+        }
+
+        public List<double> GetValues(string name)
+        {
+            return this[name]?.ToList();
+        }
+
+        public IndexedDoubles GetIndexedDoubles(string name)
+        {
+            List<double> values = GetValues(name);
+            if (values == null)
+            {
+                return null;
+            }
+
+            return new IndexedDoubles(values);
+        }
+
+        public IndexedDoubles GetIndexedDoubles(WeatherDataType weatherDataType)
+        {
+            return GetIndexedDoubles(weatherDataType.ToString());
         }
 
         /// <summary>

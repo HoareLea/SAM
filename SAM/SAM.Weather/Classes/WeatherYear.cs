@@ -244,6 +244,22 @@ namespace SAM.Weather
             return result;
         }
 
+        public IndexedDoubles GetIndexedDoubles(string name)
+        {
+            List<double> values = GetValues(name);
+            if(values == null)
+            {
+                return null;
+            }
+
+            return new IndexedDoubles(values);
+        }
+
+        public IndexedDoubles GetIndexedDoubles(WeatherDataType weatherDataType)
+        {
+            return GetIndexedDoubles(weatherDataType.ToString());
+        }
+
         /// <summary>
         /// Gets a list of weather data values for a specific parameter by WeatherDataType.
         /// </summary>
