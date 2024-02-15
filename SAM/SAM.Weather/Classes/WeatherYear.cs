@@ -238,7 +238,10 @@ namespace SAM.Weather
 
                 double[] values = weatherDay[name];
                 if (values == null || values.Length != 24)
+                {
                     result.AddRange(Enumerable.Repeat(double.NaN, 24));
+                }
+                result.AddRange(values);
             }
 
             return result;

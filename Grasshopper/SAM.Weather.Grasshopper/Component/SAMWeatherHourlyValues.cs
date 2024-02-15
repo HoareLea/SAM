@@ -126,6 +126,8 @@ namespace SAM.Analytical.Grasshopper
                 {
                     indexedDoubles_Temp.Add(index_Temp, indexDoubles[index_Temp]);
                 }
+
+                indexDoubles = indexedDoubles_Temp;
             }
 
             index = Params.IndexOfOutputParam("values");
