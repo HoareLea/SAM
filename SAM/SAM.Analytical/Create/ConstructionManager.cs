@@ -37,7 +37,11 @@ namespace SAM.Analytical
 
                     result.GetConstructions(keyValuePair.Key)?.ForEach(x => result.Remove(x));
 
-                    result.Add(keyValuePair.Value, keyValuePair.Key);
+                    Construction construction = keyValuePair.Value;
+                    if(construction != null)
+                    {
+                        result.Add(new Construction(construction, System.Guid.NewGuid()), keyValuePair.Key);
+                    }
                 }
             }
 
@@ -52,7 +56,12 @@ namespace SAM.Analytical
 
                     result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key)?.ForEach(x => result.Remove(x));
                     
-                    result.Add(keyValuePair.Value, keyValuePair.Key);
+                    ApertureConstruction apertureConstruction = keyValuePair.Value;
+                    if (apertureConstruction != null)
+                    {
+                        result.Add(new ApertureConstruction(System.Guid.NewGuid(), apertureConstruction, apertureConstruction.Name), keyValuePair.Key);
+                        
+                    }
                 }
             }
 

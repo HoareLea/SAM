@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateConstructionManagerByPanelType()
           : base("SAMAnalytical.CreateConstructionManagerByPanelType", "SAMAnalytical.CreateConstructionManagerByPanelType",
-              "Create ConstructionManager By PanelType",
+              "Create ConstructionManager By PanelType \nPlease note in single constrctuctio is connected to muliple inputs/panelType \n will be ducplicated with different DefaultPanelType",
               "SAM", "Analytical")
         {
         }
