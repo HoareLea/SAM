@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateConstruction : GH_SAMComponent
+    public class SAMAnalyticalCreateConstruction : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,23 +37,40 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            Construction construction = Analytical.Query.DefaultConstruction(PanelType.Roof);
-            
-            inputParamManager.AddTextParameter("_name_", "_name_", "Contruction Name", GH_ParamAccess.item, construction.Name);
+            get
+            {
+                Construction construction = Analytical.Query.DefaultConstruction(PanelType.Roof);
 
-            GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam();
-            gooConstructionLayerParam.PersistentData.AppendRange(construction.ConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-            inputParamManager.AddParameter(gooConstructionLayerParam, "constructionLayers_", "constructionLayers_", "SAM Contruction Layers", GH_ParamAccess.list);
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Contruction Name", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData(construction.Name);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam() { Name = "_constructionLayers_", NickName = "_constructionLayers_", Description = "SAM Contruction Layers", Access = GH_ParamAccess.list };
+                gooConstructionLayerParam.PersistentData.AppendRange(construction.ConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
+                result.Add(new GH_SAMParam(gooConstructionLayerParam, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "defaultPanelType_", NickName = "defaultPanelType_", Description = "Default PanelType", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionParam(), "Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction", NickName = "construction", Description = "SAM Analytical Construction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,36 +81,41 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_name_");
             string name = null;
-            if (!dataAccess.GetData(0, ref name))
+            if (index == -1 || !dataAccess.GetData(index, ref name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            dataAccess.GetDataList(1, objectWrappers);
-
-            List<ConstructionLayer> constructionLayers = null;
-            if(objectWrappers != null)
+            index = Params.IndexOfInputParam("_constructionLayers_");
+            List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+            if (index == -1 || !dataAccess.GetDataList(index, constructionLayers))
             {
-                constructionLayers = new List<ConstructionLayer>();
-                foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            Construction construction = new Construction(name, constructionLayers);
+
+            index = Params.IndexOfInputParam("defaultPanelType_");
+            string text = null;
+            if(index != -1 && dataAccess.GetData(index, ref text) && !string.IsNullOrWhiteSpace(text))
+            {
+                if (Core.Query.TryGetEnum(text, out PanelType panelType))
                 {
-                    ConstructionLayer constructionLayer = null;
-                    if (objectWrapper.Value is ConstructionLayer)
-                        constructionLayer = (ConstructionLayer)objectWrapper.Value;
-                    else if (objectWrapper.Value is GooConstructionLayer)
-                        constructionLayer = ((GooConstructionLayer)objectWrapper.Value).Value;
-
-                    if (constructionLayer == null)
-                        continue;
-
-                    constructionLayers.Add(constructionLayer);
+                    construction.SetValue(ConstructionParameter.DefaultPanelType, panelType);
                 }
             }
 
-            dataAccess.SetData(0, new GooConstruction(new Construction(name, constructionLayers)));
+            index = Params.IndexOfOutputParam("construction");
+            if(index != -1)
+            {
+                dataAccess.SetData(index, new GooConstruction(construction));
+            }
         }
     }
 }
