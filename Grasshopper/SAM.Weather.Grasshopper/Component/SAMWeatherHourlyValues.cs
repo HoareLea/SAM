@@ -19,12 +19,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small3;
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMWeatherHourlyValues()
-          : base("SAMWeather.HourlyValues", "SAMWeather.HourlyValues", "Gets hourly values", "SAM WIP", "Analytical")
+          : base("SAMWeather.HourlyValues", "SAMWeather.HourlyValues", "Gets hourly values by WeatherDataType from  Weather Data, Weahter Year or WeatherDay", "SAM", "Analytical")
         {
         }
 
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM Weather Object such as WeatherHour, WeatherDay etc.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM Weather Object such as Weather Data, Weahter Year or WeatherDay.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_weatherDataType", NickName = "lower", Description = "_weatherDataType", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "hoursOfYear_", NickName = "hoursOfYear_", Description = "Hours of year [0-8759]", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
