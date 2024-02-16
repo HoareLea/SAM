@@ -476,8 +476,8 @@ namespace SAM.Analytical
             int min_ToRemove = ranges == null || ranges.Count == 0 ? min : System.Math.Min(ranges.Min(), min);
             int max_ToRemove = ranges == null || ranges.Count == 0 ? max : System.Math.Max(ranges.Max(), max);
 
-            Range<int> range_ToRemove = new Range<int>(min_ToRemove, max_ToRemove);
-            Range<int> range = new Range<int>(min, max);
+            Range<int> range_ToRemove = new Range<int>(min_ToRemove, max_ToRemove + 1);
+            Range<int> range = new Range<int>(min, max + 1);
 
             double[] values_Temp = GetValues(range_ToRemove);
             foreach (int min_Temp in mins)
