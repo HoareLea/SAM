@@ -154,5 +154,10 @@ namespace SAM.Core
 
             return result;
         }
+
+        public double GetAverage()
+        {
+            return GetSum() / Count;
+        }
     }
 }
