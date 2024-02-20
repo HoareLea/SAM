@@ -64,5 +64,10 @@ namespace SAM.Core
 
             return true;
         }
+
+        public static bool Similar(System.Drawing.Color color_1, System.Drawing.Color color_2)
+        {
+            return color_1.A == color_2.A && color_1.R == color_2.R && color_1.G == color_2.G && color_1.B == color_2.B;
+        }
     }
 }
