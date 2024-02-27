@@ -1,5 +1,8 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
+using SAM.Core.Grasshopper;
+using SAM.Geometry.Object;
+using SAM.Geometry.Object.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -99,6 +102,25 @@ namespace SAM.Geometry.Grasshopper
                 }
 
                 return;
+            }
+        }
+
+        public static void DrawViewportWires(this ISAMGeometryObject sAMGeometryObject, GH_PreviewWireArgs previewWireArgs, System.Drawing.Color color)
+        {
+            if (sAMGeometryObject == null || previewWireArgs == null)
+            {
+                return;
+            }
+
+            List<ISAMGeometry> sAMGeometries = Object.Convert.ToSAM_ISAMGeometry(sAMGeometryObject);
+            if(sAMGeometries  == null)
+            {
+                return;
+            }
+
+            foreach(ISAMGeometry sAMGeometry in sAMGeometries)
+            {
+                DrawViewportWires(sAMGeometry, previewWireArgs, color);
             }
         }
 

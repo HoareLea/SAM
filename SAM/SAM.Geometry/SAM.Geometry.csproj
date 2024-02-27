@@ -59,6 +59,7 @@
     <Compile Include="Object\Base\Classes\Appearance\SurfaceAppearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\TextAppearance.cs" />
     <Compile Include="Geometry\Base\Classes\Face.cs" />
+    <Compile Include="Object\Base\Convert\ToSAM\ISAMGeometries.cs" />
     <Compile Include="Object\Base\Interfaces\IAppearance.cs" />
     <Compile Include="Geometry\Planar\Classes\CoordinateSystem2D.cs" />
     <Compile Include="Geometry\Planar\Classes\SAMGeometry2DGroup.cs" />
