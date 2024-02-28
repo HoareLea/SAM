@@ -28,6 +28,11 @@ namespace SAM.Geometry.Object.Planar
                     result.Add(new Polyline2DObject((Polyline2D)(object)sAMGeometry2D, curveAppearance));
                 }
 
+                else if (sAMGeometry2D is Polygon2D)
+                {
+                    result.Add(new Polygon2DObject((Polygon2D)(object)sAMGeometry2D, curveAppearance));
+                }
+
             }
 
             return result;

@@ -115,9 +115,11 @@
     <Compile Include="Object\Base\Query\DefaultPointAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultSurfaceAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultTextAppearance.cs" />
+    <Compile Include="Object\Planar\Classes\Polygon2DObject.cs" />
     <Compile Include="Object\Planar\Classes\SAMGeometry2DObjectCollection.cs" />
     <Compile Include="Object\Planar\Classes\Segment2DObject.cs" />
     <Compile Include="Object\Planar\Create\SAMGeometry2DObjectCollection.cs" />
+    <Compile Include="Object\Planar\Interfaces\IPolygon2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IPolyline2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IBoundable2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\ISegment2DObject.cs" />
