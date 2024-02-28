@@ -11,7 +11,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            double factor = System.Math.PI / density;
+            double factor = 2 * System.Math.PI / density;
 
             List<Point2D> point2Ds = new List<Point2D>();
             for (int i = 0; i <= density; i++)
