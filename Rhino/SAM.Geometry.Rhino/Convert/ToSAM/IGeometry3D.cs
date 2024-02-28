@@ -27,8 +27,7 @@ namespace SAM.Geometry.Rhino
                         return circle3D;
                     }
 
-                    //return circle3D.Simplify();
-
+                    return Spatial.Query.Simplify(circle3D, 10);
                 }
             }
 
