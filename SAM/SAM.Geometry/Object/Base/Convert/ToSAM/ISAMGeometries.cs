@@ -24,6 +24,11 @@ namespace SAM.Geometry.Object
                 return new List<ISAMGeometry>() { ((ISegment2DObject)sAMGeometryObject).Segment2D };
             }
 
+            if (sAMGeometryObject is IPolygon2DObject)
+            {
+                return new List<ISAMGeometry>() { ((IPolygon2DObject)sAMGeometryObject).Polygon2D };
+            }
+
             if (sAMGeometryObject is IEnumerable<ISAMGeometry2DObject>)
             {
                 List<ISAMGeometry> result = new List<ISAMGeometry>();

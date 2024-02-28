@@ -8,7 +8,7 @@ namespace SAM.Geometry.Planar
     /// <summary>
     /// Segment2D
     /// </summary>
-    public class Segment2D : SAMGeometry, ICurve2D, ISegmentable2D, IReversible
+    public class Segment2D : SAMGeometry, ICurve2D, ISegmentable2D, IReversible, IMovable2D<Segment2D>
     {
         private Point2D origin;
         private Vector2D vector;
@@ -644,6 +644,17 @@ namespace SAM.Geometry.Planar
         public ISAMGeometry2D GetTransformed(Transform2D transform2D)
         {
             return Query.Transform(this, transform2D);
+        }
+
+        public bool Move(Vector2D vector2D)
+        {
+            if(vector2D == null || origin == null)
+            {
+                return false;
+            }
+
+            origin.Move(vector2D);
+            return true;
         }
     }
 }
