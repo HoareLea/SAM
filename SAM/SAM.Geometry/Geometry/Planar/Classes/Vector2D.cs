@@ -137,7 +137,7 @@ namespace SAM.Geometry.Planar
         }
 
 
-        public static implicit operator Vector2D(Point2D point2D)
+        public static explicit operator Vector2D(Point2D point2D)
         {
             if (point2D == null)
                 return null;
