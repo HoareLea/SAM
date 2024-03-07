@@ -1,5 +1,6 @@
 ﻿using Rhino.Geometry;
 using System.Collections.Generic;
+using System.Net.Http.Headers;
 
 namespace SAM.Geometry.Rhino
 {
@@ -15,6 +16,21 @@ namespace SAM.Geometry.Rhino
 
             if (curve is LineCurve)
                 return ((LineCurve)curve).ToSAM();
+
+            if(curve.IsCircle())
+            {
+                if(curve.TryGetCircle(out Circle circle))
+                {
+                    Spatial.Circle3D circle3D = new Spatial.Circle3D(circle.Plane.ToSAM(), circle.Radius);
+                    if(!simplify)
+                    {
+                        return circle3D;
+                    }
+
+                    return Spatial.Query.Simplify(circle3D, 10);
+                }
+            }
+
 
             if (simplify)
             {

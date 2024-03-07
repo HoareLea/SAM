@@ -66,7 +66,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<Point2D> point2Ds_ConvexHull = Query.ConvexHull(point2Ds);
-            if(point2Ds_ConvexHull == null || point2Ds_ConvexHull.Count < 2)
+            if (point2Ds_ConvexHull == null || point2Ds_ConvexHull.Count < 2)
             {
                 return null;
             }
@@ -85,7 +85,7 @@ namespace SAM.Geometry.Planar
                 {
                     angleHashSet.Add(angle);
                     Rectangle2D rectangle_Temp = Rectangle2D(point2Ds_ConvexHull, direction);
-                    if(rectangle_Temp == null || !rectangle_Temp.IsValid())
+                    if (rectangle_Temp == null || !rectangle_Temp.IsValid())
                     {
                         continue;
                     }
@@ -99,13 +99,13 @@ namespace SAM.Geometry.Planar
                         int count_1 = point2Ds_1.Count(x => point2Ds_ConvexHull.Find(y => y.AlmostEquals(x, tolerance)) != null);
                         int count_2 = point2Ds_2.Count(x => point2Ds_ConvexHull.Find(y => y.AlmostEquals(x, tolerance)) != null);
 
-                        if(count_2 > count_1)
+                        if (count_2 > count_1)
                         {
                             area = area_Temp;
                             rectangle = rectangle_Temp;
                         }
                     }
-                    else if(area_Temp < area)
+                    else if (area_Temp < area)
                     {
                         area = area_Temp;
                         rectangle = rectangle_Temp;
@@ -118,21 +118,21 @@ namespace SAM.Geometry.Planar
 
         public static Rectangle2D Rectangle2D(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(segmentable2Ds == null)
+            if (segmentable2Ds == null)
             {
                 return null;
             }
 
             List<Point2D> point2Ds = new List<Point2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
-                if(segmentable2D == null)
+                if (segmentable2D == null)
                 {
                     continue;
                 }
 
                 List<Point2D> point2Ds_Temp = segmentable2D.GetPoints();
-                if(point2Ds_Temp == null)
+                if (point2Ds_Temp == null)
                 {
                     continue;
                 }
@@ -145,7 +145,7 @@ namespace SAM.Geometry.Planar
 
         public static Rectangle2D Rectangle2D(this Rectangle2D rectangle2D_1, Rectangle2D rectangle2D_2, double tolerance = Core.Tolerance.Distance)
         {
-            if(rectangle2D_1 == null || rectangle2D_2 == null)
+            if (rectangle2D_1 == null || rectangle2D_2 == null)
             {
                 return null;
             }
@@ -158,17 +158,19 @@ namespace SAM.Geometry.Planar
 
         public static Rectangle2D Rectangle2D(this Segment2D segment2D, double width, double axesRatio = 1)
         {
-            if(segment2D == null)
+            if (segment2D == null)
             {
                 return null;
             }
             Vector2D widthVector = segment2D.Direction.GetPerpendicular() * width / 2;
 
-            List<Point2D> rectanglePoints = new List<Point2D>();
-            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector);
-            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector);
-            rectanglePoints.Add(new Point2D(segment2D.Start).GetScaledY(axesRatio) + widthVector.GetNegated());
-            rectanglePoints.Add(new Point2D(segment2D.End).GetScaledY(axesRatio) + widthVector.GetNegated());
+            List<Point2D> rectanglePoints = new List<Point2D>()
+            {
+                new Point2D(segment2D.Start).GetScaledY(axesRatio).GetMoved(widthVector),
+                new Point2D(segment2D.End).GetScaledY(axesRatio).GetMoved(widthVector),
+                new Point2D(segment2D.Start).GetScaledY(axesRatio).GetMoved(widthVector.GetNegated()),
+                new Point2D(segment2D.End).GetScaledY(axesRatio).GetMoved(widthVector.GetNegated())
+            };
 
             return Rectangle2D(rectanglePoints);
         }

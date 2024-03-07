@@ -1,6 +1,7 @@
 ﻿using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
+using SAM.Geometry.Object;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -9,6 +10,29 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Modify
     {
+        public static bool BakeGeometry(this ISAMGeometryObject sAMGeometryObject, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids)
+        {
+            guids = null;
+
+            List<ISAMGeometry> sAMGeometries = Object.Convert.ToSAM_ISAMGeometry(sAMGeometryObject);
+            if(sAMGeometries == null || sAMGeometries.Count == 0)
+            {
+                return false;
+            }
+
+            guids = new List<Guid>();
+            foreach(ISAMGeometry sAMGeometry in sAMGeometries)
+            {
+                if(BakeGeometry(sAMGeometry, rhinoDoc, objectAttributes, out Guid guid))
+                {
+                    guids.Add(guid);
+                }
+            }
+
+            return true;
+
+        }
+
         public static bool BakeGeometry(this ISAMGeometry sAMGeometry, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
         {
             guid = Guid.Empty;

@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D, IEnumerable<Segment2D>, IReversible
+    public class Polyline2D : SAMGeometry, IBoundable2D, ISegmentable2D, IEnumerable<Segment2D>, IReversible, IMovable2D<Polyline2D>
     {
         private List<Point2D> points;
 
@@ -239,11 +239,6 @@ namespace SAM.Geometry.Planar
             return length;
         }
 
-        public ISAMGeometry2D GetMoved(Vector2D vector2D)
-        {
-            return new Polyline2D(points.ConvertAll(x => (Point2D)x.GetMoved(vector2D)));
-        }
-
         public bool Move(Vector2D vector2D)
         {
             if (vector2D == null || points == null)
@@ -378,6 +373,16 @@ namespace SAM.Geometry.Planar
         public ISAMGeometry2D GetTransformed(Transform2D transform2D)
         {
             return Query.Transform(this, transform2D);
+        }
+
+        public Polyline2D GetMoved(Vector2D vector2D)
+        {
+            if(vector2D == null || points == null)
+            {
+                return null;
+            }
+
+            return new Polyline2D(points.ConvertAll(x => x.GetMoved(vector2D)));
         }
     }
 }

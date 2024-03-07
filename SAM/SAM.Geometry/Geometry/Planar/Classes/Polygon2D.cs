@@ -6,7 +6,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
-    public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D, IEnumerable<Point2D>, IReversible
+    public class Polygon2D : SAMGeometry, IClosed2D, ISegmentable2D, IEnumerable<Point2D>, IReversible, IMovable2D<Polygon2D>
     {
         private List<Point2D> points;
 
@@ -334,6 +334,16 @@ namespace SAM.Geometry.Planar
         public ISAMGeometry2D GetTransformed(Transform2D transform2D)
         {
             return Query.Transform(this, transform2D);
+        }
+
+        public Polygon2D GetMoved(Vector2D vector2D)
+        {
+            if(vector2D == null || points == null)
+            {
+                return null;
+            }
+
+            return new Polygon2D(points.ConvertAll(x => x.GetMoved(vector2D)));
         }
     }
 }

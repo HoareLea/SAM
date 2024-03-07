@@ -42,7 +42,7 @@ namespace SAM.Geometry.Planar
             }
         }
 
-        public static implicit operator Line2D(Segment2D segment2D)
+        public static explicit operator Line2D(Segment2D segment2D)
         {
             if (segment2D == null)
                 return null;
@@ -50,7 +50,7 @@ namespace SAM.Geometry.Planar
             return new Line2D(segment2D[0], segment2D.Direction);
         }
 
-        public static implicit operator Line2D(LinearEquation linearEquation)
+        public static explicit operator Line2D(LinearEquation linearEquation)
         {
             if (linearEquation == null)
             {

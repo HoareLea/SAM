@@ -53,12 +53,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Geometry\Planar\Interfaces\IMovable2D.cs" />
+    <Compile Include="Geometry\Planar\Query\Simplify.cs" />
+    <Compile Include="Geometry\Spatial\Query\Simplify.cs" />
     <Compile Include="Object\Base\Classes\Appearance\Appearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\CurveAppearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\PointAppearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\SurfaceAppearance.cs" />
     <Compile Include="Object\Base\Classes\Appearance\TextAppearance.cs" />
     <Compile Include="Geometry\Base\Classes\Face.cs" />
+    <Compile Include="Object\Base\Convert\ToSAM\ISAMGeometries.cs" />
     <Compile Include="Object\Base\Interfaces\IAppearance.cs" />
     <Compile Include="Geometry\Planar\Classes\CoordinateSystem2D.cs" />
     <Compile Include="Geometry\Planar\Classes\SAMGeometry2DGroup.cs" />
@@ -112,8 +115,11 @@
     <Compile Include="Object\Base\Query\DefaultPointAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultSurfaceAppearance.cs" />
     <Compile Include="Object\Base\Query\DefaultTextAppearance.cs" />
+    <Compile Include="Object\Planar\Classes\Polygon2DObject.cs" />
     <Compile Include="Object\Planar\Classes\SAMGeometry2DObjectCollection.cs" />
     <Compile Include="Object\Planar\Classes\Segment2DObject.cs" />
+    <Compile Include="Object\Planar\Create\SAMGeometry2DObjectCollection.cs" />
+    <Compile Include="Object\Planar\Interfaces\IPolygon2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IPolyline2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\IBoundable2DObject.cs" />
     <Compile Include="Object\Planar\Interfaces\ISegment2DObject.cs" />

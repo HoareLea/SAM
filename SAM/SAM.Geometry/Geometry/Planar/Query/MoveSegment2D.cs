@@ -36,7 +36,7 @@ namespace SAM.Geometry.Planar
             }
 
             Segment2D segment2D = segment2Ds[index];
-            segment2D = segment2D.Move(vector2D);
+            segment2D = segment2D.GetMoved(vector2D);
 
             Segment2D segment2D_Previous = segment2Ds[index_Previous];
             Segment2D segment2D_Next = segment2Ds[index_Next];

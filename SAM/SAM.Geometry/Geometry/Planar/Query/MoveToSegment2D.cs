@@ -16,7 +16,7 @@ namespace SAM.Geometry.Planar
         /// <returns></returns>
         public static Rectangle2D MoveToSegment2D(this Rectangle2D rectangle2D, Segment2D segment2D, Point2D point2D, double distanceToCenter, bool clockwise = true)
         {
-            if(rectangle2D == null || segment2D == null || point2D == null)
+            if (rectangle2D == null || segment2D == null || point2D == null)
             {
                 return rectangle2D;
             }
@@ -24,21 +24,24 @@ namespace SAM.Geometry.Planar
             Vector2D horizontalVector = segment2D.Direction.Unit;
             Vector2D verticalVector = horizontalVector.GetPerpendicular();
 
-            Point2D rectangleCenter = point2D + verticalVector * distanceToCenter;
+            Point2D rectangleCenter = point2D.GetMoved(verticalVector * distanceToCenter);
 
-            if(clockwise)
+            if (clockwise)
             {
-                rectangleCenter = point2D + verticalVector.GetNegated() * distanceToCenter;
+                rectangleCenter = point2D.GetMoved(verticalVector.GetNegated() * distanceToCenter);
             }
 
             Vector2D widthVector = horizontalVector * (rectangle2D.Width / 2);
             Vector2D heightVector = verticalVector * (rectangle2D.Height / 2);
 
-            List<Point2D> rectangleCornerPoints = new List<Point2D>();
-            rectangleCornerPoints.Add(rectangleCenter + widthVector.GetNegated() + heightVector);
-            rectangleCornerPoints.Add(rectangleCenter + widthVector + heightVector);
-            rectangleCornerPoints.Add(rectangleCenter + widthVector + heightVector.GetNegated());
-            rectangleCornerPoints.Add(rectangleCenter + widthVector.GetNegated() + heightVector.GetNegated());
+            List<Point2D> rectangleCornerPoints = new List<Point2D>()
+            {
+                rectangleCenter.GetMoved(widthVector.GetNegated() + heightVector),
+                rectangleCenter.GetMoved(widthVector + heightVector),
+                rectangleCenter.GetMoved(widthVector + heightVector.GetNegated()),
+                rectangleCenter.GetMoved(widthVector.GetNegated() + heightVector.GetNegated())
+            };
+
 
             return Create.Rectangle2D(rectangleCornerPoints);
         }
