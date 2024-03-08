@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,6 +39,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "pollutantGPerHrPerArea_", NickName = "pollutantGPerHrPerArea_", Description = "Pollutant Per Hour Per Area [g/h/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "useOccupancyProfile_", NickName = "useOccupancyProfile_", Description = "Use Occupancy Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -122,6 +123,13 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref pollutantGenerationPerPerson);
 
+            bool useOccupancyProfile = false;
+            index = Params.IndexOfInputParam("useOccupancyProfile_");
+            if (index == -1 || !dataAccess.GetData(index, ref useOccupancyProfile))
+            {
+                useOccupancyProfile = false;
+            }
+
             double pollutantGenerationPerArea = double.NaN;
 
             index = Params.IndexOfInputParam("pollutantGPerHrPerArea_");
@@ -146,6 +154,15 @@ namespace SAM.Analytical.Grasshopper
                 InternalCondition internalCondition = space_Temp.InternalCondition;
                 if (internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
+
+                if(useOccupancyProfile)
+                {
+                    string occupancyProfileName = internalCondition.GetProfileName(ProfileType.Occupancy);
+                    if(!string.IsNullOrWhiteSpace(occupancyProfileName))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, occupancyProfileName);
+                    }
+                }
 
                 if (profile != null)
                     internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, profile.Name);
