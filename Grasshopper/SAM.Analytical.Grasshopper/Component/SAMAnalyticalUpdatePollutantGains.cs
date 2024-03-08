@@ -155,17 +155,23 @@ namespace SAM.Analytical.Grasshopper
                 if (internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
 
-                if(useOccupancyProfile)
-                {
-                    string occupancyProfileName = internalCondition.GetProfileName(ProfileType.Occupancy);
-                    if(!string.IsNullOrWhiteSpace(occupancyProfileName))
-                    {
-                        internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, occupancyProfileName);
-                    }
-                }
+
 
                 if (profile != null)
+                {
                     internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, profile.Name);
+                }
+                else if (useOccupancyProfile)
+                {
+                    Profile profile_Occupancy = internalCondition.GetProfile(ProfileType.Occupancy, profileLibrary);
+                    if (profile_Occupancy != null)
+                    {
+                        Profile profile_Temp = new Profile(Guid.NewGuid(), profile_Occupancy, ProfileType.Pollutant.Text());
+                        profileLibrary.Add(profile_Temp);
+
+                        internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, profile_Temp.Name);
+                    }
+                }
 
                 if (!double.IsNaN(pollutantGenerationPerPerson))
                     internalCondition.SetValue(InternalConditionParameter.PollutantGenerationPerPerson, pollutantGenerationPerPerson);

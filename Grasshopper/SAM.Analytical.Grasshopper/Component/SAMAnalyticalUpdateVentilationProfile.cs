@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "internalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlow", NickName = "calculatedSupplyAirFlow", Description = "CalculatedSupplyAirFlow [l/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlow", NickName = "calculatedExhaustAirFlow", Description = "CalculatedExhaustAirFlow [l/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlowPerPerson", NickName = "calculatedSupplyAirFlowPerPerson", Description = "CalculatedSupplyAirFlowPerPerson [l/s/p]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
@@ -358,7 +358,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
             }
 
-            index = Params.IndexOfOutputParam("InternalConditions");
+            index = Params.IndexOfOutputParam("internalConditions");
             if (index != -1)
                 dataAccess.SetDataList(index, internalConditions_Result?.ConvertAll(x => new GooInternalCondition(x)));
 
