@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,22 +40,22 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow_", NickName = "SupplyAirFlow_", Description = "Supply Air Flow [m3/s]", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlow_", NickName = "SupplyAirFlow_", Description = "Supply Air Flow [l/s]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow_", NickName = "exhaustAirFlow_", Description = "Exhaust Air Flow [m3/s]", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow_", NickName = "exhaustAirFlow_", Description = "Exhaust Air Flow [l/s]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerPerson_", NickName = "supplyAirFlowPerPerson_", Description = "Supply Air Flow Per Person [m3/s/p]", Access = GH_ParamAccess.item, Optional = true};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerPerson_", NickName = "supplyAirFlowPerPerson_", Description = "Supply Air Flow Per Person [l/s/p]", Access = GH_ParamAccess.item, Optional = true};
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlowPerPerson_", NickName = "exhaustAirFlowPerPerson_", Description = "Exhaust Air Flow Per Person [m3/s/p]", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlowPerPerson_", NickName = "exhaustAirFlowPerPerson_", Description = "Exhaust Air Flow Per Person [l/s/p]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerArea_", NickName = "supplyAirFlowPerArea_", Description = "Supply Air Flow Per Area [m3/s/m2]", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerArea_", NickName = "supplyAirFlowPerArea_", Description = "Supply Air Flow Per Area [l/s/m2]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlowPerArea_", NickName = "exhaustAirFlowPerArea_", Description = "Exhaust Air Flow Per Area [m3/s/m2]", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlowPerArea_", NickName = "exhaustAirFlowPerArea_", Description = "Exhaust Air Flow Per Area [l/s/m2]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirChangesPerHour_", NickName = "supplyAirChangesPerHour_", Description = "Supply Air Changes Per Hour [ACH]", Access = GH_ParamAccess.item, Optional = true };
@@ -76,12 +76,12 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlow", NickName = "calculatedSupplyAirFlow", Description = "CalculatedSupplyAirFlow [m3/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlow", NickName = "calculatedExhaustAirFlow", Description = "CalculatedExhaustAirFlow [m3/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlowPerPerson", NickName = "calculatedSupplyAirFlowPerPerson", Description = "CalculatedSupplyAirFlowPerPerson [m3/s/p]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlowPerPerson", NickName = "calculatedExhaustAirFlowPerPerson", Description = "CalculatedExhaustAirFlowPerPerson [m3/s/p]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlowPerArea", NickName = "calculatedSupplyAirFlowPerArea", Description = "CalculatedSupplyAirFlowPerArea [m3/s/m2]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlowPerArea", NickName = "calculatedExhaustAirFlowPerArea", Description = "CalculatedExhaustAirFlowPerArea [m3/s/m2]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlow", NickName = "calculatedSupplyAirFlow", Description = "CalculatedSupplyAirFlow [l/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlow", NickName = "calculatedExhaustAirFlow", Description = "CalculatedExhaustAirFlow [l/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlowPerPerson", NickName = "calculatedSupplyAirFlowPerPerson", Description = "CalculatedSupplyAirFlowPerPerson [l/s/p]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlowPerPerson", NickName = "calculatedExhaustAirFlowPerPerson", Description = "CalculatedExhaustAirFlowPerPerson [l/s/p]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlowPerArea", NickName = "calculatedSupplyAirFlowPerArea", Description = "CalculatedSupplyAirFlowPerArea [l/s/m2]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirFlowPerArea", NickName = "calculatedExhaustAirFlowPerArea", Description = "CalculatedExhaustAirFlowPerArea [l/s/m2]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirChangesPerHour", NickName = "calculatedSupplyAirChangesPerHour", Description = "CalculatedSupplyAirChangesPerHour [ACH]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedExhaustAirChangesPerHour", NickName = "calculatedExhaustAirChangesPerHour", Description = "CalculatedExhaustAirChangesPerHour [ACH]", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -235,7 +235,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlow, supplyAirFlow);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlow, supplyAirFlow / 1000);
                 }
 
                 if (double.IsNaN(exhaustAirFlow))
@@ -244,7 +244,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlow, exhaustAirFlow);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlow, exhaustAirFlow / 1000);
                 }
 
                 if (double.IsNaN(supplyAirFlowPerPerson))
@@ -253,7 +253,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlowPerPerson, supplyAirFlowPerPerson);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlowPerPerson, supplyAirFlowPerPerson / 1000);
                 }
 
                 if (double.IsNaN(exhaustAirFlowPerPerson))
@@ -262,7 +262,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlowPerPerson, exhaustAirFlowPerPerson);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlowPerPerson, exhaustAirFlowPerPerson / 1000);
                 }
 
                 if (double.IsNaN(supplyAirFlowPerArea))
@@ -271,7 +271,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlowPerArea, supplyAirFlowPerArea);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.SupplyAirFlowPerArea, supplyAirFlowPerArea / 1000);
                 }
 
                 if (double.IsNaN(exhaustAirFlowPerArea))
@@ -280,7 +280,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlowPerArea, exhaustAirFlowPerArea);
+                    internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirFlowPerArea, exhaustAirFlowPerArea / 1000);
                 }
 
                 if (double.IsNaN(supplyAirChangesPerHour))
@@ -337,14 +337,14 @@ namespace SAM.Analytical.Grasshopper
                     calculatedExhaustAirChangesPerHour = calculatedExhaustAirFlow / volume * 3600;
                 }
 
-                calculatedSupplyAirFlows.Add(calculatedSupplyAirFlow);
-                calculatedExhaustAirFlows.Add(calculatedExhaustAirFlow);
+                calculatedSupplyAirFlows.Add(calculatedSupplyAirFlow * 1000);
+                calculatedExhaustAirFlows.Add(calculatedExhaustAirFlow * 1000);
 
-                calculatedSupplyAirFlowPerPersons.Add(calculatedSupplyAirFlowPerPerson);
-                calculatedExhaustAirFlowPerPersons.Add(calculatedExhaustAirFlowPerPerson);
+                calculatedSupplyAirFlowPerPersons.Add(calculatedSupplyAirFlowPerPerson * 1000);
+                calculatedExhaustAirFlowPerPersons.Add(calculatedExhaustAirFlowPerPerson * 1000);
 
-                calculatedSupplyAirFlowPerAreas.Add(calculatedSupplyAirFlowPerArea);
-                calculatedExhaustAirFlowPerAreas.Add(calculatedExhaustAirFlowPerArea);
+                calculatedSupplyAirFlowPerAreas.Add(calculatedSupplyAirFlowPerArea * 1000);
+                calculatedExhaustAirFlowPerAreas.Add(calculatedExhaustAirFlowPerArea * 1000);
 
                 calculatedSupplyAirChangesPerHours.Add(calculatedSupplyAirChangesPerHour);
                 calculatedExhaustAirChangesPerHours.Add(calculatedExhaustAirChangesPerHour);
