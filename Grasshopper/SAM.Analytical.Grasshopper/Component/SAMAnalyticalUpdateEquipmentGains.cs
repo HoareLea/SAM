@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGain_", NickName = "equipmentLatGain_", Description = "Equipment Latent Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 //set default values 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_multipleSenisbleGainPerPerson_", NickName = "_multipleSenisbleGainPerPerson_", Description = "Multiple Sensible Gain Per Person, Default = false", Access = GH_ParamAccess.item};
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_multiplySenisbleGainPerPerson_", NickName = "_multiplySenisbleGainPerPerson_", Description = "Multiply Sensible Gain Per Person, Default = false", Access = GH_ParamAccess.item};
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
@@ -132,10 +132,10 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref equipmentLatGain);
 
-            bool multipleSenisbleGainPerPerson = false;
-            index = Params.IndexOfInputParam("_multipleSenisbleGainPerPerson_");
+            bool multiplySenisbleGainPerPerson = false;
+            index = Params.IndexOfInputParam("_multiplySenisbleGainPerPerson_");
             if (index != -1)
-                dataAccess.GetData(index, ref multipleSenisbleGainPerPerson);
+                dataAccess.GetData(index, ref multiplySenisbleGainPerPerson);
 
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
@@ -177,7 +177,7 @@ namespace SAM.Analytical.Grasshopper
                 if (!double.IsNaN(equipmentSensGain))
                 {
                     double equipmentSensGain_Temp = equipmentSensGain;
-                    if (multipleSenisbleGainPerPerson)
+                    if (multiplySenisbleGainPerPerson)
                     {
                         double occupancy = space.CalculatedOccupancy();
                         if(!double.IsNaN(occupancy))
