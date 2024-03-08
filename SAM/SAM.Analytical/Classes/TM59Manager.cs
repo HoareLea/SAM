@@ -90,6 +90,10 @@ namespace SAM.Analytical
         {
             return TM59SpaceApplications(space, textMap);
         }
+        public List<TM59SpaceApplication> TM59SpaceApplications(InternalCondition internalCondition)
+        {
+            return TM59SpaceApplications(internalCondition, textMap);
+        }
 
         public int Occupancy(Space space)
         {
@@ -238,6 +242,33 @@ namespace SAM.Analytical
             }
 
             if (IsCooking(space, textMap))
+            {
+                result.Add(TM59SpaceApplication.Cooking);
+            }
+
+            return result;
+
+        }
+
+        public static List<TM59SpaceApplication> TM59SpaceApplications(InternalCondition internalCondition, TextMap textMap)
+        {
+            if (internalCondition == null || textMap == null)
+            {
+                return null;
+            }
+
+            List<TM59SpaceApplication> result = new List<TM59SpaceApplication>();
+            if (IsSleeping(internalCondition, textMap))
+            {
+                result.Add(TM59SpaceApplication.Sleeping);
+            }
+
+            if (IsLiving(internalCondition, textMap))
+            {
+                result.Add(TM59SpaceApplication.Living);
+            }
+
+            if (IsCooking(internalCondition, textMap))
             {
                 result.Add(TM59SpaceApplication.Cooking);
             }
