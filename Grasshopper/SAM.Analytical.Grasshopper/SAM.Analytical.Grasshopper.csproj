@@ -102,6 +102,7 @@
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMAnalyticalAdjacentSpaces.cs" />
+    <Compile Include="Component\SAMAnalyticalModifyInternalConditionByProfile.cs" />
     <Compile Include="Component\SAMAnalyticalPanelGroup.cs" />
     <Compile Include="Component\SAMAnalyticalRemoveAirMovementObjects.cs" />
     <Compile Include="Component\SAMAnalyticalAddResults.cs" />
