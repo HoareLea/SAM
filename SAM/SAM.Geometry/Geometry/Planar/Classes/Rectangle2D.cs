@@ -323,5 +323,25 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Rectangle2D rectangle2D = Query.Transform(this, transform2D);
+            if(rectangle2D == null)
+            {
+                return false;
+            }
+
+            height = rectangle2D.Height;
+            heightDirection = rectangle2D.heightDirection;
+            origin = rectangle2D.origin;
+            width = rectangle2D.width;
+            return true;
+        }
     }
 }

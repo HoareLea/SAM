@@ -135,5 +135,10 @@ namespace SAM.Geometry.Planar
         {
             throw new System.Exception();
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

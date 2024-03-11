@@ -214,5 +214,20 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null || points == null)
+            {
+                return false;
+            }
+
+            for(int i= 0; i < points.Count(); i++)
+            {
+                points[i].Transform(transform2D);
+            }
+
+            return true;
+        }
     }
 }

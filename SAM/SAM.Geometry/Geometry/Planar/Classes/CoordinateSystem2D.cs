@@ -146,9 +146,9 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            Point2D origin_New = origin?.Transform(transform2D);
-            Vector2D axisX_New = axisX?.Transform(transform2D);
-            Vector2D axisY_New = axisY?.Transform(transform2D);
+            Point2D origin_New = Query.Transform(origin, transform2D);
+            Vector2D axisX_New = Query.Transform(axisX, transform2D);
+            Vector2D axisY_New = Query.Transform(axisY, transform2D);
 
             return new CoordinateSystem2D(origin_New, axisX_New, axisY_New);
         }

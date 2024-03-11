@@ -185,5 +185,25 @@ namespace SAM.Geometry.Planar
 
             return new Ellipse2D(center_New, vector2D_Width.Length, vector2D_Height.Length, vector2D_Height.Unit);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Ellipse2D ellipse2D = GetTransformed(transform2D) as Ellipse2D;
+            if(ellipse2D == null)
+            {
+                return false;
+            }
+
+            center = ellipse2D.center;
+            height = ellipse2D.height;
+            heightDirection = ellipse2D.heightDirection;
+            width = ellipse2D.width;
+            return true;
+        }
     }
 }

@@ -656,5 +656,24 @@ namespace SAM.Geometry.Planar
             origin.Move(vector2D);
             return true;
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Segment2D segment2D = Query.Transform(this, transform2D);
+            if(segment2D == null)
+            {
+                return false;
+            }
+
+            origin = segment2D.origin;
+            vector = segment2D.vector;
+            return true;
+
+        }
     }
 }

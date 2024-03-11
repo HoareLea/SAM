@@ -391,5 +391,16 @@ namespace SAM.Geometry.Planar
         {
             return new Mesh2D(Query.Transform(points, transform2D), indexes);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            points = Query.Transform(points, transform2D);
+            return true;
+        }
     }
 }

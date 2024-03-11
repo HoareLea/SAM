@@ -168,5 +168,23 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Circle2D circle2D = Query.Transform(this, transform2D);
+            if(circle2D == null)
+            {
+                return false;
+            }
+
+            center = circle2D.Center;
+            radious = circle2D.Radious;
+            return true;
+        }
     }
 }

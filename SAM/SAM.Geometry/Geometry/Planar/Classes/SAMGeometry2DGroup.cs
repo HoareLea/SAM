@@ -175,6 +175,17 @@ namespace SAM.Geometry.Planar
             return new SAMGeometry2DGroup(coordinateSystem2D_New, sAMGeometry2Ds);
         }
 
+        public bool Transform(Transform2D transform2D)
+        {
+            if (transform2D == null)
+            {
+                return false;
+            }
+
+            coordinateSystem2D = coordinateSystem2D.Transform(transform2D);
+            return true; 
+        }
+
         public virtual JObject ToJObject()
         {
             JObject result = new JObject();

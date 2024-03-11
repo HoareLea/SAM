@@ -450,5 +450,23 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if (transform2D == null)
+            {
+                return false;
+            }
+
+            BoundingBox2D boundingBox2D = Query.Transform(this, transform2D);
+            if (boundingBox2D == null)
+            {
+                return false;
+            }
+
+            min = boundingBox2D.min;
+            max = boundingBox2D.max;
+            return true;
+        }
     }
 }

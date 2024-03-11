@@ -398,5 +398,23 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Point2D point2D = Query.Transform(this, transform2D);
+            if(point2D == null)
+            {
+                return false;
+            }
+
+            coordinates[0] = point2D[0];
+            coordinates[1] = point2D[1];
+            return true;
+        }
     }
 }

@@ -345,5 +345,22 @@ namespace SAM.Geometry.Planar
 
             return new Polygon2D(points.ConvertAll(x => x.GetMoved(vector2D)));
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if (transform2D == null)
+            {
+                return false;
+            }
+
+            Polygon2D polygon2D = Query.Transform(this, transform2D);
+            if (polygon2D == null)
+            {
+                return false;
+            }
+
+            points = polygon2D.points;
+            return true;
+        }
     }
 }

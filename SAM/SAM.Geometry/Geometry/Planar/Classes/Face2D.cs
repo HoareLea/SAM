@@ -253,5 +253,23 @@ namespace SAM.Geometry.Planar
         {
             return Query.Transform(this, transform2D);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            Face2D face2D = Query.Transform(this, transform2D);
+            if(face2D == null)
+            {
+                return false;
+            }
+
+            externalEdge2D = face2D.externalEdge2D;
+            internalEdge2Ds = face2D.internalEdge2Ds;
+            return true;
+        }
     }
 }

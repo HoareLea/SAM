@@ -169,5 +169,18 @@ namespace SAM.Geometry.Planar
 
             return new Line2D(origin_New, vector_New);
         }
+
+        public bool Transform(Transform2D transform2D)
+        {
+            if(transform2D == null)
+            {
+                return false;
+            }
+
+            origin = Query.Transform(origin, transform2D);
+            vector = Query.Transform(vector, transform2D);
+            return true;
+
+        }
     }
 }
