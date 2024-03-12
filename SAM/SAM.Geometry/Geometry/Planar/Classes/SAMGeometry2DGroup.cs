@@ -163,7 +163,7 @@ namespace SAM.Geometry.Planar
             return GetTransformed(transform3D);
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             if(transform2D == null)
             {
@@ -175,7 +175,7 @@ namespace SAM.Geometry.Planar
             return new SAMGeometry2DGroup(coordinateSystem2D_New, sAMGeometry2Ds);
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             if (transform2D == null)
             {

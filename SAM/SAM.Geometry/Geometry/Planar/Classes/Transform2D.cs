@@ -1,10 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
+using SAM.Geometry.Spatial;
 using SAM.Math;
 
 namespace SAM.Geometry.Planar
 {
-    public class Transform2D : IJSAMObject
+    public class Transform2D : ITransform2D
     {
         private Matrix3D matrix3D;
 
@@ -132,12 +133,35 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static ITransform2D GetMirrorX(Point2D point2D)
+        {
+            if(point2D == null)
+            {
+                return null;
+            }
+
+            CoordinateSystem2D coordinateSystem2D = new CoordinateSystem2D(point2D);
+
+            return new TransformGroup2D(new Transform2D[] { GetOriginToCoordinateSystem2D(coordinateSystem2D), GetMirrorX(), GetCoordinateSystem2DToOrigin(coordinateSystem2D) });
+        }
         public static Transform2D GetMirrorY()
         {
             Transform2D result = GetIdentity();
             result.matrix3D[0, 0] = -result.matrix3D[0, 0];
 
             return result;
+        }
+
+        public static ITransform2D GetMirrorY(Point2D point2D)
+        {
+            if (point2D == null)
+            {
+                return null;
+            }
+
+            CoordinateSystem2D coordinateSystem2D = new CoordinateSystem2D(point2D);
+
+            return new TransformGroup2D(new Transform2D[] { GetOriginToCoordinateSystem2D(coordinateSystem2D), GetMirrorY(), GetCoordinateSystem2DToOrigin(coordinateSystem2D) });
         }
 
         public static Transform2D GetOriginToCoordinateSystem2D(CoordinateSystem2D coordinateSystem2D)

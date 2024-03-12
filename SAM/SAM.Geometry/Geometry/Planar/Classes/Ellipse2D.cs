@@ -174,7 +174,7 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             Point2D center_New = Query.Transform(center, transform2D);
 
@@ -186,7 +186,7 @@ namespace SAM.Geometry.Planar
             return new Ellipse2D(center_New, vector2D_Width.Length, vector2D_Height.Length, vector2D_Height.Unit);
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             if(transform2D == null)
             {

@@ -52,6 +52,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Geometry\Planar\Classes\TransformGroup2D.cs" />
+    <Compile Include="Geometry\Planar\Interfaces\ITransform2D.cs" />
     <Compile Include="Geometry\Planar\Interfaces\IMovable2D.cs" />
     <Compile Include="Geometry\Planar\Query\Simplify.cs" />
     <Compile Include="Geometry\Spatial\Query\Simplify.cs" />

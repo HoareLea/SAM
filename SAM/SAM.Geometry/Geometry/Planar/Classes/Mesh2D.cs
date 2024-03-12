@@ -387,12 +387,12 @@ namespace SAM.Geometry.Planar
             return jObject;
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             return new Mesh2D(Query.Transform(points, transform2D), indexes);
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             if(transform2D == null)
             {

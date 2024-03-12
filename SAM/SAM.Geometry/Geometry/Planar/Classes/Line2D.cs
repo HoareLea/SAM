@@ -162,7 +162,7 @@ namespace SAM.Geometry.Planar
 
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             Point2D origin_New = Query.Transform(origin, transform2D);
             Vector2D vector_New = Query.Transform(vector, transform2D);
@@ -170,7 +170,7 @@ namespace SAM.Geometry.Planar
             return new Line2D(origin_New, vector_New);
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             if(transform2D == null)
             {

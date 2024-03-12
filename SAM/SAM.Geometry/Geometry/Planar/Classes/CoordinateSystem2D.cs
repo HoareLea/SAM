@@ -139,7 +139,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public CoordinateSystem2D GetTransformed(Transform2D transform2D)
+        public CoordinateSystem2D GetTransformed(ITransform2D transform2D)
         {
             if(transform2D == null)
             {

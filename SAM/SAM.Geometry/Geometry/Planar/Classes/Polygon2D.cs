@@ -331,7 +331,7 @@ namespace SAM.Geometry.Planar
             return Query.Trim(this, parameter, inverted);
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             return Query.Transform(this, transform2D);
         }
@@ -346,7 +346,7 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(points.ConvertAll(x => x.GetMoved(vector2D)));
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             if (transform2D == null)
             {

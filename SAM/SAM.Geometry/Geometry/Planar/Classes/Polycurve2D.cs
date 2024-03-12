@@ -131,12 +131,12 @@ namespace SAM.Geometry.Planar
             return new Polygon2D(curves.ConvertAll(x => x.GetStart()));
         }
 
-        public ISAMGeometry2D GetTransformed(Transform2D transform2D)
+        public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
             throw new System.Exception();
         }
 
-        public bool Transform(Transform2D transform2D)
+        public bool Transform(ITransform2D transform2D)
         {
             throw new System.NotImplementedException();
         }
