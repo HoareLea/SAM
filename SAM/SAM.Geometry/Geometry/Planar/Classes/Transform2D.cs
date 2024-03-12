@@ -102,6 +102,15 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
+        public static Transform2D GetRotation(Point2D origin, double angle)
+        {
+            Transform2D transform2D_Translation_1 = GetTranslation(origin.X, origin.Y);
+            Transform2D transform2D_Rotation = GetRotation(angle);
+            Transform2D transform2D_Translation_2 = GetTranslation(-origin.X, -origin.Y);
+
+            return transform2D_Translation_1 * transform2D_Rotation * transform2D_Translation_2;
+        }
+
         public static Transform2D GetCoordinateSystem2DToOrigin(CoordinateSystem2D coordinateSystem2D)
         {
             if (coordinateSystem2D == null)
