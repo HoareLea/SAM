@@ -24,7 +24,7 @@ namespace SAM.Core
                             continue;
                         }
 
-                        if (logRecordType == logRecord.LogRecordType))
+                        if (logRecordType == logRecord.LogRecordType)
                         {
                             result.Add(logRecord);
                         }

@@ -86,9 +86,6 @@ namespace SAM.Analytical.Grasshopper
                 log.Add("All good! You can switch off your computer and go home now.");
             }
 
-            log.
-
-
             dataAccess.SetData(0, log.Filter(new LogRecordType[] { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Undefined }));
             dataAccess.SetData(1, log.Filter(new LogRecordType[] { LogRecordType.Message }));
         }
