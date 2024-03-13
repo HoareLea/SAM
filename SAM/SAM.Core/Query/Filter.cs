@@ -6,19 +6,45 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static Log Filter(this Log log, IEnumerable<LogRecordType> logRecordTypes)
+        public static Log Filter(this Log log, IEnumerable<LogRecordType> logRecordTypes, bool sort = true)
         {
             if (log == null || logRecordTypes == null)
                 return null;
 
             Log result = new (log.Name);
-            foreach(LogRecord logRecord in log)
-            {
-                if (logRecord == null)
-                    continue;
 
-                if (logRecordTypes.Contains(logRecord.LogRecordType))
-                    result.Add(logRecord);
+            if(sort)
+            {
+                foreach (LogRecordType logRecordType in logRecordTypes)
+                {
+                    foreach (LogRecord logRecord in log)
+                    {
+                        if (logRecord == null)
+                        {
+                            continue;
+                        }
+
+                        if (logRecordType == logRecord.LogRecordType))
+                        {
+                            result.Add(logRecord);
+                        }
+                    }
+                }
+            }
+            else
+            {
+                foreach (LogRecord logRecord in log)
+                {
+                    if (logRecord == null)
+                    {
+                        continue;
+                    }
+
+                    if (logRecordTypes.Contains(logRecord.LogRecordType))
+                    {
+                        result.Add(logRecord);
+                    }
+                }
             }
 
             return result;

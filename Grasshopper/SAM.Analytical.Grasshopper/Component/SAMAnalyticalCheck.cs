@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,8 +48,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooLogParam(), "Log", "Log", "SAM Log", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooLogParam(), "Messages", "Messages", "SAM Log with Messages", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooLogParam(), "errors", "errors", "SAM Log", GH_ParamAccess.item);
+            outputParamManager.AddParameter(new GooLogParam(), "messages", "messages", "SAM Log with Messages", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -77,10 +77,17 @@ namespace SAM.Analytical.Grasshopper
 
 
             if (log == null)
+            {
                 log = new Log();
+            }
 
             if (log.Count() == 0)
+            {
                 log.Add("All good! You can switch off your computer and go home now.");
+            }
+
+            log.
+
 
             dataAccess.SetData(0, log.Filter(new LogRecordType[] { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Undefined }));
             dataAccess.SetData(1, log.Filter(new LogRecordType[] { LogRecordType.Message }));
