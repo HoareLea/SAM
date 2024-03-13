@@ -527,7 +527,7 @@ namespace SAM.Core
             int count = 0;
             foreach (string typeName in typeNames)
             {
-                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, object> dictionary) || dictionary == null)
+                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, X> dictionary) || dictionary == null)
                 {
                     continue;
                 }
