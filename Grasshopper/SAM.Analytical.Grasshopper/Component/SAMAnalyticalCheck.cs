@@ -3,11 +3,12 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCheck : GH_SAMComponent
+    public class SAMAnalyticalCheck : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,22 +35,34 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
+                @boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Connect a boolean toggle to run.", Access = GH_ParamAccess.item };
+                @boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(@boolean, ParamVisibility.Binding));
+                
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooLogParam(), "errors", "errors", "SAM Log", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooLogParam(), "messages", "messages", "SAM Log with Messages", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLogParam() { Name = "errors", NickName = "errors", Description = "SAM Log Errors and Warnings", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooLogParam() { Name = "messages", NickName = "messages", Description = "SAM Log Messages", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                return result.ToArray();
+            }
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -58,19 +71,30 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(1, ref run) || !run)
                 return;
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
+            IAnalyticalObject analyticalObject = null;
+            if (!dataAccess.GetData(0, ref analyticalObject))
                 return;
+
+            int index_Errors = Params.IndexOfOutputParam("errors");
+            int index_Messages = Params.IndexOfOutputParam("messages");
 
             Log log = null;
             try
             {
-                log = Create.Log(sAMObject as dynamic);
+                log = Create.Log(analyticalObject as dynamic);
             }
             catch 
             {
-                dataAccess.SetData(0, null);
-                dataAccess.SetData(1, null);
+                if(index_Errors != -1)
+                {
+                    dataAccess.SetData(index_Errors, null);
+                }
+
+                if (index_Messages != -1)
+                {
+                    dataAccess.SetData(index_Messages, null);
+                }
+
                 return;
             }
 
@@ -86,8 +110,15 @@ namespace SAM.Analytical.Grasshopper
                 log.Add("All good! You can switch off your computer and go home now.");
             }
 
-            dataAccess.SetData(0, log.Filter(new LogRecordType[] { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Undefined }));
-            dataAccess.SetData(1, log.Filter(new LogRecordType[] { LogRecordType.Message }));
+            if (index_Errors != -1)
+            {
+                dataAccess.SetData(index_Errors, log.Filter(new LogRecordType[] { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Undefined }));
+            }
+
+            if (index_Messages != -1)
+            {
+                dataAccess.SetData(index_Messages, log.Filter(new LogRecordType[] { LogRecordType.Message }));
+            }
         }
     }
 }
