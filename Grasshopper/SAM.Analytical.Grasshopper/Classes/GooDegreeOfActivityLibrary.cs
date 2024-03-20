@@ -31,6 +31,8 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("d78c8b14-8706-427e-b6a7-31f0118dc158");
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooDegreeOfActivityLibraryParam()

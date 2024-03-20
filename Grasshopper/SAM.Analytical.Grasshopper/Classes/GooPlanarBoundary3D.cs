@@ -112,6 +112,8 @@ namespace SAM.Analytical.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         bool IGH_PreviewObject.Hidden { get; set; }
 
         bool IGH_PreviewObject.IsPreviewCapable => !VolatileData.IsEmpty;

@@ -181,6 +181,8 @@ namespace SAM.Geometry.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Geometry;
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         public bool IsBakeCapable => false;
 
         public GooTransform3DParam()

@@ -30,6 +30,8 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("d32c05a1-cd76-4e62-bfbe-4e5a35848204");
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooGroupParam()

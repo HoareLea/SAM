@@ -40,6 +40,8 @@ namespace SAM.Core.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         public GooLogParam()
             : base(typeof(Log).Name, typeof(Log).Name, typeof(Log).FullName.Replace(".", " "), "Params", "SAM")
         {
