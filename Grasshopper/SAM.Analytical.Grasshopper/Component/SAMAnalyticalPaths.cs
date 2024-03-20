@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -95,7 +95,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "t3d", NickName = "t3d", Description = "Tas T3D File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "tsd", NickName = "tsd", Description = "TasTSD File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "tpd", NickName = "tpd", Description = "TasTPD File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
-                
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "ifc", NickName = "ifc", Description = "IFC File Path", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -195,6 +196,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "gem")));
+            }
+
+            index = Params.IndexOfOutputParam("ifc");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, System.IO.Path.Combine(directory, string.Format("{0}.{1}", modelName, "ifc")));
             }
 
         }

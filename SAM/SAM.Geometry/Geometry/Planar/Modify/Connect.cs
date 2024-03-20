@@ -5,7 +5,7 @@ namespace SAM.Geometry.Planar
     public static partial class Modify
     {
         /// <summary>
-        /// Connect given Point2D to Segment2Ds. If point2D in on the end of Segment2D then nothing happen. If point2D is on the Segment2D then segment will be split otherwise point2D will be connected to closest Segment2D by adding extra segment.
+        /// Connect given Point2D to Segment2Ds. If point2D is on the end of Segment2D then nothing happen. If point2D is on the Segment2D then segment will be split otherwise point2D will be connected to closest Segment2D by adding extra segment.
         /// </summary>
         /// <param name="segment2Ds">Segment2Ds</param>
         /// <param name="point2D">Point2D to be connected</param>
