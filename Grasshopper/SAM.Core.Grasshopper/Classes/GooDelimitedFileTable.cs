@@ -89,6 +89,8 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("abcaf868-db1b-4407-92f3-f8bca25a5e79");
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooDelimitedFileTableParam()

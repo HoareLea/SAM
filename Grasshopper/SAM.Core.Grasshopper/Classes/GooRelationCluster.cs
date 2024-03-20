@@ -40,6 +40,8 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("8cc38f9b-506d-4b2a-8f80-c1119fac105a");
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         //Here we control name, nickname, description, category, sub-category as deafult we use typeofclass name
