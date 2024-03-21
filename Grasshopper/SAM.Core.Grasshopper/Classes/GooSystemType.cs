@@ -32,6 +32,8 @@ namespace SAM.Core.Grasshopper
 
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
+        public override GH_Exposure Exposure => GH_Exposure.hidden;
+
         public GooSystemTypeParam()
             : base("SystemType", "SystemType", "SAM Core SystemType", "Params", "SAM")
         {
