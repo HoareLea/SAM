@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDesignDays()
           : base("SAMAnalytical.DesignDays", "SAMAnalytical.DesignDays",
               "Queries Cooling and Heating Design Days from SAM Weather WeatherData",
-              "SAM WIP", "Weather")
+              "SAM", "Weather")
         {
         }
 

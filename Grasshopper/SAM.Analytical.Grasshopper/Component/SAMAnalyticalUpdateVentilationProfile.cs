@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -94,7 +94,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateVentilationProfile()
           : base("SAMAnalytical.UpdateVentilationProfile", "SAMAnalytical.UpdateVentilationProfile",
               "Updates InternalCondition(IC) Ventilation Properties for Spaces",
-              "SAM WIP", "SAM_IC")
+              "SAM", "SAM_IC")
         {
         }
 

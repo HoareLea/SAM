@@ -16,7 +16,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,7 +33,7 @@ namespace SAM.Core.Grasshopper
         public SAMCoreNumberFilter()
           : base("SAMCore.NumberFilter", "SAMCore.NumberFilter",
               "Get Number Filter",
-              "SAM WIP", "Core")
+              "SAM", "Core")
         {
         }
 

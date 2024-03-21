@@ -19,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,7 +32,7 @@ namespace SAM.Geometry.Grasshopper
         public SAMGeometryShellsSplitByFace3Ds()
           : base("SAMGeometry.ShellsSplitByFace3Ds", "SAMGeometry.ShellsSplitByFace3Ds",
               "Shells Split By Face3Ds",
-              "SAM WIP", "Geometry")
+              "SAM", "Geometry")
         {
         }
 

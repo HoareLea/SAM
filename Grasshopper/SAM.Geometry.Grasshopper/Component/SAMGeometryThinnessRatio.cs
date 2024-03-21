@@ -18,7 +18,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +31,7 @@ namespace SAM.Geometry.Grasshopper
         public SAMGeometryThinnessRatio()
           : base("SAMGeometry.ThinnessRatio", "SAMGeometry.ThinnessRatio",
               "Calculate Thinness Ratio",
-              "SAM WIP", "Geometry")
+              "SAM", "Geometry")
         {
         }
 
