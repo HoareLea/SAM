@@ -45,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_type_", NickName = "_type_", Description = "SAM Type Full Name", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_type_", NickName = "_type_", Description = "SAM Type Full Name \nie. SAM.Analytical.Space or SAM.Analytical.Panel", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -103,7 +103,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 try
                 {
-                    type = Type.GetType(fullTypeName);
+                    type = Core.Query.Type(fullTypeName);
                 }
                 catch
                 {
