@@ -215,7 +215,7 @@ namespace SAM.Geometry.Planar
 
         public static Circle2D Offset(Circle2D circle2D, double offset)
         {
-            return new Circle2D(circle2D.Center, System.Math.Abs(circle2D.Radious + offset));
+            return new Circle2D(circle2D.Center, System.Math.Abs(circle2D.Radius + offset));
         }
 
         public static Ellipse2D Offset(Ellipse2D ellipse2D, double offset)

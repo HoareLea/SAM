@@ -6,18 +6,18 @@ namespace SAM.Geometry.Spatial
     public class Circle3D : SAMGeometry, IClosedPlanar3D, IBoundable3D
     {
         private Plane plane;
-        private double radious;
+        private double radius;
 
-        public Circle3D(Plane plane, double radious)
+        public Circle3D(Plane plane, double radius)
         {
             this.plane = new Plane(plane);
-            this.radious = radious;
+            this.radius = radius;
         }
 
         public Circle3D(Circle3D circle3D)
         {
             plane = new Plane(circle3D.plane);
-            radious = circle3D.radious;
+            radius = circle3D.radius;
         }
 
         public Circle3D(JObject jObject)
@@ -37,32 +37,32 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public double Radious
+        public double Radius
         {
             get
             {
-                return radious;
+                return radius;
             }
             set
             {
-                radious = value;
+                radius = value;
             }
         }
 
         public double GetArea()
         {
-            return System.Math.PI * radious * radious;
+            return System.Math.PI * radius * radius;
         }
 
         public double Diameter
         {
             get
             {
-                return radious * 2;
+                return radius * 2;
             }
             set
             {
-                radious = value / 2;
+                radius = value / 2;
             }
         }
 
@@ -73,7 +73,7 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Circle3D((Plane)plane.GetMoved(vector3D), radious);
+            return new Circle3D((Plane)plane.GetMoved(vector3D), radius);
         }
 
         public void Move(Vector3D vector3D)
@@ -83,7 +83,7 @@ namespace SAM.Geometry.Spatial
 
         public double GetPerimeter()
         {
-            return 2 * System.Math.PI * radious;
+            return 2 * System.Math.PI * radius;
         }
 
         public Plane GetPlane()
@@ -103,12 +103,12 @@ namespace SAM.Geometry.Spatial
         /// <returns>Point on Circle</returns>
         public Point3D GetPoint3D(double angle)
         {
-            if(plane == null || double.IsNaN(radious))
+            if(plane == null || double.IsNaN(radius))
             {
                 return null;
             }
 
-            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(plane.Origin), radious);
+            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(plane.Origin), radius);
             Planar.Point2D point2D = circle2D.GetPoint2D(angle);
             if(point2D == null)
             {
@@ -120,7 +120,7 @@ namespace SAM.Geometry.Spatial
 
         public override ISAMGeometry Clone()
         {
-            return new Circle3D((Plane)plane.Clone(), radious);
+            return new Circle3D((Plane)plane.Clone(), radius);
         }
 
         public BoundingBox3D GetBoundingBox(double offset = 0)
@@ -136,7 +136,7 @@ namespace SAM.Geometry.Spatial
         public override bool FromJObject(JObject jObject)
         {
             plane = new Plane(jObject.Value<JObject>("Plane"));
-            radious = jObject.Value<double>("Radious");
+            radius = jObject.Value<double>("Radius");
 
             return true;
         }
@@ -148,7 +148,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             jObject.Add("Plane", plane.ToJObject());
-            jObject.Add("Radious", radious);
+            jObject.Add("Radius", radius);
 
             return jObject;
         }
@@ -176,12 +176,12 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            return circle3D.plane == plane && circle3D.radious == radious;
+            return circle3D.plane == plane && circle3D.radius == radius;
         }
 
         public override int GetHashCode()
         {
-            return new Tuple<Plane, double>(plane, radious).GetHashCode();
+            return new Tuple<Plane, double>(plane, radius).GetHashCode();
         }
 
         public static bool operator ==(Circle3D circle3D_1, Circle3D circle3D_2)
@@ -195,7 +195,7 @@ namespace SAM.Geometry.Spatial
             if (ReferenceEquals(circle3D_2, null))
                 return false;
 
-            return circle3D_1.plane == circle3D_2.plane && circle3D_1.radious == circle3D_2.radious;
+            return circle3D_1.plane == circle3D_2.plane && circle3D_1.radius == circle3D_2.radius;
         }
 
         public static bool operator !=(Circle3D circle3D_1, Circle3D circle3D_2)
@@ -209,7 +209,7 @@ namespace SAM.Geometry.Spatial
             if (ReferenceEquals(circle3D_2, null))
                 return true;
 
-            return circle3D_1.plane != circle3D_2.plane || circle3D_1.radious != circle3D_2.radious;
+            return circle3D_1.plane != circle3D_2.plane || circle3D_1.radius != circle3D_2.radius;
         }
     }
 }

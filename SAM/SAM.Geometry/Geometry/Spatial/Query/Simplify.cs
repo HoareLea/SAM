@@ -12,7 +12,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            Circle2D circle2D = new Circle2D(plane.Convert(circle3D.Center), circle3D.Radious);
+            Circle2D circle2D = new Circle2D(plane.Convert(circle3D.Center), circle3D.Radius);
 
             Polygon2D polygon2Ds = circle2D.Simplify(density);
 

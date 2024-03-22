@@ -98,7 +98,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Circle3D(plane.Transform(matrix4D), circle3D.Radious);
+            return new Circle3D(plane.Transform(matrix4D), circle3D.Radius);
         }
 
         public static Sphere Transform(this Sphere sphere, Matrix4D matrix4D)
@@ -114,7 +114,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Sphere(point3D.Transform(matrix4D), sphere.Radious);
+            return new Sphere(point3D.Transform(matrix4D), sphere.Radius);
         }
 
         public static Ellipse3D Transform(this Ellipse3D ellipse3D, Transform3D transform3D)

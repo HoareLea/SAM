@@ -334,7 +334,7 @@ namespace SAM.Geometry.Spatial
             Point3D origin = sphere.Origin;
 
             Vector3D vector3D = new Vector3D(System.Math.Sin(point2D.X) * System.Math.Cos(point2D.Y), System.Math.Sin(point2D.X) * System.Math.Sin(point2D.Y), System.Math.Cos(point2D.X));
-            vector3D.Scale(sphere.Radious);
+            vector3D.Scale(sphere.Radius);
 
             return origin.GetMoved(vector3D) as Point3D;
         }

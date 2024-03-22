@@ -201,7 +201,7 @@ namespace SAM.Geometry.Spatial
 
         public static Mesh3D Mesh3D(this Sphere sphere, double factor, int minDensity = 2, int maxDensity = 10)
         {
-            int denisty = System.Convert.ToInt32(System.Math.Ceiling(sphere.Radious / factor));
+            int denisty = System.Convert.ToInt32(System.Math.Ceiling(sphere.Radius / factor));
             if(denisty < minDensity)
             {
                 denisty = minDensity;
@@ -222,7 +222,7 @@ namespace SAM.Geometry.Spatial
 
         public static Mesh3D Mesh3D(this Circle3D circle3D, double factor, int minDensity = 2, int maxDensity = 10)
         {
-            int denisty = System.Convert.ToInt32(System.Math.Ceiling(circle3D.Radious / factor));
+            int denisty = System.Convert.ToInt32(System.Math.Ceiling(circle3D.Radius / factor));
             if (denisty < minDensity)
             {
                 denisty = minDensity;

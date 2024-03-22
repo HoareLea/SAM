@@ -339,7 +339,7 @@ namespace SAM.Geometry.Spatial
             }
 
             vector3D.Normalize();
-            vector3D.Scale(sphere.Radious);
+            vector3D.Scale(sphere.Radius);
 
             return origin.GetMoved(vector3D) as Point3D;
         }

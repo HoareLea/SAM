@@ -135,7 +135,7 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            if(double.IsNaN(circle3D.Radious))
+            if(double.IsNaN(circle3D.Radius))
             {
                 return false;
             }
@@ -349,7 +349,7 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            if(double.IsNaN(sphere.Radious))
+            if(double.IsNaN(sphere.Radius))
             {
                 return false;
             }

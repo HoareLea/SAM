@@ -154,7 +154,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            Vector2D vector2D = new Vector2D(1, 1) * circle2D.Radious;
+            Vector2D vector2D = new Vector2D(1, 1) * circle2D.Radius;
             vector2D.Transform(transform2D);
 
             return new Circle2D(circle2D.Center.GetTransformed(transform2D) as Point2D, vector2D.Length);
@@ -282,7 +282,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            return new Circle2D(circle2D.Center.Transform(matrix3D), circle2D.Radious);
+            return new Circle2D(circle2D.Center.Transform(matrix3D), circle2D.Radius);
         }
 
         public static CoordinateSystem2D Transform(this CoordinateSystem2D coordinateSystem2D, Transform2D transform2D)
@@ -418,7 +418,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            return new Circle3D(plane.Transform(matrix4D), circle3D.Radious);
+            return new Circle3D(plane.Transform(matrix4D), circle3D.Radius);
         }
 
         public static Polyline2D Transform(this Polyline2D polyline3D, Matrix3D matrix4D)

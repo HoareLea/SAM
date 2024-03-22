@@ -8,18 +8,18 @@ namespace SAM.Geometry.Spatial
     public class Sphere : SAMGeometry, IBoundable3D
     {
         private Point3D origin;
-        private double radious;
+        private double radius;
 
-        public Sphere(Point3D origin, double radious)
+        public Sphere(Point3D origin, double radius)
         {
             this.origin = origin;
-            this.radious = radious;
+            this.radius = radius;
         }
 
         public Sphere(Sphere sphere)
         {
             origin = new Point3D(sphere.origin);
-            radious = sphere.radious;
+            radius = sphere.radius;
         }
 
         public Sphere(JObject jObject)
@@ -40,17 +40,17 @@ namespace SAM.Geometry.Spatial
             }
         }
 
-        public double Radious
+        public double Radius
         {
             get
             {
-                return radious;
+                return radius;
             }
         }
 
         public bool Inside(Point3D point3D)
         {
-            return origin.Distance(point3D) < radious;
+            return origin.Distance(point3D) < radius;
         }
 
         public bool Inside(Segment3D segment3D)
@@ -82,7 +82,7 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            return new Sphere((Point3D)origin.GetMoved(vector3D), radious);
+            return new Sphere((Point3D)origin.GetMoved(vector3D), radius);
         }
 
         public ISAMGeometry3D GetTransformed(Transform3D transform3D)
@@ -98,7 +98,7 @@ namespace SAM.Geometry.Spatial
         public override bool FromJObject(JObject jObject)
         {
             origin = new Point3D(jObject.Value<JObject>("Origin"));
-            radious = jObject.Value<double>("Radious");
+            radius = jObject.Value<double>("Radius");
 
             return true;
         }
@@ -110,7 +110,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             jObject.Add("Origin", origin.ToJObject());
-            jObject.Add("Radious", radious);
+            jObject.Add("Radius", radius);
 
             return jObject;
         }

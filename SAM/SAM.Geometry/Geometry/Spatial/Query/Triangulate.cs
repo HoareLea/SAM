@@ -241,7 +241,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(circle3D.Center), circle3D.Radious);
+            Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(circle3D.Center), circle3D.Radius);
             List<Planar.Triangle2D> triangle2Ds = Planar.Query.Triangulate(circle2D, density);
             if(triangle2Ds == null || triangle2Ds.Count == 0)
             {

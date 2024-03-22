@@ -6,18 +6,18 @@ namespace SAM.Geometry.Planar
     public class Circle2D : SAMGeometry, IClosed2D, IBoundable2D
     {
         private Point2D center;
-        private double radious;
+        private double radius;
 
-        public Circle2D(Point2D center, double radious)
+        public Circle2D(Point2D center, double radius)
         {
             this.center = center;
-            this.radious = radious;
+            this.radius = radius;
         }
 
         public Circle2D(Circle2D circle2D)
         {
             center = new Point2D(circle2D.center);
-            radious = circle2D.radious;
+            radius = circle2D.radius;
         }
 
         public Circle2D(JObject jObject)
@@ -41,23 +41,23 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                return radious * 2;
+                return radius * 2;
             }
             set
             {
-                radious = value / 2;
+                radius = value / 2;
             }
         }
 
-        public double Radious
+        public double Radius
         {
             get
             {
-                return radious;
+                return radius;
             }
             set
             {
-                radious = value;
+                radius = value;
             }
         }
 
@@ -69,18 +69,18 @@ namespace SAM.Geometry.Planar
         public override bool FromJObject(JObject jObject)
         {
             center = new Point2D(jObject.Value<JObject>("Center"));
-            radious = jObject.Value<double>("Radious");
+            radius = jObject.Value<double>("Radius");
             return true;
         }
 
         public double GetArea()
         {
-            return System.Math.PI * radious * radious;
+            return System.Math.PI * radius * radius;
         }
 
         public BoundingBox2D GetBoundingBox(double offset = 0)
         {
-            return new BoundingBox2D(new Point2D(center[0] - radious, center[1] - radious), new Point2D(center[0] + radious, center[1] + radious), offset);
+            return new BoundingBox2D(new Point2D(center[0] - radius, center[1] - radius), new Point2D(center[0] + radius, center[1] + radius), offset);
         }
 
         public Point2D GetCentroid()
@@ -90,7 +90,7 @@ namespace SAM.Geometry.Planar
 
         public override int GetHashCode()
         {
-            return Tuple.Create(center, radious).GetHashCode();
+            return Tuple.Create(center, radius).GetHashCode();
         }
 
         public Point2D GetInternalPoint2D(double tolerance = Core.Tolerance.Distance)
@@ -100,12 +100,12 @@ namespace SAM.Geometry.Planar
 
         public Circle2D GetMoved(Vector2D vector2D)
         {
-            return new Circle2D((Point2D)center.GetMoved(vector2D), radious);
+            return new Circle2D((Point2D)center.GetMoved(vector2D), radius);
         }
 
         public double GetPerimeter()
         {
-            return 2 * System.Math.PI * radious;
+            return 2 * System.Math.PI * radius;
         }
 
         /// <summary>
@@ -115,7 +115,7 @@ namespace SAM.Geometry.Planar
         /// <returns>Point2D on circle</returns>
         public Point2D GetPoint2D(double angle)
         {
-            if (double.IsNaN(angle) || double.IsNaN(radious))
+            if (double.IsNaN(angle) || double.IsNaN(radius))
             {
                 return null;
             }
@@ -126,12 +126,12 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            return center.GetMoved(vector2D * radious);
+            return center.GetMoved(vector2D * radius);
         }
 
         public bool Inside(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return center.Distance(point2D) < radious + tolerance;
+            return center.Distance(point2D) < radius + tolerance;
         }
 
         public bool Inside(IClosed2D closed2D, double tolerance = Core.Tolerance.Distance)
@@ -149,7 +149,7 @@ namespace SAM.Geometry.Planar
 
         public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return System.Math.Abs(center.Distance(point2D) - radious) <= tolerance;
+            return System.Math.Abs(center.Distance(point2D) - radius) <= tolerance;
         }
 
         public override JObject ToJObject()
@@ -159,7 +159,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             jObject.Add("Center", center.ToJObject());
-            jObject.Add("Radious", radious);
+            jObject.Add("Radius", radius);
 
             return jObject;
         }
@@ -183,7 +183,7 @@ namespace SAM.Geometry.Planar
             }
 
             center = circle2D.Center;
-            radious = circle2D.Radious;
+            radius = circle2D.Radius;
             return true;
         }
     }

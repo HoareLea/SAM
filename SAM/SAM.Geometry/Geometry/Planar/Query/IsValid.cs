@@ -136,7 +136,7 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            if (double.IsNaN(circle2D.Radious))
+            if (double.IsNaN(circle2D.Radius))
             {
                 return false;
             }
