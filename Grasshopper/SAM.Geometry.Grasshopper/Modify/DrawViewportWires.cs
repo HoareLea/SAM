@@ -3,6 +3,7 @@ using Rhino.Geometry;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Object;
 using SAM.Geometry.Object.Planar;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -70,9 +71,9 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            if (sAMGeomery is Planar.Point2D)
+            if (sAMGeomery is Point2D)
             {
-                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Planar.Point2D)), color);
+                previewWireArgs.Pipeline.DrawPoint(Rhino.Convert.ToRhino((sAMGeomery as Point2D)), color);
                 return;
             }
 
@@ -99,6 +100,26 @@ namespace SAM.Geometry.Grasshopper
                 if(mesh != null)
                 {
                     previewWireArgs.Pipeline.DrawMeshWires(mesh, color);
+                }
+
+                return;
+            }
+
+            if(sAMGeomery is SAMGeometry2DGroup)
+            {
+                foreach(ISAMGeometry sAMGeometry in (SAMGeometry2DGroup)sAMGeomery)
+                {
+                    DrawViewportWires(sAMGeometry, previewWireArgs, color);
+                }
+
+                return;
+            }
+
+            if (sAMGeomery is SAMGeometry3DGroup)
+            {
+                foreach (ISAMGeometry sAMGeometry in (SAMGeometry3DGroup)sAMGeomery)
+                {
+                    DrawViewportWires(sAMGeometry, previewWireArgs, color);
                 }
 
                 return;

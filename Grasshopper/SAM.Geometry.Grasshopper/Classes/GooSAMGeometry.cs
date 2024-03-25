@@ -6,6 +6,10 @@ using Rhino;
 using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Geometry.Grasshopper.Properties;
+using SAM.Geometry.Object.Planar;
+using SAM.Geometry.Object.Spatial;
+using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -156,6 +160,60 @@ namespace SAM.Geometry.Grasshopper
                     Value = (ISAMGeometry)source;
                     return true;
                 }
+
+                if (source is SAMGeometry2DObjectCollection)
+                {
+                    List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
+                    foreach(ISAMGeometry2DObject sAMGeometry2DObject in (SAMGeometry2DObjectCollection)source)
+                    {
+                        if(sAMGeometry2DObject is IFace2DObject)
+                        {
+                            sAMGeometry2Ds.Add(((IFace2DObject)sAMGeometry2DObject).Face2D);
+                        }
+                        else if (sAMGeometry2DObject is IPolygon2DObject)
+                        {
+                            sAMGeometry2Ds.Add(((IPolygon2DObject)sAMGeometry2DObject).Polygon2D);
+                        }
+                        else if (sAMGeometry2DObject is IPolyline2DObject)
+                        {
+                            sAMGeometry2Ds.Add(((IPolyline2DObject)sAMGeometry2DObject).Polyline2D);
+                        }
+                        else if (sAMGeometry2DObject is ISegment2DObject)
+                        {
+                            sAMGeometry2Ds.Add(((ISegment2DObject)sAMGeometry2DObject).Segment2D);
+                        }
+                    }
+
+                    Value = new SAMGeometry2DGroup(sAMGeometry2Ds);
+                    return true;
+                }
+
+                if (source is SAMGeometry3DObjectCollection)
+                {
+                    List<ISAMGeometry3D> sAMGeometry3Ds = new List<ISAMGeometry3D>();
+                    foreach (ISAMGeometry3DObject sAMGeometry3DObject in (SAMGeometry3DObjectCollection)source)
+                    {
+                        if (sAMGeometry3DObject is IFace3DObject)
+                        {
+                            sAMGeometry3Ds.Add(((IFace3DObject)sAMGeometry3DObject).Face3D);
+                        }
+                        else if (sAMGeometry3DObject is IPolygon3DObject)
+                        {
+                            sAMGeometry3Ds.Add(((IPolygon3DObject)sAMGeometry3DObject).Polygon3D);
+                        }
+                        else if (sAMGeometry3DObject is IPolyline3DObject)
+                        {
+                            sAMGeometry3Ds.Add(((IPolyline3DObject)sAMGeometry3DObject).Polyline3D);
+                        }
+                        else if (sAMGeometry3DObject is ISegment3DObject)
+                        {
+                            sAMGeometry3Ds.Add(((ISegment3DObject)sAMGeometry3DObject).Segment3D);
+                        }
+                    }
+
+                    Value = new SAMGeometry3DGroup(sAMGeometry3Ds);
+                    return true;
+                }
             }
 
             if (source is Polyline)
@@ -212,9 +270,9 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if (source is Plane)
+            if (source is global::Rhino.Geometry.Plane)
             {
-                Value = Rhino.Convert.ToSAM((Plane)source);
+                Value = Rhino.Convert.ToSAM((global::Rhino.Geometry.Plane)source);
                 return true;
             }
 
@@ -294,7 +352,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if (typeof(Y) == typeof(Plane))
+            if (typeof(Y) == typeof(global::Rhino.Geometry.Plane))
             {
                 if (Value is Spatial.Plane)
                 {

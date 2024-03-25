@@ -1,4 +1,5 @@
-﻿using System;
+﻿using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -130,6 +131,23 @@ namespace SAM.Geometry.Spatial
 
             //return new Polygon3D(Convert(polygon2D.Points));
             return new Polygon3D(plane, polygon2D.Points);
+        }
+
+        public static SAMGeometry3DGroup Convert(this Plane plane, Planar.SAMGeometry2DGroup sAMGeometry2Ds)
+        {
+            if(plane == null || sAMGeometry2Ds == null)
+            {
+                return null;
+            }
+
+            List<ISAMGeometry3D> sAMGeometry3D = new List<ISAMGeometry3D>();
+            foreach(ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
+            {
+                ISAMGeometry3D sAMGeometry3D_Temp = Convert(plane, sAMGeometry2D);
+                sAMGeometry3D.Add(sAMGeometry3D_Temp);
+            }
+
+            return new SAMGeometry3DGroup(sAMGeometry3D);
         }
 
         public static Rectangle3D Convert(this Plane plane, Planar.Rectangle2D rectangle2D)
