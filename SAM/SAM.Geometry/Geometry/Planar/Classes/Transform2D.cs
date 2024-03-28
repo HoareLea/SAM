@@ -153,6 +153,7 @@ namespace SAM.Geometry.Planar
 
             return new TransformGroup2D(new Transform2D[] { GetOriginToCoordinateSystem2D(coordinateSystem2D), GetMirrorX(), GetCoordinateSystem2DToOrigin(coordinateSystem2D) });
         }
+
         public static Transform2D GetMirrorY()
         {
             Transform2D result = GetIdentity();
