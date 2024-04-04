@@ -59,8 +59,6 @@ namespace SAM.Geometry.Rhino
                             plane.FlipZ(true);
                         }
                     }
-
-
                 }
                 
                 List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
@@ -84,8 +82,23 @@ namespace SAM.Geometry.Rhino
                             geometry3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
                         }
                     }
+                    else if(geometry3D is Polyline3D)
+                    {
+                        Polyline3D polyline3D = (Polyline3D)geometry3D;
+                        List<Point3D> point3Ds = polyline3D.Points;
+                        if(polyline3D.IsClosed())
+                        {
+                            point3Ds.RemoveAt(point3Ds.Count - 1);
+                        }
+
+                        geometry3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
+                    }
+
                     if (geometry3D is IClosedPlanar3D)
+                    {
                         closedPlanar3Ds.Add((IClosedPlanar3D)geometry3D);
+                    }
+
                 }
 
                 if (closedPlanar3Ds == null || closedPlanar3Ds.Count == 0)
