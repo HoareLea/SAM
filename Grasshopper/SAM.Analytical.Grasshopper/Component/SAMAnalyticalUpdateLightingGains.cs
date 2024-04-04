@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,6 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGain_", NickName = "lightingGain_", Description = "Lighting Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingLevel_", NickName = "lightingLevel_", Description = "Lighting Level, lux", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingEfficiency_", NickName = "lightingEfficiency_", Description = "Lighting Efficiency, W/m²/100lux", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -46,8 +47,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "internalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -120,6 +121,18 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref lightingEfficiency);
 
+            string functions = null;
+            index = Params.IndexOfInputParam("functions_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref functions);
+
+                if(string.IsNullOrWhiteSpace(functions))
+                {
+                    functions = null;
+                }
+            }
+
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
             if (profile != null)
@@ -157,19 +170,31 @@ namespace SAM.Analytical.Grasshopper
                 if (!double.IsNaN(lightingEfficiency))
                     internalCondition.SetValue(InternalConditionParameter.LightingEfficiency, lightingEfficiency);
 
+                if (functions != null)
+                {
+                    if(string.IsNullOrEmpty(functions))
+                    {
+                        internalCondition.RemoveValue(InternalConditionParameter.LightingControlFunction);
+                    }
+                    else
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.LightingControlFunction, functions);
+                    }
+                }
+
                 space_Temp.InternalCondition = internalCondition;
                 internalConditions.Add(internalCondition);
                 adjacencyCluster.AddObject(space_Temp);
             }
 
-            index = Params.IndexOfOutputParam("AnalyticalModel");
+            index = Params.IndexOfOutputParam("analyticalModel");
             if(index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
             }
 
-            index = Params.IndexOfOutputParam("InternalConditions");
+            index = Params.IndexOfOutputParam("internalConditions");
             if (index != -1)
                 dataAccess.SetDataList(index, internalConditions?.ConvertAll(x => new GooInternalCondition(x)));
         }

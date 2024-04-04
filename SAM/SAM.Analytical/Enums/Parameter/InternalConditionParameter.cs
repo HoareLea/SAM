@@ -62,6 +62,7 @@ namespace SAM.Analytical
         [ParameterProperties("Equipment View Coefficient", "Equipment View Coefficient [0-1]"), DoubleParameterValue(0, 1)] EquipmentViewCoefficient,
 
         [ParameterProperties("Lighting Control Function", "Lighting Control Function"), ParameterValue(Core.ParameterType.String)] LightingControlFunction,
+        [ParameterProperties("Ventilation Function", "Ventilation Function"), ParameterValue(Core.ParameterType.String)] VentilationFunction,
 
         [ParameterProperties("NCM Data", "National Calculation Method (NCM) Data"), SAMObjectParameterValue(typeof(NCMData))] NCMData,
 

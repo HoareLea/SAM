@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -63,6 +63,8 @@ namespace SAM.Analytical.Grasshopper
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirChangesPerHour_", NickName = "exhaustAirChangesPerHour_", Description = "Exhaust Air Changes Per Hour [ACH]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -188,6 +190,18 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref exhaustAirChangesPerHour);
 
+            string functions = null;
+            index = Params.IndexOfInputParam("functions_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref functions);
+
+                if (string.IsNullOrWhiteSpace(functions))
+                {
+                    functions = null;
+                }
+            }
+
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
             if(profile != null)
             {
@@ -299,6 +313,18 @@ namespace SAM.Analytical.Grasshopper
                 else
                 {
                     internalCondition_Temp.SetValue(InternalConditionParameter.ExhaustAirChangesPerHour, exhaustAirChangesPerHour);
+                }
+
+                if (functions != null)
+                {
+                    if (string.IsNullOrEmpty(functions))
+                    {
+                        internalCondition_Temp.RemoveValue(InternalConditionParameter.VentilationFunction);
+                    }
+                    else
+                    {
+                        internalCondition_Temp.SetValue(InternalConditionParameter.VentilationFunction, functions);
+                    }
                 }
 
                 space_Temp.InternalCondition = internalCondition_Temp;
