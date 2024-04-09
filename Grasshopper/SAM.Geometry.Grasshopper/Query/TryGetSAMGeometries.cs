@@ -122,6 +122,16 @@ namespace SAM.Geometry.Grasshopper
                         //sAMGeometries = ((Spatial.Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
                         //return true;
                     }
+                    else if(@object is Polyline3D)
+                    {
+                        Polyline3D polyline3D = (Polyline3D)@object;
+                        if (polyline3D.IsClosed())
+                        {
+                            List<Point3D> point3Ds = polyline3D.Points;
+                            sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D(new Polygon3D(point3Ds)) };
+                            return true;
+                        }
+                    }
 
                 }
                 else if(typeof(T) == typeof(Point3D))
