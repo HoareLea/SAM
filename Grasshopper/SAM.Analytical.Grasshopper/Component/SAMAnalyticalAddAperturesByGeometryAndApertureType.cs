@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometry", GH_ParamAccess.list);
+            index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometry \nwhen using Polyline frame come from layer thickenss so default 0.05m if surface connected from two closed curves, thickness is frame hole will be pane", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
@@ -57,10 +57,10 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "Trim Aperture Geometry", GH_ParamAccess.item, true);
             inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Tolerance.MacroDistance);
 
-            index = inputParamManager.AddNumberParameter("frameWidth_", "frameWidth_", "Frame Width [m]", GH_ParamAccess.list);
+            index = inputParamManager.AddNumberParameter("frameWidth_", "frameWidth_", "Frame Width [m] \n*Min value is sum of frame layer thicknesses Default 0.05m so unable to dopt below this value unless. \nIf you want zero remove frame layer in aperture construction ", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
 
-            index = inputParamManager.AddNumberParameter("framePercentage_", "framePercentage_", "Frame Percentage [%]", GH_ParamAccess.list);
+            index = inputParamManager.AddNumberParameter("framePercentage_", "framePercentage_", "Frame Percentage [%] \nsee frameWidth_ description \nuse only one input frameWidth_ or framePercentage_ ", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
         }
 
