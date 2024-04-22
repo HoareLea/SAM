@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -23,9 +24,15 @@ namespace SAM.Core
             this.reference = reference;
         }
 
-        public ObjectReference(System.Type type)
+        public ObjectReference(Type type)
         {
             typeName= Query.FullTypeName(type);
+        }
+
+        public ObjectReference(Type type, Reference? reference = null)
+        {
+            typeName = Query.FullTypeName(type);
+            this.reference = reference;
         }
 
         public ObjectReference(SAMObject sAMObject)

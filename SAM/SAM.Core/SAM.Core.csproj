@@ -71,6 +71,7 @@
     <Compile Include="Convert\ToSAM\ComplexReference.cs" />
     <Compile Include="Create\Category.cs" />
     <Compile Include="Create\IndexedDoubles.cs" />
+    <Compile Include="Create\ObjectReference.cs" />
     <Compile Include="Create\StartupOptions.cs" />
     <Compile Include="Enums\Period.cs" />
     <Compile Include="Enums\Parameter\ParameterizedSAMObjectParameter.cs" />
