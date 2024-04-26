@@ -92,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> angles = new List<double>();
             index = Params.IndexOfInputParam("_angles_");
-            if (index == -1 || !dataAccess.GetData(index, ref angles) || angles == null)
+            if (index == -1 || !dataAccess.GetDataList(index, angles) || angles == null)
             {
                 angles = new List<double>() { 0, 90, 180, 270, 360 };
             }
