@@ -39,31 +39,20 @@ namespace SAM.Core
             }
         }
 
-        public override bool FromJObject(JObject jObject)
+        public int Count
         {
-            if (!base.FromJObject(jObject))
-                return false;
-
-            if (jObject.ContainsKey("Objects"))
+            get
             {
-                List<T> jSAMObjects = Create.IJSAMObjects<T>(jObject.Value<JArray>("Objects"));
-                if (jSAMObjects != null && jSAMObjects.Count != 0)
-                    jSAMObjects.ForEach(x => Add(x));
+                return objects == null ? 0 : objects.Count;
             }
-                
-            return true;
         }
 
-        public override JObject ToJObject()
+        public Type GenericType
         {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return jObject;
-
-            if (objects != null && objects.Count != 0)
-                jObject.Add("Objects", Create.JArray(objects.Values));
-
-            return jObject;
+            get
+            {
+                return typeof(T);
+            }
         }
 
         public bool Add(T jSAMObject)
@@ -85,6 +74,54 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Append(string path)
+        {
+            if (!File.Exists(path))
+                return false;
+
+            string json = File.ReadAllText(path);
+
+            JToken jToken = JToken.Parse(json);
+            if (jToken == null)
+                return false;
+
+            if (jToken.Type == JTokenType.Array)
+            {
+                List<T> jSAMObjects = Create.IJSAMObjects<T>((JArray)jToken);
+                if (jSAMObjects == null)
+                    return false;
+
+                if (objects == null)
+                    objects = new Dictionary<string, T>();
+                jSAMObjects.ForEach(x => Add(x));
+                return true;
+            }
+
+
+            if (jToken is JObject)
+            {
+                IJSAMObject IJSAMObject = Create.IJSAMObject((JObject)jToken);
+                if (IJSAMObject == null)
+                    return false;
+
+                if (IJSAMObject is SAMLibrary<T>)
+                {
+                    IEnumerable<T> jSAMObjects = ((SAMLibrary<T>)IJSAMObject).objects?.Values;
+                    if (jSAMObjects != null && jSAMObjects.Count() > 0)
+                        foreach (T jSAMObject in jSAMObjects)
+                            Add(jSAMObject);
+
+                    return true;
+                }
+                else if (IJSAMObject is T)
+                {
+                    return Add((T)IJSAMObject);
+                }
+            }
+
+            return false;
+        }
+
         public bool Contains(T jSAMObject)
         {
             if (jSAMObject == null || objects == null)
@@ -100,63 +137,19 @@ namespace SAM.Core
             return objects.ContainsKey(uniqueId);
         }
 
-        public bool Update(T jSAMObject)
+        public override bool FromJObject(JObject jObject)
         {
-            if (jSAMObject == null)
+            if (!base.FromJObject(jObject))
                 return false;
 
-            if (objects == null || objects.Count == 0)
-                return false;
-
-            if (!IsValid(jSAMObject))
-                return false;
-
-            string uniqueId = GetUniqueId(jSAMObject);
-            if (uniqueId == null)
-                return false;
-
-            if (!objects.ContainsKey(uniqueId))
-                return false;
-
-            objects[uniqueId] = jSAMObject.Clone();
-            return true;
-        }
-
-        public bool Remove(T jSAMObject)
-        {
-            if (jSAMObject == null)
-                return false;
-
-            if (objects == null || objects.Count == 0)
-                return false;
-
-            if (!IsValid(jSAMObject))
-                return false;
-
-            string uniqueId = GetUniqueId(jSAMObject);
-            if (uniqueId == null)
-                return false;
-
-            return objects.Remove(uniqueId);
-        }
-
-        public bool RemoveAll()
-        {
-            if(objects == null || objects.Count == 0)
+            if (jObject.ContainsKey("Objects"))
             {
-                return false;
+                List<T> jSAMObjects = Create.IJSAMObjects<T>(jObject.Value<JArray>("Objects"));
+                if (jSAMObjects != null && jSAMObjects.Count != 0)
+                    jSAMObjects.ForEach(x => Add(x));
             }
-
-            objects = new Dictionary<string, T>();
+                
             return true;
-        }
-
-        public int Count
-        {
-            get
-            {
-                return objects == null ? 0 : objects.Count;
-            }
         }
 
         public T GetObject(string uniqueId)
@@ -171,7 +164,7 @@ namespace SAM.Core
             return result.Clone();
         }
 
-        public W GetObject<W>(string uniqueId) where W: T
+        public W GetObject<W>(string uniqueId) where W : T
         {
             T result = GetObject(uniqueId);
 
@@ -186,7 +179,7 @@ namespace SAM.Core
             return objects?.Values?.ToList().ConvertAll(x => x.Clone());
         }
 
-        public List<W> GetObjects<W>() where W: T
+        public List<W> GetObjects<W>() where W : T
         {
             if (objects == null)
             {
@@ -199,14 +192,14 @@ namespace SAM.Core
                 if (jSAMObject is W)
                 {
                     T t = jSAMObject.Clone();
-                    if(t is W)
+                    if (t is W)
                     {
                         result.Add((W)t);
                     }
                 }
             }
 
-            
+
             return result;
         }
 
@@ -218,14 +211,6 @@ namespace SAM.Core
             return @in;
         }
 
-        public Type GenericType
-        {
-            get
-            {
-                return typeof(T);
-            }
-        }
-        
         public List<T> GetObjects(string text, TextComparisonType textComparisonType, bool caseSensitive = true)
         {
             if (text == null)
@@ -239,7 +224,7 @@ namespace SAM.Core
             return result;
         }
 
-        public List<W> GetObjects<W>(string text, TextComparisonType textComparisonType, bool caseSensitive = true) where W: T
+        public List<W> GetObjects<W>(string text, TextComparisonType textComparisonType, bool caseSensitive = true) where W : T
         {
             List<T> jSAMObjects = GetObjects(text, textComparisonType, caseSensitive);
             if (jSAMObjects == null)
@@ -266,30 +251,59 @@ namespace SAM.Core
             return true;
         }
 
+        public bool Remove(T jSAMObject)
+        {
+            if (jSAMObject == null)
+                return false;
+
+            if (objects == null || objects.Count == 0)
+                return false;
+
+            if (!IsValid(jSAMObject))
+                return false;
+
+            string uniqueId = GetUniqueId(jSAMObject);
+            if (uniqueId == null)
+                return false;
+
+            return objects.Remove(uniqueId);
+        }
+
+        public bool RemoveAll()
+        {
+            if (objects == null || objects.Count == 0)
+            {
+                return false;
+            }
+
+            objects = new Dictionary<string, T>();
+            return true;
+        }
+
         public bool Replace(string uniqueId, T jSAMObject)
         {
-            if(uniqueId == null || jSAMObject == null || objects == null)
+            if (uniqueId == null || jSAMObject == null || objects == null)
             {
                 return false;
             }
 
-            if(!IsValid(jSAMObject))
+            if (!IsValid(jSAMObject))
             {
                 return false;
             }
 
-            if(!objects.ContainsKey(uniqueId))
+            if (!objects.ContainsKey(uniqueId))
             {
                 return false;
             }
 
             string uniqueId_New = GetUniqueId(jSAMObject);
-            if(uniqueId_New == null)
+            if (uniqueId_New == null)
             {
                 return false;
             }
 
-            if(uniqueId != uniqueId_New)
+            if (uniqueId != uniqueId_New)
             {
                 objects.Remove(uniqueId);
                 uniqueId = uniqueId_New;
@@ -299,57 +313,43 @@ namespace SAM.Core
             return true;
         }
 
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            if (objects != null && objects.Count != 0)
+                jObject.Add("Objects", Create.JArray(objects.Values));
+
+            return jObject;
+        }
+
+        public bool Update(T jSAMObject)
+        {
+            if (jSAMObject == null)
+                return false;
+
+            if (objects == null || objects.Count == 0)
+                return false;
+
+            if (!IsValid(jSAMObject))
+                return false;
+
+            string uniqueId = GetUniqueId(jSAMObject);
+            if (uniqueId == null)
+                return false;
+
+            if (!objects.ContainsKey(uniqueId))
+                return false;
+
+            objects[uniqueId] = jSAMObject.Clone();
+            return true;
+        }
+
         public bool Write(string path)
         {
             return Query.Write(this, path);
-        }
-
-        public bool Append(string path)
-        {
-            if (!File.Exists(path))
-                return false;
-
-            string json = File.ReadAllText(path);
-
-            JToken jToken = JToken.Parse(json);
-            if (jToken == null)
-                return false;
-
-            if(jToken.Type == JTokenType.Array)
-            {
-                List<T> jSAMObjects = Create.IJSAMObjects<T>((JArray)jToken);
-                if (jSAMObjects == null)
-                    return false;
-
-                if (objects == null)
-                    objects = new Dictionary<string, T>();
-                jSAMObjects.ForEach(x => Add(x));
-                return true;
-            }
-            
-
-            if(jToken is JObject)
-            {
-                IJSAMObject IJSAMObject = Create.IJSAMObject((JObject)jToken);
-                if (IJSAMObject == null)
-                    return false;
-
-                if(IJSAMObject is SAMLibrary<T>)
-                {
-                    IEnumerable<T> jSAMObjects = ((SAMLibrary<T>)IJSAMObject).objects?.Values;
-                    if (jSAMObjects != null && jSAMObjects.Count() > 0)
-                        foreach (T jSAMObject in jSAMObjects)
-                            Add(jSAMObject);
-
-                    return true;
-                }
-                else if(IJSAMObject is T)
-                {
-                    return Add((T)IJSAMObject);
-                }
-            }
-
-            return false;
         }
     }
 }
