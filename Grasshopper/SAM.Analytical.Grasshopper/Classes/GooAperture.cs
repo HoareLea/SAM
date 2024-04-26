@@ -68,14 +68,34 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
         {
+            List<Face3D> face3Ds = new List<Face3D>();
+            
             Face3D face3D = Value?.GetFrameFace3D();
-            if(face3D == null)
+            if(face3D != null)
+            {
+                face3Ds.Add(face3D);
+            }
+            else
+            {
+                List<Face3D> face3Ds_Pane = Value?.GetPaneFace3Ds();
+                if (face3Ds_Pane == null)
+                {
+                    return;
+                }
+
+                face3Ds.AddRange(face3Ds_Pane);
+            }
+
+            if(face3Ds == null || face3Ds.Count == 0)
             {
                 return;
             }
 
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
-            gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
+            foreach(Face3D face3D_Temp in face3Ds)
+            {
+                GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D_Temp));
+                gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
+            }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
