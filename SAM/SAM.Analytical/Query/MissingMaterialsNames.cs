@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -111,6 +112,60 @@ namespace SAM.Analytical
 
                 names.Add(name);
             }
+
+            return names.ToList();
+        }
+
+        public static List<string> MissingMaterialsNames(this ConstructionManager constructionManager)
+        {
+            if(constructionManager == null)
+            {
+                return null;
+            }
+
+            HashSet<string> names = new HashSet<string>();
+
+            MaterialLibrary materialLibrary = constructionManager.MaterialLibrary;
+
+            MissingMaterialsNames(materialLibrary, constructionManager.Constructions)?.ForEach(x => names.Add(x));
+            MissingMaterialsNames(materialLibrary, constructionManager.ApertureConstructions)?.ForEach(x => names.Add(x));
+
+            return names.ToList();
+        }
+
+        public static List<string> MissingMaterialsNames(this ConstructionManager constructionManager, IEnumerable<Guid> guids)
+        {
+            if (constructionManager == null || guids == null)
+            {
+                return null;
+            }
+
+            HashSet<string> names = new HashSet<string>();
+
+            MaterialLibrary materialLibrary = constructionManager.MaterialLibrary;
+
+            List<Construction> constructions = new List<Construction>();
+            List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
+
+            foreach(Guid guid in guids)
+            {
+                Construction construction = constructionManager.GetConstruction(guid);
+                if(construction != null)
+                {
+                    constructions.Add(construction);
+                    continue;
+                }
+
+                ApertureConstruction apertureConstruction = constructionManager.GetApertureConstruction(guid);
+                if (apertureConstruction != null)
+                {
+                    apertureConstructions.Add(apertureConstruction);
+                    continue;
+                }
+            }
+
+            MissingMaterialsNames(materialLibrary, constructions)?.ForEach(x => names.Add(x));
+            MissingMaterialsNames(materialLibrary, apertureConstructions)?.ForEach(x => names.Add(x));
 
             return names.ToList();
         }

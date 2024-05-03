@@ -170,6 +170,12 @@ namespace SAM.Analytical.Grasshopper
             constructions?.ForEach(x => constructionManager.Add(x));
             apertureConstructions?.ForEach(x => constructionManager.Add(x));
 
+            List<string> names = Analytical.Query.MissingMaterialsNames(constructionManager);
+            if(names != null && names.Count != 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("{0}: {1}", "ConstructionManager is missing following materials:" , string.Join(", ", names)));
+            }
+
             index = Params.IndexOfOutputParam("constructionManager");
             if (index != -1)
             {

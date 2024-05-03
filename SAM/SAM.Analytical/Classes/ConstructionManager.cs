@@ -201,6 +201,16 @@ namespace SAM.Analytical
             return Add(apertureConstruction_New);
         }
 
+        public Construction GetConstruction(System.Guid guid)
+        {
+            return constructionLibrary?.GetConstructions()?.Find(x => x.Guid == guid);
+        }
+
+        public ApertureConstruction GetApertureConstruction(System.Guid guid)
+        {
+            return apertureConstructionLibrary?.GetApertureConstructions()?.Find(x => x.Guid == guid);
+        }
+
         public List<Construction> GetConstructions(string text, TextComparisonType textComparisonType = TextComparisonType.Equals, bool caseSensitive = true)
         {
             return constructionLibrary?.GetConstructions(text, textComparisonType, caseSensitive);
