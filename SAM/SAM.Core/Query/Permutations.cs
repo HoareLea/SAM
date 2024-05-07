@@ -14,14 +14,14 @@ namespace SAM.Core
             }
 
             List<List<T>> result = new List<List<T>>();
-            Permutations<T>(@in.ToList(), 0, result);
+            Permutations(@in.ToList(), 0, result);
 
             return result;
         }
 
         public static List<List<T>> Permutations<T>(this IEnumerable<T> @in, bool unique, Func<T, T, bool> equatableFunc = null) where T : IComparable
         {
-            List<List<T>> result = Permutations<T>(@in);
+            List<List<T>> result = Permutations(@in);
             if (!unique)
             {
                 return result;
@@ -40,7 +40,7 @@ namespace SAM.Core
                 result_New.Add(values);
                 for (int i = result.Count - 1; i >= 0; i--)
                 {
-                    if (Similar<T>(values, result[i], equatableFunc))
+                    if (Similar(values, result[i], equatableFunc))
                     {
                         result.RemoveAt(i);
                     }
@@ -66,7 +66,7 @@ namespace SAM.Core
                 @in[start] = temp;
 
                 // Recurse on the remaining elements
-                Permutations<T>(@in, start + 1, @out);
+                Permutations(@in, start + 1, @out);
 
                 // Backtrack: swap elements back to their original positions
                 @in[start] = @in[i];

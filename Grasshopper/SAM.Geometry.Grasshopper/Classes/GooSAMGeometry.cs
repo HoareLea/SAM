@@ -71,22 +71,22 @@ namespace SAM.Geometry.Grasshopper
         {
             get
             {
-                if (Value is Spatial.IBoundable3D)
-                    return Rhino.Convert.ToRhino(((Spatial.IBoundable3D)Value).GetBoundingBox());
+                if (Value is IBoundable3D)
+                    return Rhino.Convert.ToRhino(((IBoundable3D)Value).GetBoundingBox());
 
-                if (Value is Spatial.Point3D)
-                    return Rhino.Convert.ToRhino(((Spatial.Point3D)(object)Value).GetBoundingBox(1));
+                if (Value is Point3D)
+                    return Rhino.Convert.ToRhino(((Point3D)(object)Value).GetBoundingBox(1));
 
-                if (Value is Planar.IBoundable2D)
+                if (Value is IBoundable2D)
                 {
-                    Planar.BoundingBox2D boundingBox2D = ((Planar.IBoundable2D)Value).GetBoundingBox();
-                    return Rhino.Convert.ToRhino( new Spatial.BoundingBox3D(new Spatial.Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Spatial.Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)));
+                    BoundingBox2D boundingBox2D = ((IBoundable2D)Value).GetBoundingBox();
+                    return Rhino.Convert.ToRhino( new BoundingBox3D(new Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)));
                 }
 
-                if (Value is Planar.Point2D)
+                if (Value is Point2D)
                 {
-                    Planar.Point2D point2D = (Planar.Point2D)Value;
-                    return Rhino.Convert.ToRhino(new Spatial.BoundingBox3D(new Spatial.Point3D(point2D.X, point2D.Y, -1), new Spatial.Point3D(point2D.X, point2D.Y, 1)));
+                    Point2D point2D = (Point2D)Value;
+                    return Rhino.Convert.ToRhino(new BoundingBox3D(new Point3D(point2D.X, point2D.Y, -1), new Point3D(point2D.X, point2D.Y, 1)));
                 }
 
                 if (Value is Spatial.Plane)
@@ -288,7 +288,7 @@ namespace SAM.Geometry.Grasshopper
 
             if (source is Brep)
             {
-                List<Spatial.ISAMGeometry3D> sAMGeometry3Ds = Rhino.Convert.ToSAM(((Brep)source));
+                List<ISAMGeometry3D> sAMGeometry3Ds = Rhino.Convert.ToSAM(((Brep)source));
                 if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count != 0)
                 {
                     Value = sAMGeometry3Ds[0];
@@ -309,27 +309,27 @@ namespace SAM.Geometry.Grasshopper
 
             if (typeof(Y) == typeof(Polyline))
             {
-                if (Value is Spatial.ISegmentable3D)
+                if (Value is ISegmentable3D)
                 {
-                    target = (Y)(object)(new Polyline(((Spatial.ISegmentable3D)Value).GetPoints().ConvertAll(x => Rhino.Convert.ToRhino(x))));
+                    target = (Y)(object)(new Polyline(((ISegmentable3D)Value).GetPoints().ConvertAll(x => Rhino.Convert.ToRhino(x))));
                     return true;
                 }
             }
 
             if (typeof(Y) == typeof(Point3d))
             {
-                if (Value is Spatial.Point3D)
+                if (Value is Point3D)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((((Spatial.Point3D)Value)));
+                    target = (Y)(object)Rhino.Convert.ToRhino((((Point3D)Value)));
                     return true;
                 }
             }
 
             if (typeof(Y) == typeof(GH_Point))
             {
-                if (Value is Spatial.Point3D)
+                if (Value is Point3D)
                 {
-                    target = (Y)(object)(((Spatial.Point3D)Value).ToGrasshopper());
+                    target = (Y)(object)(((Point3D)Value).ToGrasshopper());
                     return true;
                 }
             }
@@ -345,9 +345,9 @@ namespace SAM.Geometry.Grasshopper
 
             if (typeof(Y) == typeof(GH_Rectangle))
             {
-                if (Value is Spatial.Rectangle3D)
+                if (Value is Rectangle3D)
                 {
-                    target = (Y)(object)(((Spatial.Rectangle3D)Value).ToGrasshopper());
+                    target = (Y)(object)(((Rectangle3D)Value).ToGrasshopper());
                     return true;
                 }
             }
@@ -363,72 +363,72 @@ namespace SAM.Geometry.Grasshopper
 
             if (typeof(Y) == typeof(Vector3d))
             {
-                if (Value is Spatial.Vector3D)
+                if (Value is Vector3D)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Vector3D)Value);
+                    target = (Y)(object)Rhino.Convert.ToRhino((Vector3D)Value);
                     return true;
                 }
 
-                if (Value is Planar.Vector2D)
+                if (Value is Vector2D)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((Planar.Vector2D)Value);
+                    target = (Y)(object)Rhino.Convert.ToRhino((Vector2D)Value);
                     return true;
                 }
             }
 
             if(typeof(Y) == typeof(Rectangle3d))
             {
-                if(Value is Spatial.Rectangle3D)
+                if(Value is Rectangle3D)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Rectangle3D)Value);
+                    target = (Y)(object)Rhino.Convert.ToRhino((Rectangle3D)Value);
                     return true;
                 }
 
-                if (Value is Planar.Rectangle2D)
+                if (Value is Rectangle2D)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((Planar.Rectangle2D)Value);
+                    target = (Y)(object)Rhino.Convert.ToRhino((Rectangle2D)Value);
                     return true;
                 }
             }
 
             if (typeof(Y) == typeof(GH_Vector))
             {
-                if (Value is Spatial.Vector3D)
+                if (Value is Vector3D)
                 {
-                    target = (Y)(object)(((Spatial.Vector3D)Value).ToGrasshopper());
+                    target = (Y)(object)(((Vector3D)Value).ToGrasshopper());
                     return true;
                 }
 
-                if (Value is Planar.Vector2D)
+                if (Value is Vector2D)
                 {
-                    target = (Y)(object)(((Planar.Vector2D)Value).ToGrasshopper());
+                    target = (Y)(object)(((Vector2D)Value).ToGrasshopper());
                     return true;
                 }
             }
 
             if (typeof(Y).IsAssignableFrom(typeof(Brep)))
             {
-                if (Value is Spatial.Shell)
+                if (Value is Shell)
                 {
-                    target = (Y)(object)Rhino.Convert.ToRhino((Spatial.Shell)Value);
+                    target = (Y)(object)Rhino.Convert.ToRhino((Shell)Value);
                     return true;
                 }
             }
 
             if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
             {
-                if (Value is Spatial.Shell)
+                if (Value is Shell)
                 {
-                    target = (Y)(object)new GH_Brep(Rhino.Convert.ToRhino((Spatial.Shell)Value));
+                    target = (Y)(object)new GH_Brep(Rhino.Convert.ToRhino((Shell)Value));
                     return true;
                 }
             }
 
             if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
             {
-                if (Value is Spatial.Shell)
+                if (Value is Shell)
                 {
-                    Mesh mesh = Rhino.Convert.ToRhino_Mesh((Spatial.Shell)Value);
+                    Mesh mesh = Rhino.Convert.ToRhino_Mesh((Shell)Value);
                     if(mesh != null)
                     {
                         target = (Y)(object)new GH_Mesh(mesh);
@@ -436,9 +436,9 @@ namespace SAM.Geometry.Grasshopper
                     }
                 }
 
-                if(Value is Spatial.Mesh3D)
+                if(Value is Mesh3D)
                 {
-                    target = (Y)(object)new GH_Mesh(Rhino.Convert.ToRhino((Spatial.Mesh3D)Value));
+                    target = (Y)(object)new GH_Mesh(Rhino.Convert.ToRhino((Mesh3D)Value));
                     return true;
                 }
             }

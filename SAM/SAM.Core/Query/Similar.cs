@@ -9,7 +9,7 @@ namespace SAM.Core
     {
         public static bool Similar<T>(this IEnumerable<T> items_1, IEnumerable<T> items_2) where T :IComparable
         {
-            return Similar<T>(items_1, items_2, null);
+            return Similar(items_1, items_2, null);
         }
 
         public static bool Similar<T>(this IEnumerable<T> items_1, IEnumerable<T> items_2, Func<T, T, bool> equatableFunc) where T : IComparable

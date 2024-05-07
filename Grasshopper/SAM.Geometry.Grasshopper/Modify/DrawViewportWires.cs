@@ -38,9 +38,9 @@ namespace SAM.Geometry.Grasshopper
                     if (closedPlanar3D is ICurvable3D)
                         curve3Ds.AddRange(((ICurvable3D)closedPlanar3D).GetCurves());
             }
-            else if (sAMGeomery is Planar.Face2D)
+            else if (sAMGeomery is Face2D)
             {
-                Face3D face3D = Spatial.Query.Convert(Spatial.Plane.WorldXY, (Planar.Face2D)sAMGeomery);
+                Face3D face3D = Spatial.Query.Convert(Spatial.Plane.WorldXY, (Face2D)sAMGeomery);
                 if(face3D != null)
                 {
                     curve3Ds = new List<ICurve3D>();
@@ -54,9 +54,9 @@ namespace SAM.Geometry.Grasshopper
             {
                 curve3Ds = ((ICurvable3D)sAMGeomery).GetCurves();
             }
-            else if (sAMGeomery is Planar.ICurvable2D)
+            else if (sAMGeomery is ICurvable2D)
             {
-                curve3Ds = ((Planar.ICurvable2D)sAMGeomery).GetCurves().ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
+                curve3Ds = ((ICurvable2D)sAMGeomery).GetCurves().ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
             }
 
             if (curve3Ds != null && curve3Ds.Count > 0)

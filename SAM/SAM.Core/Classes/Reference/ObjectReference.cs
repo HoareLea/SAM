@@ -158,7 +158,7 @@ namespace SAM.Core
             }
         }
 
-        public System.Type Type
+        public Type Type
         {
             get
             {
@@ -167,7 +167,7 @@ namespace SAM.Core
                     return null;
                 }
 
-                System.Type result = Query.Type(typeName);
+                Type result = Query.Type(typeName);
                 if(result == null)
                 {
                     result = Query.Type(string.Format(".{0}", typeName), TextComparisonType.EndsWith, false, (System.Reflection.Assembly x) => x.GetName().Name.StartsWith("SAM."));

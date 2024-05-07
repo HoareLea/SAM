@@ -6,17 +6,17 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
     {
-        public static Spatial.ISAMGeometry3D ToSAM(this global::Rhino.Geometry.PolyCurve polyCurve)
+        public static ISAMGeometry3D ToSAM(this global::Rhino.Geometry.PolyCurve polyCurve)
         {
             List<global::Rhino.Geometry.Curve> curves = polyCurve.Explode().ToList();
 
-            List<Spatial.ICurve3D> curve3Ds = new List<Spatial.ICurve3D>();
+            List<ICurve3D> curve3Ds = new List<ICurve3D>();
             foreach (global::Rhino.Geometry.Curve curve in curves)
             {
                 if (!curve.IsLinear())
-                    curve3Ds.AddRange(Spatial.Query.Explode(curve.ToSAM() as Spatial.ICurve3D));
+                    curve3Ds.AddRange(Spatial.Query.Explode(curve.ToSAM() as ICurve3D));
                 else
-                    curve3Ds.Add(new Spatial.Segment3D(curve.PointAtStart.ToSAM(), curve.PointAtEnd.ToSAM()));
+                    curve3Ds.Add(new Segment3D(curve.PointAtStart.ToSAM(), curve.PointAtEnd.ToSAM()));
             }
 
             if(curve3Ds.TrueForAll(x => x is Segment3D))
