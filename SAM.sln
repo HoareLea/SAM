@@ -1,11 +1,11 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core", "SAM\SAM.Core\SAM.Core.csproj", "{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry", "SAM\SAM.Geometry\SAM.Geometry.csproj", "{4CF184FD-B48A-41FC-ADBC-20218B44B03D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Geometry", "SAM\SAM.Geometry\SAM.Geometry.csproj", "{4CF184FD-B48A-41FC-ADBC-20218B44B03D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical", "SAM\SAM.Analytical\SAM.Analytical.csproj", "{B47BAD06-8523-455E-ACF8-4879D0286EC1}"
 EndProject
@@ -33,7 +33,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Units", "SAM\SAM.Units\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Architectural.Grasshopper", "Grasshopper\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj", "{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math", "SAM\SAM.Math\SAM.Math.csproj", "{255E428D-6969-4542-9846-67B7DE87501B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Math", "SAM\SAM.Math\SAM.Math.csproj", "{255E428D-6969-4542-9846-67B7DE87501B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math.Grasshopper", "Grasshopper\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj", "{0D87D3BC-3E98-4521-8B69-DD93B0C16A4A}"
 EndProject
