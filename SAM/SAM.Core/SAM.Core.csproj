@@ -23,7 +23,9 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Interfaces\Range\" />
+    <Compile Remove="Interfaces\Range\**" />
+    <EmbeddedResource Remove="Interfaces\Range\**" />
+    <None Remove="Interfaces\Range\**" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />

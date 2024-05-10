@@ -37,7 +37,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Math", "SAM\SAM.Math\SA
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math.Grasshopper", "Grasshopper\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj", "{0D87D3BC-3E98-4521-8B69-DD93B0C16A4A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather", "SAM\SAM.Weather\SAM.Weather.csproj", "{BE06B786-865A-4316-95C8-970DB6E53424}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Weather", "SAM\SAM.Weather\SAM.Weather.csproj", "{BE06B786-865A-4316-95C8-970DB6E53424}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Grasshopper", "Grasshopper\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj", "{14C5E8DE-5729-4CA0-BAF9-7CA548D12B35}"
 EndProject

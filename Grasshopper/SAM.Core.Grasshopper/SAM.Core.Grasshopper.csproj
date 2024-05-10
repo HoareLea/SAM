@@ -169,12 +169,6 @@
     <Compile Include="Query\DataTree.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
-      <Project>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -232,6 +226,12 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\SAM_Filter3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
+      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
+      <Name>SAM.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
