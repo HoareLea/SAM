@@ -43,7 +43,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Grasshopper", "
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rhino", "Rhino", "{1DDF5AA0-99F2-4E5F-A218-4C6CAE5DA962}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Rhino", "Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj", "{3D10AC53-E2E3-405A-967B-BE00F3CA9BC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Core.Rhino", "Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj", "{3D10AC53-E2E3-405A-967B-BE00F3CA9BC8}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math.Rhino", "Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj", "{4CF0F164-3C3B-4F14-AD9C-8267AC379D71}"
 EndProject
