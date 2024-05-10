@@ -7,7 +7,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core", "SAM\SAM.Core\SA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Geometry", "SAM\SAM.Geometry\SAM.Geometry.csproj", "{4CF184FD-B48A-41FC-ADBC-20218B44B03D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical", "SAM\SAM.Analytical\SAM.Analytical.csproj", "{B47BAD06-8523-455E-ACF8-4879D0286EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Analytical", "SAM\SAM.Analytical\SAM.Analytical.csproj", "{B47BAD06-8523-455E-ACF8-4879D0286EC1}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAMAnalyticalDynamo", "Dynamo\SAMAnalyticalDynamo\SAMAnalyticalDynamo.csproj", "{C0FC4B58-6EA4-47B0-B242-F4C053BB14C2}"
 EndProject
