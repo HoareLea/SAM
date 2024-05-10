@@ -45,11 +45,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rhino", "Rhino", "{1DDF5AA0
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Core.Rhino", "Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj", "{3D10AC53-E2E3-405A-967B-BE00F3CA9BC8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math.Rhino", "Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj", "{4CF0F164-3C3B-4F14-AD9C-8267AC379D71}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Math.Rhino", "Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj", "{4CF0F164-3C3B-4F14-AD9C-8267AC379D71}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry.Rhino", "Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj", "{40EA176A-6C19-4410-A22E-BC87833F9C77}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Geometry.Rhino", "Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj", "{40EA176A-6C19-4410-A22E-BC87833F9C77}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Rhino", "Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj", "{FDCF91DF-29E7-49A5-B955-2D561C1A95EC}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Analytical.Rhino", "Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj", "{FDCF91DF-29E7-49A5-B955-2D561C1A95EC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
