@@ -108,9 +108,8 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            analyticalModel = new AnalyticalModel(analyticalModel);
-
-            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster?.Clone();
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            adjacencyCluster = adjacencyCluster == null ? null : new AdjacencyCluster(adjacencyCluster, true);
 
             apertureConstruction = new ApertureConstruction(apertureConstruction);
 
