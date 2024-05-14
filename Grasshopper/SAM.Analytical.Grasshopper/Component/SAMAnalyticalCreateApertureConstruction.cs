@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateApertureConstruction()
           : base("SAMAnalytical.CreateApertureConstruction", "SAMAnalytical.CreateApertureConstruction",
-              "Create Aperture Construction",
+              "Create Aperture Construction \n*The layers should be ordered from inside to outside",
               "SAM", "Analytical")
         {
         }
@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
 
             gooConstructionLayerParam = new GooConstructionLayerParam();
             gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.PaneConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-            inputParamManager.AddParameter(gooConstructionLayerParam, "paneConstructionLayers_", "paneConstructionLayers_", "SAM Pane Contruction Layers", GH_ParamAccess.list);
+            inputParamManager.AddParameter(gooConstructionLayerParam, "paneConstructionLayers_", "paneConstructionLayers_", "SAM Pane Contruction Layers \n* order from Inside to Outside", GH_ParamAccess.list);
 
             gooConstructionLayerParam = new GooConstructionLayerParam();
             gooConstructionLayerParam.Optional = true;
