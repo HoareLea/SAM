@@ -361,13 +361,13 @@ namespace SAM.Analytical
                 material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
                 if(material is GasMaterial)
                 {
-                    result.Add(string.Format("First construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("First construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Error);
                 }
 
                 material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
                 if (material is GasMaterial)
                 {
-                    result.Add(string.Format("Last construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("Last construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Error);
                 }
             }
 
@@ -437,13 +437,13 @@ namespace SAM.Analytical
                 material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
                 if (material is GasMaterial)
                 {
-                    result.Add(string.Format("First aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("First aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
                 }
 
                 material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
                 if (material is GasMaterial)
                 {
-                    result.Add(string.Format("Last aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("Last aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
                 }
             }
 
@@ -457,13 +457,13 @@ namespace SAM.Analytical
                 material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
                 if (material is GasMaterial)
                 {
-                    result.Add(string.Format("First aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("First aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
                 }
 
                 material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
                 if (material is GasMaterial)
                 {
-                    result.Add(string.Format("Last aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Warning);
+                    result.Add(string.Format("Last aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
                 }
             }
 
