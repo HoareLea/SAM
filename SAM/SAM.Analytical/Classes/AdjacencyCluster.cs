@@ -21,7 +21,13 @@ namespace SAM.Analytical
         {
 
         }
-        
+
+        public AdjacencyCluster(AdjacencyCluster adjacencyCluster, bool deepClone)
+            : base(adjacencyCluster, deepClone)
+        {
+
+        }
+
         public AdjacencyCluster(JObject jObject)
             : base(jObject)
         {
