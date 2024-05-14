@@ -112,6 +112,8 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster?.Clone();
 
+            apertureConstruction = new ApertureConstruction(apertureConstruction);
+
             for (int i = 0; i < apertures.Count; i++)
             {
                 apertures[i] = new Aperture(apertures[i], apertureConstruction);
