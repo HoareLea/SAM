@@ -4,50 +4,50 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Object.Planar
 {
-    public class Segment2DObject : Segment2D, ISegment2DObject, ITaggable, IBoundable2DObject
+    public class BoundingBox2DObject : BoundingBox2D, IBoundingBox2DObject, ITaggable
     {
         public CurveAppearance CurveAppearance { get; set; }
 
-        public Segment2D Segment2D
+        public BoundingBox2D BoundingBox2D
         {
             get
             {
-                return new Segment2D(this);
+                return new BoundingBox2D(this);
             }
         }
 
         public Tag Tag { get; set; }
 
-        public Segment2DObject(Segment2D segment2D)
-            : base(segment2D)
+        public BoundingBox2DObject(BoundingBox2D boundingBox2D)
+            : base(boundingBox2D)
         {
 
         }
 
-        public Segment2DObject(Segment2D segment2D, CurveAppearance curveAppearance)
-            : base(segment2D)
+        public BoundingBox2DObject(JObject jObject)
+            : base(jObject)
+        {
+
+        }
+
+        public BoundingBox2DObject(BoundingBox2DObject boundingBox2DObject)
+                : base(boundingBox2DObject)
+        {
+            if (boundingBox2DObject?.CurveAppearance != null)
+            {
+                CurveAppearance = new CurveAppearance(boundingBox2DObject?.CurveAppearance);
+            }
+
+            Tag = boundingBox2DObject?.Tag;
+        }
+
+        public BoundingBox2DObject(BoundingBox2D boundingBox2D, CurveAppearance curveAppearance)
+            : base(boundingBox2D)
         {
             if (curveAppearance != null)
             {
                 CurveAppearance = new CurveAppearance(curveAppearance);
             }
-        }
-
-        public Segment2DObject(JObject jObject)
-            :base(jObject)
-        {
-
-        }
-
-        public Segment2DObject(Segment2DObject segment2DObject)
-            : base(segment2DObject)
-        {
-            if (segment2DObject.CurveAppearance != null)
-            {
-                CurveAppearance = new CurveAppearance(segment2DObject.CurveAppearance);
-            }
-
-            Tag = segment2DObject?.Tag;
         }
 
         public override bool FromJObject(JObject jObject)

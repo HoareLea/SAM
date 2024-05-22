@@ -1,145 +1,24 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{BE06B786-865A-4316-95C8-970DB6E53424}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Weather</RootNamespace>
-    <AssemblyName>SAM.Weather</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <Deterministic>false</Deterministic>
-    <TargetFrameworkProfile />
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\build\SAM.Weather.xml</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Interop.TAS3D">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TAS3D.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TasConv">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TasConv.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TBD">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TBD.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TCD">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TCD.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TCR">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TCR.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TIC">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TIC.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TPD">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TPD.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TSD">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TSD.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="Interop.TWD">
-      <HintPath>..\..\..\SAM_Tas\references_buildonly\Interop.TWD.dll</HintPath>
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-    </Reference>
-    <Reference Include="SAM.Architectural, Version=1.0.8677.28762, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\build\SAM.Architectural.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GroundTemperature.cs" />
-    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\WeightingCalculationMethod.cs" />
-    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\SimpleArithmeticMeanCalculationMethod.cs" />
-    <Compile Include="Classes\PrevailingMeanOutdoorAirTemperature\PrevailingMeanOutdoorAirTemperatureCalculator.cs" />
-    <Compile Include="Classes\WeatherHour.cs" />
-    <Compile Include="Classes\WeatherDay.cs" />
-    <Compile Include="Classes\WeatherData.cs" />
-    <Compile Include="Classes\WeatherYear.cs" />
-    <Compile Include="Convert\ToEPW\EPW.cs" />
-    <Compile Include="Convert\ToSAM\WeatherData.cs" />
-    <Compile Include="Create\WeatherYear.cs" />
-    <Compile Include="Enums\Parameter\WeatherDataParameter.cs" />
-    <Compile Include="Enums\WeatherDataType.cs" />
-    <Compile Include="Interfaces\PrevailingMeanOutdoorAirTemperature\IPrevailingMeanOutdoorAirTemperatureCalculationMethod.cs" />
-    <Compile Include="Interfaces\IWeatherObject.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\Compare.cs" />
-    <Compile Include="Query\DayIndex.cs" />
-    <Compile Include="Query\RunningMeanDryBulbTemperatures.cs" />
-    <Compile Include="Query\ApproximateRunningMeanDryBulbTemperature.cs" />
-    <Compile Include="Query\DryBulbTemperatureRange.cs" />
-    <Compile Include="Query\DryBulbTemperatureRanges.cs" />
-    <Compile Include="Query\MaxValue.cs" />
-    <Compile Include="Query\HeatingDesignWeatherDay.cs" />
-    <Compile Include="Query\DataString.cs" />
-    <Compile Include="Query\CommentsString.cs" />
-    <Compile Include="Query\DataPeriodsString.cs" />
-    <Compile Include="Query\Values.cs" />
-    <Compile Include="Query\Color.cs" />
-    <Compile Include="Query\WeatherDays.cs" />
-    <Compile Include="Query\DaylightSavingsString.cs" />
-    <Compile Include="Query\CoolingDesignWeatherDay.cs" />
-    <Compile Include="Query\GroundTemperaturesString.cs" />
-    <Compile Include="Query\TryGetGroundTemperatures.cs" />
-    <Compile Include="Query\TryGetData.cs" />
-    <Compile Include="Query\TryGetValue.cs" />
-    <Compile Include="Query\TryGetLocationData.cs" />
-    <Compile Include="Query\TypicalPeriodsString.cs" />
-    <Compile Include="Query\DesignConditionsString.cs" />
-    <Compile Include="Query\LocationString.cs" />
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj">
-      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
-    </PackageReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -4,7 +4,7 @@ using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Object.Planar
 {
-    public class Polyline2DObject : Polyline2D, IPolyline2DObject, ITaggable
+    public class Polyline2DObject : Polyline2D, IPolyline2DObject, ITaggable, IBoundable2DObject
     {
         public CurveAppearance CurveAppearance { get; set; }
 

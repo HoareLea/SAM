@@ -185,7 +185,7 @@ namespace SAM.Geometry.Planar
 
         public List<ICurve2D> GetCurves()
         {
-            return GetSegments().ConvertAll(x => (ICurve2D)x);
+            return GetSegments()?.ConvertAll(x => (ICurve2D)x);
         }
 
         public Point2D GetEnd()

@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -65,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
         /// Updates PanelTypes for AdjacencyCluster
         /// </summary>
         public SAMAnalyticalUpdateHeatTransferCoefficients()
-          : base("SAMAdjacencyCluster.UpdateHeatTransferCoefficients", "SAMAdjacencyCluster.UpdateHeatTransferCoefficients",
+          : base("SAMAnalytical.UpdateHeatTransferCoefficients", "SAMAnalytical.UpdateHeatTransferCoefficients",
               "Updates Constructions Gas Material HeatTransferCoefficients, , it checks panel tilt for each construction and if tilt varies it duplicates construction and assign corrected for each tilt, if values set to false it will take wighted average for Panels and use this tilt for constructions ",
               "SAM", "Analytical")
         {

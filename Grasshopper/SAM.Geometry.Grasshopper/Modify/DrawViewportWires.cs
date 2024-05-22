@@ -56,7 +56,7 @@ namespace SAM.Geometry.Grasshopper
             }
             else if (sAMGeomery is ICurvable2D)
             {
-                curve3Ds = ((ICurvable2D)sAMGeomery).GetCurves().ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
+                curve3Ds = ((ICurvable2D)sAMGeomery).GetCurves()?.ConvertAll(x => Spatial.Query.Convert(Spatial.Plane.WorldXY, x));
             }
 
             if (curve3Ds != null && curve3Ds.Count > 0)

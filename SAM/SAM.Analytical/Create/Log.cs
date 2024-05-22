@@ -353,7 +353,23 @@ namespace SAM.Analytical
 
             List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
+            {
                 Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, construction.Name, construction.Guid));
+
+                IMaterial material = null;
+
+                material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
+                if(material is GasMaterial)
+                {
+                    result.Add(string.Format("First construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Error);
+                }
+
+                material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
+                if (material is GasMaterial)
+                {
+                    result.Add(string.Format("Last construction layer (Name: {0}) for Construction (Name: {1} Guid: {2}) shall not be gas type", material.Name, construction.Name, construction.Guid), LogRecordType.Error);
+                }
+            }
 
             double thickness;
             if(construction.TryGetValue(ConstructionParameter.DefaultThickness, out thickness))
@@ -362,7 +378,9 @@ namespace SAM.Analytical
                 if(!double.IsNaN(thickness_ConstructionLayers))
                 {
                     if(System.Math.Abs(thickness - thickness_ConstructionLayers) > Tolerance.MacroDistance)
+                    {
                         result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Message);
+                    }
                 }
             }
 
@@ -411,11 +429,43 @@ namespace SAM.Analytical
 
             constructionLayers = apertureConstruction?.PaneConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
+            {
                 Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid));
+
+                IMaterial material = null;
+
+                material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
+                if (material is GasMaterial)
+                {
+                    result.Add(string.Format("First aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
+                }
+
+                material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
+                if (material is GasMaterial)
+                {
+                    result.Add(string.Format("Last aperture construction pane layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
+                }
+            }
 
             constructionLayers = apertureConstruction?.FrameConstructionLayers;
             if (constructionLayers != null && constructionLayers.Count > 0)
+            {
                 Core.Modify.AddRange(result, constructionLayers?.Log(materialLibrary, apertureConstruction.Name, apertureConstruction.Guid));
+
+                IMaterial material = null;
+
+                material = materialLibrary.GetMaterial(constructionLayers.First()?.Name);
+                if (material is GasMaterial)
+                {
+                    result.Add(string.Format("First aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
+                }
+
+                material = materialLibrary.GetMaterial(constructionLayers.Last()?.Name);
+                if (material is GasMaterial)
+                {
+                    result.Add(string.Format("Last aperture construction frame layer (Name: {0}) for ApertureConstruction (Name: {1} Guid: {2}) shall not be gas type", material.Name, apertureConstruction.Name, apertureConstruction.Guid), LogRecordType.Error);
+                }
+            }
 
             return result;
         }

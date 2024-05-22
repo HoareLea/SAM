@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateConstruction()
           : base("SAMAnalytical.CreateConstruction", "SAMAnalyticalCreate.Construction",
-              "Create Construction, if nothing connect default values: _name = Basic Roof: SIM_EXT_SLD_Roof DA01 ",
+              "Create Construction, if nothing connect default values: _name = Basic Roof: SIM_EXT_SLD_Roof DA01 \n*The layers should be ordered from inside to outside",
               "SAM", "Analytical")
         {
         }
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
                 param_String.SetPersistentData(construction.Name);
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-                GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam() { Name = "_constructionLayers_", NickName = "_constructionLayers_", Description = "SAM Contruction Layers", Access = GH_ParamAccess.list };
+                GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam() { Name = "_constructionLayers_", NickName = "_constructionLayers_", Description = "SAM Contruction Layers \n*The layers should be ordered from inside to outside", Access = GH_ParamAccess.list };
                 gooConstructionLayerParam.PersistentData.AppendRange(construction.ConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
                 result.Add(new GH_SAMParam(gooConstructionLayerParam, ParamVisibility.Binding));
 

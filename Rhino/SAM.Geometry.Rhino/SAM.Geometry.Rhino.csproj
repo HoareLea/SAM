@@ -1,106 +1,30 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{40EA176A-6C19-4410-A22E-BC87833F9C77}</ProjectGuid>
+    <TargetFramework>netstandard2.0</TargetFramework>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.Rhino</RootNamespace>
-    <AssemblyName>SAM.Geometry.Rhino</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <Deterministic>true</Deterministic>
+	<AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
     <DocumentationFile>..\..\build\SAM.Geometry.Rhino.xml</DocumentationFile>
-    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Convert\ToRhino\BoundingBox.cs" />
-    <Compile Include="Convert\ToRhino\Brep.cs" />
-    <Compile Include="Convert\ToRhino\Curve.cs" />
-    <Compile Include="Convert\ToRhino\Line.cs" />
-    <Compile Include="Convert\ToRhino\LineCurve.cs" />
-    <Compile Include="Convert\ToRhino\Mesh.cs" />
-    <Compile Include="Convert\ToRhino\Plane.cs" />
-    <Compile Include="Convert\ToRhino\Point3d.cs" />
-    <Compile Include="Convert\ToRhino\Rectangle3d.cs" />
-    <Compile Include="Convert\ToRhino\Polyline.cs" />
-    <Compile Include="Convert\ToRhino\PolylineCurve.cs" />
-    <Compile Include="Convert\ToRhino\Vector3d.cs" />
-    <Compile Include="Convert\ToSAM\Rectangle3D.cs" />
-    <Compile Include="Convert\ToSAM\Circle3D.cs" />
-    <Compile Include="Convert\ToSAM\IClosed3D.cs" />
-    <Compile Include="Convert\ToSAM\IGeometry3D.cs" />
-    <Compile Include="Convert\ToSAM\IGeometry3Ds.cs" />
-    <Compile Include="Convert\ToSAM\Mesh3D.cs" />
-    <Compile Include="Convert\ToSAM\Plane.cs" />
-    <Compile Include="Convert\ToSAM\Point3D.cs" />
-    <Compile Include="Convert\ToSAM\Polycurve3D.cs" />
-    <Compile Include="Convert\ToSAM\Polyline3D.cs" />
-    <Compile Include="Convert\ToSAM\Segment3D.cs" />
-    <Compile Include="Convert\ToSAM\Shell.cs" />
-    <Compile Include="Convert\ToSAM\Transform3D.cs" />
-    <Compile Include="Convert\ToSAM\Vector3D.cs" />
-    <Compile Include="Create\Shell.cs" />
-    <Compile Include="Manager\ActiveSetting.cs" />
-    <Compile Include="Modify\BakeGeometry.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Query\UnitScale.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.2</Version>
-    </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="RhinoCommon">
       <ExcludeAssets>runtime</ExcludeAssets>
       <Version>6.32.20340.21001</Version>
     </PackageReference>
+    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
-      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
-      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
-      <Name>SAM.Geometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
-      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
-      <Name>SAM.Math</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Math.Rhino\SAM.Math.Rhino.csproj">
-      <Project>{4cf0f164-3c3b-4f14-ad9c-8267ac379d71}</Project>
-      <Name>SAM.Math.Rhino</Name>
-    </ProjectReference>
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj" />
+    <ProjectReference Include="..\SAM.Math.Rhino\SAM.Math.Rhino.csproj" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
