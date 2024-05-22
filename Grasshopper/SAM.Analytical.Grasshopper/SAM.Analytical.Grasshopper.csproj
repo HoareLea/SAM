@@ -55,6 +55,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\GooAdjacencyCluster.cs" />
+    <Compile Include="Classes\GooAnalyticalEquipment.cs" />
     <Compile Include="Classes\GooAirMovement.cs" />
     <Compile Include="Classes\GooSection.cs" />
     <Compile Include="Classes\GooAperture.cs" />

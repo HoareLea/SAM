@@ -37,6 +37,7 @@ namespace SAM.Analytical
             result.AddSimpleEquipments(FlowClassification.Supply, simpleEquipments.ToArray());
 
             //Extract
+            simpleEquipments = new List<ISimpleEquipment>();
             simpleEquipments.Add(new Silencer());
             simpleEquipments.Add(heatRecoveryUnit);
             simpleEquipments.Add(new EmptySection());
