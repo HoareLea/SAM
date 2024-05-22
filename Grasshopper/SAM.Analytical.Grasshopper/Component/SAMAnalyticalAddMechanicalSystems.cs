@@ -82,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSystemParam() { Name = "mechanicalSystems", NickName = "mechanicalSystems", Description = "SAM Mechanical Systems", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "equipments", NickName = "equipments", Description = "SAM Mechanical Equipments", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalEquipmentParam() { Name = "equipments", NickName = "equipments", Description = "SAM Mechanical Equipments", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -187,7 +187,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<MechanicalSystem> mechanicalSystems = null;
-            List<ISimpleEquipment> simpleEquipments = null;
+            List<IAnalyticalEquipment> analyticalEquipments = null;
 
             AdjacencyCluster adjacencyCluster = null;
             if (analyticalObject is AnalyticalModel)
@@ -204,7 +204,7 @@ namespace SAM.Analytical.Grasshopper
                 mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
                 if (mechanicalSystems != null && mechanicalSystems.Count > 0)
                 {
-                    simpleEquipments = new List<ISimpleEquipment>();
+                    analyticalEquipments = new List<IAnalyticalEquipment>();
 
                     foreach(MechanicalSystem mechanicalSystem in mechanicalSystems)
                     {
@@ -225,17 +225,22 @@ namespace SAM.Analytical.Grasshopper
                             AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(x => x.Name == name);
                             if (airHandlingUnit != null)
                             {
-                                List<ISimpleEquipment> simpleEquipments_AHU = airHandlingUnit.GetSimpleEquipments<ISimpleEquipment>();
-                                if (simpleEquipments_AHU != null)
+                                if (analyticalEquipments.Find(x => airHandlingUnit.Guid == (x as dynamic).Guid) == null)
                                 {
-                                    foreach (ISimpleEquipment simpleEquipment in simpleEquipments_AHU)
-                                    {
-                                        if (simpleEquipments.Find(x => simpleEquipment.Guid == x.Guid) == null)
-                                        {
-                                            simpleEquipments.Add(simpleEquipment);
-                                        }
-                                    }
+                                    analyticalEquipments.Add(airHandlingUnit);
                                 }
+
+                                //List<ISimpleEquipment> simpleEquipments_AHU = airHandlingUnit.GetSimpleEquipments<ISimpleEquipment>();
+                                //if (simpleEquipments_AHU != null)
+                                //{
+                                //    foreach (ISimpleEquipment simpleEquipment in simpleEquipments_AHU)
+                                //    {
+                                //        if (simpleEquipments.Find(x => simpleEquipment.Guid == x.Guid) == null)
+                                //        {
+                                //            simpleEquipments.Add(simpleEquipment);
+                                //        }
+                                //    }
+                                //}
                             }
                         }
                     }
@@ -266,7 +271,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("equipments");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, simpleEquipments);
+                dataAccess.SetDataList(index, analyticalEquipments);
             }
         }
     }
