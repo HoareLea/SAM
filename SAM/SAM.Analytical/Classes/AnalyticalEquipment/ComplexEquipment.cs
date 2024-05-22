@@ -102,6 +102,11 @@ namespace SAM.Analytical
             return GetSimpleEquipments<T>(flowClassification, null);
         }
 
+        public List<T> GetSimpleEquipments<T>() where T : ISimpleEquipment
+        {
+            return GetSimpleEquipments<T>();
+        }
+
         public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification, Func<T, bool> func) where T : ISimpleEquipment
         {
             List<ISimpleEquipment> simpleEquipments = complexEquipmentModel?.GetSimpleEquipments(flowClassification);

@@ -187,7 +187,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<MechanicalSystem> mechanicalSystems = null;
-            List<IAnalyticalEquipment> analyticalEquipments = null;
+            List<ISimpleEquipment> simpleEquipments = null;
 
             AdjacencyCluster adjacencyCluster = null;
             if (analyticalObject is AnalyticalModel)
@@ -204,14 +204,39 @@ namespace SAM.Analytical.Grasshopper
                 mechanicalSystems = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
                 if (mechanicalSystems != null && mechanicalSystems.Count > 0)
                 {
-                    analyticalEquipments = new List<IAnalyticalEquipment>();
+                    simpleEquipments = new List<ISimpleEquipment>();
 
                     foreach(MechanicalSystem mechanicalSystem in mechanicalSystems)
                     {
-                        List<IAnalyticalEquipment> analyticalEquipments_System = adjacencyCluster.GetRelatedObjects<IAnalyticalEquipment>(mechanicalSystem);
-                        if(analyticalEquipments_System != null)
+                        if(!(mechanicalSystem is VentilationSystem))
                         {
-                            analyticalEquipments.AddRange(analyticalEquipments_System);
+                            continue;
+                        }
+
+                        string[] names = new string[] { mechanicalSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName), mechanicalSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName) };
+
+                        foreach(string name in names)
+                        {
+                            if(string.IsNullOrEmpty(name))
+                            {
+                                continue;
+                            }
+
+                            AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(x => x.Name == name);
+                            if (airHandlingUnit != null)
+                            {
+                                List<ISimpleEquipment> simpleEquipments_AHU = airHandlingUnit.GetSimpleEquipments<ISimpleEquipment>();
+                                if (simpleEquipments_AHU != null)
+                                {
+                                    foreach (ISimpleEquipment simpleEquipment in simpleEquipments_AHU)
+                                    {
+                                        if (simpleEquipments.Find(x => simpleEquipment.Guid == x.Guid) == null)
+                                        {
+                                            simpleEquipments.Add(simpleEquipment);
+                                        }
+                                    }
+                                }
+                            }
                         }
                     }
 
@@ -241,7 +266,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("equipments");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, analyticalEquipments);
+                dataAccess.SetDataList(index, simpleEquipments);
             }
         }
     }

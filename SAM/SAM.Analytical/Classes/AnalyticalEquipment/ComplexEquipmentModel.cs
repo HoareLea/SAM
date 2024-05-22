@@ -238,6 +238,11 @@ namespace SAM.Analytical
             return result;
         }
 
+        public List<T> GetSimpleEquipments<T>() where T: ISimpleEquipment
+        {
+            return GetObjects(x => x is T).ConvertAll(x => (T)x);
+        }
+
         public List<ISimpleEquipment> GetSimpleEquipments(ISimpleEquipment simpleEquipment, FlowClassification flowClassification, Direction direction)
         {
             if(simpleEquipment == null)
