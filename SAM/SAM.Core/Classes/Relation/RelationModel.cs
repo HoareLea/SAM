@@ -65,7 +65,23 @@ namespace SAM.Core
             return reference;
         }
 
-        
+
+        protected Relation AddRelation(string id, T @object)
+        {
+            Reference? reference = GetReference(@object);
+            if (reference == null || !reference.HasValue || !reference.Value.IsValid())
+            {
+                return null;
+            }
+
+            if (!dictionary.ContainsKey(reference.Value))
+            {
+                dictionary[reference.Value] = @object;
+            }
+
+            return AddRelation(id, reference.Value);
+        }
+
         protected Relation AddRelation(string id, T @object_1, T @object_2)
         {
             Reference? reference_1 = GetReference(@object_1);
@@ -101,6 +117,16 @@ namespace SAM.Core
             }
 
             return relationCollection.Add(id, reference_1, reference_2);
+        }
+
+        protected Relation AddRelation(string id, Reference reference)
+        {
+            if (!dictionary.ContainsKey(reference))
+            {
+                return null;
+            }
+
+            return relationCollection.Add(id, reference, new Reference());
         }
 
         protected Relation AddRelation(Relation relation)

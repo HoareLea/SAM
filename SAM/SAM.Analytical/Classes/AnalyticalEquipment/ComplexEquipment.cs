@@ -48,6 +48,11 @@ namespace SAM.Analytical
                 complexEquipmentModel = new ComplexEquipmentModel();
             }
 
+            if(simpleEquipments.Length == 1)
+            {
+                complexEquipmentModel.Add(simpleEquipments[0]);
+            }
+
             return complexEquipmentModel.AddRelations(flowClassification, simpleEquipments);
         }
 

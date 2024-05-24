@@ -70,9 +70,27 @@ namespace SAM.Analytical
             return AddRelation(id, simpleEquipment_2, simpleEquipment_1) != null;
         }
 
+        public bool AddRelation(FlowClassification flowClassification, Direction direction, ISimpleEquipment simpleEquipment)
+        {
+            if (flowClassification == FlowClassification.Undefined || simpleEquipment == null)
+            {
+                return false;
+            }
+
+            string id = null;
+
+            id = Query.Id(flowClassification, direction);
+            if (string.IsNullOrWhiteSpace(id))
+            {
+                return false;
+            }
+
+            return AddRelation(id, simpleEquipment) != null;
+        }
+
         public bool AddRelations(FlowClassification flowClassification, params ISimpleEquipment[] simpleEquipments)
         {
-            if(simpleEquipments == null || simpleEquipments.Length < 2)
+            if(simpleEquipments == null || simpleEquipments.Length == 0)
             {
                 return false;
             }
@@ -82,9 +100,14 @@ namespace SAM.Analytical
 
         public bool AddRelations(FlowClassification flowClassification, Direction direction, params ISimpleEquipment[] simpleEquipments)
         {
-            if (simpleEquipments == null || simpleEquipments.Length < 2)
+            if (simpleEquipments == null || simpleEquipments.Length == 0)
             {
                 return false;
+            }
+
+            if(simpleEquipments.Length == 1)
+            {
+                return AddRelation(flowClassification, direction, simpleEquipments[0]);
             }
 
             bool result = false;
