@@ -6,6 +6,34 @@ namespace SAM.Core
 {
     public static partial class Query
     {
+        public static double Calculate(this ArithmeticOperator arithmeticOperator, double value_1, double value_2)
+        {
+            if (double.IsNaN(value_1) || double.IsNaN(value_2))
+            {
+                return double.NaN;
+            }
+
+            switch (arithmeticOperator)
+            {
+                case ArithmeticOperator.Addition:
+                    return value_1 + value_2;
+
+                case ArithmeticOperator.Subtraction:
+                    return value_1 - value_2;
+
+                case ArithmeticOperator.Division:
+                    return value_1 / value_2;
+                
+                case ArithmeticOperator.Multiplication:
+                    return value_1 * value_2;
+
+                case ArithmeticOperator.Modulus:
+                    return value_1 % value_2;
+            }
+
+            return double.NaN;
+        }
+
         public static double Calculate(this Func<double, double> func, double value, double start, double stop, out int count, out double calculationValue, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
         {
             calculationValue = double.NaN;
