@@ -5,7 +5,7 @@ namespace SAM.Core
 {
     public class ModifiableValue : IModifiableValue
     {
-        public ModifiableValue(ISimpleModifier modifier, double value)
+        public ModifiableValue(IModifier modifier, double value)
         {
             Value = value;
             Modifier = modifier;
@@ -30,7 +30,7 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
-        public ISimpleModifier Modifier { get; set; }
+        public IModifier Modifier { get; set; }
         
         public double Value { get; set; }
         

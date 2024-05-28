@@ -2,8 +2,8 @@
 
 namespace SAM.Core
 {
-    public interface IComplexModifier : ISimpleModifier
+    public interface IComplexModifier : IModifier
     {
-        public List<ISimpleModifier> GetModifiers();
+        List<IModifier> Modifiers { get; }
     }
 }

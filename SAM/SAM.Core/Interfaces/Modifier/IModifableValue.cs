@@ -4,7 +4,7 @@
     {
         double Value { get; }
 
-        ISimpleModifier Modifier { get; }
+        IModifier Modifier { get; }
 
         double GetCalculatedValue(int index);
     }
