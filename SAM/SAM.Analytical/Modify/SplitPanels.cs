@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -47,7 +48,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                for(int i=0; i < face3Ds.Count; i++)
+                for (int i=0; i < face3Ds.Count; i++)
                 {
                     Guid guid = panel.Guid;
                     if(i > 0)

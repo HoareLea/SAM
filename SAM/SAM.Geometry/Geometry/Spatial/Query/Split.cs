@@ -611,7 +611,27 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
+            if(segmentable2Ds == null || segmentable2Ds.Count == 0)
+            {
+                return new List<Face3D> { new Face3D(face3D) };
+            }
+
             List<Face2D> face2Ds = plane.Convert(face3D)?.Cut(segmentable2Ds, tolerance_Distance);
+
+            for (int i = face2Ds.Count - 1; i >= 0; i--)
+            {
+                Face2D face3D_Temp = face2Ds[i];
+                List<IClosed2D> closed2Ds = face3D_Temp.InternalEdge2Ds;
+                if (closed2Ds == null || closed2Ds.Count == 0)
+                {
+                    continue;
+                }
+
+                foreach (IClosed2D closed2D in closed2Ds)
+                {
+                    face2Ds.Add(new Face2D(closed2D));
+                }
+            }
 
             return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
