@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalReportSpaces()
           : base("SAMAnalytical.ReportSpaces", "SAMAnalytical.ReportSpaces",
-              "Report Spaces provide all information about space including assumptions from Internal Condition",
+              "Report Spaces provide all information about space including assumptions from Internal Condition\n*Analytical Model need to be connected to see Profile data like HeatingDesignTemperature etc ",
               "SAM", "SAM_Communicate")
         {
         }
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 GH_SAMParam[] result = new GH_SAMParam[1];
-                result[0] = new GH_SAMParam(new Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object\n*Analytical Model need to be connected to see Profile data like HeatingDesignTemperature etc", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 return result;
             }
         }
