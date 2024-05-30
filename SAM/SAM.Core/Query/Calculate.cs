@@ -412,7 +412,7 @@ namespace SAM.Core
                     double value_1 = tuples_Temp_1[0].Item1;
                     double value_2 = tuples_Temp_2[0].Item1;
 
-                    if (tuples_Temp_1.Count != 1 && tuples_Temp_2.Count != 1)
+                    if (tuples_Temp_1.Count != 1 || tuples_Temp_2.Count != 1)
                     {
                         List<double> values_1 = tuples_Temp_1.ConvertAll(x => x.Item1);
                         List<double> values_2 = tuples_Temp_2.ConvertAll(x => x.Item1);
