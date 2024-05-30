@@ -406,7 +406,34 @@ namespace SAM.Core
 
                 if (!double.IsNaN(tuple_Temp.Item1) && !double.IsNaN(tuple_Temp.Item2))
                 {
-                    tuple = new Tuple<double, double>(tuples.Find(x => x.Item2 == tuple_Temp.Item1).Item1, tuples.Find(x => x.Item2 == tuple_Temp.Item2).Item1);
+                    List<Tuple<double, double>> tuples_Temp_1 = tuples.FindAll(x => x.Item2 == tuple_Temp.Item1);
+                    List<Tuple<double, double>> tuples_Temp_2 = tuples.FindAll(x => x.Item2 == tuple_Temp.Item2);
+
+                    double value_1 = tuples_Temp_1[0].Item1;
+                    double value_2 = tuples_Temp_2[0].Item1;
+
+                    if (tuples_Temp_1.Count != 1 && tuples_Temp_2.Count != 1)
+                    {
+                        List<double> values_1 = tuples_Temp_1.ConvertAll(x => x.Item1);
+                        List<double> values_2 = tuples_Temp_2.ConvertAll(x => x.Item1);
+
+                        double difference = Math.Abs(value_1 - value_2);
+                        foreach (double value_Temp_1 in values_1)
+                        {
+                            foreach (double value_Temp_2 in values_2)
+                            {
+                                double difference_Temp = Math.Abs(value_Temp_1 - value_Temp_2);
+                                if (difference > difference_Temp)
+                                {
+                                    difference = difference_Temp;
+                                    value_1 = value_Temp_1;
+                                    value_2 = value_Temp_2;
+                                }
+                            }
+                        }
+                    }
+
+                    tuple = new Tuple<double, double>(value_1, value_2);
                     break;
                 }
             }
