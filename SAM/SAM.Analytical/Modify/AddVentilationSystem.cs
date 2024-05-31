@@ -22,5 +22,29 @@ namespace SAM.Analytical
 
             return ventilationSystem;
         }
+
+        public static VentilationSystem AddVentilationSystem(this AdjacencyCluster adjacencyCluster, AirHandlingUnit airHandlingUnit, VentilationSystemType ventilationSystemType, IEnumerable<Space> spaces = null, bool allowMultipleSystems = false)
+        {
+            if (adjacencyCluster == null || ventilationSystemType == null || airHandlingUnit == null)
+            {
+                return null;
+            }
+
+            VentilationSystem ventilationSystem = AddMechanicalSystem(adjacencyCluster, ventilationSystemType, spaces) as VentilationSystem;
+            if (ventilationSystem == null)
+            {
+                return null;
+            }
+
+            adjacencyCluster.AddObject(airHandlingUnit);
+
+            ventilationSystem.SetValue(VentilationSystemParameter.SupplyUnitName, airHandlingUnit.Name);
+
+            ventilationSystem.SetValue(VentilationSystemParameter.ExhaustUnitName, airHandlingUnit.Name);
+
+            adjacencyCluster.AddObject(ventilationSystem);
+
+            return ventilationSystem;
+        }
     }
 }

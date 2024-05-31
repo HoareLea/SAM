@@ -139,7 +139,6 @@ namespace SAM.Core
         public override Type[] Types => new Type[] { typeof(T) };
         
         public static implicit operator string(AnyOf<T> b) => b?.ToString();
-
     }
 
     public class AnyOf<T, K> : AnyOf
