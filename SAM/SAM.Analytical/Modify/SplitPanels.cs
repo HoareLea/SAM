@@ -145,7 +145,7 @@ namespace SAM.Analytical
                     }
 
                     Guid guid = panel_Old.Guid;
-                    if (adjacencyCluster.Contains<Panel>(guid))
+                    while (adjacencyCluster.Contains<Panel>(guid))
                     {
                         guid = Guid.NewGuid();
                     }
@@ -155,15 +155,12 @@ namespace SAM.Analytical
 
                     adjacencyCluster.AddObject(panel_New);
 
-                    if (i > 0)  
+                    List<IJSAMObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
+                    if (objects != null)
                     {
-                        List<IJSAMObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
-                        if (objects != null)
+                        foreach (IJSAMObject @object in objects)
                         {
-                            foreach (IJSAMObject @object in objects)
-                            {
-                                adjacencyCluster.AddRelation(panel_New, @object);
-                            }
+                            adjacencyCluster.AddRelation(panel_New, @object);
                         }
                     }
                 }
