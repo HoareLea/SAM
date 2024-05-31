@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSplitPanelsByPanels()
           : base("SAMAnalytical.SplitPanelsByPanels", "SAMAnalytical.SplitPanelsByPanels",
-              "Split SAM Analytical Panels by Geometries, *aperture will be splited as well",
+              "Split SAM Analytical Panels by Panels, *aperture will be splited as well\nProperty of Panels will be used",
               "SAM", "Analytical")
         {
         }
@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "Panelsn\nProperty of Panel will be used", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
