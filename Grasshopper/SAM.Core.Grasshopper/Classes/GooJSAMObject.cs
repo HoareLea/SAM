@@ -144,12 +144,23 @@ namespace SAM.Core.Grasshopper
 
                 if (typeof(IGH_Goo).IsAssignableFrom(type_Source))
                 {
-                    object @object = (source as dynamic).Value;
-                    if (@object is T)
+                    var value_Temp = type_Source.GetProperty("Value");
+                    if (value_Temp != null)
                     {
-                        Value = (T)@object;
-                        return true;
+                        var value = value_Temp.GetValue(source);
+                        if (value is T)
+                        {
+                            Value = (T)value;
+                            return true;
+                        }
                     }
+
+                    //object @object = (source as dynamic).Value;
+                    //if (@object is T)
+                    //{
+                    //    Value = (T)@object;
+                    //    return true;
+                    //}
                 }
             }
 
