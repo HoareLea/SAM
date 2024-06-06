@@ -55,6 +55,21 @@ namespace SAM.Geometry.Planar
             return transform2Ds?.ConvertAll(x => x.Clone()).GetEnumerator();
         }
 
+        public void Inverse()
+        {
+            if(transform2Ds == null)
+            {
+                return;
+            }
+
+            transform2Ds.Reverse();
+
+            foreach(ITransform2D transform2D in transform2Ds)
+            {
+                transform2D.Inverse();
+            }
+        }
+
         public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
