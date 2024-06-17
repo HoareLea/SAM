@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,9 +47,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObjectParam = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object \nAnalytical Model, Adjacency Cluster, Panels or Spaces", Access = GH_ParamAccess.list };
-                genericObjectParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(genericObjectParam, ParamVisibility.Binding));
+                GooAnalyticalObjectParam gooAnalyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object \nAnalytical Model, Adjacency Cluster, Panels or Spaces", Access = GH_ParamAccess.list };
+                gooAnalyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Brep() { Name = "_brep", NickName = "_brep", Description = "Brep", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
 
@@ -74,8 +74,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "In", NickName = "In", Description = "SAM Analytical Objects In - Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Out", NickName = "Out", Description = "SAM Analytical Objects Out", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "In", NickName = "In", Description = "SAM Analytical Objects In - Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Out", NickName = "Out", Description = "SAM Analytical Objects Out", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -94,8 +94,8 @@ namespace SAM.Analytical.Grasshopper
             int index_Out = Params.IndexOfOutputParam("Out");
 
             index = Params.IndexOfInputParam("_analyticals");
-            List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects))
+            List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
+            if (index == -1 || !dataAccess.GetDataList(index, analyticalObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
             if (index == -1 || !dataAccess.GetData(index, ref brep))
             {
                 if (index_In != -1)
-                    dataAccess.SetDataList(index_In, sAMObjects);
+                    dataAccess.SetDataList(index_In, analyticalObjects);
 
                 return;
             }
@@ -134,30 +134,62 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels = sAMObjects.FindAll(x => x is Panel).Cast<Panel>().ToList();
-            List<Space> spaces = sAMObjects.FindAll(x => x is Space).Cast<Space>().ToList();
+            List<Panel> panels = analyticalObjects.FindAll(x => x is Panel).Cast<Panel>().ToList();
+            List<Space> spaces = analyticalObjects.FindAll(x => x is Space).Cast<Space>().ToList();
 
-            List<SAMObject> sAMObjects_Result = new List<SAMObject>();
+            List<AdjacencyCluster> adjacencyClusters = new List<AdjacencyCluster>();
+            foreach(IAnalyticalObject analyticalObject in analyticalObjects)
+            {
+                List<Panel> panels_Temp = null;
+                if(analyticalObject is AdjacencyCluster)
+                {
+                    panels_Temp = ((AdjacencyCluster)analyticalObject).GetPanels();
+                }
+                else if(analyticalObject is AnalyticalModel)
+                {
+                    panels_Temp = ((AnalyticalModel)analyticalObject).GetPanels();
+                }
+
+                if(panels_Temp == null || panels_Temp.Count == 0)
+                {
+                    continue;
+                }
+
+                if(panels == null)
+                {
+                    panels = new List<Panel>();
+                }
+
+                panels.AddRange(panels_Temp);
+            }
+
+            List<IAnalyticalObject> analyticalObjects_Result = new List<IAnalyticalObject>();
             if (insideOnly)
             {
-                sAMObjects_Result.AddRange(Geometry.Object.Spatial.Query.Inside(shell, panels, Tolerance.MacroDistance, tolerance));
-                sAMObjects_Result.AddRange(Analytical.Query.Inside(spaces, shell, Tolerance.MacroDistance, tolerance));
+                analyticalObjects_Result.AddRange(Geometry.Object.Spatial.Query.Inside(shell, panels, Tolerance.MacroDistance, tolerance));
+                analyticalObjects_Result.AddRange(Analytical.Query.Inside(spaces, shell, Tolerance.MacroDistance, tolerance));
             }
             else
             {
-                sAMObjects_Result.AddRange(Geometry.Object.Spatial.Query.InRange(shell, panels, tolerance));
-                sAMObjects_Result.AddRange(Analytical.Query.InRange(spaces, shell, tolerance));
+                analyticalObjects_Result.AddRange(Geometry.Object.Spatial.Query.InRange(shell, panels, tolerance));
+                analyticalObjects_Result.AddRange(Analytical.Query.InRange(spaces, shell, tolerance));
             }
 
             if (index_In != -1)
-                dataAccess.SetDataList(index_In, sAMObjects_Result);
+            {
+                dataAccess.SetDataList(index_In, analyticalObjects_Result);
+            }
 
             if (index_Out != -1)
             {
-                if (sAMObjects_Result == null || sAMObjects_Result.Count == 0)
-                    dataAccess.SetDataList(index_Out, sAMObjects);
+                if (analyticalObjects_Result == null || analyticalObjects_Result.Count == 0)
+                {
+                    dataAccess.SetDataList(index_Out, analyticalObjects);
+                }
                 else
-                    dataAccess.SetDataList(index_Out, sAMObjects?.FindAll(x => !sAMObjects_Result.Contains(x)));
+                {
+                    dataAccess.SetDataList(index_Out, analyticalObjects?.FindAll(x => !analyticalObjects_Result.Contains(x)));
+                }
             }
         }
     }
