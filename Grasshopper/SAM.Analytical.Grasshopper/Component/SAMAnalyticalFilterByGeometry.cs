@@ -47,13 +47,13 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObjectParam = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object", Access = GH_ParamAccess.list };
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObjectParam = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object \nAnalytcial Model, Adjacency Cluster, Panels or Spaces", Access = GH_ParamAccess.list };
                 genericObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(genericObjectParam, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Brep() { Name = "_brep", NickName = "_brep", Description = "Brep", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_insideOnly_", NickName = "_insideOnly_", Description = "Inside Only", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_insideOnly_", NickName = "_insideOnly_", Description = "Inside Only\nif True only fully inside element will be return", Access = GH_ParamAccess.item };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
