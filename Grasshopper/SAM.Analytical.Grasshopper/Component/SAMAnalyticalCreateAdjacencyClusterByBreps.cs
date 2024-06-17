@@ -135,6 +135,12 @@ namespace SAM.Analytical.Grasshopper
                     breps.Add((global::Rhino.Geometry.Brep)@object);
                     continue;
                 }
+                if(@object is global::Rhino.Geometry.Extrusion)
+                {
+                    global::Rhino.Geometry.Extrusion extrusion = (global::Rhino.Geometry.Extrusion)@object;
+                    breps.Add(extrusion.ToBrep(true));
+                    continue;
+                }
                
                 if(@object is global::Rhino.Geometry.Mesh)
                 {
