@@ -84,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
 
             AnalyticalModel analyticalModel = null;
             index = Params.IndexOfInputParam("_analyticalModel");
-            if (index != -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -93,14 +93,14 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = new List<Panel>();
             index = Params.IndexOfInputParam("_panels");
-            if (index == -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, panels);
             }
 
             List<Aperture> apertures = new List<Aperture>();
             index = Params.IndexOfInputParam("_apertures");
-            if (index == -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, apertures);
             }
