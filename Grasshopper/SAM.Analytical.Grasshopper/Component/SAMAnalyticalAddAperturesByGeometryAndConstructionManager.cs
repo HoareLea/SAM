@@ -156,6 +156,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            List<IMaterial> materials = null;
+
             List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
 
             if (analyticalObject is Panel)
@@ -213,7 +215,7 @@ namespace SAM.Analytical.Grasshopper
                         apertureConstructions.Add(apertureConstruction_Temp);
                     }
                     
-                    List<IMaterial> materials = new List<IMaterial>();
+                    materials = new List<IMaterial>();
                     foreach(ApertureConstruction apertureConstruction_Temp in apertureConstructions)
                     {
                         IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(apertureConstruction_Temp, constructionManager.MaterialLibrary);
@@ -312,12 +314,37 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            materials = new List<IMaterial>();
+            foreach (ApertureConstruction apertureConstruction_Temp in apertureConstructions)
+            {
+                IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(apertureConstruction_Temp, constructionManager.MaterialLibrary);
+                if (materials_Temp != null)
+                {
+                    foreach (IMaterial material in materials_Temp)
+                    {
+                        if (materials.Find(x => x.Name == material.Name) == null)
+                        {
+                            materials.Add(material);
+                        }
+                    }
+                }
+            }
+
             index = Params.IndexOfOutputParam("analyticalObject");
             if(index != -1)
             {
                 if (analyticalModel != null)
                 {
-                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
+                    foreach(IMaterial material in materials)
+                    {
+                        if(materialLibrary.GetMaterial(material.Name) == null)
+                        {
+                            materialLibrary.Add(material);
+                        }
+                    }
+
+                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster, materialLibrary, analyticalModel.ProfileLibrary);
                     dataAccess.SetData(index, analyticalModel_Result);
                 }
                 else
@@ -335,22 +362,6 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("materials");
             if (index != -1 && constructionManager != null)
             {
-                List<IMaterial> materials = new List<IMaterial>();
-                foreach (ApertureConstruction apertureConstruction_Temp in apertureConstructions)
-                {
-                    IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(apertureConstruction_Temp, constructionManager.MaterialLibrary);
-                    if (materials_Temp != null)
-                    {
-                        foreach (IMaterial material in materials_Temp)
-                        {
-                            if (materials.Find(x => x.Name == material.Name) == null)
-                            {
-                                materials.Add(material);
-                            }
-                        }
-                    }
-                }
-
                 dataAccess.SetDataList(index, materials.ConvertAll(x => new GooMaterial(x)));
             }
 
