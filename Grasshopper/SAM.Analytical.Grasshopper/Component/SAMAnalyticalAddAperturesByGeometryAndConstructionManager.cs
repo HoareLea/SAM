@@ -97,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
             index = Params.IndexOfInputParam("_geometries_");
-            if (index == -1 || dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -148,8 +148,9 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(1, ref sAMObject))
+            IAnalyticalObject analyticalObject = null;
+            index = Params.IndexOfInputParam("_analyticalObject");
+            if (!dataAccess.GetData(index, ref analyticalObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -157,9 +158,9 @@ namespace SAM.Analytical.Grasshopper
 
             List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
 
-            if (sAMObject is Panel)
+            if (analyticalObject is Panel)
             {
-                Panel panel = Create.Panel((Panel)sAMObject);
+                Panel panel = Create.Panel((Panel)analyticalObject);
 
                 List<Aperture> apertures = new List<Aperture>();
 
@@ -236,13 +237,13 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = null;
             AnalyticalModel analyticalModel = null;
-            if (sAMObject is AdjacencyCluster)
+            if (analyticalObject is AdjacencyCluster)
             {
-                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
+                adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if(analyticalObject is AnalyticalModel)
             {
-                analyticalModel = ((AnalyticalModel)sAMObject);
+                analyticalModel = ((AnalyticalModel)analyticalObject);
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
             }
 
