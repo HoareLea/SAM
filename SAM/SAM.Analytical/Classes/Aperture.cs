@@ -122,12 +122,27 @@ namespace SAM.Analytical
                 return new List<Face3D>() { face3D };
             }
 
+            //Added 18.06.2024 -> Requested by Michal
+            ApertureConstruction apertureConstruction = Type;
+            List<ConstructionLayer> constructionLayers = apertureConstruction.FrameConstructionLayers;
+            if(constructionLayers == null || constructionLayers.Count == 0)
+            {
+                switch (aperturePart)
+                {
+                    case AperturePart.Pane:
+                        return new List<Face3D>() { new Face3D(face3D.GetExternalEdge3D()) };
+
+                    case AperturePart.Frame:
+                        return new List<Face3D>();
+                }
+            }
+
             List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
             if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
             {
                 double frameWidth = 0;
 
-                ApertureConstruction apertureConstruction = Type;
+
                 if(apertureConstruction != null)
                 {
                     double frameThickness = apertureConstruction.GetFrameThickness();
