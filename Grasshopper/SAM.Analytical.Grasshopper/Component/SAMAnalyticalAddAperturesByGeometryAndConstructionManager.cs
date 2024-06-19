@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,6 +62,12 @@ namespace SAM.Analytical.Grasshopper
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Acceptable area of Aperture", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(Tolerance.MacroDistance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width [m] \n*Min value is sum of frame layer thicknesses Default 0.05m so unable to dopt below this value unless. \nIf you want zero remove frame layer in aperture construction", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage [%] \nsee frameWidth_ description \nuse only one input frameWidth_ or framePercentage_", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical Construction Manager", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
@@ -154,6 +160,28 @@ namespace SAM.Analytical.Grasshopper
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
+            }
+
+            bool framePercentage = true;
+            List<double> values = new List<double>();
+            index = Params.IndexOfInputParam("frameWidth_");
+            if (index != -1 && dataAccess.GetDataList(index, values))
+            {
+                framePercentage = false;
+            }
+
+            if (framePercentage)
+            {
+                index = Params.IndexOfInputParam("framePercentage_");
+                if (index != -1)
+                {
+                    dataAccess.GetDataList(index, values);
+                }
+            }
+
+            if (values != null && values.Count != 0)
+            {
+                face3Ds = Query.Offset(face3Ds, values, framePercentage);
             }
 
             List<IMaterial> materials = null;
