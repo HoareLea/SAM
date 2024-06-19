@@ -166,6 +166,12 @@ namespace SAM.Analytical.Grasshopper
                                 }
                             }
                         }
+
+                        List<string> names = materialLibrary.MissingMaterialsNames(apertureConstruction);
+                        if(names != null && names.Count > 0)
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Fllowing materials are missing: {0}", string.Join(", ", names)));
+                        }
                     }
                 }
                 else if (jSAMObject_Existing is Construction)
@@ -184,6 +190,12 @@ namespace SAM.Analytical.Grasshopper
                                     materialLibrary.Add(material);
                                 }
                             }
+                        }
+
+                        List<string> names = materialLibrary.MissingMaterialsNames(construction);
+                        if (names != null && names.Count > 0)
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Fllowing materials are missing: {0}", string.Join(", ", names)));
                         }
                     }
                 }

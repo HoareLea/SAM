@@ -78,34 +78,34 @@ namespace SAM.Analytical.Grasshopper
             bool simplify = false;
             if (!dataAccess.GetData(3, ref simplify))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                 return;
             }
 
             object @object = null;
             if (!dataAccess.GetData(0, ref @object))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                 return;
             }
 
             List<ISAMGeometry3D> geometry3Ds = null;
             if(!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                 return;
             }
 
             if (geometry3Ds == null || geometry3Ds.Count() == 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
             double tolerance = double.NaN;
             if(!dataAccess.GetData(5, ref tolerance))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                 return;
             }
 
