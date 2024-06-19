@@ -103,6 +103,7 @@
     <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
     <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
     <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndConstructionManager.cs" />
+    <Compile Include="Component\SAMAnalyticalReplaceObject.cs" />
     <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelAperture.cs" />
     <Compile Include="Component\SAMAnalyticalModifyVentilationSystem.cs" />
     <Compile Include="Component\SAMAnalyticalSetApertureConstructionByAnalyticalModel.cs" />
