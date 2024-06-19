@@ -154,6 +154,11 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
+            if(constructionManager == null)
+            {
+                constructionManager = Analytical.Query.DefaultConstructionManager();
+            }
+
             IAnalyticalObject analyticalObject = null;
             index = Params.IndexOfInputParam("_analyticalObject");
             if (!dataAccess.GetData(index, ref analyticalObject))
