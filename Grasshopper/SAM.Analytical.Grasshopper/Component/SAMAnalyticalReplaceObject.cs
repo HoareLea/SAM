@@ -42,10 +42,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_existingObjects", NickName = "_existingObjects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_newObjects", NickName = "_newObjects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_existingObjects", NickName = "_existingObjects", Description = "SAM Objects", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_newObjects", NickName = "_newObjects", Description = "SAM Objects", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical Construction Manager", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical Construction Manager", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
