@@ -393,6 +393,7 @@
     </Compile>
     <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
     <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
+    <Compile Include="Query\Offset.cs" />
     <Compile Include="Query\AnalyticalUIPath.cs" />
     <Compile Include="Query\DataTree.cs" />
     <Compile Include="Query\New\DisplayMaterial.cs" />
