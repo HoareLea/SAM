@@ -1,11 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateGasMaterial : GH_SAMComponent
+    public class SAMAnalyticalCreateGasMaterial : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -32,40 +34,40 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
-            
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
-            
-            index = inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            inputParamManager.AddNumberParameter("_defaultThickness_", "_defaultThickness_", "Default Thickness [m]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_vapourDiffusionFactor_", "_vapourDiffusionFactor_", "Vapour Diffusion Factor [-]", GH_ParamAccess.item, double.NaN);            
-            inputParamManager.AddNumberParameter("_heatTransferCoefficient_", "_heatTransferCoefficient_", "Heat Transfer Coefficient [W/m2K]", GH_ParamAccess.item, double.NaN);
-            
-            inputParamManager.AddNumberParameter("_conductivity_", "_conductivity_", "Conductivity [W/mK]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_density_", "_density_", "Density [kg/m3]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_specificHeatCapacity_", "_specificHeatCapacity_", "Specific Heat Capacity [J/kgK]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_dynamicViscosity_", "_dynamicViscosity_", "Dynamic Viscosity [kg/ms]", GH_ParamAccess.item, double.NaN);
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "gasMaterial_", NickName = "gasMaterial_", Description = "Source SAM Gas Material", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Material Name", Access = GH_ParamAccess.item, Optional = false }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "group_", NickName = "group_", Description = "Group", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "displayName_", NickName = "displayName_", Description = "Display Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "description_", NickName = "description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "defaultThickness_", NickName = "defaultThickness_", Description = "Default Thickness [m]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "vapourDiffusionFactor_", NickName = "vapourDiffusionFactor_", Description = "Vapour Diffusion Factor [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatTransferCoefficient_", NickName = "heatTransferCoefficient_", Description = "Heat Transfer Coefficient [W/m2K]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "conductivity_", NickName = "conductivity_", Description = "Conductivity [W/mK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "density_", NickName = "density_", Description = "Density [kg/m3]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "specificHeatCapacity_", NickName = "specificHeatCapacity_", Description = "Specific Heat Capacity [J/kgK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dynamicViscosity_", NickName = "dynamicViscosity_", Description = "Dynamic Viscosity [kg/ms]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooMaterialParam(), "Material", "Material", "SAM Material", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "material", NickName = "material", Description = "SAM Analytical Material", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -76,47 +78,140 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || string.IsNullOrWhiteSpace(name))
+            index = Params.IndexOfInputParam("_name");
+            if (index == -1 || !dataAccess.GetData(index, ref name) || name == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string group = null;
-            dataAccess.GetData(1, ref group);
+            GasMaterial gasMaterial = null;
+            index = Params.IndexOfInputParam("apertureConstruction_");
+            if (index != -1)
+            {
+                IMaterial material = null;
+                dataAccess.GetData(index, ref material);
+                if(!(material is GasMaterial))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
 
-            string displayName = null;
-            dataAccess.GetData(2, ref displayName);
-            if (string.IsNullOrWhiteSpace(displayName))
-                displayName = name;
+                gasMaterial = (GasMaterial)material;
+            }
 
-            string description = null;
-            dataAccess.GetData(3, ref description);
+            if (gasMaterial == null)
+            {
+                gasMaterial = new GasMaterial(name);
+            }
+            else
+            {
+                gasMaterial = new GasMaterial(name, Guid.NewGuid(), gasMaterial, gasMaterial.DisplayName, gasMaterial.Description);
+            }
 
-            double defaultThickness = double.NaN;
-            dataAccess.GetData(4, ref defaultThickness);
+            string group = gasMaterial.Group;
+            index = Params.IndexOfInputParam("group_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref group);
+            }
 
-            double vapourDiffusionFactor = double.NaN;
-            dataAccess.GetData(5, ref vapourDiffusionFactor);
+            string displayName = gasMaterial.DisplayName;
+            index = Params.IndexOfInputParam("displayName_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref displayName);
+            }
 
-            double heatTransferCoefficient = double.NaN;
-            dataAccess.GetData(6, ref heatTransferCoefficient);
+            string description = gasMaterial.Description;
+            index = Params.IndexOfInputParam("description_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref description);
+            }
 
-            double conductivity = double.NaN;
-            dataAccess.GetData(7, ref conductivity);
+            double defaultThickness = gasMaterial.GetValue<double>(Core.MaterialParameter.DefaultThickness);
+            index = Params.IndexOfInputParam("defaultThickness_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if(dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    defaultThickness = value;
+                }
+            }
 
-            double density = double.NaN;
-            dataAccess.GetData(8, ref density);
+            double vapourDiffusionFactor = gasMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor);
+            index = Params.IndexOfInputParam("vapourDiffusionFactor_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    vapourDiffusionFactor = value;
+                }
+            }
 
-            double specificHeatCapacity = double.NaN;
-            dataAccess.GetData(9, ref specificHeatCapacity);
+            double heatTransferCoefficient = gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient);
+            index = Params.IndexOfInputParam("heatTransferCoefficient_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    heatTransferCoefficient = value;
+                }
+            }
 
-            double dynamicViscosity = double.NaN;
-            dataAccess.GetData(10, ref dynamicViscosity);
+            double thermalConductivity = gasMaterial.ThermalConductivity;
+            index = Params.IndexOfInputParam("conductivity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    thermalConductivity = value;
+                }
+            }
+
+            double density = gasMaterial.Density;
+            index = Params.IndexOfInputParam("density_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    density = value;
+                }
+            }
+
+            double specificHeatCapacity = gasMaterial.SpecificHeatCapacity;
+            index = Params.IndexOfInputParam("specificHeatCapacity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    specificHeatCapacity = value;
+                }
+            }
+
+            double dynamicViscosity = gasMaterial.DynamicViscosity;
+            index = Params.IndexOfInputParam("specificHeatCapacity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    dynamicViscosity = value;
+                }
+            }
 
 
-            dataAccess.SetData(0, new GooMaterial(Create.GasMaterial(name, group, displayName, description, conductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
+            dataAccess.SetData(0, new GooMaterial(Create.GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
         }
     }
 }
