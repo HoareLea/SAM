@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,20 +40,12 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                Construction construction = Analytical.Query.DefaultConstruction(PanelType.Roof);
-
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Contruction Name", Access = GH_ParamAccess.item };
-                param_String.SetPersistentData(construction.Name);
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-                GooConstructionLayerParam gooConstructionLayerParam = new GooConstructionLayerParam() { Name = "_constructionLayers_", NickName = "_constructionLayers_", Description = "SAM Contruction Layers \n*The layers should be ordered from inside to outside", Access = GH_ParamAccess.list };
-                gooConstructionLayerParam.PersistentData.AppendRange(construction.ConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-                result.Add(new GH_SAMParam(gooConstructionLayerParam, ParamVisibility.Binding));
-
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "defaultPanelType_", NickName = "defaultPanelType_", Description = "Default PanelType", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_", NickName = "construction_", Description = "Source SAM Analytical Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Construction Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "constructionLayers_", NickName = "constructionLayers_", Description = "SAM Contruction Layers", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "defaultPanelType_", NickName = "defaultPanelType_", Description = "Default PanelType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -82,29 +74,44 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_name_");
+            Construction construction = null;
+            index = Params.IndexOfInputParam("construction_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref construction);
+            }
+
+            if (construction == null)
+            {
+                construction = Analytical.Query.DefaultConstruction(PanelType.Roof);
+            }
+            else
+            {
+                construction = new Construction(Guid.NewGuid(), construction, construction.Name);
+            }
+
             string name = null;
-            if (index == -1 || !dataAccess.GetData(index, ref name))
+            index = Params.IndexOfInputParam("name_");
+            if (index != -1 && dataAccess.GetData(index, ref name) && name != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                construction = new Construction(construction, name);
             }
 
-            index = Params.IndexOfInputParam("_constructionLayers_");
-            List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
-            if (index == -1 || !dataAccess.GetDataList(index, constructionLayers))
+            index = Params.IndexOfInputParam("constructionLayers_");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+                if (dataAccess.GetDataList(index, constructionLayers))
+                {
+                    construction = new Construction(construction, constructionLayers);
+                }
             }
 
-            Construction construction = new Construction(name, constructionLayers);
-
+            string panelType_String = null;
             index = Params.IndexOfInputParam("defaultPanelType_");
-            string text = null;
-            if(index != -1 && dataAccess.GetData(index, ref text) && !string.IsNullOrWhiteSpace(text))
+            if (index != -1 && dataAccess.GetData(index, ref panelType_String) && !string.IsNullOrWhiteSpace(panelType_String))
             {
-                if (Core.Query.TryGetEnum(text, out PanelType panelType))
+                if (Core.Query.TryGetEnum(panelType_String, out PanelType panelType))
                 {
                     construction.SetValue(ConstructionParameter.DefaultPanelType, panelType);
                 }
