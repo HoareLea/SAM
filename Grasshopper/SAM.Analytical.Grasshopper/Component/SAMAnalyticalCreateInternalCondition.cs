@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreateInternalCondition()
-          : base("SAMAnalytical.InternalCondition", "SAMAnalyticalCreate.InternalCondition",
+          : base("SAMAnalytical.CreateInternalCondition", "SAMAnalytical.CreateInternalCondition",
               "Create InternalCondition",
               "SAM", "Analytical")
         {

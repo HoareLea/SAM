@@ -89,7 +89,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             GasMaterial gasMaterial = null;
-            index = Params.IndexOfInputParam("apertureConstruction_");
+            index = Params.IndexOfInputParam("gasMaterial_");
             if (index != -1)
             {
                 IMaterial material = null;
@@ -200,7 +200,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double dynamicViscosity = gasMaterial.DynamicViscosity;
-            index = Params.IndexOfInputParam("specificHeatCapacity_");
+            index = Params.IndexOfInputParam("dynamicViscosity_");
             if (index != -1)
             {
                 double value = double.NaN;
@@ -210,8 +210,12 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            index = Params.IndexOfOutputParam("material");
+            if(index == -1)
+            {
+                dataAccess.SetData(index, new GooMaterial(Create.GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
+            }
 
-            dataAccess.SetData(0, new GooMaterial(Create.GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
         }
     }
 }
