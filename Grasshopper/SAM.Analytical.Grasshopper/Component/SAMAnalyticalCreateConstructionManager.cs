@@ -90,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             ConstructionManager constructionManager = null;
-            index = Params.IndexOfInputParam("constructions_");
+            index = Params.IndexOfInputParam("constructionManager_");
             if(index != -1)
             {
                 dataAccess.GetData(index, ref constructionManager);

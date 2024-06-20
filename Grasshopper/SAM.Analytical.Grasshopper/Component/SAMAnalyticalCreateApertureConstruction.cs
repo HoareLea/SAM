@@ -75,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             ApertureConstruction apertureConstruction = null;
-            index = Params.IndexOfInputParam("space_");
+            index = Params.IndexOfInputParam("apertureConstruction_");
             if (index != -1)
             {
                 dataAccess.GetData(index, ref apertureConstruction);
@@ -129,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("apertureConstruction");
-            if (index == -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, new GooApertureConstruction(apertureConstruction));
             }
