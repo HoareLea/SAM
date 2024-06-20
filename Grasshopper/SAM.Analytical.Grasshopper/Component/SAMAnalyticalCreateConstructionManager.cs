@@ -162,23 +162,23 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("materials_");
-            List<ISAMObject> sAMObjects = new List<ISAMObject>();
+            List<IJSAMObject> sAMObjects = new List<IJSAMObject>();
             if (index != -1 && dataAccess.GetDataList(index, sAMObjects) && sAMObjects != null)
             {
                 List<IMaterial> materials = new List<IMaterial>();
-                foreach (ISAMObject sAMObject in sAMObjects)
+                foreach (IJSAMObject jSAMObject in sAMObjects)
                 {
-                    if (sAMObject is MaterialLibrary)
+                    if (jSAMObject is MaterialLibrary)
                     {
-                        ((MaterialLibrary)sAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
+                        ((MaterialLibrary)jSAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
                     }
-                    else if (sAMObject is IMaterial)
+                    else if (jSAMObject is IMaterial)
                     {
-                        materials.Add((IMaterial)sAMObject);
+                        materials.Add((IMaterial)jSAMObject);
                     }
-                    else if (sAMObject is ConstructionManager)
+                    else if (jSAMObject is ConstructionManager)
                     {
-                        ((ConstructionManager)sAMObject)?.Materials?.ForEach(x => materials.Add(x));
+                        ((ConstructionManager)jSAMObject)?.Materials?.ForEach(x => materials.Add(x));
                     }
                 }
 
