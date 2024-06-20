@@ -1,6 +1,5 @@
 ﻿using Rhino.Geometry;
 using System.Collections.Generic;
-using System.Net.Http.Headers;
 
 namespace SAM.Geometry.Rhino
 {

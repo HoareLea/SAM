@@ -1,13 +1,8 @@
-﻿using GH_IO.Serialization;
-using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
-using Rhino;
+﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {

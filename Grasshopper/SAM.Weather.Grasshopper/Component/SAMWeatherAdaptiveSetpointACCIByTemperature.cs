@@ -2,10 +2,8 @@
 using SAM.Weather.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Weather.Grasshopper;
 using System;
 using System.Collections.Generic;
-using SAM.Weather;
 
 namespace SAM.Analytical.Grasshopper
 {

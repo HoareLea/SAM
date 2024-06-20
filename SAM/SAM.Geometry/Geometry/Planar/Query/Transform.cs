@@ -1,6 +1,4 @@
-﻿using NetTopologySuite.Geometries;
-using NetTopologySuite.Triangulate;
-using SAM.Geometry.Spatial;
+﻿using SAM.Geometry.Spatial;
 using SAM.Math;
 using System.Collections.Generic;
 

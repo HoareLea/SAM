@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SAM.Geometry.Planar
+﻿namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {

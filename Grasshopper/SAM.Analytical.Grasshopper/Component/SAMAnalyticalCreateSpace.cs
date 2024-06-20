@@ -6,7 +6,6 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {

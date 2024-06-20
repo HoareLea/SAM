@@ -1,8 +1,6 @@
 ﻿using Grasshopper.Kernel;
 using Rhino.Geometry;
-using SAM.Core.Grasshopper;
 using SAM.Geometry.Object;
-using SAM.Geometry.Object.Planar;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;

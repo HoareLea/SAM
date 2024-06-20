@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -7,7 +6,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateApertureConstruction : GH_SAMComponent
+    public class SAMAnalyticalCreateApertureConstruction : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,31 +36,32 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            ApertureConstruction apertureConstruction = Analytical.Query.DefaultApertureConstruction(PanelType.WallExternal, ApertureType.Window);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, apertureConstruction.Name);
-            inputParamManager.AddTextParameter("_apertureType", "_apertureType", "Aperture Type", GH_ParamAccess.item, apertureConstruction.ApertureType.ToString());
-
-            GooConstructionLayerParam gooConstructionLayerParam = null;
-
-            gooConstructionLayerParam = new GooConstructionLayerParam();
-            gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.PaneConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-            inputParamManager.AddParameter(gooConstructionLayerParam, "paneConstructionLayers_", "paneConstructionLayers_", "SAM Pane Contruction Layers \n* order from Inside to Outside", GH_ParamAccess.list);
-
-            gooConstructionLayerParam = new GooConstructionLayerParam();
-            gooConstructionLayerParam.Optional = true;
-            //gooConstructionLayerParam.PersistentData.AppendRange(apertureConstruction.FrameConstructionLayers.ConvertAll(x => new GooConstructionLayer(x)));
-            inputParamManager.AddParameter(gooConstructionLayerParam, "frameConstructionLayers_", "frameConstructionLayers_", "SAM Frame Contruction Layers", GH_ParamAccess.list);
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "apertureConstruction_", NickName = "apertureConstruction_", Description = "Source SAM Analytical ApertureConstruction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Space Name, Default = Space_Default", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "apertureType_", NickName = "apertureType_", Description = "ApertureType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "paneConstructionLayers_", NickName = "paneConstructionLayers_", Description = "SAM Pane Contruction Layers \n* order from Inside to Outside", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "frameConstructionLayers_", NickName = "frameConstructionLayers_", Description = "SAM Frame Contruction Layers", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooApertureConstructionParam(), "ApertureConstruction", "ApertureConstruction", "SAM Analytical Aperture Construction", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "apertureConstruction", NickName = "apertureConstruction", Description = "SAM Analytical ApertureConstruction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -72,77 +72,68 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            ApertureConstruction apertureConstruction = null;
+            index = Params.IndexOfInputParam("space_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref apertureConstruction);
+            }
+
+            if (apertureConstruction == null)
+            {
+                apertureConstruction = Analytical.Query.DefaultApertureConstruction(PanelType.WallExternal, ApertureType.Window);
+            }
+            else
+            {
+                apertureConstruction = new ApertureConstruction(Guid.NewGuid(), apertureConstruction, apertureConstruction.Name);
+            }
+
             string name = null;
-            if (!dataAccess.GetData(0, ref name))
+            index = Params.IndexOfInputParam("name_");
+            if (index != -1 && dataAccess.GetData(index, ref name) && name != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                apertureConstruction = new ApertureConstruction(apertureConstruction, name);
             }
 
-            ApertureType apertureType = ApertureType.Undefined;
-
-            GH_ObjectWrapper objectWrapper = null;
-            dataAccess.GetData(1, ref objectWrapper);
-            if (objectWrapper != null)
+            string apertureType_String = null;
+            index = Params.IndexOfInputParam("apertureType_");
+            if(index != -1 && dataAccess.GetData(index, ref apertureType_String) && !string.IsNullOrWhiteSpace(apertureType_String))
             {
-                if (objectWrapper.Value is GH_String)
-                    apertureType = Analytical.Query.ApertureType(((GH_String)objectWrapper.Value).Value);
-                else
-                    apertureType = Analytical.Query.ApertureType(objectWrapper.Value);
-            }
-
-            List<GH_ObjectWrapper> objectWrappers = null;
-
-            objectWrappers = new List<GH_ObjectWrapper>();
-            if(!dataAccess.GetDataList(2, objectWrappers))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<ConstructionLayer> paneConstructionLayers = new List<ConstructionLayer>();
-            foreach (GH_ObjectWrapper objectWrapper_ConstructionLayer in objectWrappers)
-            {
-                ConstructionLayer constructionLayer = null;
-                if (objectWrapper_ConstructionLayer.Value is ConstructionLayer)
-                    constructionLayer = (ConstructionLayer)objectWrapper_ConstructionLayer.Value;
-                else if (objectWrapper_ConstructionLayer.Value is GooConstructionLayer)
-                    constructionLayer = ((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value;
-
-                if (constructionLayer == null)
-                    continue;
-
-                paneConstructionLayers.Add(constructionLayer);
-            }
-
-            objectWrappers = new List<GH_ObjectWrapper>();
-            dataAccess.GetDataList(3, objectWrappers);
-
-            List<ConstructionLayer> frameConstructionLayers = null;
-
-            if (objectWrappers != null && objectWrappers.Count != 0)
-            {
-                foreach (GH_ObjectWrapper objectWrapper_ConstructionLayer in objectWrappers)
+                ApertureType apertureType = Analytical.Query.ApertureType(apertureType_String);
+                if(apertureType != ApertureType.Undefined)
                 {
-                    ConstructionLayer constructionLayer = null;
-                    if (objectWrapper_ConstructionLayer.Value is ConstructionLayer)
-                        constructionLayer = (ConstructionLayer)objectWrapper_ConstructionLayer.Value;
-                    else if (objectWrapper_ConstructionLayer.Value is GooConstructionLayer)
-                       constructionLayer = ((GooConstructionLayer)objectWrapper_ConstructionLayer.Value).Value;
-
-                    if (constructionLayer == null)
-                        continue;
-
-                    if(frameConstructionLayers == null)
-                    {
-                        frameConstructionLayers = new List<ConstructionLayer>();
-                    }
-
-                    frameConstructionLayers.Add(constructionLayer); 
+                    apertureConstruction = new ApertureConstruction(apertureConstruction, apertureType);
                 }
             }
 
-            dataAccess.SetData(0, new GooApertureConstruction(new ApertureConstruction(Guid.NewGuid(), name, apertureType, paneConstructionLayers, frameConstructionLayers)));
+            index = Params.IndexOfInputParam("paneConstructionLayers_");
+            if(index != -1)
+            {
+                List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+                if (dataAccess.GetDataList(index, constructionLayers))
+                {
+                    apertureConstruction = new ApertureConstruction(apertureConstruction, constructionLayers, apertureConstruction.FrameConstructionLayers);
+                }
+            }
+
+            index = Params.IndexOfInputParam("frameConstructionLayers_");
+            if (index != -1)
+            {
+                List<ConstructionLayer> constructionLayers = new List<ConstructionLayer>();
+                if (dataAccess.GetDataList(index, constructionLayers))
+                {
+                    apertureConstruction = new ApertureConstruction(apertureConstruction, apertureConstruction.PaneConstructionLayers, constructionLayers);
+                }
+            }
+
+            index = Params.IndexOfOutputParam("apertureConstruction");
+            if (index == -1)
+            {
+                dataAccess.SetData(index, new GooApertureConstruction(apertureConstruction));
+            }
+
         }
     }
 }

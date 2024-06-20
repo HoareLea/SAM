@@ -1,6 +1,4 @@
-﻿using SAM.Architectural;
-using SAM.Core;
-using System;
+﻿using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
