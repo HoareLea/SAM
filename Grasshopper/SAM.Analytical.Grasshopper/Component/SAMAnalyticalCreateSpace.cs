@@ -6,6 +6,7 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,17 +46,10 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Space Name, Default = Space_Default", Access = GH_ParamAccess.item, Optional = true };
-                param_String.SetPersistentData("Space_Default");
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-                GooSAMGeometryParam gooSAMGeometryParam = new GooSAMGeometryParam() { Name = "_locationPoint", NickName = "_locationPoint", Description = "Space Location Point, Default = (0,0,0.75)", Access = GH_ParamAccess.item, Optional = true };
-                gooSAMGeometryParam.SetPersistentData(new GooSAMGeometry(new Point3D(0, 0, 0.75)));
-                result.Add(new GH_SAMParam(gooSAMGeometryParam, ParamVisibility.Binding));
-
-                GooInternalConditionParam gooInternalConditionParam = new GooInternalConditionParam() { Name = "internalCondition_", NickName = "internalCondition_", Description = "Space InternalCondition", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(gooInternalConditionParam, ParamVisibility.Voluntary));
-
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "space_", NickName = "space_", Description = "Source SAM Analytical Space", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Space Name, Default = Space_Default", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "locationPoint_", NickName = "locationPoint_", Description = "Space Location Point, Default = (0,0,0.75)", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalCondition_", NickName = "internalCondition_", Description = "Space InternalCondition", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "volume_", NickName = "volume_", Description = "Space Volume [m3]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "area_", NickName = "area_", Description = "Space Area [m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -85,55 +79,54 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            string name = null;
-            index = Params.IndexOfInputParam("_name");
-            if (index == -1 || !dataAccess.GetData(index, ref name) || name == null)
+            Space space = null;
+            index = Params.IndexOfInputParam("space_");
+            if(index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref space);
+            }
+
+            if(space == null)
+            {
+                space = new Space("Space_Default", new Point3D(0, 0, 0.75));
+            }
+            else
+            {
+                space = new Space(Guid.NewGuid(), space);
+            }
+
+
+            string name = null;
+            index = Params.IndexOfInputParam("name_");
+            if (index != -1 && dataAccess.GetData(index, ref name) && name != null)
+            {
+                space = new Space(space, name, space.Location);
             }
 
             ISAMGeometry location = null;
-            index = Params.IndexOfInputParam("_locationPoint");
-            if (index == -1 || !dataAccess.GetData(1, ref location) || !(location is Point3D))
+            index = Params.IndexOfInputParam("locationPoint_");
+            if (index != -1 && dataAccess.GetData(index, ref location) && (location is Point3D))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                space = new Space(space, space.Name, (Point3D)location);
             }
 
             InternalCondition internalCondition = null;
             index = Params.IndexOfInputParam("internalCondition_");
-            if(index != -1)
-            {
-                dataAccess.GetData(index, ref internalCondition);
-            }
-
-            double volume = double.NaN;
-            index = Params.IndexOfInputParam("volume_");
-            if (index != -1)
-            {
-                dataAccess.GetData(index, ref volume);
-            }
-
-            double area = double.NaN;
-            index = Params.IndexOfInputParam("area_");
-            if (index != -1)
-            {
-                dataAccess.GetData(index, ref area);
-            }
-
-            Space space = new Space(name, (Point3D)location);
-            if(internalCondition != null)
+            if(index != -1 && dataAccess.GetData(index, ref internalCondition))
             {
                 space.InternalCondition = internalCondition;
             }
 
-            if(!double.IsNaN(volume))
+            double volume = double.NaN;
+            index = Params.IndexOfInputParam("volume_");
+            if (index != -1 && dataAccess.GetData(index, ref volume))
             {
                 space.SetValue(SpaceParameter.Volume, volume);
             }
 
-            if (!double.IsNaN(area))
+            double area = double.NaN;
+            index = Params.IndexOfInputParam("area_");
+            if (index != -1 && dataAccess.GetData(index, ref area))
             {
                 space.SetValue(SpaceParameter.Area, area);
             }
