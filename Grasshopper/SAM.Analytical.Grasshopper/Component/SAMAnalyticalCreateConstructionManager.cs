@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,8 +45,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                GooAnalyticalObjectParam analyticalObjectParam;
+                result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical ConstructionManager", Access = GH_ParamAccess.item, Optional = true }));
 
+                GooAnalyticalObjectParam analyticalObjectParam;
                 analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "constructions_", NickName = "constructions_", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.list, Optional = true };
                 analyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
@@ -55,9 +56,11 @@ namespace SAM.Analytical.Grasshopper
                 analyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
 
-                GooSAMObjectParam sAMObjectParam = new GooSAMObjectParam() { Name = "_materials", NickName = "_materials", Description = "SAM Materials", Access = GH_ParamAccess.list };
+                GooSAMObjectParam sAMObjectParam = new GooSAMObjectParam() { Name = "materials_", NickName = "materials_", Description = "SAM Materials", Optional = true, Access = GH_ParamAccess.list };
                 sAMObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(sAMObjectParam, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "removeUnused_", NickName = "removeUnused_", Description = "Remove unused materials from Construction Manager", Access = GH_ParamAccess.item, Optional = true }));
 
                 return result.ToArray();
             }
@@ -85,38 +88,57 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
+
+            ConstructionManager constructionManager = null;
+            index = Params.IndexOfInputParam("constructions_");
+            if(index != -1)
+            {
+                dataAccess.GetData(index, ref constructionManager);
+            }
+
+            if(constructionManager == null)
+            {
+                constructionManager = new ConstructionManager();
+            }
+            else
+            {
+                constructionManager = new ConstructionManager(constructionManager);
+            }
+
             List<IAnalyticalObject> analyticalObjects = null;
 
             index = Params.IndexOfInputParam("constructions_");
             analyticalObjects = new List<IAnalyticalObject>();
-            if (index != -1)
+            if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
             {
-                dataAccess.GetDataList(index, analyticalObjects);
+                List<Construction> constructions = new List<Construction>();
+                foreach (IAnalyticalObject analyticalObject in analyticalObjects)
+                {
+                    if (analyticalObject is ConstructionLibrary)
+                    {
+                        ((ConstructionLibrary)analyticalObject)?.GetConstructions()?.ForEach(x => constructions.Add(x));
+                    }
+                    else if (analyticalObject is Construction)
+                    {
+                        constructions.Add((Construction)analyticalObject);
+                    }
+                    else if (analyticalObject is ConstructionManager)
+                    {
+                        ((ConstructionManager)analyticalObject)?.Constructions?.ForEach(x => constructions.Add(x));
+                    }
+                }
+
+                if(constructions != null && constructions.Count != 0)
+                {
+                    constructions?.ForEach(x => constructionManager.Add(x));
+                }
             }
 
-            List<Construction> constructions = new List<Construction>();
-            foreach(IAnalyticalObject analyticalObject in analyticalObjects)
-            {
-                if (analyticalObject is ConstructionLibrary)
-                {
-                    ((ConstructionLibrary)analyticalObject)?.GetConstructions()?.ForEach(x => constructions.Add(x));
-                }
-                else if (analyticalObject is Construction)
-                {
-                    constructions.Add((Construction)analyticalObject);
-                }
-                else if (analyticalObject is ConstructionManager)
-                {
-                    ((ConstructionManager)analyticalObject)?.Constructions?.ForEach(x => constructions.Add(x));
-                }
-            }
-
-            List<ApertureConstruction> apertureConstructions = null;
             index = Params.IndexOfInputParam("apertureConstructions_");
             analyticalObjects = new List<IAnalyticalObject>();
             if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
             {
-                apertureConstructions = new List<ApertureConstruction>();
+                List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
                 foreach (IAnalyticalObject analyticalObject in analyticalObjects)
                 {
                     if (analyticalObject is ApertureConstructionLibrary)
@@ -132,43 +154,46 @@ namespace SAM.Analytical.Grasshopper
                         ((ConstructionManager)analyticalObject)?.ApertureConstructions?.ForEach(x => apertureConstructions.Add(x));
                     }
                 }
+
+                if (apertureConstructions != null && apertureConstructions.Count != 0)
+                {
+                    apertureConstructions?.ForEach(x => constructionManager.Add(x));
+                }
             }
 
-            if((apertureConstructions == null || apertureConstructions.Count == 0) && (constructions == null || constructions.Count == 0))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            index = Params.IndexOfInputParam("_materials");
+            index = Params.IndexOfInputParam("materials_");
             List<ISAMObject> sAMObjects = new List<ISAMObject>();
-            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null)
+            if (index != -1 && dataAccess.GetDataList(index, sAMObjects) && sAMObjects != null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                List<IMaterial> materials = new List<IMaterial>();
+                foreach (ISAMObject sAMObject in sAMObjects)
+                {
+                    if (sAMObject is MaterialLibrary)
+                    {
+                        ((MaterialLibrary)sAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
+                    }
+                    else if (sAMObject is IMaterial)
+                    {
+                        materials.Add((IMaterial)sAMObject);
+                    }
+                    else if (sAMObject is ConstructionManager)
+                    {
+                        ((ConstructionManager)sAMObject)?.Materials?.ForEach(x => materials.Add(x));
+                    }
+                }
+
+                materials?.ForEach(x => constructionManager.Add(x));
             }
 
-            List<IMaterial> materials = new List<IMaterial>();
-            foreach (ISAMObject sAMObject in sAMObjects)
+            bool removeUnusedMaterials = false;
+            index = Params.IndexOfInputParam("removeUnused_");
+            if (index != -1  && dataAccess.GetData(index, ref removeUnusedMaterials))
             {
-                if (sAMObject is MaterialLibrary)
+                if(removeUnusedMaterials)
                 {
-                    ((MaterialLibrary)sAMObject)?.GetMaterials()?.ForEach(x => materials.Add(x));
-                }
-                else if (sAMObject is IMaterial)
-                {
-                    materials.Add((IMaterial)sAMObject);
-                }
-                else if (sAMObject is ConstructionManager)
-                {
-                    ((ConstructionManager)sAMObject)?.Materials?.ForEach(x => materials.Add(x));
+                    constructionManager.RemoveUnusedMaterials();
                 }
             }
-
-            ConstructionManager constructionManager = new ConstructionManager();
-            materials?.ForEach(x => constructionManager.Add(x));
-            constructions?.ForEach(x => constructionManager.Add(x));
-            apertureConstructions?.ForEach(x => constructionManager.Add(x));
 
             List<string> names = Analytical.Query.MissingMaterialsNames(constructionManager);
             if(names != null && names.Count != 0)
