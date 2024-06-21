@@ -1,5 +1,4 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -108,6 +107,10 @@ namespace SAM.Analytical.Grasshopper
                 opaqueMaterial = (OpaqueMaterial)material;
             }
 
+            if(opaqueMaterial == null)
+            {
+                opaqueMaterial = Create.OpaqueMaterial(name, null, null, null, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, false);
+            }
 
             string group = opaqueMaterial.Group;
             index = Params.IndexOfInputParam("group_");

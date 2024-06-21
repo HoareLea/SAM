@@ -1,15 +1,13 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreatePanelBy3DGeometry : GH_SAMComponent
+    public class SAMAnalyticalCreatePanelBy3DGeometry : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,35 +34,34 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_3Dgeometry", "_3Dgeometry", "3D Geometry", GH_ParamAccess.item);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
-
-            index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            //GooConstructionParam gooConstructionParam = new GooConstructionParam();
-            //gooConstructionParam.PersistentData.Append(new GooConstruction(Query.Construction(PanelType.Roof)));
-            index = inputParamManager.AddParameter(new GooConstructionParam(), "construction_", "construction_", "SAM Analytical Construction", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            inputParamManager.AddBooleanParameter("simplify_", "simplify_", "Simplify", GH_ParamAccess.item, true);
-            inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Core.Tolerance.MacroDistance);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panel_", NickName = "panel_", Description = "Source SAM Analytical Panel", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "3Dgeometry_", NickName = "3Dgeometry_", Description = "3D Geometry", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "panelType_", NickName = "panelType_", Description = "SAM Analytical PanelType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_", NickName = "construction_", Description = "SAM Analytical Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "simplify_", NickName = "simplify_", Description = "Simplify", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Acceptable area of Aperture", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panel", NickName = "panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,69 +72,104 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            bool simplify = false;
-            if (!dataAccess.GetData(3, ref simplify))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
-                return;
-            }
-
-            object @object = null;
-            if (!dataAccess.GetData(0, ref @object))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
-                return;
-            }
-
-            List<ISAMGeometry3D> geometry3Ds = null;
-            if(!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
-                return;
-            }
-
-            if (geometry3Ds == null || geometry3Ds.Count() == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
-                return;
-            }
-
-            double tolerance = double.NaN;
-            if(!dataAccess.GetData(5, ref tolerance))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
-                return;
-            }
+            int index;
 
             PanelType panelType = PanelType.Undefined;
-
-            GH_ObjectWrapper objectWrapper = null;
-            dataAccess.GetData(1, ref objectWrapper);
-            if (objectWrapper != null)
+            index = Params.IndexOfInputParam("panelType_");
+            if (index != -1)
             {
-                if (objectWrapper.Value is GH_String)
-                    panelType = Analytical.Query.PanelType(((GH_String)objectWrapper.Value).Value);
-                else
-                    panelType = Analytical.Query.PanelType(objectWrapper.Value);
+                string panelType_String = null;
+                if(dataAccess.GetData(index, ref panelType_String))
+                {
+                    panelType = Analytical.Query.PanelType(panelType_String);
+                }
             }
 
             Construction construction = null;
-            dataAccess.GetData(2, ref construction);
+            index = Params.IndexOfInputParam("construction_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref construction);
+            }
+
+            double tolerance = Core.Tolerance.Distance;
+            index = Params.IndexOfInputParam("tolerance_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref tolerance);
+            }
 
             double minArea = Core.Tolerance.MacroDistance;
-            dataAccess.GetData(4, ref minArea);
+            index = Params.IndexOfInputParam("minArea_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref minArea);
+            }
 
-            List<Panel> panels = Create.Panels(geometry3Ds, panelType, construction, minArea, tolerance);
+
+            bool simplify = true;
+            index = Params.IndexOfInputParam("simplify_");
+            if(index != -1)
+            {
+                dataAccess.GetData(index, ref simplify);
+            }
+
+            List<ISAMGeometry3D> geometry3Ds = null;
+            index = Params.IndexOfInputParam("3Dgeometry_");
+            if(index != -1)
+            {
+                object @object = null;
+                if(dataAccess.GetData(index, ref @object))
+                {
+                    if(!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
+                    {
+                        geometry3Ds = null;
+                    }
+                }
+            }
+
+            index = Params.IndexOfInputParam("panel_");
+            Panel panel = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref panel);
+            }
+
+            List<Panel> panels = null;
+
+            if(panel == null)
+            {
+                if(geometry3Ds == null || panelType == PanelType.Undefined)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
+                    return;
+                }
+
+                panels = Create.Panels(geometry3Ds, panelType, construction, minArea, tolerance);
+            }
+            else
+            {
+                panels = new List<Panel> {  Create.Panel(Guid.NewGuid(), panel) };
+            }
+
             if (panels == null || panels.Count == 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid geometry for panel");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid data for panel");
                 return;
             }
 
-            if (panels.Count == 1)
-                dataAccess.SetData(0, new GooPanel(panels[0]));
-            else
-                dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("panel");
+            if(index != -1)
+            {
+                if (panels.Count == 1)
+                {
+                    dataAccess.SetData(0, new GooPanel(panels[0]));
+                }
+                else
+                {
+                    dataAccess.SetDataList(0, panels.ConvertAll(x => new GooPanel(x)));
+                }
+            }
         }
     }
 }

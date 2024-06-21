@@ -110,6 +110,10 @@ namespace SAM.Analytical.Grasshopper
                 transparentMaterial = (TransparentMaterial)material;
             }
 
+            if(transparentMaterial == null)
+            {
+                transparentMaterial = Create.TransparentMaterial(name, null, null, null, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, double.NaN, false);
+            }
 
             string group = transparentMaterial.Group;
             index = Params.IndexOfInputParam("group_");

@@ -90,6 +90,16 @@ namespace SAM.Analytical
             return new Panel(panel);
         }
 
+        public static Panel Panel(Guid guid, Panel panel)
+        {
+            if (panel == null)
+            {
+                return null;
+            }
+
+            return new Panel(guid, panel);
+        }
+
         public static Panel Panel(Panel panel, PanelType panelType)
         {
             if(panel == null)
