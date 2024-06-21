@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Newtonsoft.Json.Linq;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -30,9 +31,10 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile", Optional = true, Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name of Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values", NickName = "_values", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_typeOrGroup", NickName = "_typeOrGroup", Description = "SAM Analytical ProfileType or ProfileGroup", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "values_", NickName = "values_", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "typeOrGroup_", NickName = "typeOrGroup_", Description = "SAM Analytical ProfileType or ProfileGroup", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -62,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_name");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -75,64 +77,63 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_values");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            List<double> values = new List<double>();
-            if (!dataAccess.GetDataList(index, values) || values == null || values.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            index = Params.IndexOfInputParam("_typeOrGroup");
-            if (index == -1)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            string typeOrGroup = null;
-            if (!dataAccess.GetData(index, ref typeOrGroup) || string.IsNullOrWhiteSpace(typeOrGroup))
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            ProfileType profileType = ProfileType.Undefined;
-            ProfileGroup profileGroup = ProfileGroup.Undefined;
-
-            if(!Core.Query.TryConvert(typeOrGroup, out profileType))
-                if (!Core.Query.TryConvert(typeOrGroup, out profileGroup))
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
-                }
-
-            if(profileType == ProfileType.Undefined && profileGroup == ProfileGroup.Undefined)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             Profile profile = null;
-            if (profileType != ProfileType.Undefined)
+            index = Params.IndexOfInputParam("profile_");
+            if(index != -1)
             {
-                profile = new Profile(name, profileType, values);
+                dataAccess.GetData(index, ref profile);
+            }
+
+            if(profile == null)
+            {
+                profile = new Profile(name, ProfileGroup.Gain);
             }
             else
             {
-                profile = new Profile(name, profileGroup, values);
+                profile = new Profile(Guid.NewGuid(), profile, name, profile.Category);
             }
 
+            index = Params.IndexOfInputParam("values_");
+            if(index != -1)
+            {
+                List<double> values = new List<double>();
+                if (dataAccess.GetDataList(index, values) && values != null && values.Count != 0)
+                {
+                    profile = new Profile(profile, values, profile.Category);
+                }
+            }
+
+            index = Params.IndexOfInputParam("_typeOrGroup");
+            if (index != -1)
+            {
+                string category = null;
+                if (dataAccess.GetData(index, ref category) && !string.IsNullOrWhiteSpace(category))
+                {
+                    if (Core.Query.TryConvert(category, out ProfileType profileType))
+                    {
+                        category = profileType.Text();
+                    }
+
+                    if(string.IsNullOrWhiteSpace( category))
+                    {
+                        if (Core.Query.TryConvert(category, out ProfileGroup profileGroup))
+                        {
+                            category = profileGroup.Text();
+                        }
+                    }
+
+                    if(!string.IsNullOrWhiteSpace(category))
+                    {
+                        profile = new Profile(Guid.NewGuid(), profile, profile.Category);
+                    }
+                }
+            }
 
             index = Params.IndexOfOutputParam("profile");
             if (index != -1)
+            {
                 dataAccess.SetData(index, new GooProfile(profile));
+            }
         }
     }
 }

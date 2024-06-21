@@ -185,6 +185,15 @@ namespace SAM.Analytical
             }
         }
 
+        public Profile(Profile profile, IEnumerable<double> values, string category)
+            : base(profile)
+        {
+            Update(values);
+            this.category = category;
+
+        }
+
+
         public Profile(JObject jObject)
             : base(jObject)
         {

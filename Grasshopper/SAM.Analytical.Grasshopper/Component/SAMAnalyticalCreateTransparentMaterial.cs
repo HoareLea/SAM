@@ -1,11 +1,13 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateTransparentMaterial : GH_SAMComponent
+    public class SAMAnalyticalCreateTransparentMaterial : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -15,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -35,41 +37,44 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
-            
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddTextParameter("_group_", "_group_", "Group", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddTextParameter("_displayName_", "_displayName_", "Display Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            index = inputParamManager.AddTextParameter("_description_", "_description_", "Description", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
-
-            inputParamManager.AddNumberParameter("_thermalConductivity_", "_thermalConductivity_", "Thermal Conductivity [W/mK]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_defaultThickness_", "_defaultThickness_", "Default Thickness [m]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_vapourDiffusionFactor_", "_vapourDiffusionFactor_", "Vapour Diffusion Factor [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_solarTransmittance_", "_solarTransmittance_", "Solar Transmittance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_lightTransmittance_", "_lightTransmittance_", "Light Transmittance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_externalSolarReflectance_", "_externalSolarReflectance_", "External Solar Reflectance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_internalSolarReflectance_", "_internalSolarReflectance_", "Internal Solar Reflectance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_externalLightReflectance_", "_externalLightReflectance_", "External Light Reflectance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_internalLightReflectance_", "_internalLightReflectance_", "Internal Light Reflectance [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_externalEmissivity_", "_externalEmissivity_", "External Emissivity [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddNumberParameter("_internalEmissivity_", "_internalEmissivity_", "Internal Emissivity [-]", GH_ParamAccess.item, double.NaN);
-            inputParamManager.AddBooleanParameter("_isBlind_", "_isBlind_", "Is Blind", GH_ParamAccess.item, false);
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "transparentMaterial_", NickName = "transparentMaterial_", Description = "Source SAM Transparent Material", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Material Name", Access = GH_ParamAccess.item, Optional = false }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "group_", NickName = "group_", Description = "Group", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "displayName_", NickName = "displayName_", Description = "Display Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "description_", NickName = "description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "conductivity_", NickName = "conductivity_", Description = "Thermal Conductivity [W/mK]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "defaultThickness_", NickName = "defaultThickness_", Description = "Default Thickness [m]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "vapourDiffusionFactor_", NickName = "vapourDiffusionFactor_", Description = "Vapour Diffusion Factor [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "solarTransmittance_", NickName = "solarTransmittance_", Description = "Solar Transmittance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightTransmittance_", NickName = "lightTransmittance_", Description = "Light Transmittance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "externalSolarReflectance_", NickName = "externalSolarReflectance_", Description = "External Solar Reflectance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "internalSolarReflectance_", NickName = "internalSolarReflectance_", Description = "Internal Solar Reflectance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "externalLightReflectance_", NickName = "externalLightReflectance_", Description = "External Light Reflectance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "internalLightReflectance_", NickName = "internalLightReflectance_", Description = "Internal Light Reflectance [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "externalEmissivity_", NickName = "externalEmissivity_", Description = "External Emissivity [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "internalEmissivity_", NickName = "internalEmissivity_", Description = "Internal Emissivity [-]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "isBlind_", NickName = "isBlind_", Description = "Is Blind", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooMaterialParam(), "Material", "Material", "SAM Material", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "material", NickName = "material", Description = "SAM Analytical Material", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -80,59 +85,186 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || string.IsNullOrWhiteSpace(name))
+            index = Params.IndexOfInputParam("_name");
+            if (index == -1 || !dataAccess.GetData(index, ref name) || name == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string group = null;
-            dataAccess.GetData(1, ref group);
+            TransparentMaterial transparentMaterial = null;
+            index = Params.IndexOfInputParam("transparentMaterial_");
+            if (index != -1)
+            {
+                IMaterial material = null;
+                dataAccess.GetData(index, ref material);
+                if (!(material is OpaqueMaterial))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
 
-            string displayName = null;
-            dataAccess.GetData(2, ref displayName);
-            if (string.IsNullOrWhiteSpace(displayName))
-                displayName = name;
+                transparentMaterial = (TransparentMaterial)material;
+            }
 
-            string description = null;
-            dataAccess.GetData(3, ref description);
 
-            double thermalConductivity = double.NaN;
-            dataAccess.GetData(4, ref thermalConductivity);
+            string group = transparentMaterial.Group;
+            index = Params.IndexOfInputParam("group_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref group);
+            }
 
-            double defaultThickness = double.NaN;
-            dataAccess.GetData(5, ref defaultThickness);
+            string displayName = transparentMaterial.DisplayName;
+            index = Params.IndexOfInputParam("displayName_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref displayName);
+            }
 
-            double vapourDiffusionFactor = double.NaN;
-            dataAccess.GetData(6, ref vapourDiffusionFactor);
+            string description = transparentMaterial.Description;
+            index = Params.IndexOfInputParam("description_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref description);
+            }
 
-            double solarTransmittance = double.NaN;
-            dataAccess.GetData(7, ref solarTransmittance);
+            double defaultThickness = transparentMaterial.GetValue<double>(Core.MaterialParameter.DefaultThickness);
+            index = Params.IndexOfInputParam("defaultThickness_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    defaultThickness = value;
+                }
+            }
 
-            double lightTransmittance = double.NaN;
-            dataAccess.GetData(8, ref lightTransmittance);
+            double vapourDiffusionFactor = transparentMaterial.GetValue<double>(MaterialParameter.VapourDiffusionFactor);
+            index = Params.IndexOfInputParam("vapourDiffusionFactor_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    vapourDiffusionFactor = value;
+                }
+            }
 
-            double externalSolarReflectance = double.NaN;
-            dataAccess.GetData(9, ref externalSolarReflectance);
+            double solarTransmittance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.SolarTransmittance);
+            index = Params.IndexOfInputParam("solarTransmittance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    solarTransmittance = value;
+                }
+            }
 
-            double internalSolarReflectance = double.NaN;
-            dataAccess.GetData(10, ref internalSolarReflectance);
+            double lightTransmittance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.LightTransmittance);
+            index = Params.IndexOfInputParam("lightTransmittance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    lightTransmittance = value;
+                }
+            }
 
-            double externalLightReflectance = double.NaN;
-            dataAccess.GetData(11, ref externalLightReflectance);
 
-            double internalLightReflectance = double.NaN;
-            dataAccess.GetData(12, ref internalLightReflectance);
 
-            double externalEmissivity = double.NaN;
-            dataAccess.GetData(13, ref externalEmissivity);
+            double externalSolarReflectance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalSolarReflectance);
+            index = Params.IndexOfInputParam("externalSolarReflectance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    externalSolarReflectance = value;
+                }
+            }
 
-            double internalEmissivity = double.NaN;
-            dataAccess.GetData(14, ref internalEmissivity);
+            double internalSolarReflectance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalSolarReflectance);
+            index = Params.IndexOfInputParam("internalSolarReflectance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    internalSolarReflectance = value;
+                }
+            }
 
-            bool isBlind = false;
-            dataAccess.GetData(15, ref isBlind);
+            double externalLightReflectance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalLightReflectance);
+            index = Params.IndexOfInputParam("externalLightReflectance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    externalLightReflectance = value;
+                }
+            }
+
+            double internalLightReflectance = transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalLightReflectance);
+            index = Params.IndexOfInputParam("internalLightReflectance_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    internalLightReflectance = value;
+                }
+            }
+
+            double externalEmissivity = transparentMaterial.GetValue<double>(TransparentMaterialParameter.ExternalEmissivity);
+            index = Params.IndexOfInputParam("externalEmissivity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    externalEmissivity = value;
+                }
+            }
+
+            double internalEmissivity = transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalEmissivity);
+            index = Params.IndexOfInputParam("internalEmissivity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    internalEmissivity = value;
+                }
+            }
+
+            bool isBlind = transparentMaterial.GetValue<bool>(TransparentMaterialParameter.IsBlind);
+            index = Params.IndexOfInputParam("ignoreThermalTransmittanceCalculations_");
+            if (index != -1)
+            {
+                bool value = true;
+                if (dataAccess.GetData(index, ref value))
+                {
+                    isBlind = value;
+                }
+            }
+
+            double thermalConductivity = transparentMaterial.ThermalConductivity;
+            index = Params.IndexOfInputParam("conductivity_");
+            if (index != -1)
+            {
+                double value = double.NaN;
+                if (dataAccess.GetData(index, ref value) && !double.IsNaN(value))
+                {
+                    thermalConductivity = value;
+                }
+            }
 
             dataAccess.SetData(0, new GooMaterial(Create.TransparentMaterial(name, group, displayName, description, thermalConductivity, defaultThickness, vapourDiffusionFactor, solarTransmittance, lightTransmittance, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, isBlind)));
         }
