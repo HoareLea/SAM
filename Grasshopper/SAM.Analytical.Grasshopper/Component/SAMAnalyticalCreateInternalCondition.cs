@@ -59,6 +59,18 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatentGain_", NickName = "equipmentLatentGain_", Description = "Equipment Latent Gain [W]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatentGainPerArea_", NickName = "equipmentLatentGainPerArea_", Description = "Equipment Latent Gain Per Area [W/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "lightingProfile_", NickName = "lightingProfile_", Description = "Lighting Profile Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGain_", NickName = "lightingGain_", Description = "Lighting Gain [W]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGainPerArea_", NickName = "lightingGainPerArea_", Description = "Lighting Gain Per Area [W/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingGainPerPerson_", NickName = "lightingGainPerPerson_", Description = "Lighting Gain Per Person [W/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingLevel_", NickName = "lightingLevel_", Description = "Lighting Level [lux]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "lightingEfficiency_", NickName = "lightingEfficiency_", Description = "Lighting Efficiency [W/m²/100lux]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "infiltrationProfile_", NickName = "infiltrationProfile_", Description = "Infiltration Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationAirChangesPerHour_", NickName = "infiltrationAirChangesPerHour_", Description = "Infiltration Air Changes Per Hour [ACH]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+
+
 
                 return result.ToArray();
             }
@@ -213,6 +225,13 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            double lightingGain = double.NaN;
+            index = Params.IndexOfInputParam("lightingGain_");
+            if (index != -1 && dataAccess.GetData(index, ref lightingGain) && !double.IsNaN(lightingGain))
+            {
+                internalCondition.SetValue(InternalConditionParameter.LightingGain, lightingGain);
+            }
+
             double equipmentLatentGain = double.NaN;
             index = Params.IndexOfInputParam("equipmentLatentGain_");
             if (index != -1 && dataAccess.GetData(index, ref equipmentLatentGain) && !double.IsNaN(equipmentLatentGain))
@@ -227,8 +246,53 @@ namespace SAM.Analytical.Grasshopper
                 internalCondition.SetValue(InternalConditionParameter.EquipmentLatentGainPerArea, equipmentLatentGainPerArea);
             }
 
+            double lightingLevel = double.NaN;
+            index = Params.IndexOfInputParam("lightingLevel_");
+            if (index != -1 && dataAccess.GetData(index, ref lightingLevel) && !double.IsNaN(lightingLevel))
+            {
+                internalCondition.SetValue(InternalConditionParameter.LightingLevel, lightingLevel);
+            }
 
-            dataAccess.SetData(0, new GooInternalCondition(internalCondition));
+            double lightingEfficiency = double.NaN;
+            index = Params.IndexOfInputParam("lightingEfficiency_");
+            if (index != -1 && dataAccess.GetData(index, ref lightingEfficiency) && !double.IsNaN(lightingEfficiency))
+            {
+                internalCondition.SetValue(InternalConditionParameter.LightingEfficiency, lightingEfficiency);
+            }
+
+            index = Params.IndexOfInputParam("infiltrationProfile_");
+            if (index != -1)
+            {
+                Profile profile = null;
+                string profileName = null;
+                if (dataAccess.GetData(index, ref profile))
+                {
+                    profileName = profile.Name;
+                }
+                else
+                {
+                    dataAccess.GetData(index, ref profileName);
+                }
+
+                if (!string.IsNullOrEmpty(profileName))
+                {
+                    internalCondition.SetValue(InternalConditionParameter.InfiltrationProfileName, profileName);
+                }
+            }
+
+            double infiltrationAirChangesPerHour = double.NaN;
+            index = Params.IndexOfInputParam("infiltrationAirChangesPerHour_");
+            if (index != -1 && dataAccess.GetData(index, ref infiltrationAirChangesPerHour) && !double.IsNaN(infiltrationAirChangesPerHour))
+            {
+                internalCondition.SetValue(InternalConditionParameter.InfiltrationAirChangesPerHour, infiltrationAirChangesPerHour);
+            }
+
+            index = Params.IndexOfOutputParam("internalCondition_");
+            if(index != -1)
+            {
+
+                dataAccess.SetData(index, new GooInternalCondition(internalCondition));
+            }
         }
     }
 }
