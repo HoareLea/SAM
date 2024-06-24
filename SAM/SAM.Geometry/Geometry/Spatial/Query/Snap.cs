@@ -1,4 +1,6 @@
-﻿using System;
+﻿using QuickGraph;
+using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -391,5 +393,166 @@ namespace SAM.Geometry.Spatial
             return new Segment3D(point3D_1, point3D_2);
         }
 
+        public static Shell Snap(this Shell shell, IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
+        {
+            if(shell == null)
+            {
+                return null;
+            }
+
+            if(point3Ds == null )
+            {
+                return new Shell(shell);
+            }
+
+            int count = point3Ds.Count();
+            if (count == 0)
+            {
+                return new Shell(shell);
+            }
+
+            BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox();
+            if(boundingBox3D_Shell == null)
+            {
+                return new Shell(shell);
+            }
+
+            List<Point3D> point3Ds_Shell = point3Ds?.ToList().FindAll(x => boundingBox3D_Shell.InRange(x, tolerance));
+            if(point3Ds_Shell == null || point3Ds_Shell.Count == 0)
+            {
+                return new Shell(shell);
+            }
+
+            List<Face3D> face3Ds = shell.Face3Ds;
+            if(face3Ds == null || face3Ds.Count == 0)
+            {
+                return new Shell(face3Ds);
+            }
+
+            for(int i = 0; i < face3Ds.Count; i++)
+            {
+                BoundingBox3D boundingBox3D_Face3D = face3Ds[i]?.GetBoundingBox();
+                if(boundingBox3D_Face3D == null)
+                {
+                    continue;
+                }
+
+                List<Point3D> point3Ds_Face3D = point3Ds_Shell.FindAll(x => boundingBox3D_Face3D.InRange(x, tolerance));
+                if(point3Ds_Face3D == null || point3Ds_Face3D.Count == 0)
+                {
+                    continue;
+                }
+
+
+                face3Ds[i] = face3Ds[i].Snap(point3Ds_Face3D, tolerance);
+
+            }
+
+            return new Shell(face3Ds);
+        }
+
+        public static Face3D Snap(this Face3D face3D, IEnumerable<Point3D> point3Ds, double tolerance = SAM.Core.Tolerance.Distance)
+        {
+            if(face3D == null)
+            {
+                return null;
+            }
+
+            if(point3Ds == null)
+            {
+                return new Face3D(face3D);
+            }
+
+            List<Point3D> point3Ds_Temp = point3Ds.ToList().FindAll(x => face3D.InRange(x, tolerance + tolerance));
+            if(point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+            {
+                return new Face3D(face3D);
+            }
+
+            Plane plane = face3D.GetPlane();
+            if(plane == null)
+            {
+                return new Face3D(face3D);
+            }
+
+            bool updated = false;
+
+            IClosed2D externalEdge2D = face3D.ExternalEdge2D;
+
+            List<Point2D> point2Ds_Edge = (externalEdge2D as ISegmentable2D)?.GetPoints();
+            if(point2Ds_Edge != null)
+            {
+
+                for (int i = 0; i < point2Ds_Edge.Count; i++)
+                {
+                    Point3D point3D = plane.Convert(point2Ds_Edge[i]);
+
+                    int index = point3Ds_Temp.FindIndex(x => x.Distance(point3D) < tolerance);
+                    if(index != -1)
+                    {
+                        point3D = point3Ds_Temp[index];
+                        Point3D point3D_Project = plane.Project(point3D);
+                        if(point3D.Distance(point3D_Project) > tolerance)
+                        {
+                            point3D = point3D_Project.Mid(point3D);
+                        }
+
+                        point2Ds_Edge[i] = plane.Convert(point3D);
+                        updated = true;
+                    }
+                }
+
+                if(updated)
+                {
+                    externalEdge2D = new Polygon2D(point2Ds_Edge);
+                }
+            }
+
+            List<IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
+            if(internalEdge2Ds != null)
+            {
+                for(int i = 0; i < internalEdge2Ds.Count; i++)
+                {
+                    bool updated_Internal = false;
+                    
+                    point2Ds_Edge = (internalEdge2Ds[i] as ISegmentable2D)?.GetPoints();
+                    if (point2Ds_Edge != null)
+                    {
+
+                        for (int j = 0; j < point2Ds_Edge.Count; j++)
+                        {
+                            Point3D point3D = plane.Convert(point2Ds_Edge[j]);
+
+                            int index = point3Ds_Temp.FindIndex(x => x.Distance(point3D) < tolerance);
+                            if (index != -1)
+                            {
+                                point3D = point3Ds_Temp[index];
+                                Point3D point3D_Project = plane.Project(point3D);
+                                if (point3D.Distance(point3D_Project) > tolerance)
+                                {
+                                    point3D = point3D_Project.Mid(point3D);
+                                }
+
+                                point2Ds_Edge[j] = plane.Convert(point3D);
+                                updated_Internal = true;
+                            }
+                        }
+
+                        if (updated_Internal)
+                        {
+                            internalEdge2Ds[i] = new Polygon2D(point2Ds_Edge);
+                            updated = true;
+                        }
+                    }
+                }
+            }
+
+            if(!updated)
+            {
+                return new Face3D(face3D);
+            }
+
+            return new Face3D(plane, Face2D.Create(externalEdge2D, internalEdge2Ds));
+        }
     }
 }
