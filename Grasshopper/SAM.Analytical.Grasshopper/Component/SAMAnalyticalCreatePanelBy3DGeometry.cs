@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index;
 
-            PanelType panelType = PanelType.Undefined;
+            PanelType? panelType = null;
             index = Params.IndexOfInputParam("panelType_");
             if (index != -1)
             {
@@ -139,13 +139,31 @@ namespace SAM.Analytical.Grasshopper
 
             if(panel == null)
             {
-                if(geometry3Ds == null || panelType == PanelType.Undefined)
+                if(geometry3Ds == null)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                     return;
                 }
 
-                panels = Create.Panels(geometry3Ds, panelType, construction, minArea, tolerance);
+                PanelType panelType_Temp = PanelType.Undefined;
+                if(panelType != null && panelType.HasValue)
+                {
+                    panelType_Temp = panelType.Value;
+                }
+
+                panels = Create.Panels(geometry3Ds, panelType_Temp, construction, minArea, tolerance);
+
+                if(panels != null && (panelType == null || !panelType.HasValue))
+                {
+                    for (int i = 0; i < panels.Count; i++)
+                    {
+                        panelType_Temp = Analytical.Query.PanelType(panels[i]?.GetFace3D()?.GetPlane()?.Normal);
+                        if(panelType_Temp != PanelType.Undefined)
+                        {
+                            panels[i] = Create.Panel(panels[i], panelType_Temp);
+                        }
+                    }
+                }
             }
             else
             {
