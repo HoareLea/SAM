@@ -107,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("analytical");
             if (index != -1)
             {
-                dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster_Result));
+                dataAccess.SetData(index, new GooAnalyticalObject(analyticalObject));
             }
 
             index = Params.IndexOfOutputParam("panels");
