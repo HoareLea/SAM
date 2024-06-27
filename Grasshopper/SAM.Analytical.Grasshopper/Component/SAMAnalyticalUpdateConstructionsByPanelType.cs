@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "_constructionManager", NickName = "_constructionManager", Description = "SAM Construction Manager", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Construction Manager", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
                 @boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Connect a boolean toggle to run.", Access = GH_ParamAccess.item };
@@ -105,11 +105,15 @@ namespace SAM.Analytical.Grasshopper
             }
 
             ConstructionManager constructionManager = null;
-            index = Params.IndexOfInputParam("_constructionManager");
-            if (index == -1 || !dataAccess.GetData(index, ref constructionManager) || constructionManager == null)
+            index = Params.IndexOfInputParam("constructionManager_");
+            if (index == -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref constructionManager);
+            }
+
+            if(constructionManager == null)
+            {
+                constructionManager = Analytical.Query.DefaultConstructionManager();
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
