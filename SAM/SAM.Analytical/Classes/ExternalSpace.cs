@@ -32,13 +32,13 @@ namespace SAM.Analytical
         public ExternalSpace(ExternalSpace externalSpace, string name)
             : base(name, externalSpace)
         {
-
+            location = externalSpace?.Location?.Clone<Point3D>();
         }
 
         public ExternalSpace(ExternalSpace externalSpace)
             : base(externalSpace)
         {
-
+            location = externalSpace?.Location?.Clone<Point3D>();
         }
 
         public ExternalSpace(JObject jObject)

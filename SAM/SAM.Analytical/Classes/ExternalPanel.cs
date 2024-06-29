@@ -23,7 +23,7 @@ namespace SAM.Analytical
         public ExternalPanel(ExternalPanel externalPanel)
             : base(externalPanel)
         {
-
+            face3D = externalPanel?.Face3D?.Clone<Face3D>();
         }
 
         public ExternalPanel(JObject jObject)
