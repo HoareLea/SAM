@@ -904,8 +904,8 @@ namespace SAM.Analytical
             if (!base.IsValid(type))
                 return false;
 
-            return typeof(Panel).IsAssignableFrom(type) ||
-                typeof(Space).IsAssignableFrom(type) ||
+            return typeof(IPanel).IsAssignableFrom(type) ||
+                typeof(ISpace).IsAssignableFrom(type) ||
                 typeof(Zone).IsAssignableFrom(type) ||
                 typeof(MechanicalSystem).IsAssignableFrom(type) ||
                 typeof(AdjacencyClusterSimulationResult).IsAssignableFrom(type) ||

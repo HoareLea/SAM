@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry;
-using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -13,7 +12,7 @@ namespace SAM.Analytical
     /// <summary>
     /// SAM Analytical Panel stores information about shape and properties of building boundary such as Wall, Floor, Roof, Slab etc.
     /// </summary>
-    public class Panel : SAMInstance<Construction>, IFace3DObject, IAnalyticalObject
+    public class Panel : SAMInstance<Construction>, IPanel
     {
         /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.

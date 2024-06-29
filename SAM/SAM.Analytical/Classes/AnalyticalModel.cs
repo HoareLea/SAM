@@ -701,5 +701,13 @@ namespace SAM.Analytical
                 return Create.ConstructionManager(this);
             }
         }
+
+        public List<ExternalSpace> ExternalSpaces
+        {
+            get
+            {
+                return adjacencyCluster.GetObjects<ExternalSpace>();
+            }
+        }
     }
 }

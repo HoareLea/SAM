@@ -6,7 +6,7 @@ using System;
 
 namespace SAM.Analytical
 {
-    public class Space : SAMObject, ISAMGeometry3DObject, IAnalyticalObject
+    public class Space : SAMObject, ISpace
     {
         private Point3D location;
         private InternalCondition internalCondition;

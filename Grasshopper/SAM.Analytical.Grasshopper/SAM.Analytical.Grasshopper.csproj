@@ -113,6 +113,7 @@
     <Compile Include="Component\SAMAnalyticalRemoveAirMovementObjects.cs" />
     <Compile Include="Component\SAMAnalyticalAddResults.cs" />
     <Compile Include="Component\SAMAnalyticalHourlyValues.cs" />
+    <Compile Include="Component\SAMAnalyticalSetExternalSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalTM52SpaceExtendedResultByDayOfYears.cs" />
     <Compile Include="Component\SAMAnalyticalTM52BuildingCategory.cs" />
     <Compile Include="Component\SAMAnalyticalDailyIndoorComfortTemperatures.cs" />
