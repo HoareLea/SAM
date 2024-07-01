@@ -47,6 +47,16 @@ namespace SAM.Analytical
             }
         }
 
+        public void FlipNormal(bool flipX = true)
+        {
+            if (face3D == null)
+            {
+                return;
+            }
+
+            face3D.FlipNormal(flipX);
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
