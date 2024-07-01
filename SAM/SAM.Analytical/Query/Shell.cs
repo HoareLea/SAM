@@ -4,16 +4,20 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Geometry.Spatial.Shell Shell(this AdjacencyCluster adjacencyCluster, Space space)
+        public static Geometry.Spatial.Shell Shell(this AdjacencyCluster adjacencyCluster, ISpace space)
         {
             if (adjacencyCluster == null || space == null)
+            {
                 return null;
+            }
 
-            List<Panel> panels = adjacencyCluster.GetRelatedObjects<Panel>(space);
+            List<IPanel> panels = adjacencyCluster.GetRelatedObjects<IPanel>(space);
             if (panels == null || panels.Count == 0)
+            {
                 return null;
+            }
 
-            return new Geometry.Spatial.Shell(panels.ConvertAll(x => x.GetFace3D()));
+            return new Geometry.Spatial.Shell(panels.ConvertAll(x => x.Face3D));
         }
 
         public static Geometry.Spatial.Shell Shell(this AdjacencyCluster adjacencyCluster, System.Guid spaceGuid)
