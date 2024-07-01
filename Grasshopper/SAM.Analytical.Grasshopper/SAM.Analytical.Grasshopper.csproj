@@ -57,6 +57,7 @@
     <Compile Include="Classes\GooAdjacencyCluster.cs" />
     <Compile Include="Classes\GooAnalyticalEquipment.cs" />
     <Compile Include="Classes\GooAirMovement.cs" />
+    <Compile Include="Classes\GooExternalSpace.cs" />
     <Compile Include="Classes\GooSection.cs" />
     <Compile Include="Classes\GooAperture.cs" />
     <Compile Include="Classes\GooAnalyticalModel.cs" />
@@ -113,6 +114,7 @@
     <Compile Include="Component\SAMAnalyticalRemoveAirMovementObjects.cs" />
     <Compile Include="Component\SAMAnalyticalAddResults.cs" />
     <Compile Include="Component\SAMAnalyticalHourlyValues.cs" />
+    <Compile Include="Component\SAMAnalyticalRemoveExternalSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalSetExternalSpaces.cs" />
     <Compile Include="Component\SAMAnalyticalTM52SpaceExtendedResultByDayOfYears.cs" />
     <Compile Include="Component\SAMAnalyticalTM52BuildingCategory.cs" />
