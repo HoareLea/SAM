@@ -39,6 +39,14 @@ namespace SAM.Analytical
             }
         }
 
+        public Construction Construction
+        {
+            get
+            {
+                return Type;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

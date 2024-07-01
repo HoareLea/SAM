@@ -1,13 +1,14 @@
-﻿using System.Collections.Generic;
+﻿using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static double MinElevation(this Panel panel)
+        public static double MinElevation(this IPanel panel)
         {
-            return MinElevation(panel?.PlanarBoundary3D);
+            return MinElevation(panel?.Face3D);
         }
 
         public static double MinElevation(this PlanarBoundary3D planarBoundary3D)
@@ -19,7 +20,16 @@ namespace SAM.Analytical
             return boundingBox3D.Min.Z;
         }
 
-        public static double MinElevation(this IEnumerable<Panel> panels)
+        public static double MinElevation(this Face3D face3D)
+        {
+            BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
+            if (boundingBox3D == null)
+                return double.NaN;
+
+            return boundingBox3D.Min.Z;
+        }
+
+        public static double MinElevation(this IEnumerable<IPanel> panels)
         {
             if (panels == null || panels.Count() == 0)
                 return double.NaN;

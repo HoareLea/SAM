@@ -46,6 +46,16 @@
             return UniqueName(aperture, index);
         }
 
+        public static string UniqueName(this IPanel panel, int id = -1)
+        {
+            if(panel == null)
+            {
+                return null;
+            }
+
+            return UniqueName((dynamic)panel, id);
+        }
+
         public static string UniqueName(this Panel panel, int id = -1)
         {
             if (panel == null)
@@ -60,6 +70,22 @@
             }
 
             return UniqueName(panel.PanelType, name, panel.Guid, id);
+        }
+
+        public static string UniqueName(this ExternalPanel externalPanel, int id = -1)
+        {
+            if (externalPanel == null)
+                return null;
+
+            string name = externalPanel.Name;
+            if (string.IsNullOrEmpty(name))
+            {
+                name = externalPanel.Construction?.Name;
+                if (string.IsNullOrEmpty(name))
+                    return null;
+            }
+
+            return UniqueName(typeof(ExternalPanel).Name, name, externalPanel.Guid, id);
         }
 
         public static string UniqueName(this Aperture aperture, int id = -1)

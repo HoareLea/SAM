@@ -6,20 +6,20 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static Dictionary<double, List<Panel>> MinElevationDictionary(this IEnumerable<Panel> panels, double tolerance = Tolerance.MicroDistance)
+        public static Dictionary<double, List<IPanel>> MinElevationDictionary(this IEnumerable<IPanel> panels, double tolerance = Tolerance.MicroDistance)
         {
             if (panels == null)
                 return null;
 
-            Dictionary<double, List<Panel>> result = new Dictionary<double, List<Panel>>();
-            foreach (Panel panel in panels)
+            Dictionary<double, List<IPanel>> result = new Dictionary<double, List<IPanel>>();
+            foreach (IPanel panel in panels)
             {               
                 double minElevation = Core.Query.Round(panel.MinElevation(), tolerance);
 
-                List<Panel> panels_Elevation = null;
+                List<IPanel> panels_Elevation = null;
                 if (!result.TryGetValue(minElevation, out panels_Elevation))
                 {
-                    panels_Elevation = new List<Panel>();
+                    panels_Elevation = new List<IPanel>();
                     result[minElevation] = panels_Elevation;
                 }
 
@@ -29,20 +29,20 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static Dictionary<double, List<Panel>> MinElevationDictionary(this IEnumerable<Panel> panels, bool filterElevations, double tolerance = Tolerance.MicroDistance)
+        public static Dictionary<double, List<IPanel>> MinElevationDictionary(this IEnumerable<IPanel> panels, bool filterElevations, double tolerance = Tolerance.MicroDistance)
         {
             if (panels == null)
                 return null;
 
-            List<Panel> panels_Temp = panels.ToList();
+            List<IPanel> panels_Temp = panels.ToList();
             if (panels_Temp.Count == 0)
-                return new Dictionary<double, List<Panel>>();
+                return new Dictionary<double, List<IPanel>>();
 
-            List<Panel> panels_Levels = null;
+            List<IPanel> panels_Levels = null;
 
             if (filterElevations)
             {
-                panels_Levels = new List<Panel>();
+                panels_Levels = new List<IPanel>();
                 foreach(Panel panel in panels_Temp)
                 {
                     PanelGroup panelGroup = PanelGroup(panel.PanelType);
@@ -70,24 +70,24 @@ namespace SAM.Analytical
                 }
 
                 if (panels_Levels.Count == 0)
-                    panels_Levels = panels_Temp.FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall && x.PanelType != Analytical.PanelType.CurtainWall);
+                    panels_Levels = panels_Temp.FindAll(x => x is Panel && PanelGroup(((Panel)x).PanelType) == Analytical.PanelGroup.Wall && ((Panel)x).PanelType != Analytical.PanelType.CurtainWall);
 
                 if (panels_Levels.Count == 0)
-                    panels_Levels = panels_Temp.FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
+                    panels_Levels = panels_Temp.FindAll(x => PanelGroup(((Panel)x).PanelType) == Analytical.PanelGroup.Wall);
             }
 
             if (panels_Levels == null || panels_Levels.Count == 0)
                 panels_Levels = panels_Temp;
 
             if (panels_Levels == null || panels_Levels.Count == 0)
-                return new Dictionary<double, List<Panel>>();
+                return new Dictionary<double, List<IPanel>>();
 
 
             //Dictionary of Minimal Elevations and List of Panels
-            Dictionary<double, List<Panel>> result = MinElevationDictionary(panels_Levels, tolerance);
+            Dictionary<double, List<IPanel>> result = MinElevationDictionary(panels_Levels, tolerance);
             List<double> elevations = result.Keys.ToList();
 
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panels_Levels.Contains(panel))
                     continue;
