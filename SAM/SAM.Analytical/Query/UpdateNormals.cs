@@ -30,7 +30,7 @@ namespace SAM.Analytical
 
 
             HashSet<System.Guid> guids = new HashSet<System.Guid>();
-            foreach(Space space in spaces)
+            foreach(ISpace space in spaces)
             {
                 Shell shell = null;
                 Dictionary<IPanel, Vector3D> dictionary = result.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
@@ -157,7 +157,7 @@ namespace SAM.Analytical
             if (!external)
             {
                 List<IPanel> panels = dictionary.Keys.ToList();
-                foreach (Panel panel in panels)
+                foreach (IPanel panel in panels)
                 {
                     dictionary[panel] = dictionary[panel].GetNegated();
                 }
