@@ -1,5 +1,6 @@
 ﻿using Rhino;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -11,12 +12,12 @@ namespace SAM.Analytical.Grasshopper
             if (layerTable == null)
                 return;
 
-            List<Space> spaces = new List<Space>();
+            List<ISpace> spaces = new List<ISpace>();
             foreach (var variable in gH_Structure.AllData(true))
             {
                 if (variable is GooSpace)
                 {
-                    Space space = ((GooSpace)variable).Value;
+                    ISpace space = ((GooSpace)variable).Value;
                     if (space == null)
                         continue;
 
@@ -29,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (spaces != null && spaces.Count != 0)
-                Rhino.Modify.BakeGeometry_ByLevel(rhinoDoc, spaces);
+                Rhino.Modify.BakeGeometry_ByLevel(rhinoDoc, spaces?.FindAll(x => x is Space)?.Cast<Space>());
         }
     }
 }

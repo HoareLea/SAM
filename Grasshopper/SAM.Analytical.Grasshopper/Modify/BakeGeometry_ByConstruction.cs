@@ -10,7 +10,7 @@ namespace SAM.Analytical.Grasshopper
             if (rhinoDoc == null)
                 return;
 
-            List<Panel> panels = new List<Panel>();
+            List<IPanel> panels = new List<IPanel>();
             foreach (var variable in gH_Structure.AllData(true))
             {
                 if (variable is GooPanel)

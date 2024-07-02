@@ -7,7 +7,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByPanelType(this RhinoDoc rhinoDoc, IEnumerable<Panel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByPanelType(this RhinoDoc rhinoDoc, IEnumerable<IPanel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             global::Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)

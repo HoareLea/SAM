@@ -18,7 +18,7 @@ using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooPanel : GooJSAMObject<Panel>, IGH_PreviewData, IGH_BakeAwareData
+    public class GooPanel : GooJSAMObject<IPanel>, IGH_PreviewData, IGH_BakeAwareData
     {
         public BoundaryType? BoundaryType { get; }  = null;
         
@@ -29,12 +29,12 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
-        public GooPanel(Panel panel)
+        public GooPanel(IPanel panel)
             : base(panel)
         {
         }
 
-        public GooPanel(Panel panel, BoundaryType? boundaryType)
+        public GooPanel(IPanel panel, BoundaryType? boundaryType)
             : base(panel)
         {
             BoundaryType = boundaryType;
@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
                 if (Value == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Rhino.Convert.ToRhino(Value.GetBoundingBox());
+                return Geometry.Rhino.Convert.ToRhino(Value?.Face3D?.GetBoundingBox());
             }
         }
 
@@ -62,10 +62,29 @@ namespace SAM.Analytical.Grasshopper
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             if (Value == null)
+            {
                 return;
+            }
 
-            System.Drawing.Color color_ExternalEdge = Analytical.Query.Color(Value.PanelType, false);
-            System.Drawing.Color color_InternalEdges = Analytical.Query.Color(Value.PanelType, true);
+            GooPlanarBoundary3D gooPlanarBoundary3D = null;
+
+            if (Value is ExternalPanel)
+            {
+                System.Drawing.Color color = Analytical.Query.Color((ExternalPanel)Value);
+
+                gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(Value.Face3D));
+                gooPlanarBoundary3D.DrawViewportWires(args, color, color);
+                return;
+            }
+
+            Panel panel = Value as Panel;
+            if(panel == null)
+            {
+                return;
+            }
+
+            System.Drawing.Color color_ExternalEdge = Analytical.Query.Color(panel.PanelType, false);
+            System.Drawing.Color color_InternalEdges = Analytical.Query.Color(panel.PanelType, true);
 
             if (color_ExternalEdge == System.Drawing.Color.Empty)
                 color_ExternalEdge = args.Color;
@@ -73,10 +92,10 @@ namespace SAM.Analytical.Grasshopper
             if (color_InternalEdges == System.Drawing.Color.Empty)
                 color_InternalEdges = args.Color;
 
-            GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(Value.PlanarBoundary3D);
+            gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
             gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
 
-            List<Aperture> apertures = Value.Apertures;
+            List<Aperture> apertures = panel.Apertures;
             if (apertures != null)
             {
                 foreach (Aperture aperture in apertures)
@@ -92,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Face3D face3D = Value?.GetFace3D();
+            Face3D face3D = Value?.Face3D;
             if (face3D == null)
             {
                 return;
@@ -113,7 +132,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            global::Rhino.Display.DisplayMaterial displayMaterial = BoundaryType != null && BoundaryType.HasValue ? Query.DisplayMaterial(BoundaryType.Value) : Query.DisplayMaterial(Value.PanelType);
+            global::Rhino.Display.DisplayMaterial displayMaterial = BoundaryType != null && BoundaryType.HasValue ? Query.DisplayMaterial(BoundaryType.Value) : Value is Panel ? Query.DisplayMaterial(((Panel)Value).PanelType) : Query.DisplayMaterial(Value as ExternalPanel);
             if (displayMaterial == null)
             {
                 displayMaterial = args.Material;
@@ -127,21 +146,24 @@ namespace SAM.Analytical.Grasshopper
 
             args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
-            List<Aperture> apertures = Value.Apertures;
-            if (apertures != null)
+            if(Value is Panel)
             {
-                foreach (Aperture aperture in apertures)
+                List<Aperture> apertures = ((Panel)Value).Apertures;
+                if (apertures != null)
                 {
-                    foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
+                    foreach (Aperture aperture in apertures)
                     {
-                        global::Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
-                        if (displayMaterial_Aperture == null)
+                        foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
                         {
-                            displayMaterial_Aperture = args.Material;
-                        }
+                            global::Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
+                            if (displayMaterial_Aperture == null)
+                            {
+                                displayMaterial_Aperture = args.Material;
+                            }
 
-                        GooSAMGeometry gooSAMGeometry_Aperture = new GooSAMGeometry(closedPlanar3D);
-                        gooSAMGeometry_Aperture.DrawViewportMeshes(args, displayMaterial_Aperture);
+                            GooSAMGeometry gooSAMGeometry_Aperture = new GooSAMGeometry(closedPlanar3D);
+                            gooSAMGeometry_Aperture.DrawViewportMeshes(args, displayMaterial_Aperture);
+                        }
                     }
                 }
             }
@@ -226,7 +248,7 @@ namespace SAM.Analytical.Grasshopper
             }
             else if (typeof(Y).IsAssignableFrom(typeof(GH_Brep)))
             {
-                target = (Y)(object)Value.GetFace3D()?.ToGrasshopper_Brep();
+                target = (Y)(object)Value.Face3D?.ToGrasshopper_Brep();
                 return true;
             }
 

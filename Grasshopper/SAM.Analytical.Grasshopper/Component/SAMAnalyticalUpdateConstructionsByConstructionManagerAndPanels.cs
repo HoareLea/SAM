@@ -167,7 +167,7 @@ namespace SAM.Analytical.Grasshopper
 
                         foreach (GooPanel gooPanel in gooPanels)
                         {
-                            Panel panel = gooPanel?.Value;
+                            IPanel panel = gooPanel?.Value;
                             if(panel == null)
                             {
                                 continue;
@@ -179,7 +179,15 @@ namespace SAM.Analytical.Grasshopper
                                 continue;
                             }
 
-                            panel = Create.Panel(panel, construction_Temp);
+                            if(panel is Panel)
+                            {
+                                panel = Create.Panel((Panel)panel, construction_Temp);
+                            }
+                            else if(panel is ExternalPanel)
+                            {
+                                panel = new ExternalPanel(panel.Face3D, construction_Temp);
+                            }
+
                             adjacencyCluster.AddObject(panel);
                         }
 

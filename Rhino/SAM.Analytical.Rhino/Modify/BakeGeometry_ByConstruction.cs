@@ -7,7 +7,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByConstruction(this RhinoDoc rhinoDoc, IEnumerable<Panel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByConstruction(this RhinoDoc rhinoDoc, IEnumerable<IPanel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             global::Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -36,16 +36,16 @@ namespace SAM.Analytical.Rhino
             Random random = new Random();
 
             List<Guid> guids = new List<Guid>();
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panel == null)
                     continue;
 
-                PanelType panelType = panel.PanelType;
+                PanelType panelType = panel is Panel ? ((Panel)panel).PanelType : PanelType.Air;
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
                 
-                string layerName = panel.Name;
+                string layerName = panel is Panel ? ((Panel)panel).Name : panel.GetType().Name;
                 if (string.IsNullOrWhiteSpace(layerName))
                 {
                     if (panelType == PanelType.Air)
@@ -64,39 +64,42 @@ namespace SAM.Analytical.Rhino
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                List<Aperture> apertures = panel.Apertures;
-
                 if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
                     guids.AddRange(guids_Panel);
                 }
 
-                if (apertures != null && apertures.Count != 0)
+                if(panel is Panel)
                 {
-                    foreach (Aperture aperture in apertures)
+                    List<Aperture> apertures = ((Panel)panel).Apertures;
+
+                    if (apertures != null && apertures.Count != 0)
                     {
-                        if (aperture == null)
+                        foreach (Aperture aperture in apertures)
                         {
-                            continue;
+                            if (aperture == null)
+                            {
+                                continue;
+                            }
+
+                            string apertureConstructionName = aperture.ApertureConstruction?.Name;
+                            if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                                apertureConstructionName = aperture.Name;
+
+                            if (string.IsNullOrWhiteSpace(apertureConstructionName))
+                                continue;
+
+                            color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+
+                            layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
+
+                            //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                            objectAttributes.LayerIndex = layer.Index;
+
+                            Guid guid = default;
+                            if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                                guids.Add(guid);
                         }
-
-                        string apertureConstructionName = aperture.ApertureConstruction?.Name;
-                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                            apertureConstructionName = aperture.Name;
-
-                        if (string.IsNullOrWhiteSpace(apertureConstructionName))
-                            continue;
-
-                        color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-
-                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureConstruction.Id, apertureConstructionName, color);
-
-                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                        objectAttributes.LayerIndex = layer.Index;
-
-                        Guid guid = default;
-                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
-                            guids.Add(guid);
                     }
                 }
             }

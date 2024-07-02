@@ -9,7 +9,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static bool BakeGeometry(this Panel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static bool BakeGeometry(this IPanel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             guids = null;
 
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Rhino
             }
 
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
-            objectAttributes.Name = panel.Name;
+            objectAttributes.Name = panel is Panel ? ((Panel)panel).Name : panel.GetType().Name;
 
             //List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
             List<IPanel> panels_FixEdges = panel.FixEdges(false, tolerance);
@@ -141,7 +141,7 @@ namespace SAM.Analytical.Rhino
             return true;
         }
 
-        public static bool BakeGeometry(this Space space, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
+        public static bool BakeGeometry(this ISpace space, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
         {
             guid = Guid.Empty;
 

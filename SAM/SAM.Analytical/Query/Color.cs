@@ -154,6 +154,16 @@
             return Color(panel.PanelType);
         }
 
+        public static System.Drawing.Color Color(this ExternalPanel externalPanel)
+        {
+            if(externalPanel == null)
+            {
+                return System.Drawing.Color.Empty;
+            }
+
+            return System.Drawing.Color.Yellow;
+        }
+
         public static System.Drawing.Color Color(this Aperture aperture, AperturePart aperturePart)
         {
             if (aperture == null)

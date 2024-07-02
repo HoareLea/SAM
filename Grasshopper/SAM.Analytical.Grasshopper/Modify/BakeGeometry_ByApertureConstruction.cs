@@ -15,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (variable is GooPanel)
                 {
-                    List<Aperture> apertures_Temp = ((GooPanel)variable).Value.Apertures;
+                    List<Aperture> apertures_Temp = (((GooPanel)variable).Value as Panel)?.Apertures;
                     if(apertures_Temp != null)
                     {
                         apertures.AddRange(apertures_Temp);
@@ -29,13 +29,17 @@ namespace SAM.Analytical.Grasshopper
                 {
                     List<Aperture> apertures_Temp = ((GooAdjacencyCluster)variable).Value?.GetApertures();
                     if (apertures_Temp != null && apertures_Temp.Count != 0)
+                    {
                         apertures.AddRange(apertures_Temp);
+                    }
                 }
                 else if (variable is GooAnalyticalModel)
                 {
                     List<Aperture> apertures_Temp = ((GooAnalyticalModel)variable).Value?.AdjacencyCluster.GetApertures();
                     if (apertures_Temp != null && apertures_Temp.Count != 0)
+                    {
                         apertures.AddRange(apertures_Temp);
+                    }
                 }
             }
 

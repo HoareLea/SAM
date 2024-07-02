@@ -4,7 +4,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static string Label(this SAMObject sAMObject, string format, double tolerance = Core.Tolerance.MacroDistance, char openSymbol = '[', char closeSymbol = ']')
+        public static string Label(this IJSAMObject sAMObject, string format, double tolerance = Core.Tolerance.MacroDistance, char openSymbol = '[', char closeSymbol = ']')
         {
             List<string> names = sAMObject?.Names(true, true, true, false);
             if (names == null || names.Count == 0)
