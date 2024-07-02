@@ -110,9 +110,14 @@ namespace SAM.Analytical.Rhino
             return result;
         }
 
-        public static List<Brep> ToRhino(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Brep> ToRhino(this IPanel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
         {
-            List<Face3D> face3Ds = panel.GetFace3Ds(cutApertures);
+            if (panel == null)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = panel is Panel ? ((Panel)panel).GetFace3Ds(cutApertures) : new List<Face3D>() { panel.Face3D };
             if(face3Ds == null || face3Ds.Count == 0)
             {
                 return null;

@@ -22,10 +22,10 @@ namespace SAM.Analytical.Rhino
             objectAttributes.Name = panel.Name;
 
             //List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
-            List<Panel> panels_FixEdges = panel.FixEdges(false, tolerance);
+            List<IPanel> panels_FixEdges = panel.FixEdges(false, tolerance);
             if (panels_FixEdges == null || panels_FixEdges.Count == 0)
             {
-                panels_FixEdges = new List<Panel>() { panel };
+                panels_FixEdges = new List<IPanel>() { panel };
             }
 
             bool result = true;
@@ -37,7 +37,7 @@ namespace SAM.Analytical.Rhino
                 List<Brep> breps = panel_FixEdges.ToRhino(cutApertures, tolerance);
                 if (breps == null || breps.Count == 0)
                 {
-                    result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.GetFace3D(), rhinoDoc, objectAttributes, out Guid guid);
+                    result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.Face3D, rhinoDoc, objectAttributes, out Guid guid);
                     if (result)
                     {
                         guids.Add(guid);
