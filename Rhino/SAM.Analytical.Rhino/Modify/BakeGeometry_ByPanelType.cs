@@ -62,6 +62,8 @@ namespace SAM.Analytical.Rhino
 
                 List<Guid> guids_Panel;
 
+                Layer layer;
+
                 if (!(panel is Panel))
                 {
                     layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Query.Color(panel as dynamic));
@@ -71,10 +73,6 @@ namespace SAM.Analytical.Rhino
                     }
                         continue;
                 }
-
-                Panel panel_Temp = (Panel)panel;
-
-                PanelType panelType = panel_Temp.PanelType;
 
                 layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
 
