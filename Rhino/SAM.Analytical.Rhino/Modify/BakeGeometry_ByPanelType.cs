@@ -1,4 +1,5 @@
-﻿using Rhino;
+﻿using MathNet.Numerics;
+using Rhino;
 using Rhino.DocObjects;
 using Rhino.Render;
 using System;
@@ -73,11 +74,12 @@ namespace SAM.Analytical.Rhino
                     {
                         guids.AddRange(guids_Panel);
                     }
-
-                    if (panel is ExternalPanel)
-                    {
-                        RenderMaterial renderMaterial = layer.RenderMaterial;
-                    }
+                    
+                    // 2024-07-03 Find a way to create transpaernt material
+                    //if (panel is ExternalPanel)
+                    //{
+                    //    RenderMaterial renderMaterial = layer.RenderMaterial;
+                    //}
 
                     continue;
                 }
