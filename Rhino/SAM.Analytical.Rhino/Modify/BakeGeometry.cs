@@ -32,7 +32,7 @@ namespace SAM.Analytical.Rhino
 
             guids = new List<Guid>();
 
-            foreach (Panel panel_FixEdges in panels_FixEdges)
+            foreach (IPanel panel_FixEdges in panels_FixEdges)
             {
                 List<Brep> breps = panel_FixEdges.ToRhino(cutApertures, tolerance);
                 if (breps == null || breps.Count == 0)
