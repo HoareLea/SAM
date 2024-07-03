@@ -1,5 +1,6 @@
 ﻿using Rhino;
 using Rhino.DocObjects;
+using Rhino.Render;
 using System;
 using System.Collections.Generic;
 
@@ -72,7 +73,13 @@ namespace SAM.Analytical.Rhino
                     {
                         guids.AddRange(guids_Panel);
                     }
-                        continue;
+
+                    if (panel is ExternalPanel)
+                    {
+                        RenderMaterial renderMaterial = layer.RenderMaterial;
+                    }
+
+                    continue;
                 }
 
                 layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
