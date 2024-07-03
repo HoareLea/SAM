@@ -67,6 +67,7 @@ namespace SAM.Analytical.Rhino
                 if (!(panel is Panel))
                 {
                     layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Query.Color(panel as dynamic));
+                    objectAttributes.LayerIndex = layer.Index;
                     if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                     {
                         guids.AddRange(guids_Panel);
