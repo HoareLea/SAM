@@ -34,24 +34,42 @@ namespace SAM.Analytical.Rhino
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
             List<Guid> guids = new List<Guid>();
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panel == null)
+                {
                     continue;
+                }
 
-                PanelType panelType = panel.PanelType;
+                Layer layer = null;
 
-                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
+                List<Guid> guids_Panel;
+
+                if (!(panel is Panel))
+                {
+                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Query.Color(panel as dynamic));
+                    if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                    {
+                        guids.AddRange(guids_Panel);
+                    }
+                        continue;
+                }
+
+                Panel panel_Temp = (Panel)panel;
+
+                PanelType panelType = panel_Temp.PanelType;
+
+                layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
                     guids.AddRange(guids_Panel);
                 }
 
-                List<Aperture> apertures = panel.Apertures;
+                List<Aperture> apertures = panel_Temp.Apertures;
                 if (apertures == null || apertures.Count == 0)
                 {
                     continue;
