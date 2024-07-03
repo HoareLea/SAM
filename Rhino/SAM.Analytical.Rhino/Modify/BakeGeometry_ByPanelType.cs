@@ -40,8 +40,25 @@ namespace SAM.Analytical.Rhino
                 {
                     continue;
                 }
+				
+                PanelType panelType = PanelType.Undefined;
 
-                Layer layer = null;
+                if (panel is Panel)
+                {
+                    panelType = ((Panel)panel).PanelType;
+                }
+                else if(panel is ExternalPanel)
+                {
+                    ExternalPanel externalPanel = (ExternalPanel)panel;
+                    if(externalPanel.Construction == null)
+                    {
+                        panelType = PanelType.Air;
+                    }
+                    else
+                    {
+                        panelType = PanelType.Shade;
+                    }
+                }
 
                 List<Guid> guids_Panel;
 
@@ -69,27 +86,30 @@ namespace SAM.Analytical.Rhino
                     guids.AddRange(guids_Panel);
                 }
 
-                List<Aperture> apertures = panel_Temp.Apertures;
-                if (apertures == null || apertures.Count == 0)
+                if(panel is Panel)
                 {
-                    continue;
-                }
-
-                foreach (Aperture aperture in apertures)
-                {
-                    if (aperture == null)
+                    List<Aperture> apertures = ((Panel)panel).Apertures;
+                    if (apertures == null || apertures.Count == 0)
+                    {
                         continue;
+                    }
 
-                    ApertureType apertureType = aperture.ApertureType;
+                    foreach (Aperture aperture in apertures)
+                    {
+                        if (aperture == null)
+                            continue;
 
-                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
+                        ApertureType apertureType = aperture.ApertureType;
 
-                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                    objectAttributes.LayerIndex = layer.Index;
+                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
 
-                    Guid guid = default;
-                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
-                        guids.Add(guid);
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        Guid guid = default;
+                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                            guids.Add(guid);
+                    }
                 }
             }
 

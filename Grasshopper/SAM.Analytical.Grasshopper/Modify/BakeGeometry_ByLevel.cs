@@ -12,12 +12,12 @@ namespace SAM.Analytical.Grasshopper
             if (layerTable == null)
                 return;
 
-            List<ISpace> spaces = new List<ISpace>();
+            List<Space> spaces = new List<Space>();
             foreach (var variable in gH_Structure.AllData(true))
             {
                 if (variable is GooSpace)
                 {
-                    ISpace space = ((GooSpace)variable).Value;
+                    Space space = ((GooSpace)variable).Value as Space;
                     if (space == null)
                         continue;
 
@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (spaces != null && spaces.Count != 0)
-                Rhino.Modify.BakeGeometry_ByLevel(rhinoDoc, spaces?.FindAll(x => x is Space)?.Cast<Space>());
+                Rhino.Modify.BakeGeometry_ByLevel(rhinoDoc, spaces);
         }
     }
 }

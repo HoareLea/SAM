@@ -12,7 +12,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Aperture> apertures = new List<Aperture>();
 
-            List<IPanel> panels = new List<IPanel>();
+            List<Panel> panels = new List<Panel>();
             foreach (var variable in gH_Structure.AllData(true))
             {
                 if (variable is GooAperture)
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if(variable is GooPanel)
                 {
-                    panels.Add(((GooPanel)variable).Value);
+                    panels.Add(((GooPanel)variable).Value as Panel);
                 }
                 else if (variable is GooAdjacencyCluster)
                 {
@@ -38,15 +38,14 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            foreach(IPanel panel in panels)
+            foreach(Panel panel in panels)
             {
-                Panel panel_Temp = panel as Panel;
-                if(panel_Temp == null)
+                if(panel == null)
                 {
                     continue;
                 }
 
-                List<Aperture> apertures_Panel = panel_Temp?.Apertures;
+                List<Aperture> apertures_Panel = panel?.Apertures;
                 if(apertures_Panel == null)
                 {
                     continue;

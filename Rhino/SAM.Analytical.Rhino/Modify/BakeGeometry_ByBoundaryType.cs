@@ -24,13 +24,15 @@ namespace SAM.Analytical.Rhino
 
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
+            List<IPanel> panels = adjacencyCluster.GetObjects<IPanel>();
 
             List<Guid> guids = new List<Guid>();
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panel == null)
+                {
                     continue;
+                }
 
                 BoundaryType boundaryType = adjacencyCluster.BoundaryType(panel);
 
@@ -43,19 +45,22 @@ namespace SAM.Analytical.Rhino
                     guids.AddRange(guids_Panel);
                 }
 
-                List<Aperture> apertures = panel.Apertures;
-                if (apertures == null || apertures.Count == 0)
+                if(panel is Panel)
                 {
-                    continue;
-                }
-
-                foreach (Aperture aperture in apertures)
-                {
-                    if (aperture == null)
+                    List<Aperture> apertures = ((Panel)panel).Apertures;
+                    if (apertures == null || apertures.Count == 0)
+                    {
                         continue;
+                    }
 
-                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
-                        guids.Add(guid);
+                    foreach (Aperture aperture in apertures)
+                    {
+                        if (aperture == null)
+                            continue;
+
+                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
+                            guids.Add(guid);
+                    }
                 }
             }
         }

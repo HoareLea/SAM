@@ -19,15 +19,19 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if (variable is GooAdjacencyCluster)
                 {
-                    List<Panel> panels_Temp = ((GooAdjacencyCluster)variable).Value?.GetPanels();
+                    List<IPanel> panels_Temp = ((GooAdjacencyCluster)variable).Value?.GetObjects<IPanel>();
                     if (panels_Temp != null && panels_Temp.Count != 0)
+                    {
                         panels.AddRange(panels_Temp);
+                    }
                 }
                 else if (variable is GooAnalyticalModel)
                 {
-                    List<Panel> panels_Temp = ((GooAnalyticalModel)variable).Value?.AdjacencyCluster.GetPanels();
+                    List<IPanel> panels_Temp = ((GooAnalyticalModel)variable).Value?.AdjacencyCluster.GetObjects<IPanel>();
                     if (panels_Temp != null && panels_Temp.Count != 0)
+                    {
                         panels.AddRange(panels_Temp);
+                    }
                 }
             }
 
