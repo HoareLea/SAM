@@ -45,7 +45,24 @@ namespace SAM.Analytical.Rhino
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
                 
-                string layerName = panel is Panel ? ((Panel)panel).Name : panel.GetType().Name;
+                string layerName = null;
+                if(panel is Panel)
+                {
+                    layerName = ((Panel)panel).Name;
+                }
+                else if(panel is ExternalPanel)
+                {
+                    ExternalPanel externalPanel = (ExternalPanel)panel;
+                    if(externalPanel.Construction == null)
+                    {
+                        layerName = panel.GetType().Name;
+                    }
+                    else
+                    {
+                        layerName = externalPanel.Construction.Name;
+                    }
+                }
+
                 if (string.IsNullOrWhiteSpace(layerName))
                 {
                     if (panelType == PanelType.Air)
