@@ -34,32 +34,53 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
+                Layer layer_Temp = null;
+                List<Guid> guids_Panel = null;
+
+                if (panel is ExternalPanel)
+                {
+                    layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, panel.GetType().Name, Query.Color((ExternalPanel)panel));
+
+                    objectAttributes.LayerIndex = layer_Temp.Index;
+
+                    if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                    {
+                        guids.AddRange(guids_Panel);
+                    }
+                    continue;
+                }
+
+                Panel panel_Temp = panel as Panel;
+                if(panel_Temp == null)
+                {
+                    continue;
+                }
+
                 BoundaryType boundaryType = adjacencyCluster.BoundaryType(panel);
 
-                Layer layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Query.Color(boundaryType));
+                layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Query.Color(boundaryType));
 
                 objectAttributes.LayerIndex = layer_Temp.Index;
 
-                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
                     guids.AddRange(guids_Panel);
                 }
 
-                if(panel is Panel)
+                List<Aperture> apertures = panel_Temp.Apertures;
+                if (apertures == null || apertures.Count == 0)
                 {
-                    List<Aperture> apertures = ((Panel)panel).Apertures;
-                    if (apertures == null || apertures.Count == 0)
-                    {
+                    continue;
+                }
+
+                foreach (Aperture aperture in apertures)
+                {
+                    if (aperture == null)
                         continue;
-                    }
 
-                    foreach (Aperture aperture in apertures)
+                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
                     {
-                        if (aperture == null)
-                            continue;
-
-                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
-                            guids.Add(guid);
+                        guids.Add(guid);
                     }
                 }
             }
