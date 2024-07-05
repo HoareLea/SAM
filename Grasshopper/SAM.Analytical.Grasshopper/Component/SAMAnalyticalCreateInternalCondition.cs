@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -647,7 +647,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            index = Params.IndexOfOutputParam("internalCondition_");
+            index = Params.IndexOfOutputParam("internalCondition");
             if(index != -1)
             {
 

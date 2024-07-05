@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalModifyObject()
           : base("SAMAnalytical.ModifyObject", "SAMAnalytical.ModifyObject",
-              "Modify Object to AdjacencyCluster or AnalyticalModel \n*If new Space is connected will be added this may cause duplicate spaces \n Consider using UpdateSpace node",
+              "Modify Object to AdjacencyCluster or AnalyticalModel \n If new Space is connected will be added to Model even if not used \n * Consider using UpdateSpace node \n  adds an object to a list, if it already exists, will replace with the new object with data",
               "SAM", "Analytical")
         {
         }
