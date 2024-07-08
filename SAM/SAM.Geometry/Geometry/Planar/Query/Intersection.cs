@@ -243,6 +243,11 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
+            if (!face2D_1.GetBoundingBox().InRange(face2D_2.GetBoundingBox(), tolerance))
+            {
+                return null;
+            }
+
             List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
             if(face2Ds_1 == null || face2Ds_1.Count == 0)
             {
