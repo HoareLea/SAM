@@ -73,16 +73,16 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = null;
 
-                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "heatingSetPoints_", NickName = "heatingSetPoints_", Description = "Heating SetPoints, default Constant 21 degC", Access = GH_ParamAccess.list, Optional = true };
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "heatingSetPoints_", NickName = "heatingSetPoints_", Description = "Heating SetPoints, default Constant 21 degC \n* Input as Values or Profiles", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "coolingSetPoints_", NickName = "coolingSetPoints_", Description = "Cooling SetPoints, default Constant 24 degC", Access = GH_ParamAccess.list, Optional = true};
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "coolingSetPoints_", NickName = "coolingSetPoints_", Description = "Cooling SetPoints, default Constant 24 degC\n* Input as Values or Profiles", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "humidificationSetPoints_", NickName = "humidificationSetPoints_", Description = "Humidification SetPoints, default Constant 40%", Access = GH_ParamAccess.list, Optional = true};
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "humidificationSetPoints_", NickName = "humidificationSetPoints_", Description = "Humidification SetPoints, default Constant 40%\n* Input as Values or Profiles", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
-                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "dehumidificationSetPoints_", NickName = "dehumidificationSetPoints_", Description = "Dehumidification SetPoints, default Constant 60%", Access = GH_ParamAccess.list, Optional = true};
+                genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "dehumidificationSetPoints_", NickName = "dehumidificationSetPoints_", Description = "Dehumidification SetPoints, default Constant 60%\n* Input as Values or Profiles", Access = GH_ParamAccess.list, Optional = true};
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "infiltrationsACH_", NickName = "infiltrationsACH_", Description = "Infiltrations, default Constant 0.2 ac/h for spaces with external Panels", Access = GH_ParamAccess.list, Optional = true};
@@ -226,17 +226,16 @@ namespace SAM.Analytical.Grasshopper
 
                     Profile profile = null;
 
-                    if (value is double)
-                    {
-                        double setPoint = (double)value;
-                        profile = double.IsNaN(setPoint) ? null : new Profile(string.Format("HTG_1to24_{0}", setPoint), setPoint, ProfileGroup.Thermostat);
-                    }
-                    else if (value is Profile)
+                    if (value is Profile)
                     {
                         profile = (Profile)value;
                     }
+                    else if (Core.Query.TryConvert(value, out double @double))
+                    {
+                        profile = double.IsNaN(@double) ? null : new Profile(string.Format("HTG_1to24_{0}", @double), @double, ProfileGroup.Thermostat);
+                    }
 
-                    if(profile == null)
+                    if (profile == null)
                     {
                         continue;
                     }
@@ -260,14 +259,13 @@ namespace SAM.Analytical.Grasshopper
 
                     Profile profile = null;
 
-                    if (value is double)
-                    {
-                        double setPoint = (double)value;
-                        profile = double.IsNaN(setPoint) ? null : new Profile(string.Format("CLG_1to24_{0}", setPoint), setPoint, ProfileGroup.Thermostat);
-                    }
-                    else if (value is Profile)
+                    if (value is Profile)
                     {
                         profile = (Profile)value;
+                    }
+                    else if (Core.Query.TryConvert(value, out double @double))
+                    {
+                        profile = double.IsNaN(@double) ? null : new Profile(string.Format("CLG_1to24_{0}", @double), @double, ProfileGroup.Thermostat);
                     }
 
                     if (profile == null)
@@ -294,14 +292,13 @@ namespace SAM.Analytical.Grasshopper
 
                     Profile profile = null;
 
-                    if (value is double)
-                    {
-                        double setPoint = (double)value;
-                        profile = double.IsNaN(setPoint) ? null : new Profile(string.Format("HUM_1to24_{0}", setPoint), setPoint, ProfileGroup.Humidistat);
-                    }
-                    else if (value is Profile)
+                    if (value is Profile)
                     {
                         profile = (Profile)value;
+                    }
+                    else if (Core.Query.TryConvert(value, out double @double))
+                    {
+                        profile = double.IsNaN(@double) ? null : new Profile(string.Format("HUM_1to24_{0}", @double), @double, ProfileGroup.Humidistat);
                     }
 
                     if (profile == null)
@@ -328,14 +325,13 @@ namespace SAM.Analytical.Grasshopper
 
                     Profile profile = null;
 
-                    if (value is double)
-                    {
-                        double setPoint = (double)value;
-                        profile = double.IsNaN(setPoint) ? null : new Profile(string.Format("DHU_1to24_{0}", setPoint), setPoint, ProfileGroup.Humidistat);
-                    }
-                    else if (value is Profile)
+                    if (value is Profile)
                     {
                         profile = (Profile)value;
+                    }
+                    else if (Core.Query.TryConvert(value, out double @double))
+                    {
+                        profile = double.IsNaN(@double) ? null : new Profile(string.Format("DHU_1to24_{0}", @double), @double, ProfileGroup.Humidistat);
                     }
 
                     if (profile == null)
@@ -438,7 +434,35 @@ namespace SAM.Analytical.Grasshopper
 
                 if (pollutantGenerationsPerPerson != null && pollutantGenerationsPerPerson.Count != 0)
                 {
-                    internalCondition.SetValue(InternalConditionParameter.PollutantGenerationPerPerson, pollutantGenerationsPerPerson.Count > i ? pollutantGenerationsPerPerson[i] : pollutantGenerationsPerPerson.Last());
+                    double value = pollutantGenerationsPerPerson.Count > i ? pollutantGenerationsPerPerson[i] : pollutantGenerationsPerPerson.Last();
+                    string name = internalCondition.GetValue<string>(InternalConditionParameter.OccupancyProfileName);
+                    if(string.IsNullOrWhiteSpace(name))
+                    {
+                        name = value.ToString();
+                    }
+                    else
+                    {
+                        name = string.Format("{0}", name);
+                    }
+
+                    Profile profile = profileLibrary.GetProfile(name, ProfileType.Pollutant, true);
+                    if(profile == null)
+                    {
+                        profile = internalCondition.GetProfile(ProfileType.Occupancy, analyticalModel.ProfileLibrary, true);
+                        if(profile != null)
+                        {
+                            profile = new Profile(Guid.NewGuid(), profile, name, ProfileType.Pollutant.ToString());
+                        }
+                        else
+                        {
+                            profile = new Profile(name, ProfileType.Pollutant, new double[] { 1 });
+                        }
+
+                        profileLibrary.Add(profile);
+                    }
+
+                    internalCondition.SetValue(InternalConditionParameter.PollutantGenerationPerPerson, value);
+                    internalCondition.SetValue(InternalConditionParameter.PollutantProfileName, profile.Name);
                 }
 
                 if (profiles_Heating != null && profiles_Heating.Count != 0)
@@ -541,7 +565,6 @@ namespace SAM.Analytical.Grasshopper
                 space_Temp.InternalCondition = internalCondition;
                 internalConditions.Add(internalCondition);
                 adjacencyCluster.AddObject(space_Temp);
-
             }
 
             index = Params.IndexOfOutputParam("analyticalModel");
