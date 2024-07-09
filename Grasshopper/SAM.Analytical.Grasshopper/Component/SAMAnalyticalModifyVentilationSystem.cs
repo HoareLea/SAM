@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -68,8 +68,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "mechanicalSystem", NickName = "mechanicalSystem", Description = "SAM Mechanical System", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalEquipmentParam() { Name = "equipment", NickName = "equipment", Description = "SAM Mechanical Equipment", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "ventilationSystem", NickName = "ventilationSystem", Description = "SAM Ventilation System", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "aHU", NickName = "aHU", Description = "SAM Air HAndling Unit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -188,13 +188,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(index, analyticalObject);
             }
 
-            index = Params.IndexOfOutputParam("mechanicalSystem");
+            index = Params.IndexOfOutputParam("ventilationSystem");
             if (index != -1)
             {
                 dataAccess.SetData(index, ventilationSystem);
             }
 
-            index = Params.IndexOfOutputParam("equipment");
+            index = Params.IndexOfOutputParam("aHU");
             if (index != -1)
             {
                 dataAccess.SetData(index, airHandlingUnit);
