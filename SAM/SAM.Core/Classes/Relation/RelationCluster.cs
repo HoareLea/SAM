@@ -544,6 +544,56 @@ namespace SAM.Core
             return -1;
         }
 
+        public virtual int GetIndex(X @object, Type type)
+        {
+            if (@object == null)
+            {
+                return -1;
+            }
+
+            X object_Temp = @object;
+            if (@object is Guid)
+            {
+                object_Temp = GetObject(Guid);
+            }
+
+            if (object_Temp == null)
+            {
+                return -1;
+            }
+
+            Guid guid = GetGuid(object_Temp);
+            if (guid.Equals(Guid.Empty))
+            {
+                return -1;
+            }
+
+            List<string> typeNames = GetTypeNames(type);
+            if (typeNames == null || typeNames.Count == 0)
+            {
+                return -1;
+            }
+
+            int count = 0;
+            foreach (string typeName in typeNames)
+            {
+                if (!dictionary_Objects.TryGetValue(typeName, out Dictionary<Guid, X> dictionary) || dictionary == null)
+                {
+                    continue;
+                }
+
+                foreach (Guid guid_Temp in dictionary.Keys)
+                {
+                    if (guid_Temp.Equals(guid))
+                        return count;
+
+                    count++;
+                }
+            }
+
+            return -1;
+        }
+
         public T GetObject<T>(params Func<T, bool>[] functions) where T : X
         {
             List<T> objects = null;

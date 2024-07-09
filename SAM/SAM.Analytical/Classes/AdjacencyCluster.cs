@@ -445,6 +445,11 @@ namespace SAM.Analytical
             return result;
         }
 
+        public override int GetIndex(IJSAMObject @object, Type type)
+        {
+            return base.GetIndex(@object, type);
+        }
+
         public IEnumerable<InternalCondition> GetInternalConditions()
         {
             return GetInternalConditions(true, true);
