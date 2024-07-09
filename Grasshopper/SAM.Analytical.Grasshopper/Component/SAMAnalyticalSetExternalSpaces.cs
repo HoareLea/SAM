@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalSetExternalSpaces()
-          : base("SAMAnalytical.SetExternalSpaces", "SAMAnalytical.SetExternalSpaces",
+          : base("SAMAnalytical.SetExternalSpaces", "SAMAnalytical.SetExternalSpaces \n*you need to select in T3D surfaces that connect to External Space and - Reverse Building Element",
               "Sets ExternalSpaces for SAM AnalyticalModel",
               "SAM", "Analytical")
         {
