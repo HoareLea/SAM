@@ -88,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
             else
             {
                 adjacencyCluster_New = adjacencyCluster.Filter(new Space[] { space });
-                List<Panel> panels = adjacencyCluster_New.UpdateNormals(space, includeApertures);
+                List<IPanel> panels = adjacencyCluster_New.UpdateNormals(space, includeApertures);
                 if (panels != null)
                     panels.ForEach(x => adjacencyCluster_New.AddObject(x));
             }

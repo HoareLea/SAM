@@ -43,9 +43,15 @@ namespace SAM.Analytical
             if (filterElevations)
             {
                 panels_Levels = new List<IPanel>();
-                foreach(Panel panel in panels_Temp)
+                foreach(IPanel panel in panels_Temp)
                 {
-                    PanelGroup panelGroup = PanelGroup(panel.PanelType);
+                    Panel panel_Temp = panel as Panel;
+                    if(panel_Temp == null)
+                    {
+                        continue;
+                    }
+
+                    PanelGroup panelGroup = PanelGroup(panel_Temp.PanelType);
                     if (panelGroup == Analytical.PanelGroup.Undefined)
                         continue;
 
@@ -55,10 +61,10 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    if (panel.PanelType != Analytical.PanelType.Air)
+                    if (panel_Temp.PanelType != Analytical.PanelType.Air)
                         continue;
 
-                    Geometry.Spatial.Vector3D normal = panel.Normal;
+                    Geometry.Spatial.Vector3D normal = panel_Temp.Normal;
                     if (normal == null)
                         continue;
 

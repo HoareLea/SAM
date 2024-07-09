@@ -13,7 +13,7 @@ namespace SAM.Analytical
 
         public static double MinElevation(this PlanarBoundary3D planarBoundary3D)
         {
-            Geometry.Spatial.BoundingBox3D boundingBox3D = planarBoundary3D?.GetBoundingBox();
+            BoundingBox3D boundingBox3D = planarBoundary3D?.GetBoundingBox();
             if (boundingBox3D == null)
                 return double.NaN;
 

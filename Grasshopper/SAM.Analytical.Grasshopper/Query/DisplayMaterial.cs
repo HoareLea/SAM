@@ -27,6 +27,18 @@
             return new global::Rhino.Display.DisplayMaterial(color);
         }
 
+        public static global::Rhino.Display.DisplayMaterial DisplayMaterial(this ExternalPanel externalPanel)
+        {
+            System.Drawing.Color color = Analytical.Query.Color(externalPanel);
+
+            if (color == System.Drawing.Color.Empty)
+            {
+                return null;
+            }
+
+            return new global::Rhino.Display.DisplayMaterial(color);
+        }
+
         public static global::Rhino.Display.DisplayMaterial DisplayMaterial(this ApertureType apertureType)
         {
             System.Drawing.Color color = Analytical.Query.Color(apertureType);

@@ -25,9 +25,14 @@ namespace SAM.Analytical.Rhino
 
         }
 
-        public static Mesh ToRhino_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
+        public static Mesh ToRhino_Mesh(this IPanel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            List<Face3D> face3Ds = panel?.GetFace3Ds(cutApertures);
+            if(panel == null)
+            {
+                return null;
+            }
+
+            List<Face3D> face3Ds = panel is ExternalPanel ? new List<Face3D>() {  panel.Face3D } : (panel as Panel)?.GetFace3Ds(cutApertures);
             if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
@@ -60,11 +65,23 @@ namespace SAM.Analytical.Rhino
                 return null;
             }
 
-            result.VertexColors.CreateMonotoneMesh(Query.Color(panel.PanelType));
+            if(panel is ExternalPanel)
+            {
+                result.VertexColors.CreateMonotoneMesh(Query.Color((ExternalPanel)panel));
+                return result;
+            }
+
+            Panel panel_Temp = panel as Panel;
+            if(panel_Temp == null)
+            {
+                return null;
+            }
+
+            result.VertexColors.CreateMonotoneMesh(Query.Color(panel_Temp.PanelType));
 
             if (includeApertures)
             {
-                List<Aperture> apertures = panel.Apertures;
+                List<Aperture> apertures = panel_Temp.Apertures;
                 if(apertures != null && apertures.Count != 0)
                 {
                     foreach(Aperture aperture in apertures)

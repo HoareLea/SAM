@@ -365,7 +365,7 @@ namespace SAM.Analytical
             return adjacencyCluster.AddObject(analyticalModelSimulationResult_Temp);
         }
 
-        public bool AddSpace(Space space, IEnumerable<Panel> panels = null)
+        public bool AddSpace(Space space, IEnumerable<IPanel> panels = null)
         {
             if (space == null)
             {

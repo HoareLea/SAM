@@ -141,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (GooSpace gooSpace in Params.Input[0].VolatileData.AllData(true))
             {
-                Space space = gooSpace.Value;
+                ISpace space = gooSpace.Value;
                 if (space == null)
                     continue;
 
@@ -150,7 +150,10 @@ namespace SAM.Analytical.Grasshopper
                 {
                     text = name.Substring(1);
                     text = Core.Query.Label(space, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
-                    text = Core.Query.Label(space.InternalCondition, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                    if(space is Space)
+                    {
+                        text = Core.Query.Label(((Space)space).InternalCondition, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                    }
                 }
                 else
                 {
@@ -169,7 +172,7 @@ namespace SAM.Analytical.Grasshopper
                 double height_Temp = height;
                 if (double.IsNaN(height_Temp))
                 {
-                    double area = space.GetValue<double>(SpaceParameter.Area);
+                    double area = space is Space ? ((Space)space).GetValue<double>(SpaceParameter.Area) : double.NaN;
                     if (double.IsNaN(area))
                     {
                         height_Temp = 1;

@@ -22,7 +22,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            List<List<Panel>> panelsList = Enumerable.Repeat<List<Panel>>(null, panels.Count).ToList();
+            List<List<IPanel>> panelsList = Enumerable.Repeat<List<IPanel>>(null, panels.Count).ToList();
 
             Parallel.For(0, panels.Count, (int i) =>
             {
@@ -31,7 +31,7 @@ namespace SAM.Analytical
 
             for(int i=0; i < panels.Count; i++)
             {
-                List<Panel> panels_Temp = panelsList[i];
+                List<IPanel> panels_Temp = panelsList[i];
                 if(panels_Temp == null || panels_Temp.Count == 0)
                 {
                     continue;
@@ -45,7 +45,7 @@ namespace SAM.Analytical
 
                 List<IAnalyticalObject> relatedObjects = result.GetRelatedObjects<IAnalyticalObject>(panels[i]);
 
-                foreach (Panel panel_FixEdge in panels_Temp)
+                foreach (IPanel panel_FixEdge in panels_Temp)
                 {
                     result.AddObject(panel_FixEdge);
                     if (relatedObjects != null)
@@ -61,14 +61,14 @@ namespace SAM.Analytical
             return result;
         }
         
-        public static List<Panel> FixEdges(this Panel panel, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static List<IPanel> FixEdges(this IPanel panel, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             if(panel == null)
             {
                 return null;
             }
 
-            List<Face3D> face3Ds = panel.GetFace3Ds(cutApertures);
+            List<Face3D> face3Ds = panel is Panel ? ((Panel)panel).GetFace3Ds(cutApertures) : new List<Face3D>() { panel.Face3D };
             if(face3Ds == null)
             {
                 return null;
@@ -88,7 +88,7 @@ namespace SAM.Analytical
 
             face3Ds = face3Ds_Temp;
 
-            List<Panel> result = new List<Panel>();
+            List<IPanel> result = new List<IPanel>();
             foreach(Face3D face3D_Temp in face3Ds)
             {
                 System.Guid guid = panel.Guid;
@@ -97,7 +97,16 @@ namespace SAM.Analytical
                     guid = System.Guid.NewGuid();
                 }
 
-                Panel panel_New = Create.Panel(guid, panel, face3D_Temp, null, true, tolerance, tolerance);
+                IPanel panel_New = null;
+                if(panel is Panel)
+                {
+                    panel_New = Create.Panel(guid, (Panel)panel, face3D_Temp, null, true, tolerance, tolerance);
+                }
+                else if(panel is ExternalPanel)
+                {
+                    panel_New = new ExternalPanel(guid, panel as ExternalPanel, face3D_Temp);
+                }
+
                 if(panel_New != null)
                 {
                     result.Add(panel_New);

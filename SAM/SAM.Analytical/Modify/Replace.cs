@@ -118,7 +118,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                List<IJSAMObject> jSAMObjects = adjacencyCluster.GetRelatedObjects<Core.IJSAMObject>(space);
+                List<IJSAMObject> jSAMObjects = adjacencyCluster.GetRelatedObjects<IJSAMObject>(space);
                 adjacencyCluster.Remove(new List<Space>() { space });
                 adjacencyCluster.AddObject(space_New);
                 jSAMObjects.ForEach(x => adjacencyCluster.AddRelation(space_New, x));

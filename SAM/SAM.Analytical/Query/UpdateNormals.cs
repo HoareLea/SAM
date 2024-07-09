@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Spatial;
+﻿using SAM.Core;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,31 +24,31 @@ namespace SAM.Analytical
 
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
 
-            List<Space> spaces = result.GetSpaces();
+            List<ISpace> spaces = result.GetObjects<ISpace>();
             if (spaces == null || spaces.Count == 0)
                 return result;
 
 
             HashSet<System.Guid> guids = new HashSet<System.Guid>();
-            foreach(Space space in spaces)
+            foreach(ISpace space in spaces)
             {
                 Shell shell = null;
-                Dictionary<Panel, Vector3D> dictionary = result.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
+                Dictionary<IPanel, Vector3D> dictionary = result.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
                 if (dictionary == null)
                     continue;
 
                 if (!external)
                 {
-                    List<Panel> panels = dictionary.Keys.ToList();
-                    foreach (Panel panel in panels)
+                    List<IPanel> panels = dictionary.Keys.ToList();
+                    foreach (IPanel panel in panels)
                     {
                         dictionary[panel] = dictionary[panel].GetNegated();
                     }
                 }
 
-                foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+                foreach (KeyValuePair<IPanel, Vector3D> keyValuePair in dictionary)
                 {
-                    Panel panel = keyValuePair.Key;
+                    IPanel panel = keyValuePair.Key;
                     if (panel == null)
                         continue;
 
@@ -62,7 +63,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Vector3D normal_Panel = panel.Plane?.Normal;
+                    Vector3D normal_Panel = panel.Face3D?.GetPlane()?.Normal;
                     if (normal_Panel == null)
                     {
                         continue;
@@ -72,14 +73,25 @@ namespace SAM.Analytical
 
                     if (!normal_External.SameHalf(normal_Panel))
                     {
-                        panel = new Panel(panel);
-                        panel.FlipNormal(flipX, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                        panel = panel.Clone();
+
+                        if(panel is Panel)
+                        {
+                            ((Panel)panel).FlipNormal(flipX, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                        }
+                        else if(panel is ExternalPanel)
+                        {
+                            ((ExternalPanel)panel).FlipNormal(flipX);
+                        }
+
                         updated = true;
                     }
 
-                    if(includeApertures)
+                    if (panel is Panel && includeApertures)
                     {
-                        List<Aperture> apertures = panel.Apertures;
+                        Panel panel_Temp = (Panel)panel;
+
+                        List<Aperture> apertures = panel_Temp.Apertures;
                         if(apertures != null)
                         {
                             foreach (Aperture aperture in apertures)
@@ -97,14 +109,15 @@ namespace SAM.Analytical
 
                                 if (!updated)
                                 {
-                                    panel = new Panel(panel);
+                                    panel = new Panel(panel_Temp);
                                 }
 
                                 aperture.FlipNormal(flipX);
 
-                                panel.RemoveAperture(aperture.Guid);
-                                panel.AddAperture(aperture);
+                                panel_Temp.RemoveAperture(aperture.Guid);
+                                panel_Temp.AddAperture(aperture);
                                 updated = true;
+                                panel = panel_Temp;
                             }
                         }
                     }
@@ -130,30 +143,30 @@ namespace SAM.Analytical
         /// <param name="silverSpacing">SilverSpacing Tolerance</param>
         /// <param name="tolerance">Distance Tolerance</param>
         /// <returns>Copy of panels which enclose given space</returns>
-        public static List<Panel> UpdateNormals(this AdjacencyCluster adjacencyCluster, Space space, bool includeApertures, bool external = true, bool flipX = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<IPanel> UpdateNormals(this AdjacencyCluster adjacencyCluster, ISpace space, bool includeApertures, bool external = true, bool flipX = false, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (adjacencyCluster == null || space == null)
                 return null;
 
             Shell shell = null;
 
-            Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
+            Dictionary<IPanel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out shell, true, silverSpacing, tolerance);
             if (dictionary == null)
                 return null;
 
             if (!external)
             {
-                List<Panel> panels = dictionary.Keys.ToList();
-                foreach (Panel panel in panels)
+                List<IPanel> panels = dictionary.Keys.ToList();
+                foreach (IPanel panel in panels)
                 {
                     dictionary[panel] = dictionary[panel].GetNegated();
                 }
             }
 
-            List<Panel> result = new List<Panel>();
-            foreach (KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+            List<IPanel> result = new List<IPanel>();
+            foreach (KeyValuePair<IPanel, Vector3D> keyValuePair in dictionary)
             {
-                Panel panel = keyValuePair.Key;
+                IPanel panel = keyValuePair.Key;
                 if (panel != null)
                 {
                     Vector3D normal_External = keyValuePair.Value;
@@ -162,7 +175,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    Vector3D normal_Panel = panel.Plane?.Normal;
+                    Vector3D normal_Panel = panel.Face3D?.GetPlane()?.Normal;
                     if(normal_Panel == null)
                     {
                         continue;
@@ -172,14 +185,25 @@ namespace SAM.Analytical
 
                     if (!normal_External.SameHalf(normal_Panel))
                     {
-                        panel = new Panel(panel);
-                        panel.FlipNormal(flipX, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                        panel = panel.Clone();
+
+                        if (panel is Panel)
+                        {
+                            ((Panel)panel).FlipNormal(flipX, false); //2020.09.03 Input changed to false to match with second Method for UpdateNormals
+                        }
+                        else if (panel is ExternalPanel)
+                        {
+                            ((ExternalPanel)panel).FlipNormal(flipX);
+                        }
+
                         updated = true;
                     }
 
-                    if (includeApertures)
+                    if (panel is Panel && includeApertures)
                     {
-                        List<Aperture> apertures = panel.Apertures;
+                        Panel panel_Temp = (Panel)panel;
+
+                        List<Aperture> apertures = panel_Temp.Apertures;
                         if (apertures != null)
                         {
                             foreach (Aperture aperture in apertures)
@@ -197,14 +221,15 @@ namespace SAM.Analytical
 
                                 if (!updated)
                                 {
-                                    panel = new Panel(panel);
+                                    panel_Temp = new Panel(panel_Temp);
                                 }
 
                                 aperture.FlipNormal(flipX);
 
-                                panel.RemoveAperture(aperture.Guid);
-                                panel.AddAperture(aperture);
+                                panel_Temp.RemoveAperture(aperture.Guid);
+                                panel_Temp.AddAperture(aperture);
                                 updated = true;
+                                panel = panel_Temp;
                             }
                         }
                     }

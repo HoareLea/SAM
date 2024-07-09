@@ -1,5 +1,6 @@
 ﻿using Rhino;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -16,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (variable is GooSpace)
                 {
-                    Space space = ((GooSpace)variable).Value;
+                    Space space = ((GooSpace)variable).Value as Space;
                     if (space == null)
                         continue;
 
@@ -29,7 +30,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             if (spaces != null && spaces.Count != 0)
+            {
                 Rhino.Modify.BakeGeometry_ByInternalCondition(rhinoDoc, spaces);
+            }
         }
     }
 }

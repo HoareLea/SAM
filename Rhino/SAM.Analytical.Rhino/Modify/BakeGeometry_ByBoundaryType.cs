@@ -24,26 +24,50 @@ namespace SAM.Analytical.Rhino
 
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
+            List<IPanel> panels = adjacencyCluster.GetObjects<IPanel>();
 
             List<Guid> guids = new List<Guid>();
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panel == null)
+                {
                     continue;
+                }
+
+                Layer layer_Temp = null;
+                List<Guid> guids_Panel = null;
+
+                if (panel is ExternalPanel)
+                {
+                    layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, panel.GetType().Name, Query.Color((ExternalPanel)panel));
+                    
+                    objectAttributes.LayerIndex = layer_Temp.Index;
+
+                    if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                    {
+                        guids.AddRange(guids_Panel);
+                    }
+                    continue;
+                }
+
+                Panel panel_Temp = panel as Panel;
+                if(panel_Temp == null)
+                {
+                    continue;
+                }
 
                 BoundaryType boundaryType = adjacencyCluster.BoundaryType(panel);
 
-                Layer layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Query.Color(boundaryType));
+                layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Query.Color(boundaryType));
 
                 objectAttributes.LayerIndex = layer_Temp.Index;
 
-                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
                     guids.AddRange(guids_Panel);
                 }
 
-                List<Aperture> apertures = panel.Apertures;
+                List<Aperture> apertures = panel_Temp.Apertures;
                 if (apertures == null || apertures.Count == 0)
                 {
                     continue;
@@ -55,7 +79,9 @@ namespace SAM.Analytical.Rhino
                         continue;
 
                     if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
+                    {
                         guids.Add(guid);
+                    }
                 }
             }
         }

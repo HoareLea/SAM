@@ -20,6 +20,12 @@ namespace SAM.Analytical
             this.face3D = face3D == null ? null : new Face3D(face3D);
         }
 
+        public ExternalPanel(System.Guid guid, ExternalPanel externalPanel, Face3D face3D)
+            : base(externalPanel)
+        {
+            this.face3D = face3D == null ? null : new Face3D(face3D);
+        }
+
         public ExternalPanel(ExternalPanel externalPanel)
             : base(externalPanel)
         {
@@ -45,6 +51,16 @@ namespace SAM.Analytical
             {
                 return Type;
             }
+        }
+
+        public void FlipNormal(bool flipX = true)
+        {
+            if (face3D == null)
+            {
+                return;
+            }
+
+            face3D.FlipNormal(flipX);
         }
 
         public override bool FromJObject(JObject jObject)

@@ -9,7 +9,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static bool BakeGeometry(this Panel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static bool BakeGeometry(this IPanel panel, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out List<Guid> guids, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             guids = null;
 
@@ -19,25 +19,25 @@ namespace SAM.Analytical.Rhino
             }
 
             //Core.Grasshopper.Modify.SetUserStrings(objectAttributes, panel);
-            objectAttributes.Name = panel.Name;
+            objectAttributes.Name = panel is Panel ? ((Panel)panel).Name : panel.GetType().Name;
 
             //List<Panel> panels_FixEdges = panel.FixEdges(cutApertures, tolerance);
-            List<Panel> panels_FixEdges = panel.FixEdges(false, tolerance);
+            List<IPanel> panels_FixEdges = panel.FixEdges(false, tolerance);
             if (panels_FixEdges == null || panels_FixEdges.Count == 0)
             {
-                panels_FixEdges = new List<Panel>() { panel };
+                panels_FixEdges = new List<IPanel>() { panel };
             }
 
             bool result = true;
 
             guids = new List<Guid>();
 
-            foreach (Panel panel_FixEdges in panels_FixEdges)
+            foreach (IPanel panel_FixEdges in panels_FixEdges)
             {
                 List<Brep> breps = panel_FixEdges.ToRhino(cutApertures, tolerance);
                 if (breps == null || breps.Count == 0)
                 {
-                    result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.GetFace3D(), rhinoDoc, objectAttributes, out Guid guid);
+                    result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.Face3D, rhinoDoc, objectAttributes, out Guid guid);
                     if (result)
                     {
                         guids.Add(guid);
@@ -141,7 +141,7 @@ namespace SAM.Analytical.Rhino
             return true;
         }
 
-        public static bool BakeGeometry(this Space space, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
+        public static bool BakeGeometry(this ISpace space, RhinoDoc rhinoDoc, ObjectAttributes objectAttributes, out Guid guid)
         {
             guid = Guid.Empty;
 

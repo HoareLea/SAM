@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else if(variable is GooPanel)
                 {
-                    panels.Add(((GooPanel)variable).Value);
+                    panels.Add(((GooPanel)variable).Value as Panel);
                 }
                 else if (variable is GooAdjacencyCluster)
                 {
@@ -40,6 +40,11 @@ namespace SAM.Analytical.Grasshopper
 
             foreach(Panel panel in panels)
             {
+                if(panel == null)
+                {
+                    continue;
+                }
+
                 List<Aperture> apertures_Panel = panel?.Apertures;
                 if(apertures_Panel == null)
                 {

@@ -136,6 +136,7 @@
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanelType.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManagerAndPanels.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManager.cs" />
+    <Compile Include="Component\SAMAnalyticalUpdateInternalConditionList.cs" />
     <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
     <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />
     <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />

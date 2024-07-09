@@ -5,6 +5,7 @@ using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -30,48 +31,60 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 if (Value == null)
+                {
                     return BoundingBox.Empty;
+                }
 
-                List<Geometry.Spatial.BoundingBox3D> boundingBox3Ds = new List<Geometry.Spatial.BoundingBox3D>();
+                List<BoundingBox3D> boundingBox3Ds = new List<BoundingBox3D>();
 
-                IEnumerable<Panel> panels = Value.GetPanels();
+                IEnumerable<IPanel> panels = Value.GetObjects<IPanel>();
                 if (panels != null)
                 {
-                    foreach (Panel panel in panels)
+                    foreach (IPanel panel in panels)
                     {
-                        Geometry.Spatial.BoundingBox3D boundingBox3D = panel?.GetBoundingBox();
+                        BoundingBox3D boundingBox3D = panel?.Face3D?.GetBoundingBox();
                         if (boundingBox3D == null)
+                        {
                             continue;
+                        }
 
                         boundingBox3Ds.Add(boundingBox3D);
                     }
                 }
 
-                IEnumerable<Space> spaces = Value.GetSpaces();
+                IEnumerable<ISpace> spaces = Value.GetObjects<ISpace>();
                 if (spaces != null)
                 {
-                    foreach (Space space in spaces)
+                    foreach (ISpace space in spaces)
                     {
                         if (space == null)
+                        {
                             continue;
+                        }
 
-                        Geometry.Spatial.Point3D location = space.Location;
+                        Point3D location = space.Location;
                         if (location == null)
+                        {
                             continue;
+                        }
 
                         boundingBox3Ds.Add(location.GetBoundingBox(1));
                     }
                 }
 
                 if (boundingBox3Ds == null)
+                {
                     return BoundingBox.Empty;
+                }
 
                 boundingBox3Ds.RemoveAll(x => x == null);
 
                 if (boundingBox3Ds.Count == 0)
+                {
                     return BoundingBox.Empty;
+                }
 
-                return Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.BoundingBox3D(boundingBox3Ds));
+                return Geometry.Rhino.Convert.ToRhino(new BoundingBox3D(boundingBox3Ds));
             }
         }
 
@@ -82,71 +95,87 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            List<Space> spaces = Value?.GetSpaces();
+            List<ISpace> spaces = Value?.GetObjects<ISpace>();
             if(spaces != null)
             {
-                foreach(Space space in spaces)
+                foreach(ISpace space in spaces)
                 {
                     Point3d? point3d = Geometry.Rhino.Convert.ToRhino(space?.Location);
                     if (point3d == null || !point3d.HasValue)
+                    {
                         continue;
+                    }
 
                     args.Pipeline.DrawPoint(point3d.Value);
                 }
             }
 
-            List<Panel> panels = Value?.GetPanels();
+            List<IPanel> panels = Value?.GetObjects<IPanel>();
             if (panels == null)
+            {
                 return;
+            }
 
-            Geometry.Spatial.BoundingBox3D boundingBox3D = null;
+            BoundingBox3D boundingBox3D = null;
             if(args.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max)});
+                boundingBox3D = new BoundingBox3D(new Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max)});
             }
 
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
-                List<Space> spaces_Panel = Value.GetSpaces(panel);
+                List<ISpace> spaces_Panel = Value.GetRelatedObjects<ISpace>(panel);
                 if (spaces_Panel != null && spaces_Panel.Count > 1)
+                {
                     continue;
+                }
 
-                PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
-                if (planarBoundary3D == null)
+                Face3D face3D = panel.Face3D;
+                if (face3D == null)
+                {
                     continue;
+                }
 
                 if(boundingBox3D != null)
                 {
-                    Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = planarBoundary3D.GetBoundingBox();
+                    BoundingBox3D boundingBox3D_Temp = face3D.GetBoundingBox();
                     if(boundingBox3D_Temp != null)
                     {
                         if (!boundingBox3D.Inside(boundingBox3D_Temp) && !boundingBox3D.Intersect(boundingBox3D_Temp))
+                        {
                             continue;
+                        }
                     }
                 }
                 
-                Dictionary<BoundaryEdge3DLoop, System.Drawing.Color> aDictionary = new Dictionary<BoundaryEdge3DLoop, System.Drawing.Color>();
+                Dictionary<IClosedPlanar3D, System.Drawing.Color> dictionary = new Dictionary<IClosedPlanar3D, System.Drawing.Color>();
 
                 //Assign Color for Edges
-                aDictionary[planarBoundary3D.GetExternalEdge3DLoop()] = System.Drawing.Color.DarkRed;
+                dictionary[face3D.GetExternalEdge3D()] = System.Drawing.Color.DarkRed;
 
-                IEnumerable<BoundaryEdge3DLoop> edge3DLoops = planarBoundary3D.GetInternalEdge3DLoops();
-                if (edge3DLoops != null)
+                IEnumerable<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+                if (internalEdge3Ds != null)
                 {
-                    foreach (BoundaryEdge3DLoop edge3DLoop in edge3DLoops)
-                        aDictionary[edge3DLoop] = System.Drawing.Color.BlueViolet;
+                    foreach (IClosedPlanar3D internalEdge3D in internalEdge3Ds)
+                    {
+                        dictionary[internalEdge3D] = System.Drawing.Color.BlueViolet;
+                    }
                 }
 
-                foreach (KeyValuePair<BoundaryEdge3DLoop, System.Drawing.Color> keyValuePair in aDictionary)
+                foreach (KeyValuePair<IClosedPlanar3D, System.Drawing.Color> keyValuePair in dictionary)
                 {
-                    List<BoundaryEdge3D> edge3Ds = keyValuePair.Key.BoundaryEdge3Ds;
-                    if (edge3Ds == null || edge3Ds.Count == 0)
+                    ISegmentable3D segmentable3D = keyValuePair.Key as ISegmentable3D;
+                    if (segmentable3D == null)
+                    {
                         continue;
+                    }
 
-                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x.Curve3D.GetStart()));
+                    List<Point3d> point3ds = segmentable3D.GetPoints().ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x));
                     if (point3ds.Count == 0)
+                    {
                         continue;
+                    }
 
                     point3ds.Add(point3ds[0]);
 
@@ -157,54 +186,68 @@ namespace SAM.Analytical.Grasshopper
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {         
-            List<Panel> panels = Value?.GetPanels();
+            List<IPanel> panels = Value?.GetObjects<IPanel>();
             if (panels == null)
+            {
                 return;
+            }
 
-            Geometry.Spatial.BoundingBox3D boundingBox3D = null;
+            BoundingBox3D boundingBox3D = null;
             if (args.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new Geometry.Spatial.BoundingBox3D(new Geometry.Spatial.Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
+                boundingBox3D = new BoundingBox3D(new Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
             }
 
-            List<PlanarBoundary3D> planarBoundary3Ds = new List<PlanarBoundary3D>();
+            List<Face3D> face3Ds = new List<Face3D>();
             for (int i = 0; i < panels.Count; i++)
-                planarBoundary3Ds.Add(null);
+            {
+                face3Ds.Add(null);
+            }
 
             Parallel.For(0, panels.Count, (int i) => 
             {
-                Panel panel = panels[i];
+                IPanel panel = panels[i];
                 
-                List<Space> spaces = Value.GetSpaces(panel);
+                List<ISpace> spaces = Value.GetRelatedObjects<ISpace>(panel);
                 if (spaces != null && spaces.Count > 1)
+                {
                     return;
+                }
 
-                PlanarBoundary3D planarBoundary3D = panel.PlanarBoundary3D;
-                if (planarBoundary3D == null)
+                Face3D face3D = panel.Face3D;
+                if (face3D == null)
+                {
                     return;
+                }
 
                 if (boundingBox3D != null)
                 {
-                    Geometry.Spatial.BoundingBox3D boundingBox3D_Temp = planarBoundary3D.GetBoundingBox();
+                    BoundingBox3D boundingBox3D_Temp = face3D.GetBoundingBox();
                     if (boundingBox3D_Temp != null)
                     {
                         if (!boundingBox3D.Inside(boundingBox3D_Temp) && !boundingBox3D.Intersect(boundingBox3D_Temp))
+                        {
                             return;
+                        }
                     }
                 }
 
-                planarBoundary3Ds[i] = planarBoundary3D;
+                face3Ds[i] = face3D;
             });
 
-            foreach(PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
+            foreach(Face3D face3D in face3Ds)
             {
-                if (planarBoundary3D == null)
+                if (face3D == null)
+                {
                     continue;
+                }
                 
-                Brep brep = Rhino.Convert.ToRhino(planarBoundary3D);
+                Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
                 if (brep == null)
+                {
                     continue;
+                }
 
                 args.Pipeline.DrawBrepShaded(brep, args.Material);
             }
@@ -214,26 +257,34 @@ namespace SAM.Analytical.Grasshopper
         {
             obj_guid = Guid.Empty;
 
-            List<Panel> panels = Value?.GetPanels();
+            List<IPanel> panels = Value?.GetObjects<IPanel>();
             if (panels == null || panels.Count == 0)
+            {
                 return false;
+            }
 
             List<Brep> breps = new List<Brep>();
-            foreach(Panel panel in panels)
+            foreach(IPanel panel in panels)
             {
                 List<Brep> breps_Panel = Rhino.Convert.ToRhino(panel);
                 if (breps_Panel == null)
+                {
                     continue;
+                }
 
                 breps.AddRange(breps_Panel);
             }
 
             if (breps == null || breps.Count == 0)
+            {
                 return false;
+            }
 
             Brep result = Brep.MergeBreps(breps, Core.Tolerance.MacroDistance); //Tolerance has been changed from Core.Tolerance.Distance
             if (result == null)
+            {
                 return false;
+            }
 
             obj_guid = doc.Objects.AddBrep(result);
             return true;

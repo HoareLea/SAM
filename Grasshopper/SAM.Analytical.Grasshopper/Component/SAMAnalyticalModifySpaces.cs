@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalModifySpaces()
           : base("SAMAnalytical.ModifySpaces", "SAMAnalytical.ModifySpaces",
-              "Modify Spaces in AdjacencyCluster or AnalyticalModel \n You can ONLY apply one value to input object or list of objects",
+              "Modify Spaces in AdjacencyCluster or AnalyticalModel \n *For given Space/ list of Spaces You can ONLY input single value to all remaining inputs like occupancy, designCoolingLoad etc.",
               "SAM", "Analytical")
         {
         }

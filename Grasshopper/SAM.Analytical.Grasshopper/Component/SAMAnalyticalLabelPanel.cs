@@ -142,9 +142,11 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (GooPanel gooPanel in Params.Input[0].VolatileData.AllData(true))
             {
-                Panel panel = gooPanel.Value;
+                IPanel panel = gooPanel.Value;
                 if (panel == null)
+                {
                     continue;
+                }
 
                 string text;
                 if (!panel.TryGetValue(name, out text, true))
@@ -154,10 +156,10 @@ namespace SAM.Analytical.Grasshopper
                 if (double.TryParse(text, out value))
                     text =   value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
-                Vector3D normal = panel.PlanarBoundary3D?.GetFace3D()?.GetPlane()?.Normal;
+                Vector3D normal = panel.Face3D?.GetPlane()?.Normal;
                 normal.Round(Tolerance.Distance);
 
-                Point3D point3D = panel.GetInternalPoint3D();
+                Point3D point3D = panel.Face3D?.GetInternalPoint3D();
 
                 // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
 
@@ -181,7 +183,7 @@ namespace SAM.Analytical.Grasshopper
                     if (length < 10)
                         length = 10;
 
-                    BoundingBox2D boundingBox2D = panel.GetFace3D().ExternalEdge2D.GetBoundingBox();
+                    BoundingBox2D boundingBox2D = panel.Face3D.ExternalEdge2D.GetBoundingBox();
                     double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
 
                     height_Temp = max / (length * 2);

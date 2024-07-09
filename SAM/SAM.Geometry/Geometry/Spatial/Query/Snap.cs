@@ -321,8 +321,8 @@ namespace SAM.Geometry.Spatial
             if (!snapped)
                 return new Face3D(face3D);
 
-            Planar.Polygon2D polygon2D_ExternalEdge2D = new Planar.Polygon2D(point3Ds_ExternalEdge3D.ConvertAll(x => plane.Convert(x)));
-            List<Planar.Polygon2D> polygon2Ds_InternalEdge2Ds = point3Ds_InternalEdge3Ds?.ConvertAll(x => new Planar.Polygon2D(x.ConvertAll(y => plane.Convert(y))));
+            Polygon2D polygon2D_ExternalEdge2D = new Polygon2D(point3Ds_ExternalEdge3D.ConvertAll(x => plane.Convert(x)));
+            List<Polygon2D> polygon2Ds_InternalEdge2Ds = point3Ds_InternalEdge3Ds?.ConvertAll(x => new Polygon2D(x.ConvertAll(y => plane.Convert(y))));
 
             return Face3D.Create(plane, polygon2D_ExternalEdge2D, polygon2Ds_InternalEdge2Ds);
         }

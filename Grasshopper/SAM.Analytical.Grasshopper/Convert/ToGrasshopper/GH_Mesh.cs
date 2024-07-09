@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
             return new GH_Mesh(mesh);
         }
 
-        public static GH_Mesh ToGrasshopper_Mesh(this Panel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
+        public static GH_Mesh ToGrasshopper_Mesh(this IPanel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
             Mesh mesh = Rhino.Convert.ToRhino_Mesh(panel, cutApertures, includeApertures, tolerance);
             if(mesh == null)

@@ -1,5 +1,7 @@
-﻿using Rhino;
+﻿using MathNet.Numerics;
+using Rhino;
 using Rhino.DocObjects;
+using Rhino.Render;
 using System;
 using System.Collections.Generic;
 
@@ -7,7 +9,7 @@ namespace SAM.Analytical.Rhino
 {
     public static partial class Modify
     {
-        public static void BakeGeometry_ByPanelType(this RhinoDoc rhinoDoc, IEnumerable<Panel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
+        public static void BakeGeometry_ByPanelType(this RhinoDoc rhinoDoc, IEnumerable<IPanel> panels, bool cutApertures = false, double tolerance = Core.Tolerance.Distance)
         {
             global::Rhino.DocObjects.Tables.LayerTable layerTable = rhinoDoc?.Layers;
             if (layerTable == null)
@@ -34,44 +36,88 @@ namespace SAM.Analytical.Rhino
             ObjectAttributes objectAttributes = rhinoDoc.CreateDefaultAttributes();
 
             List<Guid> guids = new List<Guid>();
-            foreach (Panel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 if (panel == null)
+                {
                     continue;
+                }
+				
+                PanelType panelType = PanelType.Undefined;
 
-                PanelType panelType = panel.PanelType;
+                if (panel is Panel)
+                {
+                    panelType = ((Panel)panel).PanelType;
+                }
+                else if(panel is ExternalPanel)
+                {
+                    ExternalPanel externalPanel = (ExternalPanel)panel;
+                    if(externalPanel.Construction == null)
+                    {
+                        panelType = PanelType.Air;
+                    }
+                    else
+                    {
+                        panelType = PanelType.Shade;
+                    }
+                }
 
-                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
+                List<Guid> guids_Panel;
+
+                Layer layer;
+
+                if (!(panel is Panel))
+                {
+                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Query.Color(panel as dynamic));
+                    objectAttributes.LayerIndex = layer.Index;
+                    if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                    {
+                        guids.AddRange(guids_Panel);
+                    }
+                    
+                    // 2024-07-03 Find a way to create transpaernt material
+                    //if (panel is ExternalPanel)
+                    //{
+                    //    RenderMaterial renderMaterial = layer.RenderMaterial;
+                    //}
+
+                    continue;
+                }
+
+                layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
 
-                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out List<Guid> guids_Panel, cutApertures, tolerance) && guids_Panel != null)
+                if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                 {
                     guids.AddRange(guids_Panel);
                 }
 
-                List<Aperture> apertures = panel.Apertures;
-                if (apertures == null || apertures.Count == 0)
+                if(panel is Panel)
                 {
-                    continue;
-                }
-
-                foreach (Aperture aperture in apertures)
-                {
-                    if (aperture == null)
+                    List<Aperture> apertures = ((Panel)panel).Apertures;
+                    if (apertures == null || apertures.Count == 0)
+                    {
                         continue;
+                    }
 
-                    ApertureType apertureType = aperture.ApertureType;
+                    foreach (Aperture aperture in apertures)
+                    {
+                        if (aperture == null)
+                            continue;
 
-                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
+                        ApertureType apertureType = aperture.ApertureType;
 
-                    //layerTable.SetCurrentLayerIndex(layer.Index, true);
-                    objectAttributes.LayerIndex = layer.Index;
+                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
 
-                    Guid guid = default;
-                    if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
-                        guids.Add(guid);
+                        //layerTable.SetCurrentLayerIndex(layer.Index, true);
+                        objectAttributes.LayerIndex = layer.Index;
+
+                        Guid guid = default;
+                        if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out guid))
+                            guids.Add(guid);
+                    }
                 }
             }
 

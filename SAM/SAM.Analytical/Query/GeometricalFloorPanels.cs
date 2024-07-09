@@ -10,18 +10,18 @@ namespace SAM.Analytical
             if (adjacencyCluster == null || space == null)
                 return null;
 
-            Dictionary<Panel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
+            Dictionary<IPanel, Vector3D> dictionary = adjacencyCluster.NormalDictionary(space, out Shell shell, true, silverSpacing, tolerance);
             if (dictionary == null || dictionary.Count == 0)
                 return null;
 
             List<Panel> result = new List<Panel>();
-            foreach(KeyValuePair<Panel, Vector3D> keyValuePair in dictionary)
+            foreach(KeyValuePair<IPanel, Vector3D> keyValuePair in dictionary)
             {
                 Vector3D vector3D = keyValuePair.Value;
                 if (vector3D == null)
                     continue;
 
-                Panel panel = keyValuePair.Key;
+                Panel panel = keyValuePair.Key as Panel;
                 if (panel == null)
                     continue;
 
