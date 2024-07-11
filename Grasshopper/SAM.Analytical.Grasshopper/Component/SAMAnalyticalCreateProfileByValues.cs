@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -102,7 +102,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            index = Params.IndexOfInputParam("_typeOrGroup");
+            index = Params.IndexOfInputParam("typeOrGroup_");
             if (index != -1)
             {
                 string category = null;
@@ -123,7 +123,7 @@ namespace SAM.Analytical.Grasshopper
 
                     if(!string.IsNullOrWhiteSpace(category))
                     {
-                        profile = new Profile(Guid.NewGuid(), profile, profile.Category);
+                        profile = new Profile(Guid.NewGuid(), profile, category);
                     }
                 }
             }

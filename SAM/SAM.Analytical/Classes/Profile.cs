@@ -699,7 +699,7 @@ namespace SAM.Analytical
 
         public double[] GetValues()
         {
-            return GetIndexedDoubles().Values?.ToArray();
+            return GetIndexedDoubles()?.Values?.ToArray();
 
             //if (values == null)
             //    return null;
