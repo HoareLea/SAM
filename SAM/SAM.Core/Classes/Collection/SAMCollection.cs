@@ -111,5 +111,26 @@ namespace SAM.Core
 
             return jObject;
         }
+
+        public new List<T> Items
+        {
+            get
+            {
+                IList<T> items = base.Items;
+                if(items == null)
+                {
+                    return null;
+                }
+
+                List<T> result = new List<T>();
+                foreach(T t in items)
+                {
+                    T t_temp = t == null ? default : Query.Clone(t);
+                    result.Add(t_temp);
+                }
+
+                return result;
+            }
+        }
     }
 }
