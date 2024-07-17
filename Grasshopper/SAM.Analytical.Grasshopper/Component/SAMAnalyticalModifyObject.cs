@@ -114,6 +114,8 @@ namespace SAM.Analytical.Grasshopper
 
                 if(adjacencyCluster != null)
                 {
+                    adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
+
                     foreach (SAMObject sAMObject_Temp in sAMObjects)
                     {
                         if (sAMObject_Temp is Aperture)
