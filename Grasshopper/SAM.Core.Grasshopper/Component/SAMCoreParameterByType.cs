@@ -36,7 +36,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreParameterByType()
           : base("SAMCore.ParameterByType", "SAMCore.ParameterByType",
-              "Get one Parameter from all possible Type parameters",
+              "Get one Parameter from all possible Type parameters \n* connect input SAMCore.GetType",
               "SAM", "Core")
         {
         }
@@ -117,7 +117,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
-            inputParamManager.AddGenericParameter("Type", "Type", "Type", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter("Type", "Type", "Type \n* connect input SAMCore.GetType", GH_ParamAccess.item);
         }
 
         /// <summary>
