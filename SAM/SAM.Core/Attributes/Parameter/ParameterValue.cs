@@ -62,7 +62,9 @@ namespace SAM.Core.Attributes
 
                 case ParameterType.IJSAMObject:
                     if (!(object_In is IJSAMObject))
+                    {
                         return false;
+                    }
 
                     object_Out = object_In;
                     return true;
