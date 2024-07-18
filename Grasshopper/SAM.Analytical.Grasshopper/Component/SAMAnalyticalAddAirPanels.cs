@@ -86,7 +86,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-
             index = Params.IndexOfInputParam("_planes");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
             if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null || objectWrappers.Count == 0)
