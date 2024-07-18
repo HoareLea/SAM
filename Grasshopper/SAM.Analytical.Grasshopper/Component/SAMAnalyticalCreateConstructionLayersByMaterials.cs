@@ -133,10 +133,9 @@ namespace SAM.Analytical.Grasshopper
             if (constructionLayers != null)
             {
                 double thickness = constructionLayers.ConvertAll(x => x.Thickness).Sum();
-                if (thickness >= 1)
+                if (thickness > 1)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Thickness of construction layers exceed 1m");
-                    return;
                 }
             }
 
