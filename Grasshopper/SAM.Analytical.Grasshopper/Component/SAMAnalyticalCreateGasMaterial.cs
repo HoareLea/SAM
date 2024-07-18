@@ -94,13 +94,18 @@ namespace SAM.Analytical.Grasshopper
             {
                 IMaterial material = null;
                 dataAccess.GetData(index, ref material);
-                if(!(material is GasMaterial))
+                if (material != null)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
+                    if (material is GasMaterial)
+                    {
+                        gasMaterial = (GasMaterial)material;
+                    }
+                    else
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid type of material");
+                        return;
+                    }
                 }
-
-                gasMaterial = (GasMaterial)material;
             }
 
             if (gasMaterial == null)
@@ -211,7 +216,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("material");
-            if(index == -1)
+            if(index != -1)
             {
                 dataAccess.SetData(index, new GooMaterial(Create.GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient)));
             }

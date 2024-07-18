@@ -101,13 +101,18 @@ namespace SAM.Analytical.Grasshopper
             {
                 IMaterial material = null;
                 dataAccess.GetData(index, ref material);
-                if (!(material is OpaqueMaterial))
+                if (material != null)
                 {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                    return;
+                    if (material is TransparentMaterial)
+                    {
+                        transparentMaterial = (TransparentMaterial)material;
+                    }
+                    else
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid type of material");
+                        return;
+                    }
                 }
-
-                transparentMaterial = (TransparentMaterial)material;
             }
 
             if(transparentMaterial == null)
@@ -270,7 +275,11 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetData(0, new GooMaterial(Create.TransparentMaterial(name, group, displayName, description, thermalConductivity, defaultThickness, vapourDiffusionFactor, solarTransmittance, lightTransmittance, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, isBlind)));
+            index = Params.IndexOfOutputParam("material");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooMaterial(Create.TransparentMaterial(name, group, displayName, description, thermalConductivity, defaultThickness, vapourDiffusionFactor, solarTransmittance, lightTransmittance, externalSolarReflectance, internalSolarReflectance, externalLightReflectance, internalLightReflectance, externalEmissivity, internalEmissivity, isBlind)));
+            }
         }
     }
 }
