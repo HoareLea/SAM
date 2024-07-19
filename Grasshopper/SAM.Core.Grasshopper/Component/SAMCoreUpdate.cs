@@ -18,6 +18,8 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public override string LatestComponentVersion => "1.0.0";
 
+        List<GH_SAMComponent> gH_SAMComponents = null;
+
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
@@ -45,6 +47,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLogParam() { Name = "log", NickName = "log", Description = "Log", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "succeeded", NickName = "succeeded", Description = "Succeeded", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
@@ -73,7 +76,7 @@ namespace SAM.Core.Grasshopper
 
         private void Menu_Update(object sender, EventArgs e)
         {
-            Modify.UpdateComponents(OnPingDocument());
+            Modify.UpdateComponents(OnPingDocument(), out Log log);
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
@@ -93,13 +96,42 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            Modify.UpdateComponents(OnPingDocument());
+            GH_Document gH_Document = OnPingDocument();
+
+            //List<GH_SAMComponent> gH_SAMComponents = Modify.UpdateComponents(gH_Document, out Log log);
+            gH_SAMComponents = Modify.UpdateComponents(gH_Document, out Log log);
+
+
+            //gH_Document.SolutionEnd += GH_Document_SolutionEnd;
+
+            //OnPingDocument().Modified();
+
+            //ExpireSolution(true);
+
+            index = Params.IndexOfOutputParam("log");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, log);
+            }
 
             index = Params.IndexOfOutputParam("succeeded");
             if(index != -1)
             {
-                dataAccess.SetData(index, true);
+                dataAccess.SetData(index, gH_SAMComponents != null && gH_SAMComponents.Count != 0);
             }
         }
+
+        //private void GH_Document_SolutionEnd(object sender, GH_SolutionEventArgs e)
+        //{
+        //    if (gH_SAMComponents != null)
+        //    {
+        //        foreach (GH_SAMComponent gH_SAMComponent in gH_SAMComponents)
+        //        {
+        //            gH_SAMComponent.ExpireSolution(true);
+        //        }
+        //    }
+
+        //    gH_SAMComponents = null;
+        //}
     }
 }
