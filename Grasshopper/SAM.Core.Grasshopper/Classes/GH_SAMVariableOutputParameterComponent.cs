@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core.Grasshopper
@@ -53,7 +54,9 @@ namespace SAM.Core.Grasshopper
             for (int i = 0; i < templateParams.Length; ++i)
             {
                 if (templateParams[i].Param.Name == current)
+                {
                     return !templateParams[i].ParamVisibility.HasFlag(ParamVisibility.Mandatory);
+                }
             }
 
             return true;
@@ -88,7 +91,9 @@ namespace SAM.Core.Grasshopper
         public IGH_Param CreateParameter(GH_ParameterSide side, int index)
         {
             if (GetTemplateParam(side, index) is IGH_Param param)
+            {
                 return param.Clone();
+            }
 
             return default;
         }
@@ -103,13 +108,17 @@ namespace SAM.Core.Grasshopper
         protected override sealed void RegisterInputParams(GH_InputParamManager manager)
         {
             foreach (var definition in Inputs.Where(x => x.ParamVisibility.HasFlag(ParamVisibility.Default)))
+            {
                 manager.AddParameter(definition.Param.Clone());
+            }
         }
 
         protected override sealed void RegisterOutputParams(GH_OutputParamManager manager)
         {
             foreach (var definition in Outputs.Where(x => x.ParamVisibility.HasFlag(ParamVisibility.Default)))
+            {
                 manager.AddParameter(definition.Param.Clone());
+            }
         }
     }
 }

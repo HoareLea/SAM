@@ -140,6 +140,9 @@
     <Compile Include="Component\SAMCoreGetValue.cs" />
     <Compile Include="Convert\ToSAM\GH_SAMParam.cs" />
     <Compile Include="Create\GH_SAMParam.cs" />
+    <Compile Include="Modify\UpdateComponent.cs" />
+    <Compile Include="Modify\UpdateComponents.cs" />
+    <Compile Include="Modify\CopyParameteres.cs" />
     <Compile Include="Modify\RunGrasshopperScript.cs" />
     <Compile Include="Modify\AppendSourceCodeAdditionalMenuItem.cs" />
     <Compile Include="Modify\AppendNewComponentAdditionalMenuItem.cs" />

@@ -1,9 +1,7 @@
 ﻿using Grasshopper.Kernel;
-using Rhino;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
@@ -32,6 +30,12 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run Update", Access = GH_ParamAccess.item, Optional = false };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -41,6 +45,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "succeeded", NickName = "succeeded", Description = "Succeeded", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -68,201 +73,33 @@ namespace SAM.Core.Grasshopper
 
         private void Menu_Update(object sender, EventArgs e)
         {
-            GH_Document gH_Document = OnPingDocument();
-            if(gH_Document == null)
-            {
-                return;
-            }
-
-            IList<IGH_DocumentObject> gH_DocumentObjects = gH_Document.Objects;
-            if(gH_DocumentObjects == null || gH_DocumentObjects.Count == 0)
-            {
-                return;
-            }
-
-            List<GH_SAMComponent> gH_SAMComponents = new List<GH_SAMComponent>();
-            foreach(IGH_DocumentObject gH_DocumentObject in gH_DocumentObjects)
-            {
-                GH_SAMComponent gH_SAMComponent = gH_DocumentObject as GH_SAMComponent;
-
-                if (!(gH_DocumentObject is GH_SAMComponent))
-                {
-                    continue;
-                }
-
-                if(!gH_SAMComponent.Obsolete)
-                {
-                    gH_SAMComponents.Add(gH_SAMComponent);
-                }
-            }
-
-            if (gH_SAMComponents == null || gH_SAMComponents.Count == 0)
-            {
-                return;
-            }
-
-            Update(gH_SAMComponents);
+            Modify.UpdateComponents(OnPingDocument());
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
 
-        }
+            bool run = false;
+            index = Params.IndexOfInputParam("_run");
+            if (index == -1 || !dataAccess.GetData(index, ref run))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-        private void Update(IEnumerable<GH_SAMComponent> gH_SAMComponents)
-        {
-            if(gH_SAMComponents == null || gH_SAMComponents.Count() == 0)
+            if (!run)
             {
                 return;
             }
 
-            foreach(GH_SAMComponent gH_SAMComponent in gH_SAMComponents)
+            Modify.UpdateComponents(OnPingDocument());
+
+            index = Params.IndexOfOutputParam("succeeded");
+            if(index != -1)
             {
-                Update(gH_SAMComponent);
+                dataAccess.SetData(index, true);
             }
-        }
-
-        private void Update(GH_SAMComponent gH_SAMComponent)
-        {
-            if(gH_SAMComponent == null)
-            {
-                return;
-            }
-
-            GH_Document gH_Document = OnPingDocument();
-            if (gH_Document == null)
-            {
-                return;
-            }
-
-            GH_SAMComponent gH_SAMComponent_New = Activator.CreateInstance(gH_SAMComponent.GetType()) as GH_SAMComponent;
-            if (gH_SAMComponent_New == null)
-            {
-                RhinoApp.WriteLine("Failed to create new component.");
-                return;
-            }
-
-            gH_Document.AddObject(gH_SAMComponent_New, false);
-
-            gH_SAMComponent_New.Attributes.Pivot = gH_SAMComponent.Attributes.Pivot;
-
-            bool updateFailed = false;
-
-
-            if (gH_SAMComponent_New is IGH_VariableParameterComponent && gH_SAMComponent is IGH_VariableParameterComponent)
-            {
-                for (int i = 0; i < gH_SAMComponent.Params.Input.Count; i++)
-                {
-                    IGH_Param gh_Param_Old = gH_SAMComponent.Params.Input[i];
-                    IGH_Param gh_Param_New = gH_SAMComponent_New.Params.Input.FirstOrDefault(p => p.NickName == gh_Param_Old.NickName && p.Access == gh_Param_Old.Access);
-
-                    if (gh_Param_New == null)
-                    {
-                        updateFailed = true;
-                        break;
-                    }
-
-                    foreach (IGH_Param gh_Param_Source in gh_Param_Old.Sources)
-                    {
-                        gh_Param_New.AddSource(gh_Param_Source);
-                        //if (gh_Param_New.Optional && gh_Param_New.IsHidden)
-                        //{
-                        //    gh_Param_New.IsHidden = false;
-                        //    gh_Param_New.ExpireSolution(true);
-                        //}
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < gH_SAMComponent.Params.Input.Count; i++)
-                {
-                    var oldParam = gH_SAMComponent.Params.Input[i];
-                    var newParam = gH_SAMComponent_New.Params.Input[i];
-
-                    if (oldParam.Sources.Any())
-                    {
-                        foreach (var source in oldParam.Sources)
-                        {
-                            newParam.AddSource(source);
-                        }
-                    }
-                }
-            }
-
-            if (updateFailed)
-            {
-                gH_Document.RemoveObject(gH_SAMComponent_New, false);
-                MarkComponentInRed(gH_SAMComponent, string.Format("Update of component {0} failed: Parameter mismatch", gH_SAMComponent.Name));
-                return;
-            }
-
-            // Transfer outputs
-            for (int i = 0; i < gH_SAMComponent.Params.Output.Count; i++)
-            {
-                var oldParam = gH_SAMComponent.Params.Output[i];
-                var newParam = gH_SAMComponent_New.Params.Output[i];
-
-                foreach (var recipient in oldParam.Recipients)
-                {
-                    recipient.AddSource(newParam);
-                }
-            }
-
-            gH_Document.RemoveObject(gH_SAMComponent, true);
-            gH_SAMComponent_New.ExpireSolution(true);
-        }
-
-        private void MarkComponentInRed(IGH_Component gH_Component, string message)
-        {
-            if(gH_Component == null)
-            {
-                return;
-            }
-
-            //gH_Component.Attributes.Selected = true;
-            //gH_Component.Attributes.Ma  = Color.Red;
-            //gH_Component.Attributes.PenWidth = 2;
-            
-            if(!string.IsNullOrWhiteSpace(message))
-            {
-                RhinoApp.WriteLine(message);
-            }
-            
-            gH_Component.ExpireSolution(true);
         }
     }
-
-    //public class CustomAttributes : GH_ComponentAttributes
-    //{
-    //    private bool _markForReview;
-
-    //    public CustomAttributes(IGH_Component component) : base(component) { }
-
-    //    public void MarkForReview()
-    //    {
-    //        _markForReview = true;
-    //        Owner.OnDisplayExpired(true);
-    //    }
-
-    //    protected override void Layout()
-    //    {
-    //        base.Layout();
-    //        if (_markForReview)
-    //        {
-    //            Bounds = new RectangleF(Bounds.X - 5, Bounds.Y - 5, Bounds.Width + 10, Bounds.Height + 10);
-    //        }
-    //    }
-
-    //    protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
-    //    {
-    //        base.Render(canvas, graphics, channel);
-
-    //        if (channel == GH_CanvasChannel.Objects && _markForReview)
-    //        {
-    //            var pen = new Pen(Color.Red, 2);
-    //            graphics.DrawRectangle(pen, Bounds.X, Bounds.Y, Bounds.Width, Bounds.Height);
-    //        }
-    //    }
-    //}
 }
