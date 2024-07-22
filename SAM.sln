@@ -20,7 +20,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Grasshopper"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Grasshopper", "Grasshopper\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj", "{EA20D57F-BB3E-447A-80A2-14C04BAA665F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Units", "SAM\SAM.Units\SAM.Units.csproj", "{CCE71A0C-1303-4330-AB5E-44998C94F802}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Units", "SAM\SAM.Units\SAM.Units.csproj", "{CCE71A0C-1303-4330-AB5E-44998C94F802}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Architectural.Grasshopper", "Grasshopper\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj", "{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}"
 EndProject
