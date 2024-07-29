@@ -1,479 +1,48 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <Rhino7DefaultInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Path', null, RegistryView.Registry64))</Rhino7DefaultInstallDir>
     <Rhino7DebugInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Path', null, RegistryView.Registry64))</Rhino7DebugInstallDir>
     <Rhino7InstallDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugInstallDir)', '$(Rhino7DefaultInstallDir)'))</Rhino7InstallDir>
     <Rhino7DefaultPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DefaultPluginsDir>
     <Rhino7DebugPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DebugPluginsDir>
     <Rhino7PluginsDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugPluginsDir)', '$(Rhino7DefaultPluginsDir)'))</Rhino7PluginsDir>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Deterministic>false</Deterministic>
   </PropertyGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{A1DB5A5E-8118-4B86-8E0D-80FF61D80FEB}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Analytical.Grasshopper</RootNamespace>
-    <AssemblyName>SAM.Analytical.Grasshopper</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Classes\GooAdjacencyCluster.cs" />
-    <Compile Include="Classes\GooAnalyticalEquipment.cs" />
-    <Compile Include="Classes\GooAirMovement.cs" />
-    <Compile Include="Classes\GooExternalSpace.cs" />
-    <Compile Include="Classes\GooSection.cs" />
-    <Compile Include="Classes\GooAperture.cs" />
-    <Compile Include="Classes\GooAnalyticalModel.cs" />
-    <Compile Include="Classes\GooApertureConstruction.cs" />
-    <Compile Include="Classes\GooAirHandlingUnit.cs" />
-    <Compile Include="Classes\GooConstructionManager.cs" />
-    <Compile Include="Classes\GooOpeningProperties.cs" />
-    <Compile Include="Classes\GooProfileLibrary.cs" />
-    <Compile Include="Classes\GooProfile.cs" />
-    <Compile Include="Classes\GooDegreeOfActivityLibrary.cs" />
-    <Compile Include="Classes\GooInternalConditionLibrary.cs" />
-    <Compile Include="Classes\GooInternalCondition.cs" />
-    <Compile Include="Classes\GooConstruction.cs" />
-    <Compile Include="Classes\GooConstructionLayer.cs" />
-    <Compile Include="Classes\GooApertureConstructionLibrary.cs" />
-    <Compile Include="Classes\GooConstructionLibrary.cs" />
-    <Compile Include="Classes\GooText3D.cs" />
-    <Compile Include="Classes\GooSpace.cs" />
-    <Compile Include="Classes\GooPlanarBoundary3D.cs" />
-    <Compile Include="Classes\GooPanel.cs" />
-    <Compile Include="Classes\GooDesignDay.cs" />
-    <Compile Include="Classes\New\GooArchitecturalModel.cs" />
-    <Compile Include="Classes\GooAnalyticalObject.cs" />
-    <Compile Include="Classes\New\GooFloorType.cs" />
-    <Compile Include="Classes\New\GooHostPartitionType.cs" />
-    <Compile Include="Classes\New\GooOpening.cs" />
-    <Compile Include="Classes\New\GooOpeningType.cs" />
-    <Compile Include="Classes\New\GooPartition.cs" />
-    <Compile Include="Classes\New\GooRoofType.cs" />
-    <Compile Include="Classes\New\GooWallType.cs" />
-    <Compile Include="Component\New\SAMAnalyticalAddMissingProfiles.cs" />
-    <Compile Include="Component\New\SAMAnalyticalAddMissingMaterials.cs" />
-    <Compile Include="Component\New\SAMAnalyticalAddAirPartitions.cs" />
-    <Compile Include="Component\New\SAMAnalyticalAddOpenings.cs" />
-    <Compile Include="Component\New\SAMAnalyticalAddOpeningsByAzimuth.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateBuildingModelBy2DGeometries.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateBuildingModelByShells.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateOpeningsBy3DGeometry.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionType.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateMaterialLayersByNames.cs" />
-    <Compile Include="Component\New\SAMAnalyticalCreateHostPartitionsBy3DGeometry.cs" />
-    <Compile Include="Component\New\SAMAnalyticalHostPartitionCategory.cs" />
-    <Compile Include="Component\New\SAMArchitecturalRelatedObjects.cs" />
-    <Compile Include="Component\New\SAMAnalyticalUpdateArchitecturalModel.cs" />
-    <Compile Include="Component\New\SAMAnalyticalUpdateHostPartitionType.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalReplaceObject.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelAperture.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyVentilationSystem.cs" />
-    <Compile Include="Component\SAMAnalyticalSetApertureConstructionByAnalyticalModel.cs" />
-    <Compile Include="Component\SAMAnalyticalAdjacentSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyInternalConditionByProfile.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelGroup.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveAirMovementObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalAddResults.cs" />
-    <Compile Include="Component\SAMAnalyticalHourlyValues.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveExternalSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalSetExternalSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalTM52SpaceExtendedResultByDayOfYears.cs" />
-    <Compile Include="Component\SAMAnalyticalTM52BuildingCategory.cs" />
-    <Compile Include="Component\SAMAnalyticalDailyIndoorComfortTemperatures.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileBySpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByBooleansAndValues.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyProfileByNumberComparison.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileSum.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileDivide.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileMultiply.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionManagerByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateIZAMBySpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateIZAMBySetPoint.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveFromConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalDefaultConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalGetValuesByReference.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManagerAndPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByConstructionManager.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateInternalConditionList.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateInternalCondition.cs" />
-    <Compile Include="Component\SAMAnalyticalSeasonProfileBySetPoint.cs" />
-    <Compile Include="Component\SAMAnalyticalAddOpeningPropertiesByPartO.cs" />
-    <Compile Include="Component\SAMAnalyticalApertureType.cs" />
-    <Compile Include="Component\SAMAnalyticalBake.cs" />
-    <Compile Include="Component\SAMAnalyticalCalculateDaylightFactor.cs" />
-    <Compile Include="Component\SAMAnalyticalCalculateSpacePanelArea.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModelBySpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByBooleans.cs" />
-    <Compile Include="Component\SAMAnalyticalLightingOccupancyControls.cs" />
-    <Compile Include="Component\SAMAnalyticalLightingPhotoelectricControls.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelsDifference.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateByModel.cs" />
-    <Compile Include="Component\SAMAnalyticalSetDefaultApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalRoundAzimuth.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateNCM.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateVentilationProfile.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateLibraries.cs" />
-    <Compile Include="Component\SAMAnalyticalDaylightFactor.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByBoundaryType.cs" />
-    <Compile Include="Component\SAMAnalyticalGetApertures.cs" />
-    <Compile Include="Component\SAMAnalyticalAddOpeningProperties.cs" />
-    <Compile Include="Component\SAMAnalyticalPerimeterSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePerimeterZones_2.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePerimeterZones.cs" />
-    <Compile Include="Component\SAMAnalyticalAddPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByRatio_Old.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByValues.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeSpacesByZones.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeSpacesByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeSpacesByAirPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyMechanicalSystems.cs" />
-    <Compile Include="Component\SAMAnalyticalDataTree.cs" />
-    <Compile Include="Component\SAMAnalyticalDesignDays.cs" />
-    <Compile Include="Component\SAMAnalyticalGetExternalMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalGetPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyAirHandlingUnits.cs" />
-    <Compile Include="Component\SAMAnalyticalModifySpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalPaths.cs" />
-    <Compile Include="Component\SAMAnalyticalSetAdiabatic.cs" />
-    <Compile Include="Component\SAMAnalyticalDuplicateConstructionByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalSetSystemTypeNames.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByWeatherYear.cs" />
-    <Compile Include="Component\SAMAnalyticalSetLocation.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanelsByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanelsByGeometries.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanelsByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalTriangulateConcavePanels.cs" />
-    <Compile Include="Component\SAMAnalyticalMergePanels.cs" />
-    <Compile Include="Component\SAMAnalyticalAdjustPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalAlignHorizontalPanelByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByBreps.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateShellsByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByMaxRectangle3D.cs" />
-    <Compile Include="Component\SAMAnalyticalFillFloorsAndRoofs.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAirPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalJoinSpacesByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeCoplanarApertures.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeCoplanarPanelsBySpace.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeOverlapApertures.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveOverlapApertures.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapByPlanes.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations.cs" />
-    <Compile Include="Component\SAMAnalyticalExtendExternalPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalTrimPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalExternalPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalSection.cs" />
-    <Compile Include="Component\SAMAnalyticalExtendPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelByBottomAndHeight.cs" />
-    <Compile Include="Component\SAMAnalyticalFixAdjacencyCluster.cs" />
-    <Compile Include="Component\SAMAnalyticalAlignPanelsByLowerAndUpperElevation.cs" />
-    <Compile Include="Component\SAMAnalyticalAlignPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalDefaultColorByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalMapPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyClusterByShells.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateShells.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByAzimuth.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByAperture.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureType.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByRatio.cs" />
-    <Compile Include="Component\SAMAnalyticalAddMechanicalSystems.cs" />
-    <Compile Include="Component\SAMAnalyticalAddMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateIZAM.cs" />
-    <Compile Include="Component\SAMAnalyticalCalculateFloorArea.cs" />
-    <Compile Include="Component\SAMAnalyticalHourOfYearToDateTime.cs" />
-    <Compile Include="Component\SAMAnalyticalFixNames.cs" />
-    <Compile Include="Component\SAMAnalyticalGetZonesByName.cs" />
-    <Compile Include="Component\SAMAnalyticalGetZonesBySpace.cs" />
-    <Compile Include="Component\SAMAnalyticalAirflow.cs" />
-    <Compile Include="Component\SAMAnalyticalCopyApertureConstructionLayers.cs" />
-    <Compile Include="Component\SAMAnalyticalCopyConstructionLayers.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelsByPlane.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyObject.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelsByShell.cs" />
-    <Compile Include="Component\SAMAnalyticalMapAdjacencyCluster.cs" />
-    <Compile Include="Component\SAMAnalyticalAdjustRoofs.cs" />
-    <Compile Include="Component\SAMAnalyticalOffsetPanel.cs" />
-    <Compile Include="Component\SAMAnalyticalSetAirflow.cs" />
-    <Compile Include="Component\SAMAnalyticalSetInternalConditionPerArea.cs" />
-    <Compile Include="Component\SAMAnalyticalSetInternalCondition.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalModifyZonesCategoryName.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateZonesByValues.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateSpaceNames.cs" />
-    <Compile Include="Component\SAMAnalyticalZoneType.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateZoneByName.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalGetSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateEquipmentGains.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateInternalConditionByProfiles.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateSetPoint.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdatePollutantGains.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateInfiltrationGains.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateLightingGains.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateOccupancyGains.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileGroup.cs" />
-    <Compile Include="Component\SAMAnalyticalProfileType.cs" />
-    <Compile Include="Component\SAMAnalyticalReportSpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateProfileByProfiles.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateName.cs" />
-    <Compile Include="Component\SAMAnalyticalMechanicalSystemTypes.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByPanelAreaAndThinnessRatio.cs" />
-    <Compile Include="Component\SAMAnalyticalFlipPanel.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultSystemTypeLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultProfileLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterBySpaces.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelTypeByText.cs" />
-    <Compile Include="Component\SAMAnalyticalMapInternalCondtions.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateDegreeOfActivityByTemperature.cs" />
-    <Compile Include="Component\SAMAnalyticalGetSortedKeys.cs" />
-    <Compile Include="Component\SAMAnalyticalGetInternalConditionTextMap.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultDegreeOfActivityLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultInternalConditionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalSetConstructionLayersByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalSetOccupancyGains.cs" />
-    <Compile Include="Component\SAMAnalyticalSetInternalConditionByInternalConditionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalExtendPanelByPlane.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalRemoveInternalEdges.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateApertureConstructionsByName.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateGeometry.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateInternalCondition.cs" />
-    <Compile Include="Component\SAMAnalyticalJoinPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByGeometry.cs" />
-    <Compile Include="Component\SAMAnalyticalInternalConditionParameter.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateApertureConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLayersByMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateGasMaterial.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateTransparentMaterial.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultApertureConstructions.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultGasMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultMaterialLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalLabelSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalLabelPanel.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLayersByNames.cs" />
-    <Compile Include="Component\SAMAnalyticalGetInternalMaterials.cs" />
-    <Compile Include="Component\SAMAnalyticalGetInternalConstructionLayers.cs" />
-    <Compile Include="Component\SAMAnalyticalGetDefaultConstructions.cs" />
-    <Compile Include="Component\SAMAnalyticalHeatFlowDirection.cs" />
-    <Compile Include="Component\SAMAnalyticalDefaultGasType.cs" />
-    <Compile Include="Component\SAMAnalyticalGetPanelsByConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalExtendPanelByPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalNormalsDisplay.cs" />
-    <Compile Include="Component\SAMAnalyticalCheck.cs" />
-    <Compile Include="Component\SAMAnalyticalGrid.cs" />
-    <Compile Include="Component\SAMAnalyticalSetApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalSetConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateTypesByMap.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByMap.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateTypesByName.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateHeatTransferCoefficients.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateConstructionsByName.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalGetAdjacentSpaceNames.cs" />
-    <Compile Include="Component\SAMAnalyticalApertureConstructions.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelLocation.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateNormals.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitByInternalEdges.cs" />
-    <Compile Include="Component\SAMAnalyticalAddAperturesByGeometryAndApertureConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalRemove.cs" />
-    <Compile Include="Component\SAMAnalyticalFilter.cs" />
-    <Compile Include="Component\SAMAnalyticalSetDefaultConstructionByPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdatePanelTypes_Obsolete.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateSpaceByLocationAndName.cs" />
-    <Compile Include="Component\SAMAnalyticalExternalVector3D.cs" />
-    <Compile Include="Component\SAMAnalyticalInsideSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAdjacencyCluster.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdatePanelTypes.cs" />
-    <Compile Include="Component\SAMAnalyticalAddSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateAnalyticalModelByAdjacencyCluster.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelSpacing.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelDistance.cs" />
-    <Compile Include="Component\SAMAnalyticalTransfom.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeOverlapPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalMergeCoplanarPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalOffsetAperturesOnEdge.cs" />
-    <Compile Include="Component\SAMAnalyticalHeatTransferCoefficientByDefaultGasType.cs" />
-    <Compile Include="Component\SAMAnalyticalOverlapPanels.cs" />
-    <Compile Include="Component\SAMAnalyticalMovePanel.cs" />
-    <Compile Include="Component\SAMAnalyticalPlaneIntersection.cs" />
-    <Compile Include="Component\SAMAnalyticalSetConstructionByCsv.cs" />
-    <Compile Include="Component\SAMAnalyticalRenameConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalFilterByElevation.cs" />
-    <Compile Include="Component\SAMAnalyticalNCMSystemType.cs" />
-    <Compile Include="Component\SAMAnalyticalSetPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalPlanarBoundary3D.cs" />
-    <Compile Include="Component\SAMAnalyticalCreatePanelBy3DGeometry.cs" />
-    <Compile Include="Component\SAMAnalyticalGeometry.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstruction.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateSpace.cs" />
-    <Compile Include="Component\SAMAnalyticalPanelType.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapByLines.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapByPoints.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapByOffset.cs" />
-    <Compile Include="Component\SAMAnalyticalSnapPoints.cs" />
-    <Compile Include="Component\SAMAnalyticalUpdateObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalRelatedObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateConstructionLibrary.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateOpaqueMaterial.cs" />
-    <Compile Include="Component\SAMAnalyticalObjects.cs" />
-    <Compile Include="Component\SAMAnalyticalLoadWeatherData.cs" />
-    <Compile Include="Component\SAMAnalyticalCreateLevels.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Surfaces.cs" />
-    <Compile Include="Convert\ToGrasshopper\New\GH_Mesh.cs" />
-    <Compile Include="Classes\GooDegreeOfActivity.cs" />
-    <Compile Include="Convert\ToUI\Process.cs" />
-    <Compile Include="Enums\PanelBakeMethod.cs" />
-    <Compile Include="Kernel\AssemblyInfo.cs" />
-    <Compile Include="Modify\BakeGeometry_ByApertureConstruction.cs" />
-    <Compile Include="Modify\BakeGeometry_ByConstruction.cs" />
-    <Compile Include="Modify\BakeGeometry_ByInternalCondtion.cs" />
-    <Compile Include="Modify\BakeGeometry_ByLevel.cs" />
-    <Compile Include="Modify\BakeGeometry_ByBoundaryType.cs" />
-    <Compile Include="Modify\BakeGeometry_ByApertureType.cs" />
-    <Compile Include="Modify\BakeGeometry_ByDischargeCoefficient.cs" />
-    <Compile Include="Modify\BakeGeometry_ByPanelType.cs" />
-    <Compile Include="Modify\New\BakeGeometry_ByAnalyticalType.cs" />
-    <Compile Include="Modify\New\BakeGeometry_ByCategory.cs" />
-    <Compile Include="Modify\New\BakeGeometry_ByType.cs" />
-    <Compile Include="Modify\New\DrawViewportMeshes.cs" />
-    <Compile Include="Modify\New\DrawViewportWires.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Convert\ToGrasshopper\GH_Breps.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="Query\Offset.cs" />
-    <Compile Include="Query\AnalyticalUIPath.cs" />
-    <Compile Include="Query\DataTree.cs" />
-    <Compile Include="Query\New\DisplayMaterial.cs" />
-    <Compile Include="Query\TryConvertToPanelGeometries.cs" />
-    <Compile Include="Query\DisplayMaterial.cs" />
-    <Compile Include="Component\SAMAnalyticalSplitPanelByElevations.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj">
-      <Project>{fdcf91df-29e7-49a5-b955-2d561c1a95ec}</Project>
-      <Name>SAM.Analytical.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
-      <Project>{40ea176a-6c19-4410-a22e-bc87833f9c77}</Project>
-      <Name>SAM.Geometry.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj">
-      <Project>{b47bad06-8523-455e-acf8-4879d0286ec1}</Project>
-      <Name>SAM.Analytical</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj">
-      <Project>{752ad1b6-fd09-4008-b7cc-5fd45fd2f9d9}</Project>
-      <Name>SAM.Architectural</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
-      <Project>{1C86B9AC-81B3-41D8-BA48-321F28AB94F4}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
-      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
-      <Name>SAM.Geometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
-      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
-      <Name>SAM.Math</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Weather\SAM.Weather.csproj">
-      <Project>{be06b786-865a-4316-95c8-970db6e53424}</Project>
-      <Name>SAM.Weather</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj">
-      <Project>{d8b37aba-a2f9-4eb2-9bc6-717bb11f5f47}</Project>
-      <Name>SAM.Architectural.Grasshopper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
-      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
-      <Name>SAM.Core.Grasshopper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj">
-      <Project>{b8f0ee34-a776-4518-ada2-e047e468b47b}</Project>
-      <Name>SAM.Geometry.Grasshopper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj">
-      <Project>{14c5e8de-5729-4ca0-baf9-7ca548d12b35}</Project>
-      <Name>SAM.Weather.Grasshopper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Resources\SAM_Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Logo24.png" />
+    <ProjectReference Include="..\..\Rhino\SAM.Analytical.Rhino\SAM.Analytical.Rhino.csproj" />
+    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Weather\SAM.Weather.csproj" />
+    <ProjectReference Include="..\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj" />
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj" />
+    <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj" />
+    <ProjectReference Include="..\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="NetTopologySuite">
       <Version>2.5.0</Version>
     </PackageReference>
@@ -481,35 +50,17 @@
       <Version>13.0.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
-
-set SAM_DIR=$(APPDATA)\SAM\
-if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
-
-copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
-copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
-
-::erase "%25SAM_DIR%25$(ProjectName).dll"
-::erase "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartProgram>C:\Program Files\Rhino 6\System\Rhino.exe</StartProgram>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments></StartArguments>
     <StartAction>Program</StartAction>
     <DocumentationFile>..\..\build\SAM.Analytical.Grasshopper.xml</DocumentationFile>
   </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;set SAM_DIR=$(APPDATA)\SAM\&#xD;&#xA;if not exist &quot;%25SAM_DIR%25&quot; mkdir &quot;%25SAM_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;%25SAM_DIR%25\$(ProjectName).dll&quot; &quot;%25SAM_DIR%25\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;::erase &quot;%25SAM_DIR%25$(ProjectName).dll&quot;&#xD;&#xA;::erase &quot;$(TargetPath)" />
+  </Target>
 </Project>
