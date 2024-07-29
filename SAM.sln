@@ -12,25 +12,25 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "SAM", "SAM", "{4FDEDAD6-FCE
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Grasshopper", "Grasshopper", "{B365D5A7-F4F1-4C45-9565-5F6CFC1134A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Geometry.Grasshopper", "Grasshopper\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj", "{B8F0EE34-A776-4518-ADA2-E047E468B47B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Geometry.Grasshopper", "Grasshopper\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj", "{B8F0EE34-A776-4518-ADA2-E047E468B47B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Architectural", "SAM\SAM.Architectural\SAM.Architectural.csproj", "{752AD1B6-FD09-4008-B7CC-5FD45FD2F9D9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Analytical.Grasshopper", "Grasshopper\SAM.Analytical.Grasshopper\SAM.Analytical.Grasshopper.csproj", "{A1DB5A5E-8118-4B86-8E0D-80FF61D80FEB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Analytical.Grasshopper", "Grasshopper\SAM.Analytical.Grasshopper\SAM.Analytical.Grasshopper.csproj", "{A1DB5A5E-8118-4B86-8E0D-80FF61D80FEB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Core.Grasshopper", "Grasshopper\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj", "{EA20D57F-BB3E-447A-80A2-14C04BAA665F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Core.Grasshopper", "Grasshopper\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj", "{EA20D57F-BB3E-447A-80A2-14C04BAA665F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Units", "SAM\SAM.Units\SAM.Units.csproj", "{CCE71A0C-1303-4330-AB5E-44998C94F802}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Architectural.Grasshopper", "Grasshopper\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj", "{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Architectural.Grasshopper", "Grasshopper\SAM.Architectural.Grasshopper\SAM.Architectural.Grasshopper.csproj", "{D8B37ABA-A2F9-4EB2-9BC6-717BB11F5F47}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Math", "SAM\SAM.Math\SAM.Math.csproj", "{255E428D-6969-4542-9846-67B7DE87501B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Math.Grasshopper", "Grasshopper\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj", "{0D87D3BC-3E98-4521-8B69-DD93B0C16A4A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Math.Grasshopper", "Grasshopper\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj", "{0D87D3BC-3E98-4521-8B69-DD93B0C16A4A}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Weather", "SAM\SAM.Weather\SAM.Weather.csproj", "{BE06B786-865A-4316-95C8-970DB6E53424}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SAM.Weather.Grasshopper", "Grasshopper\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj", "{14C5E8DE-5729-4CA0-BAF9-7CA548D12B35}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SAM.Weather.Grasshopper", "Grasshopper\SAM.Weather.Grasshopper\SAM.Weather.Grasshopper.csproj", "{14C5E8DE-5729-4CA0-BAF9-7CA548D12B35}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Rhino", "Rhino", "{1DDF5AA0-99F2-4E5F-A218-4C6CAE5DA962}"
 EndProject
