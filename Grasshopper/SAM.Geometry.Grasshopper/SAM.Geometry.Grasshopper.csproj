@@ -24,6 +24,11 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="Manager\**" />
+    <EmbeddedResource Remove="Manager\**" />
+    <None Remove="Manager\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
@@ -47,9 +52,6 @@
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
     </PackageReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Manager\" />
   </ItemGroup>
   <PropertyGroup />
   <PropertyGroup>

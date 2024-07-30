@@ -24,7 +24,9 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Enums\" />
+    <Compile Remove="Enums\**" />
+    <EmbeddedResource Remove="Enums\**" />
+    <None Remove="Enums\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj" />
