@@ -1,199 +1,53 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net472</TargetFramework>
     <Rhino7DefaultInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Path', null, RegistryView.Registry64))</Rhino7DefaultInstallDir>
     <Rhino7DebugInstallDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Path', null, RegistryView.Registry64))</Rhino7DebugInstallDir>
     <Rhino7InstallDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugInstallDir)', '$(Rhino7DefaultInstallDir)'))</Rhino7InstallDir>
     <Rhino7DefaultPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_LOCAL_MACHINE\SOFTWARE\McNeel\Rhinoceros\7.0\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DefaultPluginsDir>
     <Rhino7DebugPluginsDir>$([MSBuild]::GetRegistryValueFromView('HKEY_CURRENT_USER\Software\McNeel\Rhinoceros\7.0-WIP-Developer-Debug-trunk\Install', 'Default Plug-ins Folder', null, RegistryView.Registry64))</Rhino7DebugPluginsDir>
     <Rhino7PluginsDir>$([MSBuild]::ValueOrDefault('$(Rhino7DebugPluginsDir)', '$(Rhino7DefaultPluginsDir)'))</Rhino7PluginsDir>
-    <NuGetPackageImportStamp>
-    </NuGetPackageImportStamp>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
+    <Deterministic>false</Deterministic>
+	  <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+	  <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{B8F0EE34-A776-4518-ADA2-E047E468B47B}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SAM.Geometry.Grasshopper</RootNamespace>
-    <AssemblyName>SAM.Geometry.Grasshopper</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisIgnoreBuiltInRules>false</CodeAnalysisIgnoreBuiltInRules>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
     <OutputPath>..\..\build\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System" />
-    <Reference Include="System.Core" />
-    <Reference Include="System.Data" />
+    <Compile Remove="Manager\**" />
+    <EmbeddedResource Remove="Manager\**" />
+    <None Remove="Manager\**" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System.IO.Compression" />
-    <Reference Include="System.Numerics" />
-    <Reference Include="System.Xml" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Classes\GooTransform3D.cs" />
-    <Compile Include="Classes\GooSAMGeometry.cs" />
-    <Compile Include="Component\CreateSAMTransform3DOriginToPlane.cs" />
-    <Compile Include="Component\GeometryCreateShell.cs" />
-    <Compile Include="Component\GeometryGetShellsByPoint3Ds.cs" />
-    <Compile Include="Component\SAMGeometryThinnessRatio.cs" />
-    <Compile Include="Component\SAMGeometrySectionByShell.cs" />
-    <Compile Include="Component\SAMGeometrySectionByFace3D.cs" />
-    <Compile Include="Component\SAMGeometryCreateShellsByElevations.cs" />
-    <Compile Include="Component\SAMGeometryIsClosed.cs" />
-    <Compile Include="Component\SAMGeometryShellIntersection.cs" />
-    <Compile Include="Component\SAMGeometryShellDifference.cs" />
-    <Compile Include="Component\SAMGeometryShellsSplitByFace3Ds.cs" />
-    <Compile Include="Component\SAMGeometryShellsSplit.cs" />
-    <Compile Include="Component\SAMGeometryCreateShellsByOffset.cs" />
-    <Compile Include="Component\SAMGeometryShellsUnion.cs" />
-    <Compile Include="Component\SAMGeometryCutShell.cs" />
-    <Compile Include="Component\GeometryTriangulate.cs" />
-    <Compile Include="Component\SAMGeometryShellsSplitFace3Ds.cs" />
-    <Compile Include="Component\SAMGeometryFace3DSpacing.cs" />
-    <Compile Include="Component\SAMGeometryFill.cs" />
-    <Compile Include="Component\SAMGeometryMargeOverlaps.cs" />
-    <Compile Include="Component\SAMGeometryShellNakedSegment3Ds.cs" />
-    <Compile Include="Component\SAMGeometrySplitCoplanarFace3Ds.cs" />
-    <Compile Include="Component\SAMGeometryShellContains.cs" />
-    <Compile Include="Component\GeometryFilterShells.cs" />
-    <Compile Include="Component\GeometryGetShellsByPoint3D.cs" />
-    <Compile Include="Component\GeometryMeshClose.cs" />
-    <Compile Include="Component\GeometryModifyIntersection.cs" />
-    <Compile Include="Component\GeometryMeshReduce.cs" />
-    <Compile Include="Component\GeometryModifyUnion.cs" />
-    <Compile Include="Component\GeometryModifyDifference.cs" />
-    <Compile Include="Component\GeometryPolycurveLoop2D.cs" />
-    <Compile Include="Component\GeometryCreatePlane.cs" />
-    <Compile Include="Component\SAMGeometryCreateShellsByTopAndBottom.cs" />
-    <Compile Include="Component\GeometrySnapByDistance.cs" />
-    <Compile Include="Component\CreateSAMTransform3DPlaneToPlane.cs" />
-    <Compile Include="Component\CreateSAMTransform3DPlaneToOrigin.cs" />
-    <Compile Include="Component\NTSSAMGeometry2D.cs" />
-    <Compile Include="Component\SAMGeometryFlipNormal.cs" />
-    <Compile Include="Component\SAMGeometryTransform.cs" />
-    <Compile Include="Component\SAMGeometryPlaneIntersection.cs" />
-    <Compile Include="Component\SAMGeometrySplit.cs" />
-    <Compile Include="Component\SAMGeometry2DToNTS.cs" />
-    <Compile Include="Component\SAMGeometryGeometry.cs" />
-    <Compile Include="Component\GeometrySAMGeometry.cs" />
-    <Compile Include="Component\GeometrySnapByPoints.cs" />
-    <Compile Include="Component\SAMGeometry2DSAMGeometry.cs" />
-    <Compile Include="Component\SAMGeometrySAMGeometry2D.cs" />
-    <Compile Include="Component\SAMGeometrySegment2DIntersection.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Rectangle.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Brep.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Plane.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Mesh.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Vector.cs" />
-    <Compile Include="Convert\ToSAM\Mesh3D.cs" />
-    <Compile Include="Convert\ToSAM\Rectangle3D.cs" />
-    <Compile Include="Convert\ToSAM\Transform3D.cs" />
-    <Compile Include="Create\Shell.cs" />
-    <Compile Include="Enum\MeshType.cs" />
-    <Compile Include="Kernel\AssemblyInfo.cs" />
-    <Compile Include="Modify\DrawViewportMeshes.cs" />
-    <Compile Include="Modify\DrawViewportWires.cs" />
-    <Compile Include="Modify\Convert.cs" />
-    <Compile Include="Modify\Reduce.cs" />
-    <Compile Include="Query\TryGetSAMGeometries.cs" />
-    <Compile Include="Query\Close.cs" />
-    <Compile Include="Template\TemplateComponent.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-    <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Surface.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Curve.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Line.cs" />
-    <Compile Include="Convert\ToGrasshopper\IGH_Goo.cs" />
-    <Compile Include="Convert\ToGrasshopper\GH_Point.cs" />
-    <Compile Include="Convert\ToSAM\IGeometry3Ds.cs" />
-    <Compile Include="Convert\ToSAM\Surface.cs" />
-    <Compile Include="Convert\ToSAM\IGeometry3D.cs" />
-    <Compile Include="Convert\ToSAM\Circle3D.cs" />
-    <Compile Include="Convert\ToSAM\Vector3D.cs" />
-    <Compile Include="Convert\ToSAM\Plane.cs" />
-    <Compile Include="Convert\ToSAM\Segment3D.cs" />
-    <Compile Include="Convert\ToSAM\Point3D.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
-    <None Include="Resources\SAM_Small.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj">
-      <Project>{40ea176a-6c19-4410-a22e-bc87833f9c77}</Project>
-      <Name>SAM.Geometry.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj">
-      <Project>{4cf0f164-3c3b-4f14-ad9c-8267ac379d71}</Project>
-      <Name>SAM.Math.Rhino</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj">
-      <Project>{1c86b9ac-81b3-41d8-ba48-321f28ab94f4}</Project>
-      <Name>SAM.Core</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj">
-      <Project>{4cf184fd-b48a-41fc-adbc-20218b44b03d}</Project>
-      <Name>SAM.Geometry</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj">
-      <Project>{255e428d-6969-4542-9846-67b7de87501b}</Project>
-      <Name>SAM.Math</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj">
-      <Project>{ea20d57f-bb3e-447a-80a2-14c04baa665f}</Project>
-      <Name>SAM.Core.Grasshopper</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj">
-      <Project>{0d87d3bc-3e98-4521-8b69-dd93b0c16a4a}</Project>
-      <Name>SAM.Math.Grasshopper</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HL_Logo24.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\SAM_Geometry.png" />
+    <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
+    <ProjectReference Include="..\..\Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
+    <ProjectReference Include="..\..\SAM\SAM.Math\SAM.Math.csproj" />
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj" />
+    <ProjectReference Include="..\SAM.Math.Grasshopper\SAM.Math.Grasshopper.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grasshopper">
       <Version>6.32.20340.21001</Version>
       <ExcludeAssets>runtime</ExcludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="NetTopologySuite">
       <Version>2.5.0</Version>
     </PackageReference>
@@ -201,37 +55,17 @@
       <Version>13.0.3</Version>
     </PackageReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Manager\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
-  <PropertyGroup>
-    <PostBuildEvent>copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
-
-set SAM_DIR=$(APPDATA)\SAM\
-if not exist "%25SAM_DIR%25" mkdir "%25SAM_DIR%25"
-
-copy "$(TargetDir)*.dll" "%25SAM_DIR%25"
-copy "%25SAM_DIR%25\$(ProjectName).dll" "%25SAM_DIR%25\$(ProjectName).gha"
-
-::erase "%25SAM_DIR%25$(ProjectName).dll"
-::erase "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <StartProgram>C:\Program Files\Rhino 6\System\Rhino.exe</StartProgram>
-    <StartArguments>
-    </StartArguments>
+    <StartArguments></StartArguments>
     <StartAction>Program</StartAction>
     <DocumentationFile>..\..\build\SAM.Geometry.Grasshopper.xml</DocumentationFile>
   </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;set SAM_DIR=$(APPDATA)\SAM\&#xD;&#xA;if not exist &quot;%25SAM_DIR%25&quot; mkdir &quot;%25SAM_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;%25SAM_DIR%25\$(ProjectName).dll&quot; &quot;%25SAM_DIR%25\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;::erase &quot;%25SAM_DIR%25$(ProjectName).dll&quot;&#xD;&#xA;::erase &quot;$(TargetPath)" />
+  </Target>
 </Project>
