@@ -10,6 +10,71 @@ namespace SAM.Analytical
 {
     public static partial class Create
     {
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, double elevation_Ground = 0, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        {
+            if(shells == null)
+            {
+                return null;
+            }
+
+            List<Shell> shells_Temp = new List<Shell>(shells);
+
+            shells_Temp.SplitFace3Ds(tolerance_Angle, tolerance_Distance);
+            shells_Temp.RemoveAll(x => x == null);
+
+            AdjacencyCluster result = new AdjacencyCluster();
+
+
+            List<Space> spaces_Temp = spaces == null ? new List<Space>() : new List<Space>(spaces);
+
+            List<Tuple<BoundingBox3D, Face3D, Panel>> tuples = new List<Tuple<BoundingBox3D, Face3D, Panel>>();
+            
+            int index = 1;
+            foreach(Shell shell in shells_Temp)
+            {
+                Space space = spaces_Temp.Find(x => shell.GetBoundingBox().InRange(x.Location, tolerance_Distance) && shell.InRange(x.Location, tolerance_Distance));
+                if(space == null)
+                {
+                    while (spaces_Temp.Find(x => x.Name == string.Format("{0} {1}", "Space", index)) != null)
+                    {
+                        index++;
+                    }
+
+                    space = new Space(string.Format("{0} {1}", "Space", index), shell.InternalPoint3D(silverSpacing, tolerance_Distance));
+                }
+
+                result.AddObject(space);
+
+                foreach(Face3D face3D in shell.Face3Ds)
+                {
+                    Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
+
+                    Tuple<BoundingBox3D, Face3D, Panel> tuple = tuples.Find(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.InRange(point3D, tolerance_Distance));
+                    if(tuple == null)
+                    {
+                        PanelType panelType = Query.PanelType(face3D.GetPlane().Normal, tolerance_Angle);
+
+                        Construction construction = Query.DefaultConstruction(panelType);
+
+                        Panel panel = Panel(construction, panelType, face3D);
+
+                        tuple = new Tuple<BoundingBox3D, Face3D, Panel>(face3D.GetBoundingBox(), face3D, panel);
+                    }
+
+                    result.AddRelation(space, tuple.Item2);
+                }
+            }
+
+            result.Cut(elevation_Ground, null, tolerance_Distance);
+
+            result = result.UpdateNormals(false, true, false, Tolerance.MacroDistance, tolerance_Distance);
+            result.Normalize(false);
+            result.UpdatePanelTypes(elevation_Ground);
+            result.SetDefaultConstructionByPanelType();
+
+            return result;
+        }
+
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<ISegmentable2D> segmentable2Ds, double elevation_Min, double elevation_Max, double elevation_Ground = 0, double tolerance = Tolerance.Distance)
         {
             if (segmentable2Ds == null || double.IsNaN(elevation_Min) || double.IsNaN(elevation_Max))
