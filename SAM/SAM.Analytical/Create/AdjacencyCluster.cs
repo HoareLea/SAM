@@ -1,4 +1,6 @@
-﻿using SAM.Core;
+﻿using NetTopologySuite.Algorithm;
+using SAM.Core;
+using SAM.Geometry;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -41,6 +43,34 @@ namespace SAM.Analytical
                     }
 
                     space = new Space(string.Format("{0} {1}", "Space", index), shell.InternalPoint3D(silverSpacing, tolerance_Distance));
+                }
+
+                List<Face3D> face3Ds = shell.Section();
+                if(face3Ds != null && face3Ds.Count != 0)
+                {
+                    double area = 0;
+                    foreach(Face3D face3D in face3Ds)
+                    {
+                        if(face3D == null)
+                        {
+                            continue;
+                        }
+
+                        double area_Temp = face3D.GetArea();
+                        if(!double.IsNaN(area_Temp) && area_Temp > 0)
+                        {
+                            area += area_Temp;
+                        }
+
+                    }
+
+                    space.SetValue(SpaceParameter.Area, area);
+                }
+
+                double volume = shell.Volume(silverSpacing, tolerance_Distance);
+                if(!double.IsNaN(volume))
+                {
+                    space.SetValue(SpaceParameter.Volume, volume);
                 }
 
                 result.AddObject(space);
