@@ -42,32 +42,11 @@
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
   </ItemGroup>
-  <PropertyGroup>
-    <PostBuildEvent>
-      copy "$(TargetPath)" "$(TargetDir)\$(ProjectName).gha"
-
-      set SAM_DIR=$(APPDATA)\SAM\
-      if not exist "%SAM_DIR%" mkdir "%SAM_DIR%"
-
-      copy "$(TargetDir)*.dll" "%SAM_DIR%"
-      copy "%SAM_DIR%"$(ProjectName).dll" "%SAM_DIR%\$(ProjectName).gha"
-
-
-      echo #Order of files is important or just folder &gt; "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
-echo %SAM_DIR% &gt;&gt; "$(APPDATA)\Grasshopper\Libraries\SAM.ghlink"
-
-
-xcopy "$(SolutionDir)\files\resources" "$(APPDATA)\SAM\resources" /Y/I/E/S
-xcopy "$(SolutionDir)\files\resources" "$(USERPROFILE)\Documents\SAM\resources" /Y/D/I/E/S
-
-
-if Exist "$(SolutionDir)\files\Grasshopper\UserObjects" (
-xcopy "$(SolutionDir)\files\Grasshopper\UserObjects" "$(APPDATA)\Grasshopper\UserObjects\SAM" /Y/I/E/S
-)
-::erase "%SAM_DIR%$(ProjectName).dll"
-::erase "$(TargetPath)"</PostBuildEvent>
-  </PropertyGroup>
+  <PropertyGroup />
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>
   </PropertyGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(TargetPath)&quot; &quot;$(TargetDir)\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;set SAM_DIR=$(APPDATA)\SAM\&#xD;&#xA;if not exist &quot;%25SAM_DIR%25&quot; mkdir &quot;%25SAM_DIR%25&quot;&#xD;&#xA;&#xD;&#xA;copy &quot;$(TargetDir)*.dll&quot; &quot;%25SAM_DIR%25&quot;&#xD;&#xA;copy &quot;%25SAM_DIR%25\$(ProjectName).dll&quot; &quot;%25SAM_DIR%25\$(ProjectName).gha&quot;&#xD;&#xA;&#xD;&#xA;::erase &quot;%25SAM_DIR%25$(ProjectName).dll&quot;&#xD;&#xA;::erase &quot;$(TargetPath)" />
+  </Target>
 </Project>
