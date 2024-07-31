@@ -32,7 +32,7 @@ namespace SAM.Analytical
             int index = 1;
             foreach(Shell shell in shells_Temp)
             {
-                Space space = spaces_Temp.Find(x => shell.GetBoundingBox().InRange(x.Location, tolerance_Distance) && shell.InRange(x.Location, tolerance_Distance));
+                Space space = spaces_Temp.Find(x => shell.GetBoundingBox().InRange(x.Location, tolerance_Distance) && shell.Inside(x.Location, silverSpacing, tolerance_Distance));
                 if(space == null)
                 {
                     while (spaces_Temp.Find(x => x.Name == string.Format("{0} {1}", "Space", index)) != null)
@@ -58,10 +58,13 @@ namespace SAM.Analytical
 
                         Panel panel = Panel(construction, panelType, face3D);
 
+                        result.AddObject(panel);
+
                         tuple = new Tuple<BoundingBox3D, Face3D, Panel>(face3D.GetBoundingBox(), face3D, panel);
+                        tuples.Add(tuple);
                     }
 
-                    result.AddRelation(space, tuple.Item2);
+                    result.AddRelation(space, tuple.Item3);
                 }
             }
 

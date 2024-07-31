@@ -215,7 +215,7 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, spaces, elevationGround, silverSpacing, Core.Tolerance.Angle, tolerance);
 
-            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            index = Params.IndexOfOutputParam("adjacencyCluster");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster));
