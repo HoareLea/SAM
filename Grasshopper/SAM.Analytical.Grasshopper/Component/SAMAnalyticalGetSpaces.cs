@@ -273,6 +273,19 @@ namespace SAM.Analytical.Grasshopper
                     if (point3D != null)
                         tuples.Add(new Tuple<GH_Path, Geometry.Spatial.Point3D>(path, point3D));
                 }
+                else if(@object is string)
+                {
+                    List<Space> spaces = adjacencyCluster.GetSpaces();
+                    if (spaces == null || spaces.Count == 0)
+                    {
+                        return;
+                    }
+
+                    Space space = spaces.Find(x => x != null && x.Name == (string)@object);
+
+                    dataTree_Spaces.Add(new GooSpace(space), path);
+                    dataTree_Shells.Add(new Geometry.Grasshopper.GooSAMGeometry(adjacencyCluster.Shell(space)), path);
+                }
             }
 
             if(tuples != null && tuples.Count != 0)
