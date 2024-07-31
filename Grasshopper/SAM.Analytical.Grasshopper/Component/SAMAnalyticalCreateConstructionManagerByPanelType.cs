@@ -143,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Dictionary<PanelType, Construction> constructionDictionary = new Dictionary<PanelType, Construction>();
-            Dictionary<PanelType, ApertureConstruction> apertureConstructionDictionary = new Dictionary<PanelType, ApertureConstruction>();
+            Dictionary<Tuple<PanelType, ApertureType>, ApertureConstruction> apertureConstructionDictionary = new Dictionary<Tuple<PanelType, ApertureType>, ApertureConstruction>();
 
             Construction construction = null;
             ApertureConstruction apertureConstruction = null;
@@ -231,7 +231,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Door);
 
-                apertureConstructionDictionary[PanelType.WallExternal] = apertureConstruction;
+                apertureConstructionDictionary[new Tuple<PanelType, ApertureType>(PanelType.WallExternal, ApertureType.Door)] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("doorInternal_");
@@ -239,7 +239,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Door);
 
-                apertureConstructionDictionary[PanelType.WallInternal] = apertureConstruction;
+                apertureConstructionDictionary[new Tuple<PanelType, ApertureType>(PanelType.WallInternal, ApertureType.Door)] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("skylight_");
@@ -247,7 +247,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
 
-                apertureConstructionDictionary[PanelType.Roof] = apertureConstruction;
+                apertureConstructionDictionary[new Tuple<PanelType, ApertureType>(PanelType.Roof, ApertureType.Window)] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("windowExternal_");
@@ -255,7 +255,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
 
-                apertureConstructionDictionary[PanelType.WallExternal] = apertureConstruction;
+                apertureConstructionDictionary[new Tuple<PanelType, ApertureType>(PanelType.WallExternal, ApertureType.Window)] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("windowInternal_");
@@ -263,7 +263,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 apertureConstruction = new ApertureConstruction(apertureConstruction, ApertureType.Window);
                 
-                apertureConstructionDictionary[PanelType.WallInternal] = apertureConstruction;
+                apertureConstructionDictionary[new Tuple<PanelType, ApertureType>(PanelType.WallInternal, ApertureType.Window)] = apertureConstruction;
             }
 
             index = Params.IndexOfInputParam("materials_");

@@ -1,4 +1,5 @@
 ﻿using SAM.Core;
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -22,7 +23,7 @@ namespace SAM.Analytical
             return new ConstructionManager(apertureConstructions, constructions, materialLibrary);
         }
 
-        public static ConstructionManager ConstructionManager(ConstructionManager constructionManager, Dictionary<PanelType, Construction> constructionDictionary, Dictionary<PanelType, ApertureConstruction> apertureConctructionDictionary, IEnumerable<IMaterial> materials)
+        public static ConstructionManager ConstructionManager(ConstructionManager constructionManager, Dictionary<PanelType, Construction> constructionDictionary, Dictionary<Tuple<PanelType, ApertureType>, ApertureConstruction> apertureConctructionDictionary, IEnumerable<IMaterial> materials)
         {
             ConstructionManager result = constructionManager == null ? new ConstructionManager() : new ConstructionManager(constructionManager);
 
@@ -47,19 +48,21 @@ namespace SAM.Analytical
 
             if (apertureConctructionDictionary != null)
             {
-                foreach (KeyValuePair<PanelType, ApertureConstruction> keyValuePair in apertureConctructionDictionary)
+                foreach (KeyValuePair<Tuple<PanelType,ApertureType>, ApertureConstruction> keyValuePair in apertureConctructionDictionary)
                 {
                     if (keyValuePair.Value == null)
                     {
                         continue;
                     }
 
-                    result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key)?.ForEach(x => result.Remove(x));
+                    result.GetApertureConstructions(keyValuePair.Value.ApertureType, keyValuePair.Key.Item1)?.ForEach(x => result.Remove(x));
                     
                     ApertureConstruction apertureConstruction = keyValuePair.Value;
                     if (apertureConstruction != null)
                     {
-                        result.Add(new ApertureConstruction(System.Guid.NewGuid(), apertureConstruction, apertureConstruction.Name), keyValuePair.Key);
+                        ApertureConstruction apertureConstruction_Temp = new ApertureConstruction(Guid.NewGuid(), apertureConstruction, apertureConstruction.Name);
+                        apertureConstruction_Temp = new ApertureConstruction(apertureConstruction_Temp, keyValuePair.Key.Item2);
+                        result.Add(apertureConstruction_Temp, keyValuePair.Key.Item1);
                         
                     }
                 }
