@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             ConstructionManager constructionManager = null;
             index = Params.IndexOfInputParam("constructionManager_");
-            if (index == -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref constructionManager);
             }
