@@ -302,34 +302,37 @@ namespace SAM.Analytical.Grasshopper
                 string exhaustUnitName_Temp = string.IsNullOrWhiteSpace(exhaustUnitName) ? null : exhaustUnitName;
 
                 List<VentilationSystem> ventilationSystems = adjacencyCluster.GetMechanicalSystems<VentilationSystem>();
-                foreach(VentilationSystem ventilationSystem in ventilationSystems)
+                if(ventilationSystems != null)
                 {
-                    string supplyUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName);
-                    if(string.IsNullOrWhiteSpace(supplyUnitName_VentilationSystem))
+                    foreach (VentilationSystem ventilationSystem in ventilationSystems)
                     {
-                        supplyUnitName_VentilationSystem = null;
-                    }
+                        string supplyUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName);
+                        if (string.IsNullOrWhiteSpace(supplyUnitName_VentilationSystem))
+                        {
+                            supplyUnitName_VentilationSystem = null;
+                        }
 
-                    if(supplyUnitName_VentilationSystem != supplyUnitName_Temp)
-                    {
-                        continue;
-                    }
+                        if (supplyUnitName_VentilationSystem != supplyUnitName_Temp)
+                        {
+                            continue;
+                        }
 
-                    string exhaustUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName);
-                    if (string.IsNullOrWhiteSpace(exhaustUnitName_VentilationSystem))
-                    {
-                        exhaustUnitName_VentilationSystem = null;
-                    }
+                        string exhaustUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName);
+                        if (string.IsNullOrWhiteSpace(exhaustUnitName_VentilationSystem))
+                        {
+                            exhaustUnitName_VentilationSystem = null;
+                        }
 
-                    if (exhaustUnitName_VentilationSystem != exhaustUnitName_Temp)
-                    {
-                        continue;
-                    }
+                        if (exhaustUnitName_VentilationSystem != exhaustUnitName_Temp)
+                        {
+                            continue;
+                        }
 
 
-                    if (ventilationSystem?.Type?.Name != ventilationSystemTypeName)
-                    {
-                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "There are different system types in Spaces in Zones therfore AirHandling will not be created");
+                        if (ventilationSystem?.Type?.Name != ventilationSystemTypeName)
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "There are different system types in Spaces in Zones therfore AirHandling will not be created");
+                        }
                     }
                 }
             }
