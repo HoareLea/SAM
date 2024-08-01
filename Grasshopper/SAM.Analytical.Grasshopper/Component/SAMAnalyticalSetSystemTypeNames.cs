@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,19 +49,19 @@ namespace SAM.Analytical.Grasshopper
                 GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "analyticalModel_", NickName = "analyticalModel_", Description = "SAM Analytical Model", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooSpaceParam spaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true };
-                spaceParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(spaceParam, ParamVisibility.Binding));
-
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject paramGenericObject;
 
-                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "ventilationSystemTypeName_", NickName = "ventilationSystemTypeName_", Description = "Ventilation System Type Name", Access = GH_ParamAccess.item, Optional = true };
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spacesOrZones_", NickName = "_spacesOrZones_", Description = "SAM Analytical Spaces or Zones", Access = GH_ParamAccess.list, Optional = true };
+                paramGenericObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
-                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "heatingSystemTypeName_", NickName = "heatingSystemTypeName_", Description = "Heating System Type Name", Access = GH_ParamAccess.item, Optional = true };
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "ventilationSystemTypeNames_", NickName = "ventilationSystemTypeNames_", Description = "VentilationSystemType or Ventilation System Type Names", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
-                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "coolingSystemTypeName_", NickName = "coolingSystemTypeName_", Description = "Cooling System Type Name", Access = GH_ParamAccess.item, Optional = true };
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "heatingSystemTypeNames_", NickName = "heatingSystemTypeNames_", Description = "HeatingSystemType or Heating System Type Names", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
+
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "coolingSystemTypeNames_", NickName = "coolingSystemTypeNames_", Description = "CoolingSystemType or Cooling System Type Names", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -85,146 +85,195 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_spaces_");
-            List<Space> spaces = new List<Space>();
+            index = Params.IndexOfInputParam("analyticalModel_");
+            AnalyticalModel analyticalModel = null;
             if (index != -1)
             {
-                dataAccess.GetDataList(index, spaces);
-            }
-            
-            index = Params.IndexOfInputParam("analyticalModel_");
-
-            AnalyticalModel analyticalModel = null;
-            if(index != -1)
-            {
                 dataAccess.GetData(index, ref analyticalModel);
-                if(analyticalModel != null && (spaces == null || spaces.Count == 0))
-                {
-                    spaces = analyticalModel.GetSpaces();
-                }
             }
 
-            if(analyticalModel == null && (spaces == null || spaces.Count == 0))
+            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            string ventilationSystemTypeName = null;
-            index = Params.IndexOfInputParam("ventilationSystemTypeName_");
+            adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
+
+            List<GH_ObjectWrapper> objectWrappers = null;
+
+            List<List<Space>> spacesList = new List<List<Space>>();
+
+            index = Params.IndexOfInputParam("_spacesOrZones_");
             if (index != -1)
             {
-                GH_ObjectWrapper objectWrapper = null;
-                if (dataAccess.GetData(index, ref objectWrapper))
+                objectWrappers = new List<GH_ObjectWrapper>();
+                dataAccess.GetDataList(index, objectWrappers);
+                foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
                     object value = objectWrapper?.Value;
                     if (value is IGH_Goo)
-                        value = (value as dynamic).Value;
-
-                    if (value is SAMObject)
                     {
-                        ventilationSystemTypeName = (value as SAMObject).Name;
+                        value = (value as dynamic).Value;
+                    }
+
+                    List<Space> spaces = null;
+                    if(value is Zone)
+                    {
+                        spaces = analyticalModel.GetSpaces((Zone)value);
+                    }
+                    else if (value is Space)
+                    {
+                        spaces = new List<Space>() { (Space)value };
                     }
                     else if(value is string)
                     {
-                        ventilationSystemTypeName = (string)value;
+                        spaces = new List<Space>() { analyticalModel?.GetSpaces()?.Find(x => x?.Name == (string)value) };
                     }
+
+                    spacesList.Add(spaces);
                 }
             }
 
-            string heatingSystemTypeName = null;
-            index = Params.IndexOfInputParam("heatingSystemTypeName_");
+            List<string> ventilationSystemTypeNames = new List<string>();
+            index = Params.IndexOfInputParam("ventilationSystemTypeNames_");
             if (index != -1)
             {
-                GH_ObjectWrapper objectWrapper = null;
-                if (dataAccess.GetData(index, ref objectWrapper))
+                objectWrappers = new List<GH_ObjectWrapper>();
+                dataAccess.GetDataList(index, objectWrappers);
+                foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
                     object value = objectWrapper?.Value;
                     if (value is IGH_Goo)
                         value = (value as dynamic).Value;
 
+                    string name = null;
                     if (value is SAMObject)
                     {
-                        heatingSystemTypeName = (value as SAMObject).Name;
+                        name = (value as SAMObject).Name;
                     }
                     else if (value is string)
                     {
-                        heatingSystemTypeName = (string)value;
+                        name = (string)value;
                     }
+
+                    ventilationSystemTypeNames.Add(name);
                 }
             }
 
-            string coolingSystemTypeName = null;
-            index = Params.IndexOfInputParam("coolingSystemTypeName_");
+            List<string> heatingSystemTypeNames = new List<string>();
+            index = Params.IndexOfInputParam("heatingSystemTypeNames_");
             if (index != -1)
             {
-                GH_ObjectWrapper objectWrapper = null;
-                if (dataAccess.GetData(index, ref objectWrapper))
+                objectWrappers = new List<GH_ObjectWrapper>();
+                dataAccess.GetDataList(index, objectWrappers);
+                foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
                     object value = objectWrapper?.Value;
                     if (value is IGH_Goo)
                         value = (value as dynamic).Value;
 
+                    string name = null;
                     if (value is SAMObject)
                     {
-                        coolingSystemTypeName = (value as SAMObject).Name;
+                        name = (value as SAMObject).Name;
                     }
                     else if (value is string)
                     {
-                        coolingSystemTypeName = (string)value;
+                        name = (string)value;
                     }
+
+                    heatingSystemTypeNames.Add(name);
                 }
             }
 
-            AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
-            if(adjacencyCluster != null)
+            List<string> coolingSystemTypeNames = new List<string>();
+            index = Params.IndexOfInputParam("coolingSystemTypeNames_");
+            if (index != -1)
             {
-                adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-            }
-
-            for (int i = 0; i < spaces.Count; i++)
-            {
-                Space space = spaces[i];
-                if(adjacencyCluster != null)
+                objectWrappers = new List<GH_ObjectWrapper>();
+                dataAccess.GetDataList(index, objectWrappers);
+                foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
-                    space = adjacencyCluster.GetObject<Space>(space.Guid);
-                }
+                    object value = objectWrapper?.Value;
+                    if (value is IGH_Goo)
+                        value = (value as dynamic).Value;
 
-                if(space == null)
+                    string name = null;
+                    if (value is SAMObject)
+                    {
+                        name = (value as SAMObject).Name;
+                    }
+                    else if (value is string)
+                    {
+                        name = (string)value;
+                    }
+
+                    coolingSystemTypeNames.Add(name);
+                }
+            }
+
+
+
+            for (int i = 0; i < spacesList.Count; i++)
+            {
+                List<Space> spaces = spacesList[i];
+                if(spaces == null || spaces.Count == 0)
                 {
                     continue;
                 }
 
-                space = new Space(space);
+                string ventilationSystemTypeName = ventilationSystemTypeNames.Count > i ? ventilationSystemTypeNames[i] : null;              
+                string heatingSystemTypeName = heatingSystemTypeNames.Count > i ? heatingSystemTypeNames[i] : null;
+                string coolingSystemTypeName = coolingSystemTypeNames.Count > i ? coolingSystemTypeNames[i] : null;
 
-                InternalCondition internalCondition = space.InternalCondition;
-                if(internalCondition == null)
+                for (int j = 0; j < spaces.Count; j++)
                 {
-                    internalCondition = new InternalCondition(space.Name);
-                }
+                    Space space = spaces[j];
+                    if(space != null)
+                    {
+                        space = adjacencyCluster.GetObject<Space>(space.Guid);
+                    }
 
-                if(!string.IsNullOrWhiteSpace(ventilationSystemTypeName))
-                {
-                    internalCondition.SetValue(InternalConditionParameter.VentilationSystemTypeName, ventilationSystemTypeName);
-                }
+                    if (space == null)
+                    {
+                        continue;
+                    }
 
-                if (!string.IsNullOrWhiteSpace(heatingSystemTypeName))
-                {
-                    internalCondition.SetValue(InternalConditionParameter.HeatingSystemTypeName, heatingSystemTypeName);
-                }
+                    InternalCondition internalCondition = space.InternalCondition;
+                    if (internalCondition == null)
+                    {
+                        internalCondition = new InternalCondition(space.Name);
+                    }
 
-                if (!string.IsNullOrWhiteSpace(coolingSystemTypeName))
-                {
-                    internalCondition.SetValue(InternalConditionParameter.CoolingSystemTypeName, coolingSystemTypeName);
-                }
+                    if (!string.IsNullOrWhiteSpace(ventilationSystemTypeName))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.VentilationSystemTypeName, ventilationSystemTypeName);
+                    }
+                    else
+                    {
+                        internalCondition.RemoveValue(InternalConditionParameter.VentilationSystemTypeName);
+                    }
 
-                space.InternalCondition = internalCondition;
+                    if (!string.IsNullOrWhiteSpace(heatingSystemTypeName))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.HeatingSystemTypeName, heatingSystemTypeName);
+                    }
+                    else
+                    {
+                        internalCondition.RemoveValue(InternalConditionParameter.HeatingSystemTypeName);
+                    }
 
-                spaces[i] = space;
+                    if (!string.IsNullOrWhiteSpace(coolingSystemTypeName))
+                    {
+                        internalCondition.SetValue(InternalConditionParameter.CoolingSystemTypeName, coolingSystemTypeName);
+                    }
+                    else
+                    {
+                        internalCondition.RemoveValue(InternalConditionParameter.CoolingSystemTypeName);
+                    }
 
-                if (adjacencyCluster != null)
-                {
-                    adjacencyCluster.AddObject(spaces[i]);
                 }
             }
 
@@ -236,14 +285,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("analyticals");
             if (index != -1)
             {
-                if(analyticalModel != null)
-                {
-                    dataAccess.SetDataList(index, new GooAnalyticalModel[] { new GooAnalyticalModel(analyticalModel)});
-                }
-                else
-                {
-                    dataAccess.SetDataList(index, spaces?.ConvertAll(x => new GooSpace(x)));
-                }
+                dataAccess.SetDataList(index, new GooAnalyticalModel[] { new GooAnalyticalModel(analyticalModel) });
             }
         }
     }
