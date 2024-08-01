@@ -274,6 +274,9 @@ namespace SAM.Analytical.Grasshopper
                         internalCondition.RemoveValue(InternalConditionParameter.CoolingSystemTypeName);
                     }
 
+                    spaces[j].InternalCondition = internalCondition;
+
+                    adjacencyCluster.AddObject(spaces[j]);
                 }
             }
 
