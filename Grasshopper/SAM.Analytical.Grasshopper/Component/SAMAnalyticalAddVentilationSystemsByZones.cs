@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddMechanicalSystemsByZones : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalAddVentilationSystemsByZones : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -27,9 +27,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalAddMechanicalSystemsByZones()
-          : base("SAMAnalytical.AddMechanicalSystemsByZones", "SAMAnalytical.AddMechanicalSystemsByZones",
-              "Add MechanicalSystems to SAM Analytical Model",
+        public SAMAnalyticalAddVentilationSystemsByZones()
+          : base("SAMAnalytical.AddVentilationSystemsByZones", "SAMAnalytical.AddVentilationSystemsByZones",
+              "Add VentilationSystems to SAM Analytical Model",
               "SAM", "Analytical")
         {
         }
@@ -54,15 +54,6 @@ namespace SAM.Analytical.Grasshopper
                 param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_exhaustUnitNames_", NickName = "_exhaustUnitNames_", Description = "Exhaust Unit Names", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_ventilationRiserNames_", NickName = "_ventilationRiserNames_", Description = "Ventilation Riser Names", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_heatingRiserNames_", NickName = "_heatingRiserNames_", Description = "Heating Riser Names", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_coolingRiserNames_", NickName = "_coolingRiserNames_", Description = "Cooling Riser Names", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
                 return result.ToArray();
             }
         }
@@ -76,8 +67,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "mechanicalSystems", NickName = "mechanicalSystems", Description = "SAM Mechanical Systems", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalEquipmentParam() { Name = "equipments", NickName = "equipments", Description = "SAM Mechanical Equipments", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "ventilationSystems", NickName = "ventilationSystems", Description = "SAM Ventilation Systems", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalEquipmentParam() { Name = "aHUs", NickName = "aHUs", Description = "SAM Mechanical Air Handling Units", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -115,6 +106,8 @@ namespace SAM.Analytical.Grasshopper
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
+
+            adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
 
             index = Params.IndexOfInputParam("_systemTypeLibrary_");
             SystemTypeLibrary systemTypeLibrary = null;
@@ -174,27 +167,6 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, exhaustUnitNames);
             }
 
-            index = Params.IndexOfInputParam("_ventilationRiserNames_");
-            List<string> ventilationRiserNames = new List<string>();
-            if (index != -1)
-            {
-                dataAccess.GetDataList(index, ventilationRiserNames);
-            }
-
-            index = Params.IndexOfInputParam("_heatingRiserNames_");
-            List<string> heatingRiserNames = new List<string>();
-            if (index != -1)
-            {
-                dataAccess.GetDataList(index, heatingRiserNames);
-            }
-
-            index = Params.IndexOfInputParam("_coolingRiserNames_");
-            List<string> coolingRiserNames = new List<string>();
-            if (index != -1)
-            {
-                dataAccess.GetDataList(index, coolingRiserNames);
-            }
-
             List<MechanicalSystem> mechanicalSystems = new List<MechanicalSystem>();
             List<IAnalyticalEquipment> analyticalEquipments = new List<IAnalyticalEquipment>();
 
@@ -212,9 +184,6 @@ namespace SAM.Analytical.Grasshopper
 
                     string supplyUnitName = null;
                     string exhaustUnitName = null;
-                    string ventilationRiserName = null;
-                    string heatingRiserName = null;
-                    string coolingRiserName = null;
 
                     if(supplyUnitNames.Count > i)
                     {
@@ -226,49 +195,29 @@ namespace SAM.Analytical.Grasshopper
                         exhaustUnitName = exhaustUnitNames[i];
                     }
 
-                    if (ventilationRiserNames.Count > i)
+                    VentilationSystem  ventilationSystem = adjacencyCluster.AddVentilationSystem(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
+                    if (ventilationSystem != null)
                     {
-                        ventilationRiserName = ventilationRiserNames[i];
-                    }
-
-                    if (heatingRiserNames.Count > i)
-                    {
-                        heatingRiserName = heatingRiserNames[i];
-                    }
-
-                    if (coolingRiserNames.Count > i)
-                    {
-                        coolingRiserName = coolingRiserNames[i];
-                    }
-
-                    List<MechanicalSystem>  mechanicalSystems_Temp = adjacencyCluster.AddMechanicalSystems(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName, ventilationRiserName, heatingRiserName, coolingRiserName);
-                    if (mechanicalSystems_Temp != null && mechanicalSystems_Temp.Count > 0)
-                    {
-                        foreach (MechanicalSystem mechanicalSystem in mechanicalSystems_Temp)
+                        if(mechanicalSystems.Find(x => x.Guid == ventilationSystem.Guid) == null)
                         {
-                            mechanicalSystems.Add(mechanicalSystem);
+                            mechanicalSystems.Add(ventilationSystem);
+                        }
 
-                            if (!(mechanicalSystem is VentilationSystem))
+                        string[] names = new string[] { ventilationSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName), ventilationSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName) };
+
+                        foreach (string name in names)
+                        {
+                            if (string.IsNullOrEmpty(name))
                             {
                                 continue;
                             }
 
-                            string[] names = new string[] { mechanicalSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName), mechanicalSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName) };
-
-                            foreach (string name in names)
+                            AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(x => x.Name == name);
+                            if (airHandlingUnit != null)
                             {
-                                if (string.IsNullOrEmpty(name))
+                                if (analyticalEquipments.Find(x => airHandlingUnit.Guid == (x as dynamic).Guid) == null)
                                 {
-                                    continue;
-                                }
-
-                                AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(x => x.Name == name);
-                                if (airHandlingUnit != null)
-                                {
-                                    if (analyticalEquipments.Find(x => airHandlingUnit.Guid == (x as dynamic).Guid) == null)
-                                    {
-                                        analyticalEquipments.Add(airHandlingUnit);
-                                    }
+                                    analyticalEquipments.Add(airHandlingUnit);
                                 }
                             }
                         }
@@ -291,13 +240,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetData(index, analyticalObject);
             }
 
-            index = Params.IndexOfOutputParam("mechanicalSystems");
+            index = Params.IndexOfOutputParam("ventilationSystems");
             if (index != -1)
             {
                 dataAccess.SetDataList(index, mechanicalSystems);
             }
 
-            index = Params.IndexOfOutputParam("equipments");
+            index = Params.IndexOfOutputParam("aHUs");
             if (index != -1)
             {
                 dataAccess.SetDataList(index, analyticalEquipments);

@@ -24,6 +24,26 @@ namespace SAM.Core.Grasshopper
         {
             return new GooSystem(Value);
         }
+
+        public override string ToString()
+        {
+            if (Value == null)
+            {
+                return null;
+            }
+
+            System.Reflection.PropertyInfo propertyInfo = Value.GetType().GetProperty("FullName");
+            if(propertyInfo != null)
+            {
+                string fullName = propertyInfo.GetValue(Value) as string;
+                if(!string.IsNullOrWhiteSpace(fullName))
+                {
+                    return string.Format("{0} [{1}]", Value.GetType().FullName, fullName);
+                }
+            }
+
+            return base.ToString();
+        }
     }
 
     public class GooSystemParam : GH_PersistentParam<GooSystem>
