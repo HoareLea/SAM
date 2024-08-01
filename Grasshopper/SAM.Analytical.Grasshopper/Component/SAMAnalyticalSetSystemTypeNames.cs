@@ -251,27 +251,15 @@ namespace SAM.Analytical.Grasshopper
                     {
                         internalCondition.SetValue(InternalConditionParameter.VentilationSystemTypeName, ventilationSystemTypeName);
                     }
-                    else
-                    {
-                        internalCondition.RemoveValue(InternalConditionParameter.VentilationSystemTypeName);
-                    }
 
                     if (!string.IsNullOrWhiteSpace(heatingSystemTypeName))
                     {
                         internalCondition.SetValue(InternalConditionParameter.HeatingSystemTypeName, heatingSystemTypeName);
                     }
-                    else
-                    {
-                        internalCondition.RemoveValue(InternalConditionParameter.HeatingSystemTypeName);
-                    }
 
                     if (!string.IsNullOrWhiteSpace(coolingSystemTypeName))
                     {
                         internalCondition.SetValue(InternalConditionParameter.CoolingSystemTypeName, coolingSystemTypeName);
-                    }
-                    else
-                    {
-                        internalCondition.RemoveValue(InternalConditionParameter.CoolingSystemTypeName);
                     }
 
                     spaces[j].InternalCondition = internalCondition;
@@ -280,10 +268,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(adjacencyCluster != null)
-            {
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
-            }
+            analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
             index = Params.IndexOfOutputParam("analyticals");
             if (index != -1)

@@ -6,6 +6,7 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -197,6 +198,8 @@ namespace SAM.Analytical.Grasshopper
                         exhaustUnitName = exhaustUnitNames[i];
                     }
 
+                    Check(adjacencyCluster, zone, supplyUnitName, exhaustUnitName);
+
                     VentilationSystem  ventilationSystem = adjacencyCluster.AddVentilationSystem(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
                     if (ventilationSystem != null)
                     {
@@ -256,6 +259,79 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetDataTree(index, dataTree_AnalyticalEquipments);
+            }
+        }
+
+        private void Check(AdjacencyCluster adjacencyCluster, Zone zone, string supplyUnitName, string exhaustUnitName)
+        {
+            if(adjacencyCluster == null || zone == null)
+            {
+                return;
+            }
+
+
+            List<Space> spaces = adjacencyCluster.GetSpaces(zone);
+            if (spaces == null || spaces.Count == 0)
+            {
+                return;
+            }
+
+            IEnumerable<string> ventilationSystemTypeNames = spaces.ConvertAll(x => x.InternalCondition?.GetValue<string>(InternalConditionParameter.VentilationSystemTypeName)).Distinct();
+            if(ventilationSystemTypeNames != null && ventilationSystemTypeNames.Count() > 0)
+            {
+                if (ventilationSystemTypeNames.Count() != 1)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("There are different ventilationSystemTypeName in spaces in Zone ({0}) system from first take first space in zone was used. \r\n*Please correct to have unified names", string.IsNullOrWhiteSpace(zone?.Name) ? "???" : zone?.Name));
+                }
+
+                if (ventilationSystemTypeNames.Contains("EOL") && spaces.Count != 1)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "EOL - Extrac Only Local can only have one space, please rename zones for each EOL");
+                }
+
+                if (ventilationSystemTypeNames.Contains("NV") || ventilationSystemTypeNames.Contains("UV"))
+                {
+                    if (!string.IsNullOrWhiteSpace(supplyUnitName) || !string.IsNullOrWhiteSpace(exhaustUnitName))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "VentilationSystemTypeName is NV or UV but AirHandling Names provided. AirHandling will not be created.");
+                    }
+                }
+
+                string ventilationSystemTypeName = ventilationSystemTypeNames.ElementAt(0);
+                string supplyUnitName_Temp = string.IsNullOrWhiteSpace(supplyUnitName) ? null : supplyUnitName;
+                string exhaustUnitName_Temp = string.IsNullOrWhiteSpace(exhaustUnitName) ? null : exhaustUnitName;
+
+                List<VentilationSystem> ventilationSystems = adjacencyCluster.GetMechanicalSystems<VentilationSystem>();
+                foreach(VentilationSystem ventilationSystem in ventilationSystems)
+                {
+                    string supplyUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName);
+                    if(string.IsNullOrWhiteSpace(supplyUnitName_VentilationSystem))
+                    {
+                        supplyUnitName_VentilationSystem = null;
+                    }
+
+                    if(supplyUnitName_VentilationSystem != supplyUnitName_Temp)
+                    {
+                        continue;
+                    }
+
+                    string exhaustUnitName_VentilationSystem = ventilationSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName);
+                    if (string.IsNullOrWhiteSpace(exhaustUnitName_VentilationSystem))
+                    {
+                        exhaustUnitName_VentilationSystem = null;
+                    }
+
+                    if (exhaustUnitName_VentilationSystem != exhaustUnitName_Temp)
+                    {
+                        continue;
+                    }
+
+
+                    if (ventilationSystem?.Type?.Name != ventilationSystemTypeName)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "There are different system types in Spaces in Zones therfore AirHandling will not be created");
+                    }
+                }
             }
         }
     }
