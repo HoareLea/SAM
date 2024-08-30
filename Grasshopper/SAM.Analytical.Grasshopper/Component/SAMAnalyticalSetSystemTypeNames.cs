@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,8 +32,8 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSetSystemTypeNames()
           : base("SAMAnalytical.SetSystemTypeNames", "SAMAnalytical.SetSystemTypeNames",
-              "Align Panels",
-              "SAM WIP", "Analytical")
+              "Allow to change SystemTypeNames in internal condition\n * Please note that all input  ventilationSystemType_, heatingSystemTypeNames_ etc need to  match list lentgth of spaces",
+              "SAM", "Analytical")
         {
         }
 
@@ -51,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject paramGenericObject;
 
-                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spacesOrZones_", NickName = "_spacesOrZones_", Description = "SAM Analytical Spaces or Zones", Access = GH_ParamAccess.list, Optional = true };
+                paramGenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spacesOrZones", NickName = "_spacesOrZones", Description = "SAM Analytical Spaces or Zones \n * Please note that all input below SystemType need to  match list lentgth of spaces", Access = GH_ParamAccess.list, Optional = true };
                 paramGenericObject.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(paramGenericObject, ParamVisibility.Binding));
 
@@ -105,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<List<Space>> spacesList = new List<List<Space>>();
 
-            index = Params.IndexOfInputParam("_spacesOrZones_");
+            index = Params.IndexOfInputParam("_spacesOrZones");
             if (index != -1)
             {
                 objectWrappers = new List<GH_ObjectWrapper>();
