@@ -90,7 +90,7 @@
                 else
                 {
                     value_2 = string_out.Substring(1, indexEnd - 1);
-                    string_out = string_out.Substring(indexEnd + 1); ;
+                    string_out = string_out.Substring(indexEnd + 1);
                 }
             }
 
