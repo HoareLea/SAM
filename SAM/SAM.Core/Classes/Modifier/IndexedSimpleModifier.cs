@@ -2,26 +2,26 @@
 
 namespace SAM.Core
 {
-    public abstract class SimpleModifier : Modifier, ISimpleModifier
+    public abstract class IndexedSimpleModifier : IndexedModifier, ISimpleModifier
     {
         public ArithmeticOperator ArithmeticOperator { get; set; }
 
-        public SimpleModifier()
+        public IndexedSimpleModifier()
             :base()
         {
 
         }
 
-        public SimpleModifier(SimpleModifier simpleModifier)
-            : base(simpleModifier)
+        public IndexedSimpleModifier(IndexedSimpleModifier indexedSimpleModifier)
+            : base(indexedSimpleModifier)
         {
-            if(simpleModifier != null)
+            if(indexedSimpleModifier != null)
             {
-                ArithmeticOperator = simpleModifier.ArithmeticOperator;
+                ArithmeticOperator = indexedSimpleModifier.ArithmeticOperator;
             }
         }
 
-        public SimpleModifier(JObject jObject)
+        public IndexedSimpleModifier(JObject jObject)
             : base(jObject)
         {
 
@@ -30,7 +30,7 @@ namespace SAM.Core
         public virtual bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
@@ -46,7 +46,7 @@ namespace SAM.Core
         public virtual JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }

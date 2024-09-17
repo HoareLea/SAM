@@ -57,11 +57,6 @@ namespace SAM.Core
 
             return true;
         }
-
-        public double GetCalculatedValue(int index)
-        {
-            return Modifier == null ? Value : Modifier.GetCalculatedValue(index, Value);
-        }
         
         public JObject ToJObject()
         {

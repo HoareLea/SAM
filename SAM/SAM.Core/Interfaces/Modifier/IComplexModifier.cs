@@ -4,6 +4,11 @@ namespace SAM.Core
 {
     public interface IComplexModifier : IModifier
     {
-        List<IModifier> Modifiers { get; }
+
+    }
+
+    public interface IComplexModifier<T> : IComplexModifier where T : IModifier
+    {
+        List<T> Modifiers { get; }
     }
 }

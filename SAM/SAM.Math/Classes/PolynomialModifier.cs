@@ -3,7 +3,7 @@ using SAM.Math;
 
 namespace SAM.Core
 {
-    public class PolynomialModifier : SimpleModifier
+    public class PolynomialModifier : IndexedSimpleModifier
     {
         public PolynomialEquation PolynomialEquation { get; set; }
 
