@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalTransform()
           : base("SAMAnalytical.Transform", "SAMAnalytical.Transform",
               "WIP!!! Currently Transform only Panel - known issue when Pushing Revit - DO NOT USE WITH REVIT",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

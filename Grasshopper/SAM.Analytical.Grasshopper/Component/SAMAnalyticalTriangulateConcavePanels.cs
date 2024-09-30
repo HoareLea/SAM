@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalTriangulateConcavePanels()
           : base("SAMAnalytical.TriangulateConcavePanels", "SAMAnalytical.TriangulateConcavePanels",
               "Triangulate Concave Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

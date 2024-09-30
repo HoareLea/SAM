@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateMaterialLayersByNames()
           : base("SAMAnalytical.CreateMaterialLayersByNames", "SAMAnalytical.CreateMaterialLayersByNames",
               "Create Material Layers By Material Names",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

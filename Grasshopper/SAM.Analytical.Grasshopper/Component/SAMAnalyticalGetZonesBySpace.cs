@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetZonesBySpace()
           : base("SAMAnalytical.GetZonesBySpace", "SAMAnalytical.GetZonesBySpace",
               "Get Space Zones (Groups) from Analytical Object",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

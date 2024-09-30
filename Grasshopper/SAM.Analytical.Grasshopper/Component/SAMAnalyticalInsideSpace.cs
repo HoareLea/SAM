@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalInsideSpace()
           : base("SAMAnalytical.InsideSpace", "SAMAnalytical.InsideSpace",
               "Checks if Point is inside SAM Analytical Space",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

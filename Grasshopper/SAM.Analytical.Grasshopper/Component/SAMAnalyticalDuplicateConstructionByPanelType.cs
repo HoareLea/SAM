@@ -53,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDuplicateConstructionByPanelType()
           : base("SAMAdjacencyCluster.DuplicateConstructionByPanelType", "SAMAdjacencyCluster.DuplicateConstructionByPanelType",
               "Duplicate Constructions By PanelType for Adjacency Cluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

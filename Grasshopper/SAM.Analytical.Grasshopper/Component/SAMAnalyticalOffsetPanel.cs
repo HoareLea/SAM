@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalOffsetPanel()
           : base("SAMAnalytical.OffsetPanel", "SAMAnalytical.OffsetPanel",
               "Offset Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

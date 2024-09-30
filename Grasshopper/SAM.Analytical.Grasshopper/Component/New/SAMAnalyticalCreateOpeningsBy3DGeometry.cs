@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateOpeningsBy3DGeometry()
           : base("SAMAnalytical.CreateOpeningsBy3DGeometry", "SAMAnalytical.CreateOpeningsBy3DGeometry",
               "Create SAM Analytical Opening by 3D Geometry",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

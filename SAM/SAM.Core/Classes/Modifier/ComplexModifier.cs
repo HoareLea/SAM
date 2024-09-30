@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace SAM.Core
 {
-    public class ComplexModifier : Modifier, IComplexModifier
+    public class ComplexModifier : Modifier, IComplexModifier<IModifier>
     {
         public ComplexModifier()
             :base()
@@ -35,9 +35,10 @@ namespace SAM.Core
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            bool result = base.FromJObject(jObject);
+            if(!result)
             {
-                return false;
+                return result;
             }
 
             if(jObject.ContainsKey("Modifiers"))
@@ -53,15 +54,18 @@ namespace SAM.Core
                 }
             }
 
-            return true;
+            return result;
         }
 
         public List<IModifier> Modifiers { get; set; }
 
         public virtual JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
+            JObject result = base.ToJObject();
+            if(result == null)
+            {
+                return result;
+            }
 
             if (Modifiers != null)
             {
@@ -71,46 +75,10 @@ namespace SAM.Core
                     jArray.Add(modifier.ToJObject());
                 }
 
-                jObject.Add("Modifiers", jArray);
+                result.Add("Modifiers", jArray);
             }
 
-            return jObject;
-        }
-
-        public override bool ContainsIndex(int index)
-        {
-            if(Modifiers == null)
-            {
-                return false;
-            }
-
-            foreach(IModifier modifier in Modifiers)
-            {
-                if(modifier.ContainsIndex(index))
-                {
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public override double GetCalculatedValue(int index, double value)
-        {
-            if (Modifiers == null)
-            {
-                return value;
-            }
-
-            foreach (IModifier modifier in Modifiers)
-            {
-                if (modifier.ContainsIndex(index))
-                {
-                    return modifier.GetCalculatedValue(index, value);
-                }
-            }
-
-            return value;
+            return result;
         }
     }
 }

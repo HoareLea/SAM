@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetPanelType()
           : base("SAMAnalytical.SetPanelType", "SAMAnalytical.SetPanelType",
               "Sets Panel Type for Analytical Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

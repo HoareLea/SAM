@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalOverlapPanels()
           : base("SAMAnalytical.OverlapPanels", "SAMAnalytical.OverlapPanels",
               "Gets Overlaping SAM Analytical Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

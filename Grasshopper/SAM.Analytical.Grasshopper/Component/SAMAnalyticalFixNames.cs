@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFixNames()
           : base("SAMAnalytical.FixNames", "SAMAnalytical.FixNames",  //SAMAnalytical.ModifyToISOBasicLatinAlphabet
               "Fix/Modidy SAM Analytical Object Names (Spaces, Panel, Aperture, Construction) by removing special characters. \nreplace special character with ISO basic Latin alphabet https://en.wikipedia.org/wiki/ISO_basic_Latin_alphabet \n *Right click and select language.",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

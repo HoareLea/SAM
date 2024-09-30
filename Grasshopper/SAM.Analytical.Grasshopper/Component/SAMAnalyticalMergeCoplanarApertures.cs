@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMergeCoplanarApertures()
           : base("SAMAnalytical.MergeCoplanarApertures", "SAMAnalytical.MergeCoplanarApertures",
               "Merge Coplanar SAM Analytical Apertures",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

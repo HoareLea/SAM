@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFixAdjacencyCluster()
           : base("SAMAnalytical.FixAdjacencyCluster", "SAMAnalytical.FixAdjacencyCluster",
               "Fix AdjacencyCluster - this component will check each panel and nr of adjacency and will fix PanelType and also duplicate construction and assign correct prefix, so if you have SIM_EXT_SLD WA10 and this after split will become internal wall. Panel tyope will be changed to InternalWall and construction to SIM_INT_SLD WA10",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

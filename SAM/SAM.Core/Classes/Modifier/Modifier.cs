@@ -19,8 +19,6 @@ namespace SAM.Core
             FromJObject(jObject);
         }
 
-        public abstract bool ContainsIndex(int index);
-
         public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
@@ -30,8 +28,6 @@ namespace SAM.Core
 
             return true;
         }
-
-        public abstract double GetCalculatedValue(int index, double value);
 
         public virtual JObject ToJObject()
         {

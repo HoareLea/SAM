@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetConstructionLayersByPanelType()
           : base("SAMAnalytical.SetConstructionLayersByPanelType", "SAMAnalytical.SetConstructionLayersByPanelType",
               "Set SAM Analytical ConstructionLayers By PanelType",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

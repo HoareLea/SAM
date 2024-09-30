@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
 
 * Please note construction manager is Constructions merged with materials
   Construction names must match Construction in Analytical Model",
-                "SAM WIP",
-                "Tas")
+                "SAM",
+                "Analytical04")
         {
         }
 

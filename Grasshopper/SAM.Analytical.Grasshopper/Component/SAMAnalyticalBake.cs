@@ -64,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalBake()
           : base("SAMAnalytical.Bake", "SAMAnalytical.Bake",
               "Bake Analytical Object",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalModifyInternalConditionByProfile()
           : base("SAMAnalytical.ModifyInternalConditionByProfile", "SAMAnalytical.ModifyInternalConditionByProfile",
               "Modify InternalCondition By Profile",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

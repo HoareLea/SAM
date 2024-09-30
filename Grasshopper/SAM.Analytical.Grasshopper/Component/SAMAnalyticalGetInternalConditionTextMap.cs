@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetInternalConditionTextMap()
           : base("SAMAnalytical.GetInternalConditionTextMap", "SAMAnalytical.GetInternalConditionTextMap",
               "Get InternalCondition TextMap",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

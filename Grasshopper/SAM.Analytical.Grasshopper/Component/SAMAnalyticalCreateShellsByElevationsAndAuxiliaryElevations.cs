@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateShellsByElevationsAndAuxiliaryElevations()
           : base("SAMAnalytical.CreateShellsByElevationsAndAuxiliaryElevations", "SAMAnalytical.CreateShellsByElevationsAndAuxiliaryElevations",
               "Create Shells ",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -3,7 +3,7 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public class ProfileModifier : SimpleModifier
+    public class ProfileModifier : IndexedSimpleModifier
     {
         public Profile Profile { get; set; }
 

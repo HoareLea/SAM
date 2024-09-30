@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilterByBoundaryType()
           : base("SAMAnalytical.FilterByBoundaryType", "SAMAnalytical.FilterByBoundaryType",
               "Filters Panels By BoundaryType",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

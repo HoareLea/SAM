@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetConstruction()
           : base("SAMAnalytical.SetConstruction", "SAMAnalytical.SetConstruction",
               "Set Construction",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

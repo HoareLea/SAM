@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalHourOfYearToDateTime()
           : base("SAMAnalytical.HourOfYearToDateTime", "SAMAnalytical.HourOfYearToDateTime",
               "Convert hour of year to DateTime",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

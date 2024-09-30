@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePanelBy3DGeometry()
           : base("SAMAnalytical.CreatePanelBy3DGeometry", "SAMAnalytical.CreatePanelBy3DGeometry",
               "Create SAM Analytical Panel by 3D Geometry",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

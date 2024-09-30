@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalLabelPanel()
           : base("SAMAnalytical.LabelPanel", "SAMAnalytical.LabelPanel",
               "Label SAM Analytical Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

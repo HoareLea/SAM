@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetAirflow()
           : base("SAMAnalytical.SetAirflow", "SAMAnalytical.SetAirflow",
               "Sets Airflow for given spaces",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

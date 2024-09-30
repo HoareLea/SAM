@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetOccupancyGains()
           : base("SAMAnalytical.SetOccupancyGains", "SAMAnalytical.SetOccupancyGains",
               "Set Occupancy Gains",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

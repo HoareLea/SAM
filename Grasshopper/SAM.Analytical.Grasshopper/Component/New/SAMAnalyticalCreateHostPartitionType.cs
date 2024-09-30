@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateHostPartitionType()
           : base("SAMAnalytical.CreateHostPartitionType", "SAMAnalytical.CreateHostPartitionType",
               "Create SAM Analytical HostPartitionType",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

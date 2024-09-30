@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateZoneByName()
           : base("SAMAnalytical.UpdateZone", "SAMAnalytical.UpdateZone",
               "Update or Create Zone (Group) in Analytical Object\n*Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applied",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetInternalConditionPerArea()
           : base("SAMAnalytical.SetInternalConditionPerArea", "SAMAnalytical.SetInternalConditionPerArea",
               "Set Internal Condition Per Area",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

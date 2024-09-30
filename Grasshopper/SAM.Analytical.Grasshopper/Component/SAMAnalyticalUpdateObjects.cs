@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateObjects()
           : base("AdjacencyCluster.UpdateObjects", "AdjacencyCluster.UpdateObjects",
               "Update Objects in AdjacencyCluster such as Panel or Space",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

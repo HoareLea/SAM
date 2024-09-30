@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalHostPartitionCategory()
           : base("SAMAnalytical.HostPartitionCategory", "SAMAnalytical.HostPartitionCategory",
               "Select HostPartitionCategory",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
     }

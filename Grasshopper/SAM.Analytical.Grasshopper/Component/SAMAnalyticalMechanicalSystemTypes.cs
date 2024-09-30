@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMechanicalSystemTypes()
           : base("SAMAnalytical.SystemTypes", "SAMAnalytical.SystemTypes",
               "Gets Analytical System Types",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

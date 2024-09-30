@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRelatedObjects()
           : base("Analytical.RelatedObjects", "Analytical.RelatedObjects",
               "Gets Related Objects from AnalyticalModel or AdjacencyCluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

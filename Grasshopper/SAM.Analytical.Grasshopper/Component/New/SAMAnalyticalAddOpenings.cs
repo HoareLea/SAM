@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAddOpenings()
           : base("SAMAnalytical.AddOpenings", "SAMAnalytical.AddOpenings",
               "Add Openings to ",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

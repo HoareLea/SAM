@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultConstructions()
           : base("SAMAnalytical.GetDefaultConstructions", "SAMAnalytical.GetDefaultConstructions",
               "Get Default SAM Constructions",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

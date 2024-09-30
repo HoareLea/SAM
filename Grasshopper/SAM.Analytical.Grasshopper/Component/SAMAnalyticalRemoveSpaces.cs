@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemoveSpaces()
           : base("SAMAnalytical.RemoveSpaces", "SAMAnalytical.RemoveSpaces",
               "Remove Spaces from SAM Analytical Model",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

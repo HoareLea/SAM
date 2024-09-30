@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAdjacentSpaces()
           : base("SAMAnalytical.AdjacentSpaces", "SAMAnalytical.AdjacentSpaces",
               "Get Adjacent Spaces",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

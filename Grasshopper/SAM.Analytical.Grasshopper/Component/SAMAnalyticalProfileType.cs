@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileType()
           : base("SAMAnalytical.ProfileType", "SAMAnalytical.ProfileType",
               "Select ProfileType",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
     }

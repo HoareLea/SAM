@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalModifyObject()
           : base("SAMAnalytical.ModifyObject", "SAMAnalytical.ModifyObject",
               "Modify Object to AdjacencyCluster or AnalyticalModel \n If new Space is connected will be added to Model even if not used \n * Consider using UpdateSpace node \n  adds an object to a list, if it already exists, will replace with the new object with data",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

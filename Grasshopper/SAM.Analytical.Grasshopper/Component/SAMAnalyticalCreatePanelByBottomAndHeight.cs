@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePanelByBottomAndHeight()
           : base("SAMAnalytical.CreatePanelByBottomAndHeight", "SAMAnalytical.CreatePanelByBottomAndHeight",
               "Create SAM Analytical Panel by Bottom Edge And Height",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

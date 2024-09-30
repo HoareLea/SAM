@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPerimeterSpaces()
           : base("SAMAnalytical.PerimeterSpaces", "SAMAnalytical.PerimeterSpaces",
               "Gets Perimeter Spaces",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

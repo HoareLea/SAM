@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetAdiabatic()
           : base("SAMAnalytical.SetAdiabatic", "SAMAnalytical.SetAdiabatic",
               "Set Adiabartic Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDataTree()
           : base("SAMAnalytical.DataTree", "SAMAnalytical.DataTree",
               "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

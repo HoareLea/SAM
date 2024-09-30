@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalExtendExternalPanels()
           : base("SAMAnalytical.ExtendExternalPanels", "SAMAnalytical.ExtendExternalPanels",
               "Extend External Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

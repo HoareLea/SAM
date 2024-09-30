@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPlaneIntersection()
           : base("SAMAnalytical.PlaneIntersection", "SAMAnalytical.PlaneIntersection",
               "Gets SAM.Geometry Edge3Ds from Analytical Object that intersect with Planne by Elevation",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

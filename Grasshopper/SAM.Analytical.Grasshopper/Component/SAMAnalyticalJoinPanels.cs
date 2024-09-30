@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalJoinPanels()
           : base("SAMAnalytical.JoinPanels", "SAMAnalytical.JoinPanels",
               "Join SAM Analytical Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

@@ -55,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdatePanelTypes()
           : base("SAMAnalytical.UpdatePanelTypes", "SAMAnalytical.UpdatePanelTypes",
               "Updates PanelTypes for Adjacency Cluster, default ground elevation = 0 m",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

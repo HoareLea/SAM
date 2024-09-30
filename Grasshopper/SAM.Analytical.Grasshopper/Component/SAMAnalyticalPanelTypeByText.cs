@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelTypeByText()
           : base("SAMAnalytical.PanelTypeByText", "SAMAnalytical.PanelTypeByText",
               "Get PanelType By Text",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

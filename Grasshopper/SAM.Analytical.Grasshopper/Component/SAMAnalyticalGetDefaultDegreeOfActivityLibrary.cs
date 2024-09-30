@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultDegreeOfActivityLibrary()
           : base("SAMAnalytical.GetDefaultDegreeOfActivityLibrary", "SAMAnalytical.GetDefaultDegreeOfActivityLibrary",
               "Get Default SAM DegreeOfActivityLibrary",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

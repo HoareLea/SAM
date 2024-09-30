@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalNCMSystemType()
           : base("SAMAnalytical.NCMSystemType", "SAMAnalytical.NCMSystemType",
               "Select NCMSystemType",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
     }

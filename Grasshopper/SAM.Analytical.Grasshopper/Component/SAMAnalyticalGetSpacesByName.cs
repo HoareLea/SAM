@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetSpacesByName()
           : base("SAMAnalytical.GetSpaceByName", "SAMAnalytical.GetSpaceByName",
               "Get Space from SAM Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetPanelsByConstruction()
           : base("SAMAnalytical.GetPanelsByConstruction", "SAMAnalytical.GetPanelsByConstruction",
               "Gets Panels By Construction",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

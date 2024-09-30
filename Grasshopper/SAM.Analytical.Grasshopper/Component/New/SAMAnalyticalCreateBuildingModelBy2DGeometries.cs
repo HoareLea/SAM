@@ -39,7 +39,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateBuildingModelBy2DGeometries()
           : base("SAMAnalytical.CreateBuildingModelBy2DGeometries(", "SAMAnalytical.CreateBuildingModelBy2DGeometries",
               "Creates BuildingModel By 2D Geometries of the floors and roofs",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

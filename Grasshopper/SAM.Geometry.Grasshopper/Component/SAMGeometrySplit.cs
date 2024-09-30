@@ -34,7 +34,7 @@ namespace SAM.Geometry.Grasshopper
         public SAMGeometrySplit()
           : base("SAMGeometry.Split", "SAMGeometry.Split",
               "Split Geometry or Segment2Ds",
-              "SAM WIP", "Geometry")
+              "SAM", "Geometry")
         {
         }
 

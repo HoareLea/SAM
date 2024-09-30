@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultApertureConstructionLibrary()
           : base("SAMAnalytical.GetDefaultApertureConstructionLibrary", "SAMAnalytical.GetDefaultApertureConstructionLibrary",
               "Get Default SAM ApertureConstructionLibrary",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

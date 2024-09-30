@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalZoneType()
           : base("SAMAnalytical.ZoneType", "SAMAnalytical.ZoneType",
               "Select Zone Type",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
     }

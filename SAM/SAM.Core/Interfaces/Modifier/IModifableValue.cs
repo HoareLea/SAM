@@ -5,7 +5,5 @@
         double Value { get; }
 
         IModifier Modifier { get; }
-
-        double GetCalculatedValue(int index);
     }
 }

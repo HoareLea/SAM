@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilterByMaxRectangle3D()
           : base("SAMAnalytical.FilterByMaxRectangle3D", "SAMAnalytical.FilterByMaxRectangle3D",
               "Filter Analytical Objects By Maxilal Rectangle3D dimension",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

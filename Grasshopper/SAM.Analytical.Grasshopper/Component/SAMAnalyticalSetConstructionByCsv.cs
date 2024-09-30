@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetConstructionByCsv()
           : base("SAMAnalytical.SetConstructionByCsv", "SAMAnalytical.SetConstructionByCsv",
               "Rename Construction",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

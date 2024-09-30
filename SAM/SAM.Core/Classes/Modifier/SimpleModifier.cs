@@ -2,7 +2,7 @@
 
 namespace SAM.Core
 {
-    public abstract class SimpleModifier : Modifier
+    public abstract class SimpleModifier : Modifier, ISimpleModifier
     {
         public ArithmeticOperator ArithmeticOperator { get; set; }
 
@@ -29,9 +29,10 @@ namespace SAM.Core
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if (jObject == null)
+            bool result = base.FromJObject(jObject);
+            if(!result)
             {
-                return false;
+                return result;
             }
 
             if (jObject.ContainsKey("ArithmeticOperator"))
@@ -39,17 +40,20 @@ namespace SAM.Core
                 ArithmeticOperator = Query.Enum<ArithmeticOperator>(jObject.Value<string>("ArithmeticOperator"));
             }
 
-            return true;
+            return result;
         }
 
         public virtual JObject ToJObject()
         {
-            JObject jObject = new JObject();
-            jObject.Add("_type", Query.FullTypeName(this));
+            JObject result = base.ToJObject();
+            if(result == null)
+            {
+                return result;
+            }
 
-            jObject.Add("ArithmeticOperator", ArithmeticOperator.ToString());
+            result.Add("ArithmeticOperator", ArithmeticOperator.ToString());
 
-            return jObject;
+            return result;
         }
     }
 }

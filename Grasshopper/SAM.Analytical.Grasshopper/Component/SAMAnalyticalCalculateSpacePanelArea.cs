@@ -52,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCalculateSpacePanelArea()
           : base("SAMAnalytical.CalculateSpacePanelArea", "SAMAnalytical.CalculateSpacePanelArea",
               "Calculate Space Panel Area",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

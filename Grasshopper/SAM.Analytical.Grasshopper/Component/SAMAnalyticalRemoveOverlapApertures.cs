@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemoveOverlapApertures()
           : base("SAMAnalytical.RemoveOverlapApertures", "SAMAnalytical.RemoveOverlapApertures",
               "Remove Overlap Apertures",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

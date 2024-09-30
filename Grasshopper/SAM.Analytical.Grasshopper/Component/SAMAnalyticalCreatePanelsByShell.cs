@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePanelsByShell()
           : base("SAMAnalytical.CreatePanelsByShell", "SAMAnalytical.CreatePanelsByShell",
               "Creates Panels By Shell",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

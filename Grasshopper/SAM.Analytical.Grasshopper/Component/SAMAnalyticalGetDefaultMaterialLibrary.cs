@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultMaterialLibrary()
           : base("SAMAnalytical.GetDefaultMaterialLibrary", "SAMAnalytical.GetDefaultMaterialLibrary",
               "Get Default SAM MaterialLibrary",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

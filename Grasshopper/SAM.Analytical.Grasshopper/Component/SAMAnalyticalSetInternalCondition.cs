@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetInternalCondition()
           : base("SAMAnalytical.SetInternalCondition", "SAMAnalytical.SetInternalCondition",
               "Set Internal Condition",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

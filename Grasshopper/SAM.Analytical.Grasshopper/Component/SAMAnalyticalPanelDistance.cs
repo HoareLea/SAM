@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelDistance()
           : base("SAMAnalytical.PanelDistance", "SAMAnalytical.PanelDistance",
               "Calculates Distance to Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

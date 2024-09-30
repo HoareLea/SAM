@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFlipPanel()
           : base("SAMAnalytical.FlipPanel", "SAMAnalytical.FlipPanel",
               "Flip SAM Analytical Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMergeSpacesByAirPanels()
           : base("SAMAnalytical.MergeSpacesByAirPanels", "SAMAnalytical.MergeSpacesByAirPanels",
               "Merge Analytical Spaces By Air Panels. Removes air panels and combines spaces",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

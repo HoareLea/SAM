@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSnapByLines()
           : base("SAMAnalytical.SnapByLines", "SAMAnalytical.SnapByLines",
               "Snap Panels to Lines",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

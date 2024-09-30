@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetPanels()
           : base("SAMAnalytical.GetPanels", "SAMAnalytical.GetPanels",
               "Get Panels from SAM Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

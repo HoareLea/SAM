@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileMultiply()
           : base("SAMAnalytical.ProfileMultiply", "SAMAnalytical.ProfileMultiply",
               "Multiply Profile by Value or Profile",
-              "SAM", "Analytical1")
+              "SAM", "Analytical03")
         {
         }
 

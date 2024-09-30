@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPaths()
           : base("SAMAnalytical.Paths", "SAMAnalytical.Paths",
               "Gets all project and filepath generated \nUse to name your project \n*Right click to access extra option \n ie. open project folder",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

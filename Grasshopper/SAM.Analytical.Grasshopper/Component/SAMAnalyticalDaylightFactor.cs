@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDaylightFactor()
           : base("SAMAnalytical.DaylightFactor", "SAMAnalytical.DaylightFactor",
               "Calculates Daylight Factor for Space",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 
