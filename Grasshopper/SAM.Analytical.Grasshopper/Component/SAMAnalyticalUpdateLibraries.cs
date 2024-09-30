@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateLibraries()
           : base("SAMAnalytical.UpdateLibraries", "SAMAnalytical.UpdateLibraries",
               "Update Libraries in analyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

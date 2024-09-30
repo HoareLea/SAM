@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetLocation()
           : base("SAMAnalytical.SetLocation", "SAMAnalytical.SetLocation",
               "Sets Location for SAM AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalTM52SpaceExtendedResultByDaysOfYear()
           : base("SAMAnalytical.TM52SpaceExtendedResultByDaysOfYears", "SAMAnalytical.TM52SpaceExtendedResultByDaysOfYear",
               "TM52SpaceExtendedResult by days of the year",
-              "SAM", "Analytical1")
+              "SAM", "Analytical03")
         {
         }
 

@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAddPanels()
           : base("SAMAnalytical.AddPanels", "SAMAnalytical.AddPanels",
               "Add Panels to Analytical Model or AdjacencyCluster",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

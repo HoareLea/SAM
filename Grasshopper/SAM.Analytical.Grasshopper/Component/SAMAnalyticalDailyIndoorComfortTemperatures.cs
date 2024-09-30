@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDailyIndoorComfortTemperatures()
           : base("SAMAnalytical.DailyIndoorComfortTemperatures", "SAMAnalytical.DailyIndoorComfortTemperatures",
               "Daily Indoor Comfort Temperatures",
-              "SAM", "Analytical1")
+              "SAM", "Analytical01")
         {
         }
 

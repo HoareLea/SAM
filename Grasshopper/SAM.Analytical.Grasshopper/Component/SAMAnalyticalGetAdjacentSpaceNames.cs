@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetAdjacentSpaceNames()
           : base("SAMAnalytical.GetAdjacentSpaceNames", "SAMAnalytical.GetAdjacentSpaceNames",
               "Get Adjacent Space Names from SAM Analytical Object such as AdjacencyCluster or AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

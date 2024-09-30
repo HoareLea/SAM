@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemoveFromConstructionManager()
           : base("SAMAnalytical.RemoveFromConstructionManager", "SAMAnalytical.RemoveFromConstructionManager",
               "Remove From ConstructionManager",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

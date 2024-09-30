@@ -54,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateProfileByValues()
           : base("SAMAnalytical.CreateProfileByValues", "SAMAnalytical.CreateProfileByValues",
               "Creates SAM Analytical Profile By Values",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateSpaceByLocationAndName()
           : base("SAMAnalytical.UpdateSpaceByLocationAndName", "SAMAnalytical.UpdateSpaceByLocationAndName",
               "Update SAM Analytical Space By given Location Point or Name",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

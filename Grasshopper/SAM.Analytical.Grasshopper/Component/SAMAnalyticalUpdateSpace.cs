@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateSpace()
           : base("SAMAnalytical.UpdateSpace", "SAMAnalytical.UpdateSpace",
               "Update Space in SAM Adjacency Cluster or Analytical Model \n*If Space with new location is connected \n exisitng space will be replace by new one",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

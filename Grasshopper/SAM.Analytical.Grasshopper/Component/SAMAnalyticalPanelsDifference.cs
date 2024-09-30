@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelsDifference()
           : base("SAMAnalytical.PanelsDifference", "SAMAnalytical.PanelsDifference",
               "Get Panels Difference",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalHeatFlowDirection()
           : base("SAMAnalytical.HeatFlowDirection", "SAMAnalytical.HeatFlowDirection",
               "Select Heat Flow Direction",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
     }

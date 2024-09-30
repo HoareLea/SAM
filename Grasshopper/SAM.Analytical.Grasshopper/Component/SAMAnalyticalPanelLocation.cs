@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelLocation()
           : base("SAMAnalytical.PanelLocation", "SAMAnalytical.PanelLocation",
               "Location of SAM Analytical Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

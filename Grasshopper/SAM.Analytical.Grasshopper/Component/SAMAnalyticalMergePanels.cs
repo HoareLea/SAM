@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMergePanels()
           : base("SAMAnalytical.MergePanels", "SAMAnalytical.MergePanels",
               "Merge Analytical Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

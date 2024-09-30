@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalModifyMechanicalSystems()
           : base("SAMAnalytical.ModifyMechanicalSystems", "SAMAnalytical.ModifyMechanicalSystems",
               "Modify MechanicalSystems to SAM Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

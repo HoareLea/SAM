@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSplitPanelByElevations()
           : base("SAMAnalytical.SplitPanelByElevations", "SAMAnalytical.SplitPanelByElevations",
               "Split SAM Analytical Panel by Elevation or Plane, *aperture will be splited as well",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

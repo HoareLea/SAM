@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetApertureConstructionByAnalyticalModel()
           : base("SAMAnalytical.SetApertureConstructionByAnalyticalModel", "SAMAnalytical.SetApertureConstructionByAnalyticalModel",
               "Set Aperture Construction By AnalyticalModel \n*The layers should be ordered from inside to outside",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

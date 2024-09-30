@@ -66,7 +66,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePanelsByPlane()
           : base("SAMAnalytical.CreatePanelsByPlane", "SAMAnalytical.CreatePanelsByPlane",
               "Create Panels By Adjacency cluster or ANalyticalModel and Plane",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

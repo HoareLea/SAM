@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelGroup()
           : base("SAMAnalytical.PanelGroup", "SAMAnalytical.PanelGroup",
               "Select PanelGroup",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical02")
         {
         }
     }

@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalNormalsDisplay()
           : base("SAMAnalytical.NormalsDisplay", "SAMAnalytical.NormalsDisplay",
               "Gets Internal Point and Normal Vector for SAM Analytical Object please connect to GH 'Vector Display' component",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

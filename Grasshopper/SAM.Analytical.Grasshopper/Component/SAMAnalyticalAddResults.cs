@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAddResults()
           : base("SAMAnalytical.AddResults", "SAMAnalytical.AddResults",
               "Add Results to Analytical Model or AdjacencyCluster",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

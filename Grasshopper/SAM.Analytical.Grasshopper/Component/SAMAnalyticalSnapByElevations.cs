@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSnapByElevations()
           : base("SAMAnalytical.SnapByElevations", "SAMAnalytical.SnapByElevations",
               "Snap By Elevation",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

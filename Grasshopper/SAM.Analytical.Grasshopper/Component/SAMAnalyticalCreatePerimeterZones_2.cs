@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePerimeterZones_2()
           : base("SAMAnalytical.CreatePerimeterZones_2", "SAMAnalytical.CreatePerimeterZones_2",
               "Creae Perimeter Zones in Analytical Model or AdjacencyCluster",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

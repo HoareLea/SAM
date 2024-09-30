@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGeometry()
           : base("SAMAnalytical.Geometry", "SAMAnalytical.Geometry",
               "Convert SAM Analitical to GH Geometry ie. Panel to Surface",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

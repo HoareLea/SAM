@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalTrimPanels()
           : base("SAMAnalytical.TrimPanels", "SAMAnalytical.TrimPanels",
               "Trim Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

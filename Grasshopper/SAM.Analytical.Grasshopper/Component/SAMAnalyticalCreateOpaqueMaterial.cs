@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateOpaqueMaterial()
           : base("SAMAnalytical.CreateOpaqueMaterial", "SAMAnalytical.CreateOpaqueMaterial",
               "Create Opaque Material",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

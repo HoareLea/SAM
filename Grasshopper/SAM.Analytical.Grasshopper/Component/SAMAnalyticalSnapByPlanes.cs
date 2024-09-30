@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSnapByPlanes()
           : base("SAMAnalytical.SnapPanelsByPlanes", "SAMAnalytical.SnapPanelsByPlanes",
               "Snap Panels By Elevations",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

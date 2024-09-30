@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemove()
           : base("SAMAnalytical.Remove", "SAMAnalytical.Remove",
               "Remove from SAM Analytical Object",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

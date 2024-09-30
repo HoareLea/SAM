@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultSystemTypeLibrary()
           : base("SAMAnalytical.GetDefaultSystemTypeLibrary", "SAMAnalytical.GetDefaultSystemTypeLibrary",
               "Get Default SAM SystemTypeibrary",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

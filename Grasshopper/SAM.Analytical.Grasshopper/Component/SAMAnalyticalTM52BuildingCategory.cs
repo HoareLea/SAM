@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalTM52BuildingCategory()
           : base("SAMAnalytical.TM52BuildingCategory", "SAMAnalytical.TM52BuildingCategory",
               "TM52 Building Category",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
     }

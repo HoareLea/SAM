@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalAddOpeningPropertiesByPartO()
           : base("SAMAnalytical.AddOpeningPropertiesByPartO", "SAMAnalytical.AddOpeningPropertiesByPartO",
               "Add Opening Properties to given apertures",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical")
         {
         }
 

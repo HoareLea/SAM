@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalOffsetAperturesOnEdge()
           : base("SAMAnalytical.OffsetAperturesOnEdge", "SAMAnalytical.OffsetAperturesOnEdge",
               "Offset Aperture On Edge. It offset Panel inwards by distance and checks if ovelap, if true then offset aperute by distance default = 0.1m. *it will remove Aperture is Panel dimension is below 0.2m",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

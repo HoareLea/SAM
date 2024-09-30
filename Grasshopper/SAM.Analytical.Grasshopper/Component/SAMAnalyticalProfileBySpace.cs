@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileBySpace()
           : base("SAMAnalytical.ProfileBySpace", "SAMAnalytical.ProfileBySpace",
               "Profile By Space",
-              "SAM", "Analytical1")
+              "SAM", "Analytical03")
         {
         }
 

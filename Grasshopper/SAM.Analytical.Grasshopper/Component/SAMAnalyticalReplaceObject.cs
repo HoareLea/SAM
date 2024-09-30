@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalReplaceObject()
           : base("SAMAnalytical.ReplaceObject", "SAMAnalytical.ReplaceObject",
               "Replace Object in AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

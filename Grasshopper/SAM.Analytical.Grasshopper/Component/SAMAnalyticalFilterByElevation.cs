@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilterByElevation()
           : base("SAMAnalytical.FilterByElevation", "SAMAnalytical.FilterByElevation",
               "Filter Analytical Objects By Elevation",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

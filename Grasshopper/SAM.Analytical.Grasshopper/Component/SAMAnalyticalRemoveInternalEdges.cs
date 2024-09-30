@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemoveInternalEdges()
           : base("SAMAnalytical.RemoveInternalEdges", "SAMAnalytical.RemoveInternalEdges",
               "Removes Internal Edges in SAM Analytical Object",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPlanarBoundary3D()
           : base("SAMAnalytical.PlanarBoundary3D", "SAMAnalytical.PlanarBoundary3D",
               "Gets SAM Analytical PlanarBoundary3D",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

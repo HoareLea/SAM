@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateZonesByValues()
           : base("SAMAnalytical.CreateZonesByValues", "SAMAnalytical.CreateZonesByValues",
               "Create Zones By Values",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

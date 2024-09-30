@@ -26,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalExtendPanelByPanels()
           : base("SAMAnalytical.ExtendPanelByPanels", "SAMAnalytical.ExtendPanelByPanels",
               "Extend SAM Analytical Panel By Given Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

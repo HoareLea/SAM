@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultInternalConditionLibrary()
           : base("SAMAnalytical.GetDefaultInternalConditionLibrary", "SAMAnalytical.GetDefaultInternalConditionLibrary",
               "Get Default SAM InternalCondition",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

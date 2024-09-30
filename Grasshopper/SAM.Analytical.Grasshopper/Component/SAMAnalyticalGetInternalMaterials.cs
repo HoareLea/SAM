@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetInternalMaterials()
           : base("SAMAnalytical.GetInternalMaterials", "SAMAnalytical.GetInternalMaterials",
               "Gets Internal Materials from SAM AdjacencyCluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileDivide()
           : base("SAMAnalytical.ProfileDivide", "SAMAnalytical.ProfileDivide",
               "Divide Profile by Value or Profile",
-              "SAM", "Analytical1")
+              "SAM", "Analytical03")
         {
         }
 

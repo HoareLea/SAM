@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalHeatTransferCoefficientByDefaultGasType()
           : base("SAMAnalytical.HeatTransferCoefficientByDefaultGasType", "SAMAnalyticalCreate.HeatTransferCoefficientByDefaultGasType",
               "Calculate Heat Transfer Coefficient By DefaultGasType",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

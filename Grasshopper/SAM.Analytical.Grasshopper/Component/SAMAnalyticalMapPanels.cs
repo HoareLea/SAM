@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMapPanels()
           : base("SAMAnalytical.MapPanels", "SAMAnalytical.MapPanels",
               "Map Panels for AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

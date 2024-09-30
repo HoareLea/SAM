@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetValuesByReference()
           : base("SAMAnalytical.GetValuesByReference", "SAMAnalytical.GetValuesByReference",
               "Get Values By Reference",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetExternalSpaces()
           : base("SAMAnalytical.SetExternalSpaces", "SAMAnalytical.SetExternalSpaces \n*you need to select in T3D surfaces that connect to External Space and - Reverse Building Element",
               "Sets ExternalSpaces for SAM AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

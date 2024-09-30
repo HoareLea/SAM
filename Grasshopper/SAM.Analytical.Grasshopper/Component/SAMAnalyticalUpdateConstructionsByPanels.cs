@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateConstructionsByPanels()
           : base("SAMAnalytical.UpdateConstructionsByPanels", "SAMAnalytical.UpdateConstructionsByPanels",
               "Update Constructions By Panels from input Panels. If you have internal floor and conneted Panels does not contain Panel in same location it will convert existing panel into Air",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

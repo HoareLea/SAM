@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalModifyZonesCategoryName()
           : base("SAMAnalytical.ModifyZone", "SAMAnalytical.ModifyZone",
               "Modify Zone (Group) in Analytical Object",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

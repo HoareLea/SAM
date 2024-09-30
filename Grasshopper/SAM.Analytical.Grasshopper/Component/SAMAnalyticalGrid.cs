@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGrid()
           : base("SAMAnalytical.Grid", "SAMAnalytical.Grid",
               "Calculates Grid from Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

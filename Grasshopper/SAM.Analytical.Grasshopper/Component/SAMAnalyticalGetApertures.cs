@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetApertures()
           : base("SAMAnalytical.GetApertures", "SAMAnalytical.GetApertures",
               "Get Apertures from SAM Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateProfileByBooleansAndValues()
           : base("SAMAnalytical.CreateProfileByBooleansAndValues", "SAMAnalytical.CreateProfileByBooleansAndValues",
               "Create Profile By Bools and Values",
-              "SAM", "Analytical1")
+              "SAM", "Analytical01")
         {
         }
 

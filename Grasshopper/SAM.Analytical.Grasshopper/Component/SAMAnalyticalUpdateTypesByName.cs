@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateTypesByName()
           : base("SAMAnalytical.UpdateTypesByName", "SAMAnalytical.UpdateTypesByName",
               "Update Constructions and ApertureConstructions in SAM Adjacency Cluster or List of Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

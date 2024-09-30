@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper.Obsolete_20200707
         public SAMAnalyticalUpdatePanelType()
           : base("SAMAdjacencyCluster.PanelTypeUpdate", "SAMAdjacencyCluster.PanelTypeUpdate",
               "Updates PanelType for Adjacency Cluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

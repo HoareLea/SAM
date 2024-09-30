@@ -53,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateProfileByBooleans()
           : base("SAMAnalytical.CreateProfileByBooleans", "SAMAnalytical.CreateProfileByBooleans",
               "Creates SAM Analytical Profile By Booleans",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

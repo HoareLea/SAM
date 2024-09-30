@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSplitByInternalEdges()
           : base("SAMAnalytical.SplitByInternalEdges", "SAMAnalytical.SplitByInternalEdges",
               "Splits panels to exclude internal edges",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

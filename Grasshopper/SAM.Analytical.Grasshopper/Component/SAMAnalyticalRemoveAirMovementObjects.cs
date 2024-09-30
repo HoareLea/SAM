@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalRemoveAirMovementObjects()
           : base("SAMAnalytical.RemoveIZAMs", "SAMAnalytical.RemoveIZAMs",
               "Remove IZAMs",
-              "SAM WIP", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

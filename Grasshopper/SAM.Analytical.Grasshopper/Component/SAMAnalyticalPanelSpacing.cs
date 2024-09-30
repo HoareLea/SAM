@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalPanelSpacing()
           : base("SAMAnalytical.PanelSpacing", "SAMAnalytical.PanelSpacing",
               "Calculates Spacing between Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

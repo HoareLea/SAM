@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateName()
           : base("SAMAnalytical.UpdateName", "SAMAnalytical.UpdateName",
               "Update Name of SAMObject",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

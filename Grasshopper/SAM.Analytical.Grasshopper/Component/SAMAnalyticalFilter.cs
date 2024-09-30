@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilter()
           : base("SAMAnalytical.Filter", "SAMAnalytical.Filter",
               "Filter Adjacency Cluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         "3. Output Parameters:\n" +
         "   - upperLimit: The calculated upper limit value.\n" +
         "   - lowerLimit: The calculated lower limit value.",
-        "SAM WIP", "Analytical")
+        "SAM", "Weather")
         {
         }
 

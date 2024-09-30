@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSection()
           : base("SAMAnalytical.Section", "SAMAnalytical.Section",
               "Section through list of Panels, AdjacencyClusters, AnalyticalModels",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

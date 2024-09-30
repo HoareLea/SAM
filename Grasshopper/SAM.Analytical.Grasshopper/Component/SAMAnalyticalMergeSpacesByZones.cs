@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMergeSpacesByZones()
           : base("SAMAnalytical.MergeSpacesByZones", "SAMAnalytical.MergeSpacesByZones",
               "Merge Analytical Spaces By Zones.\nZone input can be Name or SAM Zone Object\nBy default removes air panels and combines spaces alternatively removed all internal Panels between spaces.\nIf no Zone Connected all Zones will be selected and merged \nIf boolean set to false input Analytical Object will be return",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

@@ -35,8 +35,8 @@ namespace SAM.Analytical.Grasshopper
           : base("SAMAnalytical.UpdateConstructionsByPanelType",
                 "SAMAnalytical.UpdateConstructionsByPanelType",
                 "Update Constructions By PanelType",
-                "SAM WIP",
-                "Tas")
+                "SAM",
+                "Analytical04")
         {
         }
 

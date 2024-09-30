@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalJoinSpacesByPanels()
           : base("SAMAnalytical.JoinSpacesByPanels", "SAMAnalytical.JoinSpacesByPanels",
               "Join Spaces By Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

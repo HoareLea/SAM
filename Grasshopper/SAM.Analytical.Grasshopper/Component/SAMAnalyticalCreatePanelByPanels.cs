@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreatePanelByPanels()
           : base("SAMAnalytical.CreatePanelByPanels", "SAMAnalytical.CreatePanelByPanels",
               "New Panel will be generated from provided Panels and Plane or Elevation., ie Floor from Wall Panels",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSnapByOffset()
           : base("SAMAnalytical.SnapByOffset", "SAMAnalytical.SnapByOffset",
               "Snap Panels by Offset from Panels default = 0.2m",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

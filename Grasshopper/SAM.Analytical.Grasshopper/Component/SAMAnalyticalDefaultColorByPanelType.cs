@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDefaultColorByPanelType()
           : base("SAMAnalytical.DefaultColor", "SAMAnalytical.DefaultColor",
               "Gets Default Color for given Panel (PanelType) or Aperture (ApertureType)",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

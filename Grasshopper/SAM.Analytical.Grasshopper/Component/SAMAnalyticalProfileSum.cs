@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalProfileSum()
           : base("SAMAnalytical.ProfileSum", "SAMAnalytical.ProfileSum",
               "Sum Profile by Value or Profile",
-              "SAM", "Analytical1")
+              "SAM", "Analytical03")
         {
         }
 

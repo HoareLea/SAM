@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalReportSpaces()
           : base("SAMAnalytical.ReportSpaces", "SAMAnalytical.ReportSpaces",
               "Report Spaces provide all information about space including assumptions from Internal Condition\n*Analytical Model need to be connected to see Profile data like HeatingDesignTemperature etc ",
-              "SAM", "SAM_Communicate")
+              "SAM", "Analytical03")
         {
         }
 

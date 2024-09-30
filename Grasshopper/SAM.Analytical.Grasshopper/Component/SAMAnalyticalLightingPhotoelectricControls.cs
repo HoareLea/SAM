@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalLightingPhotoelectricControls()
           : base("SAMAnalytical.LightingPhotoelectricControls", "SAMAnalytical.LightingPhotoelectricControls",
               "Select LightingPhotoelectricControls",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
     }

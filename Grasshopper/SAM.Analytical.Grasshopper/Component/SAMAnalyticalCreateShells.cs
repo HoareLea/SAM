@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalCreateShells()
           : base("SAMAnalytical.CreateShells", "SAMAnalytical.CreateShells",
               "Create Shells ",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

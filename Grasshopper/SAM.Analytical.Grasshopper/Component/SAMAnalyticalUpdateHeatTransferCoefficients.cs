@@ -67,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateHeatTransferCoefficients()
           : base("SAMAnalytical.UpdateHeatTransferCoefficients", "SAMAnalytical.UpdateHeatTransferCoefficients",
               "Updates Constructions Gas Material HeatTransferCoefficients, , it checks panel tilt for each construction and if tilt varies it duplicates construction and assign corrected for each tilt, if values set to false it will take wighted average for Panels and use this tilt for constructions ",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

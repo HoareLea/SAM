@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateConstructionManager()
           : base("SAMAnalytical.UpdateConstructionManager", "SAMAnalytical.UpdateConstructionManager",
               "Update ConstructionManager",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

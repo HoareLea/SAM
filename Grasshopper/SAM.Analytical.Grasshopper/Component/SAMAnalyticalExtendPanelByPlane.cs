@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalExtendPanelByPlane()
           : base("SAMAnalytical.ExtendPanelByPlane", "SAMAnalytical.ExtendPanelByPlane",
               "Extend SAM Analytical Panel By Given Plane",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

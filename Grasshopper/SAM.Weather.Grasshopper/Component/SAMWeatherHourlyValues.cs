@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMWeatherHourlyValues()
-          : base("SAMWeather.HourlyValues", "SAMWeather.HourlyValues", "Gets hourly values by WeatherDataType from  Weather Data, Weahter Year or WeatherDay", "SAM", "Analytical")
+          : base("SAMWeather.HourlyValues", "SAMWeather.HourlyValues", "Gets hourly values by WeatherDataType from  Weather Data, Weahter Year or WeatherDay", "SAM", "Weather")
         {
         }
 

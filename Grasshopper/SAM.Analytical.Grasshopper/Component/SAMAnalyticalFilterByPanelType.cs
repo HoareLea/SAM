@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilterByPanelType()
           : base("SAMAnalytical.FilterByPanelType", "SAMAnalytical.FilterByPanelType",
               "Filters Panels By PanelType",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

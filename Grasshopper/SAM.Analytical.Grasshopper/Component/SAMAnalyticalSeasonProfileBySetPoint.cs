@@ -41,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
                "\nSeasonType.FreeCooling] = temperature > heatingTemperature && temperature <= coolingTemperature" +
                "\nSeasonType.Cooling] = temperature > coolingTemperature" +
                "\nWe calculate average temperature for each day and operate on days data",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

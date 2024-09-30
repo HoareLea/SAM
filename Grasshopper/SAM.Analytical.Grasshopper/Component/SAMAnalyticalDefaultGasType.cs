@@ -27,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalDefaultGasType()
           : base("SAMAnalytical.DefaultGasType", "SAMAnalytical.DefaultGasType",
               "Select Default Gas Type",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
     }

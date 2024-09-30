@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalModifyAirHandlingUnits()
           : base("SAMAnalytical.ModifyAirHandlingUnits", "SAMAnalytical.ModifyAirHandlingUnits",
               "Modify AirHandlingUnits in AdjacencyCluster or AnalyticalModel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

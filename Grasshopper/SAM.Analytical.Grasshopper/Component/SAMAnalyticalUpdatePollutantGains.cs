@@ -78,7 +78,7 @@ namespace SAM.Analytical.Grasshopper
               "\n(https://www.sciencedirect.com/science/article/pii/S0048969722023348)" +
               "\nAbstract: Carbon dioxide(CO2) and methane(CH4) are important greenhouse gases in the atmosphere and have large impacts on Earth's radiative forcing and climate. Their natural and anthropogenic emissions have often been in focus, while the role of human metabolic emissions has received less attention. In this study, exhaled, dermal and whole-body CO2 and CH4 emission rates from a total of 20 volunteers were quantified under various controlled environmental conditions in a climate chamber. The whole-body CO2 emissions increased with temperature. Individual differences were the most important factor for the whole-body CH4 emissions. Dermal emissions of CO2 and CH4 only contributed ~3.5% and ~5.5% to the whole-body emissions, respectively. Breath measurements conducted on 24 volunteers in a companion study identified one third of the volunteers as CH4 producers (exhaled CH4 exceeded 1 ppm above ambient level). The exhaled CH4 emission rate of these CH4 producers (4.03 ± 0.71 mg/h/person, mean ± one standard deviation) was ten times higher than that of the rest of the volunteers (non-CH4 producers; 0.41 ± 0.45 mg/h/person). With increasing global population and the expected large reduction in global anthropogenic carbon emissions in the next decades, metabolic emissions of CH4 (although not CO2) from humans may play an increasing role in regional and global carbon budgets.",
 
-              "SAM", "Analytical")
+              "SAM", "SAM_IC")
         {
         }
         protected override void SolveInstance(IGH_DataAccess dataAccess)

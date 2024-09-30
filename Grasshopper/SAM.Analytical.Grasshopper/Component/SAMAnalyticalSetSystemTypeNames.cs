@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalSetSystemTypeNames()
           : base("SAMAnalytical.SetSystemTypeNames", "SAMAnalytical.SetSystemTypeNames",
               "Allow to change SystemTypeNames in internal condition\n * Please note that all input  ventilationSystemType_, heatingSystemTypeNames_ etc need to  match list lentgth of spaces",
-              "SAM", "Analytical")
+              "SAM", "Analytical03")
         {
         }
 

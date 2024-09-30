@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalExternalVector3D()
           : base("SAMAnalytical.ExternalVector3D", "SAMAnalytical.ExternalVector3D",
               "Gets External Vector3D for Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

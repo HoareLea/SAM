@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMergeCoplanarPanelsBySpace()
           : base("SAMAnalytical.MergeCoplanarPanelsBySpace", "SAMAnalytical.MergeCoplanarPanelsBySpace",
               "Merge Coplanar SAM Analytical Panels withing Space",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

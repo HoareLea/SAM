@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalLabelSpace()
           : base("SAMAnalytical.LabelSpace", "SAMAnalytical.LabelSpace",
               "Label SAM Analytical Space",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

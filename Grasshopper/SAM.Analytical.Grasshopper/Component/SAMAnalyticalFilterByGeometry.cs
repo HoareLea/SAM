@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalFilterByGeometry()
           : base("SAMAnalytical.FilterByGeometry", "SAMAnalytical.FilterByGeometry",
               "Filter Analytical Objects By Geometry, output Panels that are inside closed brep",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

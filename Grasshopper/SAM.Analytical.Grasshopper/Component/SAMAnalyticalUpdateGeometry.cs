@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateGeometry()
           : base("SAMAnalytical.UpdateGeometry", "SAMAnalytical.UpdateGeometry",
               "Update Geometry",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

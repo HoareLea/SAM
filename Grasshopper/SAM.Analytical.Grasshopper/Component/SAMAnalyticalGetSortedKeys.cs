@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetSortedKeys()
           : base("SAMAnalytical.GetSortedKeys", "SAMAnalytical.GetSortedKeys",
               "Get Sorted Keys from TextMap",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

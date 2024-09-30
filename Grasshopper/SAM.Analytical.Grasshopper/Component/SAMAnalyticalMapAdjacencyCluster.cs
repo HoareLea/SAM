@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMapAdjacencyCluster()
           : base("SAMAnalytical.MapAdjacencyCluster", "SAMAnalytical.MapAdjacencyCluster",
               "Map AdjacencyCLuster",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

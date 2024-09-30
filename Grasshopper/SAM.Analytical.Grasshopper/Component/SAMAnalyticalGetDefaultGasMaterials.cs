@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetDefaultGasMaterials()
           : base("SAMAnalytical.GetDefaultGasMaterials", "SAMAnalytical.GetDefaultGasMaterials",
               "Get Default Gas Materials",
-              "SAM", "Analytical")
+              "SAM", "Analytical01")
         {
         }
 

@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalUpdateNormals()
           : base("SAMAnalytical.UpdateNormals", "SAMAnalytical.UpdateNormals",
               "Add Space to SAM Analytical Model",
-              "SAM", "Analytical")
+              "SAM", "Analytical04")
         {
         }
 

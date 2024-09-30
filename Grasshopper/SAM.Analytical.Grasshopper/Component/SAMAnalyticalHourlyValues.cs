@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalHourlyValues()
           : base("SAMAnalytical.HourlyValues", "SAMAnalytical.HourlyValues",
               "TM52SpaceExtendedResult hourly values",
-              "SAM", "Analytical1")
+              "SAM", "Analytical02")
         {
         }
 

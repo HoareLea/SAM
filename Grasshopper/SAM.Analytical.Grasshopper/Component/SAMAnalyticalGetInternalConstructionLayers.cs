@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalGetInternalConstructionLayers()
           : base("SAMAnalytical.GetInternalConstructionLayers", "SAMAnalytical.GetInternalConstructionLayers",
               "Gets Internal ConstructionLAyers from SAM AdjacencyCluster",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 

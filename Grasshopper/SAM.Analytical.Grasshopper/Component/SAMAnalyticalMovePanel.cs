@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public SAMAnalyticalMovePanel()
           : base("SAMAnalytical.MovePanel", "SAMAnalytical.MovePanel",
               "Move SAM Analytical Panel",
-              "SAM", "Analytical")
+              "SAM", "Analytical02")
         {
         }
 
