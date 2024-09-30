@@ -2,6 +2,8 @@
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
+using SAM.Weather.Grasshopper;
 using System;
 using System.Collections.Generic;
 
@@ -17,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -43,7 +45,12 @@ namespace SAM.Analytical.Grasshopper
 
             inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, "000000_SAM_AnalyticalModel");
             inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", DateTime.Now.ToString("yyyy/MM/dd")));
-            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_location_", "_location_", "SAM Location \n *or WeatherData it will extract location", GH_ParamAccess.item);
+            index = inputParamManager.AddParameter(new GooWeatherDataParam(), "weatherData_", "weatherData_", "SAM WeatherData", GH_ParamAccess.item);
+            inputParamManager[index].Optional = true;
+
+            global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean();
+            param_Boolean.SetPersistentData(false);
+            index = inputParamManager.AddParameter(param_Boolean, "_saveWeatherData_", "_saveWeatherData_", "Save WeatherData", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
             index = inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
@@ -84,28 +91,26 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            SAMObject sAMObject = null;
-            if (!dataAccess.GetData(2, ref sAMObject) || sAMObject == null)
+            WeatherData weatherData = null;
+            if (!dataAccess.GetData(2, ref weatherData))
             {
-                sAMObject = Core.Query.DefaultLocation();
+                weatherData = null;
             }
 
-            Location location = sAMObject as Location;
-            if(location == null)
-            {
-                if(sAMObject is Weather.WeatherData)
-                {
-                    location = ((Weather.WeatherData)sAMObject).Location;
-                }
-            }
-
-            if(location == null)
+            Location location = weatherData?.Location;
+            if (location == null)
             {
                 location = Core.Query.DefaultLocation();
             }
 
+            bool saveWeatherData = false;
+            if (!dataAccess.GetData(3, ref saveWeatherData))
+            {
+                saveWeatherData = false;
+            }
+
             List<Space> spaces = new List<Space>();
-            dataAccess.GetDataList(3, spaces);
+            dataAccess.GetDataList(4, spaces);
 
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
             if(spaces != null)
@@ -114,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             ProfileLibrary profileLibrary = null;
-            dataAccess.GetData(4, ref profileLibrary);
+            dataAccess.GetData(5, ref profileLibrary);
 
             if (profileLibrary == null)
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
@@ -122,7 +127,13 @@ namespace SAM.Analytical.Grasshopper
             IEnumerable<Profile> profiles = Analytical.Query.Profiles(adjacencyCluster, profileLibrary);
             profileLibrary = new ProfileLibrary("Default Profile Library", profiles);
 
-            dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel(name, description, location, null, adjacencyCluster, null, profileLibrary)));
+            AnalyticalModel analyticalModel = new AnalyticalModel(name, description, location, null, adjacencyCluster, null, profileLibrary);
+            if (saveWeatherData)
+            {
+                analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, new WeatherData(weatherData));
+            }
+
+            dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
         }
     }
 }
