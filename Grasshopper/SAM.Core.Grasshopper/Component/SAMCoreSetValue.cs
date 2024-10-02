@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core.Grasshopper
 {
@@ -97,35 +98,81 @@ namespace SAM.Core.Grasshopper
 
             object value = objectWrapper?.Value;
             if(value is IGH_Goo)
+            {
                 value = (value as dynamic).Value;
+            }
 
             parameterizedSAMObject = parameterizedSAMObject.Clone();
 
             bool result = false;
 
-            if(enums != null && enums.Count > 0)
+            if(name == "Name")
             {
-                if(value == null)
+                PropertyInfo[] propertyInfos = parameterizedSAMObject.GetType().GetProperties();
+                if (propertyInfos != null)
                 {
-                    foreach (Enum @enum in enums)
-                        if (parameterizedSAMObject.RemoveValue(@enum))
+                    foreach (PropertyInfo propertyInfo in propertyInfos)
+                    {
+                        if (!propertyInfo.CanWrite || propertyInfo.Name != name)
+                        {
+                            continue;
+                        }
+
+                        if (!Core.Query.TryConvert(value, out object @value_Temp, propertyInfo.PropertyType))
+                        {
+                            continue;
+                        }
+
+                        try
+                        {
+                            propertyInfo.SetValue(parameterizedSAMObject, value_Temp);
                             result = true;
+                        }
+                        catch
+                        {
+
+                        }
+
+                        break;
+                    }
+                }
+            }
+
+            if(!result)
+            {
+                if (enums != null && enums.Count > 0)
+                {
+                    if (value == null)
+                    {
+                        foreach (Enum @enum in enums)
+                        {
+                            if (parameterizedSAMObject.RemoveValue(@enum))
+                            {
+                                result = true;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        foreach (Enum @enum in enums)
+                        {
+                            if (parameterizedSAMObject.SetValue(@enum, value))
+                            {
+                                result = true;
+                            }
+                        }
+                    }
                 }
                 else
                 {
-                    foreach (Enum @enum in enums)
-                        if (parameterizedSAMObject.SetValue(@enum, value))
-                            result = true;
+                    if (value == null)
+                        result = parameterizedSAMObject.RemoveValue(name);
+                    else
+                        result = Core.Modify.SetValue(parameterizedSAMObject, name, value as dynamic);
                 }
             }
-            else
-            {
-                if (value == null)
-                    result = parameterizedSAMObject.RemoveValue(name);
-                else
-                    result = Core.Modify.SetValue(parameterizedSAMObject, name, value as dynamic);
-            }
-            
+
             dataAccess.SetData(0, parameterizedSAMObject);
             dataAccess.SetData(1, result);
         }
