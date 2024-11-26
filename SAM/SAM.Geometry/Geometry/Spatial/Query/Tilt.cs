@@ -19,6 +19,15 @@
             return Tilt(normal);
         }
 
+        public static double Tilt(this Plane plane)
+        {
+            Vector3D normal = plane?.Normal;
+            if (normal == null)
+                return double.NaN;
+
+            return Tilt(normal);
+        }
+
         /// <summary>
         /// Angle between normal and XY Plane mesured in degrees 
         /// </summary>

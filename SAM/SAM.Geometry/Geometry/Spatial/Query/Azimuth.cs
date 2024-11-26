@@ -13,7 +13,13 @@
             if (closedPlanar3D == null || referenceDirection == null)
                 return double.NaN;
 
-            Vector3D normal = closedPlanar3D.GetPlane()?.Normal;
+            return Azimuth(closedPlanar3D.GetPlane(), referenceDirection);
+        }
+
+        public static double Azimuth(this Plane plane, Vector3D referenceDirection)
+        {
+
+            Vector3D normal = plane?.Normal;
             if (normal == null)
                 return double.NaN;
 
