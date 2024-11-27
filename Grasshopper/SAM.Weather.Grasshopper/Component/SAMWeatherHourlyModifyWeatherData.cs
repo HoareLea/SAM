@@ -219,7 +219,7 @@ namespace SAM.Analytical.Grasshopper
                     ));
             }
 
-            for(int i =0; i <= weatherDatas.Count; i++)
+            for(int i =0; i < weatherDatas.Count; i++)
             {
                 WeatherData weatherData = weatherDatas[i];
 
@@ -233,22 +233,29 @@ namespace SAM.Analytical.Grasshopper
                 int year_Temp = year == null || !year.HasValue ? weatherData.Years.First() : year.Value;
 
                 WeatherYear weatherYear = weatherData[year_Temp];
+                if(weatherYear == null)
+                {
+                    weatherYear = new WeatherYear(year_Temp);
+                }
 
                 if(weatherDataTypes != null && weatherDataTypes.Count != 0)
                 {
-                    weatherYear = new WeatherYear(year_Temp);
-                    for (int j = 0; j <= weatherDataTypes.Count; j++)
+                    for (int j = 0; j < weatherDataTypes.Count; j++)
                     {
                         WeatherDataType weatherDataType = weatherDataTypes[j];
 
                         List<int> hoursOfYear = tree_HoursOfYear.Branches.ElementAt(j).ConvertAll(x => x.Value);
                         List<double> values = tree_Values.Branches.ElementAt(j).ConvertAll(x => x.Value);
 
-                        for (int k = 0; k <= hoursOfYear.Count; k++)
+                        for (int k = 0; k < hoursOfYear.Count; k++)
                         {
                             int hourOfYear = hoursOfYear[k];
 
                             WeatherHour weatherHour = weatherYear.GetWeatherHour(hourOfYear);
+                            if(weatherHour == null)
+                            {
+                                weatherHour = new WeatherHour();
+                            }
                             weatherHour[weatherDataType] = values[k];
 
                             weatherYear.Add(hourOfYear, weatherHour);
@@ -256,7 +263,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                weatherData = new WeatherData(weatherData, name_Temp, description_Temp, latitude_Temp, longitude_Temp, elevation_Temp, weatherYear);
+                weatherDatas[i] = new WeatherData(weatherData, name_Temp, description_Temp, latitude_Temp, longitude_Temp, elevation_Temp, weatherYear);
             }
 
             index = Params.IndexOfOutputParam("weatherDatas");

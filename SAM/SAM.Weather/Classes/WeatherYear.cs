@@ -11,7 +11,7 @@ namespace SAM.Weather
     public class WeatherYear : IWeatherObject
     {
         private int year;
-        private WeatherDay[] weatherDays;
+        private WeatherDay[] weatherDays = new WeatherDay[365];
 
         /// <summary>
         /// Initializes a new instance of the WeatherYear class with the specified year.
@@ -68,9 +68,6 @@ namespace SAM.Weather
             {
                 if (i < 0 || i >= 365)
                     return;
-
-                if (weatherDays == null)
-                    weatherDays = new WeatherDay[365];
 
                 weatherDays[i] = value;
             }
