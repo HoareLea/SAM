@@ -48,6 +48,22 @@ namespace SAM.Weather
             }
         }
 
+        public WeatherData(WeatherData weatherData, string name, string description, double latitude, double longitude, double elevation, WeatherYear weatherYear)
+            : this(weatherData)
+        {
+            this.name = name;
+            this.description = description;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.elevation = elevation;
+
+            weatherYears = new List<WeatherYear>();
+            if(weatherYear != null)
+            {
+                weatherYears.Add(weatherYear.Clone());
+            }
+        }
+
         /// <summary>
         /// Constructor for WeatherData class.
         /// </summary>

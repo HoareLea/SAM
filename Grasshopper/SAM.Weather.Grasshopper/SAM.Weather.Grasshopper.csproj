@@ -26,9 +26,9 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Folder Include="Convert\ToGrasshopper\" />
-    <Folder Include="Convert\ToRhino\" />
-    <Folder Include="Convert\ToSAM\" />
+    <Compile Remove="Convert\**" />
+    <EmbeddedResource Remove="Convert\**" />
+    <None Remove="Convert\**" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
