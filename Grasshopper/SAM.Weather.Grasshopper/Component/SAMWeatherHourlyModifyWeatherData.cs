@@ -9,6 +9,7 @@ using SAM.Weather;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using System.Linq;
+using MathNet.Numerics;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -56,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "name_", NickName = "name_", Description = "Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "timeZone_", NickName = "timeZone_", Description = "TimeZone", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "year_", NickName = "year_", Description = "Year", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "weatherDataTypes_", NickName = "weatherDataTypes_", Description = "WeatherDataTypes", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "hoursOfYear_", NickName = "hoursOfYear_", Description = "Hours of year [0-8759]", Access = GH_ParamAccess.tree, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "values_", NickName = "values_", Description = "Values", Access = GH_ParamAccess.tree, Optional = true }, ParamVisibility.Binding));
@@ -99,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 double value = double.NaN;
-                if(dataAccess.GetData(index, ref value))
+                if (dataAccess.GetData(index, ref value))
                 {
                     elevation = value;
                 }
@@ -178,11 +179,11 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.GetDataList(index, weatherDataTypeNames);
-                if(weatherDataTypeNames != null)
+                if (weatherDataTypeNames != null)
                 {
-                    foreach(string weatherDataTypeName in weatherDataTypeNames)
+                    foreach (string weatherDataTypeName in weatherDataTypeNames)
                     {
-                        if(Core.Query.TryGetEnum(weatherDataTypeName, out WeatherDataType weatherDataType))
+                        if (Core.Query.TryGetEnum(weatherDataTypeName, out WeatherDataType weatherDataType))
                         {
                             weatherDataTypes.Add(weatherDataType);
                         }
@@ -204,14 +205,14 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataTree(index, out tree_Values);
             }
 
-            if(weatherDatas == null || weatherDatas.Count == 0)
+            if (weatherDatas == null || weatherDatas.Count == 0)
             {
                 Location location_Default = Core.Query.DefaultLocation();
 
                 weatherDatas = new List<WeatherData>();
 
                 weatherDatas.Add(new WeatherData(
-                    name, 
+                    name,
                     description,
                     latitude == null || !latitude.HasValue ? location_Default.Latitude : latitude.Value,
                     longitude == null || !longitude.HasValue ? location_Default.Longitude : latitude.Value,
@@ -219,7 +220,23 @@ namespace SAM.Analytical.Grasshopper
                     ));
             }
 
-            for(int i =0; i < weatherDatas.Count; i++)
+            IList<List<GH_Integer>> branches_HoursOfYear = tree_HoursOfYear?.Branches;
+            IList<List<GH_Number>> branches_Values = tree_Values?.Branches;
+
+            int count_HoursOfYear = branches_HoursOfYear == null ? -1 : branches_HoursOfYear.Count();
+            int count_Values = branches_Values == null ? -1 : branches_Values.Count();
+
+            int count = weatherDataTypes != null && weatherDataTypes.Count != 0 ? weatherDataTypes.Count : -1;
+            if (count > 0)
+            {
+                if (count_HoursOfYear <= 0 || count_Values <= 0)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
+            }
+
+            for (int i = 0; i < weatherDatas.Count; i++)
             {
                 WeatherData weatherData = weatherDatas[i];
 
@@ -233,33 +250,39 @@ namespace SAM.Analytical.Grasshopper
                 int year_Temp = year == null || !year.HasValue ? weatherData.Years.First() : year.Value;
 
                 WeatherYear weatherYear = weatherData[year_Temp];
-                if(weatherYear == null)
+                if (weatherYear == null)
                 {
                     weatherYear = new WeatherYear(year_Temp);
                 }
 
-                if(weatherDataTypes != null && weatherDataTypes.Count != 0)
+                for (int j = 0; j < count; j++)
                 {
-                    for (int j = 0; j < weatherDataTypes.Count; j++)
+                    WeatherDataType weatherDataType = weatherDataTypes[j];
+
+                    int index_HoursOfYear = j % count_HoursOfYear;
+                    int index_Values = j % count_Values;
+
+                    List<int> hoursOfYear = branches_HoursOfYear.ElementAt(index_HoursOfYear).ConvertAll(x => x?.Value == null ? -1 : x.Value);
+                    List<double> values = branches_Values.ElementAt(index_Values).ConvertAll(x => x?.Value == null ? double.NaN : x.Value);
+
+                    for (int k = 0; k < hoursOfYear.Count; k++)
                     {
-                        WeatherDataType weatherDataType = weatherDataTypes[j];
-
-                        List<int> hoursOfYear = tree_HoursOfYear.Branches.ElementAt(j).ConvertAll(x => x.Value);
-                        List<double> values = tree_Values.Branches.ElementAt(j).ConvertAll(x => x.Value);
-
-                        for (int k = 0; k < hoursOfYear.Count; k++)
+                        int hourOfYear = hoursOfYear[k];
+                        if(hourOfYear == -1)
                         {
-                            int hourOfYear = hoursOfYear[k];
-
-                            WeatherHour weatherHour = weatherYear.GetWeatherHour(hourOfYear);
-                            if(weatherHour == null)
-                            {
-                                weatherHour = new WeatherHour();
-                            }
-                            weatherHour[weatherDataType] = values[k];
-
-                            weatherYear.Add(hourOfYear, weatherHour);
+                            continue;
                         }
+
+                        int count_Values_HourOfYear = k % values.Count;
+
+                        WeatherHour weatherHour = weatherYear.GetWeatherHour(hourOfYear);
+                        if (weatherHour == null)
+                        {
+                            weatherHour = new WeatherHour();
+                        }
+                        weatherHour[weatherDataType] = values[count_Values_HourOfYear];
+
+                        weatherYear.Add(hourOfYear, weatherHour);
                     }
                 }
 
