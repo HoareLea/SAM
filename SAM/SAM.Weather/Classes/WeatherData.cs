@@ -168,7 +168,7 @@ namespace SAM.Weather
                 return null;
             }
 
-            return weatherYear.GetWeatherHour(dateTime.DayOfYear, dateTime.Hour);
+            return weatherYear.GetWeatherHour(dateTime.DayOfYear - 1, dateTime.Hour);
         }
 
         /// <summary>
