@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,9 @@ namespace SAM.Analytical.Grasshopper
                 param_Integer.PersistentData.Append(new GH_Integer(2018));
                 result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
 
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "timeShift_", NickName = "timeShift_", Description = "Time shift in min", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
+
+
                 return result.ToArray();
             }
         }
@@ -67,6 +70,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "month", NickName = "month", Description = "Month", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "day", NickName = "day", Description = "Day", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "hour", NickName = "hour", Description = "Hour", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "minute", NickName = "minute", Description = "Minute", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "dayOfYear", NickName = "dayOfYear", Description = "Day of the year", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "text", NickName = "text", Description = "DateTime as Text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
@@ -98,8 +102,23 @@ namespace SAM.Analytical.Grasshopper
             {
                 year = 2018;
             }
- 
+
+            index = Params.IndexOfInputParam("timeShift_");
+            int minute = 0;
+            if (index != -1)
+            {
+                int minute_Temp = 0;
+                if (dataAccess.GetData(index, ref minute_Temp))
+                {
+                    minute = minute_Temp;
+                }
+            }
+
             DateTime dateTime = Analytical.Convert.ToDateTime(hourIndex, year);
+            if(minute != 0)
+            {
+                dateTime = dateTime.AddMinutes(minute);
+            }
 
             index = Params.IndexOfOutputParam("dateTime");
             if (index != -1)
@@ -120,6 +139,10 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("hour");
             if (index != -1)
                 dataAccess.SetData(index, dateTime.Hour);
+
+            index = Params.IndexOfOutputParam("minute");
+            if (index != -1)
+                dataAccess.SetData(index, dateTime.Minute);
 
             index = Params.IndexOfOutputParam("dayOfYear");
             if (index != -1)
