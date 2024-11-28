@@ -152,6 +152,25 @@ namespace SAM.Weather
             }
         }
 
+        public WeatherHour this[DateTime dateTime]
+        {
+            get
+            {
+                return GetWeatherHour(dateTime);
+            }
+        }
+
+        public WeatherHour GetWeatherHour(DateTime dateTime)
+        {
+            WeatherYear weatherYear = this[dateTime.Year];
+            if(weatherYear == null)
+            {
+                return null;
+            }
+
+            return weatherYear.GetWeatherHour(dateTime.DayOfYear, dateTime.Hour);
+        }
+
         /// <summary>
         /// Adds a WeatherYear object to the list of WeatherYears.
         /// </summary>

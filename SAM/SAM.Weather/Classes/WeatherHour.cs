@@ -248,7 +248,7 @@ namespace SAM.Weather
                 return double.NaN;
             }
 
-            double globalRadiation = CalculatedGlobalRadiation();
+            double globalRadiation = CalculatedGlobalSolarRadiation();
             if (double.IsNaN(globalRadiation))
             {
                 return double.NaN;
@@ -263,7 +263,7 @@ namespace SAM.Weather
         /// <returns>
         /// The global solar radiation.
         /// </returns>
-        public double CalculatedGlobalRadiation()
+        public double CalculatedGlobalSolarRadiation()
         {
             double result = this[WeatherDataType.GlobalSolarRadiation];
             if (!double.IsNaN(result))
@@ -284,6 +284,52 @@ namespace SAM.Weather
             }
 
             return directSolarRadiation + diffuseSolarRadiation;
+        }
+
+        public double CalculatedDiffuseSolarRadiation()
+        {
+            double result = this[WeatherDataType.DiffuseSolarRadiation];
+            if (!double.IsNaN(result))
+            {
+                return result;
+            }
+
+            double globalSolarRadiation = this[WeatherDataType.GlobalSolarRadiation];
+            if (double.IsNaN(globalSolarRadiation))
+            {
+                return double.NaN;
+            }
+
+            double directSolarRadiation = this[WeatherDataType.DirectSolarRadiation];
+            if (double.IsNaN(directSolarRadiation))
+            {
+                return double.NaN;
+            }
+
+            return globalSolarRadiation - directSolarRadiation;
+        }
+
+        public double CalculatedDirectSolarRadiation()
+        {
+            double result = this[WeatherDataType.DirectSolarRadiation];
+            if (!double.IsNaN(result))
+            {
+                return result;
+            }
+
+            double globalSolarRadiation = this[WeatherDataType.GlobalSolarRadiation];
+            if (double.IsNaN(globalSolarRadiation))
+            {
+                return double.NaN;
+            }
+
+            double diffuseSolarRadiation = this[WeatherDataType.DiffuseSolarRadiation];
+            if (double.IsNaN(diffuseSolarRadiation))
+            {
+                return double.NaN;
+            }
+
+            return globalSolarRadiation - diffuseSolarRadiation;
         }
 
         public double GlobalSolarRadiation
