@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 
 namespace SAM.Core
 {
@@ -212,6 +213,246 @@ namespace SAM.Core
             }
 
             return AddValues(values_Temp);
+        }
+
+        public List<double> GetValues(int columnIndex)
+        {
+            if (columnIndex == -1 || headers == null || !headers.ContainsKey(columnIndex) || values == null)
+            {
+                return null;
+            }
+
+            List<double> result = new List<double>();
+            foreach (SortedDictionary<int, double> sortedDictionary in values)
+            {
+                if (!sortedDictionary.TryGetValue(columnIndex, out double value))
+                {
+                    value = double.NaN;
+                }
+
+                result.Add(value);
+            }
+
+            return result;
+        }
+
+        public Dictionary<int, double> GetDictionary(int rowIndex, IEnumerable<int> columnIndexes)
+        {
+            if(columnIndexes == null)
+            {
+                return null;
+            }
+
+            SortedDictionary<int, double> sortedDictionary = values[rowIndex];
+
+            Dictionary<int, double> result = new Dictionary<int, double>();
+            foreach (int columnIndex in columnIndexes)
+            {
+                if(!sortedDictionary.TryGetValue(columnIndex, out double value))
+                {
+                    continue;
+                }
+
+                result[columnIndex] = value;
+            }
+
+            return result;
+        }
+
+        public List<int> FindIndexes(IDictionary<int, double> values)
+        {
+            if(values == null || this.values == null || headers == null)
+            {
+                return null;
+            }
+
+            List<int> result = new List<int>();
+
+            for(int i=0; i < this.values.Count; i++)
+            {
+                SortedDictionary<int, double> sortedDictionary = this.values[i];
+
+                bool add = true;
+                foreach (KeyValuePair<int, double> keyValuePair in values)
+                {
+
+                }
+
+                if (!add)
+                {
+                    continue;
+                }
+
+                result.Add(i);
+
+            }
+
+            return result;
+        }
+
+        public bool RemoveColumn(int index)
+        {
+            if(index < 0)
+            {
+                return false;
+            }
+
+            if(!headers.Remove(index))
+            {
+                return false;
+            }
+
+            foreach (SortedDictionary<int, double> sortedDictionary in values)
+            {
+                sortedDictionary?.Remove(index);
+            }
+
+            return true;
+        }
+
+        public double[,] GetValues()
+        {
+            if(headers == null || headers.Count == 0)
+            {
+                return null;
+            }
+
+            double[,] result = null;
+            if(headers.Count < 3)
+            {
+                result = new double[values.Count, headers.Count];
+                for (int i = 0; i < values.Count; i++)
+                {
+                    SortedDictionary<int, double> sortedDictionary = values[i];
+
+                    for (int j = 0; j < headers.Count; j++)
+                    {
+                        if (sortedDictionary.TryGetValue(j, out double value))
+                        {
+                            result[i, j] = value;
+                        }
+                    }
+                }
+
+                return result;
+            }
+
+            int columnIndex_Value = headers.Keys.Max();
+            int columnIndex_ToRemove = columnIndex_Value - 1;
+
+            Dictionary<int, string> headers_Temp = new Dictionary<int, string>();
+
+            List<int> headerIndexes = new List<int>();
+            for (int i = 0; i < columnIndex_ToRemove; i++)
+            {
+                headers_Temp[i] = headers[i];
+                headerIndexes.Add(i);
+            }
+
+            IEnumerable<double> uniqueValues = GetValues(columnIndex_ToRemove).Distinct();
+            foreach(double uniqueValue in uniqueValues)
+            {
+                headers_Temp[headers_Temp.Keys.Max() + 1] = uniqueValue.ToString();
+            }
+
+            TableModifier tableModifier = new TableModifier(ArithmeticOperator, headers_Temp.Values);
+
+            List<SortedDictionary<int, double>> sortedDictionaries = new List<SortedDictionary<int, double>>(values);
+            while(sortedDictionaries.Count > 0)
+            {
+                Dictionary<int, double> dictionary_Full = new Dictionary<int, double>(values[0]);
+                Dictionary<int, double> dictionary_Filtered = GetDictionary(sortedDictionaries, 0, headerIndexes);
+
+                List<int> indexes = FindIndexes(sortedDictionaries, dictionary_Filtered);
+                foreach(int index in indexes)
+                {
+                    double uniqueValue = sortedDictionaries[index][columnIndex_ToRemove];
+                    int columnIndex_UniqueValue = tableModifier.GetHeaderIndex(uniqueValue.ToString());
+                    dictionary_Filtered[columnIndex_UniqueValue] = sortedDictionaries[index][columnIndex_Value];
+                }
+
+                tableModifier.AddValues(dictionary_Filtered);
+
+                indexes.Sort((x, y) => y.CompareTo(x));
+                indexes.ForEach(x => sortedDictionaries.RemoveAt(x));
+            }
+
+            headerIndexes.Reverse();
+            headerIndexes.ForEach(x => tableModifier.RemoveColumn(x));
+
+            result = new double[tableModifier.values.Count, tableModifier.headers.Count];
+            for (int i = 0; i < tableModifier.values.Count; i++)
+            {
+                SortedDictionary<int, double> sortedDictionary = tableModifier.values[i];
+
+                for (int j = 0; j < tableModifier.headers.Count; j++)
+                {
+                    if (sortedDictionary.TryGetValue(tableModifier.headers.Keys.ElementAt(j), out double value))
+                    {
+                        result[i, j] = value;
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public static Dictionary<int, double> GetDictionary(IEnumerable<SortedDictionary<int, double>> sortedDictionaries, int rowIndex, IEnumerable<int> columnIndexes)
+        {
+            if (columnIndexes == null)
+            {
+                return null;
+            }
+
+            SortedDictionary<int, double> sortedDictionary = sortedDictionaries.ElementAt(rowIndex);
+
+            Dictionary<int, double> result = new Dictionary<int, double>();
+            foreach (int columnIndex in columnIndexes)
+            {
+                if (!sortedDictionary.TryGetValue(columnIndex, out double value))
+                {
+                    continue;
+                }
+
+                result[columnIndex] = value;
+            }
+
+            return result;
+        }
+
+        public List<int> FindIndexes(IEnumerable<SortedDictionary<int, double>> sortedDictionaries, IDictionary<int, double> values)
+        {
+            if (sortedDictionaries == null || sortedDictionaries == null || headers == null)
+            {
+                return null;
+            }
+
+            List<int> result = new List<int>();
+
+            for (int i = 0; i < sortedDictionaries.Count(); i++)
+            {
+                SortedDictionary<int, double> sortedDictionary = sortedDictionaries.ElementAt(i);
+
+                bool add = true;
+                foreach (KeyValuePair<int, double> keyValuePair in values)
+                {
+                    if (!sortedDictionary.TryGetValue(keyValuePair.Key, out double value) || keyValuePair.Value != value)
+                    {
+                        add = false;
+                        break;
+                    }
+                }
+
+                if (!add)
+                {
+                    continue;
+                }
+
+                result.Add(i);
+
+            }
+
+            return result;
         }
 
         public override JObject ToJObject()
