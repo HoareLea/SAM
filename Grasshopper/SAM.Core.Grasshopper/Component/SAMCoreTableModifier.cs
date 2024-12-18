@@ -5,7 +5,6 @@ using Rhino.Geometry;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Linq;
 
 namespace SAM.Core.Grasshopper
@@ -20,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -62,6 +61,8 @@ namespace SAM.Core.Grasshopper
                 result.Add(new GH_SAMParam(new GooTableModifierParam() { Name = "tableModifier", NickName = "tableModifier", Description = "SAM Core TableModifier", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "names", NickName = "names", Description = "Names", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tree", NickName = "tree", Description = "Tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "columnHeader", NickName = "columnHeader", Description = "Column Header", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "rowHeaders", NickName = "rowHeaders", Description = "Row Headers", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Matrix() { Name = "matrix", NickName = "matrix", Description = "Matrix", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "matrixTree", NickName = "matrixTree", Description = "Matrix tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
@@ -97,7 +98,13 @@ namespace SAM.Core.Grasshopper
 
             int columnCount = names.Count();
 
-            double[,] values = tableModifier.GetValues();
+            double[,] values = tableModifier.GetValues(out List<string> columnHeader, out List<List<string>> rowHeaders);
+
+            DataTree<string> dataTree_RowHeaders = new DataTree<string>();
+            for(int i =0; i < rowHeaders.Count; i++)
+            {
+                dataTree_RowHeaders.AddRange(rowHeaders[i], new GH_Path(i));
+            }
 
             int rowIndex = values.GetLength(0);
             int columnIndex = values.GetLength(1);
@@ -139,6 +146,18 @@ namespace SAM.Core.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("columnHeader");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, columnHeader);
+            }
+
+            index = Params.IndexOfOutputParam("rowHeaders");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_RowHeaders);
             }
 
             index = Params.IndexOfOutputParam("matrix");

@@ -310,8 +310,11 @@ namespace SAM.Core
             return true;
         }
 
-        public double[,] GetValues()
+        public double[,] GetValues(out List<string> columnHeader, out List<List<string>> rowHeaders)
         {
+            columnHeader = null;
+            rowHeaders = null;
+
             if(headers == null || headers.Count == 0)
             {
                 return null;
@@ -320,6 +323,12 @@ namespace SAM.Core
             double[,] result = null;
             if(headers.Count < 3)
             {
+                columnHeader = Headers?.ToList();
+                rowHeaders = new List<List<string>>()
+                {
+                    GetValues(headers.Keys.First())?.ConvertAll(x => x.ToString())
+                };
+
                 result = new double[values.Count, headers.Count];
                 for (int i = 0; i < values.Count; i++)
                 {
@@ -342,11 +351,15 @@ namespace SAM.Core
 
             Dictionary<int, string> headers_Temp = new Dictionary<int, string>();
 
+            rowHeaders = new List<List<string>>();
+
             List<int> headerIndexes = new List<int>();
             for (int i = 0; i < columnIndex_ToRemove; i++)
             {
                 headers_Temp[i] = headers[i];
                 headerIndexes.Add(i);
+
+                rowHeaders.Add(GetValues(i).ConvertAll(x => x.ToString()));
             }
 
             IEnumerable<double> uniqueValues = GetValues(columnIndex_ToRemove).Distinct();
@@ -354,6 +367,8 @@ namespace SAM.Core
             {
                 headers_Temp[headers_Temp.Keys.Max() + 1] = uniqueValue.ToString();
             }
+
+            columnHeader = uniqueValues.ToList().ConvertAll(x => x.ToString());
 
             TableModifier tableModifier = new TableModifier(ArithmeticOperator, headers_Temp.Values);
 
