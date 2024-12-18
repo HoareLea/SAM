@@ -351,15 +351,12 @@ namespace SAM.Core
 
             Dictionary<int, string> headers_Temp = new Dictionary<int, string>();
 
-            rowHeaders = new List<List<string>>();
 
             List<int> headerIndexes = new List<int>();
             for (int i = 0; i < columnIndex_ToRemove; i++)
             {
                 headers_Temp[i] = headers[i];
                 headerIndexes.Add(i);
-
-                rowHeaders.Add(GetValues(i).ConvertAll(x => x.ToString()));
             }
 
             IEnumerable<double> uniqueValues = GetValues(columnIndex_ToRemove).Distinct();
@@ -390,6 +387,12 @@ namespace SAM.Core
 
                 indexes.Sort((x, y) => y.CompareTo(x));
                 indexes.ForEach(x => sortedDictionaries.RemoveAt(x));
+            }
+
+            rowHeaders = new List<List<string>>();
+            foreach(int index in headerIndexes)
+            {
+                rowHeaders.Add(tableModifier.GetValues(index).ConvertAll(x => x.ToString()));
             }
 
             headerIndexes.Reverse();
