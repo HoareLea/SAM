@@ -1,4 +1,6 @@
-﻿using Grasshopper.Kernel;
+﻿using Grasshopper;
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Rhino.Geometry;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -58,10 +60,11 @@ namespace SAM.Core.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooTableModifierParam() { Name = "tableModifier", NickName = "tableModifier", Description = "SAM Core TableModifier", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Matrix() { Name = "matrixReloaded", NickName = "matrixReloaded", Description = "Matrix Reloaded", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "matrixAsTree", NickName = "matrixAsTree", Description = "Matrix as Tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "graphTree", NickName = "graphTree", Description = "Graph as Tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Line() { Name = "maxGraphLine", NickName = "maxGraphLine", Description = "Max Graph Line", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "names", NickName = "names", Description = "Names", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tree", NickName = "tree", Description = "Tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Matrix() { Name = "matrix", NickName = "matrix", Description = "Matrix", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "matrixTree", NickName = "matrixTree", Description = "Matrix tree", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
         }
@@ -76,29 +79,79 @@ namespace SAM.Core.Grasshopper
         {
             int index;
 
-            index = Params.IndexOfInputParam("_geometry");
+            index = Params.IndexOfInputParam("_tableModifier");
 
-            Rhino.Geometry.GeometryBase geometryBase = null;
-            if (index == -1 || !dataAccess.GetData(index, ref geometryBase))
+            TableModifier tableModifier = null;
+            if (index == -1 || !dataAccess.GetData(index, ref tableModifier))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IJSAMObject jSAMObject = null;
-
-            NameValueCollection nwc = geometryBase.GetUserStrings();
-
-            string @string = geometryBase.GetUserString("SAM");
-            if (!string.IsNullOrWhiteSpace(@string))
+            IEnumerable<string> names = tableModifier.Headers;
+            if(names == null)
             {
-                List<IJSAMObject> jSAMObjects = Core.Convert.ToSAM(@string);
-                jSAMObject = jSAMObjects?.FirstOrDefault();
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "TableModifier has no columns");
+                return;
             }
 
-            index = Params.IndexOfOutputParam("SAMObject");
+            int columnCount = names.Count();
+
+            double[,] values = tableModifier.GetValues();
+
+            int rowIndex = values.GetLength(0);
+            int columnIndex = values.GetLength(1);
+
+            Matrix matrix = new Matrix(rowIndex, columnIndex);
+            matrix.Zero();
+
+            DataTree<double> dataTree_Matrix = new DataTree<double>();
+
+            for (int i = 0; i < rowIndex; i++)
+            {
+                for (int j = 0; j < columnIndex; j++)
+                {
+                    matrix[i, j] = values[i, j];
+                    dataTree_Matrix.Add(values[i, j], new GH_Path(i));
+                }
+            }
+
+            DataTree<double> dataTree = new DataTree<double>();
+            for (int i = 0; i < columnCount; i++)
+            {
+                List<double> columnValues = tableModifier.GetValues(tableModifier.GetHeaderIndex(names.ElementAt(i)));
+                dataTree.AddRange(columnValues, new GH_Path(i));
+            }
+
+            index = Params.IndexOfOutputParam("tableModifier");
             if (index != -1)
-                dataAccess.SetData(index, jSAMObject);
+            {
+                dataAccess.SetData(index, tableModifier);
+            }
+
+            index = Params.IndexOfOutputParam("names");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, names);
+            }
+
+            index = Params.IndexOfOutputParam("tree");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("matrix");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, matrix);
+            }
+
+            index = Params.IndexOfOutputParam("matrixTree");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_Matrix);
+            }
         }
     }
 }
