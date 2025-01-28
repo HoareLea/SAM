@@ -126,7 +126,7 @@ namespace SAM.Core.Grasshopper
             DataTree<double> dataTree = new DataTree<double>();
             for (int i = 0; i < columnCount; i++)
             {
-                List<double> columnValues = tableModifier.GetValues(tableModifier.GetHeaderIndex(names.ElementAt(i)));
+                List<double> columnValues = tableModifier.GetColumnValues(tableModifier.GetHeaderIndex(names.ElementAt(i)));
                 dataTree.AddRange(columnValues, new GH_Path(i));
             }
 

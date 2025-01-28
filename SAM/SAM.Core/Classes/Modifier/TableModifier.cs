@@ -215,7 +215,7 @@ namespace SAM.Core
             return AddValues(values_Temp);
         }
 
-        public List<double> GetValues(int columnIndex)
+        public List<double> GetColumnValues(int columnIndex)
         {
             if (columnIndex == -1 || headers == null || !headers.ContainsKey(columnIndex) || values == null)
             {
@@ -231,6 +231,22 @@ namespace SAM.Core
                 }
 
                 result.Add(value);
+            }
+
+            return result;
+        }
+
+        public Dictionary<int, double> GetDictionary(int rowIndex)
+        {
+            if(rowIndex < 0 || values == null || values.Count == 0 || values.Count <= rowIndex)
+            {
+                return null;
+            }
+
+            Dictionary<int, double> result = new Dictionary<int, double>();
+            foreach(KeyValuePair<int, double> keyValuePair in values[rowIndex])
+            {
+                result[keyValuePair.Key] = keyValuePair.Value;
             }
 
             return result;
@@ -310,6 +326,19 @@ namespace SAM.Core
             return true;
         }
 
+        public int RowCount
+        {
+            get 
+            {
+                if (values != null)
+                {
+                    return values.Count;
+                }
+
+                return -1;
+            }
+        }
+
         public double[,] GetValues(out List<string> columnHeader, out List<List<string>> rowHeaders)
         {
             columnHeader = null;
@@ -326,7 +355,7 @@ namespace SAM.Core
                 columnHeader = Headers?.ToList();
                 rowHeaders = new List<List<string>>()
                 {
-                    GetValues(headers.Keys.First())?.ConvertAll(x => x.ToString())
+                    GetColumnValues(headers.Keys.First())?.ConvertAll(x => x.ToString())
                 };
 
                 result = new double[values.Count, headers.Count];
@@ -359,7 +388,7 @@ namespace SAM.Core
                 headerIndexes.Add(i);
             }
 
-            IEnumerable<double> uniqueValues = GetValues(columnIndex_ToRemove).Distinct();
+            IEnumerable<double> uniqueValues = GetColumnValues(columnIndex_ToRemove).Distinct();
             foreach(double uniqueValue in uniqueValues)
             {
                 headers_Temp[headers_Temp.Keys.Max() + 1] = uniqueValue.ToString();
@@ -392,7 +421,7 @@ namespace SAM.Core
             rowHeaders = new List<List<string>>();
             foreach(int index in headerIndexes)
             {
-                rowHeaders.Add(tableModifier.GetValues(index).ConvertAll(x => x.ToString()));
+                rowHeaders.Add(tableModifier.GetColumnValues(index).ConvertAll(x => x.ToString()));
             }
 
             headerIndexes.Reverse();
