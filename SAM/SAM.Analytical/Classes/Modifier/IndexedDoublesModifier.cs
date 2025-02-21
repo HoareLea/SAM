@@ -3,26 +3,26 @@ using SAM.Core;
 
 namespace SAM.Analytical
 {
-    public class ProfileModifier : IndexedSimpleModifier
+    public class IndexedDoublesModifier : IndexedSimpleModifier
     {
-        public Profile Profile { get; set; }
+        public IndexedDoubles Values { get; set; }
 
-        public ProfileModifier(ArithmeticOperator arithmeticOperator, Profile profile)
+        public IndexedDoublesModifier(ArithmeticOperator arithmeticOperator, IndexedDoubles values)
         {
             ArithmeticOperator = arithmeticOperator;
-            Profile = profile == null ? null : new Profile(profile);
+            Values = values == null ? null : new IndexedDoubles(values);
         }
 
-        public ProfileModifier(ProfileModifier profileModifier)
-            : base(profileModifier)
+        public IndexedDoublesModifier(IndexedDoublesModifier indexedDoublesModifier)
+            : base(indexedDoublesModifier)
         {
-            if(profileModifier != null)
+            if(indexedDoublesModifier != null)
             {
-                Profile = profileModifier?.Profile == null ? null : new Profile(profileModifier.Profile);
+                Values = indexedDoublesModifier?.Values == null ? null : new IndexedDoubles(indexedDoublesModifier.Values);
             }
         }
 
-        public ProfileModifier(JObject jObject)
+        public IndexedDoublesModifier(JObject jObject)
             :base(jObject)
         {
 
@@ -36,9 +36,9 @@ namespace SAM.Analytical
                 return result;
             }
 
-            if(jObject.ContainsKey("Profile"))
+            if(jObject.ContainsKey("Values"))
             {
-                Profile = Core.Query.IJSAMObject<Profile>(jObject.Value<JObject>("Profile"));
+                Values = Core.Query.IJSAMObject<IndexedDoubles>(jObject.Value<JObject>("Values"));
             }
 
             return result;
@@ -52,9 +52,9 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(Profile != null)
+            if(Values != null)
             {
-                result.Add("Profile", Profile.ToJObject());
+                result.Add("Values", Values.ToJObject());
             }
 
             return result;
@@ -62,27 +62,22 @@ namespace SAM.Analytical
 
         public override bool ContainsIndex(int index)
         {
-            if(Profile == null)
+            if(Values == null)
             {
                 return false;
             }
 
-            if (!Profile.TryGetValue(index, out Profile profile_Temp, out double value))
-            {
-                return false;
-            }
-
-            return true;
+            return Values.ContainsIndex(index);
         }
 
         public override double GetCalculatedValue(int index, double value)
         {
-            if (Profile == null)
+            if (Values == null)
             {
                 return value;
             }
 
-            if (!Profile.TryGetValue(index, out Profile profile_Temp, out double value_Temp))
+            if (!Values.TryGetValue(index, out double value_Temp))
             {
                 return value;
             }
