@@ -67,6 +67,31 @@ namespace SAM.Analytical
 
         }
 
+        public List<string> DayNames
+        {
+            get
+            {
+                return dayNames == null ? values == null ? null : values.Keys.ToList() : new List<string>(dayNames);
+            }
+        }
+
+        public override bool ContainsIndex(int index)
+        {
+            if (values == null)
+            {
+                return false;
+            }
+
+            if (index < 0)
+            {
+                return false;
+            }
+
+            int count = dayNames == null ? values == null ? 0 : values.Count : dayNames.Count;
+
+            return index >= count * 24;
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
@@ -103,13 +128,35 @@ namespace SAM.Analytical
 
             return result;
         }
-
-        public List<string> DayNames
+        
+        public override double GetCalculatedValue(int index, double value)
         {
-            get
+            if (values == null)
             {
-                return dayNames == null ? values == null ? null : values.Keys.ToList() : new List<string>(dayNames);
+                return value;
             }
+
+            List<string> dayNames_Temp = dayNames == null ? values == null ? null : values.Keys.ToList() : dayNames;
+            if (dayNames_Temp == null || dayNames_Temp.Count == 0)
+            {
+                return value;
+            }
+
+            int index_Temp = index % (dayNames_Temp.Count * 24);
+
+            int index_DayName = index_Temp / 24;
+            int index_Hour = index_Temp % 24;
+
+            string dayName = dayNames_Temp[index_DayName];
+
+            double value_Temp = values[dayName][index_Hour];
+
+            if (double.IsNaN(value_Temp))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate(ArithmeticOperator, value, value_Temp);
         }
 
         public double GetValue(string dayName, int index)
@@ -165,53 +212,6 @@ namespace SAM.Analytical
             }
 
             return result;
-        }
-
-        public override bool ContainsIndex(int index)
-        {
-            if(values == null)
-            {
-                return false;
-            }
-
-            if(index < 0)
-            {
-                return false;
-            }
-
-            int count = dayNames == null ? values == null ? 0 : values.Count : dayNames.Count;
-
-            return index >= count * 24;
-        }
-
-        public override double GetCalculatedValue(int index, double value)
-        {
-            if (values == null)
-            {
-                return value;
-            }
-
-            List<string> dayNames_Temp = dayNames == null ? values == null ? null : values.Keys.ToList() : dayNames;
-            if(dayNames_Temp == null || dayNames_Temp.Count == 0)
-            {
-                return value;
-            }
-
-            int index_Temp = index % (dayNames_Temp.Count * 24);
-
-            int index_DayName = index_Temp / 24;
-            int index_Hour = index_Temp % 24;
-
-            string dayName = dayNames_Temp[index_DayName];
-
-            double value_Temp = values[dayName][index_Hour];
-
-            if(double.IsNaN(value_Temp))
-            {
-                return double.NaN;
-            }
-
-            return Core.Query.Calculate(ArithmeticOperator, value, value_Temp);
         }
     }
 }

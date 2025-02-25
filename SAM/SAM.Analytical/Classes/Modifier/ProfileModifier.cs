@@ -5,20 +5,17 @@ namespace SAM.Analytical
 {
     public class ProfileModifier : IndexedSimpleModifier
     {
-        private Profile Profile { get; set; }
-        public double Setback { get; set; }
-
         public ProfileModifier(ArithmeticOperator arithmeticOperator, Profile profile, double setback)
         {
             ArithmeticOperator = arithmeticOperator;
-            Profile = Core.Query.Clone(profile); 
+            Profile = Core.Query.Clone(profile);
             Setback = setback;
         }
 
         public ProfileModifier(ProfileModifier scheduleModifier)
             : base(scheduleModifier)
         {
-            if(scheduleModifier != null)
+            if (scheduleModifier != null)
             {
                 Profile = Core.Query.Clone(scheduleModifier.Profile);
                 Setback = scheduleModifier.Setback;
@@ -26,9 +23,23 @@ namespace SAM.Analytical
         }
 
         public ProfileModifier(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
+        }
+
+        public double Setback { get; set; }
+        
+        private Profile Profile { get; set; }
+        
+        public override bool ContainsIndex(int index)
+        {
+            if (Profile == null)
+            {
+                return false;
+            }
+
+            return Profile.TryGetValue(index, out Profile profile, out double value);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -52,6 +63,26 @@ namespace SAM.Analytical
             return result;
         }
 
+        public override double GetCalculatedValue(int index, double value)
+        {
+            if (!Profile.TryGetValue(index, out Profile profile, out double value_Temp))
+            {
+                return double.NaN;
+            }
+
+            if (value == 1)
+            {
+                return value;
+            }
+
+            if (value == 0)
+            {
+                return Setback;
+            }
+
+            return Setback * value;
+        }
+
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
@@ -71,36 +102,6 @@ namespace SAM.Analytical
             }
 
             return result;
-        }
-
-        public override bool ContainsIndex(int index)
-        {
-            if(Profile == null)
-            {
-                return false;
-            }
-
-            return Profile.TryGetValue(index, out Profile profile, out double value);
-        }
-
-        public override double GetCalculatedValue(int index, double value)
-        {
-            if (!Profile.TryGetValue(index, out Profile profile, out double value_Temp))
-            {
-                return double.NaN;
-            }
-
-            if(value == 1)
-            {
-                return value;
-            }
-
-            if(value == 0)
-            {
-                return Setback;
-            }
-
-            return Setback * value;
         }
     }
 }

@@ -5,8 +5,6 @@ namespace SAM.Analytical
 {
     public class IndexedDoublesModifier : IndexedSimpleModifier
     {
-        public IndexedDoubles Values { get; set; }
-
         public IndexedDoublesModifier(ArithmeticOperator arithmeticOperator, IndexedDoubles values)
         {
             ArithmeticOperator = arithmeticOperator;
@@ -16,16 +14,28 @@ namespace SAM.Analytical
         public IndexedDoublesModifier(IndexedDoublesModifier indexedDoublesModifier)
             : base(indexedDoublesModifier)
         {
-            if(indexedDoublesModifier != null)
+            if (indexedDoublesModifier != null)
             {
                 Values = indexedDoublesModifier?.Values == null ? null : new IndexedDoubles(indexedDoublesModifier.Values);
             }
         }
 
         public IndexedDoublesModifier(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
+        }
+
+        public IndexedDoubles Values { get; set; }
+        
+        public override bool ContainsIndex(int index)
+        {
+            if (Values == null)
+            {
+                return false;
+            }
+
+            return Values.ContainsIndex(index);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -44,6 +54,26 @@ namespace SAM.Analytical
             return result;
         }
 
+        public override double GetCalculatedValue(int index, double value)
+        {
+            if (Values == null)
+            {
+                return value;
+            }
+
+            if (!Values.TryGetValue(index, out double value_Temp))
+            {
+                return value;
+            }
+
+            if (double.IsNaN(value_Temp))
+            {
+                return double.NaN;
+            }
+
+            return Core.Query.Calculate(ArithmeticOperator, value, value_Temp);
+        }
+
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
@@ -58,36 +88,6 @@ namespace SAM.Analytical
             }
 
             return result;
-        }
-
-        public override bool ContainsIndex(int index)
-        {
-            if(Values == null)
-            {
-                return false;
-            }
-
-            return Values.ContainsIndex(index);
-        }
-
-        public override double GetCalculatedValue(int index, double value)
-        {
-            if (Values == null)
-            {
-                return value;
-            }
-
-            if (!Values.TryGetValue(index, out double value_Temp))
-            {
-                return value;
-            }
-
-            if(double.IsNaN(value_Temp))
-            {
-                return double.NaN;
-            }
-
-            return Core.Query.Calculate(ArithmeticOperator, value, value_Temp);
         }
     }
 }
