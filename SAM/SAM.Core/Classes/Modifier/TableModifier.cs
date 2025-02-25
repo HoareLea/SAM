@@ -45,8 +45,12 @@ namespace SAM.Core
                         {
                             sortedDictionary_New[keyValuePair.Key] = keyValuePair.Value;
                         }
+
+                        values.Add(sortedDictionary_New);
                     }
                 }
+
+                Extrapolate = tableModifier.Extrapolate;
             }
         }
 
