@@ -94,6 +94,11 @@ namespace SAM.Analytical.Grasshopper
                     apertures_Result = new List<Aperture>();
                     foreach (Aperture aperture in apertures)
                     {
+                        if(aperture == null)
+                        {
+                            continue;
+                        }
+
                         List<Aperture> apertures_New = panel.AddApertures(new Aperture[] { aperture }, false, Tolerance.MacroDistance, maxDistance);
                         if (apertures_New != null)
                         {
@@ -140,6 +145,11 @@ namespace SAM.Analytical.Grasshopper
                     bool updated = false;
                     foreach (Aperture aperture in apertures)
                     {
+                        if(aperture == null)
+                        {
+                            continue;
+                        }
+                        
                         List<Aperture> apertures_New = Analytical.Modify.AddApertures(panel_New, aperture.ApertureConstruction, aperture.GetFace3D(), false, Tolerance.MacroDistance, maxDistance);
                         if (apertures_New != null && apertures_New.Count > 0)
                         {

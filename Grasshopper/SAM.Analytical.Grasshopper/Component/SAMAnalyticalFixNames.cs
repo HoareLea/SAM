@@ -170,6 +170,11 @@ namespace SAM.Analytical.Grasshopper
                         {
                             foreach (Space space in spaces)
                             {
+                                if(space?.InternalCondition == null)
+                                {
+                                    continue;
+                                }
+
                                 InternalCondition internalCondition = Analytical.Query.ReplaceNameSpecialCharacters(space.InternalCondition, name);
                                 Space space_New = null;
                                 if (internalCondition.Name != space.InternalCondition.Name)
