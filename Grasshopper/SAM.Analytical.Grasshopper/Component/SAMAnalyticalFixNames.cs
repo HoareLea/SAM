@@ -156,7 +156,7 @@ namespace SAM.Analytical.Grasshopper
                                         panel_New = Create.Panel(panel_New);
 
                                         panel_New.RemoveAperture(aperture.Guid);
-                                        panel.AddAperture(aperture_New);
+                                        panel_New.AddAperture(aperture_New);
                                     }
                                 }
 
