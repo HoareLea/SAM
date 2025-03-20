@@ -880,7 +880,7 @@ namespace SAM.Analytical
                         //continue;
                     }
 
-                    if (!shell.IsClosed(silverSpacing))
+                    if (!shell.IsClosed(silverSpacing * 10))
                     {
                         guids[i] = space.Guid;
                         return;
