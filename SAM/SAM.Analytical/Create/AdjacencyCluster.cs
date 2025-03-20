@@ -908,7 +908,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, double elevationGround = 0, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, double elevationGround = 0, double thinnessRatio = 0.001, double minArea = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
             if(shells == null)
             {

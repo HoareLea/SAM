@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -70,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Area", Access = GH_ParamAccess.item };
-                paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
+                paramNumber.SetPersistentData(0.01);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
@@ -226,7 +226,7 @@ namespace SAM.Analytical.Grasshopper
 
 
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, elevationGround, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, elevationGround, 0.001, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)
