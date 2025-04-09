@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -100,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_points");
-            List<global::Rhino.Geometry.Point> points = new List<global::Rhino.Geometry.Point>();
+            List<GH_Point> points = new List<GH_Point>();
             if (index == -1 || !dataAccess.GetDataList(index, points))
             {
                 if (index_In != -1)
@@ -111,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_tolerance_");
             double tolerance = double.NaN;
-            if (index == -1 || !dataAccess.GetData(3, ref tolerance))
+            if (index == -1 || !dataAccess.GetData(index, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -149,9 +150,9 @@ namespace SAM.Analytical.Grasshopper
             tuples_Panel.RemoveAll(x => x.Item2 == null);
 
             Dictionary<Guid, Panel> dictionary_Panel = new Dictionary<Guid, Panel>();
-            foreach(global::Rhino.Geometry.Point point in points)
+            foreach(GH_Point point in points)
             {
-                Point3D point3D = point?.ToSAM();
+                Point3D point3D = point?.Value.ToSAM();
                 if(point3D == null)
                 {
                     continue;
@@ -173,7 +174,7 @@ namespace SAM.Analytical.Grasshopper
                 }
                 else
                 {
-                    dataAccess.SetDataList(index_Out, tuples_Panel?.FindAll(x => !dictionary_Panel.ContainsKey(x.Item1.Guid)));
+                    dataAccess.SetDataList(index_Out, tuples_Panel?.FindAll(x => !dictionary_Panel.ContainsKey(x.Item1.Guid)).ConvertAll(x => x.Item1));
                 }
             }
         }

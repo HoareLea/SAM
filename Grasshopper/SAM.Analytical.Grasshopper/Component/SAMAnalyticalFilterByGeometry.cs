@@ -113,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_insideOnly_");
             bool insideOnly = false;
-            if (index == -1 || !dataAccess.GetData(2, ref insideOnly))
+            if (index == -1 || !dataAccess.GetData(index, ref insideOnly))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -121,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_tolerance_");
             double tolerance = double.NaN;
-            if (index == -1 || !dataAccess.GetData(3, ref tolerance))
+            if (index == -1 || !dataAccess.GetData(index, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
