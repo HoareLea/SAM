@@ -27,6 +27,11 @@ namespace SAM.Core
         {
         }
 
+        public SAMModel(Guid guid, SAMModel sAMModel)
+            : base(guid, sAMModel)
+        {
+        }
+
         public SAMModel(SAMModel sAMModel, string name)
             : base(name, Guid.NewGuid(), sAMModel)
         {
