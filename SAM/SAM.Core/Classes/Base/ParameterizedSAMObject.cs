@@ -15,7 +15,9 @@ namespace SAM.Core
             {
                 parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in parameterizedSAMObject.parameterSets)
+                {
                     parameterSets.Add(parameterSet.Clone());
+                }
             }
         }
 
@@ -25,7 +27,9 @@ namespace SAM.Core
             {
                 this.parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in parameterSets)
+                {
                     this.parameterSets.Add(parameterSet.Clone());
+                }
             }
         }
 
@@ -41,18 +45,26 @@ namespace SAM.Core
         public bool RemoveValue(Enum @enum)
         {
             if (!Query.IsValid(GetType(), @enum))
+            {
                 return false;
+            }
 
             Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
             if (parameterProperties == null)
+            {
                 return false;
+            }
 
             if (!parameterProperties.WriteAccess())
+            {
                 return false;
+            }
 
             string name = parameterProperties.Name;
             if (string.IsNullOrEmpty(name))
+            {
                 return false;
+            }
 
             return Modify.RemoveValue(this, name, @enum.GetType().Assembly);
         }
@@ -67,22 +79,32 @@ namespace SAM.Core
             value = null;
             
             if (!Query.IsValid(GetType(), @enum))
+            {
                 return false;
+            }
 
             Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
             if (parameterProperties == null)
+            {
                 return false;
+            }
 
             if (!parameterProperties.ReadAccess())
+            {
                 return false;
+            }
 
             string name = parameterProperties.Name;
             if (string.IsNullOrEmpty(name))
+            {
                 return false;
+            }
 
             object result = null;
             if (!Query.TryGetValue(this, name, @enum.GetType().Assembly, out result))
+            {
                 return false;
+            }
 
             value = result;
             return true;
@@ -120,7 +142,9 @@ namespace SAM.Core
 
             object result = null;
             if (!Query.TryGetValue(this, name, out result))
+            {
                 return false;
+            }
 
             value = result;
             return true;
@@ -132,7 +156,9 @@ namespace SAM.Core
 
             object result;
             if (!TryGetValue(name, out result))
+            {
                 return false;
+            }
 
             if (result is T)
             {
@@ -152,7 +178,9 @@ namespace SAM.Core
 
             object result;
             if (!TryGetValue(@enum, out result))
+            {
                 return false;
+            }
 
             if (result is T)
             {
@@ -161,7 +189,9 @@ namespace SAM.Core
             }
 
             if (!tryConvert)
+            {
                 return false;
+            }
 
             return Query.TryConvert(result, out value);
         }
@@ -170,7 +200,9 @@ namespace SAM.Core
         {
             object result = null;
             if (!TryGetValue(@enum, out result))
+            {
                 return null;
+            }
 
             return result;
         }
@@ -179,7 +211,9 @@ namespace SAM.Core
         {
             T result = default;
             if (!TryGetValue(@enum, out result, true))
+            {
                 return default;
+            }
 
             return result;
         }
@@ -187,18 +221,26 @@ namespace SAM.Core
         public bool SetValue(Enum @enum, object value)
         {
             if (!Query.IsValid(GetType(), @enum))
+            {
                 return false;
+            }
 
             Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
             if (parameterProperties == null)
+            {
                 return false;
+            }
 
             if (!parameterProperties.WriteAccess())
+            {
                 return false;
+            }
 
             string name = parameterProperties.Name;
             if (string.IsNullOrEmpty(name))
+            {
                 return false;
+            }
 
             object value_Temp = value;
 
@@ -206,7 +248,9 @@ namespace SAM.Core
             if (parameterValue != null)
             {
                 if (!parameterValue.TryConvert(value, out value_Temp))
+                {
                     return false;
+                }
             }
 
             if (value_Temp == null)
