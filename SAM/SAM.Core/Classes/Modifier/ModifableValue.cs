@@ -52,7 +52,7 @@ namespace SAM.Core
 
             if (jObject.ContainsKey("Modifier"))
             {
-                Modifier = Query.IJSAMObject<ISimpleModifier>(jObject.Value<JObject>("Modifier"));
+                Modifier = Query.IJSAMObject<IModifier>(jObject.Value<JObject>("Modifier"));
             }
 
             return true;
