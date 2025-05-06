@@ -77,7 +77,7 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            return point2D_1.AlmostSimilar(point2D_2, tolerance);
+            return point2D_1.Distance(point2D_2) <= tolerance;
         }
     }
 }
