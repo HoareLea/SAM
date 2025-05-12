@@ -12,6 +12,12 @@ namespace SAM.Core
             this.id = id;
         }
 
+        public LongId(int id)
+            : base()
+        {
+            this.id = id;
+        }
+
         public LongId(LongId longId)
             :base(longId)
         {
@@ -35,6 +41,11 @@ namespace SAM.Core
         public static implicit operator LongId(long id)
         {
             return new LongId(id);
+        }
+
+        public static implicit operator LongId(int id)
+        {
+            return new LongId(System.Convert.ToInt64(id));
         }
 
         public override bool FromJObject(JObject jObject)
