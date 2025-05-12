@@ -2,29 +2,29 @@
 
 namespace SAM.Core
 {
-    public class IntegerId : ParameterizedSAMObject, IId
+    public class LongId : ParameterizedSAMObject, IId
     {
-        private int id;
+        private long id;
 
-        public IntegerId(int id)
+        public LongId(long id)
             : base()
         {
             this.id = id;
         }
 
-        public IntegerId(IntegerId integerId)
-            :base(integerId)
+        public LongId(LongId longId)
+            :base(longId)
         {
-            id = integerId.id;
+            id = longId.id;
         }
 
-        public IntegerId(JObject jObject)
+        public LongId(JObject jObject)
             : base(jObject)
         {
 
         }
 
-        public int Id
+        public long Id
         {
             get
             {
@@ -32,9 +32,9 @@ namespace SAM.Core
             }
         }
 
-        public static implicit operator IntegerId(int id)
+        public static implicit operator LongId(long id)
         {
-            return new IntegerId(id);
+            return new LongId(id);
         }
 
         public override bool FromJObject(JObject jObject)
@@ -49,7 +49,7 @@ namespace SAM.Core
                 return false;
             }
 
-            id = jObject.Value<int>("Id");
+            id = jObject.Value<long>("Id");
             return true;
         }
 
