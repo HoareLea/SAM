@@ -5,6 +5,7 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -69,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Area", Access = GH_ParamAccess.item };
-                paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
+                paramNumber.SetPersistentData(0.01);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
@@ -163,6 +164,15 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            index = Params.IndexOfInputParam("tolerance_");
+            double tolerance = Core.Tolerance.Distance;
+            if (index != -1)
+                dataAccess.GetData(index, ref tolerance);
+
+            index = Params.IndexOfInputParam("silverSpacing_");
+            double silverSpacing = Core.Tolerance.MacroDistance;
+            if (index != -1)
+                dataAccess.GetData(index, ref silverSpacing);
 
             List<Shell> shells = new List<Shell>();
             foreach (global::Rhino.Geometry.Brep brep in breps)
@@ -170,6 +180,14 @@ namespace SAM.Analytical.Grasshopper
                 Shell shell = Geometry.Rhino.Convert.ToSAM_Shell(brep);
                 if(shell != null)
                 {
+                    if(!shell.IsClosed(tolerance * 10))
+                    {
+                        if (Geometry.Spatial.Query.TryClose(shell, out Shell shell_Closed, silverSpacing, tolerance * 100) && shell_Closed != null)
+                        {
+                            shell = shell_Closed;
+                        }
+                    }
+
                     shells.Add(shell);
                 }
             }
@@ -199,22 +217,16 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref addMissingPanels);
 
-            index = Params.IndexOfInputParam("silverSpacing_");
-            double silverSpacing = Core.Tolerance.MacroDistance;
-            if (index != -1)
-                dataAccess.GetData(index, ref silverSpacing);
+
 
             index = Params.IndexOfInputParam("minArea_");
             double minArea = Core.Tolerance.MacroDistance;
             if (index != -1)
                 dataAccess.GetData(index, ref minArea);
 
-            index = Params.IndexOfInputParam("tolerance_");
-            double tolerance = Core.Tolerance.Distance;
-            if (index != -1)
-                dataAccess.GetData(index, ref tolerance);
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, elevationGround, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
+
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(shells, elevationGround, 0.001, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)

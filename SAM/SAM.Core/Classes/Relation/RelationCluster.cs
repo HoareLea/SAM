@@ -659,6 +659,21 @@ namespace SAM.Core
             return GetObject(type, guid, out Dictionary<Guid, X> dictionary, out string typeName);
         }
 
+        public X GetObject(ObjectReference objectReference)
+        {
+            if(objectReference == null)
+            {
+                return default;
+            }
+
+            if (!Guid.TryParse(objectReference.Reference?.ToString(), out Guid guid))
+            {
+                return default;
+            }
+
+            return GetObject(objectReference.Type, guid);
+        }
+
         public List<X> GetObjects(IEnumerable<Guid> guids)
         {
             if (guids == null)

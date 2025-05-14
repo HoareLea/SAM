@@ -24,9 +24,14 @@ namespace SAM.Analytical
         /// <param name="boundary2D">The boundary2d.</param>
         public Boundary2D(Boundary2D boundary2D)
         {
-            externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.externalEdge2DLoop);
-            if (boundary2D.internalEdge2DLoops != null)
-                internalEdge2DLoops = boundary2D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
+            if(boundary2D != null)
+            {
+                externalEdge2DLoop = new BoundaryEdge2DLoop(boundary2D.externalEdge2DLoop);
+                if (boundary2D.internalEdge2DLoops != null)
+                {
+                    internalEdge2DLoops = boundary2D.internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
+                }
+            }
         }
 
         /// <summary>
@@ -36,7 +41,7 @@ namespace SAM.Analytical
         public Boundary2D(BoundaryEdge2DLoop edge2DLoop)
             : base()
         {
-            externalEdge2DLoop = new BoundaryEdge2DLoop(edge2DLoop);
+            externalEdge2DLoop = edge2DLoop == null ? null : new BoundaryEdge2DLoop(edge2DLoop);
         }
    
         /// <summary>
@@ -53,7 +58,9 @@ namespace SAM.Analytical
                 externalEdge2DLoop = new BoundaryEdge2DLoop(face3D.GetExternalEdge3D());
                 List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
                 if (internalEdges != null)
+                {
                     internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
+                }
             }
             else
             {
@@ -75,7 +82,9 @@ namespace SAM.Analytical
                 externalEdge2DLoop = new BoundaryEdge2DLoop(face2D.ExternalEdge2D);
                 List<Geometry.Planar.IClosed2D> internalEdges = face2D.InternalEdge2Ds;
                 if (internalEdges != null)
+                {
                     internalEdge2DLoops = internalEdges.ConvertAll(x => new BoundaryEdge2DLoop(x));
+                }
             }
             else
             {
@@ -117,7 +126,9 @@ namespace SAM.Analytical
             get
             {
                 if (internalEdge2DLoops == null)
+                {
                     return null;
+                }
 
                 return internalEdge2DLoops.ConvertAll(x => new BoundaryEdge2DLoop(x));
             }
@@ -145,7 +156,9 @@ namespace SAM.Analytical
         public List<BoundaryEdge3DLoop> GetInternalEdge3DLoops(Plane plane)
         {
             if (internalEdge2DLoops == null)
+            {
                 return null;
+            }
 
             return internalEdge2DLoops.ConvertAll(x => new BoundaryEdge3DLoop(plane, x));
         }
@@ -160,12 +173,14 @@ namespace SAM.Analytical
         public List<IClosedPlanar3D> GetInternalClosedPlanar3Ds(Plane plane)
         {
             if (internalEdge2DLoops == null)
+            {
                 return null;
+            }
 
             List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
             foreach (BoundaryEdge2DLoop edge2DLoop in internalEdge2DLoops)
             {
-                Polygon3D polygon3D = new Polygon3D(edge2DLoop.BoundaryEdge2Ds.ConvertAll(x => ((ICurve3D)plane.Convert(x.Curve2D)).GetStart()));
+                Polygon3D polygon3D = new Polygon3D(edge2DLoop.BoundaryEdge2Ds.ConvertAll(x => plane.Convert(x.Curve2D).GetStart()));
                 result.Add(polygon3D);
             }
 
@@ -188,7 +203,9 @@ namespace SAM.Analytical
         {
             List<Geometry.Planar.IClosed2D> internalClosed2Ds = null;
             if (internalEdge2DLoops != null && internalEdge2DLoops.Count > 0)
+            {
                 internalClosed2Ds = InternalEdge2DLoops.ConvertAll(x => x.GetClosed2D());
+            }
 
             return Geometry.Planar.Create.Face2D(externalEdge2DLoop.GetClosed2D(), internalClosed2Ds);
         }

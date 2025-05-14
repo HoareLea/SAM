@@ -311,12 +311,24 @@ namespace SAM.Core.Grasshopper
                         }
                         else if(Core.Query.IsNumeric(values[j]))
                         {
-                            if (!Core.Query.TryConvert(values[j], out double @double))
+                            if(values[j] is long || values[j] is int)
                             {
-                                @double = double.NaN;
-                            }
+                                if (!Core.Query.TryConvert(values[j], out int @int))
+                                {
+                                    @int = int.MinValue;
+                                }
 
-                            values[j] = new GH_Number(@double);
+                                values[j] = new GH_Integer(@int);
+                            }
+                            else
+                            {
+                                if (!Core.Query.TryConvert(values[j], out double @double))
+                                {
+                                    @double = double.NaN;
+                                }
+
+                                values[j] = new GH_Number(@double);
+                            }
                         }
                         else
                         {

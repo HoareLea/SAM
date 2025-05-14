@@ -27,7 +27,7 @@ namespace SAM.Core
 
         }
 
-        public virtual bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
             if(!result)
@@ -43,7 +43,7 @@ namespace SAM.Core
             return result;
         }
 
-        public virtual JObject ToJObject()
+        public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
             if(result == null)

@@ -11,19 +11,19 @@ namespace SAM.Geometry
 
         public Face(IClosed2D closed2D)
         {
-            if (closed2D == null)
-                return;
-
-            if (closed2D is Face)
+            if (closed2D != null)
             {
-                Face face = (Face)closed2D;
-                externalEdge2D = (IClosed2D)face.externalEdge2D.Clone();
-                if (face.internalEdge2Ds != null)
-                    internalEdge2Ds = face.internalEdge2Ds.ConvertAll(x => (IClosed2D)x.Clone());
-            }
-            else
-            {
-                externalEdge2D = (IClosed2D)closed2D.Clone();
+                if (closed2D is Face)
+                {
+                    Face face = (Face)closed2D;
+                    externalEdge2D = (IClosed2D)face.externalEdge2D.Clone();
+                    if (face.internalEdge2Ds != null)
+                        internalEdge2Ds = face.internalEdge2Ds.ConvertAll(x => (IClosed2D)x.Clone());
+                }
+                else
+                {
+                    externalEdge2D = (IClosed2D)closed2D.Clone();
+                }
             }
         }
 
@@ -37,7 +37,9 @@ namespace SAM.Geometry
             externalEdge2D = Planar.Create.IClosed2D(jObject.Value<JObject>("ExternalEdge2D"));
 
             if (jObject.ContainsKey("InternalEdge2Ds"))
+            {
                 internalEdge2Ds = Core.Create.IJSAMObjects<IClosed2D>(jObject.Value<JArray>("InternalEdge2Ds"));
+            }
 
             return true;
         }

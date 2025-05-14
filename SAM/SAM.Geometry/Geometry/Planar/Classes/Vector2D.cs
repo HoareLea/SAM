@@ -14,7 +14,10 @@ namespace SAM.Geometry.Planar
 
         public Vector2D(Point2D start, Point2D end)
         {
-            coordinates = new double[2] { end[0] - start[0], end[1] - start[1] };
+            if(start != null && end != null)
+            {
+                coordinates = new double[2] { end[0] - start[0], end[1] - start[1] };
+            }
         }
 
         public Vector2D()
@@ -24,14 +27,20 @@ namespace SAM.Geometry.Planar
 
         public Vector2D(Vector2D vector)
         {
-            coordinates[0] = vector.coordinates[0];
-            coordinates[1] = vector.coordinates[1];
+            if(vector != null)
+            {
+                coordinates[0] = vector.coordinates[0];
+                coordinates[1] = vector.coordinates[1];
+            }
         }
 
         public Vector2D(double[] coordinates)
         {
-            coordinates[0] = this.coordinates[0];
-            coordinates[1] = this.coordinates[1];
+            if(coordinates != null && coordinates.Length > 1)
+            {
+                this.coordinates[0] = coordinates[0];
+                this.coordinates[1] = coordinates[1];
+            }
         }
 
         public Vector2D(JObject jObject)

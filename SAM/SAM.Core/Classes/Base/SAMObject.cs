@@ -12,8 +12,11 @@ namespace SAM.Core
         public SAMObject(SAMObject sAMObject)
             : base(sAMObject)
         {
-            guid = sAMObject.Guid;
-            name = sAMObject.Name;
+            if(sAMObject != null)
+            {
+                guid = sAMObject.Guid;
+                name = sAMObject.Name;
+            }
         }
 
         public SAMObject(string name, SAMObject sAMObject)

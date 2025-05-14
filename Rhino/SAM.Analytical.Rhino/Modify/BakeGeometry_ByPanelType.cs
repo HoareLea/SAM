@@ -1,7 +1,5 @@
-﻿using MathNet.Numerics;
-using Rhino;
+﻿using Rhino;
 using Rhino.DocObjects;
-using Rhino.Render;
 using System;
 using System.Collections.Generic;
 

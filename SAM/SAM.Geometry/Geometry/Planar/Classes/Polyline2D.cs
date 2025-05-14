@@ -11,21 +11,31 @@ namespace SAM.Geometry.Planar
 
         public Polyline2D(IEnumerable<Point2D> point2Ds, bool close = false)
         {
-            points = Query.Clone(point2Ds);
-            if (close && !IsClosed())
-                points.Add(points.First());
+            if(point2Ds != null)
+            {
+                points = Query.Clone(point2Ds);
+                if (close && !IsClosed())
+                {
+                    points.Add(points.First());
+                }
+            }
         }
 
         public Polyline2D(IEnumerable<Segment2D> segment2Ds)
         {
-            points = new List<Point2D>() { segment2Ds.ElementAt(0).GetStart() };
-            foreach (Segment2D segment2D in segment2Ds)
-                points.Add(segment2D.GetEnd());
+            if(segment2Ds != null && segment2Ds.Count() != 0)
+            {
+                points = new List<Point2D>() { segment2Ds.ElementAt(0).GetStart() };
+                foreach (Segment2D segment2D in segment2Ds)
+                {
+                    points.Add(segment2D.GetEnd());
+                }
+            }
         }
 
         public Polyline2D(Polyline2D polyline2D)
         {
-            points = Query.Clone(polyline2D.points);
+            points = Query.Clone(polyline2D?.points);
         }
 
         public Polyline2D(JObject jObject)

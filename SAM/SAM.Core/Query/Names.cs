@@ -128,6 +128,11 @@ namespace SAM.Core
                     }
                 }
 
+                if(methodInfo.Name == "Duplicate")
+                {
+                    continue;
+                }
+
                 result.Add(methodInfo.Name);
             }
 

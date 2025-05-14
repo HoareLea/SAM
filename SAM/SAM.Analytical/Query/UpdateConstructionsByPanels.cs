@@ -79,7 +79,7 @@ namespace SAM.Analytical
                     if(intersectionAreas[0]/area < areaFactor)
                     {
                         panel_Updated = new Panel(panel, null);
-                        panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
+    
                         if (panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
                         {
                             panel_Updated.FlipNormal(true, false);
