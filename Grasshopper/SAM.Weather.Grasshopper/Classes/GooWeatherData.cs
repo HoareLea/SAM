@@ -32,7 +32,7 @@ namespace SAM.Weather.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("3de17bc3-6f46-4b97-ad5a-ce311ac9c02f");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         bool IGH_PreviewObject.Hidden { get; set; }
 

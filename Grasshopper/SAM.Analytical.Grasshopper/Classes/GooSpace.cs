@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("bbb45545-17b3-49be-b177-db284b2087f3");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         bool IGH_PreviewObject.Hidden { get; set; }
 

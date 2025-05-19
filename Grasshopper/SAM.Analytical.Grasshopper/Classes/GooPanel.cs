@@ -262,7 +262,7 @@ namespace SAM.Analytical.Grasshopper
         
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         bool IGH_PreviewObject.Hidden { get; set; }
 
@@ -485,16 +485,16 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            Menu_AppendItem(menu, "Show All", Menu_ShowAll, VolatileData.AllData(true).Any(), showAll).Tag = showAll;
+            Menu_AppendItem(menu, "Show All", Menu_ShowAll, Core.Convert.ToBitmap(Resources.SAM3) , VolatileData.AllData(true).Any(), showAll).Tag = showAll;
 
-            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
 
             if (System.IO.File.Exists(Query.AnalyticalUIPath()))
             {
-                Menu_AppendItem(menu, "Open in UI", Menu_OpenInUI, VolatileData.AllData(true).Any());
+                Menu_AppendItem(menu, "Open in UI", Menu_OpenInUI, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
             }
 
             base.AppendAdditionalMenuItems(menu);

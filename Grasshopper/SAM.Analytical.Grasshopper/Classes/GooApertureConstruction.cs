@@ -64,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("9b821163-e775-48d9-aee8-dc4d51c4186b");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooApertureConstructionParam()
             : base(typeof(ApertureConstruction).Name, typeof(ApertureConstruction).Name, typeof(ApertureConstruction).FullName.Replace(".", " "), "Params", "SAM")

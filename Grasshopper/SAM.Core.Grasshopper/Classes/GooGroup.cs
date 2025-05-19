@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooGroupParam()
             : base("Group", "Group", "SAM Core Group", "Params", "SAM")

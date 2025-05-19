@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -150,8 +150,8 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Resources.SAM_Small, true, false);
-            Menu_AppendItem(menu, "Ladybug.Tools - EPW Map", Menu_GoTo_LadybugTools, Resources.SAM_Small, true, false);
+            Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
+            Menu_AppendItem(menu, "Ladybug.Tools - EPW Map", Menu_GoTo_LadybugTools, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
         }
 
         void Menu_GoTo_OneBuilding(object sender, EventArgs e)

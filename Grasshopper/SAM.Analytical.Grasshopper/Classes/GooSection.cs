@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooSectionParam()
             : base(typeof(ISection).Name, typeof(ISection).Name, typeof(ISection).FullName.Replace(".", " "), "Params", "SAM")

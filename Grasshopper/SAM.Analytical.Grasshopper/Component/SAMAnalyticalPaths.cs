@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -44,8 +44,8 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Resources.SAM_Small, true, false);
-            Menu_AppendItem(menu, "Set Default Directory", Menu_SetDefaultDirectory, Resources.SAM_Small, true, false);
+            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
+            Menu_AppendItem(menu, "Set Default Directory", Menu_SetDefaultDirectory, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
         }
 
         /// <summary>

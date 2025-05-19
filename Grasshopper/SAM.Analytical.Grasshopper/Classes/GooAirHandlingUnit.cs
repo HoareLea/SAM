@@ -4,6 +4,8 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -31,7 +33,16 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("d1fc7f31-a0d6-4431-9f15-ba98668888eb");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override Bitmap Icon
+        {
+            get
+            {
+                using (var ms = new MemoryStream(Resources.SAM_Small))
+                {
+                    return new Bitmap(ms);
+                }
+            }
+        }
 
         public GooAirHandlingUnitParam()
             : base(typeof(AirHandlingUnit).Name, typeof(AirHandlingUnit).Name, typeof(AirHandlingUnit).FullName.Replace(".", " "), "Params", "SAM")

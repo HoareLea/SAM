@@ -106,7 +106,7 @@ namespace SAM.Architectural.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("cb6524ab-7111-454a-b6be-5e23007c794c");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooMaterialLayerParam()
             : base(typeof(MaterialLayer).Name, typeof(MaterialLayer).Name, typeof(MaterialLayer).FullName.Replace(".", " "), "Params", "SAM")

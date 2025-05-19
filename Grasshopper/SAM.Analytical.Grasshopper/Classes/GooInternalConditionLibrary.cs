@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("33c1494a-aece-4ac4-a413-a7cb79795579");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooInternalConditionLibraryParam()
             : base(typeof(InternalConditionLibrary).Name, typeof(InternalConditionLibrary).Name, typeof(InternalConditionLibrary).FullName.Replace(".", " "), "Params", "SAM")

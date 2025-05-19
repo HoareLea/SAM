@@ -50,7 +50,7 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("dc71d798-1059-4a71-a892-891d62cb7fda");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooSystemParam()
             : base("System", "System", "SAM Core System", "Params", "SAM")

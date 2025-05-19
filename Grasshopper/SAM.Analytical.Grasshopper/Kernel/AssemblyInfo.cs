@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
-                return Properties.Resources.SAM_Small; ;
+                return Core.Convert.ToBitmap(Properties.Resources.SAM_Small);
             }
         }
 
@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 //Return a 24x24 pixel bitmap to represent this GHA library.
-                return Properties.Resources.SAM_Small; ;
+                return Core.Convert.ToBitmap(Properties.Resources.SAM_Small);
             }
         }
 

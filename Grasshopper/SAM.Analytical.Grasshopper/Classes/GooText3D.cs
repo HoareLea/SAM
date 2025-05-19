@@ -165,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooText3DParam()
             : base(typeof(global::Rhino.Display.Text3d).Name, typeof(global::Rhino.Display.Text3d).Name, typeof(global::Rhino.Display.Text3d).FullName.Replace(".", " "), "Params", "SAM")

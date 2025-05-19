@@ -30,7 +30,7 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("ce7b8666-f1e6-4931-9e86-1b4da97a5056");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooLocationParam()
             : base(typeof(Location).Name, typeof(Location).Name, typeof(Location).FullName.Replace(".", " "), "Params", "SAM")

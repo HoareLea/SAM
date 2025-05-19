@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("1D59B4F4-8930-48dF-9ADF-C39Fa7D1DB53");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooExternalSpaceParam()
             : base(typeof(ExternalSpace).Name, typeof(ExternalSpace).Name, typeof(ExternalSpace).FullName.Replace(".", " "), "Params", "SAM")

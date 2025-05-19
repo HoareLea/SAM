@@ -31,7 +31,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("e795b603-ca16-4362-9052-5979474c2c92");
 
-        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooAnalyticalEquipmentParam()
             : base(typeof(IAnalyticalEquipment).Name, typeof(IAnalyticalEquipment).Name, typeof(IAnalyticalEquipment).FullName.Replace(".", " "), "Params", "SAM")
