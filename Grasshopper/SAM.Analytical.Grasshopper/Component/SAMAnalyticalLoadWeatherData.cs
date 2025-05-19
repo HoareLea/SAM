@@ -150,8 +150,8 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
-            Menu_AppendItem(menu, "Ladybug.Tools - EPW Map", Menu_GoTo_LadybugTools, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
+            Menu_AppendItem(menu, "Climate.OneBuilding.Org", Menu_GoTo_OneBuilding, Core.Convert.ToBitmap(Resources.SAM3), true, false);
+            Menu_AppendItem(menu, "Ladybug.Tools - EPW Map", Menu_GoTo_LadybugTools, Core.Convert.ToBitmap(Resources.SAM3), true, false);
         }
 
         void Menu_GoTo_OneBuilding(object sender, EventArgs e)

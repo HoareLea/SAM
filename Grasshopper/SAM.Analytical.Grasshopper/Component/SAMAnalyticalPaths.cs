@@ -44,8 +44,8 @@ namespace SAM.Analytical.Grasshopper
             base.AppendAdditionalMenuItems(menu);
 
             Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
-            Menu_AppendItem(menu, "Set Default Directory", Menu_SetDefaultDirectory, Core.Convert.ToBitmap(Resources.SAM_Small), true, false);
+            Menu_AppendItem(menu, "Go to Directory", Menu_GoToDirectory, Core.Convert.ToBitmap(Resources.SAM3), true, false);
+            Menu_AppendItem(menu, "Set Default Directory", Menu_SetDefaultDirectory, Core.Convert.ToBitmap(Resources.SAM3), true, false);
         }
 
         /// <summary>

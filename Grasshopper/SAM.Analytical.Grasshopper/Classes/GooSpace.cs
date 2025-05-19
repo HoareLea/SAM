@@ -246,9 +246,9 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            Menu_AppendItem(menu, "Bake By Internal Condition", Menu_BakeByInternalCondition, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Level", Menu_BakeByLevel, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Internal Condition", Menu_BakeByInternalCondition, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Level", Menu_BakeByLevel, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
 
             //Menu_AppendSeparator(menu);
 

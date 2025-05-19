@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
 
             foreach (string name in names)
-                Menu_AppendItem(menu, name, Menu_Changed, true, name == this.name).Tag = name;
+                Menu_AppendItem(menu, name, Menu_Changed, Core.Convert.ToBitmap(Resources.SAM3), true, name == this.name).Tag = name;
         }
 
         private void Menu_Changed(object sender, EventArgs e)

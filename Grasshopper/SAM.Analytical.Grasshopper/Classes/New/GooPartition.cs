@@ -444,10 +444,10 @@ namespace SAM.Analytical.Grasshopper
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
 
-            Menu_AppendItem(menu, "Show All", Menu_ShowAll, VolatileData.AllData(true).Any(), showAll).Tag = showAll;
+            Menu_AppendItem(menu, "Show All", Menu_ShowAll, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any(), showAll).Tag = showAll;
 
-            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Category", Menu_BakeByCategory, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Category", Menu_BakeByCategory, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
 
             //Menu_AppendSeparator(menu);
 

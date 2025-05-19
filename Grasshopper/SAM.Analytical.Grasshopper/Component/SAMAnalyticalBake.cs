@@ -103,7 +103,7 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                Menu_AppendItem(menu, panelBakeMethod_Temp.ToString(), Menu_Changed, true, panelBakeMethod_Temp.Equals(panelBakeMethod)).Tag = panelBakeMethod_Temp;
+                Menu_AppendItem(menu, panelBakeMethod_Temp.ToString(), Menu_Changed, Core.Convert.ToBitmap(Resources.SAM3), true, panelBakeMethod_Temp.Equals(panelBakeMethod)).Tag = panelBakeMethod_Temp;
             }
 
             base.AppendAdditionalComponentMenuItems(menu);

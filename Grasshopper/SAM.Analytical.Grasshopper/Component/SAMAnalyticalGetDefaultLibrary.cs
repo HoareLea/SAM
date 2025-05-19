@@ -82,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
                 if (string.IsNullOrWhiteSpace(name))
                     continue;
 
-                Menu_AppendItem(menu, name, Menu_Changed, true, @enum.ToString() == value).Tag = @enum;
+                Menu_AppendItem(menu, name, Menu_Changed, Core.Convert.ToBitmap(Resources.SAM3), true, @enum.ToString() == value).Tag = @enum;
             }
                 
         }

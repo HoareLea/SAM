@@ -227,12 +227,12 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(System.Windows.Forms.ToolStripDropDown menu)
         {
-            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByApertureType, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByApertureConstruction, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Type With Frame", Menu_BakeByApertureTypeWithFrame, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Construction With Frame", Menu_BakeByApertureConstructionWithFrame, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, VolatileData.AllData(true).Any());
-            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type", Menu_BakeByApertureType, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByApertureConstruction, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Type With Frame", Menu_BakeByApertureTypeWithFrame, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Construction With Frame", Menu_BakeByApertureConstructionWithFrame, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
+            Menu_AppendItem(menu, "Save As...", Menu_SaveAs, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
 
             base.AppendAdditionalMenuItems(menu);
         }
