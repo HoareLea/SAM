@@ -265,7 +265,7 @@ namespace SAM.Core.Grasshopper
 
         public virtual void OnSourceCodeClick(object sender = null, object e = null)
         {
-            Process.Start("https://github.com/HoareLea/SAM");
+            Core.Query.StartProcess("https://github.com/HoareLea/SAM");
         }
 
         public string ComponentVersion

@@ -156,12 +156,12 @@ namespace SAM.Analytical.Grasshopper
 
         void Menu_GoTo_OneBuilding(object sender, EventArgs e)
         {
-            Process.Start(@"https://climate.onebuilding.org/WMO_Region_6_Europe/default.html");
+            Core.Query.StartProcess(@"https://climate.onebuilding.org/WMO_Region_6_Europe/default.html");
         }
 
         void Menu_GoTo_LadybugTools(object sender, EventArgs e)
         {
-            Process.Start(@"https://www.ladybug.tools/epwmap/");
+            Core.Query.StartProcess(@"https://www.ladybug.tools/epwmap/");
         }
     }
 }

@@ -254,7 +254,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            Process.Start(directory);
+            Core.Query.StartProcess(directory);
         }
 
         void Menu_SetDefaultDirectory(object sender, EventArgs e)

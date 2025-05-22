@@ -50,7 +50,7 @@ namespace SAM.Core.Grasshopper
                     link = link_Temp;
             }
 
-            Process.Start(link);
+            Core.Query.StartProcess(link);
         }
     }
 }
