@@ -16,6 +16,15 @@
                 }
             }
 
+            if (!System.IO.Path.Exists(path))
+            {
+                string path_Temp = System.IO.Path.Combine(System.Environment.GetFolderPath(System.Environment.SpecialFolder.ApplicationData), "SAM", fileName);
+                if (System.IO.Path.Exists(path_Temp))
+                {
+                    path = path_Temp;
+                }
+            }
+
             return path;
         }
     }
