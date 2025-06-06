@@ -16,5 +16,8 @@ namespace SAM.Analytical
         [ParameterProperties("Light Transmittance", "Light Transmittance (LT Value) [-]"), DoubleParameterValue(0, 1)] LightTransmittance,
         [ParameterProperties("Total Solar Energy Transmittance", "Total Solar Energy Transmittance (g Value) [-]"), DoubleParameterValue(0, 1)] TotalSolarEnergyTransmittance,
         [ParameterProperties("Thermal Transmittance", "Thermal Transmittance (U Value) [-]"), DoubleParameterValue()] ThermalTransmittance,
+
+        [ParameterProperties("Pane Additional Heat Transfer", "Pane Additional Heat Transfer [%]"), DoubleParameterValue(-50, 150)] PaneAdditionalHeatTransfer,
+        [ParameterProperties("Frame Additional Heat Transfer", "Frame Additional Heat Transfer [%]"), DoubleParameterValue(-50, 150)] FrameAdditionalHeatTransfer,
     }
 }

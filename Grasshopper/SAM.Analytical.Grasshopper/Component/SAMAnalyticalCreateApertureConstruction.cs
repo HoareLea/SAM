@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,7 +46,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Space Name, Default = Space_Default", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "apertureType_", NickName = "apertureType_", Description = "ApertureType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "paneConstructionLayers_", NickName = "paneConstructionLayers_", Description = "SAM Pane Contruction Layers \n* order from Inside to Outside", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "paneAdditionalHeatTransfer_", NickName = "paneAdditionalHeatTransfer_", Description = "Pane Additional Heat Transfer", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "frameConstructionLayers_", NickName = "frameConstructionLayers_", Description = "SAM Frame Contruction Layers", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frameAdditionalHeatTransfer_", NickName = "frameAdditionalHeatTransfer_", Description = "Frame Additional Heat Transfer", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -125,6 +127,26 @@ namespace SAM.Analytical.Grasshopper
                 if (dataAccess.GetDataList(index, constructionLayers))
                 {
                     apertureConstruction = new ApertureConstruction(apertureConstruction, apertureConstruction.PaneConstructionLayers, constructionLayers);
+                }
+            }
+
+            index = Params.IndexOfInputParam("paneAdditionalHeatTransfer_");
+            if (index != 1)
+            {
+                double paneAdditionalHeatTransfer = double.NaN;
+                if(dataAccess.GetData(index, ref paneAdditionalHeatTransfer) && !double.IsNaN(paneAdditionalHeatTransfer))
+                {
+                    apertureConstruction.SetValue(ApertureConstructionParameter.PaneAdditionalHeatTransfer, paneAdditionalHeatTransfer);
+                }
+            }
+
+            index = Params.IndexOfInputParam("frameAdditionalHeatTransfer_");
+            if (index != 1)
+            {
+                double frameAdditionalHeatTransfer = double.NaN;
+                if (dataAccess.GetData(index, ref frameAdditionalHeatTransfer) && !double.IsNaN(frameAdditionalHeatTransfer))
+                {
+                    apertureConstruction.SetValue(ApertureConstructionParameter.FrameAdditionalHeatTransfer, frameAdditionalHeatTransfer);
                 }
             }
 
