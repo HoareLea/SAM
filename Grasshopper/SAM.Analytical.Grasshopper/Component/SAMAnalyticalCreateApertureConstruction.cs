@@ -131,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("paneAdditionalHeatTransfer_");
-            if (index != 1)
+            if (index != -1)
             {
                 double paneAdditionalHeatTransfer = double.NaN;
                 if(dataAccess.GetData(index, ref paneAdditionalHeatTransfer) && !double.IsNaN(paneAdditionalHeatTransfer))
@@ -141,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("frameAdditionalHeatTransfer_");
-            if (index != 1)
+            if (index != -1)
             {
                 double frameAdditionalHeatTransfer = double.NaN;
                 if (dataAccess.GetData(index, ref frameAdditionalHeatTransfer) && !double.IsNaN(frameAdditionalHeatTransfer))
