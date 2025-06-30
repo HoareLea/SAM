@@ -2,8 +2,6 @@
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
@@ -43,8 +41,8 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_number", NickName = "_number", Description = "Number", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
-                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "numberOfDecimals_", NickName = "numberOfDecimals_", Description = "Number Of Decimals", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_number", NickName = "_number", Description = "Number", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "numberOfDecimals_", NickName = "numberOfDecimals_", Description = "Number Of Decimals", Access = GH_ParamAccess.item, Optional = true };
                 param_Integer.SetPersistentData(2);
                 result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
 
@@ -57,7 +55,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Number", NickName = "Number", Description = "Number", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "Number", NickName = "Number", Description = "Number", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
