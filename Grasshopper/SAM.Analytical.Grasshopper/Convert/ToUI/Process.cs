@@ -41,10 +41,7 @@ namespace SAM.Analytical.Grasshopper
                 TemporaryFile = true
             };
 
-            Process result = new Process();
-            result.StartInfo.FileName = path;
-            result.StartInfo.Arguments = startupOptions.ToString();
-            result.Start();
+            Process result = Core.Query.StartProcess(path, startupOptions?.ToString());
 
             return result;
         }
