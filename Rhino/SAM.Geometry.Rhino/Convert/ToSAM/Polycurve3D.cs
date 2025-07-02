@@ -6,7 +6,7 @@ namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
     {
-        public static ISAMGeometry3D ToSAM(this global::Rhino.Geometry.PolyCurve polyCurve)
+        public static ISAMGeometry3D ToSAM(this global::Rhino.Geometry.PolyCurve polyCurve, double tolerance = Core.Tolerance.Distance)
         {
             List<global::Rhino.Geometry.Curve> curves = polyCurve.Explode().ToList();
 
@@ -28,6 +28,17 @@ namespace SAM.Geometry.Rhino
                 }
 
                 point3Ds.Add(((Segment3D)curve3Ds.Last()).GetEnd());
+
+                if(point3Ds.Count > 2)
+                {
+                    if(point3Ds.First().AlmostEquals(point3Ds.Last(), tolerance) && polyCurve.IsPlanar() && polyCurve.TryGetPlane(out global::Rhino.Geometry.Plane plane))
+                    {
+                        Plane plane_SAM = plane.ToSAM(); 
+
+                        point3Ds.RemoveAt(0);
+                        return new Polygon3D(plane_SAM, point3Ds.ConvertAll(x => plane_SAM.Convert(x)));
+                    }
+                }
 
                 return new Polyline3D(point3Ds);
             }
