@@ -1,7 +1,9 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
@@ -107,8 +109,9 @@ namespace SAM.Core.Grasshopper
             }
 
             List<object> result = null;
+
             if (type == null)
-                result = (relationCluster as dynamic).GetRelatedObjects(sAMObject)?.Cast<object>().ToList();
+                result = ((relationCluster as dynamic).GetRelatedObjects(sAMObject) as IEnumerable)?.Cast<object>().ToList();
             else
                 result = (relationCluster as dynamic).GetRelatedObjects(sAMObject, type);
 
