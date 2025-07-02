@@ -6,7 +6,7 @@ namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
-        public static List<Polygon3D> Polygon3Ds(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, Plane plane, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Polygon3D> Polygon3Ds(this IEnumerable<IClosedPlanar3D> closedPlanar3Ds, Plane plane, bool checkIntersection = true, bool union = true, double tolerance = Core.Tolerance.Distance)
         {
             if (closedPlanar3Ds == null || plane == null)
                 return null;
@@ -77,7 +77,10 @@ namespace SAM.Geometry.Spatial
             if (polygon2Ds == null || polygon2Ds.Count == 0)
                 return null;
 
-            polygon2Ds = polygon2Ds.Union(tolerance);
+            if(union)
+            {
+                polygon2Ds = polygon2Ds.Union(tolerance);
+            }
 
             List<Polygon3D> result = new List<Polygon3D>();
 

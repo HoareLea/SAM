@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
                     panelType = Analytical.Query.PanelType(objectWrapper.Value);
             }
 
-            List<Panel> panels_Result = Create.Panels(panels, plane, panelType, true);
+            List<Panel> panels_Result = Create.Panels(panels, plane, panelType, true, false);
 
             List<Panel> panels_Upper = new List<Panel>();
             List<Panel> panels_Lower = new List<Panel>();

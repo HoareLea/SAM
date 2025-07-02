@@ -90,7 +90,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public static List<Panel> Panels(this IEnumerable<Panel> panels, Plane plane, PanelType panelType = PanelType.Undefined, bool checkIntersection = true, double tolerance = Core.Tolerance.Distance)
+        public static List<Panel> Panels(this IEnumerable<Panel> panels, Plane plane, PanelType panelType = PanelType.Undefined, bool checkIntersection = true, bool union = true, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || plane == null)
                 return null;
@@ -108,7 +108,7 @@ namespace SAM.Analytical
                 closedPlanar3Ds.Add(face3D);
             }
 
-            List<Polygon3D> polygon3Ds = Geometry.Spatial.Create.Polygon3Ds(closedPlanar3Ds, plane, checkIntersection, tolerance);
+            List<Polygon3D> polygon3Ds = Geometry.Spatial.Create.Polygon3Ds(closedPlanar3Ds, plane, checkIntersection, union, tolerance);
             if (polygon3Ds == null || polygon3Ds.Count == 0)
                 return null;
 
