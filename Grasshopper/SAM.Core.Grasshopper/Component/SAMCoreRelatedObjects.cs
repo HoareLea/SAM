@@ -108,7 +108,7 @@ namespace SAM.Core.Grasshopper
 
             List<object> result = null;
             if (type == null)
-                result = (relationCluster as dynamic).GetRelatedObjects(sAMObject);
+                result = (relationCluster as dynamic).GetRelatedObjects(sAMObject)?.Cast<object>().ToList();
             else
                 result = (relationCluster as dynamic).GetRelatedObjects(sAMObject, type);
 
