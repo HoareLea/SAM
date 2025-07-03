@@ -1,12 +1,13 @@
 ﻿//using ClipperLib;
+using NetTopologySuite.Geometries;
+using NetTopologySuite.Noding.Snapround;
+using NetTopologySuite.Operation.Buffer;
+using NetTopologySuite.Operation.Polygonize;
+using NetTopologySuite.Operation.Valid;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
-using NetTopologySuite.Operation.Buffer;
-using NetTopologySuite.Geometries;
-using NetTopologySuite.Noding.Snapround;
-using NetTopologySuite.Operation.Polygonize;
 
 namespace SAM.Geometry.Planar
 {
@@ -296,6 +297,12 @@ namespace SAM.Geometry.Planar
 
             try
             {
+                NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
+
+                bool isValid = geometry.IsValid;
+
+                IsValidOp isValidOp = new IsValidOp(geometry);
+
                 BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, bufferParameters);
                 segmentStrings = bufferCurveSetBuilder.GetCurves();
             }
