@@ -8,7 +8,7 @@
   </PropertyGroup>
   <PropertyGroup>
     <Nullable>enable</Nullable>
-    <LangVersion>9.0</LangVersion>
+    <LangVersion>12.0</LangVersion>
     <AssemblyTitle>SAM</AssemblyTitle>
     <Product>SAM</Product>
     <Copyright>Copyright ©  2020</Copyright>

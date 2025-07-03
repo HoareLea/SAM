@@ -293,44 +293,48 @@ namespace SAM.Geometry.Planar
                 geometry = new Polygon((LinearRing)lineString);
             }
 
-            IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = null;
-
-            try
-            {
-                NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
-
-                bool isValid = geometry.IsValid;
-
-                IsValidOp isValidOp = new IsValidOp(geometry);
-
-                BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, bufferParameters);
-                segmentStrings = bufferCurveSetBuilder.GetCurves();
-            }
-            catch
+            if(geometry == null || !geometry.IsValid)
             {
                 return null;
             }
 
-            //OffsetCurveSetBuilder offsetCurveSetBuilder = new OffsetCurveSetBuilder(geometry, offset, new OffsetCurveBuilder(precisionModel, bufferParameters));
-            //IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = offsetCurveSetBuilder.GetCurves();
+            List<LineString> lineStrings = null;
 
-            List<LineString> lineStrings = new List<LineString>();
-            foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
+            try
             {
-                NetTopologySuite.Noding.NodedSegmentString nodedSegmentString = segmentString as NetTopologySuite.Noding.NodedSegmentString;
+                BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, bufferParameters);
+                IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = segmentStrings = bufferCurveSetBuilder.GetCurves();
 
-                if (nodedSegmentString == null)
+                lineStrings = new List<LineString>();
+                foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
                 {
-                    continue;
+                    NetTopologySuite.Noding.NodedSegmentString nodedSegmentString = segmentString as NetTopologySuite.Noding.NodedSegmentString;
+
+                    if (nodedSegmentString == null)
+                    {
+                        continue;
+                    }
+
+                    for (int i = 0; i < nodedSegmentString.Count - 1; i++)
+                    {
+                        lineStrings.Add(nodedSegmentString[i].ToGeometry(geometryFactory));
+                    }
                 }
 
-                for (int i = 0; i < nodedSegmentString.Count - 1; i++)
-                {
-                    lineStrings.Add(nodedSegmentString[i].ToGeometry(geometryFactory));
-                }
+                lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
+
+            }
+            catch
+            {
+                NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
+                lineStrings = new GeometryNoder(precisionModel).Node([geometry_Temp]).ToList();
             }
 
-            lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
+            if(lineStrings == null || lineStrings.Count == 0)
+            {
+                return null;
+            }
+            
             if(lineString.IsClosed)
             {
                 double offset_Abs = System.Math.Abs(offset) - (tolerance * 10); // given tolerance has to be greater than input tolerance so multiply by 10
