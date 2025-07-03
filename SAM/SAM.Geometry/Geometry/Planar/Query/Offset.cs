@@ -327,7 +327,10 @@ namespace SAM.Geometry.Planar
             catch
             {
                 NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
-                lineStrings = new GeometryNoder(precisionModel).Node([geometry_Temp]).ToList();
+                if(geometry_Temp.IsValid && !geometry_Temp.IsEmpty)
+                {
+                    lineStrings = new GeometryNoder(precisionModel).Node([geometry_Temp]).ToList();
+                }
             }
 
             if(lineStrings == null || lineStrings.Count == 0)

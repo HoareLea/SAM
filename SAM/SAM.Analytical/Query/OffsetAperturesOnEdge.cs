@@ -12,7 +12,9 @@ namespace SAM.Analytical
         {
             List<Aperture> apertures = panel?.Apertures;
             if (apertures == null || apertures.Count == 0)
+            {
                 return null;
+            }
 
             Face3D face3D = panel.GetFace3D();
             if (face3D == null)
@@ -25,9 +27,12 @@ namespace SAM.Analytical
                 throw new NotImplementedException();
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Query.Offset(externalEdge, -distance, tolerance);
-            polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
+            polygon2Ds?.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
             if (polygon2Ds == null || polygon2Ds.Count == 0)
-                return null;
+            {
+                panel.RemoveApertures();
+                return new List<Aperture>();
+            }
 
             externalEdge = polygon2Ds.Last();
 
