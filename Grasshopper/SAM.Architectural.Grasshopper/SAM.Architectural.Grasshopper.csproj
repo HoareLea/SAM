@@ -25,11 +25,6 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Enums\**" />
-    <EmbeddedResource Remove="Enums\**" />
-    <None Remove="Enums\**" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Rhino\SAM.Core.Rhino\SAM.Core.Rhino.csproj" />
     <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Architectural\SAM.Architectural.csproj" />
@@ -39,11 +34,8 @@
     <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Grasshopper">
-      <Version>8.19.25132.1001</Version>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageReference Include="Grasshopper" Version="8.19.25132.1001" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.CSharp" />
     <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />

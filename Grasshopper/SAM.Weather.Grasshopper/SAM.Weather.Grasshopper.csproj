@@ -25,11 +25,6 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Convert\**" />
-    <EmbeddedResource Remove="Convert\**" />
-    <None Remove="Convert\**" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Weather\SAM.Weather.csproj" />
@@ -37,10 +32,7 @@
     <ProjectReference Include="..\SAM.Geometry.Grasshopper\SAM.Geometry.Grasshopper.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Grasshopper">
-      <Version>8.19.25132.1001</Version>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </PackageReference>
+	<PackageReference Include="Grasshopper" Version="8.19.25132.1001" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="NetTopologySuite" Version="2.6.0" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
