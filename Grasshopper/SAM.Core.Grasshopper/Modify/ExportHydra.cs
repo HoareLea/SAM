@@ -17,9 +17,6 @@ namespace SAM.Core.Grasshopper
     {
         public static List<string> ExportHydra(this GH_Document gH_Document, string githubUserName, string fileName, List<string> fileDescription, IEnumerable<string> changeLog, IEnumerable<string> fileTags, string targetFolder, bool includeRhino, bool gHForThumb, List<string> additionalFiles)
         {
-            return null;
-
-
             List<string> result = new List<string>();
 
             if(gH_Document == null)
@@ -46,38 +43,41 @@ namespace SAM.Core.Grasshopper
                 Directory.CreateDirectory(targetFolder);
             }
 
-            string ghPath = rhinoDoc.Path;
-            if (string.IsNullOrEmpty(ghPath) || !File.Exists(ghPath))
+            string path_Rhino = rhinoDoc.Path;
+            if (string.IsNullOrEmpty(path_Rhino) || !File.Exists(path_Rhino))
             {
                 result.Add($"Error: GH file not saved.");
                 return result;
             }
 
-            string ghTarget = Path.Combine(targetFolder, safeFileName + ".gh");
-            File.Copy(ghPath, ghTarget, true);
+            string path_Grasshoper = Path.Combine(targetFolder, safeFileName + ".gh");
+            File.Copy(path_Rhino, path_Grasshoper, true);
 
             // Write full-size Grasshopper image
-            string ghImgPath = WriteGHImage(safeFileName, targetFolder);
-            Bitmap ghImg = File.Exists(ghImgPath) ? new Bitmap(ghImgPath) : null;
+            string path_GrasshopperImage = Write_GrasshopperImage(safeFileName, targetFolder);
+            Bitmap bitmap_Grasshopper = File.Exists(path_GrasshopperImage) ? new Bitmap(path_GrasshopperImage) : null;
 
             // Copy Rhino file if needed & save Rhino image
-            string rhinoImgPath = null;
-            Bitmap rhinoImg = null;
+            string path_RhinoImage = null;
+            Bitmap bitmap_Rhino = null;
             if (includeRhino)
             {
                 string rhinoPath = rhinoDoc.Path;
                 if (string.IsNullOrEmpty(rhinoPath) || !File.Exists(rhinoPath))
                 {
-                    ghImg?.Dispose();
+                    bitmap_Grasshopper?.Dispose();
                     result.Add("Error: Rhino file not saved.");
                     return result;
                 }
+
                 string rhinoTarget = Path.Combine(targetFolder, safeFileName + ".3dm");
                 File.Copy(rhinoPath, rhinoTarget, true);
 
-                rhinoImgPath = WriteRhinoImage(safeFileName, targetFolder, rhinoDoc);
-                if (File.Exists(rhinoImgPath))
-                    rhinoImg = new Bitmap(rhinoImgPath);
+                path_RhinoImage = Write_RhinoImage(safeFileName, targetFolder, rhinoDoc);
+                if (File.Exists(path_RhinoImage))
+                {
+                    bitmap_Rhino = new Bitmap(path_RhinoImage);
+                }
             }
 
             // Copy additional files
@@ -86,16 +86,18 @@ namespace SAM.Core.Grasshopper
                 foreach (string additionalFile in additionalFiles)
                 {
                     if (File.Exists(additionalFile))
+                    {
                         File.Copy(additionalFile, Path.Combine(targetFolder, Path.GetFileName(additionalFile)), true);
+                    }
                 }
             }
 
             // Make thumbnail (aspect ratio, width 200px, from GH or Rhino image)
-            string thumbnailPath = MakeThumbnailImg(ghImg, rhinoImg, gHForThumb, targetFolder);
+            string path_ThumbnailImage = Write_ThumbnailImage(bitmap_Grasshopper, bitmap_Rhino, gHForThumb, targetFolder);
 
             // Dispose images
-            ghImg?.Dispose();
-            rhinoImg?.Dispose();
+            bitmap_Grasshopper?.Dispose();
+            bitmap_Rhino?.Dispose();
 
             // Write README.md
             result.Add("### Description");
@@ -124,35 +126,39 @@ namespace SAM.Core.Grasshopper
             File.WriteAllText(Path.Combine(targetFolder, "README.md"), string.Join("\n", result).ToString());
 
             // Write input.json (metadata)
-            List<IGH_DocumentObject> ghComps = GetAllTheComponents(gH_Document);
-            Dictionary<string, object> metaDataDict = GetMetaData(ghComps, fileTags?.ToList(), safeFileName, rhinoImgPath, additionalFiles, gHForThumb);
-            WriteMetadataFile(safeFileName, targetFolder, metaDataDict);
+            List<IGH_DocumentObject> documentObjects = gH_Document.Objects.ToList();
+            Dictionary<string, object> metaDataDictionary = GetMetaData(documentObjects, fileTags?.ToList(), safeFileName, path_RhinoImage, additionalFiles, gHForThumb);
+            WriteMetadataFile(safeFileName, targetFolder, metaDataDictionary);
 
             // Zip everything for upload
             string zipPath = Path.Combine(Path.GetDirectoryName(targetFolder), safeFileName + ".zip");
-            if (File.Exists(zipPath)) File.Delete(zipPath);
+            if (File.Exists(zipPath))
+            {
+                File.Delete(zipPath);
+            }
+
             ZipFile.CreateFromDirectory(targetFolder, zipPath);
 
             // ========== GIT OPERATIONS ==========
-            string repoRoot = Directory.GetParent(Directory.GetParent(targetFolder).FullName).FullName;
+            string directory_Root = Directory.GetParent(Directory.GetParent(targetFolder).FullName).FullName;
 
             string branchName = githubUserName + "_" + fileName;
 
             // 1. Pull latest
-            ExecuteGitCommand(repoRoot, "pull");
+            ExecuteGitCommand(directory_Root, "pull");
 
             // 2. Create new branch
-            ExecuteGitCommand(repoRoot, $"checkout -b {branchName}");
+            ExecuteGitCommand(directory_Root, $"checkout -b {branchName}");
 
             // 3. Add all
-            ExecuteGitCommand(repoRoot, "add .");
+            ExecuteGitCommand(directory_Root, "add .");
 
             // 4. Commit
             string commitMsg = $"Added {safeFileName}";
-            ExecuteGitCommand(repoRoot, $"commit -m \"{commitMsg}\"");
+            ExecuteGitCommand(directory_Root, $"commit -m \"{commitMsg}\"");
 
             // 5. Push new branch
-            ExecuteGitCommand(repoRoot, $"push -u origin {branchName}");
+            ExecuteGitCommand(directory_Root, $"push -u origin {branchName}");
 
             // 6. Generate pull request link
             string repoUrl = $"https://github.com/HoareLea/ScriptsHydra/compare/{branchName}?expand=1";
@@ -163,21 +169,21 @@ namespace SAM.Core.Grasshopper
         }
 
         // Save hi-res image of Grasshopper canvas
-        private static string WriteGHImage(string fileName, string repoTargetFolder)
+        private static string Write_GrasshopperImage(string fileName, string targetFolder)
         {
             GH_Canvas canvas = Instances.ActiveCanvas;
             RectangleF rectF = canvas.Document.BoundingBox(false);
             Rectangle rect = Rectangle.Truncate(rectF);
             Size size;
             string tmpPath = canvas.GenerateHiResImage(rect, new GH_Canvas.GH_ImageSettings(), out size)[0];
-            string ghImgPath = Path.Combine(repoTargetFolder, fileName + "_GH.png");
+            string ghImgPath = Path.Combine(targetFolder, fileName + "_GH.png");
             File.Copy(tmpPath, ghImgPath, true);
             File.Delete(tmpPath);
             return ghImgPath;
         }
 
         // Save screenshot of active Rhino view
-        private static string WriteRhinoImage(string fileName, string repoTargetFolder, RhinoDoc rhinoDoc)
+        private static string Write_RhinoImage(string fileName, string repoTargetFolder, RhinoDoc rhinoDoc)
         {
             var view = rhinoDoc.Views.ActiveView;
             int image_w = view.ActiveViewport.Size.Width;
@@ -192,48 +198,35 @@ namespace SAM.Core.Grasshopper
         }
 
         // Make a 200px wide thumbnail from GH or Rhino image (aspect ratio)
-        private static string MakeThumbnailImg(Bitmap ghImg, Bitmap rhinoImg, bool GHForThumb_, string repoTargetFolder)
+        private static string Write_ThumbnailImage(Bitmap bitmap_Grasshopper, Bitmap bitmap_Rhino, bool gHForThumb, string targetFolder)
         {
-            int thumbnailW = 200;
-            int thumbnailH = 200;
+            int width = 200;
+            int height = 200;
 
-            Bitmap sourceImg = rhinoImg;
-            if (GHForThumb_)
+            Bitmap bitmap_Source = bitmap_Rhino;
+            if (gHForThumb)
             {
-                sourceImg = ghImg;
+                bitmap_Source = bitmap_Grasshopper;
             }
 
-            if (sourceImg == null)
+            if (bitmap_Source == null)
             {
                 return null;
             }
 
-            double imgRatio = (double)sourceImg.Height / (double)sourceImg.Width;
-            thumbnailH = (int)(thumbnailW * imgRatio);
-            Size imgSize = new Size(thumbnailW, thumbnailH);
+            double imageRatio = bitmap_Source.Height / bitmap_Source.Width;
+            height = (int)(width * imageRatio);
+            Size imgSize = new Size(width, height);
 
-            Bitmap thumbnail = new Bitmap(sourceImg, imgSize);
-            string thumbnailPath = Path.Combine(repoTargetFolder, "thumbnail.png");
+            Bitmap thumbnail = new Bitmap(bitmap_Source, imgSize);
+            string thumbnailPath = Path.Combine(targetFolder, "thumbnail.png");
             thumbnail.Save(thumbnailPath);
             thumbnail.Dispose();
             return thumbnailPath;
         }
 
-        // Gather all components (for metadata)
-        private static List<IGH_DocumentObject> GetAllTheComponents(GH_Document document)
-        {
-            return document.Objects.ToList();
-        }
-
         // Compose metadata as dictionary (JSON serializable)
-        private static Dictionary<string, object> GetMetaData(
-            List<IGH_DocumentObject> ghComps,
-            List<string> fileTags,
-            string fileName,
-            string rhinoDocPath,
-            List<string> additionalFiles,
-            bool GHForThumb_
-            )
+        private static Dictionary<string, object> GetMetaData(IEnumerable<IGH_DocumentObject> documentObjects, IEnumerable<string> fileTags, string fileName, string path_Rhino, List<string> additionalFiles, bool gHForThumb)
         {
             Dictionary<string, object> metaDataDict = new Dictionary<string, object>();
             Dictionary<string, int> components = new Dictionary<string, int>();
@@ -245,32 +238,41 @@ namespace SAM.Core.Grasshopper
             string[] notImportantComps = new string[] {
             "Hydra", "Scribble", "SAMHydra_ExportFile", "SAMHydra_ImportFile", "Group", "Panel", "Slider", "Boolean Toggle", "Custom Preview", "Colour Swatch",
             "Button", "Control Knob", "Digit Scroller", "MD Slider", "Value List", "Point", "Vector", "Circle", "Circular Arc", "Curve", "Line", "Plane", "Rectangle", "Box", "Mesh", "Mesh Face", "Surface", "Twisted Box", "Field", "Geometry", "Geometry Cache", "Geometry Pipeline", "Transform"
-        };
+            };
 
-            foreach (IGH_DocumentObject comp in ghComps)
+            foreach (IGH_DocumentObject documentObject in documentObjects)
             {
-                string componentName = comp.Name;
+                string componentName = documentObject.Name;
                 if (notImportantComps.Contains(componentName)) continue;
                 if (components.ContainsKey(componentName))
+                {
                     components[componentName]++;
+                }
                 else
+                {
                     components[componentName] = 1;
+                }
 
-                Type objType = comp.GetType();
-                string category = (objType.GetProperty("Category")?.GetValue(comp, null) ?? "User").ToString();
-                string subcategory = (objType.GetProperty("SubCategory")?.GetValue(comp, null) ?? "").ToString();
+                Type type = documentObject.GetType();
+                string category = (type.GetProperty("Category")?.GetValue(documentObject, null) ?? "User").ToString();
+                string subcategory = (type.GetProperty("SubCategory")?.GetValue(documentObject, null) ?? "").ToString();
                 if (!dependencies.Contains(category) && !string.IsNullOrEmpty(category))
+                {
                     dependencies.Add(category);
+                }
             }
 
             metaDataDict["components"] = components;
             metaDataDict["dependencies"] = dependencies;
-            metaDataDict["tags"] = fileTags ?? new List<string>();
+            metaDataDict["tags"] = fileTags == null ? new List<string>() : fileTags.ToList();
 
             // Images
             images.Add(new Dictionary<string, string> { { fileName + "_GH.png", "Grasshopper Definition" } });
-            if (!GHForThumb_)
+            if (!gHForThumb)
+            {
                 images.Add(new Dictionary<string, string> { { fileName + "_Rhino.png", "Rhino Viewport Screenshot" } });
+            }
+            
             metaDataDict["images"] = images;
 
             // Addfiles
@@ -279,7 +281,9 @@ namespace SAM.Core.Grasshopper
                 foreach (string file in additionalFiles)
                 {
                     if (File.Exists(file))
+                    {
                         addFiles.Add(new Dictionary<string, string> { { Path.GetFileName(file), "Additional file" } });
+                    }
                 }
             }
             metaDataDict["Addfiles"] = addFiles;
@@ -299,18 +303,19 @@ namespace SAM.Core.Grasshopper
         }
 
         // Run git commands (helper)
-        private static void ExecuteGitCommand(string workingDir, string command)
+        private static void ExecuteGitCommand(string workingDirectory, string command)
         {
             ProcessStartInfo startInfo = new ProcessStartInfo()
             {
                 FileName = "git",
                 Arguments = command,
-                WorkingDirectory = workingDir,
+                WorkingDirectory = workingDirectory,
                 RedirectStandardOutput = true,
                 RedirectStandardError = true,
                 CreateNoWindow = true,
                 UseShellExecute = false
             };
+
             using (Process process = Process.Start(startInfo))
             {
                 process.WaitForExit();

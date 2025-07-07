@@ -154,7 +154,9 @@ namespace SAM.Core.Grasshopper
             List<string> messages = new List<string>() { "Export not activated." };
             if (export)
             {
-                messages = Modify.ExportHydra(OnPingDocument(), githubUserName, fileName, description, changeLog, fileTags, targetFolder, includeRhino, gHForThumb, additionalFiles);
+                GH_Document gH_Document = OnPingDocument();
+
+                messages = Modify.ExportHydra(gH_Document, githubUserName, fileName, description, changeLog, fileTags, targetFolder, includeRhino, gHForThumb, additionalFiles);
             }
 
             index = Params.IndexOfOutputParam("messages");
