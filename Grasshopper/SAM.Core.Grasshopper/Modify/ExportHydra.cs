@@ -47,8 +47,10 @@ namespace SAM.Core.Grasshopper
                 Directory.CreateDirectory(baseDirectory);
             }
 
+            List<string> messages;
+
             //0. Clone
-            result.AddRange(ExecuteGitCommand_NEW(baseDirectory, "clone https://github.com/HoareLea/ScriptsHydra")); //$"clone https://github.com/HoareLea/ScriptsHydra \"{targetFolder}\""));
+            ExecuteGitCommand(baseDirectory, "clone https://github.com/HoareLea/ScriptsHydra", out messages); //$"clone https://github.com/HoareLea/ScriptsHydra \"{targetFolder}\""));
 
             RhinoDoc rhinoDoc = gH_Document.RhinoDocument;
 
@@ -165,20 +167,25 @@ namespace SAM.Core.Grasshopper
             string branchName = githubUserName + "_" + fileName;
 
             // 1. Pull latest
-            result.AddRange(ExecuteGitCommand_NEW(directory_Root, "pull"));
+            ExecuteGitCommand(directory_Root, "pull", out messages);
+            result.AddRange(messages);
 
             // 2. Create new branch
-            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"checkout -b {branchName}"));
+            ExecuteGitCommand(directory_Root, $"checkout -b {branchName}", out messages);
+            result.AddRange(messages);
 
             // 3. Add all
-            result.AddRange(ExecuteGitCommand_NEW(directory_Root, "add ."));
+            ExecuteGitCommand(directory_Root, "add .", out messages);
+            result.AddRange(messages);
 
             // 4. Commit
             string commitMsg = $"Added {safeFileName}";
-            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"commit -m \"{commitMsg}\""));
+            ExecuteGitCommand(directory_Root, $"commit -m \"{commitMsg}\"", out messages);
+            result.AddRange(messages);
 
             // 5. Push new branch
-            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"push -u origin {branchName}"));
+            ExecuteGitCommand(directory_Root, $"push -u origin {branchName}", out messages);
+            result.AddRange(messages);
 
             if (Directory.Exists(baseDirectory))
             {
@@ -332,30 +339,30 @@ namespace SAM.Core.Grasshopper
         }
 
         // Run git commands (helper)
-        private static void ExecuteGitCommand(string workingDirectory, string command)
+        //private static void ExecuteGitCommand(string workingDirectory, string command)
+        //{
+        //    ProcessStartInfo startInfo = new ProcessStartInfo()
+        //    {
+        //        FileName = "git",
+        //        Arguments = command,
+        //        WorkingDirectory = workingDirectory,
+        //        RedirectStandardOutput = true,
+        //        RedirectStandardError = true,
+        //        CreateNoWindow = true,
+        //        UseShellExecute = false
+        //    };
+
+        //    using (Process process = Process.Start(startInfo))
+        //    {
+        //        process.WaitForExit();
+        //    }
+        //}
+
+        private static void ExecuteGitCommand(string workingDirectory, string command, out List<string> messages)
         {
-            ProcessStartInfo startInfo = new ProcessStartInfo()
-            {
-                FileName = "git",
-                Arguments = command,
-                WorkingDirectory = workingDirectory,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                CreateNoWindow = true,
-                UseShellExecute = false
-            };
+            messages = new List<string>();
 
-            using (Process process = Process.Start(startInfo))
-            {
-                process.WaitForExit();
-            }
-        }
-
-        private static List<string> ExecuteGitCommand_NEW(string workingDirectory, string command)
-        {
-            List<string> result = new List<string>();
-
-           using(Process process = new Process
+            using (Process process = new Process
             {
                 StartInfo = new ProcessStartInfo
                 {
@@ -365,41 +372,57 @@ namespace SAM.Core.Grasshopper
                     CreateNoWindow = true,
                     RedirectStandardOutput = true,
                     RedirectStandardError = true,
+                    RedirectStandardInput = false,
                     UseShellExecute = false,
                 }
             })
             {
-                try
-                {
-                    process.OutputDataReceived += (sender, e) =>
-                    {
-                        if (!string.IsNullOrWhiteSpace(e.Data))
-                        {
-                            result.Add(e.Data.Trim());
-                        }
-                    };
+                process.Start();
 
-                    process.ErrorDataReceived += (sender, e) =>
-                    {
-                        if (!string.IsNullOrWhiteSpace(e.Data))
-                        {
-                            result.Add("[GIT ERROR]\n" + e.Data.Trim());
-                        }
-                    };
+                StreamReader streamReader_StandardOutput = process.StandardOutput;
+                StreamReader streamReader_StandardError = process.StandardError;
 
-                    process.Start();
-                    process.BeginOutputReadLine();
-                    process.BeginErrorReadLine();
-                    process.WaitForExit(1000);
-                }
-                catch (Exception ex)
+                while (!process.HasExited)
                 {
-                    result.Add("Failed to start git process: " + ex.Message);
+                    if (!streamReader_StandardOutput.EndOfStream)
+                    {
+                        string line = streamReader_StandardOutput.ReadLine();
+                        if (!string.IsNullOrWhiteSpace(line))
+                        {
+                            messages.Add(line.Trim());
+                        }
+                    }
+
+                    if (!streamReader_StandardError.EndOfStream)
+                    {
+                        string line = streamReader_StandardError.ReadLine();
+                        if (!string.IsNullOrWhiteSpace(line))
+                        {
+                            messages.Add("[GIT ERROR]\n" + line.Trim());
+                        }
+                    }
                 }
+
+                while (!streamReader_StandardOutput.EndOfStream)
+                {
+                    string line = streamReader_StandardOutput.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        messages.Add(line.Trim());
+                    }
+                }
+
+                while (!streamReader_StandardError.EndOfStream)
+                {
+                    string line = streamReader_StandardError.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(line))
+                    {
+                        messages.Add("[GIT ERROR]\n" + line.Trim());
+                    }
+                }
+
+                process.WaitForExit();
             }
-
-            return result;
         }
-
     }
 }

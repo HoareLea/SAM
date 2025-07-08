@@ -123,7 +123,7 @@ namespace SAM.Core.Grasshopper
                 dataAccess.GetData(index, ref targetFolder);
             }
 
-            bool includeRhino = true;
+            bool includeRhino = false;
             index = Params.IndexOfInputParam("includeRhino_");
             if (index != -1)
             {
