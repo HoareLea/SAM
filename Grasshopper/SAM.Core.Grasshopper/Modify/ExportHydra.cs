@@ -1,6 +1,7 @@
 ﻿using Grasshopper;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using LibGit2Sharp;
 using Rhino;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,9 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Security.Cryptography.Xml;
 using System.Text.Json;
+using static System.Windows.Forms.Design.AxImporter;
 
 namespace SAM.Core.Grasshopper
 {
@@ -50,7 +53,8 @@ namespace SAM.Core.Grasshopper
             List<string> messages;
 
             //0. Clone
-            ExecuteGitCommand(baseDirectory, "clone https://github.com/HoareLea/ScriptsHydra", out messages); //$"clone https://github.com/HoareLea/ScriptsHydra \"{targetFolder}\""));
+            string path_Repository = Repository.Clone("https://github.com/HoareLea/ScriptsHydra", baseDirectory);
+            //ExecuteGitCommand(baseDirectory, "clone https://github.com/HoareLea/ScriptsHydra", out messages); //$"clone https://github.com/HoareLea/ScriptsHydra \"{targetFolder}\""));
 
             RhinoDoc rhinoDoc = gH_Document.RhinoDocument;
 
@@ -166,26 +170,72 @@ namespace SAM.Core.Grasshopper
 
             string branchName = githubUserName + "_" + fileName;
 
-            // 1. Pull latest
-            ExecuteGitCommand(directory_Root, "pull", out messages);
-            result.AddRange(messages);
+            GlobalSettings.SetOwnerValidation(false);
 
-            // 2. Create new branch
-            ExecuteGitCommand(directory_Root, $"checkout -b {branchName}", out messages);
-            result.AddRange(messages);
+            using (Repository repository = new Repository(path_Repository))
+            {
+                Configuration configuration = repository.Config;
 
-            // 3. Add all
-            ExecuteGitCommand(directory_Root, "add .", out messages);
-            result.AddRange(messages);
+                // Read user.name
+                string name = configuration.Get<string>("user.name")?.Value;
 
-            // 4. Commit
-            string commitMsg = $"Added {safeFileName}";
-            ExecuteGitCommand(directory_Root, $"commit -m \"{commitMsg}\"", out messages);
-            result.AddRange(messages);
+                // Read user.email
+                string email = configuration.Get<string>("user.email")?.Value;
 
-            // 5. Push new branch
-            ExecuteGitCommand(directory_Root, $"push -u origin {branchName}", out messages);
-            result.AddRange(messages);
+                LibGit2Sharp.Signature signature = new LibGit2Sharp.Signature(name, email, DateTimeOffset.Now);
+
+                var pullOptions = new PullOptions
+                {
+                    FetchOptions = new FetchOptions() // no credentials for public repo
+                };
+
+                // 1. Pull latest
+                MergeResult mergeResult = Commands.Pull(repository, signature, pullOptions);
+
+                // 2. Create new branch
+                Branch branch = repository.CreateBranch(branchName);
+
+                branch = Commands.Checkout(repository, branch);
+
+                // 3. Add all
+                Commands.Stage(repository, "*");
+
+                // 4. Commit
+                repository.Commit($"Added {safeFileName}", signature, signature);
+
+                // 5. Push new branch
+                Remote remote = repository.Network.Remotes["origin"];
+
+                PushOptions pushOptions = new PushOptions
+                {
+                    CredentialsProvider = (_url, _user, _cred) => new DefaultCredentials()
+                };
+
+                repository.Network.Push(remote, $"refs/heads/{branchName}", pushOptions);
+
+                repository.Branches.Update(branch, b => b.TrackedBranch = $"refs/remotes/origin/{branchName}");
+            }
+
+            //// 1. Pull latest
+            //ExecuteGitCommand(directory_Root, "pull", out messages);
+            //result.AddRange(messages);
+
+            //// 2. Create new branch
+            //ExecuteGitCommand(directory_Root, $"checkout -b {branchName}", out messages);
+            //result.AddRange(messages);
+
+            //// 3. Add all
+            //ExecuteGitCommand(directory_Root, "add .", out messages);
+            //result.AddRange(messages);
+
+            //// 4. Commit
+            //string commitMsg = $"Added {safeFileName}";
+            //ExecuteGitCommand(directory_Root, $"commit -m \"{commitMsg}\"", out messages);
+            //result.AddRange(messages);
+
+            //// 5. Push new branch
+            //ExecuteGitCommand(directory_Root, $"push -u origin {branchName}", out messages);
+            //result.AddRange(messages);
 
             if (Directory.Exists(baseDirectory))
             {
