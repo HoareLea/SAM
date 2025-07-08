@@ -27,8 +27,28 @@ namespace SAM.Core.Grasshopper
 
             if (string.IsNullOrWhiteSpace(targetFolder) || !Directory.Exists(targetFolder))
             {
-                targetFolder = "C:\\Temp\\ScriptsHydra\\";
+                targetFolder = "C:\\Temp\\ScriptsHydra";
             }
+
+            if(string.IsNullOrWhiteSpace(Path.GetFileName(targetFolder)))
+            {
+                targetFolder = Directory.GetParent(targetFolder)?.FullName;
+            }
+
+            string baseDirectory = Directory.GetParent(targetFolder)?.FullName;
+
+            if (Directory.Exists(targetFolder))
+            {
+                Directory.Delete(targetFolder, true);
+            }
+
+            if (!Directory.Exists(baseDirectory))
+            {
+                Directory.CreateDirectory(baseDirectory);
+            }
+
+            //0. Clone
+            result.AddRange(ExecuteGitCommand_NEW(baseDirectory, "clone https://github.com/HoareLea/ScriptsHydra")); //$"clone https://github.com/HoareLea/ScriptsHydra \"{targetFolder}\""));
 
             RhinoDoc rhinoDoc = gH_Document.RhinoDocument;
 
@@ -145,27 +165,36 @@ namespace SAM.Core.Grasshopper
             string branchName = githubUserName + "_" + fileName;
 
             // 1. Pull latest
-            ExecuteGitCommand(directory_Root, "pull");
+            result.AddRange(ExecuteGitCommand_NEW(directory_Root, "pull"));
 
             // 2. Create new branch
-            ExecuteGitCommand(directory_Root, $"checkout -b {branchName}");
+            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"checkout -b {branchName}"));
 
             // 3. Add all
-            ExecuteGitCommand(directory_Root, "add .");
+            result.AddRange(ExecuteGitCommand_NEW(directory_Root, "add ."));
 
             // 4. Commit
             string commitMsg = $"Added {safeFileName}";
-            ExecuteGitCommand(directory_Root, $"commit -m \"{commitMsg}\"");
+            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"commit -m \"{commitMsg}\""));
 
             // 5. Push new branch
-            ExecuteGitCommand(directory_Root, $"push -u origin {branchName}");
+            result.AddRange(ExecuteGitCommand_NEW(directory_Root, $"push -u origin {branchName}"));
+
+            if (Directory.Exists(baseDirectory))
+            {
+                Directory.Delete(baseDirectory, true);
+            }
+
+            result.Add("Cleaning done");
 
             // 6. Generate pull request link
             string repoUrl = $"https://github.com/HoareLea/ScriptsHydra/compare/{branchName}?expand=1";
 
             result.Add($"Export and Git push successful: {zipPath}\n\nTo create a pull request, open this link in your browser:\n{repoUrl}");
-            return result;
 
+            Core.Query.StartProcess(repoUrl);
+            
+            return result;
         }
 
         // Save hi-res image of Grasshopper canvas
@@ -321,5 +350,56 @@ namespace SAM.Core.Grasshopper
                 process.WaitForExit();
             }
         }
+
+        private static List<string> ExecuteGitCommand_NEW(string workingDirectory, string command)
+        {
+            List<string> result = new List<string>();
+
+           using(Process process = new Process
+            {
+                StartInfo = new ProcessStartInfo
+                {
+                    FileName = "git",
+                    Arguments = command,
+                    WorkingDirectory = workingDirectory,
+                    CreateNoWindow = true,
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                    UseShellExecute = false,
+                }
+            })
+            {
+                try
+                {
+                    process.OutputDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(e.Data))
+                        {
+                            result.Add(e.Data.Trim());
+                        }
+                    };
+
+                    process.ErrorDataReceived += (sender, e) =>
+                    {
+                        if (!string.IsNullOrWhiteSpace(e.Data))
+                        {
+                            result.Add("[GIT ERROR]\n" + e.Data.Trim());
+                        }
+                    };
+
+                    process.Start();
+                    process.BeginOutputReadLine();
+                    process.BeginErrorReadLine();
+                    process.WaitForExit(1000);
+                }
+                catch (Exception ex)
+                {
+                    result.Add("Failed to start git process: " + ex.Message);
+                }
+            }
+
+            return result;
+        }
+
     }
 }

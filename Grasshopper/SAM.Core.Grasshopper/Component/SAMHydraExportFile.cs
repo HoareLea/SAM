@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMHydraExportFile()
           : base("SAMHydra.ExportFile", "SAMHydra.ExportFile",
-              "Export File to Hydra.",
+              "Export File to Hydra.Use this component to export your GH file to your SAMHydra repository (Default is set to GHBuildingPhysicsScripts) so that you can upload and share with the community! Note that this tool is a hacked version of Hydra (https://github.com/HydraShare/hydra-grasshopper) ",
               "SAM", "Hydra")
         {
         }
@@ -47,12 +47,12 @@ namespace SAM.Core.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_githubUserName", NickName = "_githubUserName", Description = "Github user name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_fileName", NickName = "_fileName", Description = "File name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_fileDescription", NickName = "_fileDescription", Description = "File description", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "changeLog_", NickName = "changeLog_", Description = "Change log", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "fileTags_", NickName = "fileTags_", Description = "File tags", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "targetFolder_", NickName = "targetFolder_", Description = "Target folder", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "includeRhino_", NickName = "includeRhino_", Description = "Include Rhino", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "gHForThumb_", NickName = "gHForThumb_", Description = "Grasshopper for thumb", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "additionalFiles_", NickName = "additionalFiles_", Description = "Additional files", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "changeLog_", NickName = "changeLog_", Description = "Change log", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "fileTags_", NickName = "fileTags_", Description = "File tags", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "targetFolder_", NickName = "targetFolder_", Description = "Target folder", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "includeRhino_", NickName = "includeRhino_", Description = "Include Rhino", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "gHForThumb_", NickName = "gHForThumb_", Description = "Grasshopper for thumb", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "additionalFiles_", NickName = "additionalFiles_", Description = "Additional files", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_export", NickName = "_export", Description = "Export", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
