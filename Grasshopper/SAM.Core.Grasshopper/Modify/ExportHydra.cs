@@ -10,9 +10,7 @@ using System.Drawing;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
-using System.Security.Cryptography.Xml;
 using System.Text.Json;
-using static System.Windows.Forms.Design.AxImporter;
 
 namespace SAM.Core.Grasshopper
 {
