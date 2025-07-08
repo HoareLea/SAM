@@ -13,6 +13,7 @@
     <Deterministic>false</Deterministic>
     <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <CopyLocalLockFileAssemblies>True</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <PropertyGroup>
     <OutputType>Library</OutputType>
@@ -30,7 +31,6 @@
   </ItemGroup>
   <ItemGroup>
 	  <PackageReference Include="Grasshopper" Version="8.19.25132.1001" ExcludeAssets="runtime" />
-	  <PackageReference Include="LibGit2Sharp" Version="0.31.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
