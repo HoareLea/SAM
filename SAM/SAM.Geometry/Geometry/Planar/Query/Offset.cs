@@ -302,34 +302,40 @@ namespace SAM.Geometry.Planar
 
             try
             {
-                BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, bufferParameters);
-                IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = segmentStrings = bufferCurveSetBuilder.GetCurves();
-
-                lineStrings = new List<LineString>();
-                foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
+                NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
+                if (geometry_Temp.IsValid && !geometry_Temp.IsEmpty)
                 {
-                    NetTopologySuite.Noding.NodedSegmentString nodedSegmentString = segmentString as NetTopologySuite.Noding.NodedSegmentString;
-
-                    if (nodedSegmentString == null)
-                    {
-                        continue;
-                    }
-
-                    for (int i = 0; i < nodedSegmentString.Count - 1; i++)
-                    {
-                        lineStrings.Add(nodedSegmentString[i].ToGeometry(geometryFactory));
-                    }
+                    lineStrings = new GeometryNoder(precisionModel).Node([geometry_Temp]).ToList();
                 }
-
-                lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
-
             }
             catch
             {
-                NetTopologySuite.Geometries.Geometry geometry_Temp = geometry.Buffer(offset, bufferParameters);
-                if(geometry_Temp.IsValid && !geometry_Temp.IsEmpty)
+                try
                 {
-                    lineStrings = new GeometryNoder(precisionModel).Node([geometry_Temp]).ToList();
+                    BufferCurveSetBuilder bufferCurveSetBuilder = new BufferCurveSetBuilder(geometry, offset, precisionModel, geometry.Factory.ElevationModel,bufferParameters);
+                    IEnumerable<NetTopologySuite.Noding.ISegmentString> segmentStrings = segmentStrings = bufferCurveSetBuilder.GetCurves();
+
+                    lineStrings = new List<LineString>();
+                    foreach (NetTopologySuite.Noding.ISegmentString segmentString in segmentStrings)
+                    {
+                        NetTopologySuite.Noding.NodedSegmentString nodedSegmentString = segmentString as NetTopologySuite.Noding.NodedSegmentString;
+
+                        if (nodedSegmentString == null)
+                        {
+                            continue;
+                        }
+
+                        for (int i = 0; i < nodedSegmentString.Count - 1; i++)
+                        {
+                            lineStrings.Add(nodedSegmentString[i].ToGeometry(geometryFactory));
+                        }
+                    }
+
+                    lineStrings = new GeometryNoder(precisionModel).Node(lineStrings).ToList();
+                }
+                catch
+                {
+
                 }
             }
 
