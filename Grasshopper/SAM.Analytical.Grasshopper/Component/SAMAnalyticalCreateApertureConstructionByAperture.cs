@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Objects", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooApertureParam { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooApertureParam { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -76,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analyticalObject");
             SAMObject sAMObject = null;
-            if (index == -1 || dataAccess.GetData(index, ref sAMObject))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -112,17 +112,17 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                    apertureConstructions.Add(apertureConstruction);
-
                     if (apertureConstruction == null)
                     {
                         continue;
                     }
 
                     apertureConstruction = new ApertureConstruction(Guid.NewGuid(), apertureConstruction, string.IsNullOrWhiteSpace(apertureConstruction.Name) ? aperture.Guid.ToString() : string.Format("{0} {1}", apertureConstruction.Name, aperture.Guid));
+                    apertureConstructions.Add(apertureConstruction);
 
                     panel.RemoveAperture(aperture.Guid);
-                    panel.AddAperture(new Aperture(aperture, apertureConstruction));
+                    aperture = new Aperture(aperture, apertureConstruction);
+                    panel.AddAperture(aperture);
                     adjacencyCluster.AddObject(panel);
                     apertures[j] = aperture;
                 }

@@ -173,7 +173,14 @@
 
             if (guid != null && guid.HasValue)
             {
-                result += string.Format(" [{0}]", guid);
+                //Added 2025.07.18
+                if (!result.Trim().EndsWith(guid.ToString()))
+                {
+                    result += string.Format(" [{0}]", guid);
+                }
+
+                //Before 2025.07.18
+                //result += string.Format(" [{0}]", guid);
             }
 
             if (id != -1)
