@@ -48,6 +48,8 @@ namespace SAM.Analytical
 
             result.SetValue(AnalyticalSettingParameter.DefaultNCMNameCollectionFileName, "SAM_NCMNameCollection.JSON");
 
+            result.SetValue(AnalyticalSettingParameter.DefaultMergeSettings, "SAM_MergeSettings.JSON");
+
 
             string path = null;
 
@@ -110,6 +112,10 @@ namespace SAM.Analytical
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultNCMNameCollectionFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultNCMNameCollection, Core.Create.IJSAMObject<NCMNameCollection>(System.IO.File.ReadAllText(path)));
+
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultMergeSettingsFileName);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.DefaultMergeSettings, Core.Create.IJSAMObject<MergeSettings>(System.IO.File.ReadAllText(path)));
 
             return result;
         }

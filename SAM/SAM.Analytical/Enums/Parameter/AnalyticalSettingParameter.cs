@@ -42,5 +42,8 @@ namespace SAM.Analytical
 
         [ParameterProperties("Default NCMNameCollection File Name", "Default NCMNameCollection File Name"), ParameterValue(ParameterType.String)] DefaultNCMNameCollectionFileName,
         [ParameterProperties("Default NCMNameCollection", "Default NCMNameCollection"), SAMObjectParameterValue(typeof(NCMNameCollection))] DefaultNCMNameCollection,
+
+        [ParameterProperties("Default MergeSettings File Name", "Default MergeSettings File Name"), ParameterValue(ParameterType.String)] DefaultMergeSettingsFileName,
+        [ParameterProperties("Default MergeSettings", "Default MergeSettings"), SAMObjectParameterValue(typeof(MergeSettings))] DefaultMergeSettings,
     }
 }

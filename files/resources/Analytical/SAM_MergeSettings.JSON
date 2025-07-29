@@ -1,0 +1,15 @@
+[
+  {
+    "_type": "SAM.Analytical.MergeSettings,SAM.Analytical",
+    "TypeMergeSettings": [
+      {
+        "_type": "SAM.Analytical.TypeMergeSettings,SAM.Analytical",
+        "TypeName": "SAM.Analytical.ApertureConstruction,SAM.Analytical",
+        "ExcludedParameterNames": [
+          "Guid",
+          ""
+        ]
+      }
+    ]
+  }
+]
