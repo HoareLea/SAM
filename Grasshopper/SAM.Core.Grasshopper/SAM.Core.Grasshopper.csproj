@@ -30,11 +30,9 @@
     <Reference Include="System.IO.Compression" />
   </ItemGroup>
   <ItemGroup>
-	  <PackageReference Include="Grasshopper" Version="8.21.25188.17001" ExcludeAssets="runtime" />
+	<PackageReference Include="Grasshopper" Version="8.21.25188.17001" ExcludeAssets="runtime" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="Newtonsoft.Json">
-      <Version>13.0.3</Version>
-    </PackageReference>
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
