@@ -40,7 +40,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooMaterialParam(), "_materials", "_materials", "SAM Materials", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_materials", "_materials", "SAM Materials", GH_ParamAccess.list);
         }
 
         /// <summary>
