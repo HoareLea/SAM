@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
                 protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooMergeSettingsParam()
-            : base(typeof(Profile).Name, typeof(Profile).Name, typeof(Profile).FullName.Replace(".", " "), "Params", "SAM")
+            : base(typeof(MergeSettings).Name, typeof(MergeSettings).Name, typeof(MergeSettings).FullName.Replace(".", " "), "Params", "SAM")
         {
         }
 
