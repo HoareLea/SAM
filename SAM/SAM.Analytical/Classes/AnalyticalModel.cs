@@ -1,9 +1,11 @@
 ﻿using Newtonsoft.Json.Linq;
+using SAM.Architectural;
 using SAM.Core;
 using SAM.Geometry;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -591,6 +593,16 @@ namespace SAM.Analytical
             return materialLibrary.GetMaterial(material.Name) != null;
         }
 
+        public bool HasMaterial(MaterialLayer materialLayer)
+        {
+            if (materialLayer == null || materialLibrary == null)
+            {
+                return false;
+            }
+
+            return materialLibrary.GetMaterial(materialLayer.Name) != null;
+        }
+
         public bool Normalize(bool includeApertures = true, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
             if (adjacencyCluster == null)
@@ -708,6 +720,76 @@ namespace SAM.Analytical
             {
                 return adjacencyCluster.GetObjects<ExternalSpace>();
             }
+        }
+
+        public List<string> GetMissingMaterialNames()
+        {
+            HashSet<string> materialNames = new HashSet<string>();
+
+            if (adjacencyCluster != null)
+            {
+                List<Construction> constructions = adjacencyCluster.GetConstructions();
+                if (constructions != null)
+                {
+                    foreach (Construction construction in constructions)
+                    {
+                        List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
+                        if (constructionLayers == null || constructionLayers.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach (ConstructionLayer constructionLayer in constructionLayers)
+                        {
+                            if (HasMaterial(constructionLayer))
+                            {
+                                continue;
+                            }
+
+                            materialNames.Add(constructionLayer.Name);
+                        }
+                    }
+                }
+
+                List<ApertureConstruction> apertureConstructions = adjacencyCluster.GetApertureConstructions();
+                if (apertureConstructions != null)
+                {
+                    foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+                    {
+                        List<ConstructionLayer> constructionLayers = null;
+
+                        constructionLayers = apertureConstruction?.PaneConstructionLayers;
+                        if (constructionLayers != null)
+                        {
+                            foreach (ConstructionLayer constructionLayer in constructionLayers)
+                            {
+                                if (HasMaterial(constructionLayer))
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(constructionLayer.Name);
+                            }
+                        }
+
+                        constructionLayers = apertureConstruction?.FrameConstructionLayers;
+                        if (constructionLayers != null)
+                        {
+                            foreach (ConstructionLayer constructionLayer in constructionLayers)
+                            {
+                                if (HasMaterial(constructionLayer))
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(constructionLayer.Name);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return materialNames.ToList();
         }
     }
 }
