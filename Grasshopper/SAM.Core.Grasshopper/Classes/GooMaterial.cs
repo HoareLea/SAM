@@ -66,16 +66,24 @@ namespace SAM.Core.Grasshopper
         public override string ToString()
         {
             if (Value != null)
+            {
                 return Value.Name;
+            }
 
             return null;
         }
 
         public override bool CastFrom(object source)
         {
-            if(source is IGH_Goo)
+            if(source is IMaterial material_Temp)
             {
-                IMaterial material = (((IGH_Goo)source) as dynamic).Value as IMaterial;
+                Value = material_Temp;
+                return true;
+            }
+
+            if(source is IGH_Goo goo)
+            {
+                IMaterial material = (goo as dynamic).Value as IMaterial;
                 if(material != null)
                 {
                     Value = material;
