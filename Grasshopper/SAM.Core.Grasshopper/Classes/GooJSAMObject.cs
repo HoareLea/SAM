@@ -222,6 +222,29 @@ namespace SAM.Core.Grasshopper
 
             return false;
         }
+
+        public override int GetHashCode()
+        {
+            if (Value is SAMObject sAMObject)
+            {
+                return Core.Query.FullTypeName(sAMObject)?.GetHashCode() ^ sAMObject.Guid.GetHashCode()?? 0;
+            }
+
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object @object)
+        {
+            if (@object is GooJSAMObject<T> gooJSAMObject)
+            {
+                return Equals(gooJSAMObject.Value);
+            }
+            if (@object is T t)
+            {
+                return Equals(t);
+            }
+            return false;
+        }
     }
 
     public class GooJSAMObjectParam<T> : GH_PersistentParam<GooJSAMObject<T>> where T : IParameterizedSAMObject
