@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooJSAMObject<T> : GH_Goo<T>, IGooJSAMObject where T : IJSAMObject
+    public class GooJSAMObject<T> : GH_Goo<T>, IGooJSAMObject, IEquatable<T> where T : IJSAMObject
     {
         public GooJSAMObject()
             : base()
@@ -208,6 +208,19 @@ namespace SAM.Core.Grasshopper
             }
             
             return base.CastTo(ref target);
+        }
+
+        public virtual bool Equals(T t)
+        {
+            if(t is SAMObject sAMObject_1)
+            {
+                if (Value is SAMObject sAMObject_2)
+                {
+                    return sAMObject_1.GetType() == sAMObject_2.GetType() && sAMObject_2.Guid == sAMObject_1.Guid;
+                }
+            }
+
+            return false;
         }
     }
 
