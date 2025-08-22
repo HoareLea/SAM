@@ -7,6 +7,25 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Grasshopper component that duplicates <see cref="Construction"/> definitions per
+    /// panel type (e.g., Internal, External), ensuring the same construction name
+    /// is not shared across different <c>PanelType</c> contexts.
+    ///
+    /// <para>
+    /// Why? In some models a single construction instance can be referenced by
+    /// both internal and external panels. Splitting/duplicating constructions by
+    /// panel type prevents accidental cross-use and clarifies downstream analysis
+    /// and scheduling.
+    /// </para>
+    ///
+    /// <para>
+    /// Input accepts either an <see cref="AdjacencyCluster"/> or an
+    /// <see cref="AnalyticalModel"/>. The component deep-copies the input object,
+    /// performs the duplication on the copy, and outputs the updated object plus
+    /// the list of affected constructions.
+    /// </para>
+    /// </summary>
     public class SAMAnalyticalDuplicateConstructionByPanelType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
@@ -17,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,11 +67,13 @@ namespace SAM.Analytical.Grasshopper
         }
 
         /// <summary>
-        /// Updates PanelTypes for AdjacencyCluster
+        /// Core solve step. Reads the input object, duplicates constructions by
+        /// panel type on a deep copy, then outputs the updated object along with
+        /// the list of constructions that were created/modified.
         /// </summary>
         public SAMAnalyticalDuplicateConstructionByPanelType()
           : base("SAMAdjacencyCluster.DuplicateConstructionByPanelType", "SAMAdjacencyCluster.DuplicateConstructionByPanelType",
-              "Duplicate Constructions By PanelType for Adjacency Cluster",
+              "Duplicate Constructions using Name and  By PanelType for Analytical Model or Adjacency Cluster \n*Split Construction in model by panel type.",
               "SAM", "Analytical01")
         {
         }
