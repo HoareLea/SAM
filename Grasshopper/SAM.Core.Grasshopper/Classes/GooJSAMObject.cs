@@ -47,7 +47,6 @@ namespace SAM.Core.Grasshopper
             }
         }
 
-
         public override IGH_Goo Duplicate()
         {
             return new GooJSAMObject<T>(Value);
