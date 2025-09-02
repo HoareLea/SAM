@@ -311,15 +311,15 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<Construction> GetConstructions()
+        public List<Construction> GetConstructions<TPanel>() where TPanel : IPanel
         {
             List<Construction> result = null;
 
-            List<Panel> panels = GetPanels();
+            List<TPanel> panels = GetPanels<TPanel>();
             if (panels != null)
             {
                 Dictionary<Guid, Construction> dictionary = new Dictionary<Guid, Construction>();
-                foreach (Panel panel in panels)
+                foreach (TPanel panel in panels)
                 {
                     if (panel == null)
                         continue;
@@ -360,6 +360,11 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public List<Construction> GetConstructions()
+        {
+            return GetConstructions<Panel>();
         }
 
         public List<Panel> GetExposedToSunPanels()
@@ -644,6 +649,11 @@ namespace SAM.Analytical
             }
 
             return result;
+        }
+
+        public List<TPanel> GetPanels<TPanel>() where TPanel : IPanel
+        {
+            return GetObjects<TPanel>();
         }
 
         public List<Panel> GetPanels(ApertureConstruction apertureConstruction)
