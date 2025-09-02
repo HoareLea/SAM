@@ -768,7 +768,7 @@ namespace SAM.Analytical
 
             List<Tuple<Space, Shell>> tuples = new List<Tuple<Space, Shell>>();
             spaces.ForEach(x => tuples.Add(new Tuple<Space, Shell>(x, this.Shell(x))));
-            tuples.RemoveAll(x => x.Item2 == null || !x.Item2.IsClosed(silverSpacing));
+            tuples.RemoveAll(x => x.Item2 == null || !x.Item2.IsClosed(silverSpacing * 10));
 
 
             int count = point3Ds.Count();
@@ -782,6 +782,7 @@ namespace SAM.Analytical
                 result.Add(null);
 
             Parallel.For(0, count, (int i) =>
+            //for(int i =0; i < count; i++)
             {
                 Point3D point3D = point3Ds.ElementAt(i);
                 List<Tuple<Space, Shell>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(point3D, tolerance) || x.Item2.Inside(point3D, silverSpacing, tolerance));
