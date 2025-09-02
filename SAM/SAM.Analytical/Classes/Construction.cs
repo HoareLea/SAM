@@ -100,6 +100,11 @@ namespace SAM.Analytical
             return constructionLayers.ConvertAll(x => x.Thickness).Sum();
         }
 
+        public double GetThickness(bool includeSoil)
+        {
+            return includeSoil ? GetThickness() : constructionLayers.FindAll(x => !x.IsSoil).ConvertAll(x => x.Thickness).Sum();
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))

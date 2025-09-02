@@ -22,6 +22,19 @@ namespace SAM.Analytical
 
         }
 
+        public bool IsSoil
+        {
+            get
+            {
+                if(string.IsNullOrWhiteSpace(Name))
+                {
+                    return false;
+                }
+
+                return Name.ToLower().Contains("soil");
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
