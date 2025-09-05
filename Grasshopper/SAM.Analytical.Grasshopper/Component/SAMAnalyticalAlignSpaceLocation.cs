@@ -49,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
 
                 GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "Spaces", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
