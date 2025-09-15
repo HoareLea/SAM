@@ -45,8 +45,8 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_1", NickName = "_values_1", Description = "Values", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_2", NickName = "_values_2", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_M", NickName = "_values_M", Description = "Model/engine under test values", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_R", NickName = "_values_R", Description = "Reference values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -57,16 +57,73 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "M", NickName = "M", Description = "Mean error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MAE", NickName = "MAE", Description = "Mean Absolute Error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RMSE", NickName = "RMSE", Description = "Root Mean Squared Error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "nRMSE", NickName = "nRMSE", Description = "Normalized Root Mean Squared Error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MAPE", NickName = "MAPE", Description = "Mean Absolute Percentage Error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MD", NickName = "MD", Description = "Mean Difference Error", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MDUL", NickName = "MDUL", Description = "Mean Difference Upper Limit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "MDLL", NickName = "MDLL", Description = "Mean Difference Upper Limit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "M",
+                    NickName = "M",
+                    Description = "Bias (Mean Error)\nArithmetic mean of the signed differences (Model – Reference).\nPositive bias → model overestimates on average.\nNegative bias → model underestimates on average.\nUseful for detecting systematic offsets.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "MAE",
+                    NickName = "MAE",
+                    Description = "MAE (Mean Absolute Error)\nAverage magnitude of the errors, ignoring sign.\nReported in the same units as the variable (°C, g/kg, etc.).\nRepresents the typical size of deviation.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "RMSE",
+                    NickName = "RMSE",
+                    Description = "RMSE (Root Mean Squared Error)\nSimilar to MAE but penalizes larger errors more strongly.\nCommonly used in engineering and academic validation.\nHighlights the influence of large deviations.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "nRMSE",
+                    NickName = "nRMSE",
+                    Description = "nRMSE (Normalized RMSE)\nRMSE divided by the range (or mean) of reference values.\nRemoves unit dependence so errors from different variables can be compared.\nUseful for comparing across temperature, humidity, enthalpy, etc.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "MAPE",
+                    NickName = "MAPE",
+                    Description = "MAPE (Mean Absolute Percentage Error)\nAverage error expressed as a percentage of the reference value.\nEasy to interpret as 'on average, errors are X% of the true value.'\n⚠️ Not robust when reference values are near zero.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "MD",
+                    NickName = "MD",
+                    Description = "Bland–Altman Analysis\nMean Difference (Bias)\nArithmetic mean of the differences (Model – Reference).\nIndicates systematic offset between the two methods.\nPositive = overestimation, Negative = underestimation.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "MDUL",
+                    NickName = "MDUL",
+                    Description = "Bland–Altman Analysis\nUpper Limit of Agreement\nMean difference + 1.96 × standard deviation of differences.\nRepresents the upper 95% bound where most deviations are expected.\nDefines the worst-case positive deviation relative to the reference.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "MDLL",
+                    NickName = "MDLL",
+                    Description = "Bland–Altman Analysis\nLower Limit of Agreement\nMean difference − 1.96 × standard deviation of differences.\nRepresents the lower 95% bound where most deviations are expected.\nDefines the worst-case negative deviation relative to the reference.",
+                    Access = GH_ParamAccess.item
+                }, ParamVisibility.Binding));
+
                 return result.ToArray();
             }
+
         }
 
         /// <summary>
@@ -79,19 +136,19 @@ namespace SAM.Core.Grasshopper
         {
             int index;
 
-            index = Params.IndexOfInputParam("_values_1");
+            index = Params.IndexOfInputParam("_values_M");
 
-            List<double> values_1 = new List<double>();
-            if (index == -1 || !dataAccess.GetDataList(index, values_1))
+            List<double> values_M = new List<double>();
+            if (index == -1 || !dataAccess.GetDataList(index, values_M))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            index = Params.IndexOfInputParam("_values_2");
+            index = Params.IndexOfInputParam("_values_R");
 
-            List<double> values_2 = new List<double>();
-            if (index == -1 || !dataAccess.GetDataList(index, values_2))
+            List<double> values_R = new List<double>();
+            if (index == -1 || !dataAccess.GetDataList(index, values_R))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,31 +157,31 @@ namespace SAM.Core.Grasshopper
             index = Params.IndexOfOutputParam("M");
             if(index != -1)
             {
-                dataAccess.SetData(index, Core.Query.MeanError(values_1, values_2));
+                dataAccess.SetData(index, Core.Query.MeanError(values_M, values_R));
             }
 
             index = Params.IndexOfOutputParam("MAE");
             if (index != -1)
             {
-                dataAccess.SetData(index, Core.Query.MeanAbsoluteError(values_1, values_2));
+                dataAccess.SetData(index, Core.Query.MeanAbsoluteError(values_M, values_R));
             }
 
             index = Params.IndexOfOutputParam("RMSE");
             if (index != -1)
             {
-                dataAccess.SetData(index, Core.Query.RootMeanSquaredError(values_1, values_2));
+                dataAccess.SetData(index, Core.Query.RootMeanSquaredError(values_M, values_R));
             }
 
             index = Params.IndexOfOutputParam("nRMSE");
             if (index != -1)
             {
-                dataAccess.SetData(index, Core.Query.NormalizedRootMeanSquaredError(values_1, values_2));
+                dataAccess.SetData(index, Core.Query.NormalizedRootMeanSquaredError(values_M, values_R));
             }
 
             index = Params.IndexOfOutputParam("MAPE");
             if (index != -1)
             {
-                dataAccess.SetData(index, Core.Query.MeanAbsolutePercentageError(values_1, values_2));
+                dataAccess.SetData(index, Core.Query.MeanAbsolutePercentageError(values_M, values_R));
             }
 
             int index_1 = Params.IndexOfOutputParam("MD");
@@ -133,7 +190,7 @@ namespace SAM.Core.Grasshopper
 
             if(index_1 != -1 || index_2 != -1 || index_3 != -1)
             {
-                double meanDifferenceError = Core.Query.MeanDifferenceError(values_1, values_2, out double lower, out double upper);
+                double meanDifferenceError = Core.Query.MeanDifferenceError(values_M, values_R, out double lower, out double upper);
 
                 if (index_1 != -1)
                 {

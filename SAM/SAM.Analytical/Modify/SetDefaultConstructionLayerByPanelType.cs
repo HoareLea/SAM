@@ -198,7 +198,7 @@ namespace SAM.Analytical
 
                         Construction construction_PanelType = construction == null ? null : new Construction(Guid.NewGuid(), construction, construction.Name);
 
-                        Panel panel_New = new Panel(panel, construction_PanelType == null ? new Construction(construction_PanelType) : new Construction(construction_PanelType, construction_Default.ConstructionLayers));
+                        Panel panel_New = new Panel(tuple_PanelType.Item1, construction_PanelType == null ? new Construction(construction_PanelType) : new Construction(construction_PanelType, construction_Default.ConstructionLayers));
                         adjacencyCluster.AddObject(panel_New);
                         dictionary[panel_New.Guid] = panel_New;
 
