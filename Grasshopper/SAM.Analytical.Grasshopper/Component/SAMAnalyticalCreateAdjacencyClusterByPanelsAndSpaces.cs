@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,11 +29,29 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces()
-          : base("SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces", "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
-              "Create AdjacencyCluster from Panels And Spaces  \n* use node SAMAdjacencyCluster.UpdatePanelTypes after to fix PanelTypes",
-              "SAM", "Analytical")
+          : base(
+              "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
+              "CreateAdjacencyCluster",
+              "Create an AdjacencyCluster from SAM Panels and SAM Spaces.\n" +
+              "\n" +
+              "- Panels must be split per level. For double-height spaces, pre-process with " +
+              "SAMAnalytical.SplitPanelsByElevations and set addMissingPanels_ = True to insert AirPanels " +
+              "where floor/ceiling separation is missing.\n" +
+              "- Overlapping / coplanar Panels are supported; duplicates are resolved during clustering.\n" +
+              "- If you do not want subdivision by AirPanels, run SAMAnalytical.MergeSpacesByAirPanels after " +
+              "this component, optionally followed by SAMAnalytical.MergeCoplanarPanelsBySpace to remove splits.\n" +
+              "- After creation, use SAMAdjacencyCluster.UpdatePanelTypes to correct PanelTypes.\n" +
+              "\n" +
+              "Inputs:\n" +
+              "  • Panels : SAM.Analytical.Panel (analytical surfaces, not GH UI Panel)\n" +
+              "  • Spaces : SAM.Analytical.Space\n" +
+              "Output:\n" +
+              "  • AdjacencyCluster",
+              "SAM",
+              "Analytical")
         {
         }
+
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -50,21 +68,21 @@ namespace SAM.Analytical.Grasshopper
 
                 GooSpaceParam spaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true };
                 spaceParam.DataMapping = GH_DataMapping.Flatten;
-                result.Add(new GH_SAMParam(spaceParam, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(spaceParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset from the floors for computation of Spaces", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.1);
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
                 paramBoolean.SetPersistentData(true);
-                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
                 paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels \n* will generate AirFloor if missing panels", Access = GH_ParamAccess.item };
                 paramBoolean.SetPersistentData(false);
-                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "snapTolerance_", NickName = "snapTolerance_", Description = "Snap Tolerance for computation of Spaces", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
