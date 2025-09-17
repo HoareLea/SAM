@@ -7,7 +7,7 @@ using System.Collections.Generic;
 namespace SAM.Analytical.Grasshopper
 {
     /// <summary>
-    /// Grasshopper component that creates an <c>AdjacencyCluster</c> from SAM <c>Panels</c> and <c>Spaces</c>.
+    /// Grasshopper component that creates an <c>AdjacencyCluster</c> from SAM <c>Panels</c> (Walls, Floor and Roofs) and <c>Spaces</c>.
     /// </summary>
     /// <remarks>
     /// <para><b>Geometric assumption</b>: This method is valid only when the building envelope
@@ -55,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
           : base(
               "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
               "CreateAdjacencyCluster",
-              "Create an AdjacencyCluster from SAM Panels and SAM Spaces.\n" +
+              "Create an AdjacencyCluster from SAM Panels (Walls, Floor and Roofs) and SAM Spaces.\n" +
                "Assumption: valid only when the building footprint decreases or stays the same with height (no outward overhangs/cantilevers).\n" +
               "\n" +
               "- Panels must be split per level. For double-height spaces, pre-process with " +
