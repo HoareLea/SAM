@@ -133,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offsets, auxiliaryElevations, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
+            List<Shell> shells = Analytical.Query.Shells(panels, elevations, offsets, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfInputParam("_points_");
             if(index != -1)
