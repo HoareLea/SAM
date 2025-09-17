@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -95,12 +95,6 @@ namespace SAM.Analytical.Grasshopper
                         Optional = true
                     },
                     ParamVisibility.Binding));
-
-                global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
-
-                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "run_", NickName = "run_", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
-                paramBoolean.SetPersistentData(false);
-                result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
