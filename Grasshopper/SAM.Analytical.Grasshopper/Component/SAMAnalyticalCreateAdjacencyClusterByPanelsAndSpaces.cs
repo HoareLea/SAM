@@ -6,6 +6,32 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Grasshopper component that creates an <c>AdjacencyCluster</c> from SAM <c>Panels</c> and <c>Spaces</c>.
+    /// </summary>
+    /// <remarks>
+    /// <para><b>Geometric assumption</b>: This method is valid only when the building envelope
+    /// monotonically decreases (or remains constant) with height—i.e., no level has a larger
+    /// footprint than the one below (no outward overhangs/cantilevers).</para>
+    /// <para><b>Panel preparation</b>: Panels must be split per building level. For double-height or multi-storey voids,
+    /// pre-process with <c>SAMAnalytical.SplitPanelsByElevations</c> and set <c>addMissingPanels_ = true</c> to auto-insert
+    /// <c>AirPanels</c> where floor/ceiling separation is missing.</para>
+    /// <para><b>Overlaps</b>: Overlapping/copanar Panels are supported; duplicates are resolved during clustering.</para>
+    /// <para><b>No AirPanel subdivision?</b> Run <c>SAMAnalytical.MergeSpacesByAirPanels</c> after this component, and optionally
+    /// <c>SAMAnalytical.Mer­geCoplanarPanelsBySpace</c>, to remove splits.</para>
+    /// <para><b>Post-step</b>: Call <c>SAMAdjacencyCluster.UpdatePanelTypes</c> to normalise/repair <c>PanelTypes</c>.</para>
+    /// </remarks>
+    /// <example>
+    /// Inputs:
+    ///   Panels — IEnumerable&lt;SAM.Analytical.Panel&gt; (analytical surfaces; not the GH UI Panel)
+    ///   Spaces — IEnumerable&lt;SAM.Analytical.Space&gt;
+    /// Output:
+    ///   AdjacencyCluster — SAM.Analytical.AdjacencyCluster
+    /// </example>
+    /// <seealso cref="SAMAdjacencyCluster.UpdatePanelTypes"/>
+    /// <seealso cref="SAMAnalytical.SplitPanelsByElevations"/>
+    /// <seealso cref="SAMAnalytical.MergeSpacesByAirPanels"/>
+    /// <seealso cref="SAMAnalytical.MergeCoplanarPanelsBySpace"/>
     public class SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
@@ -21,36 +47,10 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        /// <summary>
-        /// Grasshopper component that creates an <c>AdjacencyCluster</c> from SAM <c>Panels</c> and <c>Spaces</c>.
-        /// </summary>
-        /// <remarks>
-        /// <para><b>Geometric assumption</b>: This method is valid only when the building envelope
-        /// monotonically decreases (or remains constant) with height—i.e., no level has a larger
-        /// footprint than the one below (no outward overhangs/cantilevers).</para>
-        /// <para><b>Panel preparation</b>: Panels must be split per building level. For double-height or multi-storey voids,
-        /// pre-process with <c>SAMAnalytical.SplitPanelsByElevations</c> and set <c>addMissingPanels_ = true</c> to auto-insert
-        /// <c>AirPanels</c> where floor/ceiling separation is missing.</para>
-        /// <para><b>Overlaps</b>: Overlapping/copanar Panels are supported; duplicates are resolved during clustering.</para>
-        /// <para><b>No AirPanel subdivision?</b> Run <c>SAMAnalytical.MergeSpacesByAirPanels</c> after this component, and optionally
-        /// <c>SAMAnalytical.Mer­geCoplanarPanelsBySpace</c>, to remove splits.</para>
-        /// <para><b>Post-step</b>: Call <c>SAMAdjacencyCluster.UpdatePanelTypes</c> to normalise/repair <c>PanelTypes</c>.</para>
-        /// </remarks>
-        /// <example>
-        /// Inputs:
-        ///   Panels — IEnumerable&lt;SAM.Analytical.Panel&gt; (analytical surfaces; not the GH UI Panel)
-        ///   Spaces — IEnumerable&lt;SAM.Analytical.Space&gt;
-        /// Output:
-        ///   AdjacencyCluster — SAM.Analytical.AdjacencyCluster
-        /// </example>
-        /// <seealso cref="SAMAdjacencyCluster.UpdatePanelTypes"/>
-        /// <seealso cref="SAMAnalytical.SplitPanelsByElevations"/>
-        /// <seealso cref="SAMAnalytical.MergeSpacesByAirPanels"/>
-        /// <seealso cref="SAMAnalytical.MergeCoplanarPanelsBySpace"/>
         public SAMAnalyticalCreateAdjacencyClusterByPanelsAndSpaces()
           : base(
               "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",

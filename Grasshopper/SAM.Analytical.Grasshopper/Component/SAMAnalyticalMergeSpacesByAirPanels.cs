@@ -7,6 +7,27 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Grasshopper component that merges SAM Analytical Spaces across AirPanels (a.k.a. AirWalls).
+    /// </summary>
+    /// <remarks>
+    /// <para><b>Default (no Spaces input connected)</b>: All AirPanels in the model are removed. For each AirPanel,
+    /// the two adjacent Spaces are merged into a single Space. The surviving Space identity is implementation-dependent;
+    /// you cannot control which of the two original Spaces remains.</para>
+    /// <para><b>With optional Spaces input</b>: Only AirPanels whose <i>both</i> adjacent Spaces are present in the
+    /// provided set are removed; all other AirPanels remain. Use this to limit the scope (and count) of merges when multiple
+    /// AirPanels exist.</para>
+    /// <para><b>Tip</b>: After merging, you may want to normalise types with <c>SAMAdjacencyCluster.UpdatePanelTypes</c>
+    /// and optionally clean coplanar boundaries with <c>SAMAnalytical.MergeCoplanarPanelsBySpace</c>.</para>
+    /// </remarks>
+    /// <example>
+    /// Typical usage:
+    ///   1) (Optional) Provide a list of Spaces to restrict which AirPanels are removed.
+    ///   2) Run MergeSpacesByAirPanels to combine Spaces across the selected AirPanels.
+    ///   3) (Optional) Run UpdatePanelTypes / MergeCoplanarPanelsBySpace for cleanup.
+    /// </example>
+    /// <seealso cref="SAMAdjacencyCluster.UpdatePanelTypes"/>
+    /// <seealso cref="SAMAnalytical.MergeCoplanarPanelsBySpace"/>
     public class SAMAnalyticalMergeSpacesByAirPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
@@ -17,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,9 +50,23 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
+        /// <summary>Initializes the component with a concise nickname and detailed description.</summary>
         public SAMAnalyticalMergeSpacesByAirPanels()
-          : base("SAMAnalytical.MergeSpacesByAirPanels", "SAMAnalytical.MergeSpacesByAirPanels",
-              "Merge Analytical Spaces By Air Panels. Removes air panels and combines spaces",
+          : base(
+              "SAMAnalytical.MergeSpacesByAirPanels",
+              "MergeSpacesByAirPanels",
+              "Merge Analytical Spaces across AirPanels (AirWalls).\n" +
+              "\n" +
+              "Default (no Spaces input connected):\n" +
+              "  • Removes all AirPanels and merges each adjacent Space pair into one.\n" +
+              "  • The surviving Space identity is implementation-dependent (not user-controlled).\n" +
+              "\n" +
+              "With optional Spaces input:\n" +
+              "  • Removes only AirPanels whose both adjacent Spaces are in the provided set.\n" +
+              "  • Use this to limit how many AirPanels are removed (and thus how many merges occur).\n" +
+              "\n" +
+              "Post-step:\n" +
+              "  • Consider SAMAdjacencyCluster.UpdatePanelTypes and SAMAnalytical.MergeCoplanarPanelsBySpace.",
               "SAM", "Analytical02")
         {
         }
@@ -45,7 +80,21 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                //result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(
+                    new GooSpaceParam()
+                    {
+                        Name = "_spaces_",
+                        NickName = "_spaces_",
+                        Description =
+                            "Optional filter of SAM Analytical Spaces.\n" +
+                            "• When connected: remove only AirPanels whose both adjacent Spaces are in this set, and merge those pairs.\n" +
+                            "• When not connected: remove all AirPanels and merge all adjacent Space pairs.",
+                        Access = GH_ParamAccess.list,
+                        Optional = true
+                    },
+                    ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
 
@@ -66,8 +115,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "Resulting Spaces after merges across removed AirPanels.", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "Removed Air Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
