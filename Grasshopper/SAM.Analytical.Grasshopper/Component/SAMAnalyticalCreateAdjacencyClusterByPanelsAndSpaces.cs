@@ -10,10 +10,7 @@ namespace SAM.Analytical.Grasshopper
     /// Grasshopper component that creates an <c>AdjacencyCluster</c> from SAM <c>Panels</c> (Walls, Floor and Roofs) and <c>Spaces</c>.
     /// </summary>
     /// <remarks>
-    /// <para><b>Geometric assumption</b>: This method is valid only when the building envelope
-    /// monotonically decreases (or remains constant) with height—i.e., no level has a larger
-    /// footprint than the one below (no outward overhangs/cantilevers).</para>
-    /// <para><b>Panel preparation</b>: Panels must be split per building level. For double-height or multi-storey voids,
+    /// <para><b>Panel preparation</b>: Panels must be without overlaps, maybe be split per building level. For double-height or multi-storey voids,
     /// pre-process with <c>SAMAnalytical.SplitPanelsByElevations</c> and set <c>addMissingPanels_ = true</c> to auto-insert
     /// <c>AirPanels</c> where floor/ceiling separation is missing.</para>
     /// <para><b>Overlaps</b>: Overlapping/copanar Panels are supported; duplicates are resolved during clustering.</para>
@@ -56,9 +53,9 @@ namespace SAM.Analytical.Grasshopper
               "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
               "CreateAdjacencyCluster",
               "Create an AdjacencyCluster from SAM Panels (Walls, Floor and Roofs) and SAM Spaces.\n" +
-               "Assumption: valid only when the building footprint decreases or stays the same with height (no outward overhangs/cantilevers).\n" +
+               "Assumption: No Overlaps allowed so use MergeOverlapPanels node.\n" +
               "\n" +
-              "- Panels must be split per level. For double-height spaces, pre-process with " +
+              "- Panels maybe be split per level. For double-height spaces, pre-process with " +
               "SAMAnalytical.SplitPanelsByElevations and set addMissingPanels_ = True to insert AirPanels " +
               "where floor/ceiling separation is missing.\n" +
               "- Overlapping / coplanar Panels are supported; duplicates are resolved during clustering.\n" +
