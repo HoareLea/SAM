@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateAdjacencyClusterByElevations()
           : base("SAMAnalytical.CreateAdjacencyClusterByElevations", "SAMAnalytical.CreateAdjacencyClusterByElevations",
-              "Create AdjacencyCluster from Shells, Panels And Spaces. If we have two boxes and want to have one Space eneter for elevation ie.0,4 and auxiliaryElevations_ ie.2 ",
+              "Create AdjacencyCluster from Panels And Spaces for Horizontal Floors and Roofs only. Provide all elevation for alll floors including top roof elevation. If we have two boxes on the top of each other and want to have one Space enter for elevation ie.0,4 and additional elevation ie.2 ",
               "SAM", "Analytical")
         {
         }
@@ -60,8 +60,8 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations for levels that should be ignored ie. 2", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations for levels that should be ignored ie. 2", Access = GH_ParamAccess.list, Optional = true };
+                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
                 paramBoolean.SetPersistentData(true);
@@ -83,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Area", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Panle Area", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
@@ -142,12 +142,12 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, offsets);
             }
 
-            List<double> auxiliaryElevations = new List<double>();
-            index = Params.IndexOfInputParam("auxiliaryElevations_");
-            if (index != -1)
-            {
-                dataAccess.GetDataList(index, auxiliaryElevations);
-            }
+            //List<double> auxiliaryElevations = new List<double>();
+            //index = Params.IndexOfInputParam("auxiliaryElevations_");
+            //if (index != -1)
+            //{
+            //    dataAccess.GetDataList(index, auxiliaryElevations);
+            //}
 
             index = Params.IndexOfInputParam("_spaces_");
             List<Space> spaces = new List<Space>();
@@ -189,7 +189,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref tolerance);
 
-            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, elevations, offsets, auxiliaryElevations, addMissingSpaces, addMissingPanels, 0.01, minArea, maxDistance, maxAngle, Core.Tolerance.MacroDistance, silverSpacing, Core.Tolerance.Angle, tolerance);
+            AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, elevations, offsets, addMissingSpaces, addMissingPanels, 0.01, minArea, maxDistance, maxAngle, Core.Tolerance.MacroDistance, silverSpacing, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)

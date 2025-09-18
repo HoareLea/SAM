@@ -53,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
               "SAMAnalytical.CreateAdjacencyClusterByPanelsAndSpaces",
               "CreateAdjacencyCluster",
               "Create an AdjacencyCluster from SAM Panels (Walls, Floor and Roofs) and SAM Spaces.\n" +
-               "Assumption: No Overlaps allowed so use MergeOverlapPanels node.\n" +
+               "Assumption: for Horizontal Floors and Roofs only, No Overlaps allowed so use MergeOverlapPanels node.\n" +
               "\n" +
               "- Panels maybe be split per level. For double-height spaces, pre-process with " +
               "SAMAnalytical.SplitPanelsByElevations and set addMissingPanels_ = True to insert AirPanels " +

@@ -947,7 +947,7 @@ namespace SAM.Analytical
             return AdjacencyCluster(shells, spaces, panels, addMissingSpaces, addMissingPanels, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
         }
 
-        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets = null, IEnumerable<double> auxiliaryElevations = null, bool addMissingSpaces = false, bool addMissingPanels = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, IEnumerable<double> elevations, IEnumerable<double> offsets = null, bool addMissingSpaces = false, bool addMissingPanels = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double snapTolerance = Tolerance.MacroDistance, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
             if (panels == null)
             {
