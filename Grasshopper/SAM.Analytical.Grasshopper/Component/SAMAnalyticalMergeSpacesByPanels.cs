@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,9 +30,12 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalMergeSpacesByPanels()
-          : base("SAMAnalytical.MergeSpacesByPanels", "SAMAnalytical.MergeSpacesByPanels",
-              "Merge Analytical Spaces By Panels. Removes given panels and combines spaces",
-              "SAM", "Analytical02")
+          : base(
+              "SAMAnalytical.MergeSpacesByPanels",
+              "SAMAnalytical.MergeSpacesByPanels",
+              "Merges analytical spaces by panels. Removes the specified panels and combines the connected spaces. If only spaces are provided, shared panels will be removed. The user cannot control which space remains — the result depends on random order.",
+              "SAM",
+              "Analytical02")
         {
         }
 
@@ -131,6 +134,11 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.GetDataList(index, panels);
+            }
+
+            if(panels == null || panels.Count == 0)
+            {
+                panels = null;
             }
 
             List<PanelType> panelTypes = new List<PanelType>();
