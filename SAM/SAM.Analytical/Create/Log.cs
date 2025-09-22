@@ -78,7 +78,6 @@ namespace SAM.Analytical
                                 case PanelType.Ceiling:
                                 case PanelType.FloorInternal:
                                 case PanelType.FloorRaised:
-                                case PanelType.UndergroundCeiling:
                                 case PanelType.WallInternal:
                                     if (spaces_Panel == null || spaces_Panel.Count == 0)
                                     {
@@ -96,6 +95,7 @@ namespace SAM.Analytical
                                 case PanelType.UndergroundSlab:
                                 case PanelType.UndergroundWall:
                                 case PanelType.WallExternal:
+                                case PanelType.UndergroundCeiling:
                                     if (spaces_Panel.Count > 1)
                                         result.Add("{0} Panel {1} (Guid: {2}) has more than one adjacent spaces.", LogRecordType.Warning, panelType.Text(), panel.Name, panel.Guid);
                                     break;
