@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.5";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,6 +45,8 @@ namespace SAM.Analytical.Grasshopper
             inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
 
             inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance", GH_ParamAccess.item, 0.1);
+
+            inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "trimGeometry (bool, default = true)\r\n\r\nDetermines how apertures are handled when their geometry extends beyond the boundaries of panels in the AdjacencyCluster.\r\n\r\ntrue (default)\r\n\r\nIf an aperture overlaps multiple panels, the geometry will be split so that each portion is placed as a separate aperture on the corresponding panels.\r\n\r\nIf an aperture extends beyond a single panel and no other adjacent panel exists, the aperture will be trimmed to fit within that panel.\r\n\r\nfalse\r\n\r\nApertures will be added without splitting or trimming, even if they extend beyond panel boundaries. ", GH_ParamAccess.item, true);
 
         }
 
@@ -84,22 +86,25 @@ namespace SAM.Analytical.Grasshopper
                 maxDistance = 0.1;
             }
 
+            bool trimApertures = true;
+            dataAccess.GetData(3, ref trimApertures);
+
             if (analyticalObject is Panel)
             {
                 Panel panel = Create.Panel((Panel)analyticalObject);
 
                 List<Aperture> apertures_Result = null;
-                if(apertures != null && apertures.Count != 0)
+                if (apertures != null && apertures.Count != 0)
                 {
                     apertures_Result = new List<Aperture>();
                     foreach (Aperture aperture in apertures)
                     {
-                        if(aperture == null)
+                        if (aperture == null)
                         {
                             continue;
                         }
 
-                        List<Aperture> apertures_New = panel.AddApertures(new Aperture[] { aperture }, false, Tolerance.MacroDistance, maxDistance);
+                        List<Aperture> apertures_New = panel.AddApertures([aperture], trimApertures, Tolerance.MacroDistance, maxDistance);
                         if (apertures_New != null)
                         {
                             apertures_Result.AddRange(apertures_New);
@@ -150,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                             continue;
                         }
                         
-                        List<Aperture> apertures_New = Analytical.Modify.AddApertures(panel_New, aperture.ApertureConstruction, aperture.GetFace3D(), false, Tolerance.MacroDistance, maxDistance);
+                        List<Aperture> apertures_New = Analytical.Modify.AddApertures(panel_New, aperture.ApertureConstruction, aperture.GetFace3D(), trimApertures, Tolerance.MacroDistance, maxDistance);
                         if (apertures_New != null && apertures_New.Count > 0)
                         {
                             updated = true;
