@@ -16,8 +16,9 @@ namespace SAM.Geometry.Rhino
 
             double unitScale = Query.UnitScale();
 
-            List<BrepFace> brepFaces = new List<BrepFace>();
-            List<BrepFace> brepFaces_Planar = new List<BrepFace>();
+            List<BrepFace> brepFaces = [];
+            List<BrepFace> brepFaces_Planar = [];
+
             foreach (BrepFace brepFace in brep.Faces)
             {
                 if (!brepFace.IsPlanar(unitScale * tolerance))
@@ -43,11 +44,11 @@ namespace SAM.Geometry.Rhino
             }
 
             
-            List<Face3D> face3Ds = new List<Face3D>();
+            List<Face3D> face3Ds = [];
             foreach (BrepFace brepFace in brepFaces_Planar)
             {
                 Spatial.Plane plane = null;
-                if (brepFace.TryGetPlane(out global::Rhino.Geometry.Plane plane_BrepFace))
+                if (brepFace.TryGetPlane(out global::Rhino.Geometry.Plane plane_BrepFace, unitScale * tolerance))
                 {
                     plane = plane_BrepFace.ToSAM();
 
@@ -61,7 +62,7 @@ namespace SAM.Geometry.Rhino
                     }
                 }
                 
-                List<IClosedPlanar3D> closedPlanar3Ds = new List<IClosedPlanar3D>();
+                List<IClosedPlanar3D> closedPlanar3Ds = [];
                 foreach (BrepLoop brepLoop in brepFace.Loops)
                 {
                     ISAMGeometry3D geometry3D = brepLoop.To3dCurve().ToSAM(simplify);
@@ -114,11 +115,11 @@ namespace SAM.Geometry.Rhino
             if (face3Ds == null || face3Ds.Count == 0)
                 return null;
 
-            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
+            List<ISAMGeometry3D> result = [];
 
             if(brep.IsSolid)
             {
-                Shell shell = new Shell(face3Ds);
+                Shell shell = new (face3Ds);
                 if(orinetNormals)
                 {
                     shell.OrientNormals();
@@ -149,9 +150,11 @@ namespace SAM.Geometry.Rhino
 
         public static List<ISAMGeometry3D> ToSAM(this global::Rhino.Geometry.Surface surface, bool simplify = true)
         {
-            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
+            List<ISAMGeometry3D> result = [];
             foreach (BrepLoop brepLoop in surface.ToBrep().Loops)
+            {
                 result.Add(brepLoop.ToSAM(simplify));
+            }
 
             return result;
         }

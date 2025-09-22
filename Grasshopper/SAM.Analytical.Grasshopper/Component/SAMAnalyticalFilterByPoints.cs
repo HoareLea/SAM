@@ -16,12 +16,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("be65e704-b18c-4f31-a322-de789d49ba69");
+        public override Guid ComponentGuid => new ("be65e704-b18c-4f31-a322-de789d49ba69");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalFilterByPoints()
-          : base("SAMAnalyticalPanel.FilterByPoints", "SAMAnalytical.FilterByPoints",
+          : base("SAMAnalytical.FilterByPoints", "SAMAnalytical.FilterByPoints",
               "Filter Analytical Objects By Points",
               "SAM", "Analytical01")
         {
@@ -48,20 +48,20 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
 
-                GooAnalyticalObjectParam gooAnalyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object \nAnalytical Model, Adjacency Cluster, Panels or Spaces", Access = GH_ParamAccess.list };
+                GooAnalyticalObjectParam gooAnalyticalObjectParam = new () { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object \nAnalytical Model, Adjacency Cluster, Panels or Apertures", Access = GH_ParamAccess.list };
                 gooAnalyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "_points", NickName = "_points", Description = "Points", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_Number paramNumber = new () { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
                 
                 
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -72,10 +72,15 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "In", NickName = "In", Description = "SAM Analytical Objects In - Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Out", NickName = "Out", Description = "SAM Analytical Objects Out", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
-                return result.ToArray();
+                List<GH_SAMParam> result = [];
+                
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Panels_In", NickName = "Panels_In", Description = "SAM Analytical Panels In", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Panels_Out", NickName = "Panels_Out", Description = "SAM Analytical Panels Out", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Apertures_In", NickName = "Apertures_In", Description = "SAM Analytical Apertures In", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "Apertures_Out", NickName = "Apertures_Out", Description = "SAM Analytical Apertures Out", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                
+                return [.. result];
             }
         }
 
@@ -89,11 +94,14 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            int index_In = Params.IndexOfOutputParam("In");
-            int index_Out = Params.IndexOfOutputParam("Out");
+            int index_Panels_In = Params.IndexOfOutputParam("Panels_In");
+            int index_Panels_Out = Params.IndexOfOutputParam("Panels_Out");
+
+            int index_Apertures_In = Params.IndexOfOutputParam("Apertures_In");
+            int index_Apertures_Out = Params.IndexOfOutputParam("Apertures_Out");
 
             index = Params.IndexOfInputParam("_analyticals");
-            List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
+            List<IAnalyticalObject> analyticalObjects = [];
             if (index == -1 || !dataAccess.GetDataList(index, analyticalObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -101,11 +109,13 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_points");
-            List<GH_Point> points = new List<GH_Point>();
+            List<GH_Point> points = [];
             if (index == -1 || !dataAccess.GetDataList(index, points))
             {
-                if (index_In != -1)
-                    dataAccess.SetDataList(index_In, analyticalObjects);
+                if (index_Panels_In != -1)
+                {
+                    dataAccess.SetDataList(index_Panels_In, analyticalObjects);
+                }
 
                 return;
             }
@@ -118,38 +128,41 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<Panel> panels = analyticalObjects.FindAll(x => x is Panel).Cast<Panel>().ToList();
+            List<Panel> panels = [.. analyticalObjects.FindAll(x => x is Panel).Cast<Panel>()];
+            List<Aperture> apertures = [.. analyticalObjects.FindAll(x => x is Aperture).Cast<Aperture>()];
 
-            List<AdjacencyCluster> adjacencyClusters = new List<AdjacencyCluster>();
+            List<AdjacencyCluster> adjacencyClusters = [];
             foreach(IAnalyticalObject analyticalObject in analyticalObjects)
             {
                 List<Panel> panels_Temp = null;
-                if(analyticalObject is AdjacencyCluster)
+                List<Aperture> apertures_Temp = null;
+                if (analyticalObject is AdjacencyCluster adjacencyCluster_Temp)
                 {
-                    panels_Temp = ((AdjacencyCluster)analyticalObject).GetPanels();
+                    panels_Temp = adjacencyCluster_Temp.GetPanels();
+                    apertures_Temp = adjacencyCluster_Temp.GetApertures();
                 }
-                else if(analyticalObject is AnalyticalModel)
+                else if(analyticalObject is AnalyticalModel analyticalModel)
                 {
-                    panels_Temp = ((AnalyticalModel)analyticalObject).GetPanels();
-                }
-
-                if(panels_Temp == null || panels_Temp.Count == 0)
-                {
-                    continue;
+                    panels_Temp = analyticalModel.GetPanels();
+                    apertures_Temp = analyticalModel.GetApertures(x => true);
                 }
 
-                if(panels == null)
+                if(panels_Temp != null && panels_Temp.Count != 0)
                 {
-                    panels = new List<Panel>();
+                    panels.AddRange(panels_Temp);
                 }
 
-                panels.AddRange(panels_Temp);
+                if (apertures_Temp != null && apertures_Temp.Count != 0)
+                {
+                    apertures.AddRange(apertures_Temp);
+                }
             }
 
+            #region PANELS
             List<Tuple<Panel, Face3D>> tuples_Panel = panels.ConvertAll(x => new Tuple<Panel, Face3D>(x, x?.Face3D));
             tuples_Panel.RemoveAll(x => x.Item2 == null);
 
-            Dictionary<Guid, Panel> dictionary_Panel = new Dictionary<Guid, Panel>();
+            Dictionary<Guid, Panel> dictionary_Panel = [];
             foreach(GH_Point point in points)
             {
                 Point3D point3D = point?.Value.ToSAM();
@@ -161,22 +174,60 @@ namespace SAM.Analytical.Grasshopper
                 tuples_Panel.FindAll(x => x.Item2.Inside(point3D, tolerance)).ForEach(x => dictionary_Panel[x.Item1.Guid] = x.Item1);
             }
 
-            if (index_In != -1)
+            if (index_Panels_In != -1)
             {
-                dataAccess.SetDataList(index_In, dictionary_Panel.Values);
+                dataAccess.SetDataList(index_Panels_In, dictionary_Panel.Values);
             }
 
-            if (index_Out != -1)
+            if (index_Panels_Out != -1)
             {
                 if (dictionary_Panel.Values.Count == 0)
                 {
-                    dataAccess.SetDataList(index_Out, analyticalObjects);
+                    dataAccess.SetDataList(index_Panels_Out, analyticalObjects);
                 }
                 else
                 {
-                    dataAccess.SetDataList(index_Out, tuples_Panel?.FindAll(x => !dictionary_Panel.ContainsKey(x.Item1.Guid)).ConvertAll(x => x.Item1));
+                    dataAccess.SetDataList(index_Panels_Out, tuples_Panel?.FindAll(x => !dictionary_Panel.ContainsKey(x.Item1.Guid)).ConvertAll(x => x.Item1));
                 }
             }
+            #endregion
+
+            #region APERTURES
+            List<Tuple<Aperture, Face3D>> tuples_Aperture = apertures.ConvertAll(x => new Tuple<Aperture, Face3D>(x, x?.Face3D));
+            tuples_Aperture.RemoveAll(x => x.Item2 == null);
+
+            Dictionary<Guid, Aperture> dictionary_Aperture = [];
+            foreach (GH_Point point in points)
+            {
+                Point3D point3D = point?.Value.ToSAM();
+                if (point3D == null)
+                {
+                    continue;
+                }
+
+                tuples_Aperture.FindAll(x => x.Item2.Inside(point3D, tolerance)).ForEach(x => dictionary_Aperture[x.Item1.Guid] = x.Item1);
+            }
+
+            if (index_Apertures_In != -1)
+            {
+                dataAccess.SetDataList(index_Apertures_In, dictionary_Aperture.Values);
+            }
+
+            if (index_Apertures_Out != -1)
+            {
+                if (dictionary_Aperture.Values.Count == 0)
+                {
+                    dataAccess.SetDataList(index_Apertures_Out, analyticalObjects);
+                }
+                else
+                {
+                    dataAccess.SetDataList(index_Apertures_Out, tuples_Aperture?.FindAll(x => !dictionary_Aperture.ContainsKey(x.Item1.Guid)).ConvertAll(x => x.Item1));
+                }
+            }
+            #endregion
+
+
+
         }
     }
 }
