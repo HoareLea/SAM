@@ -136,6 +136,10 @@ namespace SAM.Analytical
                             }
 
                             break;
+
+                        case PanelType.Undefined:
+                            panelType = Query.PanelType(panel.Normal);
+                            break;
                     }                 
 
                 }

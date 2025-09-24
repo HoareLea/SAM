@@ -2,6 +2,7 @@
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -106,7 +107,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    tuples_Shell_Existing.Add(new Tuple<Space, BoundingBox3D, Shell, Point3D>(keyValuePair.Key, boundingBox3D_Shell, keyValuePair.Value, shell.InternalPoint3D(silverSpacing, tolerance_Distance)));
+                    tuples_Shell_Existing.Add(new Tuple<Space, BoundingBox3D, Shell, Point3D>(keyValuePair.Key, keyValuePair.Value.GetBoundingBox(), keyValuePair.Value, shell.InternalPoint3D(silverSpacing, tolerance_Distance)));
                 }
             }
 
@@ -118,6 +119,8 @@ namespace SAM.Analytical
             {
                 return false;
             }
+
+            Geometry.Spatial.Modify.SplitCoplanarFace3Ds(shells_Split, tolerance_Angle, tolerance_Distance);
 
             List<Tuple<BoundingBox3D, Shell, Point3D>> tuples_Shell_New = [];
             foreach (Shell shell_Split in shells_Split)
@@ -133,6 +136,8 @@ namespace SAM.Analytical
             List<Space> spaces_New = [];
             List<Panel> panels_New = [];
 
+            int spaceCount = dictionary.Count + 1;
+
             #region Existing spaces
 
             for (int i = tuples_Shell_Existing.Count - 1; i >= 0; i--)
@@ -140,7 +145,7 @@ namespace SAM.Analytical
                 Tuple<Space, BoundingBox3D, Shell, Point3D> tuple_Shell_Existing = tuples_Shell_Existing[i];
 
                 //Find all new spaces inside existing space
-                List<Tuple<BoundingBox3D, Shell, Point3D>> tuples_Shell_New_Inside = tuples_Shell_New.FindAll(x => tuple_Shell_Existing.Item2.InRange(x.Item3, tolerance_Distance) && tuple_Shell_Existing.Item3.InRange(x.Item3, tolerance_Distance));
+                List<Tuple<BoundingBox3D, Shell, Point3D>> tuples_Shell_New_Inside = tuples_Shell_New.FindAll(x => tuple_Shell_Existing.Item2.InRange(x.Item3, tolerance_Distance) && tuple_Shell_Existing.Item3.Inside(x.Item3, silverSpacing, tolerance_Distance));
                 if (tuples_Shell_New_Inside is null || tuples_Shell_New_Inside.Count == 0)
                 {
                     continue;
@@ -157,7 +162,8 @@ namespace SAM.Analytical
                 foreach (Tuple<BoundingBox3D, Shell, Point3D> tuple_Shell_New_Inside in tuples_Shell_New_Inside)
                 {
                     //Create new space
-                    Space space = new Space("NEW", tuple_Shell_New_Inside.Item3);
+                    Space space = new Space(string.Format("Cell {0}", spaceCount), tuple_Shell_New_Inside.Item3);
+                    spaceCount++;
 
                     //Add new space
                     adjacencyCluster.AddObject(space);
@@ -232,8 +238,11 @@ namespace SAM.Analytical
                 }
 
                 //Create new space
-                Space space = new Space("NEW", tuple_Shell_New.Item3);
+                Space space = new Space(string.Format("Cell {0}", spaceCount), tuple_Shell_New.Item3);
+                spaceCount++;
                 spaces_New.Add(space);
+
+                adjacencyCluster.AddObject(space);
 
                 foreach (Face3D face3D in tuple_Shell_New.Item2.Face3Ds)
                 {
@@ -250,7 +259,7 @@ namespace SAM.Analytical
                             //Copy data/links from existing panel to new panel
                             List<Space> spaces_Panel = adjacencyCluster.GetSpaces(panel);
 
-                            panel = new Panel(Guid.NewGuid(), panel, face3D);
+                            panel = new Panel(panel.Guid, panel, face3D); //new Panel(Guid.NewGuid(), panel, face3D);
                             adjacencyCluster.AddObject(panel);
                             foreach (Space space_Panel in spaces_Panel)
                             {
@@ -302,7 +311,11 @@ namespace SAM.Analytical
                 }
             }
 
-            adjacencyCluster.UpdatePanelTypes(groundElevation, guids);
+            if (adjacencyCluster.UpdatePanelTypes(groundElevation, guids) is IEnumerable<Panel> panels_Temp && panels_Temp.Any())
+            {
+                adjacencyCluster.UpdatePanelTypes(groundElevation, panels_Temp.ToList().ConvertAll(x => x.Guid));
+            }
+
             adjacencyCluster.SetDefaultConstructionByPanelType(guids);
 
             return true;
