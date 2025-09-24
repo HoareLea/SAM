@@ -82,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result =
                 [
-                    new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM AnalyticalObject, Access = GH_ParamAccess.item }, ParamVisibility.Binding),
+                    new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding)
                 ];
                 return [.. result];
             }
@@ -165,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
                 analyticalObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
 
-            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            index = Params.IndexOfOutputParam("AnalyticalObject");
             if (index != -1)
             {
                 dataAccess.SetData(index, new GooAnalyticalObject(analyticalObject));

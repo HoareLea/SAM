@@ -92,7 +92,7 @@ namespace SAM.Analytical
             List<Tuple<Space, BoundingBox3D, Shell, Point3D>> tuples_Shell_Existing = [];
 
             Dictionary<Space, Shell> dictionary = Query.ShellDictionary(adjacencyCluster);
-            if (dictionary is null)
+            if (dictionary is not null)
             {
                 foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary)
                 {
