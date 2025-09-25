@@ -9,15 +9,15 @@ using System.Threading.Tasks;
 namespace SAM.Analytical
 {
     public class AdjacencyCluster : SAMObjectRelationCluster<IJSAMObject>, IAnalyticalObject
-    {        
+    {
         public AdjacencyCluster()
             : base()
         {
 
         }
-        
+
         public AdjacencyCluster(AdjacencyCluster adjacencyCluster)
-            :base(adjacencyCluster)
+            : base(adjacencyCluster)
         {
 
         }
@@ -537,13 +537,13 @@ namespace SAM.Analytical
 
         public List<MechanicalSystem> GetMechanicalSystems(MechanicalSystemType mechanicalSystemType)
         {
-            if(mechanicalSystemType == null)
+            if (mechanicalSystemType == null)
             {
                 return null;
             }
 
             List<MechanicalSystem> result = GetMechanicalSystems();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
@@ -940,6 +940,11 @@ namespace SAM.Analytical
                 typeof(DesignDay).IsAssignableFrom(type);
         }
 
+        public List<IJSAMObject> Merge(AdjacencyCluster adjacencyCluster)
+        {
+            return base.Merge(adjacencyCluster);
+        }
+
         public bool Shade(Panel panel)
         {
             if (panel == null)
@@ -955,9 +960,9 @@ namespace SAM.Analytical
         public void Transform(Transform3D transform3D)
         {
             List<Panel> panels = GetPanels();
-            if(panels != null)
+            if (panels != null)
             {
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
                     Panel panel_New = new Panel(panel);
                     panel_New.Transform(transform3D);
@@ -979,7 +984,7 @@ namespace SAM.Analytical
 
         public override bool TryGetObject<T>(int index, T @object)
         {
-            if(base.TryGetObject(index, @object))
+            if (base.TryGetObject(index, @object))
             {
                 return true;
             }
@@ -1008,7 +1013,7 @@ namespace SAM.Analytical
 
                     foreach (Aperture aperture_Temp in apertures)
                     {
-                        if(count == index)
+                        if (count == index)
                         {
                             @object = (T)(object)aperture_Temp;
                             return true;

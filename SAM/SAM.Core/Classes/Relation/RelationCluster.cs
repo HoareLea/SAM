@@ -1871,5 +1871,54 @@ namespace SAM.Core
 
             return guids.Remove(guid_2);
         }
+
+        protected List<X>? Merge(RelationCluster<X>? relationCluster)
+        {
+            if(relationCluster is null)
+            {
+                return null;
+            }
+
+            List<X> result = [];
+            if(relationCluster.dictionary_Objects is not null)
+            {
+                foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_Type in relationCluster.dictionary_Objects)
+                {
+                    if(!dictionary_Objects.TryGetValue(keyValuePair_Type.Key, out Dictionary<Guid, X> dictionary) || dictionary is null)
+                    {
+                        dictionary = [];
+                        dictionary_Objects[keyValuePair_Type.Key] = dictionary;
+                    }
+
+                    foreach(KeyValuePair<Guid, X> keyValuePair_Object in keyValuePair_Type.Value)
+                    {
+                        dictionary[keyValuePair_Object.Key] = keyValuePair_Object.Value;
+                        result.Add(keyValuePair_Object.Value);
+                    }
+                }
+            }
+
+            if(relationCluster.dictionary_Relations is not null)
+            {
+                foreach (KeyValuePair<string, Dictionary<Guid, HashSet<Guid>>> keyValuePair_Type in relationCluster.dictionary_Relations)
+                {
+                    if (!dictionary_Relations.TryGetValue(keyValuePair_Type.Key, out Dictionary<Guid, HashSet<Guid>> dictionary) || dictionary is null)
+                    {
+                        dictionary = [];
+                        dictionary_Relations[keyValuePair_Type.Key] = dictionary;
+                    }
+
+                    foreach (KeyValuePair< Guid, HashSet < Guid >> keyValuePair_Relation in keyValuePair_Type.Value)
+                    { 
+                        foreach(Guid guid in keyValuePair_Relation.Value)
+                        {
+                            dictionary[keyValuePair_Relation.Key].Add(guid);
+                        }
+                    }
+                }
+            }
+
+            return result;
+        }
     }
 }
