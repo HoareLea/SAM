@@ -798,6 +798,11 @@ namespace SAM.Analytical
                 result.Add(string.Format("Space (Guid: {1}) has no area assigned.", name, space.Guid), LogRecordType.Error);
             }
 
+            if(Core.Query.AlmostEqual(area, 0, Tolerance.MacroDistance))
+            {
+                result.Add(string.Format("Space (Guid: {1}) has assigned area almost equal to 0.", name, space.Guid), LogRecordType.Error);
+            }
+
             InternalCondition internalCondition = space.InternalCondition;
             if(internalCondition == null)
                 result.Add(string.Format("{0} Space (Guid: {1}) has no InternalCondition assigned.", name, space.Guid), LogRecordType.Warning);
