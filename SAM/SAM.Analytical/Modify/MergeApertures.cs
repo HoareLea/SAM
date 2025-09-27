@@ -17,7 +17,11 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Aperture> apertures = panel.Apertures;
+            if(panel.Apertures is not List<Aperture> apertures || apertures.Count == 0)
+            {
+                return null;
+            }
+
             if(apertureGuids != null && apertureGuids.Any())
             {
                 for (int i = apertures.Count - 1; i >= 0; i--)
