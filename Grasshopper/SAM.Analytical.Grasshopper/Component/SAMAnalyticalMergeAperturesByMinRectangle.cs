@@ -47,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as Panel, AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
@@ -129,18 +129,6 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
-            {
-                adjacencyCluster = (AdjacencyCluster)sAMObject;
-            }
-            else if(sAMObject is AnalyticalModel)
-            {
-                adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-            }
-
-            adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
-
             index = Params.IndexOfInputParam("_apertures_");
             List<Aperture> apertures = [];
             if (index != -1)
@@ -157,31 +145,56 @@ namespace SAM.Analytical.Grasshopper
 
             List<Aperture> apertures_Result = [];
 
-            List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels != null && panels.Count != 0)
+            if (sAMObject is Panel)
             {
-                foreach (Panel panel in panels)
+                Panel panel = Create.Panel((Panel)sAMObject);
+
+                List<Aperture> apertures_Panel = panel.MergeApertures(distance, out List<Aperture> removedApertures_Temp, apertures?.ConvertAll(x => x.Guid), removeOverlap);
+                if(apertures_Panel != null)
                 {
-                    Panel panel_Temp = Create.Panel(panel); 
-
-                    List<Aperture> apertures_Panel = panel_Temp.MergeApertures(distance, out List<Aperture> removedApertures_Temp, apertures?.ConvertAll(x => x.Guid), removeOverlap);
-                    if(apertures_Panel == null || apertures_Panel.Count == 0)
-                    {
-                        continue;
-                    }
-
-                    adjacencyCluster.AddObject(panel);
                     apertures_Result.AddRange(apertures_Panel);
                 }
             }
+            else
+            {
+                AdjacencyCluster adjacencyCluster = null;
+                if (sAMObject is AdjacencyCluster)
+                {
+                    adjacencyCluster = (AdjacencyCluster)sAMObject;
+                }
+                else if (sAMObject is AnalyticalModel)
+                {
+                    adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
+                }
 
-            if (sAMObject is AdjacencyCluster)
-            {
-                sAMObject = adjacencyCluster;
-            }
-            else if (sAMObject is AnalyticalModel)
-            {
-                sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+                adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
+
+                List<Panel> panels = adjacencyCluster.GetPanels();
+                if (panels != null && panels.Count != 0)
+                {
+                    foreach (Panel panel in panels)
+                    {
+                        Panel panel_Temp = Create.Panel(panel);
+
+                        List<Aperture> apertures_Panel = panel_Temp.MergeApertures(distance, out List<Aperture> removedApertures_Temp, apertures?.ConvertAll(x => x.Guid), removeOverlap);
+                        if (apertures_Panel == null || apertures_Panel.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        adjacencyCluster.AddObject(panel_Temp);
+                        apertures_Result.AddRange(apertures_Panel);
+                    }
+                }
+
+                if (sAMObject is AdjacencyCluster)
+                {
+                    sAMObject = adjacencyCluster;
+                }
+                else if (sAMObject is AnalyticalModel)
+                {
+                    sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
+                }
             }
 
             index = Params.IndexOfOutputParam("analyticalObject");

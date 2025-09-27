@@ -236,9 +236,35 @@ namespace SAM.Analytical
                     removedApertures.Add(aperture_Temp);
                 }
 
+                if(removeOverlap)
+                {
+                    if (panel.Apertures is List<Aperture> apertures_Existing && apertures_Existing.Count != 0)
+                    {
+                        foreach (Aperture aperture_Existing in apertures_Existing)
+                        {
+                            if (plane.Convert(aperture_Existing?.Face3D?.GetExternalEdge3D()) is not IClosed2D closed2D)
+                            {
+                                continue;
+                            }
+
+                            if (!rectangle2D_External.Inside(closed2D, Core.Tolerance.MacroDistance))
+                            {
+                                continue;
+                            }
+
+                            if (!panel.RemoveAperture(aperture_Existing.Guid))
+                            {
+                                continue;
+                            }
+
+                            removedApertures.Add(aperture_Existing);
+                        }
+                    }
+                }
+
                 Polygon3D polygon3D = plane.Convert(new Polygon2D(rectangle2D_External.GetPoints()));
 
-                Aperture aperture_New = new Aperture(Guid.NewGuid(), aperture, new Face3D(polygon3D));
+                Aperture aperture_New = new (Guid.NewGuid(), aperture, new Face3D(polygon3D));
                 panel.AddAperture(aperture_New);
                 result.Add(aperture_New);
 
