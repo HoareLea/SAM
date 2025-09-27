@@ -265,7 +265,7 @@ namespace SAM.Analytical
                 Polygon3D polygon3D = plane.Convert(new Polygon2D(rectangle2D_External.GetPoints()));
 
                 Aperture aperture_New = new (Guid.NewGuid(), aperture, new Face3D(polygon3D));
-                panel.AddAperture(aperture_New);
+                panel.AddAperture(aperture_New, tolerance_Distance: Core.Tolerance.MacroDistance);
                 result.Add(aperture_New);
 
             }
