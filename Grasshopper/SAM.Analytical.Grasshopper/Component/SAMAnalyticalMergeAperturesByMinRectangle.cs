@@ -152,7 +152,7 @@ namespace SAM.Analytical.Grasshopper
                 List<Aperture> apertures_Panel = panel.MergeApertures(distance, out List<Aperture> removedApertures_Temp, apertures?.ConvertAll(x => x.Guid), removeOverlap);
                 if(apertures_Panel != null)
                 {
-                    apertures_Result.AddRange(apertures_Panel);
+                    apertures_Result.AddRange(apertures_Panel.ConvertAll(x => new Aperture(x)));
                 }
             }
             else
@@ -183,7 +183,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         adjacencyCluster.AddObject(panel_Temp);
-                        apertures_Result.AddRange(apertures_Panel);
+                        apertures_Result.AddRange(apertures_Panel.ConvertAll(x => new Aperture(x)));
                     }
                 }
 
