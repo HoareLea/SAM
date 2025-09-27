@@ -154,6 +154,8 @@ namespace SAM.Analytical.Grasshopper
                 {
                     apertures_Result.AddRange(apertures_Panel);
                 }
+
+                sAMObject = panel;
             }
             else
             {
