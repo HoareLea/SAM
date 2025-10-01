@@ -236,7 +236,7 @@ namespace SAM.Analytical.Grasshopper
                                     double volume = space.Volume(adjacencyCluster);
                                     if (!double.IsNaN(volume))
                                     {
-                                        function_Temp[vent_Index] = volume / m3h;
+                                        function_Temp[vent_Index] = m3h / volume;
                                     }
                                 }
                             }
