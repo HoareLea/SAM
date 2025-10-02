@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using MathNet.Numerics;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -285,6 +286,10 @@ namespace SAM.Analytical
 
                 double offset = factor;
 
+                double area_Panel = face2D_Panel.GetArea();
+
+                int strikes = 0;
+
                 double area_Current = face2D.GetArea();
                 double difference = System.Math.Abs(area_Current - area_Target);
                 while (!double.IsNaN(factor) && System.Math.Abs(factor) > tolerance && difference > tolerance_Area)
@@ -300,6 +305,22 @@ namespace SAM.Analytical
                         face2D = face2Ds.First();
 
                         area_Current = face2D.GetArea();
+
+                        if(area_Current.AlmostEqual(area_Panel, tolerance_Area))
+                        {
+                            if(strikes > 12)
+                            {
+                                return null;
+                            }
+
+                            strikes++;
+                            factor = factor / 2;
+                            offset = factor;
+                            continue;
+                        }
+
+                        strikes = 0;
+
                         difference = System.Math.Abs(area_Current - area_Target);
 
                         factor_New = System.Math.Abs(factor_New);
