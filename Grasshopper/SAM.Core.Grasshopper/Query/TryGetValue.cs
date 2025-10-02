@@ -13,11 +13,16 @@ namespace SAM.Core.Grasshopper
                 return false;
 
             foreach(KeyValuePair<Interval, T> keyValuePair in dictionary)
-                if(keyValuePair.Key.IncludesParameter(value))
+            {
+                double value_Temp = System.Math.Round(value, System.MidpointRounding.ToEven);
+
+                if (keyValuePair.Key.IncludesParameter(value_Temp))
                 {
                     t = keyValuePair.Value;
                     return true;
                 }
+            }
+
 
             return false;
         }
