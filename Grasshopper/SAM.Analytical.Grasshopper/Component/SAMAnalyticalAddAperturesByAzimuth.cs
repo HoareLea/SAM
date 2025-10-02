@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -106,10 +106,10 @@ namespace SAM.Analytical.Grasshopper
             // Aperture construction (optional)
             idx = inputParamManager.AddParameter(
                 new GooApertureConstructionParam(),
-                "_apertureConstruction_",
-                "_apertureConstruction_",
-                "SAM Analytical Aperture Construction (optional).",
-                GH_ParamAccess.item);
+                "_apertureConstructions_",
+                "_apertureConstructions_",
+                "SAM Analytical Aperture Constructions (optional).",
+                GH_ParamAccess.list);
             inputParamManager[idx].Optional = true;
         }
 
@@ -131,8 +131,8 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(2, false);
 
             // Inputs
-            ApertureConstruction apertureConstruction = null;
-            dataAccess.GetData(3, ref apertureConstruction);
+            List<ApertureConstruction> apertureConstructions = [];
+            dataAccess.GetDataList(3, apertureConstructions);
 
             var ratios = new List<double>();
             if (!dataAccess.GetDataList(1, ratios) || ratios == null)
@@ -212,9 +212,20 @@ namespace SAM.Analytical.Grasshopper
                 double azimuth = NormalizeAngleDegrees(panel.Azimuth());
                 if (double.IsNaN(azimuth)) return;
 
-                if (!TryGetRatio(intervalRatioMap, azimuth, out double ratio)) return;
+                if (!TryGetRatio(intervalRatioMap, azimuth, out double ratio, out int index)) return;
 
-                var apertureConstruction_Temp = apertureConstruction ?? Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+
+                ApertureConstruction apertureConstruction_Temp = null;
+                if (apertureConstructions != null && apertureConstructions.Count != 0)
+                {
+                    apertureConstruction_Temp = apertureConstructions[index];
+                }
+
+                if (apertureConstruction_Temp is null)
+                {
+                    apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+                }
+
                 var apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
 
                 dataAccess.SetData(0, panel);
@@ -257,11 +268,21 @@ namespace SAM.Analytical.Grasshopper
                 if (double.IsNaN(az))
                     continue;
 
-                if (!TryGetRatio(intervalRatioMap, az, out double ratio))
+                if (!TryGetRatio(intervalRatioMap, az, out double ratio, out int index))
                     continue;
 
                 var panel_New = Create.Panel(panel);
-                var apertureConstruction_Temp = apertureConstruction ?? Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
+
+                ApertureConstruction apertureConstruction_Temp = null;
+                if (apertureConstructions != null && apertureConstructions.Count != 0)
+                {
+                    apertureConstruction_Temp = apertureConstructions[index];
+                }
+
+                if (apertureConstruction_Temp is null)
+                {
+                    apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
+                }
 
                 var apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio);
                 if (apertures == null || apertures.Count == 0)
@@ -324,13 +345,15 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Try to find the ratio whose interval contains the given azimuth.
         /// </summary>
-        private static bool TryGetRatio(Dictionary<Interval, double> map, double azimuthDeg, out double ratio)
+        private static bool TryGetRatio(Dictionary<Interval, double> map, double azimuthDeg, out double ratio, out int index)
         {
             double azimuthDeg_Round = System.Math.Round(azimuthDeg, MidpointRounding.ToEven);
+            index = -1;
 
             ratio = 0.0;
             foreach (var kvp in map)
             {
+                index++;
                 // Interval.IncludesParameter uses numeric comparison on [T0, T1]
                 if (kvp.Key.IncludesParameter(azimuthDeg_Round))
                 {
@@ -338,6 +361,8 @@ namespace SAM.Analytical.Grasshopper
                     return true;
                 }
             }
+
+            index = -1;
             return false;
         }
 
