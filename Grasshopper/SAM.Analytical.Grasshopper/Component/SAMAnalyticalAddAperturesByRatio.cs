@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -25,12 +25,25 @@ namespace SAM.Analytical.Grasshopper
                 protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
+        /// Adds apertures by target WWR to SAM Analytical objects (Panel, AdjacencyCluster, Analytical Model).
+        ///
+        /// How to apply on an office floor
+        /// • Keep sill ≈ 0.9 m; push head to 2.4–2.6 m if your structure allows.
+        /// • If you must cap WWR, narrow the bays (reduce width) rather than lowering the head.
+        /// • Pair with a light, reflective ceiling and (on S/E/W) external shading.
         /// </summary>
         public SAMAnalyticalAddAperturesByRatio()
-          : base("SAMAnalytical.AddAperturesByRatio", "SAMAnalytical.AddAperturesByRatio",
-              "Add Apertures to SAM Analytical Object: ie Panel, AdjacencyCluster or Analytical Model",
-              "SAM", "Analytical")
+            : base(
+                "SAMAnalytical.AddAperturesByRatio",
+                "SAMAnalytical.AddAperturesByRatio",
+                @"Add apertures to SAM Analytical object (Panel, AdjacencyCluster, or Analytical Model) by target Window-to-Wall Ratio (WWR).
+
+    How to apply on an office floor
+    • Keep sill ≈ 0.9 m; push head to 2.4–2.6 m if your structure allows.
+    • If you must cap WWR, narrow the bays (reduce width) rather than lowering the head.
+    • Pair with a light, reflective ceiling and (on S/E/W) external shading.",
+                    "SAM",
+                    "Analytical")
         {
         }
 
@@ -58,11 +71,11 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_apertureHeight_", NickName = "_apertureHeight_", Description = "Default aperture Height", Access = GH_ParamAccess.item, Optional = true };
-                number.SetPersistentData(2);
+                number.SetPersistentData(2.5);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sillHeight_", NickName = "_sillHeight_", Description = "Default sill Height", Access = GH_ParamAccess.item, Optional = true };
-                number.SetPersistentData(0.8);
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sillHeight_", NickName = "_sillHeight_", Description = "Default sill Height \n Keep sill ~0.85–1.0 m", Access = GH_ParamAccess.item, Optional = true };
+                number.SetPersistentData(0.85);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_horizontalSeparation_", NickName = "_horizontalSeparation_", Description = "Horizontal Separation", Access = GH_ParamAccess.item, Optional = true };
@@ -142,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("_apertureHeight_");
             if (index == -1 || !dataAccess.GetData(index, ref apertureHeight))
             {
-                apertureHeight = 2;
+                apertureHeight = 2.5;
             }
 
             double sillHeight = 0.8;

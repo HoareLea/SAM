@@ -94,11 +94,11 @@ namespace SAM.Analytical.Grasshopper
                     "Directional ratios applied to azimuth sectors in list ordern: [North, East, South, West].\n" +
                     "Typical range: 0.0–1.0.\n" +
                     "Defaults:\n" +
-                    "  North = 0.8, East = 0.7, South = 0.5, West = 0.6\n" +
+                    "  North = 0.15, East = 0.2, South = 0.25, West = 0.2\n" +
                     "  Ratios (0.0–1.0) are target WWRs; for each matched panel an aperture is created by scaling the panel polygon in its local plane so that the aperture area ≈ (ratio × panel area).",
                 Access = GH_ParamAccess.list,
             };
-            ratiosParam.SetPersistentData(0.8, 0.7, 0.5, 0.6);
+            ratiosParam.SetPersistentData(0.15, 0.2, 0.25, 0.2);
             idx = inputParamManager.AddParameter(ratiosParam);
             inputParamManager[idx].Optional = true;
 
