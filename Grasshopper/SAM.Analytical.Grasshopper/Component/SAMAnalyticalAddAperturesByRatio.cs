@@ -25,27 +25,55 @@ namespace SAM.Analytical.Grasshopper
                 protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
-        /// Adds apertures by target WWR to SAM Analytical objects (Panel, AdjacencyCluster, Analytical Model).
+        /// Add apertures to SAM Analytical objects (Panel, AdjacencyCluster, AnalyticalModel)
+        /// to meet a target window-to-wall ratio (WWR).
         ///
-        /// How to apply on an office floor
-        /// • Keep sill ≈ 0.9 m; push head to 2.4–2.6 m if your structure allows.
-        /// • If you must cap WWR, narrow the bays (reduce width) rather than lowering the head.
+        /// What it does
+        /// • For each eligible wall panel (external, non-adiabatic), distributes one or more windows to match the target WWR.
+        /// • Aperture height/sill define the vertical band; horizontal spacing and options control how windows are tiled.
+        ///
+        /// How eligibility works
+        /// • Panel input: operates only on that panel (no filtering).
+        /// • AdjacencyCluster / AnalyticalModel input: operates on external, non-adiabatic wall panels.
+        ///
+        /// WWR definition
+        /// • WWR is computed per panel as (total aperture area) / (gross wall area).
+        ///
+        /// Practical tips
+        /// • Keep sill ≈ 0.85–1.0 m; use head around 2.4–2.6 m where structure allows.
+        /// • If you must cap WWR, prefer narrowing horizontal bays (increase separation) rather than lowering head.
         /// • Pair with a light, reflective ceiling and (on S/E/W) external shading.
         /// </summary>
         public SAMAnalyticalAddAperturesByRatio()
             : base(
                 "SAMAnalytical.AddAperturesByRatio",
                 "SAMAnalytical.AddAperturesByRatio",
-                @"Add apertures to SAM Analytical object (Panel, AdjacencyCluster, or Analytical Model) by target Window-to-Wall Ratio (WWR).
+                @"
+Add apertures to SAM Analytical objects (Panel, AdjacencyCluster, AnalyticalModel) by target Window-to-Wall Ratio (WWR).
 
-    How to apply on an office floor
-    • Keep sill ≈ 0.9 m; push head to 2.4–2.6 m if your structure allows.
-    • If you must cap WWR, narrow the bays (reduce width) rather than lowering the head.
-    • Pair with a light, reflective ceiling and (on S/E/W) external shading.",
-                    "SAM",
-                    "Analytical")
-        {
-        }
+What it does
+• Distributes windows to meet the target WWR on each eligible panel (external, non-adiabatic).
+• Vertical band set by _sillHeight_ and _apertureHeight_. Horizontal tiling driven by _horizontalSeparation_ and options.
+
+Eligibility & scope
+• Input = Panel → only that panel.
+• Input = AdjacencyCluster or AnalyticalModel → all external, non-adiabatic wall panels.
+
+WWR definition
+• Per-panel WWR = (sum of aperture areas) / (gross wall area).
+
+Design tips
+• Keep sill ≈ 0.85–1.0 m; push head to 2.4–2.6 m if structure allows.
+• If you must cap WWR, narrow the bays (increase separation) rather than lowering head.
+• Pair with a light, reflective ceiling and (on S/E/W) external shading.
+
+Notes
+• _ratio_ is required to generate apertures; if omitted, the component passes the object through unchanged.
+• If constraints prevent an exact match to WWR, the solver will place feasible apertures that respect offsets and options.",
+                "SAM",
+                "Analytical")
+        { }
+
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -74,11 +102,11 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(2.5);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sillHeight_", NickName = "_sillHeight_", Description = "Default sill Height \n Keep sill ~0.85–1.0 m", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_sillHeight_", NickName = "_sillHeight_", Description = "Default sill Height \n Keep sill ~0.85–1.0 [m]", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(0.85);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_horizontalSeparation_", NickName = "_horizontalSeparation_", Description = "Horizontal Separation", Access = GH_ParamAccess.item, Optional = true };
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_horizontalSeparation_", NickName = "_horizontalSeparation_", Description = "Horizontal Separation distance [m]", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(3);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
