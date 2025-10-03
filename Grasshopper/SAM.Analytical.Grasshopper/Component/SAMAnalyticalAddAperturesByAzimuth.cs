@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -32,18 +32,42 @@ namespace SAM.Analytical.Grasshopper
           : base("SAMAnalytical.AddAperturesByAzimuth",
                  "SAMAnalytical.AddAperturesByAzimuth",
                  "Add Apertures to a SAM Analytical Object (Panel, AdjacencyCluster, AnalyticalModel) based on azimuth sectors.\n" +
-                 "Uses in defaults 4 directions (N, E, S, W). North wraps across 360° and is handled internally by splitting 316→44 into: 316→359 and 0→44.\n" +
-                 "Ratios map to sectors in this order: [North, East, South, West].\n" +
-                 "Defaults:\n" +
-                 "  Ratios: [0.8, 0.7, 0.5, 0.6]\n" +
-                 "  Sectors: North 316→44 (wrap), East 45→134, South 135→225, West 226→315.\n" +
+                 "\n" +
+                 "Azimuth convention: 0° = North, 90° = East, increasing clockwise in the XY plane. 0° ≡ 360°.\n" +
+                 "Sectors (azimuth) are specified as Grasshopper Domains, written as \"a to b\" (inclusive), e.g. \"0 to 90\".\n" +
+                 "\n" +
+                 "Defaults (4 directions):\n" +
+                 "• Uses 4 directions (N, E, S, W). North wraps across 360° and is handled internally by splitting the wrap domain.\n" +
+                 "• Ratios map to sectors in this order: [North, East, South, West].\n" +
+                 "• Defaults:\n" +
+                 "    Ratios : [0.8, 0.7, 0.5, 0.6]\n" +
+                 "    Sectors: North 316 to 44 (wrap → internally 316 to 359 and 0 to 44),\n" +
+                 "             East  45 to 134,\n" +
+                 "             South 135 to 225,\n" +
+                 "             West  226 to 315.\n" +
+                 "\n" +
+                 "Optional (8 directions):\n" +
+                 "• To work with 8 compass directions, provide 8 sector Domains and 8 ratios in this order:\n" +
+                 "  [N, NE, E, SE, S, SW, W, NW]. A typical 8-way partition using GH Domains is:\n" +
+                 "    N : 338 to 22  (wrap → internally 338 to 359 and 0 to 22)\n" +
+                 "    NE: 23  to 67\n" +
+                 "    E : 68  to 112\n" +
+                 "    SE: 113 to 157\n" +
+                 "    S : 158 to 202\n" +
+                 "    SW: 203 to 247\n" +
+                 "    W : 248 to 292\n" +
+                 "    NW: 293 to 337\n" +
+                 "  Example ratios (WWR 0–1): [0.15, 0.10, 0.25, 0.20, 0.30, 0.20, 0.25, 0.10] → [N, NE, E, SE, S, SW, W, NW].\n" +
+                 "\n" +
                  "Notes:\n" +
-                 "• If a sector interval has T0 > T1, it is treated as wrap-around and split internally.\n" +
-                 "• For a fixed direction, use e.g. 90→90.\n" +
-                 "• Ratios typically 0.0–1.0; they scale aperture addition per sector.",
+                 "• If a sector Domain has T0 > T1 (e.g. 338 to 22), it is treated as wrap-around and split internally.\n" +
+                 "• For a fixed direction, use a degenerate Domain, East e.g. 90 to 90.\n" +
+                 "• Ratios typically 0.0–1.0; they scale Panel to create aperture per azimuth sector.\n" +
+                 "• Domains are inclusive; 0° is treated as North (and equivalent to 360°).",
                  "SAM", "Analytical")
         {
         }
+
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -58,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
                 new GooAnalyticalObjectParam(),
                 "_analyticalObject",
                 "_analyticalObject",
-                "SAM Analytical Object (AdjacencyCluster, Panel, or AnalyticalModel).",
+                "SAM Analytical Object (Panel, AdjacencyCluster, or AnalyticalModel).",
                 GH_ParamAccess.item);
 
             // Ratios (N, E, S, W)
@@ -67,11 +91,11 @@ namespace SAM.Analytical.Grasshopper
                 Name = "_ratios",
                 NickName = "_ratios",
                 Description =
-                    "Directional ratios applied to four azimuth sectors in order: [North, East, South, West].\n" +
+                    "Directional ratios applied to azimuth sectors in list ordern: [North, East, South, West].\n" +
                     "Typical range: 0.0–1.0.\n" +
                     "Defaults:\n" +
                     "  North = 0.8, East = 0.7, South = 0.5, West = 0.6\n" +
-                    "These scale the aperture addition per sector.",
+                    "  Ratios (0.0–1.0) are target WWRs; for each matched panel an aperture is created by scaling the panel polygon in its local plane so that the aperture area ≈ (ratio × panel area).",
                 Access = GH_ParamAccess.list,
             };
             ratiosParam.SetPersistentData(0.8, 0.7, 0.5, 0.6);
@@ -84,15 +108,16 @@ namespace SAM.Analytical.Grasshopper
                 Name = "_azimuths",
                 NickName = "_azimuths",
                 Description =
-                    "Azimuth sectors [°] for 8 or 4 directions (N, E, S, W) in the same order as _ratios.\n" +
+                    "Azimuth sectors [°] normally for 8 or 4 directions (N, E, S, W) in the same order as _ratios.\n" +
                     "Defaults:\n" +
-                    "  North : 316 → 44   (wrap; internally split to 316→359 and 0→44)\n" +
-                    "  East  : 45  → 134\n" +
-                    "  South : 135 → 225\n" +
-                    "  West  : 226 → 315\n" +
+                    "  North : 316 to 44   (wrap; internally split to 316→359 and 0→44)\n" +
+                    "  East  : 45  to 134\n" +
+                    "  South : 135 to 225\n" +
+                    "  West  : 226 to 315\n" +
                     "Notes:\n" +
-                    "• If T0 > T1, the interval is treated as wrap-around and split internally.\n" +
-                    "• For a fixed angle, use e.g. 90 → 90.",
+                    "• If a sector Domain has T0 > T1 (e.g. 338 to 22), it is treated as wrap-around and split internally.\n" +
+                    "• For a fixed direction, use a degenerate Domain, East e.g. 90 to 90." +
+                    "• Domains are inclusive; 0° is treated as North (and equivalent to 360°).",
                 Access = GH_ParamAccess.list
             };
             azimuthsParam.SetPersistentData(
