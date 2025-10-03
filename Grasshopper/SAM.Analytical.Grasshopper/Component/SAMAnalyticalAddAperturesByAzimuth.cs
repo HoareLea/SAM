@@ -350,7 +350,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 Interval interval = intervals[i];
                 double ratio = ratios[System.Math.Min(i, ratios.Count - 1)];
-                ApertureConstruction apertureConstruction = apertureConstructions[System.Math.Min(i, ratios.Count - 1)];
+                ApertureConstruction apertureConstruction = apertureConstructions == null || apertureConstructions.Count == 0 ? null : apertureConstructions[System.Math.Min(i, ratios.Count - 1)];
 
                 // Normalize inputs to [0, 359] where sensible
                 double a = ClampTo360(interval.T0);
