@@ -193,8 +193,47 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            // Pairing rules:
+            // 1) If apertureConstructions.Count == azimuths.Count -> 1:1 mapping.
+            // 2) If apertureConstructions.Count == 1           -> broadcast that ApertureConstruction to all intervals.
+            // 3) Otherwise: map up to min(counts); extra intervals get the last apertureConstruction;
+            //    extra apertureConstructions are ignored. Emit a remark so users know.
+            if (apertureConstructions.Count == azimuths.Count)
+            {
+                // ok
+            }
+            else if (apertureConstructions.Count == 1)
+            {
+                ApertureConstruction apertureConstruction = apertureConstructions[0];
+                
+                List<ApertureConstruction> apertureConstructions_Temp = new (azimuths.Count);
+                for (int i = 0; i < azimuths.Count; i++)
+                {
+                    apertureConstructions_Temp.Add(apertureConstruction);
+                }
+
+                apertureConstructions = apertureConstructions_Temp;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Broadcasted single ApertureConstruction {apertureConstruction.Name} to {azimuths.Count} intervals.");
+            }
+            else
+            {
+                int pairCount = System.Math.Min(apertureConstructions.Count, azimuths.Count);
+                if (apertureConstructions.Count > pairCount)
+                {
+                    ApertureConstruction last = apertureConstructions[System.Math.Max(0, pairCount - 1)];
+                    for (int i = pairCount; i < azimuths.Count; i++) apertureConstructions.Add(last);
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Remark,
+                        $"ApertureConstructions ({apertureConstructions.Count}) < intervals ({azimuths.Count}). Reused last ApertureConstruction for remaining intervals.");
+                }
+                else if (apertureConstructions.Count > pairCount)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"ApertureConstructions ({apertureConstructions.Count}) > intervals ({azimuths.Count}). Extra ApertureConstructions ignored.");
+                    apertureConstructions.RemoveRange(pairCount, apertureConstructions.Count - pairCount);
+                }
+            }
+
             // Build interval→ratio map (wrap-aware: e.g., 338→22 is split into 338→359 & 0→22)
-            var intervalRatioMap = BuildIntervalRatioMap(azimuths, ratios);
+            Dictionary<Interval, Tuple<double, ApertureConstruction>> intervalRatioMap = BuildIntervalRatioMap(azimuths, ratios, apertureConstructions);
 
             // Analytical object
             SAMObject sAMObject = null;
@@ -212,13 +251,9 @@ namespace SAM.Analytical.Grasshopper
                 double azimuth = NormalizeAngleDegrees(panel.Azimuth());
                 if (double.IsNaN(azimuth)) return;
 
-                if (!TryGetRatio(intervalRatioMap, azimuth, out double ratio, out int index)) return;
-
-
-                ApertureConstruction apertureConstruction_Temp = null;
-                if (apertureConstructions != null && apertureConstructions.Count != 0)
+                if (!TryGetRatio(intervalRatioMap, azimuth, out double ratio, out ApertureConstruction apertureConstruction_Temp))
                 {
-                    apertureConstruction_Temp = apertureConstructions[index];
+                    return;
                 }
 
                 if (apertureConstruction_Temp is null)
@@ -268,16 +303,12 @@ namespace SAM.Analytical.Grasshopper
                 if (double.IsNaN(az))
                     continue;
 
-                if (!TryGetRatio(intervalRatioMap, az, out double ratio, out int index))
-                    continue;
-
-                var panel_New = Create.Panel(panel);
-
-                ApertureConstruction apertureConstruction_Temp = null;
-                if (apertureConstructions != null && apertureConstructions.Count != 0)
+                if (!TryGetRatio(intervalRatioMap, az, out double ratio, out ApertureConstruction apertureConstruction_Temp))
                 {
-                    apertureConstruction_Temp = apertureConstructions[index];
+                    continue;
                 }
+                    
+                var panel_New = Create.Panel(panel);
 
                 if (apertureConstruction_Temp is null)
                 {
@@ -312,31 +343,32 @@ namespace SAM.Analytical.Grasshopper
         /// Build a dictionary from intervals to ratios, expanding any wrap-around interval (T0 > T1)
         /// into two intervals: [T0→359] and [0→T1], both mapped to the same ratio.
         /// </summary>
-        private static Dictionary<Interval, double> BuildIntervalRatioMap(IList<Interval> intervals, IList<double> ratios)
+        private static Dictionary<Interval, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(IList<Interval> intervals, IList<double> ratios, IList<ApertureConstruction> apertureConstructions)
         {
-            var map = new Dictionary<Interval, double>();
+            var map = new Dictionary<Interval, Tuple<double, ApertureConstruction>>();
             for (int i = 0; i < intervals.Count; i++)
             {
-                var iv = intervals[i];
-                var r = ratios[System.Math.Min(i, ratios.Count - 1)];
+                Interval interval = intervals[i];
+                double ratio = ratios[System.Math.Min(i, ratios.Count - 1)];
+                ApertureConstruction apertureConstruction = apertureConstructions[System.Math.Min(i, ratios.Count - 1)];
 
                 // Normalize inputs to [0, 359] where sensible
-                var a = ClampTo360(iv.T0);
-                var b = ClampTo360(iv.T1);
+                double a = ClampTo360(interval.T0);
+                double b = ClampTo360(interval.T1);
 
                 // Non-wrapped: a <= b
                 if (a <= b)
                 {
                     var norm = new Interval(a, b);
-                    map[norm] = r;
+                    map[norm] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
                 else
                 {
                     // Wrapped: split into two
                     var iv1 = new Interval(a, 359.0);
                     var iv2 = new Interval(0.0, b);
-                    map[iv1] = r;
-                    map[iv2] = r;
+                    map[iv1] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
+                    map[iv2] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
             }
             return map;
@@ -345,24 +377,23 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Try to find the ratio whose interval contains the given azimuth.
         /// </summary>
-        private static bool TryGetRatio(Dictionary<Interval, double> map, double azimuthDeg, out double ratio, out int index)
+        private static bool TryGetRatio(Dictionary<Interval, Tuple<double, ApertureConstruction>> map, double azimuthDeg, out double ratio, out ApertureConstruction apertureConstruction)
         {
             double azimuthDeg_Round = System.Math.Round(azimuthDeg, MidpointRounding.ToEven);
-            index = -1;
+            apertureConstruction = null;
 
             ratio = 0.0;
             foreach (var kvp in map)
             {
-                index++;
                 // Interval.IncludesParameter uses numeric comparison on [T0, T1]
                 if (kvp.Key.IncludesParameter(azimuthDeg_Round))
                 {
-                    ratio = kvp.Value;
+                    ratio = kvp.Value.Item1;
+                    apertureConstruction = kvp.Value.Item2;
                     return true;
                 }
             }
 
-            index = -1;
             return false;
         }
 
