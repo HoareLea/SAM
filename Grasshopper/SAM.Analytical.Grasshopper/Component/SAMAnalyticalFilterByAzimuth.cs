@@ -184,7 +184,7 @@ namespace SAM.Analytical.Grasshopper
             Vector3D referenceDirection = Vector3D.WorldY;
             if(trueNorth != 0.0)
             {
-                referenceDirection = referenceDirection.Rotate(Geometry.Spatial.Plane.WorldXY, trueNorth * System.Math.PI / 180.0);
+                referenceDirection = referenceDirection.Rotate(Geometry.Spatial.Plane.WorldXY, - trueNorth * System.Math.PI / 180.0);
             }
 
             Dictionary<Interval, int> dictionary = IntervalDictionary(azimuths);
