@@ -63,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
                     new Interval(226, 315)); //West
                 result.Add(new GH_SAMParam(azimuthsParam, ParamVisibility.Binding));
                 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_trueNorth_", NickName = "_trueNorth_", Description = "True north [deg]", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_trueNorth_", NickName = "_trueNorth_", Description = "True north [0 - 359 deg] Clockwise", Access = GH_ParamAccess.item };
                 number.SetPersistentData(0.0);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
