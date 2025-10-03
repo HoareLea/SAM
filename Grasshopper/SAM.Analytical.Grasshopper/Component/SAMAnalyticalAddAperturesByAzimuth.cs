@@ -345,7 +345,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         private static Dictionary<Interval, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(IList<Interval> intervals, IList<double> ratios, IList<ApertureConstruction> apertureConstructions)
         {
-            var map = new Dictionary<Interval, Tuple<double, ApertureConstruction>>();
+            Dictionary<Interval, Tuple<double, ApertureConstruction>> dictionary = [];
             for (int i = 0; i < intervals.Count; i++)
             {
                 Interval interval = intervals[i];
@@ -360,18 +360,18 @@ namespace SAM.Analytical.Grasshopper
                 if (a <= b)
                 {
                     var norm = new Interval(a, b);
-                    map[norm] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
+                    dictionary[norm] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
                 else
                 {
                     // Wrapped: split into two
                     var iv1 = new Interval(a, 359.0);
                     var iv2 = new Interval(0.0, b);
-                    map[iv1] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
-                    map[iv2] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
+                    dictionary[iv1] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
+                    dictionary[iv2] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
             }
-            return map;
+            return dictionary;
         }
 
         /// <summary>
