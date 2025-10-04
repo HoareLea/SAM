@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -49,16 +49,15 @@ namespace SAM.Analytical.Grasshopper
                 "SAMAnalytical.AddAperturesByRatio",
                 "SAMAnalytical.AddAperturesByRatio",
                 @"
-Add apertures to SAM Analytical objects (Panel, AdjacencyCluster, AnalyticalModel) by target Window-to-Wall Ratio (WWR).
+Add apertures to SAM Analytical objects (Panel, AdjacencyCluster, AnalyticalModel) by target window-to-wall ratio (WWR).
 
 What it does
-• Distributes windows to meet the target WWR on each eligible panel (external, non-adiabatic).
-• Vertical band set by _sillHeight_ and _apertureHeight_. Horizontal tiling driven by _horizontalSeparation_ and options.
+• Distributes windows to meet the target per-panel WWR on eligible panels (external, non-adiabatic).
+• The vertical band is defined by _sillHeight_ and _apertureHeight_. If _subdivide_ is True, the band is tiled horizontally; spacing is controlled by _horizontalSeparation_.
 
-
-When _subdivide is set to True, the aperture band is divided into multiple apertures. 
-Use _horizontalSeparation to specify the clear horizontal spacing (edge-to-edge) between neighboring apertures within each panel (measured in the model’s length units). 
-The solver fits as many apertures as will fit while respecting this separation (and any applicable margins), targeting the requested area ratio.
+When _subdivide_ is True, the aperture band is divided into multiple apertures.
+Use _horizontalSeparation_ to specify the clear horizontal spacing (edge-to-edge) between neighboring apertures within each panel (in the model’s length units).
+The solver packs as many apertures as fit while respecting this separation and any applicable margins/offsets, targeting the requested area ratio.
 
 Eligibility & scope
 • Input = Panel → only that panel.
@@ -74,7 +73,7 @@ Design tips
 
 Notes
 • _ratio_ is required to generate apertures; if omitted, the component passes the object through unchanged.
-• If constraints prevent an exact match to WWR, the solver will place feasible apertures that respect offsets and options.",
+• If constraints prevent an exact match to WWR, the solver places feasible apertures that respect offsets and options.",
                 "SAM",
                 "Analytical")
         { }
