@@ -17,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -54,6 +54,11 @@ Add apertures to SAM Analytical objects (Panel, AdjacencyCluster, AnalyticalMode
 What it does
 • Distributes windows to meet the target WWR on each eligible panel (external, non-adiabatic).
 • Vertical band set by _sillHeight_ and _apertureHeight_. Horizontal tiling driven by _horizontalSeparation_ and options.
+
+
+When _subdivide is set to True, the aperture band is divided into multiple apertures. 
+Use _horizontalSeparation to specify the clear horizontal spacing (edge-to-edge) between neighboring apertures within each panel (measured in the model’s length units). 
+The solver fits as many apertures as will fit while respecting this separation (and any applicable margins), targeting the requested area ratio.
 
 Eligibility & scope
 • Input = Panel → only that panel.
@@ -94,7 +99,7 @@ Notes
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_subdivide_", NickName = "_subdivide_", Description = "Subdivide", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_subdivide_", NickName = "_subdivide_", Description = "Subdivide \n  If True, split the aperture band into multiple openings; \n  spacing is controlled by _horizontalSeparation", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
