@@ -18,7 +18,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,7 +48,20 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_dischargeCoefficients", NickName = "_dischargeCoefficients", Description = "Discharge Coefficients\nDefault discharge coefficient of 0.62, which is usually appropriate for a sharp edged orifice such as a rectangular window.\nDischarge coefficients account for the ‘friction’ of an opening; the lower the discharge coefficient, the more the aperture resists the flow.", Access = GH_ParamAccess.list};
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
+                {
+                    Name = "_dischargeCoefficients", 
+                    NickName = "_dischargeCoefficients", 
+                    Description = @"Discharge Coefficients (dimensionless)
+                DefaulDefault  discharge coefficient: 0.62 (typical for a sharp-edged rectangular opening).
+                Discharge coefficients account for the ‘friction’ of an opening; the lower the coefficient, the more the aperture resists flow.
+
+                Guidance values:
+                • 0.00 – Completely discount stack ventilation from the calculation.
+                • 0.45 – Unobstructed window with an insect screen.
+                • 0.65 – Unobstructed window with NO insect screen.",
+                    Access = GH_ParamAccess.list
+                };
                 number.SetPersistentData(0.62);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
