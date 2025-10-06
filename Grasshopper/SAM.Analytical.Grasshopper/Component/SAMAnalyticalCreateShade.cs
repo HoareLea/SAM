@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -66,6 +66,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_overhangFrontOffset_", NickName = "_overhangFrontOffset_", Description = "Overhang front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinDepth_", NickName = "_leftFinDepth_", Description = "Left fin depth [m]", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
@@ -74,6 +78,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinFrontOffset_", NickName = "_leftFinFrontOffset_", Description = "Left fin front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinDepth_", NickName = "_rightFinDepth_", Description = "Right fin depth [m]", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
@@ -81,6 +89,10 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinOffset_", NickName = "_rightFinOffset_", Description = "Right fin offset [m]", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinFrontOffset_", NickName = "_rightFinFrontOffset_", Description = "Right fin front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 return [.. result];
             }
@@ -137,6 +149,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref overhangVerticalOffset);
             }
 
+            index = Params.IndexOfInputParam("_overhangFrontOffset_");
+            double overhangFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref overhangFrontOffset);
+            }
+
             index = Params.IndexOfInputParam("_leftFinDepth_");
             double leftFinDepth = 0.0;
             if (index != -1)
@@ -151,6 +170,14 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref leftFinOffset);
             }
 
+            index = Params.IndexOfInputParam("_leftFinFrontOffset_");
+            double leftFinFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref leftFinFrontOffset);
+            }
+
+
             index = Params.IndexOfInputParam("_rightFinDepth_");
             double rightFinDepth = 0.0;
             if (index != -1)
@@ -163,6 +190,13 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.GetData(index, ref rightFinOffset);
+            }
+
+            index = Params.IndexOfInputParam("_rightFinFrontOffset_");
+            double rightFinFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref rightFinFrontOffset);
             }
 
             List<Aperture> apertures = [];
@@ -265,7 +299,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> shades = [];
             if(rectangle2Ds != null && rectangle2Ds.Count != 0)
             {
-                List<Tuple<Segment2D, double>> tuples = [];
+                List<Tuple<Segment2D, double, double>> tuples = [];
                 foreach(Rectangle2D rectangle2D in rectangle2Ds)
                 {
                     Vector2D direction_Base = null;
@@ -320,7 +354,7 @@ namespace SAM.Analytical.Grasshopper
 
                         Segment2D segment2D = new (point2D_1.GetMoved(vector2D_Auxiliary), point2D_1.GetMoved(vector2D_Auxiliary.GetNegated()));
 
-                        tuples.Add(new Tuple<Segment2D, double>(segment2D, overhangDepth));
+                        tuples.Add(new Tuple<Segment2D, double, double>(segment2D, overhangDepth, overhangFrontOffset));
                     }
 
                     if(leftFinDepth > 0)
@@ -332,7 +366,7 @@ namespace SAM.Analytical.Grasshopper
 
                         Segment2D segment2D = new(point2D_1, point2D_1.GetMoved(vector2D_Base.GetNegated() * 2));
 
-                        tuples.Add(new Tuple<Segment2D, double>(segment2D, leftFinDepth));
+                        tuples.Add(new Tuple<Segment2D, double, double>(segment2D, leftFinDepth, leftFinFrontOffset));
                     }
 
                     if (rightFinDepth > 0)
@@ -344,19 +378,26 @@ namespace SAM.Analytical.Grasshopper
 
                         Segment2D segment2D = new(point2D_1, point2D_1.GetMoved(vector2D_Base.GetNegated() * 2));
 
-                        tuples.Add(new Tuple<Segment2D, double>(segment2D, rightFinDepth));
+                        tuples.Add(new Tuple<Segment2D, double, double>(segment2D, rightFinDepth, rightFinFrontOffset));
                     }
                 }
 
                 Vector3D normal = plane.Normal;
 
-                foreach (Tuple<Segment2D, double> tuple in tuples)
+                foreach (Tuple<Segment2D, double, double> tuple in tuples)
                 {
                     Vector3D normal_Temp = normal * tuple.Item2;
 
                     if(plane.Convert(tuple.Item1) is not Segment3D segment3D)
                     {
                         continue;
+                    }
+
+                    if(!double.IsNaN(tuple.Item3) && tuple.Item3 > 0)
+                    {
+                        Vector3D offsetVector = normal * tuple.Item3;
+
+                        segment3D = new Segment3D((Point3D)segment3D[0].GetMoved(offsetVector), (Point3D)segment3D[1].GetMoved(offsetVector));
                     }
 
                     Face3D face3D = Geometry.Spatial.Create.Face3D(segment3D, normal_Temp);
