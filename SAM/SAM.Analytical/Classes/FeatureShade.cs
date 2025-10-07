@@ -44,7 +44,21 @@ namespace SAM.Analytical
         public FeatureShade(FeatureShade featureShade)
             : base(featureShade)
         {
-
+            if(featureShade is not null)
+            {
+                description = featureShade.description;
+                surfaceHeight = featureShade.surfaceHeight;
+                surfaceWidth = featureShade.surfaceWidth;
+                leftFinDepth = featureShade.leftFinDepth;
+                leftFinOffset = featureShade.leftFinOffset;
+                leftFinTransmittance = featureShade.leftFinTransmittance;
+                rightFinDepth = featureShade.rightFinDepth;
+                rightFinOffset = featureShade.rightFinOffset;
+                rightFinTransmittance = featureShade.rightFinTransmittance;
+                overhangDepth = featureShade.overhangDepth;
+                overhangOffset = featureShade.overhangOffset;
+                overhangTransmittance = featureShade.overhangTransmittance;
+            }
         }
 
         public FeatureShade(JObject jObject)
