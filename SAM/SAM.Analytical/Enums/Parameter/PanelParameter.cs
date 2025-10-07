@@ -18,5 +18,6 @@ namespace SAM.Analytical
         [ParameterProperties("Pilkington Shading Short Wavelength Coefficient", "Pilkington Shading Short Wavelength Coefficient [0-1]"), DoubleParameterValue(0, 1)] PilkingtonShadingShortWavelengthCoefficient,
         [ParameterProperties("Pilkington Shading Long Wavelength Coefficient", "Pilkington Shading Long Wavelength Coefficient [0-1]"), DoubleParameterValue(0, 1)] PilkingtonShadingLongWavelengthCoefficient,
         [ParameterProperties("Adiabatic", "Adiabatic"), ParameterValue(Core.ParameterType.Boolean)] Adiabatic,
+        [ParameterProperties("FeatureShade", "FeatureShade"), SAMObjectParameterValue(typeof(FeatureShade))] FeatureShade,
     }
 }
