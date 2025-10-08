@@ -186,6 +186,7 @@ namespace SAM.Analytical.Grasshopper
 
                         if (adjacencyCluster is not null)
                         {
+                            panel_Temp.RemoveAperture(aperture.Guid);
                             panel_Temp.AddAperture(aperture);
 
                             adjacencyCluster.AddObject(panel_Temp);
