@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -58,7 +58,9 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            int index = outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
+            outputParamManager.AddTextParameter("Text", "Text", "Text", GH_ParamAccess.item);
+            outputParamManager.AddPointParameter("Location", "Location", "Location", GH_ParamAccess.item);
+            outputParamManager.AddNumberParameter("Size", "Size", "Size", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -69,27 +71,38 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Space space = null;
-            if (!dataAccess.GetData(0, ref space))
+            //Space space = null;
+            //if (!dataAccess.GetData(0, ref space))
+            //{
+            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+            //    return;
+            //}
+
+            //string name = null;
+            //dataAccess.GetData(1, ref name);
+            //if (string.IsNullOrEmpty(name))
+            //    name = "Name";
+
+            //string text;
+            //if (!space.TryGetValue(name, out text, true))
+            //    text = "???";
+
+            //double value = double.NaN;
+            //if (double.TryParse(text, out value))
+            //    text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+
+            //dataAccess.SetData(0, text);
+
+            Text3d text3D = GetText3ds()?.Find(x => x is not null);
+            if(text3D is null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            string name = null;
-            dataAccess.GetData(1, ref name);
-            if (string.IsNullOrEmpty(name))
-                name = "Name";
-
-            string text;
-            if (!space.TryGetValue(name, out text, true))
-                text = "???";
-
-            double value = double.NaN;
-            if (double.TryParse(text, out value))
-                text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
-
-            dataAccess.SetData(0, text);
+            dataAccess.SetData(0, text3D.Text);
+            dataAccess.SetData(1, text3D.TextPlane.Origin);
+            dataAccess.SetData(2, text3D.Height);
         }
 
         public override BoundingBox ClippingBox
@@ -137,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
 
             Vector3D normal = Geometry.Spatial.Plane.WorldXY.Normal;
 
-            List<Text3d> result = new List<Text3d>();
+            List<Text3d> result = [];
 
             foreach (GooSpace gooSpace in Params.Input[0].VolatileData.AllData(true))
             {
@@ -184,7 +197,7 @@ namespace SAM.Analytical.Grasshopper
                         int length = text.Length;
                         if(text.Contains("\r\n"))
                         {
-                            length = text.Split(new string[] { "\r\n" }, StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(x => x.Length).Max();
+                            length = text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(x => x.Length).Max();
                         }
 
                         if (length < 10)

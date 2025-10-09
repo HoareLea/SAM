@@ -1,4 +1,5 @@
-﻿using SAM.Geometry.Planar;
+﻿using SAM.Geometry;
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -309,206 +310,6 @@ namespace SAM.Analytical
             return Panels(analyticalModel?.AdjacencyCluster, plane, spaces, panelType, construction, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
 
-        //public static List<Panel> Panels_Shade(this Aperture aperture, bool glassPartOnly, double overhangDepth, double overhangVerticalOffset,  double overhangFrontOffset, double leftFinDepth, double leftFinOffset, double leftFinFrontOffset, double rightFinDepth, double rightFinOffset, double rightFinFrontOffset)
-        //{
-        //    if(aperture?.Plane is not Plane plane)
-        //    {
-        //        return null;
-        //    }
-
-        //    Vector3D vector3D = plane.Project(Vector3D.WorldZ);
-        //    if (vector3D is null || !vector3D.IsValid())
-        //    {
-        //        vector3D = plane.Project(Vector3D.WorldY);
-        //    }
-
-        //    if (vector3D is null || !vector3D.IsValid())
-        //    {
-        //        return null;
-        //    }
-
-        //    Vector2D baseDirection = plane.Convert(vector3D)?.Unit;
-
-        //    if (baseDirection is null || !baseDirection.IsValid())
-        //    {
-        //        return null;
-        //    }
-
-        //    List<Rectangle2D> rectangle2Ds = [];
-
-        //    List<ISegmentable2D> segmentable2Ds = [];
-        //    if (glassPartOnly)
-        //    {
-        //        List<Face3D> face3Ds = aperture.GetFace3Ds(AperturePart.Pane);
-        //        if (face3Ds != null && face3Ds.Count != 0)
-        //        {
-        //            foreach (Face3D face3D in face3Ds)
-        //            {
-        //                if (plane.Convert(face3D) is not Face2D face2D)
-        //                {
-        //                    continue;
-        //                }
-
-        //                ISegmentable2D segmentable2D = face2D.ExternalEdge2D as ISegmentable2D;
-        //                if (segmentable2D != null)
-        //                {
-        //                    segmentable2Ds.Add(segmentable2D);
-        //                }
-        //            }
-        //        }
-        //    }
-        //    else
-        //    {
-        //        if (aperture?.Face3D is not Face3D face3D)
-        //        {
-        //            return null;
-        //        }
-
-        //        if (plane.Convert(face3D) is not Face2D face2D)
-        //        {
-        //            return null;
-        //        }
-
-        //        ISegmentable2D segmentable2D = face2D.ExternalEdge2D as ISegmentable2D;
-        //        if (segmentable2D != null)
-        //        {
-        //            segmentable2Ds.Add(segmentable2D);
-        //        }
-        //    }
-
-        //    foreach (ISegmentable2D segmentable2D in segmentable2Ds)
-        //    {
-        //        rectangle2Ds.Add(Geometry.Planar.Create.Rectangle2D(segmentable2D.GetPoints()));
-        //    }
-
-        //    PanelType panelType = PanelType.Shade;
-
-        //    Construction construction = Query.DefaultConstruction(panelType);
-
-        //    List<Panel> result = [];
-        //    if (rectangle2Ds != null && rectangle2Ds.Count != 0)
-        //    {
-        //        List<Tuple<Segment2D, double, double>> tuples = [];
-        //        foreach (Rectangle2D rectangle2D in rectangle2Ds)
-        //        {
-        //            Vector2D direction_Base = null;
-        //            double length_Base = double.NaN;
-
-        //            Vector2D direction_Auxiliary = null;
-        //            double length_Auxiliary = double.NaN;
-
-        //            if (rectangle2D.WidthDirection.SmallestAngle(baseDirection) < rectangle2D.HeightDirection.SmallestAngle(baseDirection))
-        //            {
-        //                direction_Base = rectangle2D.WidthDirection;
-        //                length_Base = rectangle2D.Width;
-
-        //                direction_Auxiliary = new Vector2D(rectangle2D.HeightDirection);
-        //                length_Auxiliary = rectangle2D.Height;
-        //            }
-        //            else
-        //            {
-        //                direction_Base = new Vector2D(rectangle2D.HeightDirection);
-        //                length_Base = rectangle2D.Height;
-
-        //                direction_Auxiliary = rectangle2D.WidthDirection;
-        //                length_Auxiliary = rectangle2D.Width;
-        //            }
-
-        //            if (baseDirection.SameHalf(direction_Base))
-        //            {
-        //                direction_Base.Negate();
-        //            }
-
-        //            if (rectangle2D.GetPoints() is not List<Point2D> point2Ds || point2Ds.Count != 4)
-        //            {
-        //                continue;
-        //            }
-
-        //            if (rectangle2D.GetCentroid() is not Point2D centroid || !centroid.IsValid())
-        //            {
-        //                continue;
-        //            }
-
-        //            Vector2D vector2D_Base = Geometry.Planar.Query.TraceFirst(centroid, direction_Base, rectangle2D);
-
-        //            Vector2D vector2D_Auxiliary = direction_Auxiliary * (length_Auxiliary / 2);
-
-        //            if (overhangDepth > 0)
-        //            {
-        //                Vector2D vector2D_Moved = new Vector2D(vector2D_Base);
-
-        //                vector2D_Moved.Length = vector2D_Moved.Length + overhangVerticalOffset;
-
-        //                Point2D point2D_1 = centroid.GetMoved(vector2D_Moved.GetNegated());
-
-        //                Segment2D segment2D = new(point2D_1.GetMoved(vector2D_Auxiliary), point2D_1.GetMoved(vector2D_Auxiliary.GetNegated()));
-
-        //                tuples.Add(new Tuple<Segment2D, double, double>(segment2D, overhangDepth, overhangFrontOffset));
-        //            }
-
-        //            if (leftFinDepth > 0)
-        //            {
-        //                Vector2D vector2D_Moved = new Vector2D(vector2D_Auxiliary);
-        //                vector2D_Moved.Length = vector2D_Moved.Length + leftFinOffset;
-
-        //                Point2D point2D_1 = centroid.GetMoved(vector2D_Base).GetMoved(vector2D_Moved);
-
-        //                Segment2D segment2D = new(point2D_1, point2D_1.GetMoved(vector2D_Base.GetNegated() * 2));
-
-        //                tuples.Add(new Tuple<Segment2D, double, double>(segment2D, leftFinDepth, leftFinFrontOffset));
-        //            }
-
-        //            if (rightFinDepth > 0)
-        //            {
-        //                Vector2D vector2D_Moved = vector2D_Auxiliary.GetNegated();
-        //                vector2D_Moved.Length = vector2D_Moved.Length + rightFinOffset;
-
-        //                Point2D point2D_1 = centroid.GetMoved(vector2D_Base).GetMoved(vector2D_Moved);
-
-        //                Segment2D segment2D = new(point2D_1, point2D_1.GetMoved(vector2D_Base.GetNegated() * 2));
-
-        //                tuples.Add(new Tuple<Segment2D, double, double>(segment2D, rightFinDepth, rightFinFrontOffset));
-        //            }
-        //        }
-
-        //        Vector3D normal = plane.Normal;
-
-        //        foreach (Tuple<Segment2D, double, double> tuple in tuples)
-        //        {
-        //            Vector3D normal_Temp = normal * tuple.Item2;
-
-        //            if (plane.Convert(tuple.Item1) is not Segment3D segment3D)
-        //            {
-        //                continue;
-        //            }
-
-        //            if (!double.IsNaN(tuple.Item3) && tuple.Item3 > 0)
-        //            {
-        //                Vector3D offsetVector = normal * tuple.Item3;
-
-        //                segment3D = new Segment3D((Point3D)segment3D[0].GetMoved(offsetVector), (Point3D)segment3D[1].GetMoved(offsetVector));
-        //            }
-
-        //            Face3D face3D = Geometry.Spatial.Create.Face3D(segment3D, normal_Temp);
-        //            if (face3D == null)
-        //            {
-        //                continue;
-        //            }
-
-
-        //            Panel shade = Create.Panel(construction, panelType, face3D);
-        //            if (shade is null)
-        //            {
-        //                continue;
-        //            }
-
-        //            result.Add(shade);
-        //        }
-        //    }
-
-        //    return result;
-        //}
-
         public static List<Panel> Panels_Shade(this Aperture aperture, bool glassPartOnly, double overhangDepth, double overhangVerticalOffset, double overhangFrontOffset, double leftFinDepth, double leftFinOffset, double leftFinFrontOffset, double rightFinDepth, double rightFinOffset, double rightFinFrontOffset)
         {
             List<Face3D> face3Ds = [];
@@ -717,6 +518,106 @@ namespace SAM.Analytical
             }
 
             return Panels_Shade([face3D], overhangDepth, overhangVerticalOffset, overhangFrontOffset, leftFinDepth, leftFinOffset, leftFinFrontOffset, rightFinDepth, rightFinOffset, rightFinFrontOffset);
+        }
+
+        public static List<Panel> Panels_Shade(this Aperture aperture, FeatureShade featureShade)
+        {
+            if(aperture == null || featureShade == null)
+            {
+                return null;
+            }
+
+            if (aperture?.Face3D is not Face3D face3D)
+            {
+                return null;
+            }
+
+            if (face3D.GetPlane() is not Plane plane)
+            {
+                return null;
+            }
+
+            Vector3D vector3D = plane.Project(Vector3D.WorldZ);
+            if (vector3D is null || !vector3D.IsValid())
+            {
+                vector3D = plane.Project(Vector3D.WorldY);
+            }
+
+            if (vector3D is null || !vector3D.IsValid())
+            {
+                return null;
+            }
+
+            Vector2D baseDirection = plane.Convert(vector3D)?.Unit;
+
+            if (baseDirection is null || !baseDirection.IsValid())
+            {
+                return null;
+            }
+
+            if (plane.Convert(face3D) is not Face2D face2D)
+            {
+                return null;
+            }
+
+            Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D((face2D.ExternalEdge2D as ISegmentable2D).GetPoints());
+            if(rectangle2D is null)
+            {
+                return null;
+            }
+
+            Vector2D direction_Base = null;
+            double length_Base = double.NaN;
+
+            Vector2D direction_Auxiliary = null;
+            double length_Auxiliary = double.NaN;
+
+            if (rectangle2D.WidthDirection.SmallestAngle(baseDirection) < rectangle2D.HeightDirection.SmallestAngle(baseDirection))
+            {
+                direction_Base = rectangle2D.WidthDirection;
+                length_Base = rectangle2D.Width;
+
+                direction_Auxiliary = new Vector2D(rectangle2D.HeightDirection);
+                length_Auxiliary = rectangle2D.Height;
+            }
+            else
+            {
+                direction_Base = new Vector2D(rectangle2D.HeightDirection);
+                length_Base = rectangle2D.Height;
+
+                direction_Auxiliary = rectangle2D.WidthDirection;
+                length_Auxiliary = rectangle2D.Width;
+            }
+
+            if (baseDirection.SameHalf(direction_Base))
+            {
+                direction_Base.Negate();
+            }
+
+            Point2D center = rectangle2D.GetCentroid();
+
+            PanelType panelType = PanelType.Shade;
+
+            Construction construction = Query.DefaultConstruction(panelType);
+
+            List<Panel> result = [];
+
+            if (featureShade.OverhangDepth > 0)
+            {
+
+            }
+
+            if (featureShade.LeftFinDepth > 0)
+            {
+
+            }
+
+            if (featureShade.RightFinDepth > 0)
+            {
+
+            }
+
+            return result;
         }
     }
 }
