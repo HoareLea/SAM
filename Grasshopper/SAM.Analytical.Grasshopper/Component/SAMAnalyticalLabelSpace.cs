@@ -9,6 +9,7 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static SAM.Geometry.Rhino.ActiveSetting;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -71,29 +72,27 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            //Space space = null;
-            //if (!dataAccess.GetData(0, ref space))
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //    return;
-            //}
+            ISpace space = null;
+            if (!dataAccess.GetData(0, ref space))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
 
-            //string name = null;
-            //dataAccess.GetData(1, ref name);
-            //if (string.IsNullOrEmpty(name))
-            //    name = "Name";
+            string parameterName = null;
+            dataAccess.GetData(1, ref parameterName);
+            if (string.IsNullOrEmpty(parameterName))
+            {
+                parameterName = "Name";
+            }
 
-            //string text;
-            //if (!space.TryGetValue(name, out text, true))
-            //    text = "???";
+            double height = double.NaN;
+            if (!dataAccess.GetData(2, ref height) || height == 0)
+            {
+                height = double.NaN;
+            }
 
-            //double value = double.NaN;
-            //if (double.TryParse(text, out value))
-            //    text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
-
-            //dataAccess.SetData(0, text);
-
-            Text3d text3D = GetText3ds()?.Find(x => x is not null);
+            Text3d text3D = GetText3d(space, parameterName, height);
             if(text3D is null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -130,10 +129,10 @@ namespace SAM.Analytical.Grasshopper
 
         private List<Text3d> GetText3ds()
         {
-            string name = null;
+            string parameterName = null;
             global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
             if (goo != null)
-                name = (goo as dynamic).Value;
+                parameterName = (goo as dynamic).Value;
 
             double height = double.NaN;
 
@@ -144,11 +143,11 @@ namespace SAM.Analytical.Grasshopper
                 {
                     goo = structureEnumerator.First();
                     if (goo != null)
+                    {
                         height = (goo as dynamic).Value;
+                    }
                 }
             }
-
-            Vector3D normal = Geometry.Spatial.Plane.WorldXY.Normal;
 
             List<Text3d> result = [];
 
@@ -156,68 +155,92 @@ namespace SAM.Analytical.Grasshopper
             {
                 ISpace space = gooSpace.Value;
                 if (space == null)
-                    continue;
-
-                string text;
-                if (name.StartsWith("="))
                 {
-                    text = name.Substring(1);
-                    text = Core.Query.Label(space, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
-                    if(space is Space)
-                    {
-                        text = Core.Query.Label(((Space)space).InternalCondition, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
-                    }
+                    continue;
+                }
+
+                Text3d text3d = GetText3d(space, parameterName, height);
+                if(text3d is not null)
+                {
+                    result.Add(text3d);
+                }
+            }
+
+            return result;
+        }
+
+        private Text3d GetText3d(ISpace space, string parameterName, double height = double.NaN)
+        {
+            if(space is null)
+            {
+                return null;
+            }
+
+            Vector3D normal = Geometry.Spatial.Plane.WorldXY.Normal;
+
+            string text;
+            if (parameterName.StartsWith("="))
+            {
+                text = parameterName.Substring(1);
+                text = Core.Query.Label(space, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                if (space is Space)
+                {
+                    text = Core.Query.Label(((Space)space).InternalCondition, text, global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+                }
+            }
+            else
+            {
+                if (!space.TryGetValue(parameterName, out text, true))
+                {
+                    text = "???";
+                }
+
+                if (double.TryParse(text, out double value))
+                {
+                    text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                }
+            }
+
+            Point3D point3D = space.Location;
+
+            global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
+            Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
+
+            double height_Temp = height;
+            if (double.IsNaN(height_Temp))
+            {
+                double area = space is Space ? ((Space)space).GetValue<double>(SpaceParameter.Area) : double.NaN;
+                if (double.IsNaN(area))
+                {
+                    height_Temp = 1;
                 }
                 else
                 {
-                    if (!space.TryGetValue(name, out text, true))
-                        text = "???";
+                    double max = System.Math.Sqrt(area);
 
-                    if (double.TryParse(text, out double value))
-                        text = value.Round(global::Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
-                }
-
-                Point3D point3D = space.Location;
-
-                global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
-                Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
-
-                double height_Temp = height;
-                if (double.IsNaN(height_Temp))
-                {
-                    double area = space is Space ? ((Space)space).GetValue<double>(SpaceParameter.Area) : double.NaN;
-                    if (double.IsNaN(area))
+                    int length = text.Length;
+                    if (text.Contains("\r\n"))
                     {
-                        height_Temp = 1;
+                        length = text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(x => x.Length).Max();
                     }
-                    else
+
+                    if (length < 10)
                     {
-                        double max = System.Math.Sqrt(area);
-
-                        int length = text.Length;
-                        if(text.Contains("\r\n"))
-                        {
-                            length = text.Split(["\r\n"], StringSplitOptions.RemoveEmptyEntries).ToList().ConvertAll(x => x.Length).Max();
-                        }
-
-                        if (length < 10)
-                            length = 10;
-
-                        height_Temp = max / (length * 1.5);
+                        length = 10;
                     }
+
+                    height_Temp = max / (length * 1.5);
                 }
-
-                global::Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = global::Rhino.DocObjects.TextHorizontalAlignment.Center;
-                global::Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = global::Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
-                Text3d text3d = new Text3d(text, plane, height_Temp);
-                text3d.HorizontalAlignment = textHorizontalAlignment;
-                text3d.VerticalAlignment = textVerticalAlignment;
-                //text3d.FontFace = "RhSS";  //same as per panel comment
-                text3d.Italic = true;
-                text3d.Bold = false;
-
-                result.Add(text3d);
             }
+
+            global::Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = global::Rhino.DocObjects.TextHorizontalAlignment.Center;
+            global::Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = global::Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
+
+            Text3d result = new (text, plane, height_Temp);
+            result.HorizontalAlignment = textHorizontalAlignment;
+            result.VerticalAlignment = textVerticalAlignment;
+            result.Italic = true;
+            result.Bold = false;
 
             return result;
         }
