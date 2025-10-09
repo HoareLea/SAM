@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -27,11 +27,17 @@ namespace SAM.Analytical.Grasshopper
                 protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
+        /// Aligns the space location point with the analytical model.
+        /// If the space location point is not positioned on a floor panel,
+        /// the component projects a vector in the -Z direction to find the nearest panel hit
+        /// and adjusts the Z coordinate of the location point accordingly.
         /// </summary>
         public SAMAnalyticalAlignSpaceLocation()
           : base("SAMAnalytical.AlignSpaceLocation", "SAMAnalytical.AlignSpaceLocation",
-              "Align Space Location",
+              "Aligns the space location point with the analytical model.\n" +
+              "If the space location point is not positioned on a floor panel,\n" +
+              "a vector is projected in the -Z direction to find the nearest panel hit,\n" +
+              "and the Z coordinate of the location point is adjusted accordingly.",
               "SAM", "Analytical")
         {
         }
