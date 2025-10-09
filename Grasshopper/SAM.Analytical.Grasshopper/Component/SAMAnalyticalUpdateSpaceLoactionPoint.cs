@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,6 +52,10 @@ namespace SAM.Analytical.Grasshopper
                 param_Number.SetPersistentData(0.15);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heightFactor_", NickName = "heightFactor_", Description = "Height Factor", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(1);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
 
                 return [.. result];
             }
@@ -63,8 +67,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() {Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
-
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Heights", NickName = "Heights", Description = "SAM Heights", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
                 return [.. result];
             }
         }
@@ -115,21 +119,28 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("offset_");
-            double offset = 0;
+            double offset = 0.1;
             if (index != -1)
             {
                 dataAccess.GetData(index, ref offset);
             }
 
+            index = Params.IndexOfInputParam("heightFactor_");
+            double heightFactor = 1;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref heightFactor);
+            }
+
             index = Params.IndexOfInputParam("aspect_");
-            double aspect = 0;
+            double aspect = 2.0;
             if (index != -1)
             {
                 dataAccess.GetData(index, ref aspect);
             }
 
             index = Params.IndexOfInputParam("clerance_");
-            double clerance = 0;
+            double clerance = 0.15;
             if (index != -1)
             {
                 dataAccess.GetData(index, ref clerance);
@@ -139,6 +150,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 spaces = adjacencyCluster.GetSpaces();
             }
+
+            List<double> heights = [];
+            List<ISpace> spaces_Result = [];
 
             if(spaces != null && spaces.Count != 0)
             {
@@ -203,6 +217,10 @@ namespace SAM.Analytical.Grasshopper
                         Point3D location = new Point3D(point3D.X, point3D.Y, space.Location.Z);
                         space_Temp = new Space(space_Temp, space_Temp.Name, location);
                         adjacencyCluster.AddObject(space_Temp);
+                        
+                        spaces_Result.Add(space_Temp);
+                        heights.Add(coordinate.height * heightFactor);
+
                         break;
                     }
 
@@ -222,6 +240,18 @@ namespace SAM.Analytical.Grasshopper
             if(index != -1)
             {
                 dataAccess.SetData(index, new GooAnalyticalObject(analyticalObject));
+            }
+
+            index = Params.IndexOfOutputParam("Spaces");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, spaces_Result);
+            }
+
+            index = Params.IndexOfOutputParam("Heights");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, heights);
             }
         }
     }
