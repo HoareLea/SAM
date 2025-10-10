@@ -24,6 +24,9 @@ namespace SAM.Geometry.Grasshopper
             if (geometricGoo is GH_Mesh)
                 return new List<ISAMGeometry3D>() { ((GH_Mesh)geometricGoo).ToSAM() };
 
+            if (geometricGoo is GH_Extrusion)
+                return new List<ISAMGeometry3D>() { ((GH_Extrusion)geometricGoo).ToSAM_Shell() };
+
             object @object = Convert.ToSAM(geometricGoo as dynamic);
             if (@object == null)
                 return null;

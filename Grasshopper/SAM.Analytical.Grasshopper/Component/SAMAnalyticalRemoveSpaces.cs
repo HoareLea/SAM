@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Geometry;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point { Name = "points_", NickName = "points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Geometry.Grasshopper.GooSAMGeometryParam { Name = "points_", NickName = "points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean { Name = "_removeExtPanels_", NickName = "_removeExtPanels_", Description = "Remove External Panels", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
@@ -115,11 +116,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
 
-            List<GH_Point> points = new List<GH_Point>();
+            List<ISAMGeometry> sAMGeometries = [];
             index = Params.IndexOfInputParam("points_");
             if(index != -1)
             {
-                dataAccess.GetDataList(index, points);
+                dataAccess.GetDataList(index, sAMGeometries);
             }
 
             bool removePanels = true;
@@ -131,13 +132,12 @@ namespace SAM.Analytical.Grasshopper
 
             Dictionary<Space, Shell> dictionary = adjacencyCluster?.ShellDictionary();
 
-            List<Space> result = new List<Space>();
-            if(points != null)
+            List<Space> result = [];
+            if(sAMGeometries != null)
             {
-                foreach (GH_Point point in points)
+                foreach (ISAMGeometry sAMGeometry in sAMGeometries)
                 {
-                    Point3D point3D = Geometry.Grasshopper.Convert.ToSAM(point);
-                    if (point3D == null)
+                    if(sAMGeometry is not Point3D point3D)
                     {
                         continue;
                     }
