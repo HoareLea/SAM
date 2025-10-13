@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.5";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -77,7 +77,7 @@ Sources
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
@@ -100,7 +100,11 @@ Sources
                 GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
 
-                return result.ToArray();
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new () { Name = "_sizePaneOnly_", NickName = "_sizePaneOnly_", Description = "Size Pane Only", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
+
+                return [.. result];
             }
         }
 
@@ -111,12 +115,12 @@ Sources
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooOpeningPropertiesParam() { Name = "openingProperties", NickName = "openingProperties", Description = "SAM Analytical IOpeningProperties", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "dischargeCoefficients", NickName = "dischargeCoefficients", Description = "Discharge Coefficients", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -149,7 +153,7 @@ Sources
             }
 
             index = Params.IndexOfInputParam("apertures_");
-            List<Aperture> apertures = new List<Aperture>();
+            List<Aperture> apertures = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, apertures);
@@ -161,45 +165,52 @@ Sources
             }
 
             index = Params.IndexOfInputParam("_openingAngles");
-            List<double> openingAngles = new List<double>();
+            List<double> openingAngles = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, openingAngles);
             }
 
             index = Params.IndexOfInputParam("descriptions_");
-            List<string> descriptions = new List<string>();
+            List<string> descriptions = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, descriptions);
             }
 
             index = Params.IndexOfInputParam("functions_");
-            List<string> functions = new List<string>();
+            List<string> functions = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, functions);
             }
 
             index = Params.IndexOfInputParam("colours_");
-            List<System.Drawing.Color> colors = new List<System.Drawing.Color>();
+            List<System.Drawing.Color> colors = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, colors);
             }
 
             index = Params.IndexOfInputParam("factors_");
-            List<double> factors = new List<double>();
+            List<double> factors = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, factors);
             }
 
             index = Params.IndexOfInputParam("profiles_");
-            List<Profile> profiles = new List<Profile>();
+            List<Profile> profiles = [];
             if (index != -1)
             {
                 dataAccess.GetDataList(index, profiles);
+            }
+
+            index = Params.IndexOfInputParam("_sizePaneOnly_");
+            bool paneSizeOnly = true;
+            if(index != -1)
+            {
+                dataAccess.GetData(index, ref paneSizeOnly);
             }
 
             List<Aperture> apertures_Result = null;
@@ -208,9 +219,9 @@ Sources
 
             if (apertures != null && openingAngles != null && apertures.Count > 0 && openingAngles.Count > 0)
             {
-                apertures_Result = new List<Aperture>();
-                dischargeCoefficients_Result = new List<double>();
-                openingProperties_Result = new List<IOpeningProperties>();
+                apertures_Result = [];
+                dischargeCoefficients_Result = [];
+                openingProperties_Result = [];
 
                 for (int i = 0; i < apertures.Count; i++)
                 {
@@ -232,12 +243,12 @@ Sources
                     aperture_Temp = new Aperture(aperture_Temp);
 
                     double openingAngle = openingAngles.Count > i ? openingAngles[i] : openingAngles.Last();
-                    double width = aperture_Temp.GetWidth(AperturePart.Pane);
-                    double height = aperture_Temp.GetHeight(AperturePart.Pane);
+                    double width = paneSizeOnly ? aperture_Temp.GetWidth(AperturePart.Pane) : aperture_Temp.GetWidth();
+                    double height = paneSizeOnly ? aperture_Temp.GetHeight(AperturePart.Pane) : aperture_Temp.GetHeight();
 
                     double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
 
-                    PartOOpeningProperties partOOpeningProperties = new PartOOpeningProperties(width, height, openingAngle);
+                    PartOOpeningProperties partOOpeningProperties = new (width, height, openingAngle);
 
                     double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
@@ -245,7 +256,7 @@ Sources
                     if (profiles != null && profiles.Count != 0)
                     {
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
-                        ProfileOpeningProperties profileOpeningProperties = new ProfileOpeningProperties(partOOpeningProperties.GetDischargeCoefficient(), profile);
+                        ProfileOpeningProperties profileOpeningProperties = new (partOOpeningProperties.GetDischargeCoefficient(), profile);
                         if (!double.IsNaN(factor))
                         {
                             profileOpeningProperties.Factor = factor;
