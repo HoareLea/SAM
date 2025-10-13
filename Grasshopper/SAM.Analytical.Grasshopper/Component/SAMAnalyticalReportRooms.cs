@@ -71,9 +71,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "Window-gValue", NickName = "Window-gValue", Description = "Window gValue [0 - 1 max]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "FrameArea", NickName = "FrameArea", Description = "Frame Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "FrameToWindowRatio", NickName = "FrameToWindowRatio", Description = "Frame To Window Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningGeometricArea", NickName = "OpeningGrossArea", Description = "Opening Gross Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningGeometricArea", NickName = "OpeningGeometricArea", Description = "Opening Geometric Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveArea", NickName = "OpeningEffectiveArea", Description = "Opening Effective Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEfficiency", NickName = "OpeningEfficiency", Description = "Opening Efficiency [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveEfficiency", NickName = "OpeningEffectiveEfficiency", Description = "Opening Effective Efficiency [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "OpeningProfileName", NickName = "OpeningProfile", Description = "Opening Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return [.. result];
@@ -106,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = [];
             if (index != -1)
             {
-                dataAccess.GetData(index, ref spaces);
+                dataAccess.GetDataList(index, spaces);
             }
 
             if(spaces is null || spaces.Count == 0)
@@ -126,9 +126,9 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> frameAreas = [];
             List<double> frameToWindowRatios = [];
-            List<double> openingsGrossAreas = [];
+            List<double> openingsGeometricAreas = [];
             List<double> openingsEffectiveAreas = [];
-            List<double> openingsEfficiency = [];
+            List<double> openingsEffectiveEfficiency = [];
             List<double> openingsEffectiveAreaToFloorAreaRatios = [];
             List<string> openingsProfileNames = [];
             for (int i =0; i < spaces.Count; i++)
@@ -157,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
                 double windowsArea = 0;
                 double windowTotalSolarEnergyTransmittance = 0;
                 double framesArea = 0;
-                double openingsGrossArea = 0;
+                double openingsGeometricArea = 0;
                 double openingsEffectiveArea = 0;
 
                 List<string> openingProfileNames = [];
@@ -205,11 +205,11 @@ namespace SAM.Analytical.Grasshopper
 
                                         double factor = openingProperties.GetFactor();
 
-                                        double openingGrossArea = factor * (openingProperties is PartOOpeningProperties partOOpeningProperties ? partOOpeningProperties.Width * partOOpeningProperties.Height : aperture.GetArea());
+                                        double openingGeometricArea = factor * (openingProperties is PartOOpeningProperties partOOpeningProperties ? partOOpeningProperties.Width * partOOpeningProperties.Height : aperture.GetArea());
 
-                                        openingsGrossArea += openingGrossArea;
+                                        openingsGeometricArea += openingGeometricArea;
 
-                                        openingsEffectiveArea += openingGrossArea * openingProperties.GetDischargeCoefficient();
+                                        openingsEffectiveArea += openingGeometricArea * openingProperties.GetDischargeCoefficient();
                                     }
                                 }
                             }
@@ -220,14 +220,14 @@ namespace SAM.Analytical.Grasshopper
                 externalPanelsAreas.Add(externalPanelsArea);
                 externalWallsAreas.Add(externalWallsArea);
                 windowsAreas.Add(windowsArea);
-                windowToWallRatios.Add(externalWallsArea == 0 || windowsArea == 0 ? 0 : Core.Query.Round((windowsArea / externalWallsArea) * 100, 0.01));
+                windowToWallRatios.Add(externalWallsArea == 0 || windowsArea == 0 ? 0 : Core.Query.Round(windowsArea / externalWallsArea * 100, 0.01));
                 windowTotalSolarEnergyTransmittances.Add(windowTotalSolarEnergyTransmittance);
                 frameAreas.Add(framesArea);
-                frameToWindowRatios.Add(windowsArea == 0 || framesArea == 0 ? 0 : Core.Query.Round((framesArea / windowsArea) * 100, 0.01));
-                openingsGrossAreas.Add(openingsGrossArea);
+                frameToWindowRatios.Add(windowsArea == 0 || framesArea == 0 ? 0 : Core.Query.Round(framesArea / windowsArea * 100, 0.01));
+                openingsGeometricAreas.Add(openingsGeometricArea);
                 openingsEffectiveAreas.Add(openingsEffectiveArea);
-                openingsEfficiency.Add(openingsGrossArea == 0 || openingsEffectiveArea == 0 ? 0 : Core.Query.Round((openingsEffectiveArea / openingsGrossArea) * 100, 0.01));
-                openingsEffectiveAreaToFloorAreaRatios.Add(double.IsNaN(floorArea) || floorArea == 0 || openingsEffectiveArea == 0 ? double.NaN : Core.Query.Round(openingsEffectiveArea / floorArea, 0.01));
+                openingsEffectiveEfficiency.Add(openingsGeometricArea == 0 || openingsEffectiveArea == 0 ? 0 : Core.Query.Round(openingsEffectiveArea / openingsGeometricArea * 100, 0.01));
+                openingsEffectiveAreaToFloorAreaRatios.Add(double.IsNaN(floorArea) || floorArea == 0 || openingsEffectiveArea == 0 ? double.NaN : Core.Query.Round(openingsEffectiveArea / floorArea * 100, 0.01));
                 openingsProfileNames.Add(string.Join("\n", openingProfileNames.Distinct()));
             }
 
@@ -297,10 +297,10 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(index, frameToWindowRatios);
             }
 
-            index = Params.IndexOfOutputParam("OpeningGrossArea");
+            index = Params.IndexOfOutputParam("OpeningGeometricArea");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, openingsGrossAreas);
+                dataAccess.SetDataList(index, openingsGeometricAreas);
             }
 
             index = Params.IndexOfOutputParam("OpeningEffectiveArea");
@@ -309,10 +309,10 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(index, openingsEffectiveAreas);
             }
 
-            index = Params.IndexOfOutputParam("OpeningEfficiency");
+            index = Params.IndexOfOutputParam("OpeningEffectiveEfficiency");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, openingsEfficiency);
+                dataAccess.SetDataList(index, openingsEffectiveEfficiency);
             }
 
             index = Params.IndexOfOutputParam("OpeningEffectiveAreaToFloorAreaRatio");
