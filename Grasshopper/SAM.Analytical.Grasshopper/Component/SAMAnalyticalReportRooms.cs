@@ -26,13 +26,33 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
-        /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
-        /// </summary>
+        private const string ReportRoomsDescription = @"
+Reports space-level façade and opening KPIs (PartO_BB101 mode):
+
+• Per space, outputs a single aggregated value even if multiple apertures exist.
+• Geometry is taken from the APERTURE (width × height).
+• Opening calculation follows BB101/DfE:
+   - OpeningGeometricArea  = Σ (pane width × pane height × Factor)
+     (This is the BB101 'free area' reference; NO sin(α) here.)
+   - DischargeCoefficient  = Cd(α, w/h) per aperture.
+   - OpeningEffectiveArea  = Σ (Cd_i × openinggeometric_i area × Factor_i)
+   - OpeningEffectiveEfficiency [%] = 100 × OpeningEffectiveArea / OpeningGeometricArea
+   - OpeningEffectiveAreaToFloorAreaRatio [%] = 100 × OpeningEffectiveArea / SpaceFloorArea
+
+Notes:
+• If multiple apertures share the same Opening Profile Function, the text is listed once (deduplicated).
+• WindowToWallRatio uses external walls only (BoundryType = exposed).
+•  ExternalPanelsArea uses BoundryType = external only. 
+• Where a required value is missing (e.g., Space Area), the component warns and returns NaN for ratios.
+";
+
         public SAMAnalyticalReportRooms()
-          : base("SAMAnalytical.ReportRooms", "SAMAnalyticalCreate.ReportRooms",
-              "Report Rooms",
-              "SAM", "Analytical")
+          : base(
+              "SAMAnalytical.ReportRooms",
+              "SAMAnalyticalCreate.ReportRooms",
+              ReportRoomsDescription,
+              "SAM",
+              "Analytical")
         {
         }
 
