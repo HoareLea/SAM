@@ -166,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     foreach (Panel panel in panels)
                     {
-                        bool external = panel.IsExternal();
+                        bool external = panel.IsExternal() && Analytical.Query.BoundaryType(adjacencyCluster, panel) == BoundaryType.Exposed;
                         if (external)
                         {
                             double area = panel.GetArea(); 
