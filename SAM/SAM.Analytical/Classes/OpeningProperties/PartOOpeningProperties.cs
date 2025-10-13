@@ -198,5 +198,21 @@ namespace SAM.Analytical
         {
             return Factor;
         }
+
+        public double Width
+        {
+            get
+            {
+                return width;
+            }
+        }
+
+        public double Height
+        {
+            get
+            {
+                return height;
+            }
+        }
     }
 }

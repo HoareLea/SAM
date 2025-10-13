@@ -127,9 +127,9 @@ namespace SAM.Analytical.Grasshopper
                         maxTiltDifference = maxTiltDifference_Temp;
                 }
 
-                Dictionary<Space, double> dictionary_Area = new Dictionary<Space, double>();
-                Dictionary<Space, List<Panel>> dictionary_Panel = new Dictionary<Space, List<Panel>>();
-                List<Space> spaces_Temp = new List<Space>();
+                Dictionary<Space, double> dictionary_Area = [];
+                Dictionary<Space, List<Panel>> dictionary_Panel = [];
+                List<Space> spaces_Temp = [];
                 foreach(Space space in spaces)
                 {
                     if(space == null)
@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
 
                     spaces_Temp.Add(space_Temp);
                     dictionary_Area[space_Temp] = double.NaN;
-                    dictionary_Panel[space_Temp] = new List<Panel>();
+                    dictionary_Panel[space_Temp] = [];
                 }
 
                 Parallel.For(0, spaces_Temp.Count, (int i) => {
