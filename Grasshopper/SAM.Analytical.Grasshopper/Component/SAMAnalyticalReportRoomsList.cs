@@ -78,7 +78,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningGeometricArea", NickName = "OpeningGeometricArea", Description = "Opening Geometric Area [m2]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveArea", NickName = "OpeningEffectiveArea", Description = "Opening Effective Area [m2]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveEfficiency", NickName = "OpeningEffectiveEfficiency", Description = "Opening Effective Efficiency [%]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "OpeningProfileName", NickName = "OpeningProfile", Description = "Opening Profile Name", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 
                 return [.. result];
@@ -128,14 +128,17 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> windowsAreas = [];
             List<double> windowToWallRatios = [];
-            
+
+            DataTree<GH_Number> windowsAreas_DataTree = new ();
+
+
             DataTree<GH_Number> windowTotalSolarEnergyTransmittances = new();
             DataTree<GH_Number> frameAreas = new();
             DataTree<GH_Number> frameToWindowRatios = new();
             DataTree<GH_Number> openingsGeometricAreas = new();
             DataTree<GH_Number> openingsEffectiveAreas = new();
             DataTree<GH_Number> openingsEffectiveEfficiency = new();
-            DataTree<GH_Number> openingsEffectiveAreaToFloorAreaRatios = new();
+            List<double> openingsEffectiveAreaToFloorAreaRatios = [];
             DataTree<GH_String> openingsProfileNames = new();
             
             for (int i =0; i < spaces.Count; i++)
@@ -164,6 +167,9 @@ namespace SAM.Analytical.Grasshopper
                 double externalPanelsArea = 0;
                 double externalWallsArea = 0;
                 double windowsArea = 0;
+
+                double openingsGeometricArea = 0;
+                double openingsEffectiveArea = 0;
 
                 List<Panel> panels = adjacencyCluster.GetPanels(space);
                 if(panels != null)
@@ -218,19 +224,21 @@ namespace SAM.Analytical.Grasshopper
                                         openingEffectiveArea = openingGeometricArea * openingProperties.GetDischargeCoefficient();
                                     }
 
-                                    openingsEffectiveEfficiency.Add(new GH_Number(double.IsNaN(openingGeometricArea) || openingGeometricArea == 0 || double.IsNaN(openingEffectiveArea) || openingEffectiveArea == 0 ? 0 : Core.Query.Round(openingEffectiveArea / openingGeometricArea * 100, 0.01)), gH_Path);
-                                    openingsEffectiveAreaToFloorAreaRatios.Add(new GH_Number(double.IsNaN(floorArea) || floorArea == 0 || double.IsNaN(openingEffectiveArea) || openingEffectiveArea == 0 ? double.NaN : Core.Query.Round(openingEffectiveArea / floorArea * 100, 0.01)), gH_Path);
-                                    frameToWindowRatios.Add(new GH_Number(double.IsNaN(windowsArea) || windowsArea == 0 || double.IsNaN(frameArea) || frameArea == 0 ? 0 : Core.Query.Round(frameArea / windowsArea * 100, 0.01)), gH_Path);
+                                    windowsAreas_DataTree.Add(new GH_Number(windowArea), gH_Path);
                                     windowTotalSolarEnergyTransmittances.Add(new GH_Number(totalSolarEnergyTransmittance), gH_Path);
                                     openingsProfileNames.Add(new GH_String(function), gH_Path);
                                     openingsGeometricAreas.Add(new GH_Number(openingGeometricArea), gH_Path);
                                     openingsEffectiveAreas.Add(new GH_Number(openingEffectiveArea), gH_Path);
+
+                                    openingsGeometricArea += openingGeometricArea;
+                                    openingsEffectiveArea += openingEffectiveArea;
                                 }
                             }
                         }
                     }
                 }
 
+                openingsEffectiveEfficiency.Add(new GH_Number(double.IsNaN(openingsGeometricArea) || openingsGeometricArea == 0 || double.IsNaN(openingsEffectiveArea) || openingsEffectiveArea == 0 ? 0 : Core.Query.Round(openingsEffectiveArea / openingsGeometricArea * 100, 0.01)), gH_Path);
                 externalPanelsAreas.Add(externalPanelsArea);
                 externalWallsAreas.Add(externalWallsArea);
                 windowsAreas.Add(windowsArea);
@@ -276,7 +284,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("WindowArea");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, windowsAreas);
+                dataAccess.SetDataTree(index, windowsAreas_DataTree);
             }
 
             index = Params.IndexOfOutputParam("WindowToWallRatio");
@@ -324,7 +332,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("OpeningEffectiveAreaToFloorAreaRatio");
             if (index != -1)
             {
-                dataAccess.SetDataTree(index, openingsEffectiveAreaToFloorAreaRatios);
+                dataAccess.SetDataList(index, openingsEffectiveAreaToFloorAreaRatios);
             }
 
             index = Params.IndexOfOutputParam("OpeningProfileName");
