@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -29,12 +29,43 @@ namespace SAM.Analytical.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
+
+        private const string Bb101Description = @"
+BB101 / DfE Discharge Coefficient (hinged windows) + Opening Properties
+
+What it does
+• Computes Cd(α) per the DfE BB101 spreadsheet using:
+  Cd(α) = CdMax · (1 − exp(−k · αdeg)), with {k, CdMax} selected by aspect-ratio (w/h).
+• Adds opening properties (including Cd) to apertures.
+
+Geometry source & scope
+• Dimensions are taken from the APERTURE PANE only (width = pane width, height = pane height).
+• If 'apertures_' is connected → only those apertures are processed.
+• If 'apertures_' is NOT connected → ALL apertures found in the supplied Analytical/AdjacencyCluster are processed.
+
+Areas & outputs
+• A_free = w·h  (DfE convention)
+• A_eff  = Cd · A_free
+• A_eq   = A_eff / 0.62  (orifice Cd0 used in DfE tool)
+
+Assumptions & caveats (DfE/BB101)
+• Façade-normal flow; no reveal corrections.
+• α < 10° is extrapolated (use with caution).
+• For bottom-hung (hinge at bottom, top tilts out), a conservative 10–15% reduction in Cd may be appropriate.
+
+Sources
+• DfE “BB101 Calculation Tools – Discharge coefficient calculator.xlsx”
+• BB101 (2018): Ventilation, thermal comfort & IAQ in schools
+• ESFA Output Specification (GDB + Annex 2F)
+";
+
+
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalAddOpeningPropertiesByPartO()
           : base("SAMAnalytical.AddOpeningPropertiesByPartO", "SAMAnalytical.AddOpeningPropertiesByPartO",
-              "Add Opening Properties to given apertures",
+              Bb101Description,
               "SAM", "Analytical")
         {
         }
@@ -207,6 +238,8 @@ namespace SAM.Analytical.Grasshopper
                     double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
 
                     PartOOpeningProperties partOOpeningProperties = new PartOOpeningProperties(width, height, openingAngle);
+
+                    double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
                     ISingleOpeningProperties singleOpeningProperties = null;
                     if (profiles != null && profiles.Count != 0)
