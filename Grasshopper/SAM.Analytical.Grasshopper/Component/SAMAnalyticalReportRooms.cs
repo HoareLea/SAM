@@ -91,11 +91,51 @@ Notes:
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "Window-gValue", NickName = "Window-gValue", Description = "Window gValue [0 - 1 max]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "FrameArea", NickName = "FrameArea", Description = "Frame Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "FrameToWindowRatio", NickName = "FrameToWindowRatio", Description = "Frame To Window Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningGeometricArea", NickName = "OpeningGeometricArea", Description = "Opening Geometric Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveArea", NickName = "OpeningEffectiveArea", Description = "Opening Effective Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveEfficiency", NickName = "OpeningEffectiveEfficiency", Description = "Opening Effective Efficiency [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Param_String() { Name = "OpeningProfileName", NickName = "OpeningProfile", Description = "Opening Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_Number()
+                {
+                    Name = "OpeningGeometricArea",
+                    NickName = "OpeningGeometricArea",
+                    Description = "BB101 reference opening area [m2] = Σ(width × height × Factor) over operable apertures. no sin(α).",
+                    Access = GH_ParamAccess.list
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new Param_Number()
+                {
+                    Name = "OpeningEffectiveArea",
+                    NickName = "OpeningEffectiveArea",
+                    Description = "Aerodynamic effective area [m2] = Σ(Cd_i × opening_i area × Factor_i). Cd_i from BB101/DfE (angle + aspect ratio).",
+                    Access = GH_ParamAccess.list
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new Param_Number()
+                {
+                    Name = "OpeningEffectiveEfficiency",
+                    NickName = "OpeningEffectiveEfficiency",
+                    Description = "OpeningEfficiency [%] = 100 × OpeningEffectiveArea / OpeningGeometricArea.",
+                    Access = GH_ParamAccess.list
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new Param_Number()
+                {
+                    Name = "OpeningEffectiveAreaToFloorAreaRatio",
+                    NickName = "OpeningEffectiveAreaToFloorAreaRatio",
+                    Description = "100 × OpeningEffectiveArea / SpaceFloorArea [%].",
+                    Access = GH_ParamAccess.list
+                }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new Param_String()
+                {
+                    Name = "OpeningProfileName",
+                    NickName = "OpeningProfile",
+                    Description = "Opening Profile Function name(s). Duplicate names across apertures are removed; shown as a unique list per space.",
+                    Access = GH_ParamAccess.list
+                }, ParamVisibility.Binding));
+
+                //result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningGeometricArea", NickName = "OpeningGeometricArea", Description = "Opening Geometric Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                //result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveArea", NickName = "OpeningEffectiveArea", Description = "Opening Effective Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                //result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveEfficiency", NickName = "OpeningEffectiveEfficiency", Description = "Opening Effective Efficiency [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                //result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                //result.Add(new GH_SAMParam(new Param_String() { Name = "OpeningProfileName", NickName = "OpeningProfile", Description = "Opening Profile Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return [.. result];
             }
         }
