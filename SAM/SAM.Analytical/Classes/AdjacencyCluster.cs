@@ -186,6 +186,13 @@ namespace SAM.Analytical
 
         public Aperture GetAperture(Guid guid)
         {
+            return GetAperture(guid, out _);
+        }
+
+        public Aperture GetAperture(Guid guid, out Panel panel)
+        {
+            panel = null;
+
             Aperture result = GetObject<Aperture>(guid);
             if (result != null)
             {
@@ -198,16 +205,21 @@ namespace SAM.Analytical
                 return null;
             }
 
-            foreach (Panel panel in panels)
+            foreach (Panel panel_Temp in panels)
             {
-                if (panel == null)
+                if (panel_Temp == null)
                 {
                     continue;
                 }
 
-                if (panel.HasAperture(guid))
+                if (panel_Temp.HasAperture(guid))
                 {
-                    return panel.GetAperture(guid);
+                    result = panel_Temp.GetAperture(guid);
+                    if(result != null)
+                    {
+                        panel = panel_Temp;
+                        return result;
+                    }
                 }
             }
 

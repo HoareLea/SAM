@@ -160,19 +160,6 @@ namespace SAM.Analytical
                 this.adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
         }
 
-        public new string Name
-        {
-            get
-            {
-                return name;
-            }
-
-            set
-            {
-                name = value;
-            }
-        }
-
         public Address Address
         {
             get
@@ -211,11 +198,27 @@ namespace SAM.Analytical
             }
         }
 
+        public ConstructionManager ConstructionManager
+        {
+            get
+            {
+                return Create.ConstructionManager(this);
+            }
+        }
+
         public string Description
         {
             get
             {
                 return description;
+            }
+        }
+
+        public List<ExternalSpace> ExternalSpaces
+        {
+            get
+            {
+                return adjacencyCluster.GetObjects<ExternalSpace>();
             }
         }
 
@@ -229,7 +232,7 @@ namespace SAM.Analytical
                 return new Location(location);
             }
         }
-        
+
         public MaterialLibrary MaterialLibrary
         {
             get
@@ -241,6 +244,19 @@ namespace SAM.Analytical
             }
         }
 
+        public new string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+        
         public ProfileLibrary ProfileLibrary
         {
             get
@@ -427,6 +443,11 @@ namespace SAM.Analytical
             return adjacencyCluster?.GetObjects<AnalyticalModelSimulationResult>()?.ConvertAll(x => x?.Clone());
         }
 
+        public Aperture GetAperture(Guid guid, out Panel panel)
+        {
+            return adjacencyCluster.GetAperture(guid, out panel);
+        }
+
         public List<Aperture> GetApertures(Func<Aperture, bool> func)
         {
             if (func == null)
@@ -460,6 +481,36 @@ namespace SAM.Analytical
             return result;
         }
 
+        public Range<double> GetElevationRange()
+        {
+            List<Panel> panels = adjacencyCluster?.GetPanels();
+            if (panels == null || panels.Count == 0)
+            {
+                return null;
+            }
+
+            Range<double> result = null;
+            foreach (Panel panel in panels)
+            {
+                Range<double> elevationRange = panel?.GetElevationRange();
+                if (elevationRange == null)
+                {
+                    continue;
+                }
+
+                if (result == null)
+                {
+                    result = elevationRange;
+                }
+                else
+                {
+                    result.Add(elevationRange);
+                }
+            }
+
+            return result;
+        }
+
         public List<IAnalyticalEquipment> GetEquipment()
         {
             return adjacencyCluster?.GetObjects<IAnalyticalEquipment>(); ;
@@ -488,6 +539,76 @@ namespace SAM.Analytical
         public List<MechanicalSystemType> GetMechanicalSystemTypes()
         {
             return GetMechanicalSystemTypes<MechanicalSystemType>();
+        }
+
+        public List<string> GetMissingMaterialNames()
+        {
+            HashSet<string> materialNames = new HashSet<string>();
+
+            if (adjacencyCluster != null)
+            {
+                List<Construction> constructions = adjacencyCluster.GetConstructions();
+                if (constructions != null)
+                {
+                    foreach (Construction construction in constructions)
+                    {
+                        List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
+                        if (constructionLayers == null || constructionLayers.Count == 0)
+                        {
+                            continue;
+                        }
+
+                        foreach (ConstructionLayer constructionLayer in constructionLayers)
+                        {
+                            if (HasMaterial(constructionLayer))
+                            {
+                                continue;
+                            }
+
+                            materialNames.Add(constructionLayer.Name);
+                        }
+                    }
+                }
+
+                List<ApertureConstruction> apertureConstructions = adjacencyCluster.GetApertureConstructions();
+                if (apertureConstructions != null)
+                {
+                    foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+                    {
+                        List<ConstructionLayer> constructionLayers = null;
+
+                        constructionLayers = apertureConstruction?.PaneConstructionLayers;
+                        if (constructionLayers != null)
+                        {
+                            foreach (ConstructionLayer constructionLayer in constructionLayers)
+                            {
+                                if (HasMaterial(constructionLayer))
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(constructionLayer.Name);
+                            }
+                        }
+
+                        constructionLayers = apertureConstruction?.FrameConstructionLayers;
+                        if (constructionLayers != null)
+                        {
+                            foreach (ConstructionLayer constructionLayer in constructionLayers)
+                            {
+                                if (HasMaterial(constructionLayer))
+                                {
+                                    continue;
+                                }
+
+                                materialNames.Add(constructionLayer.Name);
+                            }
+                        }
+                    }
+                }
+            }
+
+            return materialNames.ToList();
         }
 
         public List<Panel> GetPanels()
@@ -554,37 +675,7 @@ namespace SAM.Analytical
         {
             return adjacencyCluster?.GetZones();
         }
-
-        public Range<double> GetElevationRange()
-        {
-            List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels == null || panels.Count == 0)
-            {
-                return null;
-            }
-
-            Range<double> result = null;
-            foreach(Panel panel in panels)
-            {
-                Range<double> elevationRange = panel?.GetElevationRange();
-                if(elevationRange == null)
-                {
-                    continue;
-                }
-
-                if (result == null)
-                {
-                    result = elevationRange;
-                }
-                else
-                {
-                    result.Add(elevationRange);
-                }
-            }
-
-            return result;
-        }
-
+        
         public bool HasMaterial(IMaterial material)
         {
             if (material == null || materialLibrary == null)
@@ -704,92 +795,6 @@ namespace SAM.Analytical
         {
             if (adjacencyCluster != null)
                 adjacencyCluster.Transform(transform3D);
-        }
-
-        public ConstructionManager ConstructionManager
-        {
-            get
-            {
-                return Create.ConstructionManager(this);
-            }
-        }
-
-        public List<ExternalSpace> ExternalSpaces
-        {
-            get
-            {
-                return adjacencyCluster.GetObjects<ExternalSpace>();
-            }
-        }
-
-        public List<string> GetMissingMaterialNames()
-        {
-            HashSet<string> materialNames = new HashSet<string>();
-
-            if (adjacencyCluster != null)
-            {
-                List<Construction> constructions = adjacencyCluster.GetConstructions();
-                if (constructions != null)
-                {
-                    foreach (Construction construction in constructions)
-                    {
-                        List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
-                        if (constructionLayers == null || constructionLayers.Count == 0)
-                        {
-                            continue;
-                        }
-
-                        foreach (ConstructionLayer constructionLayer in constructionLayers)
-                        {
-                            if (HasMaterial(constructionLayer))
-                            {
-                                continue;
-                            }
-
-                            materialNames.Add(constructionLayer.Name);
-                        }
-                    }
-                }
-
-                List<ApertureConstruction> apertureConstructions = adjacencyCluster.GetApertureConstructions();
-                if (apertureConstructions != null)
-                {
-                    foreach (ApertureConstruction apertureConstruction in apertureConstructions)
-                    {
-                        List<ConstructionLayer> constructionLayers = null;
-
-                        constructionLayers = apertureConstruction?.PaneConstructionLayers;
-                        if (constructionLayers != null)
-                        {
-                            foreach (ConstructionLayer constructionLayer in constructionLayers)
-                            {
-                                if (HasMaterial(constructionLayer))
-                                {
-                                    continue;
-                                }
-
-                                materialNames.Add(constructionLayer.Name);
-                            }
-                        }
-
-                        constructionLayers = apertureConstruction?.FrameConstructionLayers;
-                        if (constructionLayers != null)
-                        {
-                            foreach (ConstructionLayer constructionLayer in constructionLayers)
-                            {
-                                if (HasMaterial(constructionLayer))
-                                {
-                                    continue;
-                                }
-
-                                materialNames.Add(constructionLayer.Name);
-                            }
-                        }
-                    }
-                }
-            }
-
-            return materialNames.ToList();
         }
     }
 }
