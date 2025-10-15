@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -74,18 +74,18 @@ namespace SAM.Analytical.Grasshopper
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Tv", NickName = "Tv", Description = "Tv", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvExt", NickName = "RvExt", Description = "RvExt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvInt", NickName = "RvInt", Description = "RvInt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvInt", NickName = "RvInt", Description = "RvInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "TauSolar", NickName = "TauSolar", Description = "TauSolar", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarExt", NickName = "RSolarExt", Description = "RSolarExt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarInt", NickName = "RSolarInt", Description = "RSolarInt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarByLayer", NickName = "ASolarByLayer", Description = "ASolarByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarInt", NickName = "RSolarInt", Description = "RSolarInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarByLayer", NickName = "ASolarByLayer", Description = "ASolarByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarTotal", NickName = "ASolarTotal", Description = "ASolarTotal", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "QiByLayer", NickName = "QiByLayer", Description = "QiByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "QiByLayer", NickName = "QiByLayer", Description = "QiByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "GValue", NickName = "GValue", Description = "GValue", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualExt", NickName = "SolarEnergyBalanceResidualExt", Description = "SolarEnergyBalanceResidualExt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualInt", NickName = "SolarEnergyBalanceResidualInt", Description = "SolarEnergyBalanceResidualInt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualExt", NickName = "SolarEnergyBalanceResidualExt", Description = "SolarEnergyBalanceResidualExt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualInt", NickName = "SolarEnergyBalanceResidualInt", Description = "SolarEnergyBalanceResidualInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return [.. result];
@@ -272,7 +272,7 @@ namespace SAM.Analytical.Grasshopper
                             }
                         }
 
-                        gValues.Add(new GH_Number(result.GValue), gH_Path);
+                        gValues.Add(new GH_Number(Core.Query.Round(result.GValue, Tolerance.MacroDistance)), gH_Path);
 
                         solarEnergyBalanceResidualExts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualExt, Tolerance.MacroDistance)), gH_Path);
                         solarEnergyBalanceResidualInts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualInt, Tolerance.MacroDistance)), gH_Path);
