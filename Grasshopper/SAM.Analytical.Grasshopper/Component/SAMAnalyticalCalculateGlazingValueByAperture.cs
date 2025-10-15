@@ -119,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AnalyticalModel analyticalModel = null;
-            index = Params.IndexOfOutputParam("_analyticalModel");
+            index = Params.IndexOfInputParam("_analyticalModel");
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -127,7 +127,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Aperture> apertures = [];
-            index = Params.IndexOfOutputParam("_apertures_");
+            index = Params.IndexOfInputParam("_apertures_");
             if (index != -1)
             {
                 dataAccess.GetDataList(index, apertures);
@@ -187,7 +187,7 @@ namespace SAM.Analytical.Grasshopper
 
                     List<Glazing.Layer> layers = [];
                     List<Glazing.Gap> gaps = [];
-                    for (int j = constructionLayers.Count - 1; j >= 0; j++)
+                    for (int j = constructionLayers.Count - 1; j >= 0; j--)
                     {
                         if (constructionLayers[j] is not ConstructionLayer constructionLayer)
                         {
@@ -216,7 +216,7 @@ namespace SAM.Analytical.Grasshopper
                                 continue;
                             }
 
-                            if (!(j > 0 && j < constructionLayers.Count - 2))
+                            if (!(j > 0 && j < constructionLayers.Count - 1))
                             {
                                 continue;
                             }
@@ -235,7 +235,7 @@ namespace SAM.Analytical.Grasshopper
                                 continue;
                             }
 
-                            double emissivity_2 = transparentMaterial_2.GetValue<double>(TransparentMaterialParameter.InternalEmissivity);
+                            double emissivity_2 = transparentMaterial_2.GetValue<double>(TransparentMaterialParameter.ExternalEmissivity);
 
                             Glazing.Gap gap = Glazing.MakeGapFromConvective(heatTransferCoefficient, emissivity_1, emissivity_2);
 
@@ -248,34 +248,34 @@ namespace SAM.Analytical.Grasshopper
                     {
                         GH_Path gH_Path = new (i);
 
-                        tvs.Add(new GH_Number(result.Tv), gH_Path);
-                        rvExts.Add(new GH_Number(result.RvExt), gH_Path);
-                        rvInts.Add(new GH_Number(result.RvInt), gH_Path);
-                        tauSolars.Add(new GH_Number(result.TauSolar), gH_Path);
-                        rSolarExts.Add(new GH_Number(result.RSolarExt), gH_Path);
-                        rSolarInts.Add(new GH_Number(result.RSolarInt), gH_Path);
+                        tvs.Add(new GH_Number(Core.Query.Round(result.Tv, Tolerance.MacroDistance)), gH_Path);
+                        rvExts.Add(new GH_Number(Core.Query.Round(result.RvExt, Tolerance.MacroDistance)), gH_Path);
+                        rvInts.Add(new GH_Number(Core.Query.Round(result.RvInt, Tolerance.MacroDistance)), gH_Path);
+                        tauSolars.Add(new GH_Number(Core.Query.Round(result.TauSolar, Tolerance.MacroDistance)), gH_Path);
+                        rSolarExts.Add(new GH_Number(Core.Query.Round(result.RSolarExt, Tolerance.MacroDistance)), gH_Path);
+                        rSolarInts.Add(new GH_Number(Core.Query.Round(result.RSolarInt, Tolerance.MacroDistance)), gH_Path);
                         if (result.ASolarByLayer is double[] aSolarByLayers_Temp)
                         {
                             foreach (double aSolarByLayer in aSolarByLayers_Temp)
                             {
-                                aSolarByLayers.Add(new GH_Number(aSolarByLayer), gH_Path);
+                                aSolarByLayers.Add(new GH_Number(Core.Query.Round(aSolarByLayer, Tolerance.MacroDistance)), gH_Path);
                             }
                         }
 
-                        aSolarTotals.Add(new GH_Number(result.ASolarTotal), gH_Path);
+                        aSolarTotals.Add(new GH_Number(Core.Query.Round(result.ASolarTotal, Tolerance.MacroDistance)), gH_Path);
 
                         if (result.QiByLayer is double[] qiByLayers_Temp)
                         {
                             foreach (double qiByLayer in qiByLayers_Temp)
                             {
-                                aSolarByLayers.Add(new GH_Number(qiByLayer), gH_Path);
+                                aSolarByLayers.Add(new GH_Number(Core.Query.Round(qiByLayer, Tolerance.MacroDistance)), gH_Path);
                             }
                         }
 
                         gValues.Add(new GH_Number(result.GValue), gH_Path);
 
-                        solarEnergyBalanceResidualExts.Add(new GH_Number(result.SolarBalanceResidualExt), gH_Path);
-                        solarEnergyBalanceResidualInts.Add(new GH_Number(result.SolarBalanceResidualInt), gH_Path);
+                        solarEnergyBalanceResidualExts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualExt, Tolerance.MacroDistance)), gH_Path);
+                        solarEnergyBalanceResidualInts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualInt, Tolerance.MacroDistance)), gH_Path);
                     }
                 }
             }
