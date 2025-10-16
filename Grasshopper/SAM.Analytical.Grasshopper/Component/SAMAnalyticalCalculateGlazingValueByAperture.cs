@@ -100,26 +100,34 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "Apertures", NickName = "Apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Tv", NickName = "Tv", Description = "Tv", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvExt", NickName = "RvExt", Description = "RvExt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvInt", NickName = "RvInt", Description = "RvInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "TauSolar", NickName = "TauSolar", Description = "TauSolar", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                // Light Visible (outside incidence)
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Tv", NickName = "Tv", Description = "Visible transmittance, outside incidence (EN 410).\n | TAS: Light Transmittance", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvExt", NickName = "RvExt", Description = "Visible reflectance (external), outside incidence (EN 410).\n | TAS: Light Reflectance (Ext.)", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RvInt", NickName = "RvInt", Description = "Visible reflectance (internal), inside incidence (EN 410).\n | TAS: (not shown)", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarExt", NickName = "RSolarExt", Description = "RSolarExt", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarInt", NickName = "RSolarInt", Description = "RSolarInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarByLayer", NickName = "ASolarByLayer", Description = "ASolarByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarTotal", NickName = "ASolarTotal", Description = "ASolarTotal", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "QiByLayer", NickName = "QiByLayer", Description = "QiByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "GValue", NickName = "GValue", Description = "GValue", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ShadingCoefficient", NickName = "ShadingCoefficient", Description = "ShadingCoefficient", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                // Solar Energy (outside incidence)
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "TauSolar", NickName = "TauSolar", Description = "Direct solar transmittance τe (EN 410 §5.4).\n | TAS: Direct Transmittance", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarExt", NickName = "RSolarExt", Description = "Direct solar reflectance (external) ρe,ext (EN 410).\n | TAS: Direct Reflectance", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "RSolarInt", NickName = "RSolarInt", Description = "Direct solar reflectance (internal) ρe,int (EN 410).\n | TAS: (not shown)", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarByLayer", NickName = "ASolarByLayer", Description = "Per-pane direct solar absorptance αᵢ (EN 410 §5.4.5).\n | TAS: External/Internal Solar Absorptance (per surface)", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarTotal", NickName = "ASolarTotal", Description = "Total direct solar absorptance Σα (EN 410).\n | TAS: Direct Absorptance", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualExt", NickName = "SolarEnergyBalanceResidualExt", Description = "SolarEnergyBalanceResidualExt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualInt", NickName = "SolarEnergyBalanceResidualInt", Description = "SolarEnergyBalanceResidualInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                // Thermal split + g
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "QiByLayer", NickName = "QiByLayer", Description = "Secondary heat-to-room fraction qᵢ per pane (EN 410 §5.4.6).\n | TAS: used internally for G Value (not listed)", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "GValue", NickName = "GValue", Description = "Total Solar Energy Transmittance g (EN 410).\n | TAS: Total Transmittance (G Value)", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ShadingCoefficient", NickName = "ShadingCoefficient", Description = "Shading Coefficient SC = g/0.87 (EN 410 §5.7).\n | TAS: Pilkington Shading Coefficients (Total)", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                // Diagnostics
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualExt", NickName = "SolarEnergyBalanceResidualExt", Description = "Energy balance residual (external incidence) = 1 − (τ + ρ + Σα).\n | TAS: n/a", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualInt", NickName = "SolarEnergyBalanceResidualInt", Description = "Energy balance residual (internal incidence) = 1 − (τ + ρ + Σα).\n | TAS: n/a", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Correctly imported?\n | TAS: n/a", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+
                 return [.. result];
             }
         }
+
 
         /// <summary>
         /// This is the method that actually does the work.
