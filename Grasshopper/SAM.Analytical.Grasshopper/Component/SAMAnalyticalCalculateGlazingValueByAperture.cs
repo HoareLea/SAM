@@ -1,6 +1,7 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Parameters.Hints;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -65,7 +66,7 @@ namespace SAM.Analytical.Grasshopper
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
-                param_Number.SetPersistentData(7.7);
+                //param_Number.SetPersistentData(7.7);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number()
@@ -182,7 +183,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref tMean);
             }
 
-            double hi = 8;
+            double hi = double.NaN;
             index = Params.IndexOfInputParam("_hi_");
             if (index != -1)
             {
@@ -306,6 +307,17 @@ namespace SAM.Analytical.Grasshopper
 
                             gaps.Add(gap);
                         }
+                    }
+
+                    if(double.IsNaN(hi))
+                    {
+                        if(double.IsNaN(emissivity))
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid emissivity for layer");
+                            return;
+                        }
+
+                        hi = 3.6 + (4.1 * emissivity / 0.837);
                     }
 
                     Glazing.Result result = Glazing.Compute(layers, gaps, he, hi);
