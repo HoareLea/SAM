@@ -9,7 +9,13 @@ namespace SAM.Analytical
     public class ApertureConstruction : SAMType, IAnalyticalObject
     {
         private ApertureType apertureType;
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         private List<ConstructionLayer> frameConstructionLayers;
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         private List<ConstructionLayer> paneConstructionLayers;
 
         public ApertureConstruction(string name, ApertureType apertureType)
@@ -79,6 +85,9 @@ namespace SAM.Analytical
 
         }
 
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         public List<ConstructionLayer> FrameConstructionLayers
         {
             get
@@ -87,6 +96,9 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         public List<ConstructionLayer> PaneConstructionLayers
         {
             get

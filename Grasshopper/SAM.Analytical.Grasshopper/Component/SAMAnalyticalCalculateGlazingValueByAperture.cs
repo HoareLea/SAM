@@ -200,6 +200,10 @@ namespace SAM.Analytical.Grasshopper
 
                     List<Glazing.Layer> layers = [];
                     List<Glazing.Gap> gaps = [];
+                    //Order of layers an gases from outside to inside
+
+                    double emissivity = double.NaN;
+
                     for (int j = constructionLayers.Count - 1; j >= 0; j--)
                     {
                         if (constructionLayers[j] is not ConstructionLayer constructionLayer)
@@ -221,6 +225,8 @@ namespace SAM.Analytical.Grasshopper
 
                             Glazing.Layer layer = new Glazing.Layer(tauSolar, rfSolar, rbSolar, tauVis, rfVis, rbVis, thickness, transparentMaterial.ThermalConductivity);
                             layers.Add(layer);
+
+                            emissivity = transparentMaterial.GetValue<double>(TransparentMaterialParameter.InternalEmissivity);
                         }
                         else if (material is GasMaterial gasMaterial)
                         {

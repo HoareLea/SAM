@@ -73,7 +73,16 @@ namespace SAM.Analytical
         /// Required inputs: per-pane solar/visible (tau, Rf, Rb), pane thickness & conductivity,
         /// and per-gap total conductance (often built from "Conv. Coeff." + hr(ε1,ε2, Tm), see helpers).
         /// Defaults (EN410 §5.4.6.1): he=23, hi=8 W/m²K (vertical glazing, unventilated).
+        /// Order of layers an gases from outside to inside!
         /// </summary>
+        /// <param name="layers">Order of layers from outside to inside</param>
+        /// <param name="gaps">Order gases from outside to inside</param>
+        /// <param name="he_Wm2K"></param>
+        /// <param name="hi_Wm2K"></param>
+        /// <param name="cutoff"></param>
+        /// <param name="maxBounces"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
         public static Result Compute(
             IList<Layer> layers,
             IList<Gap> gaps,

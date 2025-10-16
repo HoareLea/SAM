@@ -6,6 +6,12 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
+        /// <param name="panels"></param>
+        /// <param name="materialLibrary"></param>
+        /// <returns></returns>
         public static IEnumerable<IMaterial> Materials(this IEnumerable<Panel> panels, MaterialLibrary materialLibrary)
         {
             if (panels == null || materialLibrary == null)
@@ -111,6 +117,13 @@ namespace SAM.Analytical
             return result;
         }
 
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
+        /// <param name="apertureConstruction"></param>
+        /// <param name="materialLibrary"></param>
+        /// <param name="materialType"></param>
+        /// <returns></returns>
         public static IEnumerable<IMaterial> Materials(this ApertureConstruction apertureConstruction, MaterialLibrary materialLibrary, MaterialType materialType = Core.MaterialType.Undefined)
         {
             if (apertureConstruction == null || materialLibrary == null)
@@ -149,6 +162,13 @@ namespace SAM.Analytical
             return result;
         }
 
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="construction"></param>
+        /// <param name="materialLibrary"></param>
+        /// <returns></returns>
         public static IEnumerable<T> Materials<T>(this Construction construction, MaterialLibrary materialLibrary) where T: IMaterial
         {
             if (construction == null || materialLibrary == null)

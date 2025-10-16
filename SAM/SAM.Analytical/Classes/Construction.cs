@@ -8,6 +8,9 @@ namespace SAM.Analytical
 {
     public class Construction : SAMType, IAnalyticalObject
     {
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         private List<ConstructionLayer> constructionLayers;
 
         public Construction(string name)
@@ -79,6 +82,9 @@ namespace SAM.Analytical
         {
         }
 
+        /// <summary>
+        /// Order of materials from inside to outside following the TAS approach.
+        /// </summary>
         public List<ConstructionLayer> ConstructionLayers
         {
             get
