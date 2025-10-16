@@ -62,7 +62,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Name = "_hi_",
                     NickName = "_hi_",
-                    Description = "hi [W/m²K]\nInternal heat transfer coefficient.\nCalculated as: hi = 3.6 + (4.1 * εi / 0.837)\nwhere εi is the corrected emissivity of the inside surface.\nFor uncoated soda-lime silicate or borosilicate glass: εi = 0.837 = hi = 7.7W/m²K \nDefault: hi = 7.7 W/m²K for Rsi = 0.13.",
+                    Description = "hi [W/m²K]\nInternal heat transfer coefficient.\nCalculated as: hi = 3.6 + (4.1 * εi / 0.837)\nwhere εi is the corrected emissivity of the inside surface.\nFor uncoated soda-lime silicate or borosilicate glass: εi = 0.837 = hi = 7.7W/m²K \nDefault: Calculated for equation you can override with fix hi = 7.7 W/m²K for Rsi = 0.13.",
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
