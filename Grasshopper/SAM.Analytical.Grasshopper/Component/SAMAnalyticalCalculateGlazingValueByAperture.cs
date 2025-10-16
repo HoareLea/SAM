@@ -35,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCalculateGlazingValueByAperture()
           : base("SAMAnalytical.CalculateGlazingValueByAperture", "SAMAnalytical.CalculateGlazingValueByAperture",
-              "Calculate Glazing Value By Aperture",
+              "Calculate Glazing Value By Aperture using EN 410",
               "SAM WIP", "Tas")
         {
         }
@@ -57,12 +57,26 @@ namespace SAM.Analytical.Grasshopper
                 param_Number.SetPersistentData(20);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_hi_", NickName = "_hi_", Description = "hi [W/m2K]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "_hi_",
+                    NickName = "_hi_",
+                    Description = "hi [W/m²K]\nInternal heat transfer coefficient.\nCalculated as: hi = 3.6 + (4.1 * εi / 0.837)\nwhere εi is the corrected emissivity of the inside surface.\nFor uncoated soda-lime silicate or borosilicate glass: εi = 0.837 and hi = 7.7 W/m²K for Rsi = 0.13.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
                 param_Number.SetPersistentData(8);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_he_", NickName = "_he_", Description = "he [W/m2K]", Access = GH_ParamAccess.item, Optional = true };
-                param_Number.SetPersistentData(23);
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number()
+                {
+                    Name = "_he_",
+                    NickName = "_he_",
+                    Description = "he [W/m²K]\nExternal heat transfer coefficient.\nDefault: he = 25 for Rse = 0.04.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Number.SetPersistentData(25);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
