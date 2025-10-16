@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,8 +51,18 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tMean_", NickName = "_tMean_", Description = "Mean gap temperature", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tMean_", NickName = "_tMean_", Description = "Mean gap temperature", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.SetPersistentData(20);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_hi_", NickName = "_hi_", Description = "hi [W/m2K]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(8);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_he_", NickName = "_he_", Description = "he [W/m2K]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(23);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
@@ -148,6 +158,20 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.GetData(index, ref tMean);
+            }
+
+            double hi = 8;
+            index = Params.IndexOfInputParam("_hi_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref hi);
+            }
+
+            double he = 23;
+            index = Params.IndexOfInputParam("_he_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref he);
             }
 
             DataTree<GH_Number> tvs = new();
@@ -256,7 +280,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    Glazing.Result result = Glazing.Compute(layers, gaps);
+                    Glazing.Result result = Glazing.Compute(layers, gaps, he, hi);
                     if(result != null)
                     {
                         GH_Path gH_Path = new (i);
