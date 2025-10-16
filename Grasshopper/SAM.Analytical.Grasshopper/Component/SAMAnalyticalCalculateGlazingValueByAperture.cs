@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tMean_", NickName = "_tMean_", Description = "Mean gap temperature", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(20);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean @boolean = null;
 
@@ -83,6 +87,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ASolarTotal", NickName = "ASolarTotal", Description = "ASolarTotal", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "QiByLayer", NickName = "QiByLayer", Description = "QiByLayer", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "GValue", NickName = "GValue", Description = "GValue", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "ShadingCoefficient", NickName = "ShadingCoefficient", Description = "ShadingCoefficient", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualExt", NickName = "SolarEnergyBalanceResidualExt", Description = "SolarEnergyBalanceResidualExt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "SolarEnergyBalanceResidualInt", NickName = "SolarEnergyBalanceResidualInt", Description = "SolarEnergyBalanceResidualInt", Access = GH_ParamAccess.tree }, ParamVisibility.Voluntary));
@@ -138,6 +143,13 @@ namespace SAM.Analytical.Grasshopper
                 apertures = analyticalModel.GetApertures(x => true);
             }
 
+            double tMean = 20;
+            index = Params.IndexOfInputParam("_tMean_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref tMean);
+            }
+
             DataTree<GH_Number> tvs = new();
             DataTree<GH_Number> rvExts = new();
             DataTree<GH_Number> rvInts = new();
@@ -148,6 +160,7 @@ namespace SAM.Analytical.Grasshopper
             DataTree<GH_Number> aSolarTotals = new();
             DataTree<GH_Number> qiByLayers = new();
             DataTree<GH_Number> gValues = new();
+            DataTree<GH_Number> shadingCoefficients = new();
             DataTree<GH_Number> solarEnergyBalanceResidualExts = new();
             DataTree<GH_Number> solarEnergyBalanceResidualInts = new();
 
@@ -230,14 +243,14 @@ namespace SAM.Analytical.Grasshopper
                             double emissivity_1 = transparentMaterial_1.GetValue<double>(TransparentMaterialParameter.InternalEmissivity);
 
                             TransparentMaterial transparentMaterial_2 = materialLibrary.GetMaterial(constructionLayers[j - 1].Name) as TransparentMaterial;
-                            if (transparentMaterial_1 is null)
+                            if (transparentMaterial_2 is null)
                             {
                                 continue;
                             }
 
                             double emissivity_2 = transparentMaterial_2.GetValue<double>(TransparentMaterialParameter.ExternalEmissivity);
 
-                            Glazing.Gap gap = Glazing.MakeGapFromConvective(heatTransferCoefficient, emissivity_1, emissivity_2);
+                            Glazing.Gap gap = Glazing.MakeGapFromConvective(heatTransferCoefficient, emissivity_1, emissivity_2, TmeanC: tMean);
 
                             gaps.Add(gap);
                         }
@@ -268,11 +281,12 @@ namespace SAM.Analytical.Grasshopper
                         {
                             foreach (double qiByLayer in qiByLayers_Temp)
                             {
-                                aSolarByLayers.Add(new GH_Number(Core.Query.Round(qiByLayer, Tolerance.MacroDistance)), gH_Path);
+                                qiByLayers.Add(new GH_Number(Core.Query.Round(qiByLayer, Tolerance.MacroDistance)), gH_Path);
                             }
                         }
 
                         gValues.Add(new GH_Number(Core.Query.Round(result.GValue, Tolerance.MacroDistance)), gH_Path);
+                        gValues.Add(new GH_Number(Core.Query.Round(result.ShadingCoefficient, Tolerance.MacroDistance)), gH_Path);
 
                         solarEnergyBalanceResidualExts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualExt, Tolerance.MacroDistance)), gH_Path);
                         solarEnergyBalanceResidualInts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualInt, Tolerance.MacroDistance)), gH_Path);
@@ -350,6 +364,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetDataTree(index, gValues);
+            }
+
+            index = Params.IndexOfOutputParam("ShadingCoefficient");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, shadingCoefficients);
             }
 
             index = Params.IndexOfOutputParam("SolarEnergyBalanceResidualExt");

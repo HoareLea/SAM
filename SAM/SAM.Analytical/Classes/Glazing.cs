@@ -97,7 +97,10 @@ namespace SAM.Analytical
             // 3) g-value (EN410 §5.4.1, eq. (7))
             double g = solExt.Tau;
             double Atot = 0.0;
-            for (int k = 0; k < layers.Count; k++) { g += qi[k] * solExt.Abs[k]; Atot += solExt.Abs[k]; }
+            for (int k = 0; k < layers.Count; k++) 
+            { 
+                g += qi[k] * solExt.Abs[k]; 
+                Atot += solExt.Abs[k]; }
 
             return new Result
             {
