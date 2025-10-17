@@ -497,6 +497,9 @@ namespace SAM.Analytical
 
                 if (double.IsNaN(gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient)))
                     result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
+
+                if (double.IsNaN(gasMaterial.Density))
+                    result.Add(string.Format("Density for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is TransparentMaterial)
             {
