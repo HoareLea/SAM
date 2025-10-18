@@ -320,7 +320,7 @@ namespace SAM.Analytical.Grasshopper
                         hi = 3.6 + (4.1 * emissivity / 0.837);
                     }
 
-                    Glazing.Result result = Glazing.Compute(layers, gaps, he, hi);
+                    Glazing.Result result = Glazing.Compute(layers, gaps, null, he, hi);
                     if(result != null)
                     {
                         GH_Path gH_Path = new (i);
