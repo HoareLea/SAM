@@ -185,10 +185,19 @@ namespace SAM.Analytical
             int maxBounces = 40000)
         {
             if (layers == null || layers.Count == 0)
+            {
                 throw new ArgumentException("At least one layer is required.", nameof(layers));
-            if (gaps == null) gaps = Array.Empty<Gap>();
+            }
+
+            if (gaps == null)
+            {
+                gaps = Array.Empty<Gap>();
+            }
+            
             if (gaps.Count != System.Math.Max(0, layers.Count - 1))
+            {
                 throw new ArgumentException("gaps.Count must equal layers.Count - 1.");
+            }
 
             // Choose spectral vs. band-averaged path
             bool canDoSpectral = weights != null && layers.All(L => L.HasSpectral);

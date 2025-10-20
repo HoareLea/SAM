@@ -1,7 +1,6 @@
 ﻿using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Parameters.Hints;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -62,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Name = "_hi_",
                     NickName = "_hi_",
-                    Description = "hi [W/m²K]\nInternal heat transfer coefficient.\nCalculated as: hi = 3.6 + (4.1 * εi / 0.837)\nwhere εi is the corrected emissivity of the inside surface.\nFor uncoated soda-lime silicate or borosilicate glass: εi = 0.837 = hi = 7.7W/m²K \nDefault: Calculated for equation you can override with fix hi = 7.7 W/m²K for Rsi = 0.13.",
+                    Description = "hi [W/m²K]\nInternal heat transfer coefficient.\nCalculated as: hi = 3.6 + (4.1 * εi / 0.837)\nwhere εi is the corrected emissivity of the inside surface.\nFor uncoated soda-lime silicate or borosilicate glass: εi = 0.837 = hi = 7.7W/m²K \nDefault: Calculated for equation you can override with fix hi = 7.7 W/m²K for Rsi = 0.13.\nTas: hi=8",
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
@@ -73,7 +72,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Name = "_he_",
                     NickName = "_he_",
-                    Description = "he [W/m²K]\nExternal heat transfer coefficient.\nDefault: he = 25 for Rse = 0.04.",
+                    Description = "he [W/m²K]\nExternal heat transfer coefficient.\nDefault: he = 25 for Rse = 0.04.\nTas: he=23",
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
@@ -350,7 +349,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         gValues.Add(new GH_Number(Core.Query.Round(result.GValue, Tolerance.MacroDistance)), gH_Path);
-                        gValues.Add(new GH_Number(Core.Query.Round(result.ShadingCoefficient, Tolerance.MacroDistance)), gH_Path);
+                        shadingCoefficients.Add(new GH_Number(Core.Query.Round(result.ShadingCoefficient, Tolerance.MacroDistance)), gH_Path);
 
                         solarEnergyBalanceResidualExts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualExt, Tolerance.MacroDistance)), gH_Path);
                         solarEnergyBalanceResidualInts.Add(new GH_Number(Core.Query.Round(result.SolarBalanceResidualInt, Tolerance.MacroDistance)), gH_Path);

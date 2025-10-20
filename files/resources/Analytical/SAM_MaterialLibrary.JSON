@@ -9840,7 +9840,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__200mm_2.298W/m2K",
-        "Description": "Air, 200 mm, for acoustical windows, Glazed"
+        "Description": "Air, 200 mm, for acoustical windows, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9875,7 +9878,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__24mm_1.708W/m2K",
-        "Description": "Air, 24 mm, Glazed"
+        "Description": "Air, 24 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9910,7 +9916,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__30mm_1.762W/m2K",
-        "Description": "Air, 30 mm, Glazed"
+        "Description": "Air, 30 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9945,7 +9954,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__15mm_1.95W/m2K",
-        "Description": "Air layer, 15 mm, roof, SLD"
+        "Description": "Air layer, 15 mm, roof, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9980,7 +9992,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__17mm_1.471W/m2K",
-        "Description": "Air layer of 15 mm in a wall, SLD"
+        "Description": "Air layer of 15 mm in a wall, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10015,7 +10030,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__25mm_1.95W/m2K",
-        "Description": "Air layer, 25 mm, roof, SLD"
+        "Description": "Air layer, 25 mm, roof, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10050,7 +10068,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__25mm_1.25W/m2K",
-        "Description": "Air layer, 25 mm, wall, SLD"
+        "Description": "Air layer, 25 mm, wall, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10085,7 +10106,10 @@
           }
         ],
         "DisplayName": "Ar0Dn_Air__25mm_1W/m2K",
-        "Description": "Air layer, 25 mm, floor, SLD"
+        "Description": "Air layer, 25 mm, floor, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10120,7 +10144,10 @@
           }
         ],
         "DisplayName": "Ar0Dn_Air__35mm_0.714W/m2K",
-        "Description": "Air layer, 35 mm, floor, SLD"
+        "Description": "Air layer, 35 mm, floor, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10190,7 +10217,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__50mm_1.95W/m2K",
-        "Description": "Air Layer, 50 mm, roof, SLD"
+        "Description": "Air Layer, 50 mm, roof, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10225,7 +10255,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__50mm_1.25W/m2K",
-        "Description": "Air Layer, 50 mm, wall, SLD"
+        "Description": "Air Layer, 50 mm, wall, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10260,7 +10293,10 @@
           }
         ],
         "DisplayName": "Ar0Dn_Air__7mm_3.571W/m2K",
-        "Description": "Air Layer, 7 mm, wall, roof or floor, SLD"
+        "Description": "Air Layer, 7 mm, wall, roof or floor, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10295,7 +10331,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__400mm_1.95W/m2K",
-        "Description": "Air void, 400 mm, typically used in intermediate floors, SLD"
+        "Description": "Air void, 400 mm, typically used in intermediate floors, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10330,7 +10369,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__1000mm_3.333W/m2K",
-        "Description": "Cold loft Space, SLD"
+        "Description": "Cold loft Space, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10365,7 +10407,10 @@
           }
         ],
         "DisplayName": "Ar0Dn_Air__400mm_0.18W/m2K",
-        "Description": "Internal service void, 400 mm, layer of air in an intermedeiate floor between two heated parts of a building, SLD"
+        "Description": "Internal service void, 400 mm, layer of air in an intermedeiate floor between two heated parts of a building, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10400,7 +10445,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__200mm_1.95W/m2K",
-        "Description": "Loft space, R=0.2, SLD"
+        "Description": "Loft space, R=0.2, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11030,7 +11078,10 @@
           }
         ],
         "DisplayName": "Ar90Dn_Air__50mm_0.5W/m2K",
-        "Description": "50 mm floor, PartL"
+        "Description": "50 mm floor, PartL",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11065,7 +11116,10 @@
           }
         ],
         "DisplayName": "Ar90Up_Air__50mm_1.25W/m2K",
-        "Description": "50 mm wall, PartL"
+        "Description": "50 mm wall, PartL",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11100,7 +11154,10 @@
           }
         ],
         "DisplayName": "Ar90Up_Air__50mm_1.95W/m2K",
-        "Description": "50 mm ceiling, Upward Flow, PartL"
+        "Description": "50 mm ceiling, Upward Flow, PartL",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11135,7 +11192,10 @@
           }
         ],
         "DisplayName": "Ag90Up_Argon__11.38mm_1.48W/m2K",
-        "Description": "PartL"
+        "Description": "PartL",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       }
     ]
   }
