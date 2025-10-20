@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -86,6 +86,7 @@ namespace SAM.Analytical.Grasshopper
         : base("SAMAnalytical.ModifyVentilationProfileByFunction",
                "SAMAnalytical.ModifyVentilationProfileByFunction",
                "Modify a zone’s ventilation profile by functional rules.\n" +
+               "Supported in TAS 9.5.7 or higher.\n\n" +
                "Supports temperature-controlled, pollutant-controlled, and hybrid strategies.\n" +
                "Ventilation ramps between lower/upper limits (ACH or L/s·m²) with optional base flow.\n" +
                "Cooling modes reduce flow when outdoor ≈ indoor, shutting off at outdoor ≥ indoor +1 °C.\n" +
@@ -94,10 +95,10 @@ namespace SAM.Analytical.Grasshopper
                "day/night schedules. Ensures minimum ventilation is preserved while enabling\n" +
                "dynamic, parametric testing of comfort, air quality, and energy use.\n\n" +
                "Examples:\n" +
-               " - tcmvc (Cooling): tcmvc,0,19.00,20.00,0,0.000\n" +
-               " - tcmvn (Neutral): tcmvn,0,19.00,20.00,0,0.000\n" +
-               " - tmmvc (Cooling+Min): tmmvc,0,19.00,20.00,0.200,0.000\n" +
-               " - tmmvn (Neutral+Min): tmmvn,0,19.00,20.00,0.200,0.000\n" +
+               " - tcmvc (Cooling): tcmvc,0,19.00,20.00,0.000,-50.00\n" +
+               " - tcmvn (Neutral): tcmvn,0,19.00,20.00,0.000,-50.00\n" +
+               " - tmmvc (Cooling+Min): tmmvc,0,19.00,20.00,0.200,0.000,-50.00\n" +
+               " - tmmvn (Neutral+Min): tmmvn,0,19.00,20.00,0.200,0.000,-50.00\n" +
                " - tcbvc (Hybrid): tcbvc,0,19.00,20.00,0.200,19.00,20.00,30.000,0,0,50.000,\n" +
                "                   604.799,755.999,16.000,12.000,755.999,1209.598",
                "SAM", "Analytical02")
@@ -144,12 +145,18 @@ namespace SAM.Analytical.Grasshopper
                         NickName = "_function",
                         Description =
                             "Ventilation function string.\n" +
+                            "Defines the zone’s ventilation behavior (temperature-, pollutant-, or hybrid-controlled).\n" +
+                            "For TAS 9.5.7 or higher, a fixed supply air temperature can be specified as the last value\n" +
+                            "in the function string. If this option is disabled, the last value should remain -50.00\n" +
+                            "(indicating 'off'). For example, setting it to 12.00 will fix the supply air temperature\n" +
+                            "at 12 °C.\n\n" +
                             "Examples:\n" +
-                            "  tcmvc,0,19.00,20.00,0,0.000\n" +
-                            "  tcmvn,0,19.00,20.00,0,0.000\n" +
-                            "  tmmvc,0,19.00,20.00,0.200,0.000\n" +
-                            "  tmmvn,0,19.00,20.00,0.200,0.000\n" +
-                            "  tcbvc,0,19.00,20.00,0.200,19.00,20.00,30.000,0,0,50.000,604.799,755.999,16.000,12.000,755.999,1209.598",
+                            "  tcmvc,0,19.00,20.00,0.000,-50.00\n" +
+                            "  tcmvn,0,19.00,20.00,0.000,-50.00\n" +
+                            "  tmmvc,0,19.00,20.00,0.200,0.000,-50.00\n" +
+                            "  tmmvn,0,19.00,20.00,0.200,0.000,-50.00\n" +
+                            "  tcbvc,0,19.00,20.00,0.200,19.00,20.00,30.000,0,0,50.000,\n" +
+                            "         604.799,755.999,16.000,12.000,755.999,1209.598",
                         Access = GH_ParamAccess.item,
                         Optional = false
                     },
@@ -161,12 +168,12 @@ namespace SAM.Analytical.Grasshopper
                         Name = "ac/h_",
                         NickName = "ac/h_",
                         Description =
-                            "Override ACH (air changes per hour).\n" +
-                            "If supplied, replaces any 0.00 ACH token in the function string.\n" +
-                            "Example: If ac/h_ = 0.3, then\n" +
-                            "  tcmvc,0,19.00,20.00,0,0.000\n" +
-                            "becomes\n" +
-                            "  tcmvc,0,19.00,20.00,0,0.300",
+                            "Optional Override ACH (air changes per hour).\n" +
+                            "If provided, his value replaces any 0.000 ACH token in the function string.\n" +
+                            "Example:\n" +
+                            "  Input:  tcmvc,0,19.00,20.00,0,0.000,-50.00\n" +
+                            "  With ac/h_ = 0.3 → becomes:\n" +
+                            "  tcmvc,0,19.00,20.00,0,0.300,-50.00",
                         Access = GH_ParamAccess.item,
                         Optional = true
                     },
@@ -368,7 +375,7 @@ namespace SAM.Analytical.Grasshopper
                                     double volume = space.Volume(adjacencyCluster);
                                     if (!double.IsNaN(volume))
                                     {
-                                        function_Temp[vent_Index] = m3h / volume;
+                                        function_Temp[vent_Index] = Core.Query.Round(m3h / volume, Tolerance.MacroDistance);
                                     }
                                 }
                             }
