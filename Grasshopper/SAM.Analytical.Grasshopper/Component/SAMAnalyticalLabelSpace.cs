@@ -236,11 +236,13 @@ namespace SAM.Analytical.Grasshopper
             global::Rhino.DocObjects.TextHorizontalAlignment textHorizontalAlignment = global::Rhino.DocObjects.TextHorizontalAlignment.Center;
             global::Rhino.DocObjects.TextVerticalAlignment textVerticalAlignment = global::Rhino.DocObjects.TextVerticalAlignment.MiddleOfTop;
 
-            Text3d result = new (text, plane, height_Temp);
-            result.HorizontalAlignment = textHorizontalAlignment;
-            result.VerticalAlignment = textVerticalAlignment;
-            result.Italic = true;
-            result.Bold = false;
+            Text3d result = new(text, plane, height_Temp)
+            {
+                HorizontalAlignment = textHorizontalAlignment,
+                VerticalAlignment = textVerticalAlignment,
+                Italic = true,
+                Bold = false
+            };
 
             return result;
         }
