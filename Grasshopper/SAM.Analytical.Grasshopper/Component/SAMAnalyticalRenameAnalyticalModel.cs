@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_String param_String;
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "caseDescription_", NickName = "caseDescription_", Description = "Case Description", Access = GH_ParamAccess.item, Optional = true };
@@ -97,27 +97,30 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_name");
             string name = null;
-            if (index == -1 || !dataAccess.GetData(index, ref name))
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref name);
             }
 
             index = Params.IndexOfInputParam("caseDescription_");
-            string codeDescription = null;
+            string caseDescription = null;
             if (index != -1)
             {
-                dataAccess.GetData(index, ref codeDescription);
+                dataAccess.GetData(index, ref caseDescription);
             }
 
             if(analyticalModel != null)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel);
-                analyticalModel.Name = name;
-
-                if(codeDescription != null)
+                
+                if (name != null)
                 {
-                    Core.Modify.SetValue(analyticalModel, "CodeDescription", codeDescription);
+                    analyticalModel.Name = name;
+                }
+
+                if(caseDescription != null)
+                {
+                    Core.Modify.SetValue(analyticalModel, "CaseDescription", caseDescription);
                 }
             }
 
