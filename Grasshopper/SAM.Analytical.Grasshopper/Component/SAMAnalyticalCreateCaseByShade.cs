@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Rhino.Render.DataSources;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -62,37 +63,37 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_overhangVerticalOffset_", NickName = "_overhangVerticalOffset_", Description = "Overhang vertical offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_overhangVerticalOffset_", NickName = "_overhangVerticalOffset_", Description = "Overhang vertical offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_overhangFrontOffset_", NickName = "_overhangFrontOffset_", Description = "Overhang front offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_overhangFrontOffset_", NickName = "_overhangFrontOffset_", Description = "Overhang front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinDepth_", NickName = "_leftFinDepth_", Description = "Left fin depth [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinDepth_", NickName = "_leftFinDepth_", Description = "Left fin depth [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinOffset_", NickName = "_leftFinOffset_", Description = "Left fin offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinOffset_", NickName = "_leftFinOffset_", Description = "Left fin offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinFrontOffset_", NickName = "_leftFinFrontOffset_", Description = "Left fin front offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_leftFinFrontOffset_", NickName = "_leftFinFrontOffset_", Description = "Left fin front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinDepth_", NickName = "_rightFinDepth_", Description = "Right fin depth [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinDepth_", NickName = "_rightFinDepth_", Description = "Right fin depth [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinOffset_", NickName = "_rightFinOffset_", Description = "Right fin offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinOffset_", NickName = "_rightFinOffset_", Description = "Right fin offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinFrontOffset_", NickName = "_rightFinFrontOffset_", Description = "Right fin front offset [m]", Access = GH_ParamAccess.item };
-                //paramNumber.SetPersistentData(0);
-                //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_rightFinFrontOffset_", NickName = "_rightFinFrontOffset_", Description = "Right fin front offset [m]", Access = GH_ParamAccess.item };
+                paramNumber.SetPersistentData(0);
+                result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 return [.. result];
             }
@@ -107,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModels", NickName = "CaseAModels", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -146,93 +147,104 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_overhangDepth_");
-            double overhangDepth = 0;
+            double overhangDepth = 0.0;
             if (index != -1)
             {
                 dataAccess.GetData(index, ref overhangDepth);
             }
 
+            index = Params.IndexOfInputParam("_overhangVerticalOffset_");
+            double overhangVerticalOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref overhangVerticalOffset);
+            }
+
+            index = Params.IndexOfInputParam("_overhangFrontOffset_");
+            double overhangFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref overhangFrontOffset);
+            }
+
+            index = Params.IndexOfInputParam("_leftFinDepth_");
+            double leftFinDepth = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref leftFinDepth);
+            }
+
+            index = Params.IndexOfInputParam("_leftFinOffset_");
+            double leftFinOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref leftFinOffset);
+            }
+
+            index = Params.IndexOfInputParam("_leftFinFrontOffset_");
+            double leftFinFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref leftFinFrontOffset);
+            }
 
 
+            index = Params.IndexOfInputParam("_rightFinDepth_");
+            double rightFinDepth = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref rightFinDepth);
+            }
 
+            index = Params.IndexOfInputParam("_rightFinOffset_");
+            double rightFinOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref rightFinOffset);
+            }
 
-            AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Not implemented");
-            return;
+            index = Params.IndexOfInputParam("_rightFinFrontOffset_");
+            double rightFinFrontOffset = 0.0;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref rightFinFrontOffset);
+            }
 
+            if (analyticalObjects != null && analyticalObjects.Count != 0)
+            {
+                AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);;
 
+                foreach (IAnalyticalObject analyticalObject in analyticalObjects)
+                {
+                    List<Panel> shades = null;
+                    if (analyticalObject is Panel panel)
+                    {
+                        shades = Create.Panels_Shade(panel, overhangDepth, overhangVerticalOffset, overhangFrontOffset, leftFinDepth, leftFinOffset, leftFinFrontOffset, rightFinDepth, rightFinOffset, rightFinFrontOffset);
+                    }
+                    else if (analyticalObject is Aperture aperture)
+                    {
+                        shades = Create.Panels_Shade(aperture, glassPartOnly, overhangDepth, overhangVerticalOffset, overhangFrontOffset, leftFinDepth, leftFinOffset, leftFinFrontOffset, rightFinDepth, rightFinOffset, rightFinFrontOffset);
+                    }
 
+                    if(shades == null)
+                    {
+                        continue;
+                    }
 
+                    foreach(Panel shade in shades)
+                    {
+                        adjacencyCluster.AddObject(shade);
+                    }
+                }
 
-            //index = Params.IndexOfInputParam("_apertureConstructions_");
-            //List<ApertureConstruction> apertureConstructions = [];
-            //if (index != -1)
-            //{
-            //    dataAccess.GetDataList(index, apertureConstructions);
-            //}
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
 
-            //if(apertures.Count == 0)
-            //{
-            //    apertures = analyticalModel.GetApertures();
-            //}
-            //else
-            //{
-            //    for(int i = apertures.Count - 1; i >= 0; i--)
-            //    {
-            //        if (apertures[i] is null)
-            //        {
-            //            apertures.RemoveAt(i);
-            //            continue;
-            //        }
-
-            //        Aperture aperture = analyticalModel.GetAperture(apertures[i].Guid, out Panel panel);
-            //        if(aperture is null)
-            //        {
-            //            apertures.RemoveAt(i);
-            //            continue;
-            //        }
-
-            //        apertures[i] = new Aperture(aperture);
-            //    }
-            //}
-
-            //List<AnalyticalModel> analytialModels = [];
-            //if (apertures != null && apertures.Count != 0 && apertureConstructions != null && apertureConstructions.Count != 0)
-            //{
-            //    foreach (ApertureConstruction apertureConstruction in apertureConstructions)
-            //    {
-            //        AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
-
-            //        foreach (Aperture aperture in apertures)
-            //        {
-            //            Aperture aperture_Temp = new (aperture, apertureConstruction);
-
-            //            if(adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
-            //            {
-            //                continue;
-            //            }
-
-            //            panel_Temp = Create.Panel(panel_Temp);
-
-            //            panel_Temp.RemoveAperture(aperture_Temp.Guid);
-            //            panel_Temp.AddAperture(aperture_Temp);
-
-            //            adjacencyCluster.AddObject(panel_Temp);
-            //        }
-
-            //        analytialModels.Add(new AnalyticalModel(analyticalModel, adjacencyCluster));
-            //    }
-            //}
-
-            //if (analytialModels.Count == 0)
-            //{
-            //    analytialModels.Add(analyticalModel);
-            //}
-
-            //index = Params.IndexOfOutputParam("CaseAModels");
-            //if (index != -1)
-            //{
-            //    dataAccess.SetData(index, analyticalModel);
-            //}
+            index = Params.IndexOfOutputParam("CaseAModel");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, analyticalModel);
+            }
         }
     }
 }

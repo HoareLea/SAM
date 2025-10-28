@@ -50,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
                 GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "_baseAModel", NickName = "_baseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooWeatherDataParam gooWeatherDataParam = new GooWeatherDataParam() { Name = "_weatherData_", NickName = "_weatherData_", Description = "SAM WeatherData", Access = GH_ParamAccess.list, Optional = true };
+                GooWeatherDataParam gooWeatherDataParam = new GooWeatherDataParam() { Name = "_weatherData_", NickName = "_weatherData_", Description = "SAM WeatherData", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -66,7 +66,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "CaseAModels", NickName = "CaseAModels", Description = "SAM AnalyticalModels", Access = GH_ParamAccess.list };
+                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -91,34 +91,22 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_weatherData_");
-            List<WeatherData> weatherDatas = [];
+            WeatherData weatherData = null;
             if (index != -1)
             {
-                dataAccess.GetDataList(index, weatherDatas);
+                dataAccess.GetData(index, ref weatherData);
             }
 
-
-            List<AnalyticalModel> analytialModels = [];
-            if (weatherDatas != null && weatherDatas.Count != 0)
+            if (weatherData != null)
             {
-                foreach (WeatherData weatherData in weatherDatas)
-                {
-                    AnalyticalModel analyticalModel_Temp = new (analyticalModel);
-                    analyticalModel_Temp.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
-
-                    analytialModels.Add(analyticalModel_Temp);
-                }
+                analyticalModel = new(analyticalModel);
+                analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
             }
 
-            if (analytialModels.Count == 0)
-            {
-                analytialModels.Add(analyticalModel);
-            }
-
-            index = Params.IndexOfOutputParam("CaseAModels");
+            index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, analytialModels);
+                dataAccess.SetData(index, analyticalModel);
             }
         }
     }

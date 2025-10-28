@@ -51,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
 
-                GooApertureConstructionParam gooApertureConstructionParam = new() { Name = "_apertureConstructions_", NickName = "_apertureConstructions_", Description = "SAM ApertureConstructions", Access = GH_ParamAccess.list, Optional = true };
+                GooApertureConstructionParam gooApertureConstructionParam = new() { Name = "_apertureConstruction_", NickName = "_apertureConstruction_", Description = "SAM ApertureConstruction", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -67,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModels", NickName = "CaseAModels", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -98,11 +98,11 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, apertures);
             }
 
-            index = Params.IndexOfInputParam("_apertureConstructions_");
-            List<ApertureConstruction> apertureConstructions = [];
+            index = Params.IndexOfInputParam("_apertureConstruction_");
+            ApertureConstruction? apertureConstruction = null;
             if (index != -1)
             {
-                dataAccess.GetDataList(index, apertureConstructions);
+                dataAccess.GetData(index, ref apertureConstruction);
             }
 
             if(apertures.Count == 0)
@@ -130,40 +130,31 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            List<AnalyticalModel> analytialModels = [];
-            if (apertures != null && apertures.Count != 0 && apertureConstructions != null && apertureConstructions.Count != 0)
+            if (apertures != null && apertures.Count != 0 && apertureConstruction != null )
             {
-                foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+                AdjacencyCluster adjacencyCluster = new(analyticalModel.AdjacencyCluster, true);
+
+                foreach (Aperture aperture in apertures)
                 {
-                    AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
+                    Aperture aperture_Temp = new(aperture, apertureConstruction);
 
-                    foreach (Aperture aperture in apertures)
+                    if (adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
                     {
-                        Aperture aperture_Temp = new (aperture, apertureConstruction);
-
-                        if(adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
-                        {
-                            continue;
-                        }
-
-                        panel_Temp = Create.Panel(panel_Temp);
-
-                        panel_Temp.RemoveAperture(aperture_Temp.Guid);
-                        panel_Temp.AddAperture(aperture_Temp);
-
-                        adjacencyCluster.AddObject(panel_Temp);
+                        continue;
                     }
 
-                    analytialModels.Add(new AnalyticalModel(analyticalModel, adjacencyCluster));
+                    panel_Temp = Create.Panel(panel_Temp);
+
+                    panel_Temp.RemoveAperture(aperture_Temp.Guid);
+                    panel_Temp.AddAperture(aperture_Temp);
+
+                    adjacencyCluster.AddObject(panel_Temp);
                 }
+
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
 
-            if (analytialModels.Count == 0)
-            {
-                analytialModels.Add(analyticalModel);
-            }
-
-            index = Params.IndexOfOutputParam("CaseAModels");
+            index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {
                 dataAccess.SetData(index, analyticalModel);
