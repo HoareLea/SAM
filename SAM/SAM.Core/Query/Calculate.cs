@@ -292,7 +292,7 @@ namespace SAM.Core
                 }
             }
 
-            Func<double, double, int, List<double>> divide = new Func<double, double, int, List<double>>((double min_Temp, double max_Temp, int count) =>
+            Func<double, double, int, List<double>> divide = new((double min_Temp, double max_Temp, int count) =>
             {
                 if (double.IsNaN(min_Temp) || double.IsNaN(max_Temp) || count <= -1)
                 {
@@ -306,7 +306,7 @@ namespace SAM.Core
 
                 double value = (max_Temp - min_Temp) / count;
 
-                List<double> result_Temp = new List<double>();
+                List<double> result_Temp = [];
                 for (int i = 0; i <= count; i++)
                 {
                     result_Temp.Add(min_Temp + (i * value));
@@ -316,7 +316,7 @@ namespace SAM.Core
             });
 
 
-            Func<SortedSet<double>, double, Tuple<double, double>> getMinAndMax = new Func<SortedSet<double>, double, Tuple<double, double>>((SortedSet<double> values, double value) => 
+            Func<SortedSet<double>, double, Tuple<double, double>> getMinAndMax = new((values, value) => 
             { 
                 if(values == null || values.Count == 0)
                 {

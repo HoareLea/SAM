@@ -448,7 +448,7 @@ namespace SAM.Analytical
             return adjacencyCluster.GetAperture(guid, out panel);
         }
 
-        public List<Aperture> GetApertures(Func<Aperture, bool> func)
+        public List<Aperture> GetApertures(Func<Aperture, bool> func = null)
         {
             if (func == null)
             {
@@ -461,7 +461,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            List<Aperture> result = new List<Aperture>();
+            List<Aperture> result = [];
             foreach (Panel panel in panels)
             {
                 List<Aperture> apertures = panel?.Apertures;
@@ -470,7 +470,11 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                apertures = apertures.FindAll(x => func.Invoke(x));
+                if(func is not null)
+                {
+                    apertures = apertures.FindAll(func.Invoke);
+                }
+
                 if (apertures == null || apertures.Count == 0)
                 {
                     continue;

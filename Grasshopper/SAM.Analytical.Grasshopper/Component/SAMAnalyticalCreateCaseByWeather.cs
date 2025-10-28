@@ -1,17 +1,20 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
+using SAM.Weather.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalRenameAnalyticalModel : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalCreateCaseByWeather : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("5b1d7c8a-8e5f-40c5-8b4e-5f759e49e8d2");
+        public override Guid ComponentGuid => new("4f54c13d-eac7-4b13-a07e-4f620753b26a");
 
         /// <summary>
         /// The latest version of this component
@@ -28,9 +31,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalRenameAnalyticalModel()
-          : base("SAMAnalytical.RenameAnalyticalModel", "SAMAnalytical.RenameAnalyticalModel",
-              "Rename AnalyticalModel",
+        public SAMAnalyticalCreateCaseByWeather()
+          : base("SAMAnalytical.CreateCaseByWeather", "SAMAnalytical.CreateCaseByWeather",
+              "AAA",
               "SAM", "Analytical")
         {
         }
@@ -44,18 +47,11 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "_baseAModel", NickName = "_baseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String;
-
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "caseDescription_", NickName = "caseDescription_", Description = "Case Description", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
-
-
+                GooWeatherDataParam gooWeatherDataParam = new GooWeatherDataParam() { Name = "_weatherData_", NickName = "_weatherData_", Description = "SAM WeatherData", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -70,7 +66,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new GooAnalyticalModelParam() { Name = "CaseAModels", NickName = "CaseAModels", Description = "SAM AnalyticalModels", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
@@ -86,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            index = Params.IndexOfInputParam("_analyticalModel");
+            index = Params.IndexOfInputParam("_baseAModel");
             AnalyticalModel analyticalModel = null;
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
@@ -94,39 +90,35 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_name");
-            string name = null;
+            index = Params.IndexOfInputParam("_weatherData_");
+            List<WeatherData> weatherDatas = [];
             if (index != -1)
             {
-                dataAccess.GetData(index, ref name);
+                dataAccess.GetDataList(index, weatherDatas);
             }
 
-            index = Params.IndexOfInputParam("caseDescription_");
-            string caseDescription = null;
-            if (index != -1)
+
+            List<AnalyticalModel> analytialModels = [];
+            if (weatherDatas != null && weatherDatas.Count != 0)
             {
-                dataAccess.GetData(index, ref caseDescription);
-            }
-
-            if (analyticalModel != null)
-            {
-                analyticalModel = new AnalyticalModel(analyticalModel);
-
-                if (name != null)
+                foreach (WeatherData weatherData in weatherDatas)
                 {
-                    analyticalModel.Name = name;
-                }
+                    AnalyticalModel analyticalModel_Temp = new (analyticalModel);
+                    analyticalModel_Temp.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
 
-                if (caseDescription != null)
-                {
-                    Core.Modify.SetValue(analyticalModel, "CaseDescription", caseDescription);
+                    analytialModels.Add(analyticalModel_Temp);
                 }
             }
 
-            index = Params.IndexOfOutputParam("AnalyticalModel");
+            if (analytialModels.Count == 0)
+            {
+                analytialModels.Add(analyticalModel);
+            }
+
+            index = Params.IndexOfOutputParam("CaseAModels");
             if (index != -1)
             {
-                dataAccess.SetData(index, analyticalModel);
+                dataAccess.SetDataList(index, analytialModels);
             }
         }
     }
