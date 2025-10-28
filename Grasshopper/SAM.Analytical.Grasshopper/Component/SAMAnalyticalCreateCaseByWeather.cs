@@ -51,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 GooWeatherDataParam gooWeatherDataParam = new GooWeatherDataParam() { Name = "_weatherData_", NickName = "_weatherData_", Description = "SAM WeatherData", Access = GH_ParamAccess.item, Optional = true };
-                result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(gooWeatherDataParam, ParamVisibility.Binding));
 
                 return [.. result];
             }
