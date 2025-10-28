@@ -131,11 +131,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_apertures_");
-            List<Aperture> apertures = [];
+            index = Params.IndexOfInputParam("_analyticalObjects");
+            List<IAnalyticalObject> analyticalObjects = [];
             if (index != -1)
             {
-                dataAccess.GetDataList(index, apertures);
+                dataAccess.GetDataList(index, analyticalObjects);
             }
 
             index = Params.IndexOfInputParam("_glassPartOnly");
@@ -163,76 +163,76 @@ namespace SAM.Analytical.Grasshopper
 
 
 
-            index = Params.IndexOfInputParam("_apertureConstructions_");
-            List<ApertureConstruction> apertureConstructions = [];
-            if (index != -1)
-            {
-                dataAccess.GetDataList(index, apertureConstructions);
-            }
+            //index = Params.IndexOfInputParam("_apertureConstructions_");
+            //List<ApertureConstruction> apertureConstructions = [];
+            //if (index != -1)
+            //{
+            //    dataAccess.GetDataList(index, apertureConstructions);
+            //}
 
-            if(apertures.Count == 0)
-            {
-                apertures = analyticalModel.GetApertures();
-            }
-            else
-            {
-                for(int i = apertures.Count - 1; i >= 0; i--)
-                {
-                    if (apertures[i] is null)
-                    {
-                        apertures.RemoveAt(i);
-                        continue;
-                    }
+            //if(apertures.Count == 0)
+            //{
+            //    apertures = analyticalModel.GetApertures();
+            //}
+            //else
+            //{
+            //    for(int i = apertures.Count - 1; i >= 0; i--)
+            //    {
+            //        if (apertures[i] is null)
+            //        {
+            //            apertures.RemoveAt(i);
+            //            continue;
+            //        }
 
-                    Aperture aperture = analyticalModel.GetAperture(apertures[i].Guid, out Panel panel);
-                    if(aperture is null)
-                    {
-                        apertures.RemoveAt(i);
-                        continue;
-                    }
+            //        Aperture aperture = analyticalModel.GetAperture(apertures[i].Guid, out Panel panel);
+            //        if(aperture is null)
+            //        {
+            //            apertures.RemoveAt(i);
+            //            continue;
+            //        }
 
-                    apertures[i] = new Aperture(aperture);
-                }
-            }
+            //        apertures[i] = new Aperture(aperture);
+            //    }
+            //}
 
-            List<AnalyticalModel> analytialModels = [];
-            if (apertures != null && apertures.Count != 0 && apertureConstructions != null && apertureConstructions.Count != 0)
-            {
-                foreach (ApertureConstruction apertureConstruction in apertureConstructions)
-                {
-                    AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
+            //List<AnalyticalModel> analytialModels = [];
+            //if (apertures != null && apertures.Count != 0 && apertureConstructions != null && apertureConstructions.Count != 0)
+            //{
+            //    foreach (ApertureConstruction apertureConstruction in apertureConstructions)
+            //    {
+            //        AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
 
-                    foreach (Aperture aperture in apertures)
-                    {
-                        Aperture aperture_Temp = new (aperture, apertureConstruction);
+            //        foreach (Aperture aperture in apertures)
+            //        {
+            //            Aperture aperture_Temp = new (aperture, apertureConstruction);
 
-                        if(adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
-                        {
-                            continue;
-                        }
+            //            if(adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
+            //            {
+            //                continue;
+            //            }
 
-                        panel_Temp = Create.Panel(panel_Temp);
+            //            panel_Temp = Create.Panel(panel_Temp);
 
-                        panel_Temp.RemoveAperture(aperture_Temp.Guid);
-                        panel_Temp.AddAperture(aperture_Temp);
+            //            panel_Temp.RemoveAperture(aperture_Temp.Guid);
+            //            panel_Temp.AddAperture(aperture_Temp);
 
-                        adjacencyCluster.AddObject(panel_Temp);
-                    }
+            //            adjacencyCluster.AddObject(panel_Temp);
+            //        }
 
-                    analytialModels.Add(new AnalyticalModel(analyticalModel, adjacencyCluster));
-                }
-            }
+            //        analytialModels.Add(new AnalyticalModel(analyticalModel, adjacencyCluster));
+            //    }
+            //}
 
-            if (analytialModels.Count == 0)
-            {
-                analytialModels.Add(analyticalModel);
-            }
+            //if (analytialModels.Count == 0)
+            //{
+            //    analytialModels.Add(analyticalModel);
+            //}
 
-            index = Params.IndexOfOutputParam("CaseAModels");
-            if (index != -1)
-            {
-                dataAccess.SetData(index, analyticalModel);
-            }
+            //index = Params.IndexOfOutputParam("CaseAModels");
+            //if (index != -1)
+            //{
+            //    dataAccess.SetData(index, analyticalModel);
+            //}
         }
     }
 }
