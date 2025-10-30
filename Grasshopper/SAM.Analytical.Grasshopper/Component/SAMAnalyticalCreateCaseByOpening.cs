@@ -5,76 +5,218 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.InteropServices.Marshalling;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Create a case-specific AnalyticalModel by setting opening behaviour on selected apertures
+    /// (makes a copy of the base model; the original stays unchanged).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This component prepares a case-specific <see cref="AnalyticalModel"/> for parametric studies by
+    /// applying opening settings (angle, factor, profile, function, colour, description) to one or more
+    /// apertures. The component makes a copy of the base model so your original model is not changed.
+    /// If no apertures are supplied, all apertures in the model are considered.
+    /// </para>
+    /// </remarks>
     public class SAMAnalyticalCreateCaseByOpening : GH_SAMVariableOutputParameterComponent
     {
-        private static string function = "zdwno,0,19.00,21.00,99.00";
+        private const string DefaultOpeningFunction = "zdwno,0,19.00,21.00,99.00"; // default opening function (PartO)
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid => new ("249dd3f9-200b-4d85-be35-da59f302f343");
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Metadata
+        // ────────────────────────────────────────────────────────────────────────────────
 
-        /// <summary>
-        /// The latest version of this component
-        /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        /// <summary>Gets the unique ID for this component. Do not change this ID after release.</summary>
+        public override Guid ComponentGuid => new("249dd3f9-200b-4d85-be35-da59f302f343");
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
+        /// <summary>The latest version of this component.</summary>
+        public override string LatestComponentVersion => "1.0.1";
+
+        /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
+        /// <summary>Display priority in the Grasshopper ribbon.</summary>
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
-        /// </summary>
-        public SAMAnalyticalCreateCaseByOpening()
-          : base("SAMAnalytical.CreateCaseByOpening", "SAMAnalytical.CreateCaseByOpening",
-              "AAA",
-              "SAM", "Analytical")
-        {
-        }
+        // Long, multi-line description for tooltips and docs (MEP-friendly SAM style)
+        private const string DescriptionLong =
+@"Create a case-specific AnalyticalModel by setting opening behaviour on selected apertures.
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
+SUMMARY
+  • Makes a copy of _baseAModel_; the original stays unchanged.
+  • Applies opening settings to each chosen aperture: opening angle (deg) and optional
+    factor, profile, function, colour and description.
+  • If _apertures_ is empty, all model apertures are used.
+  • If you supply fewer values than apertures (e.g., angles), the last value is reused.
+
+INPUTS
+  _baseAModel  (AnalyticalModel, required)
+    Base SAM AnalyticalModel used as a template for this case.
+    Type: SAM.Analytical.AnalyticalModel
+
+  _apertures_  (Aperture[], optional)
+    Specific apertures to update. Leave empty to use all apertures in the model.
+    Type: SAM.Analytical.Aperture
+
+  _openingAngles  (Number[], required)
+    Opening angle(s) in degrees. Provide one value to apply to all, or a list matching
+    the number of apertures. If the list is shorter, the last value is reused.
+
+  descriptions_  (Text[], optional)
+    Description per aperture (one value or a list).
+
+  colours_  (Colour[], optional)
+    Display colours per aperture (one value or a list).
+
+  functions_  (Text[], optional)
+    Opening function string used by SAM to drive opening behaviour.\nDefault (PartO): 'zdwno,0,19.00,21.00,99.00'.\nLeave the default unless you need custom logic.
+
+  factors_  (Number[], optional)
+    Adjustment factor (0–1 typically). If provided with a profile, it scales the profile.
+
+  profiles_  (Profile[], optional)
+    Time-varying profile for opening. When provided, profile-based opening is used.
+
+  _sizePaneOnly_  (Boolean, optional, default = true)
+    If true, opening size is based on the glass pane only; if false, the full aperture
+    size is used.
+
+OUTPUTS
+  CaseAModel  (AnalyticalModel)
+    Copy of the base model with updated opening settings on the selected apertures.
+
+NOTES
+  • Angles are in degrees.
+  • You can feed one value to affect all apertures, or a list per-aperture.
+  • If both profile and factor are given, the factor multiplies the profile result.
+
+EXAMPLE
+  1) Read a baseline AnalyticalModel → _baseAModel
+  2) (Optional) Select apertures to control → _apertures_
+  3) Set opening angle(s) (e.g., 15 or [10,20,30]) → _openingAngles
+  4) (Optional) Provide factors_/profiles_/colours_/descriptions_/functions_
+  5) (Optional) Toggle _sizePaneOnly_ as needed
+  6) Get the case model → CaseAModel
+";
+
+        /// <summary>Initializes a new instance of the component.</summary>
+        public SAMAnalyticalCreateCaseByOpening()
+          : base(
+                "SAMAnalytical.CreateCaseByOpening",
+                "CreateCaseByOpening",
+                DescriptionLong,
+                "SAM", "Analytical")
+        { }
+
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Parameters
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        /// <summary>Registers all the input parameters for this component.</summary>
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
+                // Base Analytical Model (required)
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "_baseAModel",
+                    NickName = "_baseAModel",
+                    Description = "Base SAM AnalyticalModel used as a template for this case.\nType: SAM.Analytical.AnalyticalModel\nRequired: Yes",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooApertureParam gooApertureParam = new() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true };
+                // Apertures (optional)
+                var gooApertureParam = new GooApertureParam
+                {
+                    Name = "_apertures_",
+                    NickName = "_apertures_",
+                    Description = "Apertures to update. Leave empty to use all apertures in the model.\nType: SAM.Analytical.Aperture\nRequired: No",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_openingAngles", NickName = "_openingAngles", Description = "Opening Angles", Access = GH_ParamAccess.list };
+                // Opening angles (required list)
+                var number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_openingAngles",
+                    NickName = "_openingAngles",
+                    Description = "Opening angle(s) in degrees. One value applies to all; lists shorter than apertures reuse the last value.",
+                    Access = GH_ParamAccess.list
+                };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "descriptions_", NickName = "descriptions_", Description = "Descriptions", Access = GH_ParamAccess.list, Optional = true };
+                // Descriptions (optional)
+                var @string = new global::Grasshopper.Kernel.Parameters.Param_String
+                {
+                    Name = "descriptions_",
+                    NickName = "descriptions_",
+                    Description = "Description per aperture (one value or a list).",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Colour colour = new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "colours_", NickName = "colours_", Description = "Colours", Access = GH_ParamAccess.list, Optional = true };
+                // Colours (optional)
+                var colour = new global::Grasshopper.Kernel.Parameters.Param_Colour
+                {
+                    Name = "colours_",
+                    NickName = "colours_",
+                    Description = "Display colours per aperture (one value or a list).",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(colour, ParamVisibility.Voluntary));
 
-                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "functions_", NickName = "functions_", Description = "Functions", Access = GH_ParamAccess.list, Optional = true };
-                @string.SetPersistentData(function);
+                // Functions (optional; default persistent value)
+                @string = new global::Grasshopper.Kernel.Parameters.Param_String
+                {
+                    Name = "functions_",
+                    NickName = "functions_",
+                    Description = "Opening function string used by SAM to drive opening behaviour.\nDefault (PartO): 'zdwno,0,19.00,21.00,99.00'.\nLeave the default unless you need custom logic.",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
+                @string.SetPersistentData(DefaultOpeningFunction);
                 result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "factors_", NickName = "factors_", Description = "Factors", Access = GH_ParamAccess.list, Optional = true };
-                result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+                // Factors (optional)
+                var number2 = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "factors_",
+                    NickName = "factors_",
+                    Description = "Adjustment factor (0–1 typically). If provided with a profile, it scales the profile.",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
+                result.Add(new GH_SAMParam(number2, ParamVisibility.Voluntary));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
+                // Profiles (optional)
+                var gooProfileParam = new GooProfileParam
+                {
+                    Name = "profiles_",
+                    NickName = "profiles_",
+                    Description = "Time-varying profile for opening. When provided, profile-based opening is used.",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new() { Name = "_sizePaneOnly_", NickName = "_sizePaneOnly_", Description = "Size Pane Only", Access = GH_ParamAccess.item, Optional = true };
+                // Size pane only (optional; default true)
+                var param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                {
+                    Name = "_sizePaneOnly_",
+                    NickName = "_sizePaneOnly_",
+                    Description = "If true, size is based on the glass pane only; if false, the full aperture size is used.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
                 param_Boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
 
@@ -82,42 +224,48 @@ namespace SAM.Analytical.Grasshopper
             }
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
+        /// <summary>Registers all the output parameters for this component.</summary>
         protected override GH_SAMParam[] Outputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "CaseAModel",
+                    NickName = "CaseAModel",
+                    Description = "Copy of the base model with updated opening settings on selected apertures.",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
             }
         }
 
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Execution
+        // ────────────────────────────────────────────────────────────────────────────────
+
         /// <summary>
-        /// This is the method that actually does the work.
+        /// Core execution: read inputs, update apertures, and output the case model.
         /// </summary>
-        /// <param name="dataAccess">
-        /// The DA object is used to retrieve from inputs and store in outputs.
-        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            int index = -1;
-            index = Params.IndexOfInputParam("_baseAModel");
+            // Base model (required)
+            int index = Params.IndexOfInputParam("_baseAModel");
             AnalyticalModel analyticalModel = null;
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "_baseAModel: Please supply a valid SAM AnalyticalModel.");
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
 
-            index = Params.IndexOfInputParam("apertures_");
+            // Apertures (optional)
+            index = Params.IndexOfInputParam("_apertures_");
             List<Aperture> apertures = [];
             if (index != -1)
             {
@@ -129,6 +277,7 @@ namespace SAM.Analytical.Grasshopper
                 apertures = adjacencyCluster.GetApertures();
             }
 
+            // Opening angles (required list)
             index = Params.IndexOfInputParam("_openingAngles");
             List<double> openingAngles = [];
             if (index != -1)
@@ -136,6 +285,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, openingAngles);
             }
 
+            // Optional lists
             index = Params.IndexOfInputParam("descriptions_");
             List<string> descriptions = [];
             if (index != -1)
@@ -178,6 +328,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref paneSizeOnly);
             }
 
+            // Process apertures
             List<Aperture> apertures_Result = null;
             List<double> dischargeCoefficients_Result = null;
             List<IOpeningProperties> openingProperties_Result = null;
@@ -211,9 +362,9 @@ namespace SAM.Analytical.Grasshopper
                     double width = paneSizeOnly ? aperture_Temp.GetWidth(AperturePart.Pane) : aperture_Temp.GetWidth();
                     double height = paneSizeOnly ? aperture_Temp.GetHeight(AperturePart.Pane) : aperture_Temp.GetHeight();
 
-                    double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
+                    double factor = (factors != null && factors.Count != 0) ? (factors.Count > i ? factors[i] : factors.Last()) : double.NaN;
 
-                    PartOOpeningProperties partOOpeningProperties = new(width, height, openingAngle);
+                    PartOOpeningProperties partOOpeningProperties = new PartOOpeningProperties(width, height, openingAngle);
 
                     double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
@@ -221,7 +372,7 @@ namespace SAM.Analytical.Grasshopper
                     if (profiles != null && profiles.Count != 0)
                     {
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
-                        ProfileOpeningProperties profileOpeningProperties = new(partOOpeningProperties.GetDischargeCoefficient(), profile);
+                        ProfileOpeningProperties profileOpeningProperties = new ProfileOpeningProperties(partOOpeningProperties.GetDischargeCoefficient(), profile);
                         if (!double.IsNaN(factor))
                         {
                             profileOpeningProperties.Factor = factor;
@@ -245,7 +396,7 @@ namespace SAM.Analytical.Grasshopper
                         singleOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
                     }
 
-                    string function_Temp = function;
+                    string function_Temp = DefaultOpeningFunction;
                     if (functions != null && functions.Count != 0)
                     {
                         function_Temp = functions.Count > i ? functions[i] : functions.Last();
@@ -275,8 +426,10 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            // Make a case model with the updated cluster (original model object is not changed)
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
 
+            // Output
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {

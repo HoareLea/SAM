@@ -1,98 +1,175 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Create a case-specific AnalyticalModel by uniformly scaling selected apertures (windows).
+    /// Makes a copy of the base model; the original stays unchanged.
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This component prepares a case-specific <see cref="AnalyticalModel"/> for parametric studies by
+    /// rescaling aperture size(s) with a single, dimensionless factor (e.g., 0.8 → 80%, 1.2 → 120%).
+    /// If no apertures are supplied, all apertures in the model are considered.
+    /// A copy of the base model is made so your original model is not changed.
+    /// </para>
+    /// </remarks>
     public class SAMAnalyticalCreateCaseByWindowSize : GH_SAMVariableOutputParameterComponent
     {
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Metadata
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        /// <summary>Gets the unique ID for this component. Do not change this ID after release.</summary>
         public override Guid ComponentGuid => new Guid("41f36339-ae22-4de5-9586-0b9519ad60a4");
 
-        /// <summary>
-        /// The latest version of this component
-        /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        /// <summary>The latest version of this component.</summary>
+        public override string LatestComponentVersion => "1.0.1";
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
+        /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
+        /// <summary>Display priority in the Grasshopper ribbon.</summary>
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
-        /// </summary>
-        public SAMAnalyticalCreateCaseByWindowSize()
-          : base("SAMAnalytical.CreateCaseByWindowSize", "SAMAnalytical.CreateCaseByWindowSize",
-              "AAA",
-              "SAM", "Analytical")
-        {
-        }
+        // Long, multi-line description for tooltips and docs (MEP-friendly SAM style)
+        private const string DescriptionLong =
+@"Create a case-specific AnalyticalModel by scaling window/aperture size.
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
+SUMMARY
+  • Makes a copy of _baseAModel_; the original stays unchanged.
+  • Applies a uniform scale factor to each chosen aperture (dimensionless).
+  • If _apertures_ is empty, all model apertures are used.
+
+INPUTS
+  _baseAModel  (AnalyticalModel, required)
+    Base SAM AnalyticalModel used as a template for this case.
+    Type: SAM.Analytical.AnalyticalModel
+
+  _apertures_  (Aperture[], optional)
+    Specific apertures to rescale. Leave empty to use all apertures in the model.
+    Type: SAM.Analytical.Aperture
+
+  _apertureScaleFactor_  (Number, optional, default = 1.0)
+    Uniform scale factor for aperture size (dimensionless).
+    Examples: 0.8 → 80% of current size; 1.2 → 120%.
+
+OUTPUTS
+  CaseAModel  (AnalyticalModel)
+    Copy of the base model with updated aperture sizes.
+
+NOTES
+  • Scaling is uniform in aperture width and height.
+  • If _apertureScaleFactor_ is not provided (NaN), apertures are not changed.
+
+EXAMPLE
+  1) Read a baseline AnalyticalModel → _baseAModel
+  2) (Optional) Select apertures to rescale → _apertures_
+  3) Set _apertureScaleFactor_ (e.g., 0.9 or 1.1)
+  4) Get the case model → CaseAModel
+";
+
+        /// <summary>Initializes a new instance of the component.</summary>
+        public SAMAnalyticalCreateCaseByWindowSize()
+          : base(
+                "SAMAnalytical.CreateCaseByWindowSize",
+                "CreateCaseByWindowSize",
+                DescriptionLong,
+                "SAM", "Analytical")
+        { }
+
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Parameters
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        /// <summary>Registers all the input parameters for this component.</summary>
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
+                // Base Analytical Model (required)
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "_baseAModel",
+                    NickName = "_baseAModel",
+                    Description = "Base SAM AnalyticalModel used as a template for this case.\nType: SAM.Analytical.AnalyticalModel\nRequired: Yes",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooApertureParam gooApertureParam = new() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true };
+                // Apertures (optional)
+                var gooApertureParam = new GooApertureParam
+                {
+                    Name = "_apertures_",
+                    NickName = "_apertures_",
+                    Description = "Apertures to rescale. Leave empty to use all apertures in the model.\nType: SAM.Analytical.Aperture\nRequired: No",
+                    Access = GH_ParamAccess.list,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
-
-                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
-
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_apertureScaleFactor_", NickName = "_apertureScaleFactor_", Description = "Aperture Scale Factor", Access = GH_ParamAccess.item, Optional = true };
+                // Scale factor (optional; default 1.0)
+                var param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_apertureScaleFactor_",
+                    NickName = "_apertureScaleFactor_",
+                    Description = "Uniform scale factor (dimensionless).\nExamples: 0.8 → 80% ; 1.2 → 120%.\nDefault: 1.0",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Number.SetPersistentData(1.0);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 return [.. result];
             }
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
+        /// <summary>Registers all the output parameters for this component.</summary>
         protected override GH_SAMParam[] Outputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "CaseAModel",
+                    NickName = "CaseAModel",
+                    Description = "Copy of the base model with aperture sizes scaled by _apertureScaleFactor_.",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
             }
         }
 
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Execution
+        // ────────────────────────────────────────────────────────────────────────────────
+
         /// <summary>
-        /// This is the method that actually does the work.
+        /// Core execution: read inputs, rescale apertures, and output the case model.
         /// </summary>
-        /// <param name="dataAccess">
-        /// The DA object is used to retrieve from inputs and store in outputs.
-        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            int index = -1;
-            index = Params.IndexOfInputParam("_baseAModel");
+            // Base model (required)
+            int index = Params.IndexOfInputParam("_baseAModel");
             AnalyticalModel analyticalModel = null;
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "_baseAModel: Please supply a valid SAM AnalyticalModel.");
                 return;
             }
 
+            // Apertures (optional)
             index = Params.IndexOfInputParam("_apertures_");
             List<Aperture> apertures = [];
             if (index != -1)
@@ -100,6 +177,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, apertures);
             }
 
+            // Scale factor (optional)
             index = Params.IndexOfInputParam("_apertureScaleFactor_");
             double apertureScaleFactor = double.NaN;
             if (index != -1)
@@ -107,13 +185,15 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref apertureScaleFactor);
             }
 
-            if(apertures.Count == 0)
+            // Resolve aperture list from model when not provided
+            if (apertures.Count == 0)
             {
                 apertures = analyticalModel.GetApertures();
             }
             else
             {
-                for(int i = apertures.Count - 1; i >= 0; i--)
+                // Clean input list and re-fetch from model to ensure consistency
+                for (int i = apertures.Count - 1; i >= 0; i--)
                 {
                     if (apertures[i] is null)
                     {
@@ -122,7 +202,7 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     Aperture aperture = analyticalModel.GetAperture(apertures[i].Guid, out Panel panel);
-                    if(aperture is null)
+                    if (aperture is null)
                     {
                         apertures.RemoveAt(i);
                         continue;
@@ -132,6 +212,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            // Apply scaling when we have targets and a valid factor
             if (apertures != null && apertures.Count != 0 && !double.IsNaN(apertureScaleFactor))
             {
                 AdjacencyCluster adjacencyCluster = new(analyticalModel.AdjacencyCluster, true);
@@ -160,6 +241,7 @@ namespace SAM.Analytical.Grasshopper
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
 
+            // Output
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {

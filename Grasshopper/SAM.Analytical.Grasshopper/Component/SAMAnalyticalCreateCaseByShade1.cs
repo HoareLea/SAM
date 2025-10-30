@@ -1,93 +1,159 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Create a case-specific AnalyticalModel by adding provided shade Panels to the model
+    /// (makes a copy of the base model; the original stays unchanged).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// This component prepares a case-specific <see cref="AnalyticalModel"/> for parametric studies by
+    /// taking user-supplied shade <see cref="Panel"/>s (e.g., overhangs/fins created elsewhere) and adding
+    /// them to the model. When shades are supplied, the base model is copied so the original is not changed.
+    /// If no shades are provided, the input model is passed through unchanged.
+    /// </para>
+    /// </remarks>
     public class SAMAnalyticalCreateCaseByShade1 : GH_SAMVariableOutputParameterComponent
     {
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Metadata
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        /// <summary>Gets the unique ID for this component. Do not change this ID after release.</summary>
         public override Guid ComponentGuid => new Guid("3ff7afc9-fe51-43d8-b42f-205c8d609a96");
 
-        /// <summary>
-        /// The latest version of this component
-        /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        /// <summary>The latest version of this component.</summary>
+        public override string LatestComponentVersion => "1.0.1";
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
+        /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
+        /// <summary>Display priority in the Grasshopper ribbon.</summary>
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
-        /// </summary>
-        public SAMAnalyticalCreateCaseByShade1()
-          : base("SAMAnalytical.CreateCaseByShade1", "SAMAnalytical.CreateCaseByShade1",
-              "AAA",
-              "SAM", "Analytical")
-        {
-        }
+        // Long, multi-line description for tooltips and docs (MEP-friendly SAM style)
+        private const string DescriptionLong =
+@"Create a case-specific AnalyticalModel by adding provided shade Panels.
 
-        /// <summary>
-        /// Registers all the input parameters for this component.
-        /// </summary>
+SUMMARY
+  • Makes a copy of _baseAModel_; the original stays unchanged.
+  • Adds the Panels supplied on _shades_ into the case model.
+  • If _shades_ is empty, the input model is returned unchanged (no copy is made).
+
+INPUTS
+  _baseAModel  (AnalyticalModel, required)
+    Base SAM AnalyticalModel used as a template for this case.
+    Type: SAM.Analytical.AnalyticalModel
+
+  _shades_  (Panel[], required)
+    Shade Panels to add to the model. Typically created by other SAM nodes (e.g.,
+    CreateCaseByShade) or custom geometry conversion.
+    Type: SAM.Analytical.Panel
+
+OUTPUTS
+  CaseAModel  (AnalyticalModel)
+    If _shades_ is provided and not empty → copy of _baseAModel_ with shade Panels added.
+    Otherwise → passes through the same model you supplied.
+
+NOTES
+  • Use this node when your shades are already generated as Panels. If you need to generate
+    overhangs/fins from panels or apertures, see CreateCaseByShade.
+
+EXAMPLE
+  1) Read a baseline AnalyticalModel → _baseAModel
+  2) Generate shade Panels with another component → _shades_
+  3) Get the case model with shades added → CaseAModel
+";
+
+        /// <summary>Initializes a new instance of the component.</summary>
+        public SAMAnalyticalCreateCaseByShade1()
+          : base(
+                "SAMAnalytical.CreateCaseByShade1",
+                "CreateCaseByShade1",
+                DescriptionLong,
+                "SAM", "Analytical")
+        { }
+
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Parameters
+        // ────────────────────────────────────────────────────────────────────────────────
+
+        /// <summary>Registers all the input parameters for this component.</summary>
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
+                // Base Analytical Model (required)
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "_baseAModel",
+                    NickName = "_baseAModel",
+                    Description = "Base SAM AnalyticalModel used as a template for this case.\nType: SAM.Analytical.AnalyticalModel\nRequired: Yes",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                GooPanelParam gooPanelParam = new GooPanelParam() { Name = "_shades_", NickName = "_shades_", Description = "Shades", Access = GH_ParamAccess.list };
+                // Shade Panels (required)
+                var gooPanelParam = new GooPanelParam
+                {
+                    Name = "_shades_",
+                    NickName = "_shades_",
+                    Description = "Shade Panels to add to the model. Typically generated by other SAM nodes or custom conversion.\nType: SAM.Analytical.Panel\nRequired: Yes",
+                    Access = GH_ParamAccess.list
+                };
                 result.Add(new GH_SAMParam(gooPanelParam, ParamVisibility.Binding));
-
 
                 return [.. result];
             }
         }
 
-        /// <summary>
-        /// Registers all the output parameters for this component.
-        /// </summary>
+        /// <summary>Registers all the output parameters for this component.</summary>
         protected override GH_SAMParam[] Outputs
         {
             get
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                var analyticalModelParam = new GooAnalyticalModelParam
+                {
+                    Name = "CaseAModel",
+                    NickName = "CaseAModel",
+                    Description = "Resulting case AnalyticalModel.\nIf _shades_ is non-empty → copy with shade Panels added; otherwise the same model you supplied.",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 return [.. result];
             }
         }
 
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Execution
+        // ────────────────────────────────────────────────────────────────────────────────
+
         /// <summary>
-        /// This is the method that actually does the work.
+        /// Core execution: read inputs, add shades when present, and output the case model.
         /// </summary>
-        /// <param name="dataAccess">
-        /// The DA object is used to retrieve from inputs and store in outputs.
-        /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            int index = -1;
-            index = Params.IndexOfInputParam("_baseAModel");
+            // Base model (required)
+            int index = Params.IndexOfInputParam("_baseAModel");
             AnalyticalModel analyticalModel = null;
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "_baseAModel: Please supply a valid SAM AnalyticalModel.");
                 return;
             }
 
+            // Shade Panels (required list but may be empty at runtime)
             index = Params.IndexOfInputParam("_shades_");
             List<Panel> shades = [];
             if (index != -1)
@@ -95,18 +161,20 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, shades);
             }
 
+            // Only create a copy and add shades when any are provided
             if (shades != null && shades.Count != 0)
             {
-                AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);;
+                AdjacencyCluster adjacencyCluster = new AdjacencyCluster(analyticalModel.AdjacencyCluster, true);
 
                 foreach (Panel shade in shades)
                 {
                     adjacencyCluster.AddObject(shade);
                 }
 
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster); // copy with shades (original stays unchanged)
             }
 
+            // Output
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {
