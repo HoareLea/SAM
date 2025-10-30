@@ -110,7 +110,7 @@ namespace SAM.Analytical
 
             if(face3D_New is null)
             {
-                face3D_New = new Face3D(externalEdge);
+                face3D_New = new Face3D(plane.Convert(externalEdge));
             }
 
             return new Aperture(aperture.Guid, aperture, face3D_New);
