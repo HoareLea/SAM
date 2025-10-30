@@ -22,12 +22,12 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(face3D.ExternalEdge2D is not Polygon2D polygon2D)
+            if(face3D.ExternalEdge2D is not Polygon2D externalEdge)
             {
                 return null;
             }
 
-            double area = polygon2D.GetArea();
+            double area = externalEdge.GetArea();
             if(double.IsNaN(area))
             {
                 return null;
@@ -45,7 +45,7 @@ namespace SAM.Analytical
                 return new Aperture(aperture);
             }
 
-            Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D(polygon2D, tolerance);
+            Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D(externalEdge, tolerance);
             if(rectangle2D is null)
             {
                 return null;
@@ -53,7 +53,7 @@ namespace SAM.Analytical
 
             Func<double, double> func = (offset) =>
             {
-                if(polygon2D.Offset(offset) is not List<Polygon2D> polygon2Ds)
+                if(externalEdge.Offset(offset) is not List<Polygon2D> polygon2Ds)
                 {
                     return 0;
                 }
@@ -68,23 +68,52 @@ namespace SAM.Analytical
                 return area_Offset;
             };
 
-            double offset = Core.Query.Calculate_ByDivision(func, area_Temp, 0, System.Math.Max(rectangle2D.Width, rectangle2D.Height) / 2);
+            double start = 0;
+            double end = System.Math.Max(rectangle2D.Width, rectangle2D.Height) / 2;
+            if(scale < 1)
+            {
+                end = -end;
+            }
+
+            double offset = Core.Query.Calculate_ByDivision(func, area_Temp, start, end, tolerance: tolerance);
 
             if(double.IsNaN(offset))
             {
                 return null;
             }
 
-            if (polygon2D.Offset(offset) is not List<Polygon2D> polygon2Ds || polygon2Ds == null || polygon2Ds.Count == 0)
+            if (externalEdge.Offset(offset) is not List<Polygon2D> polygon2Ds || polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }
 
             polygon2Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
 
-            Polygon3D polygon3D = plane.Convert(polygon2D);
+            externalEdge = polygon2Ds[0];
 
-            return new Aperture(aperture.Guid, aperture, polygon3D);
+            Face3D face3D_New = null;
+            if(face3D.InternalEdge2Ds is List<IClosed2D> internalEdges && internalEdges.Count != 0)
+            {
+                double area_InternalEdges = internalEdges.ConvertAll(x => x.GetArea()).Sum();
+                if(!double.IsNaN(area_InternalEdges) && area_InternalEdges > 0)
+                {
+                    double area_Frame = (area - area_InternalEdges);
+                    area_Temp = area - (area_Frame * scale);
+
+                    offset = Core.Query.Calculate_ByDivision(func, area_Temp, start, end, tolerance: tolerance);
+                    if (externalEdge.Offset(offset) is List<Polygon2D> polygon2Ds_InternalEdge && polygon2Ds_InternalEdge.Count != 0)
+                    {
+                        face3D_New = Geometry.Spatial.Face3D.Create(plane, externalEdge, polygon2Ds_InternalEdge);
+                    }
+                }
+            }
+
+            if(face3D_New is null)
+            {
+                face3D_New = new Face3D(externalEdge);
+            }
+
+            return new Aperture(aperture.Guid, aperture, face3D_New);
         }
     }
 }

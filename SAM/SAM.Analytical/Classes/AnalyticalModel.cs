@@ -450,11 +450,6 @@ namespace SAM.Analytical
 
         public List<Aperture> GetApertures(Func<Aperture, bool> func = null)
         {
-            if (func == null)
-            {
-                return null;
-            }
-
             List<Panel> panels = adjacencyCluster?.GetPanels();
             if (panels == null || panels.Count == 0)
             {
