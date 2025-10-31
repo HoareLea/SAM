@@ -370,17 +370,17 @@ EXAMPLE
                 string sufix = string.Empty;
                 if(overhangDepth != 0)
                 {
-                    sufix += string.Format(" O{0}", overhangDepth);
+                    sufix += string.Format("O{0}m", overhangDepth);
                 }
 
                 if(leftFinDepth != 0)
                 {
-                    sufix += string.Format(" L{0}", leftFinDepth);
+                    sufix += string.Format("L{0}m", leftFinDepth);
                 }
 
                 if(rightFinDepth != 0)
                 {
-                    sufix += string.Format(" R{0}", rightFinDepth);
+                    sufix += string.Format("R{0}m", rightFinDepth);
                 }
 
                 dataAccess.SetData(index, string.Format("CaseByShade_{0}", sufix ?? string.Empty));

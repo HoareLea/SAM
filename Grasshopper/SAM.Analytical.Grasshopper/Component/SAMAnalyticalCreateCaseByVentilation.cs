@@ -393,22 +393,22 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                 string sufix = string.Empty;
                 if (!double.IsNaN(ach))
                 {
-                    sufix += string.Format(" ach{0}", ach);
+                    sufix += string.Format("{0}ach", ach);
                 }
 
                 if (m3h != 0)
                 {
-                    sufix += string.Format(" m3h{0}", m3h);
+                    sufix += string.Format("{0}m3h", m3h);
                 }
 
                 if (factor != 0)
                 {
-                    sufix += string.Format(" f{0}", factor);
+                    sufix += string.Format("{0}f", factor);
                 }
 
                 if (setback != 0)
                 {
-                    sufix += string.Format(" sb{0}", setback);
+                    sufix += string.Format("{0}sb", setback);
                 }
 
                 dataAccess.SetData(index, string.Format("CaseByVentilation_{0}", sufix ?? string.Empty));
