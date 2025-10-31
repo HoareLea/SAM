@@ -32,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new("249dd3f9-200b-4d85-be35-da59f302f343");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -240,6 +240,9 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                //global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                //result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -364,7 +367,7 @@ EXAMPLE
 
                     double factor = (factors != null && factors.Count != 0) ? (factors.Count > i ? factors[i] : factors.Last()) : double.NaN;
 
-                    PartOOpeningProperties partOOpeningProperties = new PartOOpeningProperties(width, height, openingAngle);
+                    PartOOpeningProperties partOOpeningProperties = new (width, height, openingAngle);
 
                     double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
@@ -372,7 +375,7 @@ EXAMPLE
                     if (profiles != null && profiles.Count != 0)
                     {
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
-                        ProfileOpeningProperties profileOpeningProperties = new ProfileOpeningProperties(partOOpeningProperties.GetDischargeCoefficient(), profile);
+                        ProfileOpeningProperties profileOpeningProperties = new (partOOpeningProperties.GetDischargeCoefficient(), profile);
                         if (!double.IsNaN(factor))
                         {
                             profileOpeningProperties.Factor = factor;
@@ -428,6 +431,12 @@ EXAMPLE
 
             // Make a case model with the updated cluster (original model object is not changed)
             analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, string.Format("CaseByOpening_"));
+            }
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

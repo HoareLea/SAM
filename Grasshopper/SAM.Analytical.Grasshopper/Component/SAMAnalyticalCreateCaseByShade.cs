@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("a8d0db57-5d59-493c-9dae-02ccdb7a169c");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -266,6 +266,9 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -359,6 +362,28 @@ EXAMPLE
                 }
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                string sufix = string.Empty;
+                if(overhangDepth != 0)
+                {
+                    sufix += string.Format(" O{0}", overhangDepth);
+                }
+
+                if(leftFinDepth != 0)
+                {
+                    sufix += string.Format(" L{0}", leftFinDepth);
+                }
+
+                if(rightFinDepth != 0)
+                {
+                    sufix += string.Format(" R{0}", rightFinDepth);
+                }
+
+                dataAccess.SetData(index, string.Format("CaseByShade_{0}", sufix ?? string.Empty));
             }
 
             // Output

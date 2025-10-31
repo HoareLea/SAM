@@ -16,7 +16,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -69,6 +69,9 @@ namespace SAM.Analytical.Grasshopper
 
                 GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -152,6 +155,12 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, string.Format("CaseByApertureConstruction_{0}", apertureConstruction?.Name ?? string.Empty));
             }
 
             index = Params.IndexOfOutputParam("CaseAModel");

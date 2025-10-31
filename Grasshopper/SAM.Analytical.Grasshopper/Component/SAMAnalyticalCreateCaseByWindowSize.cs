@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -28,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("41f36339-ae22-4de5-9586-0b9519ad60a4");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -146,6 +147,9 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -238,6 +242,12 @@ EXAMPLE
                 }
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, string.Format("CaseByWindowSize_{0}", apertureScaleFactor));
             }
 
             // Output

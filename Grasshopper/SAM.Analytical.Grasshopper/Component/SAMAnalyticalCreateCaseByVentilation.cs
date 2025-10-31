@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("fdc0efd6-3ce7-4fa7-b6f6-1fe4235c0639");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -226,6 +226,9 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -382,6 +385,33 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
             if (adjacencyCluster != null)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                string sufix = string.Empty;
+                if (!double.IsNaN(ach))
+                {
+                    sufix += string.Format(" ach{0}", ach);
+                }
+
+                if (m3h != 0)
+                {
+                    sufix += string.Format(" m3h{0}", m3h);
+                }
+
+                if (factor != 0)
+                {
+                    sufix += string.Format(" f{0}", factor);
+                }
+
+                if (setback != 0)
+                {
+                    sufix += string.Format(" sb{0}", setback);
+                }
+
+                dataAccess.SetData(index, string.Format("CaseByVentilation_{0}", sufix ?? string.Empty));
             }
 
             // Output

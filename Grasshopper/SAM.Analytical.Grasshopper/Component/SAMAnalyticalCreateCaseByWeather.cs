@@ -5,6 +5,7 @@ using SAM.Core.Grasshopper;
 using SAM.Weather;
 using SAM.Weather.Grasshopper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -35,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new("4f54c13d-eac7-4b13-a07e-4f620753b26a");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -151,6 +152,9 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -187,6 +191,12 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
             {
                 analyticalModel = new AnalyticalModel(analyticalModel); // copy of the base model (original stays unchanged)
                 analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, string.Format("CaseByWeather_{0}", weatherData.Name ?? string.Empty));
             }
 
             // Output

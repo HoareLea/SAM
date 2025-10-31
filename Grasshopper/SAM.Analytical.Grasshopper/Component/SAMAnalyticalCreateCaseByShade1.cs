@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("3ff7afc9-fe51-43d8-b42f-205c8d609a96");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -131,6 +131,9 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -164,7 +167,7 @@ EXAMPLE
             // Only create a copy and add shades when any are provided
             if (shades != null && shades.Count != 0)
             {
-                AdjacencyCluster adjacencyCluster = new AdjacencyCluster(analyticalModel.AdjacencyCluster, true);
+                AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
 
                 foreach (Panel shade in shades)
                 {
@@ -172,6 +175,13 @@ EXAMPLE
                 }
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster); // copy with shades (original stays unchanged)
+            }
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+
+            if (index != -1)
+            {
+                dataAccess.SetData(index, string.Format("CaseByShade1_"));
             }
 
             // Output
