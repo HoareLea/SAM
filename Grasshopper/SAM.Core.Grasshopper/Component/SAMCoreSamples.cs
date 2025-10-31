@@ -1,8 +1,10 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -164,8 +166,7 @@ Each item is a .gh or .ghx file path.",
             folderList = [];
             filesList = [];
 
-            var root = Path.GetDirectoryName(GetType().Assembly.Location);
-            var templateDir = Path.Combine(root ?? string.Empty, "Samples");
+            var templateDir = GetDefaultDirectory();
 
             var dirs = new List<string> { templateDir };
             DA.GetDataList(0, dirs);
@@ -190,7 +191,7 @@ Each item is a .gh or .ghx file path.",
 
             DA.SetDataList(0, filesList.SelectMany(_ => _));
 
-            templateMenu = GetHVACMenu();
+            templateMenu = GetMenu();
         }
 
         // ────────────────────────────────────────────────────────────────────────────────
@@ -241,9 +242,63 @@ Each item is a .gh or .ghx file path.",
         {
             // Intentionally left in place for future surface into GH menu bar if needed.
             // The component uses its own button to show the same menu.
+
+
+            Menu_AppendSeparator(menu);
+            Menu_AppendItem(menu, "Open Directory", Menu_OpenDirectory, Resources.SAM_Small, true, false);
+
         }
 
-        private ToolStripDropDownMenu GetHVACMenu()
+        //public new void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
+        //{
+        //    base.AppendAdditionalMenuItems(menu);
+
+        //    Menu_AppendSeparator(menu);
+        //    Menu_AppendItem(menu, "Open Directory", Menu_OpenDirectory, Resources.SAM_Small, true, false);
+        //}
+
+        private void Menu_OpenDirectory(object sender, EventArgs e)
+        {
+            int index_Path = Params.IndexOfInputParam("_directory_");
+            if (index_Path == -1)
+            {
+                return;
+            }
+
+            string directory = null;
+
+            if (Params.Input[index_Path].VolatileData.AllData(true)?.OfType<object>()?.FirstOrDefault() is IGH_Goo @object)
+            {
+                directory = (@object as dynamic).Value?.ToString();
+            }
+
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                directory = GetDefaultDirectory();
+            }
+
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                return;
+            }
+
+            Process.Start(new ProcessStartInfo()
+            {
+                FileName = directory,
+                UseShellExecute = true, // Important to open in Explorer
+                Verb = "open"           // Optional, default is "open"
+            });
+        }
+
+        private string GetDefaultDirectory()
+        {
+            var root = Path.GetDirectoryName(GetType().Assembly.Location);
+            var templateDir = Path.Combine(root ?? string.Empty, "Samples");
+
+            return templateDir;
+        }
+
+        private ToolStripDropDownMenu GetMenu()
         {
             var menu = new ToolStripDropDownMenu();
 
