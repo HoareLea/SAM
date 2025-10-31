@@ -403,12 +403,12 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
 
                 if (factor != 0)
                 {
-                    sufix += string.Format("{0}f", factor);
+                    sufix += string.Format("F{0}", factor);
                 }
 
                 if (setback != 0)
                 {
-                    sufix += string.Format("{0}sb", setback);
+                    sufix += string.Format("sb{0}", setback);
                 }
 
                 dataAccess.SetData(index, string.Format("CaseByVentilation_{0}", sufix ?? string.Empty));
