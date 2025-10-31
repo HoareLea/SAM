@@ -26,6 +26,7 @@ namespace SAM.Core.Grasshopper
             Menu_AppendSeparator(menu);
             //Menu_AppendItem(menu, "Source code", OnSourceCodeClick, Properties.Resources.SAM_Small);
 
+            Modify.AppendVersionMenuItem(this, menu);
             Modify.AppendSourceCodeAdditionalMenuItem(this, menu);
             Modify.AppendNewComponentAdditionalMenuItem(this, menu);
         }
