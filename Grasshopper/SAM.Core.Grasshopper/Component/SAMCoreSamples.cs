@@ -103,9 +103,9 @@ NOTES
     shown and the component stops.
 
 EXAMPLE
-  1) Add the component.
+  1) Add the GH files  to library folder.
   2) (Optional) Provide extra folders → _directory_
-  3) Click the button → choose a sample → it appears near this component.";
+  3) Click the button → choose a sample → it appears below this component.";
 
         // ────────────────────────────────────────────────────────────────────────────────
         // Parameters
@@ -359,7 +359,7 @@ Each item is a .gh or .ghx file path.",
         {
             var att = new GH_SAMComponentButtonAttributes(this)
             {
-                ButtonText = "Pick a sample folder"
+                ButtonText = "Load a sample GH file"
             };
 
             att.MouseDownEvent += (object loc) => templateMenu.Show((GH.GUI.Canvas.GH_Canvas)loc, ((GH.GUI.Canvas.GH_Canvas)loc).CursorControlPosition);
