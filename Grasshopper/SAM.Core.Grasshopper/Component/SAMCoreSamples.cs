@@ -292,7 +292,7 @@ Each item is a .gh or .ghx file path.",
 
         private string GetDefaultDirectory()
         {
-            var root = Path.GetDirectoryName(GetType().Assembly.Location);
+            var root = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments), "SAM");
             var templateDir = Path.Combine(root ?? string.Empty, "Samples");
 
             return templateDir;
