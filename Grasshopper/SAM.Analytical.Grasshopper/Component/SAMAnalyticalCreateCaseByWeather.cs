@@ -1,11 +1,10 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Weather;
 using SAM.Weather.Grasshopper;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -36,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new("4f54c13d-eac7-4b13-a07e-4f620753b26a");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -132,6 +131,17 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
                 };
                 result.Add(new GH_SAMParam(gooWeatherDataParam, ParamVisibility.Binding));
 
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -152,7 +162,7 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
@@ -196,7 +206,40 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                dataAccess.SetData(index, string.Format("CaseByWeather_{0}", weatherData.Name ?? string.Empty));
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByWeather_";
+                if (!string.IsNullOrWhiteSpace(weatherData?.Name))
+                {
+                    sufix += weatherData.Name;
+                }
+
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
             }
 
             // Output

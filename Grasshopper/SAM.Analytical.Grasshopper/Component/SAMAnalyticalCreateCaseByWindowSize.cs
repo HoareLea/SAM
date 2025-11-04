@@ -1,7 +1,7 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("41f36339-ae22-4de5-9586-0b9519ad60a4");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -126,6 +126,17 @@ EXAMPLE
                 };
                 param_Number.SetPersistentData(1.0);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -247,7 +258,40 @@ EXAMPLE
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                dataAccess.SetData(index, string.Format("CaseByWindowSize_{0}", apertureScaleFactor));
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByWindowSize_";
+                if (!double.IsNaN(apertureScaleFactor))
+                {
+                    sufix += apertureScaleFactor.ToString();
+                }
+
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
             }
 
             // Output

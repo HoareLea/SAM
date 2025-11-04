@@ -1,4 +1,5 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -16,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,9 +51,19 @@ namespace SAM.Analytical.Grasshopper
                 GooApertureParam gooApertureParam = new() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
-
                 GooApertureConstructionParam gooApertureConstructionParam = new() { Name = "_apertureConstruction_", NickName = "_apertureConstruction_", Description = "SAM ApertureConstruction", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
+
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -70,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
                 GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
@@ -160,7 +171,40 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                dataAccess.SetData(index, string.Format("CaseByApertureConstruction_{0}", apertureConstruction?.Name ?? string.Empty));
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByApertureConstruction_";
+                if (apertureConstruction is not null)
+                {
+                    sufix += apertureConstruction.Name ?? string.Empty;
+                }
+
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
             }
 
             index = Params.IndexOfOutputParam("CaseAModel");

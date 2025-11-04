@@ -1,6 +1,6 @@
 ﻿using Grasshopper.Kernel;
+using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -29,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("3ff7afc9-fe51-43d8-b42f-205c8d609a96");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -111,6 +111,17 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(gooPanelParam, ParamVisibility.Binding));
 
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -131,7 +142,7 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
@@ -178,10 +189,38 @@ EXAMPLE
             }
 
             index = Params.IndexOfOutputParam("CaseDescription");
-
             if (index != -1)
             {
-                dataAccess.SetData(index, string.Format("CaseByShade1_"));
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByShade1_";
+
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
             }
 
             // Output

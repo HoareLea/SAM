@@ -30,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("fdc0efd6-3ce7-4fa7-b6f6-1fe4235c0639");
 
         /// <summary>The latest version of this component.</summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>Component icon shown on the Grasshopper canvas.</summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
@@ -206,6 +206,17 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                 // Description (optional)
                 result.Add(new GH_SAMParam(new Param_String { Name = "description_", NickName = "description_", Description = "Free text description stored with the ventilation function.", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
                 return [.. result];
             }
         }
@@ -226,7 +237,7 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
@@ -390,7 +401,32 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                string sufix = string.Empty;
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByVentilation_";
                 if (!double.IsNaN(ach))
                 {
                     sufix += string.Format("{0}ach", ach);
@@ -411,7 +447,9 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                     sufix += string.Format("sb{0}", setback);
                 }
 
-                dataAccess.SetData(index, string.Format("CaseByVentilation_{0}", sufix ?? string.Empty));
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
             }
 
             // Output
