@@ -141,7 +141,9 @@ namespace SAM.Core
         private static bool SetValue(this ParameterizedSAMObject parameterizedSAMObject, Assembly assembly, string name, object value)
         {
             if (parameterizedSAMObject == null || string.IsNullOrWhiteSpace(name))
+            {
                 return false;
+            }
 
             ParameterSet parameterSet = null;
 
@@ -180,10 +182,13 @@ namespace SAM.Core
                 }
             }
 
-            if (value == null)
-                return parameterSet.Add(name);
+            bool result = value == null ? parameterSet.Add(name) : parameterSet.Add(name, value as dynamic);
+            if (result)
+            {
+                parameterizedSAMObject.Add(parameterSet);
+            }
 
-            return parameterSet.Add(name, value as dynamic);
+            return result;
         }
     }
 }
