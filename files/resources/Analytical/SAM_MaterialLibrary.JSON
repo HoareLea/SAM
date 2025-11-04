@@ -9245,7 +9245,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__10mm_0.934W/m2K",
-        "Description": "Krypton Vertical 10mm, Glazed"
+        "Description": "Krypton Vertical 10mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9280,7 +9283,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__6mm_1.5W/m2K",
-        "Description": "Krypton 6 mm, Glazed"
+        "Description": "Krypton 6 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9315,7 +9321,10 @@
           }
         ],
         "DisplayName": "Kr0UP_Krypton__6mm_1.899W/m2K",
-        "Description": "Krypton 6mm, Glazed"
+        "Description": "Krypton 6mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9350,7 +9359,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__8mm_1.125W/m2K",
-        "Description": "Krypton 8 mm, Glazed"
+        "Description": "Krypton 8 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9385,7 +9397,10 @@
           }
         ],
         "DisplayName": "Kr0UP_Krypton__8mm_1.813W/m2K",
-        "Description": "Krypton 8 mm, Glazed"
+        "Description": "Krypton 8 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9420,7 +9435,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__12mm_0.958W/m2K",
-        "Description": "Krypton, 12 mm, Glazed"
+        "Description": "Krypton, 12 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9455,7 +9473,10 @@
           }
         ],
         "DisplayName": "Kr0UP_Krypton__12mm_1.699W/m2K",
-        "Description": "Krypton, 12 mm, Glazed"
+        "Description": "Krypton, 12 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9490,7 +9511,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__16mm_0.997W/m2K",
-        "Description": "Krypton, 16 mm, Glazed"
+        "Description": "Krypton, 16 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9525,7 +9549,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__20mm_1.197W/m2K",
-        "Description": "Krypton, 20 mm, Glazed"
+        "Description": "Krypton, 20 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9560,7 +9587,10 @@
           }
         ],
         "DisplayName": "Kr90UP_Krypton__3mm_3W/m2K",
-        "Description": "Krypton, 20 mm, Glazed"
+        "Description": "Krypton, 20 mm, Glazed",
+		"ThermalConductivity": 0.00943,
+		"SpecificHeatCapacity": 248,
+		"Density": 5.485
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9595,7 +9625,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__6mm_4.16W/m2K",
-        "Description": "Air, 6 mm, Glazed"
+        "Description": "Air, 6 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9630,7 +9663,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__6mm_4.16W/m2K",
-        "Description": "Air, 6 mm, Glazed"
+        "Description": "Air, 6 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9665,7 +9701,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__12mm_2.08W/m2K",
-        "Description": "Air, 12 mm, Glazed"
+        "Description": "Air, 12 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9700,7 +9739,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__12mm_3.168W/m2K",
-        "Description": "Air, 12 mm, Glazed"
+        "Description": "Air, 12 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9735,7 +9777,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__16mm_1.614W/m2K",
-        "Description": "Air, 16 mm, Glazed"
+        "Description": "Air, 16 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9770,7 +9815,10 @@
           }
         ],
         "DisplayName": "Ar0UP_Air__16mm_3.026W/m2K",
-        "Description": "Air, 16 mm, Glazed"
+        "Description": "Air, 16 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -9805,7 +9853,10 @@
           }
         ],
         "DisplayName": "Ar90UP_Air__20mm_1.665W/m2K",
-        "Description": "Air, 20 mm, Glazed"
+        "Description": "Air, 20 mm, Glazed",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10182,7 +10233,10 @@
           }
         ],
         "DisplayName": "Ar0Dn_Air__50mm_0.5W/m2K",
-        "Description": "Air Layer, 50 mm, floor, principal direction of heat is downwards, SLD"
+        "Description": "Air Layer, 50 mm, floor, principal direction of heat is downwards, SLD",
+		"ThermalConductivity": 0.024,
+		"SpecificHeatCapacity": 1006.1,
+		"Density": 1.293
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10483,7 +10537,10 @@
           }
         ],
         "DisplayName": "Ag90UP_Argon__12mm_1.403W/m2K",
-        "Description": "Argon, 12 mm, Glazed"
+        "Description": "Argon, 12 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10518,7 +10575,10 @@
           }
         ],
         "DisplayName": "Ag0UP_Argon__12mm_2.24W/m2K",
-        "Description": "Argon, 12 mm, Glazed"
+        "Description": "Argon, 12 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10553,7 +10613,10 @@
           }
         ],
         "DisplayName": "Ag90UP_Argon__16mm_1.16W/m2K",
-        "Description": "Argon, 16 mm, Glazed"
+        "Description": "Argon, 16 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10588,7 +10651,10 @@
           }
         ],
         "DisplayName": "Ag0UP_Argon__16mm_2.139W/m2K",
-        "Description": "Argon, 16 mm, Glazed"
+        "Description": "Argon, 16 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10623,7 +10689,10 @@
           }
         ],
         "DisplayName": "Ag90UP_Argon__20mm_1.197W/m2K",
-        "Description": "Argon, 20 mm, Glazed"
+        "Description": "Argon, 20 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10658,7 +10727,10 @@
           }
         ],
         "DisplayName": "Ag0UP_Argon__20mm_2.064W/m2K",
-        "Description": "Argon, 20 mm, Glazed"
+        "Description": "Argon, 20 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10693,7 +10765,10 @@
           }
         ],
         "DisplayName": "Ag90UP_Argon__6mm_2.807W/m2K",
-        "Description": "Argon, 6 mm, Glazed"
+        "Description": "Argon, 6 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10728,7 +10803,10 @@
           }
         ],
         "DisplayName": "Ag0UP_Argon__6mm_2.807W/m2K",
-        "Description": "Argon, 6 mm, Glazed"
+        "Description": "Argon, 6 mm, Glazed",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10763,7 +10841,9 @@
           }
         ],
         "DisplayName": "CO290UP_CO2__12mm_2.08W/m2K",
-        "Description": "CO2, 12 mm, Glazed"
+        "Description": "CO2, 12 mm, Glazed",
+		"SpecificHeatCapacity": 846,
+		"Density": 1.84
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10798,7 +10878,9 @@
           }
         ],
         "DisplayName": "CO290UP_CO2__16mm_1.614W/m2K",
-        "Description": "CO2, 16 mm, Glazed"
+        "Description": "CO2, 16 mm, Glazed",
+		"SpecificHeatCapacity": 846,
+		"Density": 1.84
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10833,7 +10915,9 @@
           }
         ],
         "DisplayName": "CO290UP_CO2__20mm_1.665W/m2K",
-        "Description": "CO2, 20 mm, Glazed"
+        "Description": "CO2, 20 mm, Glazed",
+		"SpecificHeatCapacity": 846,
+		"Density": 1.84
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -10868,7 +10952,9 @@
           }
         ],
         "DisplayName": "CO290UP_CO2__6mm_4.16W/m2K",
-        "Description": "CO2, 6 mm, Glazed"
+        "Description": "CO2, 6 mm, Glazed",
+		"SpecificHeatCapacity": 846,
+		"Density": 1.84
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11043,7 +11129,10 @@
           }
         ],
         "DisplayName": "Ag90Up_Argon__8.85mm_1.9W/m2K",
-        "Description": "12 mm Argon Side Lit, PartL"
+        "Description": "12 mm Argon Side Lit, PartL",
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       },
       {
         "_type": "SAM.Core.GasMaterial,SAM.Core",
@@ -11193,9 +11282,9 @@
         ],
         "DisplayName": "Ag90Up_Argon__11.38mm_1.48W/m2K",
         "Description": "PartL",
-		"ThermalConductivity": 0.024,
-		"SpecificHeatCapacity": 1006.1,
-		"Density": 1.293
+		"ThermalConductivity": 0.01622,
+		"SpecificHeatCapacity": 521.9,
+		"Density": 1.782
       }
     ]
   }
