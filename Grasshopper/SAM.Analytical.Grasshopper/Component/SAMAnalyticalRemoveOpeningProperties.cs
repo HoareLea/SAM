@@ -1,10 +1,8 @@
 ﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -47,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 return [.. result];
             }
