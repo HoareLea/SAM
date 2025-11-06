@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -77,6 +77,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "directory", NickName = "directory", Description = "SAM Analytical Model Directory", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "subDirectories", NickName = "subDirectories", Description = "Sub Directories", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "sam", NickName = "sam", Description = "SAM Analytical Model Path", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "json", NickName = "json", Description = "SAM Analytical Model Path as json", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_FilePath() { Name = "tbd", NickName = "tbd", Description = "TasTPD File Path", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -114,6 +115,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetData(index, directory);
+            }
+
+            index = Params.IndexOfOutputParam("subDirectories");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, System.IO.Directory.GetDirectories(directory, "*", System.IO.SearchOption.TopDirectoryOnly));
             }
 
             string[] paths = System.IO.Directory.GetFiles(directory, "*.*", System.IO.SearchOption.AllDirectories);
@@ -173,7 +180,6 @@ namespace SAM.Analytical.Grasshopper
                         break;
                 }
             }
-
 
             index = Params.IndexOfOutputParam("sam");
             if (index != -1)
