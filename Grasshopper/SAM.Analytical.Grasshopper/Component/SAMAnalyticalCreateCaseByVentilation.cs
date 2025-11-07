@@ -3,6 +3,7 @@ using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -451,6 +452,17 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
 
                 dataAccess.SetData(index, value);
             }
+
+            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            {
+                caseDataCollection = new CaseDataCollection();
+            }
+            else
+            {
+                caseDataCollection = new CaseDataCollection(caseDataCollection);
+            }
+
+            caseDataCollection.Values.Add(new VentilationCaseData(ach));
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

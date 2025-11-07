@@ -2,6 +2,7 @@
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +13,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("3f0618c7-7a51-4e61-88c9-60da22ccb245");
+        public override Guid ComponentGuid => new ("3f0618c7-7a51-4e61-88c9-60da22ccb245");
 
         /// <summary>
         /// The latest version of this component
@@ -206,6 +207,17 @@ namespace SAM.Analytical.Grasshopper
 
                 dataAccess.SetData(index, value);
             }
+
+            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            {
+                caseDataCollection = new CaseDataCollection();
+            }
+            else
+            {
+                caseDataCollection = new CaseDataCollection(caseDataCollection);
+            }
+
+            caseDataCollection.Values.Add(new ApertureConstructionCaseData(apertureConstruction));
 
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)

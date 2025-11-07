@@ -13,5 +13,6 @@ namespace SAM.Analytical
         [ParameterProperties("Weather Data", "Weather Data"), SAMObjectParameterValue(typeof(Weather.WeatherData))] WeatherData,
         [ParameterProperties("Heating Design Days", "Heating Design Days"), SAMObjectParameterValue(typeof(SAMCollection<DesignDay>))] HeatingDesignDays,
         [ParameterProperties("Cooling Design Days", "Cooling Design Days"), SAMObjectParameterValue(typeof(SAMCollection<DesignDay>))] CoolingDesignDays,
+        [ParameterProperties("Case Data Collection", "Case Data Collection"), SAMObjectParameterValue(typeof(CaseDataCollection))] CaseDataCollection,
     }
 }

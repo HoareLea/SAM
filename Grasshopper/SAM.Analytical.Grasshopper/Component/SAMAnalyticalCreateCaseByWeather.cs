@@ -242,6 +242,17 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
                 dataAccess.SetData(index, value);
             }
 
+            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            {
+                caseDataCollection = new CaseDataCollection();
+            }
+            else
+            {
+                caseDataCollection = new CaseDataCollection(caseDataCollection);
+            }
+
+            caseDataCollection.Values.Add(new WeatherCaseData(weatherData?.Name));
+
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)

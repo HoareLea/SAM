@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -480,6 +481,17 @@ EXAMPLE
 
                 dataAccess.SetData(index, value);
             }
+
+            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            {
+                caseDataCollection = new CaseDataCollection();
+            }
+            else
+            {
+                caseDataCollection = new CaseDataCollection(caseDataCollection);
+            }
+
+            caseDataCollection.Values.Add(new OpeningCaseData(openingAngles?.FirstOrDefault() ?? double.NaN));
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");
