@@ -1039,10 +1039,18 @@ namespace SAM.Analytical
         {
             get
             {
-                if (values == null)
-                    return -1;
+                if (values == null || values.Count == 0)
+                {
+                    return 0;
+                }
 
-                return Max - Min;
+                int result = Max - Min;
+                if (result == 0)
+                {
+                    return 1;
+                }
+
+                return result;
             }
         }
 
