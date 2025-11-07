@@ -11,7 +11,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("6c2c620a-3932-456e-84f8-b0a4c210dfa5");
+        public override Guid ComponentGuid => new ("6c2c620a-3932-456e-84f8-b0a4c210dfa5");
 
         /// <summary>
         /// The latest version of this component
@@ -40,18 +40,18 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam gooAnalyticalModelParam = new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam gooAnalyticalModelParam = new () { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooAnalyticalModelParam, ParamVisibility.Binding));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "_profile", NickName = "_profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item };
+                GooProfileParam gooProfileParam = new () { Name = "_profile", NickName = "_profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
 
-                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
+                GooSpaceParam gooSpaceParam = new() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -62,9 +62,9 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -101,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_spaces");
-            List<Space> spaces = new List<Space>();
+            List<Space> spaces = [];
             if (index == -1 || !dataAccess.GetDataList(index, spaces) || spaces == null || spaces.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
@@ -137,7 +137,16 @@ namespace SAM.Analytical.Grasshopper
                         internalCondition = new InternalCondition(space_Temp.Name);
                     }
 
-                    internalCondition.SetProfileName(profile.ProfileType, profile.Name);
+                    ProfileType profileType = profile.ProfileType;
+
+                    internalCondition.SetProfileName(profileType, profile.Name);
+                    if(profileType == ProfileType.Ventilation)
+                    {
+                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunction);
+                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionDescription);
+                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionFactor);
+                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionSetback);
+                    }
 
                     space_Temp.InternalCondition = internalCondition;
 
