@@ -217,7 +217,9 @@ namespace SAM.Analytical.Grasshopper
                 caseDataCollection = new CaseDataCollection(caseDataCollection);
             }
 
-            caseDataCollection.Values.Add(new ApertureConstructionCaseData(apertureConstruction));
+            caseDataCollection.Add(new ApertureConstructionCaseData(apertureConstruction));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)

@@ -2,7 +2,6 @@
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -90,7 +89,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
             index = Params.IndexOfInputParam("_analyticalModels");
-            List<AnalyticalModel> analyticalModels = null;
+            List<AnalyticalModel> analyticalModels = [];
             if (index == -1 || !dataAccess.GetDataList(index, analyticalModels) || analyticalModels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
@@ -106,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<string> lines = Analytical.Convert.ToDesignExplorer(analyticalModels);
 
-            if(lines != null)
+            if(lines != null && !string.IsNullOrWhiteSpace(path))
             {
                 System.IO.File.WriteAllLines(path, lines);
             }

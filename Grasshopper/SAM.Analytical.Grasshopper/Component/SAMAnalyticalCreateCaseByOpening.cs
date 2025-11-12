@@ -491,7 +491,9 @@ EXAMPLE
                 caseDataCollection = new CaseDataCollection(caseDataCollection);
             }
 
-            caseDataCollection.Values.Add(new OpeningCaseData(openingAngles?.FirstOrDefault() ?? double.NaN));
+            caseDataCollection.Add(new OpeningCaseData(openingAngles?.FirstOrDefault() ?? double.NaN));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

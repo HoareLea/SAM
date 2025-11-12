@@ -303,7 +303,9 @@ EXAMPLE
                 caseDataCollection = new CaseDataCollection(caseDataCollection);
             }
 
-            caseDataCollection.Values.Add(new WindowSizeCaseData(apertureScaleFactor));
+            caseDataCollection.Add(new WindowSizeCaseData(apertureScaleFactor));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

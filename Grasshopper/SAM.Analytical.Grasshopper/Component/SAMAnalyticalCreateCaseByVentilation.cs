@@ -462,7 +462,9 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
                 caseDataCollection = new CaseDataCollection(caseDataCollection);
             }
 
-            caseDataCollection.Values.Add(new VentilationCaseData(ach));
+            caseDataCollection.Add(new VentilationCaseData(ach));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

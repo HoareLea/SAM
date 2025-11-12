@@ -77,6 +77,22 @@ namespace SAM.Analytical
             }
         }
 
+        public bool Add(CaseData caseData)
+        {
+            if(caseData is null)
+            {
+                return false;
+            }
+
+            if(caseData.Clone() is CaseData caseData_Temp)
+            {
+                caseDatas.Add(caseData_Temp);
+                return true;
+            }
+
+            return false;
+        }
+
         public IEnumerator<CaseData> GetEnumerator()
         {
             return caseDatas.GetEnumerator();

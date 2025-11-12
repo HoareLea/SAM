@@ -434,7 +434,9 @@ EXAMPLE
                 caseDataCollection = new CaseDataCollection(caseDataCollection);
             }
 
-            caseDataCollection.Values.Add(new ShadeCaseData(overhangDepth, leftFinDepth, rightFinDepth));
+            caseDataCollection.Add(new ShadeCaseData(overhangDepth, leftFinDepth, rightFinDepth));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");

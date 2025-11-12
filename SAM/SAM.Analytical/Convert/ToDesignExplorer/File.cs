@@ -45,7 +45,8 @@ namespace SAM.Analytical
                     int index = header.IndexOf(name);
                     if (index == -1)
                     {
-                        usedIndexes.Add(header.Count);
+                        index = header.Count;
+                        usedIndexes.Add(index);
                         header.Add(name);
                     }
                     else if (usedIndexes.Contains(index))
@@ -58,7 +59,8 @@ namespace SAM.Analytical
 
                         if (index == -1)
                         {
-                            usedIndexes.Add(header.Count);
+                            index = header.Count;
+                            usedIndexes.Add(index);
                             header.Add(name);
                         }
                         else
@@ -73,6 +75,8 @@ namespace SAM.Analytical
 
                     dictionary[index] = tuple.Item2;
                 }
+
+                values.Add(dictionary);
             }
 
 
@@ -136,6 +140,65 @@ namespace SAM.Analytical
 
             List<Tuple<string, object>> result = [];
 
+            if (analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection) && caseDataCollection != null)
+            {
+                foreach (CaseData caseData in caseDataCollection)
+                {
+                    if (caseData is ApertureConstructionCaseData apertureConstructionCaseData)
+                    {
+                        if (apertureConstructionCaseData.ApertureConstruction.Name is string name)
+                        {
+                            result.Add(new Tuple<string, object>("in:Aperture Construction", name));
+                        }
+                    }
+                    else if (caseData is OpeningCaseData openingCaseData)
+                    {
+                        if (openingCaseData.OpeningAngle is double openingAngle && !double.IsNaN(openingAngle))
+                        {
+                            result.Add(new Tuple<string, object>("in:Opening Angle [°]", openingAngle));
+                        }
+                    }
+                    else if (caseData is ShadeCaseData shadeCaseData)
+                    {
+                        if (shadeCaseData.OverhangDepth is double overhangDepth && !double.IsNaN(overhangDepth))
+                        {
+                            result.Add(new Tuple<string, object>("in:Overhang Depth [m]", overhangDepth));
+                        }
+
+                        if (shadeCaseData.LeftFinDepth is double leftFinDepth && !double.IsNaN(leftFinDepth))
+                        {
+                            result.Add(new Tuple<string, object>("in:Left Fin Depth [m]", leftFinDepth));
+                        }
+
+                        if (shadeCaseData.RightFinDepth is double rightFinDepth && !double.IsNaN(rightFinDepth))
+                        {
+                            result.Add(new Tuple<string, object>("in:Right Fin Depth [m]", rightFinDepth));
+                        }
+                    }
+                    else if (caseData is VentilationCaseData ventilationCaseData)
+                    {
+                        if (ventilationCaseData.ACH is double aCH && !double.IsNaN(aCH))
+                        {
+                            result.Add(new Tuple<string, object>("in:ACH [ac/h]", aCH));
+                        }
+                    }
+                    else if (caseData is WeatherCaseData weatherCaseData)
+                    {
+                        if (weatherCaseData.WeatherDataName is string name)
+                        {
+                            result.Add(new Tuple<string, object>("in:Weather Data", name));
+                        }
+                    }
+                    else if (caseData is WindowSizeCaseData windowSizeCaseData)
+                    {
+                        if (windowSizeCaseData.ApertureScaleFactor is double apertureScaleFactor && !double.IsNaN(apertureScaleFactor))
+                        {
+                            result.Add(new Tuple<string, object>("in:Aperture Scale Factor [-]", apertureScaleFactor));
+                        }
+                    }
+                }
+            }
+
             AnalyticalModelSimulationResult analyticalModelSimulationResult = analyticalModel.GetAnalyticalModelSimulationResults()?.FirstOrDefault();
 
             if (analyticalModelSimulationResult != null)
@@ -148,13 +211,13 @@ namespace SAM.Analytical
                 double peakCoolingLoad = analyticalModelSimulationResult.GetValue<double>(AnalyticalModelSimulationResultParameter.PeakCoolingLoad);
                 double peakCoolingHour = analyticalModelSimulationResult.GetValue<double>(AnalyticalModelSimulationResultParameter.PeakCoolingHour);
 
-                result.Add(new Tuple<string, object>("in:Consumption Heating", double.IsNaN(consumptionHeating) ? 0 : consumptionHeating));
-                result.Add(new Tuple<string, object>("in:Peak Heating Load", double.IsNaN(peakHeatingLoad) ? 0 : peakHeatingLoad));
-                result.Add(new Tuple<string, object>("in:Peak Heating Hour", peakHeatingHour == -1 ? 0 : peakHeatingHour));
+                result.Add(new Tuple<string, object>("out:Consumption Heating [kWh]", double.IsNaN(consumptionHeating) ? 0 : Core.Query.Round(consumptionHeating / 1000, 0.01)));
+                result.Add(new Tuple<string, object>("out:Peak Heating Load [kW]", double.IsNaN(peakHeatingLoad) ? 0 : Core.Query.Round(peakHeatingLoad / 1000, 0.01)));
+                result.Add(new Tuple<string, object>("out:Peak Heating Hour", peakHeatingHour == -1 ? 0 : peakHeatingHour));
 
-                result.Add(new Tuple<string, object>("in:Consumption Cooling", double.IsNaN(consumptionCooling) ? 0 : consumptionCooling));
-                result.Add(new Tuple<string, object>("in:Peak Cooling Load", double.IsNaN(peakCoolingLoad) ? 0 : peakCoolingLoad));
-                result.Add(new Tuple<string, object>("in:Peak Cooling Hour", peakCoolingHour == -1 ? 0 : peakCoolingHour));
+                result.Add(new Tuple<string, object>("out:Consumption Cooling [kWh]", double.IsNaN(consumptionCooling) ? 0 : Core.Query.Round(consumptionCooling / 1000, 0.01)));
+                result.Add(new Tuple<string, object>("out:Peak Cooling Load [kW]", double.IsNaN(peakCoolingLoad) ? 0 : Core.Query.Round(peakCoolingLoad / 1000, 0.01)));
+                result.Add(new Tuple<string, object>("out:Peak Cooling Hour", peakCoolingHour == -1 ? 0 : peakCoolingHour));
             }
 
             List<AdjacencyClusterSimulationResult> adjacencyClusterSimulationResults = analyticalModel.GetResults<AdjacencyClusterSimulationResult>();
@@ -168,14 +231,14 @@ namespace SAM.Analytical
                 if (adjacencyClusterSimulationResult_Cooling != null)
                 {
                     unmetHours_Cooling = adjacencyClusterSimulationResult_Cooling.GetValue<int>(AdjacencyClusterSimulationResultParameter.UnmetHours);
-                    result.Add(new Tuple<string, object>("in:Unmet Hours Cooling", unmetHours_Cooling == -1 ? 0 : unmetHours_Cooling));
+                    result.Add(new Tuple<string, object>("out:Unmet Hours Cooling", unmetHours_Cooling == -1 ? 0 : unmetHours_Cooling));
                 }
 
                 AdjacencyClusterSimulationResult adjacencyClusterSimulationResult_Heating = adjacencyClusterSimulationResults.Find(x => x.GetValue<LoadType>(AdjacencyClusterSimulationResultParameter.LoadType) == LoadType.Heating);
                 if (adjacencyClusterSimulationResult_Heating != null)
                 {
                     unmetHours_Heating = adjacencyClusterSimulationResult_Heating.GetValue<int>(AdjacencyClusterSimulationResultParameter.UnmetHours);
-                    result.Add(new Tuple<string, object>("in:Unmet Hours Cooling", unmetHours_Heating == -1 ? 0 : unmetHours_Heating));
+                    result.Add(new Tuple<string, object>("out:Unmet Hours Cooling", unmetHours_Heating == -1 ? 0 : unmetHours_Heating));
                 }
 
                 if (unmetHours_Cooling != -1 || unmetHours_Heating != -1)
@@ -193,66 +256,7 @@ namespace SAM.Analytical
                         unmetHours = unmetHours_Heating + unmetHours_Cooling;
                     }
 
-                    result.Add(new Tuple<string, object>("in:Unmet Hours", unmetHours == -1 ? 0 : unmetHours));
-                }
-            }
-
-            if (analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection) && caseDataCollection != null)
-            {
-                foreach(CaseData caseData in caseDataCollection)
-                {
-                    if(caseData is ApertureConstructionCaseData apertureConstructionCaseData)
-                    {
-                        if(apertureConstructionCaseData.ApertureConstruction.Name is string name)
-                        {
-                            result.Add(new Tuple<string, object>("out:Aperture Construction", name));
-                        }
-                    }
-                    else if(caseData is OpeningCaseData openingCaseData)
-                    {
-                        if (openingCaseData.OpeningAngle is double openingAngle && !double.IsNaN(openingAngle))
-                        {
-                            result.Add(new Tuple<string, object>("out:Opening Angle [°]", openingAngle));
-                        }
-                    }
-                    else if (caseData is ShadeCaseData shadeCaseData)
-                    {
-                        if (shadeCaseData.OverhangDepth is double overhangDepth && !double.IsNaN(overhangDepth))
-                        {
-                            result.Add(new Tuple<string, object>("out:Overhang Depth [m]", overhangDepth));
-                        }
-
-                        if (shadeCaseData.LeftFinDepth is double leftFinDepth && !double.IsNaN(leftFinDepth))
-                        {
-                            result.Add(new Tuple<string, object>("out:Left Fin Depth [m]", leftFinDepth));
-                        }
-
-                        if (shadeCaseData.RightFinDepth is double rightFinDepth && !double.IsNaN(rightFinDepth))
-                        {
-                            result.Add(new Tuple<string, object>("out:Right Fin Depth [m]", rightFinDepth));
-                        }
-                    }
-                    else if (caseData is VentilationCaseData ventilationCaseData)
-                    {
-                        if (ventilationCaseData.ACH is double aCH && !double.IsNaN(aCH))
-                        {
-                            result.Add(new Tuple<string, object>("out:ACH [ac/h]", aCH));
-                        }
-                    }
-                    else if (caseData is WeatherCaseData weatherCaseData)
-                    {
-                        if (weatherCaseData.WeatherDataName is string name)
-                        {
-                            result.Add(new Tuple<string, object>("out:Weather Data", name));
-                        }
-                    }
-                    else if (caseData is WindowSizeCaseData windowSizeCaseData)
-                    {
-                        if (windowSizeCaseData.ApertureScaleFactor is double apertureScaleFactor && !double.IsNaN(apertureScaleFactor) )
-                        {
-                            result.Add(new Tuple<string, object>("out:Aperture Scale Factor [-]", apertureScaleFactor));
-                        }
-                    }
+                    result.Add(new Tuple<string, object>("out:Unmet Hours", unmetHours == -1 ? 0 : unmetHours));
                 }
             }
 
