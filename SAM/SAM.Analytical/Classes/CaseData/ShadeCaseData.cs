@@ -41,6 +41,22 @@ namespace SAM.Analytical
             }
         }
 
+        public double LeftFinDepth
+        {
+            get
+            {
+                return leftFinDepth;
+            }
+        }
+
+        public double RightFinDepth
+        {
+            get
+            {
+                return rightFinDepth;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
