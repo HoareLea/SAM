@@ -148,7 +148,7 @@ namespace SAM.Analytical
                     {
                         if (apertureConstructionCaseData.ApertureConstruction.Name is string name)
                         {
-                            result.Add(new Tuple<string, object>("in:ApertureCONSTR", name));
+                            result.Add(new Tuple<string, object>("in:ApertureConstr", name));
                         }
                     }
                     else if (caseData is OpeningCaseData openingCaseData)
@@ -213,11 +213,11 @@ namespace SAM.Analytical
 
                 result.Add(new Tuple<string, object>("out:ConsumptionHTG[kWh]", double.IsNaN(consumptionHeating) ? 0 : Core.Query.Round(consumptionHeating / 1000, 0.01)));
                 result.Add(new Tuple<string, object>("out:PeakHTGLoad[kW]", double.IsNaN(peakHeatingLoad) ? 0 : Core.Query.Round(peakHeatingLoad / 1000, 0.01)));
-                result.Add(new Tuple<string, object>("out:PeakHeatingHr", peakHeatingHour == -1 ? 0 : peakHeatingHour));
+                result.Add(new Tuple<string, object>("out:PeakHTGHr", peakHeatingHour == -1 ? 0 : peakHeatingHour));
 
                 result.Add(new Tuple<string, object>("out:ConsumptionCLG[kWh]", double.IsNaN(consumptionCooling) ? 0 : Core.Query.Round(consumptionCooling / 1000, 0.01)));
                 result.Add(new Tuple<string, object>("out:PeakCLGLoad[kW]", double.IsNaN(peakCoolingLoad) ? 0 : Core.Query.Round(peakCoolingLoad / 1000, 0.01)));
-                result.Add(new Tuple<string, object>("out:PeakCoolingHr", peakCoolingHour == -1 ? 0 : peakCoolingHour));
+                result.Add(new Tuple<string, object>("out:PeakCLGHr", peakCoolingHour == -1 ? 0 : peakCoolingHour));
             }
 
             List<AdjacencyClusterSimulationResult> adjacencyClusterSimulationResults = analyticalModel.GetResults<AdjacencyClusterSimulationResult>();
