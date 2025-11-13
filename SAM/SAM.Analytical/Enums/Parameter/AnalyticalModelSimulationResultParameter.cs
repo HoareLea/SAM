@@ -14,5 +14,8 @@ namespace SAM.Analytical
         [ParameterProperties("Consumption Cooling", "Consumption Cooling [kWh]"), ParameterValue(ParameterType.Double)] ConsumptionCooling,
         [ParameterProperties("Peak Cooling Load", "Peak Cooling Load [kW]"), ParameterValue(ParameterType.Double)] PeakCoolingLoad,
         [ParameterProperties("Peak Cooling Hour", "Peak Cooling Hour [hr]"), ParameterValue(ParameterType.Integer)] PeakCoolingHour,
+
+        [ParameterProperties("Floor Area", "Floor Area [m2]"), ParameterValue(ParameterType.Double)] FloorArea,
+        [ParameterProperties("Volume", "Volume [m3]"), ParameterValue(ParameterType.Double)] Volume,
     }
 }
