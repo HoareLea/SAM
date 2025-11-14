@@ -91,16 +91,16 @@ namespace SAM.Analytical.Grasshopper
     ///   5) Get updated model and created apertures
     /// </para>
     /// </remarks>
-    public class SAMAnalyticalAddAperturesByAzimuth : GH_SAMVariableOutputParameterComponent
+    public class SAMAnalyticalAddAperturesByAzimuths : GH_SAMVariableOutputParameterComponent
     {
         public override Guid ComponentGuid => new("84d34834-8ce0-42cb-a3de-7366337bac4a");
-        public override string LatestComponentVersion => "1.0.7";
+        public override string LatestComponentVersion => "1.0.8";
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        public SAMAnalyticalAddAperturesByAzimuth()
-          : base("SAMAnalytical.AddAperturesByAzimuth",
-                 "AddAperturesByAzimuth",
+        public SAMAnalyticalAddAperturesByAzimuths()
+          : base("SAMAnalytical.AddAperturesByAzimuths",
+                 "AddAperturesByAzimuths",
                  DescriptionLong,
                  "SAM", "Analytical")
         { }

@@ -146,7 +146,7 @@ EXAMPLE
                 result.Add(new GH_SAMParam(analyticalObject, ParamVisibility.Binding));
 
                 // Glass part only (optional, default false)
-                var paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                var paramBoolean = new Param_Boolean
                 {
                     Name = "_glassPartOnly",
                     NickName = "_glassPartOnly",
@@ -157,7 +157,7 @@ EXAMPLE
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Binding));
 
                 // Numbers (depths/offsets) — defaults 0 m
-                var paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                var paramNumber = new Param_Number
                 {
                     Name = "_overhangDepth_",
                     NickName = "_overhangDepth_",
@@ -167,7 +167,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_overhangVerticalOffset_",
                     NickName = "_overhangVerticalOffset_",
@@ -177,7 +177,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_overhangFrontOffset_",
                     NickName = "_overhangFrontOffset_",
@@ -187,7 +187,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_leftFinDepth_",
                     NickName = "_leftFinDepth_",
@@ -197,7 +197,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_leftFinOffset_",
                     NickName = "_leftFinOffset_",
@@ -207,7 +207,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_leftFinFrontOffset_",
                     NickName = "_leftFinFrontOffset_",
@@ -217,7 +217,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_rightFinDepth_",
                     NickName = "_rightFinDepth_",
@@ -227,7 +227,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_rightFinOffset_",
                     NickName = "_rightFinOffset_",
@@ -237,7 +237,7 @@ EXAMPLE
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number
+                paramNumber = new Param_Number
                 {
                     Name = "_rightFinFrontOffset_",
                     NickName = "_rightFinFrontOffset_",
@@ -278,7 +278,7 @@ EXAMPLE
                 };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
+                Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];

@@ -116,7 +116,7 @@ EXAMPLE
                 result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
                 // Scale factor (optional; default 1.0)
-                var param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                var param_Number = new Param_Number
                 {
                     Name = "_apertureScaleFactor_",
                     NickName = "_apertureScaleFactor_",
