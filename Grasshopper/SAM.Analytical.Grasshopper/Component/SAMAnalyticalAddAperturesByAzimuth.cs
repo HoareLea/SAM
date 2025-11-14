@@ -147,7 +147,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Boolean.SetPersistentData(true);
-                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
                 { 
@@ -158,7 +158,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Number.SetPersistentData(2.5);
-                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
                 { 
@@ -169,7 +169,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Number.SetPersistentData(0.85);
-                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
                 { 
@@ -180,7 +180,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Number.SetPersistentData(3);
-                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 GooApertureConstructionParam apertureConstructionParam = new GooApertureConstructionParam() 
                 { 
@@ -201,7 +201,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Boolean.SetPersistentData(false);
-                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
                 { 
@@ -212,7 +212,7 @@ namespace SAM.Analytical.Grasshopper
                     Optional = true 
                 };
                 param_Number.SetPersistentData(0.1);
-                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
                 // Aperture construction (optional)
                 //idx = inputParamManager.AddParameter(
@@ -462,7 +462,7 @@ namespace SAM.Analytical.Grasshopper
                     apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
                 }
 
-                var apertures = panel.AddApertures(apertureConstruction_Temp, ratio);
+                var apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
 
                 dataAccess.SetData(0, panel);
                 dataAccess.SetDataList(1, apertures?.ConvertAll(x => new GooAperture(x)));
@@ -516,7 +516,7 @@ namespace SAM.Analytical.Grasshopper
                     apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
                 }
 
-                var apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio);
+                var apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
