@@ -5,69 +5,162 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace SAM.Analytical.Grasshopper
 {
+    /// <summary>
+    /// Add apertures to panels based on azimuth sectors (WWR per direction).
+    /// </summary>
+    /// <remarks>
+    /// <para>
+    /// SUMMARY
+    ///   • Adds window apertures by azimuth (compass direction), using target WWR per sector.
+    ///   • Works on a single Panel, an AdjacencyCluster, or an AnalyticalModel.
+    ///   • Azimuth convention: 0° = North, 90° = East, clockwise in the XY plane. 0° ≡ 360°.
+    /// </para>
+    /// <para>
+    /// INPUTS
+    ///   _analyticalObject  (Panel | AdjacencyCluster | AnalyticalModel, required)
+    ///     The SAM object to receive apertures.
+    ///     • Panel → adds apertures to this panel only.
+    ///     • AdjacencyCluster / AnalyticalModel → scans external walls and adds apertures by sector.
+    ///
+    ///   _ratios  (Number[], optional)
+    ///     Target WWRs (0–1) per azimuth sector, in the same order as _azimuths.
+    ///     You may pass one value (broadcast to all) or a list; if the list is shorter
+    ///     than _azimuths, the last value is reused. Percent inputs (>1) are treated as %/100.
+    ///     Default (4-way N/E/S/W): 0.15, 0.20, 0.25, 0.20.
+    ///
+    ///   _azimuths  (Domain[], optional)
+    ///     Sector domains in degrees (inclusive). Defaults (4-way):
+    ///       North 316→44  (wraps internally 316→359 & 0→44)
+    ///       East   45→134
+    ///       South 135→225
+    ///       West  226→315
+    ///     Use degenerate domains for fixed bearings (e.g., 90→90).
+    ///     Wrapped domains (T0 > T1) are handled automatically.
+    ///
+    ///   _apertureConstructions_  (ApertureConstruction[], optional)
+    ///     Optional construction(s) used per sector (1:1 with _azimuths; one value is broadcast).
+    ///
+    ///   _subdivide_  (Boolean, optional, default = true)
+    ///     If true, splits the band into multiple openings; spacing set by _horizontalSeparation_.
+    ///
+    ///   _apertureHeight_  (Number, optional, default = 2.5 m)
+    ///     Aperture height.
+    ///
+    ///   _sillHeight_  (Number, optional, default = 0.85 m)
+    ///     Sill height. Keep sill ~0.85–1.0 m for typical classrooms/offices.
+    ///
+    ///   _horizontalSeparation_  (Number, optional, default = 3 m)
+    ///     Horizontal gap between subdivided openings.
+    ///
+    ///   _apertureConstruction_  (ApertureConstruction, optional)
+    ///     Single construction for all sectors. If both list and single are provided,
+    ///     per-sector list takes precedence.
+    ///
+    ///   _keepSeparationDistance_  (Boolean, optional, default = false)
+    ///     If true, keeps the separation distance even when geometry is tight.
+    ///
+    ///   _offset_  (Number, optional, default = 0.1 m)
+    ///     Minimum offset from the panel boundary to apertures.
+    /// </para>
+    /// <para>
+    /// OUTPUTS
+    ///   AnalyticalObject  (Panel | AdjacencyCluster | AnalyticalModel)
+    ///     The updated object (Panel if a single panel was input; otherwise the updated cluster / model).
+    ///
+    ///   Apertures  (Aperture[])
+    ///     The apertures created.
+    ///
+    ///   Successful  (Boolean)
+    ///     True if at least one aperture was created.
+    /// </para>
+    /// <para>
+    /// NOTES
+    ///   • Ratios and sectors pair by index. If counts differ: one ratio is broadcast; missing ratios reuse the last; extras are ignored.
+    ///   • 8-way sets are supported (N, NE, E, SE, S, SW, W, NW) by providing 8 domains and 8 ratios.
+    ///   • Domains are inclusive; 0° is North and equivalent to 360°.
+    /// </para>
+    /// <para>
+    /// EXAMPLE
+    ///   1) Provide an AnalyticalModel → _analyticalObject
+    ///   2) Use defaults (4-way) or supply 8 sectors and 8 WWRs
+    ///   3) Set _apertureHeight_ = 2.5, _sillHeight_ = 0.9, _subdivide_ = true, _horizontalSeparation_ = 3
+    ///   4) (Optional) Provide constructions per sector
+    ///   5) Get updated model and created apertures
+    /// </para>
+    /// </remarks>
     public class SAMAnalyticalAddAperturesByAzimuth : GH_SAMVariableOutputParameterComponent
     {
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
-        public override Guid ComponentGuid => new ("84d34834-8ce0-42cb-a3de-7366337bac4a");
-
-        /// <summary>
-        /// The latest version of this component
-        /// </summary>
-        public override string LatestComponentVersion => "1.0.6";
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
+        public override Guid ComponentGuid => new("84d34834-8ce0-42cb-a3de-7366337bac4a");
+        public override string LatestComponentVersion => "1.0.7";
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
-        /// <summary>
-        /// Initializes a new instance of the component.
-        /// </summary>
         public SAMAnalyticalAddAperturesByAzimuth()
           : base("SAMAnalytical.AddAperturesByAzimuth",
-                 "SAMAnalytical.AddAperturesByAzimuth",
-                 "Add Apertures to a SAM Analytical Object (Panel, AdjacencyCluster, AnalyticalModel) based on azimuth sectors.\n" +
-                 "\n" +
-                 "Azimuth convention: 0° = North, 90° = East, increasing clockwise in the XY plane. 0° ≡ 360°.\n" +
-                 "Sectors (azimuth) are specified as Grasshopper Domains, written as \"a to b\" (inclusive), e.g. \"0 to 90\".\n" +
-                 "\n" +
-                 "Defaults (4 directions):\n" +
-                 "• Uses 4 directions (N, E, S, W). North wraps across 360° and is handled internally by splitting the wrap domain.\n" +
-                 "• Ratios map to sectors in this order: [North, East, South, West].\n" +
-                 "• Defaults:\n" +
-                 "    Ratios : [0.8, 0.7, 0.5, 0.6]\n" +
-                 "    Sectors: North 316 to 44 (wrap → internally 316 to 359 and 0 to 44),\n" +
-                 "             East  45 to 134,\n" +
-                 "             South 135 to 225,\n" +
-                 "             West  226 to 315.\n" +
-                 "\n" +
-                 "Optional (8 directions):\n" +
-                 "• To work with 8 compass directions, provide 8 sector Domains and 8 ratios in this order:\n" +
-                 "  [N, NE, E, SE, S, SW, W, NW]. A typical 8-way partition using GH Domains is:\n" +
-                 "    N : 338 to 22  (wrap → internally 338 to 359 and 0 to 22)\n" +
-                 "    NE: 23  to 67\n" +
-                 "    E : 68  to 112\n" +
-                 "    SE: 113 to 157\n" +
-                 "    S : 158 to 202\n" +
-                 "    SW: 203 to 247\n" +
-                 "    W : 248 to 292\n" +
-                 "    NW: 293 to 337\n" +
-                 "  Example ratios (WWR 0–1): [0.15, 0.10, 0.25, 0.20, 0.30, 0.20, 0.25, 0.10] → [N, NE, E, SE, S, SW, W, NW].\n" +
-                 "\n" +
-                 "Notes:\n" +
-                 "• If a sector Domain has T0 > T1 (e.g. 338 to 22), it is treated as wrap-around and split internally.\n" +
-                 "• For a fixed direction, use a degenerate Domain, East e.g. 90 to 90.\n" +
-                 "• Ratios typically 0.0–1.0; they scale Panel to create aperture per azimuth sector.\n" +
-                 "• Domains are inclusive; 0° is treated as North (and equivalent to 360°).",
+                 "AddAperturesByAzimuth",
+                 DescriptionLong,
                  "SAM", "Analytical")
-        {
-        }
+        { }
+
+        private const string DescriptionLong =
+@"Add apertures to panels by azimuth sector with target WWR per direction.
+
+SUMMARY
+  • Works on a Panel / AdjacencyCluster / AnalyticalModel.
+  • Azimuth: 0° = North, 90° = East, clockwise; 0° ≡ 360°.
+  • Pairs _azimuths and _ratios; handles broadcasting and wrap-around.
+
+INPUTS
+  _analyticalObject  (Panel | AdjacencyCluster | AnalyticalModel, required)
+    Target SAM object to receive apertures.
+
+  _ratios  (Number[], optional; default N/E/S/W = 0.15, 0.20, 0.25, 0.20)
+    WWR per sector in the same order as _azimuths. One value broadcasts to all.
+    Values > 1 are treated as percentages (divided by 100).
+
+  _azimuths  (Domain[], optional; default N/E/S/W as 316→44, 45→134, 135→225, 226→315)
+    Inclusive sector domains in degrees. Wrapped ranges (T0 > T1) are split internally.
+
+  _apertureConstructions_  (ApertureConstruction[], optional)
+    Per-sector constructions (1:1 with _azimuths). One value broadcasts.
+
+  _subdivide_  (Boolean, optional, default = true)
+    Split the band into multiple openings (spacing via _horizontalSeparation_).
+
+  _apertureHeight_  (Number, optional, default = 2.5 m)
+    Aperture height.
+
+  _sillHeight_  (Number, optional, default = 0.85 m)
+    Sill height.
+
+  _horizontalSeparation_  (Number, optional, default = 3 m)
+    Gap between subdivided openings.
+
+  _apertureConstruction_  (ApertureConstruction, optional)
+    Single construction used when per-sector list is not provided.
+
+  _keepSeparationDistance_  (Boolean, optional, default = false)
+    Keep the separation distance even in tight geometry.
+
+  _offset_  (Number, optional, default = 0.1 m)
+    Minimum offset from panel edge to apertures.
+
+OUTPUTS
+  AnalyticalObject  (Panel | AdjacencyCluster | AnalyticalModel)
+    Updated object with apertures applied.
+
+  Apertures  (Aperture[])
+    Created apertures.
+
+  Successful  (Boolean)
+    True if any apertures were created.";
+
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Parameters
+        // ────────────────────────────────────────────────────────────────────────────────
 
         protected override GH_SAMParam[] Inputs
         {
@@ -75,31 +168,35 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalObjectParam gooAnalyticalObjectParam = new() { 
-                    Name = "_analyticalObject", 
-                    NickName = "_analyticalObject", 
-                    Description = "SAM Analytical Object (Panel, AdjacencyCluster, or AnalyticalModel).", 
-                    Access = GH_ParamAccess.item 
+                var gooAnalyticalObjectParam = new GooAnalyticalObjectParam
+                {
+                    Name = "_analyticalObject",
+                    NickName = "_analyticalObject",
+                    Description = "Panel, AdjacencyCluster, or AnalyticalModel to receive apertures.",
+                    Access = GH_ParamAccess.item
                 };
                 result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
                 // Ratios (N, E, S, W)
-                global::Grasshopper.Kernel.Parameters.Param_Number ratiosParam = new() { 
-                    Name = "_ratios", 
-                    NickName = "_ratios", 
-                    Description = "Directional ratios applied to azimuth sectors in list ordern: [North, East, South, West].\n" +
+                var ratiosParam = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_ratios",
+                    NickName = "_ratios",
+                    Description =
+                        "Directional ratios applied to azimuth sectors in list order: [North, East, South, West].\n" +
                         "Typical range: 0.0–1.0.\n" +
                         "Defaults:\n" +
                         "  North = 0.15, East = 0.2, South = 0.25, West = 0.2\n" +
-                        "  Ratios (0.0–1.0) are target WWRs; for each matched panel an aperture is created by scaling the panel polygon in its local plane so that the aperture area ≈ (ratio × panel area).", 
+                        "  Ratios (0.0–1.0) are target WWRs; for each matched panel an aperture is created\n" +
+                        "  by scaling the panel polygon in its local plane so that the aperture area ≈ (ratio × panel area).",
                     Access = GH_ParamAccess.list,
                     Optional = true
                 };
                 ratiosParam.SetPersistentData(0.15, 0.2, 0.25, 0.2);
                 result.Add(new GH_SAMParam(ratiosParam, ParamVisibility.Binding));
 
-                // Azimuth intervals (4 sectors; North wraps 316→44)
-                global::Grasshopper.Kernel.Parameters.Param_Interval azimuthsParam = new global::Grasshopper.Kernel.Parameters.Param_Interval()
+                // Azimuths
+                var azimuthsParam = new global::Grasshopper.Kernel.Parameters.Param_Interval
                 {
                     Name = "_azimuths",
                     NickName = "_azimuths",
@@ -112,20 +209,21 @@ namespace SAM.Analytical.Grasshopper
                         "  West  : 226 to 315\n" +
                         "Notes:\n" +
                         "• If a sector Domain has T0 > T1 (e.g. 338 to 22), it is treated as wrap-around and split internally.\n" +
-                        "• For a fixed direction, use a degenerate Domain, East e.g. 90 to 90." +
+                        "• For a fixed direction, use a degenerate Domain, East e.g. 90 to 90.\n" +
                         "• Domains are inclusive; 0° is treated as North (and equivalent to 360°).",
                     Access = GH_ParamAccess.list,
                     Optional = true
                 };
 
                 azimuthsParam.SetPersistentData(
-                    new Interval(316, 44),  // North (wrap)
-                    new Interval(45, 134),  // East
+                    new Interval(316, 44),   // North (wrap)
+                    new Interval(45, 134),   // East
                     new Interval(135, 225),  // South
-                    new Interval(226, 315)); //West
+                    new Interval(226, 315)); // West
                 result.Add(new GH_SAMParam(azimuthsParam, ParamVisibility.Binding));
 
-                GooApertureConstructionParam gooApertureConstructionParam = new()
+                // Per-sector constructions (optional)
+                var gooApertureConstructionParam = new GooApertureConstructionParam
                 {
                     Name = "_apertureConstructions_",
                     NickName = "_apertureConstructions_",
@@ -135,117 +233,86 @@ namespace SAM.Analytical.Grasshopper
                 };
                 result.Add(new GH_SAMParam(gooApertureConstructionParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = null;
-                global::Grasshopper.Kernel.Parameters.Param_Number param_Number = null;
-
-                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() 
-                { 
-                    Name = "_subdivide_", 
-                    NickName = "_subdivide_", 
-                    Description = "Subdivide \n  If True, split the aperture band into multiple openings; \n  spacing is controlled by _horizontalSeparation", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                // Subdivide toggle
+                var param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                {
+                    Name = "_subdivide_",
+                    NickName = "_subdivide_",
+                    Description = "Subdivide \n  If True, split the aperture band into multiple openings; \n  (spacing is controlled by via _horizontalSeparation_).",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
-                { 
-                    Name = "_apertureHeight_", 
-                    NickName = "_apertureHeight_", 
-                    Description = "Default aperture Height", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                // Geometry numbers
+                var param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_apertureHeight_",
+                    NickName = "_apertureHeight_",
+                    Description = "Aperture height [m]. Default: 2.5",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Number.SetPersistentData(2.5);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
-                { 
-                    Name = "_sillHeight_", 
-                    NickName = "_sillHeight_", 
-                    Description = "Default sill Height \n Keep sill ~0.85–1.0 [m]", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_sillHeight_",
+                    NickName = "_sillHeight_",
+                    Description = "Sill height [m]. Default: 0.85 \n Keep sill in range ~0.85–1.0 [m]",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Number.SetPersistentData(0.85);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
-                { 
-                    Name = "_horizontalSeparation_", 
-                    NickName = "_horizontalSeparation_", 
-                    Description = "Horizontal Separation distance [m]", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_horizontalSeparation_",
+                    NickName = "_horizontalSeparation_",
+                    Description = "Horizontal separation between subdivided apertures [m]. Default: 3",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Number.SetPersistentData(3);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                GooApertureConstructionParam apertureConstructionParam = new GooApertureConstructionParam() 
-                { 
-                    Name = "_apertureConstruction_", 
-                    NickName = "_apertureConstruction_", 
-                    Description = "SAM Analytical Aperture Construction", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                // Single construction (optional)
+                var apertureConstructionParam = new GooApertureConstructionParam
+                {
+                    Name = "_apertureConstruction_",
+                    NickName = "_apertureConstruction_",
+                    Description = "Single aperture construction for all sectors. Per-sector list overrides this.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 result.Add(new GH_SAMParam(apertureConstructionParam, ParamVisibility.Binding));
 
-                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() 
-                { 
-                    Name = "_keepSeparationDistance_", 
-                    NickName = "_keepSeparationDistance_", 
-                    Description = "Keep horizontal separation distance between apertures", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                // Keep separation
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                {
+                    Name = "_keepSeparationDistance_",
+                    NickName = "_keepSeparationDistance_",
+                    Description = "Keep horizontal separation even in tight geometry.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
-                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
-                { 
-                    Name = "_offset_", 
-                    NickName = "_offset_", 
-                    Description = "Minimal Ofsset between wall and apertures", 
-                    Access = GH_ParamAccess.item, 
-                    Optional = true 
+                // Offset
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "_offset_",
+                    NickName = "_offset_",
+                    Description = "Minimum offset from panel boundary to apertures [m]. Default: 0.1",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
                 };
                 param_Number.SetPersistentData(0.1);
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
-
-                // Aperture construction (optional)
-                //idx = inputParamManager.AddParameter(
-                //    new GooApertureConstructionParam(),
-                //    "_apertureConstructions_",
-                //    "_apertureConstructions_",
-                //    "SAM Analytical Aperture Constructions (optional).",
-                //    GH_ParamAccess.list);
-                //inputParamManager[idx].Optional = true;
-
-                //var ratiosParam = new global::Grasshopper.Kernel.Parameters.Param_Number()
-                //{
-                //    Name = "_ratios",
-                //    NickName = "_ratios",
-                //    Description =
-                //        "Directional ratios applied to azimuth sectors in list ordern: [North, East, South, West].\n" +
-                //        "Typical range: 0.0–1.0.\n" +
-                //        "Defaults:\n" +
-                //        "  North = 0.15, East = 0.2, South = 0.25, West = 0.2\n" +
-                //        "  Ratios (0.0–1.0) are target WWRs; for each matched panel an aperture is created by scaling the panel polygon in its local plane so that the aperture area ≈ (ratio × panel area).",
-                //    Access = GH_ParamAccess.list,
-                //};
-
-                //idx = inputParamManager.AddParameter(ratiosParam);
-                //inputParamManager[idx].Optional = true;
-
-                //azimuthsParam.SetPersistentData(
-                //    new Interval(316, 44),  // North (wrap)
-                //    new Interval(45, 134),  // East
-                //    new Interval(135, 225),  // South
-                //    new Interval(226, 315)); //West
-                //idx = inputParamManager.AddParameter(azimuthsParam);
-                //inputParamManager[idx].Optional = true;
 
                 return [.. result];
             }
@@ -257,22 +324,41 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalObjectParam gooAnalyticalObjectParam = new () { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.list };
+                var gooAnalyticalObjectParam = new GooAnalyticalObjectParam
+                {
+                    Name = "AnalyticalObject",
+                    NickName = "AnalyticalObject",
+                    Description = "Updated object: Panel if a single panel was input, otherwise the updated AdjacencyCluster/AnalyticalModel.",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
-                GooApertureParam gooApertureParam = new() { Name = "Apertures", NickName = "Apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list };
-                result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
+                var gooApertureParam = new GooApertureParam
+                {
+                    Name = "Apertures",
+                    NickName = "Apertures",
+                    Description = "Created apertures.",
+                    Access = GH_ParamAccess.list
+                };
+                result.Add(new GH_SAMParam(gooApertureParam, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new() { Name = "Successful", NickName = "Successful", Description = "Successful", Access = GH_ParamAccess.item };
+                var param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                {
+                    Name = "Successful",
+                    NickName = "Successful",
+                    Description = "True if at least one aperture was created.",
+                    Access = GH_ParamAccess.item
+                };
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 return [.. result];
             }
         }
 
-        /// <summary>
-        /// This is the method that actually does the work.
-        /// </summary>
+        // ────────────────────────────────────────────────────────────────────────────────
+        // Execution
+        // ────────────────────────────────────────────────────────────────────────────────
+
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index_Successful = Params.IndexOfOutputParam("Successful");
@@ -286,7 +372,7 @@ namespace SAM.Analytical.Grasshopper
             // Inputs
             List<ApertureConstruction> apertureConstructions = [];
             index = Params.IndexOfInputParam("_apertureConstructions_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, apertureConstructions);
             }
@@ -298,18 +384,18 @@ namespace SAM.Analytical.Grasshopper
                 subdivide = true;
             }
 
-            double apertureHeight = 2;
+            double apertureHeight = 2.5;
             index = Params.IndexOfInputParam("_apertureHeight_");
             if (index == -1 || !dataAccess.GetData(index, ref apertureHeight))
             {
                 apertureHeight = 2.5;
             }
 
-            double sillHeight = 0.8;
+            double sillHeight = 0.85;
             index = Params.IndexOfInputParam("_sillHeight_");
             if (index == -1 || !dataAccess.GetData(index, ref sillHeight))
             {
-                sillHeight = 0.8;
+                sillHeight = 0.85;
             }
 
             double horizontalSeparation = 3;
@@ -335,7 +421,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> ratios = [];
             index = Params.IndexOfInputParam("_ratios");
-            if (!dataAccess.GetDataList(index, ratios) || ratios == null)
+            if (index == -1 || !dataAccess.GetDataList(index, ratios) || ratios == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid _ratios input.");
                 return;
@@ -343,30 +429,19 @@ namespace SAM.Analytical.Grasshopper
 
             List<Interval> azimuths = [];
             index = Params.IndexOfInputParam("_azimuths");
-            if (!dataAccess.GetDataList(index, azimuths) || azimuths == null)
+            if (index == -1 || !dataAccess.GetDataList(index, azimuths) || azimuths == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid _azimuths input.");
                 return;
             }
 
-            //// Expect exactly 4 directions (N, E, S, W)
-            //if (ratios.Count != 4 || azimuths.Count != 4)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Provide exactly 4 ratios and 4 azimuth intervals (N, E, S, W).");
-            //    return;
-            //}
-
             // Normalize ratios: allow percentages (e.g., 80) or fractions (0.8)
             ratios = NormalizeRatios(ratios);
 
-            // Pairing rules:
-            // 1) If ratios.Count == azimuths.Count -> 1:1 mapping.
-            // 2) If ratios.Count == 1           -> broadcast that ratio to all intervals.
-            // 3) Otherwise: map up to min(counts); extra intervals get the last ratio;
-            //    extra ratios are ignored. Emit a remark so users know.
+            // Pairing rules for ratios vs intervals
             if (ratios.Count == azimuths.Count)
             {
-                // ok
+                // 1:1 OK
             }
             else if (ratios.Count == 1)
             {
@@ -394,20 +469,16 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            // Pairing rules:
-            // 1) If apertureConstructions.Count == azimuths.Count -> 1:1 mapping.
-            // 2) If apertureConstructions.Count == 1           -> broadcast that ApertureConstruction to all intervals.
-            // 3) Otherwise: map up to min(counts); extra intervals get the last apertureConstruction;
-            //    extra apertureConstructions are ignored. Emit a remark so users know.
+            // Pairing rules for constructions vs intervals
             if (apertureConstructions.Count == azimuths.Count)
             {
-                // ok
+                // 1:1 OK
             }
             else if (apertureConstructions.Count == 1)
             {
                 ApertureConstruction apertureConstruction = apertureConstructions[0];
-                
-                List<ApertureConstruction> apertureConstructions_Temp = new (azimuths.Count);
+
+                List<ApertureConstruction> apertureConstructions_Temp = new(azimuths.Count);
                 for (int i = 0; i < azimuths.Count; i++)
                 {
                     apertureConstructions_Temp.Add(apertureConstruction);
@@ -416,10 +487,10 @@ namespace SAM.Analytical.Grasshopper
                 apertureConstructions = apertureConstructions_Temp;
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, $"Broadcasted single ApertureConstruction {apertureConstruction.Name} to {azimuths.Count} intervals.");
             }
-            else
+            else if (apertureConstructions.Count != azimuths.Count)
             {
                 int pairCount = System.Math.Min(apertureConstructions.Count, azimuths.Count);
-                if (apertureConstructions.Count > pairCount)
+                if (apertureConstructions.Count < azimuths.Count && pairCount > 0)
                 {
                     ApertureConstruction last = apertureConstructions[System.Math.Max(0, pairCount - 1)];
                     for (int i = pairCount; i < azimuths.Count; i++) apertureConstructions.Add(last);
@@ -433,8 +504,9 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            // Build interval→ratio map (wrap-aware: e.g., 338→22 is split into 338→359 & 0→22)
-            Dictionary<Interval, Tuple<double, ApertureConstruction>> intervalRatioMap = BuildIntervalRatioMap(azimuths, ratios, apertureConstructions);
+            // Map intervals to (ratio, construction) — wrap-aware
+            Dictionary<Interval, Tuple<double, ApertureConstruction>> intervalRatioMap =
+                BuildIntervalRatioMap(azimuths, ratios, apertureConstructions);
 
             // Analytical object
             SAMObject sAMObject = null;
@@ -508,7 +580,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     continue;
                 }
-                    
+
                 var panel_New = Create.Panel(panel);
 
                 if (apertureConstruction_Temp is null)
@@ -541,17 +613,23 @@ namespace SAM.Analytical.Grasshopper
         // ========================= Helpers =========================
 
         /// <summary>
-        /// Build a dictionary from intervals to ratios, expanding any wrap-around interval (T0 > T1)
-        /// into two intervals: [T0→359] and [0→T1], both mapped to the same ratio.
+        /// Build a dictionary from intervals to (ratio, construction), expanding wrap-around
+        /// intervals (T0 > T1) into [T0→359] and [0→T1].
         /// </summary>
-        private static Dictionary<Interval, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(IList<Interval> intervals, IList<double> ratios, IList<ApertureConstruction> apertureConstructions)
+        private static Dictionary<Interval, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(
+            IList<Interval> intervals,
+            IList<double> ratios,
+            IList<ApertureConstruction> apertureConstructions)
         {
             Dictionary<Interval, Tuple<double, ApertureConstruction>> dictionary = [];
             for (int i = 0; i < intervals.Count; i++)
             {
                 Interval interval = intervals[i];
                 double ratio = ratios[System.Math.Min(i, ratios.Count - 1)];
-                ApertureConstruction apertureConstruction = apertureConstructions == null || apertureConstructions.Count == 0 ? null : apertureConstructions[System.Math.Min(i, ratios.Count - 1)];
+                ApertureConstruction apertureConstruction =
+                    (apertureConstructions == null || apertureConstructions.Count == 0)
+                        ? null
+                        : apertureConstructions[System.Math.Min(i, ratios.Count - 1)];
 
                 // Normalize inputs to [0, 359] where sensible
                 double a = ClampTo360(interval.T0);
@@ -575,18 +653,19 @@ namespace SAM.Analytical.Grasshopper
             return dictionary;
         }
 
-        /// <summary>
-        /// Try to find the ratio whose interval contains the given azimuth.
-        /// </summary>
-        private static bool TryGetRatio(Dictionary<Interval, Tuple<double, ApertureConstruction>> map, double azimuthDeg, out double ratio, out ApertureConstruction apertureConstruction)
+        /// <summary>Try to find the ratio whose interval contains the given azimuth.</summary>
+        private static bool TryGetRatio(
+            Dictionary<Interval, Tuple<double, ApertureConstruction>> map,
+            double azimuthDeg,
+            out double ratio,
+            out ApertureConstruction apertureConstruction)
         {
             double azimuthDeg_Round = System.Math.Round(azimuthDeg, MidpointRounding.ToEven);
             apertureConstruction = null;
-
             ratio = 0.0;
+
             foreach (var kvp in map)
             {
-                // Interval.IncludesParameter uses numeric comparison on [T0, T1]
                 if (kvp.Key.IncludesParameter(azimuthDeg_Round))
                 {
                     ratio = kvp.Value.Item1;
@@ -594,39 +673,31 @@ namespace SAM.Analytical.Grasshopper
                     return true;
                 }
             }
-
             return false;
         }
 
-        /// <summary>
-        /// Normalize angle to [0, 359].
-        /// </summary>
+        /// <summary>Normalise angle to [0, 359].</summary>
         private static double NormalizeAngleDegrees(double angleDeg)
         {
             if (double.IsNaN(angleDeg) || double.IsInfinity(angleDeg)) return double.NaN;
-            // Bring into [0, 360)
             double a = angleDeg % 360.0;
             if (a < 0) a += 360.0;
-            // Cap 360 to 359 to keep a closed range convention
             return (a >= 360.0) ? 359.0 : a;
         }
 
-        /// <summary>
-        /// Clamp arbitrary double to [0, 359] while preserving given values in that range.
-        /// </summary>
+        /// <summary>Clamp arbitrary double to [0, 359] while preserving values in that range.</summary>
         private static double ClampTo360(double v)
         {
             if (double.IsNaN(v)) return 0.0;
-            // Normalize then clamp endpoint 360 to 359
             double a = v % 360.0;
             if (a < 0) a += 360.0;
             return (a >= 360.0) ? 359.0 : a;
         }
 
+        /// <summary>If any ratio &gt; 1, treat all as percentages and divide by 100.</summary>
         private static List<double> NormalizeRatios(List<double> ratios)
         {
             if (ratios == null || ratios.Count == 0) return ratios;
-            // If ANY ratio > 1.0, we assume percentages and divide all by 100.
             bool looksLikePercent = false;
             foreach (var r in ratios) { if (r > 1.0) { looksLikePercent = true; break; } }
             if (!looksLikePercent) return ratios;
@@ -635,6 +706,5 @@ namespace SAM.Analytical.Grasshopper
             foreach (var r in ratios) norm.Add(r / 100.0);
             return norm;
         }
-
     }
 }
