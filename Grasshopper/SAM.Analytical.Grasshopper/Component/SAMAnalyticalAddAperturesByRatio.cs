@@ -86,7 +86,7 @@ Notes
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
 
                 GooAnalyticalObjectParam analyticalObjectParam = new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalObjectParam, ParamVisibility.Binding));
@@ -125,7 +125,7 @@ Notes
                 number.SetPersistentData(0.1);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -136,11 +136,11 @@ Notes
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analyticalObject", NickName = "analyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                return result.ToArray();
+                return [.. result];
             }
         }
 
