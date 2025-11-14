@@ -4,6 +4,7 @@ using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -130,6 +131,17 @@ namespace SAM.Analytical.Grasshopper
                 number = new Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "Minimal Ofsset between wall and apertures", Access = GH_ParamAccess.item, Optional = true };
                 number.SetPersistentData(0.1);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
+
+                Param_Boolean param_Boolean = new Param_Boolean
+                {
+                    Name = "_concatenate_",
+                    NickName = "_concatenate_",
+                    Description = "concatenate",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -366,18 +378,64 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster.AddObject(panel_New);
             }
 
-            if (analyticalModel != null)
+            index = Params.IndexOfOutputParam("CaseAModel");
+            if (index != -1)
             {
-                var analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                dataAccess.SetData(0, analyticalModel_Result);
+                dataAccess.SetData(index, adjacencyCluster is null ? null : new AnalyticalModel(analyticalModel, adjacencyCluster));
+            }
+
+
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+                bool concatenate = true;
+                if (index_Concatenate != -1)
+                {
+                    dataAccess.GetData(index_Concatenate, ref concatenate);
+                }
+
+                string caseDescription = string.Empty;
+                if (concatenate)
+                {
+                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+                    {
+                        caseDescription = string.Empty;
+                    }
+                }
+
+                if (string.IsNullOrWhiteSpace(caseDescription))
+                {
+                    caseDescription = "Case";
+                }
+                else
+                {
+                    caseDescription += "_";
+                }
+
+                string sufix = "ByApertureByAzimuths_";
+                if (ratios != null && ratios.Count != 0)
+                {
+                    sufix += "R_" + string.Join("_", ratios);
+                }
+
+                string value = caseDescription + sufix;
+
+                dataAccess.SetData(index, value);
+            }
+
+            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            {
+                caseDataCollection = [];
             }
             else
             {
-                dataAccess.SetData(0, adjacencyCluster);
+                caseDataCollection = [.. caseDataCollection];
             }
 
-            dataAccess.SetDataList(1, tuples_Result.ConvertAll(x => new GooAperture(x.Item2)));
-            dataAccess.SetData(2, tuples_Result.Count > 0);
+            caseDataCollection.Add(new ApertureCaseData(ratios));
+
+            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
         }
 
         // ========================= Helpers =========================
