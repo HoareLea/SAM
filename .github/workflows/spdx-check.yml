@@ -6,6 +6,7 @@
   shell: bash
   run: |
     set -euo pipefail
+
     BASE="${{ github.event.pull_request.base.sha }}"
     HEAD="${{ github.event.pull_request.head.sha }}"
 
@@ -16,31 +17,39 @@
       exit 0
     fi
 
-    MISSING=""
+    missing=()
+
+    # Regexes:
+    # - SPDX: exact identifier, but allow spaces
+    spdx_re='SPDX-License-Identifier:[[:space:]]*LGPL-3\.0-or-later'
+    # - Copyright: tolerate dash types and spaces, (c) case-insensitive
+    cr_re='Copyright[[:space:]]*\(c\)[[:space:]]*2020[[:space:]]*[-–—][[:space:]]*2026[[:space:]]*Michal[[:space:]]+Dengusiak[[:space:]]*&[[:space:]]*Jakub[[:space:]]+Ziolkowski[[:space:]]+and[[:space:]]+contributors'
+
     while IFS= read -r f; do
       echo "Checking: $f"
 
-      # Read from the HEAD commit (not the working tree), normalize CRLF
-      HEADBLOCK=$(git show "$HEAD:$f" 2>/dev/null | head -n 30 | tr -d '\r' || true)
+      # Read from PR HEAD commit, normalize CRLF, and look at first 80 lines
+      headblock=$(git show "$HEAD:$f" 2>/dev/null | head -n 80 | tr -d '\r' || true)
 
-      if [ -z "$HEADBLOCK" ]; then
-        echo "  Could not read $f from $HEAD (renamed/deleted?)"
-        MISSING="$MISSING $f"
+      if [ -z "$headblock" ]; then
+        echo "  Could not read file content from PR head."
+        missing+=("$f")
         continue
       fi
 
-      echo "$HEADBLOCK" | grep -Fq "SPDX-License-Identifier: LGPL-3.0-or-later" \
-        || { echo "  Missing SPDX line. First lines were:"; echo "$HEADBLOCK" | sed -n '1,5p'; MISSING="$MISSING $f"; continue; }
-
-      echo "$HEADBLOCK" | grep -Eq "Copyright \(c\) 2020[–-]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" \
-        || { echo "  Missing copyright line. First lines were:"; echo "$HEADBLOCK" | sed -n '1,5p'; MISSING="$MISSING $f"; continue; }
+      echo "$headblock" | grep -Eiq "$spdx_re" || { echo "  Missing SPDX line."; missing+=("$f"); continue; }
+      echo "$headblock" | grep -Eiq "$cr_re"   || { echo "  Missing copyright line."; missing+=("$f"); continue; }
 
     done <<< "$FILES"
 
-    if [ -n "$MISSING" ]; then
+    if [ ${#missing[@]} -ne 0 ]; then
       echo "❌ Missing required header in:"
-      for f in $MISSING; do echo " - $f"; done
+      for f in "${missing[@]}"; do echo " - $f"; done
+      echo ""
+      echo "Expected somewhere in first 80 lines:"
+      echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
+      echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
       exit 1
     fi
 
-    echo "✅ SPDX + copyright headers OK."
+    echo "✅ Headers OK."
