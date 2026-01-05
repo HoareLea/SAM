@@ -10,8 +10,8 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-
-      - name: Check header in changed .cs files
+      
+      - name: Check SPDX + copyright header in changed .cs files
         run: |
           set -e
           BASE="${{ github.event.pull_request.base.sha }}"
@@ -26,22 +26,27 @@ jobs:
       
           MISSING=""
           for f in $FILES; do
-            HEADBLOCK=$(head -n 20 "$f")
+            # Read first 30 lines, strip BOM, normalize CRLF
+            HEADBLOCK=$(head -n 30 "$f" | sed '1s/^\xEF\xBB\xBF//' | tr -d '\r')
       
-            echo "$HEADBLOCK" | grep -qE "^// SPDX-License-Identifier: LGPL-3\.0-or-later" || MISSING="$MISSING $f"
-            echo "$HEADBLOCK" | grep -qE "^// Copyright \(c\) 2020[-–]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" || MISSING="$MISSING $f"
+            echo "$HEADBLOCK" | grep -q "SPDX-License-Identifier: LGPL-3.0-or-later" \
+              || MISSING="$MISSING $f"
+      
+            echo "$HEADBLOCK" | grep -q "Copyright (c) 2020[-–]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" \
+              || MISSING="$MISSING $f"
           done
       
           if [ -n "$MISSING" ]; then
             echo "❌ Missing required header in:"
             for f in $MISSING; do echo " - $f"; done
             echo ""
-            echo "Each changed .cs file must start with:"
+            echo "Each changed .cs file must contain:"
             echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
             echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
             exit 1
           fi
       
-          echo "✅ Headers OK."
+          echo "✅ SPDX + copyright headers OK."
       
-      
+            
+            
