@@ -1,52 +1,46 @@
-name: SPDX + Copyright header check
+- uses: actions/checkout@v4
+  with:
+    fetch-depth: 0
 
-on:
-  pull_request:
+- name: Check SPDX + copyright header in changed .cs files
+  shell: bash
+  run: |
+    set -euo pipefail
+    BASE="${{ github.event.pull_request.base.sha }}"
+    HEAD="${{ github.event.pull_request.head.sha }}"
 
-jobs:
-  spdx:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-      
-      - name: Check SPDX + copyright header in changed .cs files
-        run: |
-          set -e
-          BASE="${{ github.event.pull_request.base.sha }}"
-          HEAD="${{ github.event.pull_request.head.sha }}"
-      
-          FILES=$(git diff --name-only "$BASE" "$HEAD" -- '*.cs' || true)
-      
-          if [ -z "$FILES" ]; then
-            echo "No C# files changed."
-            exit 0
-          fi
-      
-          MISSING=""
-          for f in $FILES; do
-            # Read first 30 lines, strip BOM, normalize CRLF
-            HEADBLOCK=$(head -n 30 "$f" | sed '1s/^\xEF\xBB\xBF//' | tr -d '\r')
-      
-            echo "$HEADBLOCK" | grep -q "SPDX-License-Identifier: LGPL-3.0-or-later" \
-              || MISSING="$MISSING $f"
-      
-            echo "$HEADBLOCK" | grep -q "Copyright (c) 2020[-–]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" \
-              || MISSING="$MISSING $f"
-          done
-      
-          if [ -n "$MISSING" ]; then
-            echo "❌ Missing required header in:"
-            for f in $MISSING; do echo " - $f"; done
-            echo ""
-            echo "Each changed .cs file must contain:"
-            echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
-            echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
-            exit 1
-          fi
-      
-          echo "✅ SPDX + copyright headers OK."
-      
-            
-            
+    FILES=$(git diff --name-only "$BASE" "$HEAD" -- '*.cs' || true)
+
+    if [ -z "$FILES" ]; then
+      echo "No C# files changed."
+      exit 0
+    fi
+
+    MISSING=""
+    while IFS= read -r f; do
+      echo "Checking: $f"
+
+      # Read from the HEAD commit (not the working tree), normalize CRLF
+      HEADBLOCK=$(git show "$HEAD:$f" 2>/dev/null | head -n 30 | tr -d '\r' || true)
+
+      if [ -z "$HEADBLOCK" ]; then
+        echo "  Could not read $f from $HEAD (renamed/deleted?)"
+        MISSING="$MISSING $f"
+        continue
+      fi
+
+      echo "$HEADBLOCK" | grep -Fq "SPDX-License-Identifier: LGPL-3.0-or-later" \
+        || { echo "  Missing SPDX line. First lines were:"; echo "$HEADBLOCK" | sed -n '1,5p'; MISSING="$MISSING $f"; continue; }
+
+      echo "$HEADBLOCK" | grep -Eq "Copyright \(c\) 2020[–-]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" \
+        || { echo "  Missing copyright line. First lines were:"; echo "$HEADBLOCK" | sed -n '1,5p'; MISSING="$MISSING $f"; continue; }
+
+    done <<< "$FILES"
+
+    if [ -n "$MISSING" ]; then
+      echo "❌ Missing required header in:"
+      for f in $MISSING; do echo " - $f"; done
+      exit 1
+    fi
+
+    echo "✅ SPDX + copyright headers OK."
