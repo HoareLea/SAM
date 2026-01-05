@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
@@ -104,10 +107,10 @@ namespace SAM.Analytical
                 return null;
 
             List<IMaterial> result = new List<IMaterial>();
-            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 Material material = constructionLayer.Material(materialLibrary) as Material;
-                if(material != null)
+                if (material != null)
                 {
                     if (materialType == Core.MaterialType.Undefined || materialType == material.MaterialType)
                         result.Add(material);
@@ -169,7 +172,7 @@ namespace SAM.Analytical
         /// <param name="construction"></param>
         /// <param name="materialLibrary"></param>
         /// <returns></returns>
-        public static IEnumerable<T> Materials<T>(this Construction construction, MaterialLibrary materialLibrary) where T: IMaterial
+        public static IEnumerable<T> Materials<T>(this Construction construction, MaterialLibrary materialLibrary) where T : IMaterial
         {
             if (construction == null || materialLibrary == null)
                 return null;

@@ -1,13 +1,16 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Linq;
 
 namespace SAM.Core
 {
     public class AnyOf
     {
-        private object value;
+        private object? value;
 
-        public AnyOf(object value, Type type = null)
+        public AnyOf(object value, Type? type = null)
         {
             if (type == null)
             {
@@ -26,9 +29,9 @@ namespace SAM.Core
             this.value = value;
         }
 
-        public virtual Type[] Types => new Type[] { typeof(object) };
-        
-        public object Value
+        public virtual Type[] Types => [typeof(object)];
+
+        public object? Value
         {
             get
             {
@@ -41,21 +44,21 @@ namespace SAM.Core
             }
         }
 
-        public static implicit operator AnyOf(int value) => new AnyOf(value, typeof(int));
+        public static implicit operator AnyOf(int value) => new (value, typeof(int));
 
-        public static implicit operator AnyOf(string value) => new AnyOf(value, typeof(string));
+        public static implicit operator AnyOf(string value) => new (value, typeof(string));
 
-        public static implicit operator AnyOf(double value) => new AnyOf(value, typeof(double));
+        public static implicit operator AnyOf(double value) => new (value, typeof(double));
 
-        public static implicit operator AnyOf(Guid value) => new AnyOf(value, typeof(Guid));
+        public static implicit operator AnyOf(Guid value) => new (value, typeof(Guid));
 
-        public static implicit operator AnyOf(DateTime value) => new AnyOf(value, typeof(DateTime));
+        public static implicit operator AnyOf(DateTime value) => new(value, typeof(DateTime));
 
-        public static implicit operator AnyOf(long value) => new AnyOf(value, typeof(long));
+        public static implicit operator AnyOf(long value) => new (value, typeof(long));
 
-        public static implicit operator AnyOf(bool value) => new AnyOf(value, typeof(bool));
+        public static implicit operator AnyOf(bool value) => new (value, typeof(bool));
 
-        public static implicit operator string(AnyOf value) => value?.ToString();
+        public static implicit operator string?(AnyOf value) => value?.ToString();
 
         public static bool operator !=(AnyOf anyOf, object @object)
         {
@@ -72,8 +75,15 @@ namespace SAM.Core
 
         public override bool Equals(object @object)
         {
-            if (ReferenceEquals(this, null))
-                return ReferenceEquals(@object, null) ? true : false;
+            if (this is null)
+            {
+                return @object is null ? true : false;
+            }
+
+            if(value is null)
+            {
+                return @object is null;
+            }
 
             return value.Equals(@object);
         }
@@ -86,17 +96,19 @@ namespace SAM.Core
             return value.GetHashCode();
         }
 
-        public new Type GetType()
+        public new Type? GetType()
         {
             if (value == null)
+            {
                 return Types?.First();
+            }
 
             return value.GetType();
         }
 
         public T GetValue<T>()
         {
-            if(value is T)
+            if (value is T)
             {
                 return (T)(object)value;
             }
@@ -104,17 +116,21 @@ namespace SAM.Core
             return default;
         }
 
-        public bool IsValid(object value)
+        public bool IsValid(object? value)
         {
             if (Types == null || Types.Length == 0)
+            {
                 return false;
+            }
 
             if (value == null)
             {
-                foreach(Type type in Types)
+                foreach (Type type in Types)
                 {
                     if (Query.IsNullable(type))
+                    {
                         return true;
+                    }
                 }
 
                 return false;
@@ -123,7 +139,7 @@ namespace SAM.Core
             return Types.Contains(value?.GetType());
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return value?.ToString();
         }
@@ -136,9 +152,9 @@ namespace SAM.Core
         {
         }
 
-        public override Type[] Types => new Type[] { typeof(T) };
-        
-        public static implicit operator string(AnyOf<T> b) => b?.ToString();
+        public override Type[] Types => [typeof(T)];
+
+        public static implicit operator string?(AnyOf<T> b) => b?.ToString();
     }
 
     public class AnyOf<T, K> : AnyOf
@@ -148,11 +164,11 @@ namespace SAM.Core
         {
         }
 
-        public override Type[] Types => new Type[] { typeof(T), typeof(K) };
-        
-        public static implicit operator AnyOf<T, K>(T value) => new AnyOf<T, K>(value);
+        public override Type[] Types => [typeof(T), typeof(K)];
 
-        public static implicit operator AnyOf<T, K>(K value) => new AnyOf<T, K>(value);
+        public static implicit operator AnyOf<T, K>(T value) => new(value);
+
+        public static implicit operator AnyOf<T, K>(K value) => new(value);
 
         public static implicit operator string(AnyOf<T, K> value) => value?.ToString();
     }

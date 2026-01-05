@@ -1,14 +1,17 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using SAM.Geometry.Grasshopper.Properties;
+using Grasshopper.Kernel.Types;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Grasshopper.Kernel.Types;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -27,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -98,15 +101,15 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp))
+                if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp))
                 {
                     face3Ds.AddRange(face3Ds_Temp);
                 }
             }
 
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -129,13 +132,13 @@ namespace SAM.Analytical.Grasshopper
             Dictionary<Point3D, List<Face3D>> dictionary = Geometry.Spatial.Query.SpacingDictionary(face3Ds, max, min);
 
             index = Params.IndexOfOutputParam("points");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetDataList(index, dictionary?.Keys.ToList().ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x)));
             }
 
             index = Params.IndexOfOutputParam("face3Ds");
-            if(index != -1)
+            if (index != -1)
             {
                 DataTree<object> dataTree_Objects = new DataTree<object>();
 

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -74,25 +77,25 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(sAMObject is Panel)
+            if (sAMObject is Panel)
             {
                 Panel panel = Create.Panel((Panel)sAMObject);
                 panel.Transform(transform3D);
                 sAMObject = panel;
             }
-            else if(sAMObject is Aperture)
+            else if (sAMObject is Aperture)
             {
                 Aperture aperture = new Aperture((Aperture)sAMObject);
                 aperture.Transform(transform3D);
                 sAMObject = aperture;
             }
-            else if(sAMObject is Space)
+            else if (sAMObject is Space)
             {
                 Space space = new Space((Space)sAMObject);
                 space.Transform(transform3D);
                 sAMObject = space;
             }
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 adjacencyCluster.Transform(transform3D);

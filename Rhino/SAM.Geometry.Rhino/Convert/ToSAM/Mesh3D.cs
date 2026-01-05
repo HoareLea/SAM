@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using Rhino.Geometry.Collections;
 using SAM.Geometry.Spatial;
 using System;
@@ -7,10 +10,10 @@ using System.Collections.Generic;
 namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
-    {       
+    {
         public static Mesh3D ToSAM(this Mesh mesh, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(mesh == null)
+            if (mesh == null)
             {
                 return null;
             }
@@ -67,7 +70,7 @@ namespace SAM.Geometry.Rhino
                 else if (meshFace.IsTriangle)
                 {
                     int index_1 = meshFace.A;
-                    if(!sortedDictionary.ContainsKey(index_1))
+                    if (!sortedDictionary.ContainsKey(index_1))
                     {
                         sortedDictionary[index_1] = meshVertexList[meshFace.A].ToSAM();
                     }

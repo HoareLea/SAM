@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Weather;
 using System.Collections.Generic;
 
@@ -8,7 +11,7 @@ namespace SAM.Analytical
     {
         public static void UpdateWeather(this AnalyticalModel analyticalModel, WeatherData weatherData = null, IEnumerable<DesignDay> coolingDesignDays = null, IEnumerable<DesignDay> heatingDesignDays = null)
         {
-            if(analyticalModel == null)
+            if (analyticalModel == null)
             {
                 return;
             }

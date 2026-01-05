@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -41,12 +44,12 @@ namespace SAM.Analytical.Grasshopper
                 param_Number.PersistentData.Append(new global::Grasshopper.Kernel.Types.GH_Number(180));
                 param_Number.PersistentData.Append(new global::Grasshopper.Kernel.Types.GH_Number(270));
                 param_Number.PersistentData.Append(new global::Grasshopper.Kernel.Types.GH_Number(360));
-                result.Add( new GH_SAMParam(param_Number, ParamVisibility.Voluntary) );
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
 
                 param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_range_", NickName = "_range_", Description = "Range +-", Access = GH_ParamAccess.item, Optional = true };
                 param_Number.PersistentData.Append(new global::Grasshopper.Kernel.Types.GH_Number(5));
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Voluntary));
-                
+
                 return result.ToArray();
             }
         }
@@ -56,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooPanelParam() {Name = "panel", NickName = "panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panel", NickName = "panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -76,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_panel");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -104,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Face3D face3D = panel?.GetFace3D();
-            if(face3D != null)
+            if (face3D != null)
             {
 
                 Point3D point3D = face3D?.GetCentroid();
@@ -113,19 +116,19 @@ namespace SAM.Analytical.Grasshopper
                 Plane plane = Plane.WorldXY;
 
                 normal = plane.Project(normal);
-                if(normal.Length > 0.5)
+                if (normal.Length > 0.5)
                 {
                     double rad_Range = range * System.Math.PI / 180;
 
                     double rad = normal.Angle(Vector3D.WorldX);
-                    foreach(double angle_Temp in angles)
+                    foreach (double angle_Temp in angles)
                     {
                         double rad_Temp = angle_Temp * System.Math.PI / 180;
 
                         if (rad > rad_Temp - rad_Range && rad < rad_Temp + rad_Range)
                         {
                             double difference = rad_Temp - rad;
-                            if(System.Math.Abs(difference) > Core.Tolerance.Distance)
+                            if (System.Math.Abs(difference) > Core.Tolerance.Distance)
                             {
                                 Panel panel_1 = Create.Panel(panel);
                                 panel_1.Transform(Transform3D.GetRotation(point3D, Vector3D.WorldZ, -difference));

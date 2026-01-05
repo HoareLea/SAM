@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -46,7 +49,7 @@ namespace SAM.Core.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooDelimitedFileTableParam() { Name = "_delimitedFileTable", NickName = "_delimitedFileTable", Description = "SAM DelimitedFileTable", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObjects", NickName = "_sAMObjects", Description = "SAM Objects to be mapped", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_column", NickName = "_column", Description = "Column Name or Index", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_column", NickName = "_column", Description = "Column Name or Index", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_parameter", NickName = "_parameter", Description = "Parameter Name will be used to uniquely identify SAM objects", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -76,7 +79,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_delimitedFileTable");
-            
+
             DelimitedFileTable delimitedFileTable = null;
             if (index == -1 || !dataAccess.GetData(index, ref delimitedFileTable) || delimitedFileTable == null)
             {
@@ -86,7 +89,7 @@ namespace SAM.Core.Grasshopper
 
             object column = null;
             index = Params.IndexOfInputParam("_column");
-            if(index == -1 || !dataAccess.GetData(index, ref column))
+            if (index == -1 || !dataAccess.GetData(index, ref column))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -103,15 +106,15 @@ namespace SAM.Core.Grasshopper
             else
             {
                 columnIndex = delimitedFileTable.GetColumnIndex(column.ToString());
-                if(columnIndex == -1)
+                if (columnIndex == -1)
                 {
                     if ((column is string) && int.TryParse((string)column, out int columnIndex_Temp))
                         columnIndex = columnIndex_Temp;
                 }
             }
-                
 
-            if(columnIndex == -1)
+
+            if (columnIndex == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -136,7 +139,7 @@ namespace SAM.Core.Grasshopper
 
 
             List<int> indexes = Core.Query.Indexes(delimitedFileTable, sAMObjects, columnIndex, parameterName);
-            if(indexes == null)
+            if (indexes == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -145,7 +148,7 @@ namespace SAM.Core.Grasshopper
             List<int> indexes_New = new List<int>();
             List<SAMObject> sAMObjects_In = new List<SAMObject>();
             List<SAMObject> sAMObjects_Out = new List<SAMObject>();
-            for(int i=0; i < indexes.Count; i++)
+            for (int i = 0; i < indexes.Count; i++)
             {
                 if (indexes[i] == -1)
                 {

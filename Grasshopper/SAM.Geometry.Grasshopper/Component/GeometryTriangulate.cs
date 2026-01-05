@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -127,9 +130,9 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Triangle3D> triangle3Ds = new List<Triangle3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }

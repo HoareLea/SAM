@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using System;
 
@@ -13,7 +16,7 @@ namespace SAM.Core
         private double thermalConductivity = double.NaN;
         private double specificHeatCapacity = double.NaN;
         private double density = double.NaN;
-        
+
         public Material(string name)
             : base(name)
         {
@@ -33,7 +36,7 @@ namespace SAM.Core
         }
 
         public Material(Guid guid, string name, string displayName, string description, double thermalConductivity, double density, double specificHeatCapacity)
-            :base(guid, name)
+            : base(guid, name)
         {
             this.displayName = displayName;
             this.description = description;
@@ -59,7 +62,7 @@ namespace SAM.Core
         public Material(JObject jObject)
             : base(jObject)
         {
-            
+
         }
 
         public Material(Material material)
@@ -174,7 +177,7 @@ namespace SAM.Core
             if (jObject.ContainsKey("Description"))
                 description = jObject.Value<string>("Description");
 
-            if(jObject.ContainsKey("ThermalConductivity"))
+            if (jObject.ContainsKey("ThermalConductivity"))
                 thermalConductivity = jObject.Value<double>("ThermalConductivity");
 
             if (jObject.ContainsKey("SpecificHeatCapacity"))

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using QuickGraph.Algorithms.Observers;
 using SAM.Core;
 using System;
@@ -24,11 +27,11 @@ namespace SAM.Geometry
 
         public PointGraph(PointGraph<X, T> pointGraph)
         {
-            if(pointGraph != null)
+            if (pointGraph != null)
             {
                 tolerance = pointGraph.tolerance;
 
-                if(pointGraph.bidirectionalGraph != null)
+                if (pointGraph.bidirectionalGraph != null)
                 {
                     bidirectionalGraph = new QuickGraph.BidirectionalGraph<X, PointGraphEdge<X, T>>();
                     pointGraph.bidirectionalGraph.Vertices?.ToList().ForEach(x => bidirectionalGraph.AddVertex(Core.Query.Clone(x)));
@@ -97,13 +100,13 @@ namespace SAM.Geometry
 
         public bool Add(T jSAMObject, Func<T, X> sourceFunc, Func<T, X> targetFunc)
         {
-            if(sourceFunc == null || targetFunc == null)
+            if (sourceFunc == null || targetFunc == null)
             {
                 return false;
             }
 
             X source = sourceFunc.Invoke(jSAMObject);
-            if(source == null)
+            if (source == null)
             {
                 return false;
             }
@@ -119,13 +122,13 @@ namespace SAM.Geometry
 
         public List<bool> AddRange(IEnumerable<T> jSAMObjects, Func<T, X> sourceFunc, Func<T, X> targetFunc)
         {
-            if(jSAMObjects == null)
+            if (jSAMObjects == null)
             {
                 return null;
             }
 
             List<bool> result = new List<bool>();
-            foreach(T jSAMObject in jSAMObjects)
+            foreach (T jSAMObject in jSAMObjects)
             {
                 result.Add(Add(jSAMObject, sourceFunc, targetFunc));
             }
@@ -180,7 +183,7 @@ namespace SAM.Geometry
             List<X> result = new List<X>();
             foreach (X point in bidirectionalGraph.Vertices)
             {
-                if(!TryGetPointGraphEdges(point, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
+                if (!TryGetPointGraphEdges(point, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
                 {
                     continue;
                 }
@@ -197,7 +200,7 @@ namespace SAM.Geometry
         private bool TryGetPointGraphEdges(X point, out List<PointGraphEdge<X, T>> pointGraphEdges)
         {
             pointGraphEdges = null;
-            if(point == null || bidirectionalGraph == null || bidirectionalGraph.Edges == null)
+            if (point == null || bidirectionalGraph == null || bidirectionalGraph.Edges == null)
             {
                 return false;
             }
@@ -221,19 +224,19 @@ namespace SAM.Geometry
         public List<T> GetConnectedJSAMObjects(X point)
         {
             X point_Temp = Find(point);
-            if(point_Temp == null)
+            if (point_Temp == null)
             {
                 return null;
             }
 
             List<PointGraph<X, T>> pointGraphs = Split<PointGraph<X, T>>();
-            if(pointGraphs == null || pointGraphs.Count == 0)
+            if (pointGraphs == null || pointGraphs.Count == 0)
             {
                 return null;
             }
 
             PointGraph<X, T> pointGraph = pointGraphs.Find(x => x.Find(point_Temp) != null);
-            if(pointGraph == null)
+            if (pointGraph == null)
             {
                 return null;
             }
@@ -243,32 +246,32 @@ namespace SAM.Geometry
 
         public List<T> GetConnectedJSAMObjects(X start, X end)
         {
-            if(bidirectionalGraph == null || bidirectionalGraph.Edges == null || bidirectionalGraph.Vertices == null || bidirectionalGraph.Vertices.Count() == 0 || bidirectionalGraph.Edges.Count() == 0)
+            if (bidirectionalGraph == null || bidirectionalGraph.Edges == null || bidirectionalGraph.Vertices == null || bidirectionalGraph.Vertices.Count() == 0 || bidirectionalGraph.Edges.Count() == 0)
             {
                 return null;
             }
 
             X start_Temp = Find(start);
-            if(start_Temp == null)
+            if (start_Temp == null)
             {
                 return null;
             }
 
             X end_Temp = Find(end);
-            if(end_Temp == null)
+            if (end_Temp == null)
             {
                 return null;
             }
 
             QuickGraph.AdjacencyGraph<X, PointGraphEdge<X, T>> adjacencyGraph = GetAdjacencyGraph(true);
-            if(adjacencyGraph == null)
+            if (adjacencyGraph == null)
             {
                 return null;
             }
 
             QuickGraph.Algorithms.ShortestPath.FloydWarshallAllShortestPathAlgorithm<X, PointGraphEdge<X, T>> floydWarshallAllShortestPathAlgorithm = new QuickGraph.Algorithms.ShortestPath.FloydWarshallAllShortestPathAlgorithm<X, PointGraphEdge<X, T>>(adjacencyGraph, x => Weight(x));
             floydWarshallAllShortestPathAlgorithm.Compute();
-            if(!floydWarshallAllShortestPathAlgorithm.TryGetPath(start, end, out IEnumerable<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
+            if (!floydWarshallAllShortestPathAlgorithm.TryGetPath(start, end, out IEnumerable<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
             {
                 return null;
             }
@@ -308,7 +311,7 @@ namespace SAM.Geometry
 
             dijkstraShortestPathAlgorithm.Compute(point_Temp);
 
-            if(vertexPredecessorPathRecorderObserver.VertexPredecessors == null || vertexPredecessorPathRecorderObserver.VertexPredecessors.Count == 0)
+            if (vertexPredecessorPathRecorderObserver.VertexPredecessors == null || vertexPredecessorPathRecorderObserver.VertexPredecessors.Count == 0)
             {
                 return null;
             }
@@ -318,13 +321,13 @@ namespace SAM.Geometry
 
         public QuickGraph.UndirectedGraph<X, PointGraphEdge<X, T>> GetUndirectedGraph()
         {
-            if(bidirectionalGraph == null)
+            if (bidirectionalGraph == null)
             {
                 return null;
             }
 
             QuickGraph.UndirectedGraph<X, PointGraphEdge<X, T>> result = new QuickGraph.UndirectedGraph<X, PointGraphEdge<X, T>>();
-            if(bidirectionalGraph.Edges != null && bidirectionalGraph.Edges.Count() != 0)
+            if (bidirectionalGraph.Edges != null && bidirectionalGraph.Edges.Count() != 0)
             {
                 result.AddVerticesAndEdgeRange(bidirectionalGraph.Edges);
             }
@@ -334,7 +337,7 @@ namespace SAM.Geometry
 
         public QuickGraph.AdjacencyGraph<X, PointGraphEdge<X, T>> GetAdjacencyGraph(bool parallelEdges = true)
         {
-            if(bidirectionalGraph == null || bidirectionalGraph.Edges == null)
+            if (bidirectionalGraph == null || bidirectionalGraph.Edges == null)
             {
                 return null;
             }
@@ -343,7 +346,7 @@ namespace SAM.Geometry
             foreach (PointGraphEdge<X, T> point3DGraphEdge in bidirectionalGraph.Edges)
             {
                 result.AddVerticesAndEdge(point3DGraphEdge);
-                if(parallelEdges)
+                if (parallelEdges)
                 {
                     result.AddVerticesAndEdge(new PointGraphEdge<X, T>(point3DGraphEdge.JSAMObject, point3DGraphEdge.Target, point3DGraphEdge.Source));
                 }
@@ -354,13 +357,13 @@ namespace SAM.Geometry
 
         public List<Z> Split<Z>() where Z : PointGraph<X, T>
         {
-            if(bidirectionalGraph == null || bidirectionalGraph.Edges == null ||bidirectionalGraph.Edges.Count() <= 1 || bidirectionalGraph.Vertices == null || bidirectionalGraph.Vertices.Count() <= 2)
+            if (bidirectionalGraph == null || bidirectionalGraph.Edges == null || bidirectionalGraph.Edges.Count() <= 1 || bidirectionalGraph.Vertices == null || bidirectionalGraph.Vertices.Count() <= 2)
             {
                 return new List<Z> { Core.Query.Clone(this) as Z };
             }
 
             QuickGraph.UndirectedGraph<X, PointGraphEdge<X, T>> undirectedGraph = GetUndirectedGraph();
-            if(undirectedGraph == null)
+            if (undirectedGraph == null)
             {
                 return new List<Z> { Core.Query.Clone(this) as Z };
             }
@@ -369,32 +372,32 @@ namespace SAM.Geometry
             connectedComponentsAlgorithm.Compute();
 
             int count = connectedComponentsAlgorithm.ComponentCount;
-            if(count <= 1)
+            if (count <= 1)
             {
                 return new List<Z> { Core.Query.Clone(this) as Z };
             }
 
             IDictionary<X, int> dictionary_Temp = connectedComponentsAlgorithm.Components;
-            if(dictionary_Temp == null || dictionary_Temp.Count == 0)
+            if (dictionary_Temp == null || dictionary_Temp.Count == 0)
             {
                 return new List<Z> { Core.Query.Clone(this) as Z };
             }
 
 
             Dictionary<int, List<PointGraphEdge<X, T>>> dictionary = new Dictionary<int, List<PointGraphEdge<X, T>>>();
-            foreach(KeyValuePair<X, int> keyValuePair in dictionary_Temp)
+            foreach (KeyValuePair<X, int> keyValuePair in dictionary_Temp)
             {
-                if(!dictionary.TryGetValue(keyValuePair.Value, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
+                if (!dictionary.TryGetValue(keyValuePair.Value, out List<PointGraphEdge<X, T>> pointGraphEdges) || pointGraphEdges == null)
                 {
                     pointGraphEdges = new List<PointGraphEdge<X, T>>();
                     dictionary[keyValuePair.Value] = pointGraphEdges;
                 }
 
-                if(TryGetPointGraphEdges(keyValuePair.Key, out List<PointGraphEdge<X, T>> pointGraphEdges_Point) && pointGraphEdges != null)
+                if (TryGetPointGraphEdges(keyValuePair.Key, out List<PointGraphEdge<X, T>> pointGraphEdges_Point) && pointGraphEdges != null)
                 {
-                    foreach(PointGraphEdge<X, T> pointGraphEdge in pointGraphEdges_Point)
+                    foreach (PointGraphEdge<X, T> pointGraphEdge in pointGraphEdges_Point)
                     {
-                        if(!pointGraphEdges.Contains(pointGraphEdge))
+                        if (!pointGraphEdges.Contains(pointGraphEdge))
                         {
                             pointGraphEdges.Add(pointGraphEdge);
                         }
@@ -408,7 +411,7 @@ namespace SAM.Geometry
                 Z pointGraph = Core.Query.Clone(this) as Z;
                 pointGraph.bidirectionalGraph = new QuickGraph.BidirectionalGraph<X, PointGraphEdge<X, T>>();
                 pointGraph.bidirectionalGraph.AddVerticesAndEdgeRange(point3DGraphEdges_Temp);
-                
+
                 result.Add(pointGraph);
             }
 

@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 
 namespace SAM.Geometry.Rhino
 {
@@ -11,7 +14,7 @@ namespace SAM.Geometry.Rhino
 
         public static double UnitScale(RhinoDoc rhinoDoc)
         {
-            if(rhinoDoc == null)
+            if (rhinoDoc == null)
             {
                 return double.NaN;
             }

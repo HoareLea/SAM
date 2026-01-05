@@ -1,4 +1,6 @@
-﻿using SAM.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -522,7 +524,7 @@ namespace SAM.Analytical
 
         public static List<Panel> Panels_Shade(this Aperture aperture, FeatureShade featureShade)
         {
-            if(aperture == null || featureShade == null)
+            if (aperture == null || featureShade == null)
             {
                 return null;
             }
@@ -561,7 +563,7 @@ namespace SAM.Analytical
             }
 
             Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D((face2D.ExternalEdge2D as ISegmentable2D).GetPoints());
-            if(rectangle2D is null)
+            if (rectangle2D is null)
             {
                 return null;
             }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
         {
             this.points = Query.Clone(points);
 
-            if(this.points != null && this.points.Count > 2)
+            if (this.points != null && this.points.Count > 2)
             {
                 if (this.points.Last().Equals(this.points.First()))
                     this.points.RemoveAt(this.points.Count - 1);
@@ -338,7 +341,7 @@ namespace SAM.Geometry.Planar
 
         public Polygon2D GetMoved(Vector2D vector2D)
         {
-            if(vector2D == null || points == null)
+            if (vector2D == null || points == null)
             {
                 return null;
             }

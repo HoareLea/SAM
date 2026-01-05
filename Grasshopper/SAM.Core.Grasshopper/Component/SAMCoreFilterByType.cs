@@ -1,10 +1,12 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -130,7 +132,7 @@ namespace SAM.Core.Grasshopper
                 }
 
                 string name = value?.GetType()?.Name;
-                if(string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     continue;
                 }

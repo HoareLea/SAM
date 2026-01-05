@@ -1,25 +1,28 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Object.Planar
 {
     public static partial class Create
     {
-        public static SAMGeometry2DObjectCollection SAMGeometry2DObjectCollection<T>(this IEnumerable<T> sAMGeometry2Ds, SurfaceAppearance surfaceAppearance, CurveAppearance curveAppearance) where T: ISAMGeometry2D
+        public static SAMGeometry2DObjectCollection SAMGeometry2DObjectCollection<T>(this IEnumerable<T> sAMGeometry2Ds, SurfaceAppearance surfaceAppearance, CurveAppearance curveAppearance) where T : ISAMGeometry2D
         {
-            if(sAMGeometry2Ds == null)
+            if (sAMGeometry2Ds == null)
             {
                 return null;
             }
 
             SAMGeometry2DObjectCollection result = new SAMGeometry2DObjectCollection();
-            foreach(T sAMGeometry2D in sAMGeometry2Ds)
+            foreach (T sAMGeometry2D in sAMGeometry2Ds)
             {
-                if(sAMGeometry2D is ISAMGeometry2DObject)
+                if (sAMGeometry2D is ISAMGeometry2DObject)
                 {
                     result.Add((ISAMGeometry2DObject)sAMGeometry2D);
                 }
-                else if(sAMGeometry2D is Segment2D)
+                else if (sAMGeometry2D is Segment2D)
                 {
                     result.Add(new Segment2DObject((Segment2D)(object)sAMGeometry2D, curveAppearance));
                 }

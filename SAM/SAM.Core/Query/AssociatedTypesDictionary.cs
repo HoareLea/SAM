@@ -1,4 +1,7 @@
-﻿using SAM.Core.Attributes;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -9,7 +12,7 @@ namespace SAM.Core
     {
         public static Dictionary<Type, AssociatedTypes> AssociatedTypesDictionary(IEnumerable<Type> types = null, bool enumsOnly = true, bool notPublic = false)
         {
-            Dictionary<Type, AssociatedTypes> result = new ();
+            Dictionary<Type, AssociatedTypes> result = new();
             foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
             {
                 if (assembly == null)
@@ -55,7 +58,7 @@ namespace SAM.Core
                         continue;
                     }
 
-                    if(types != null)
+                    if (types != null)
                     {
                         List<Type> types_Valid = associatedTypes.ValidTypes(types);
                         if (types_Valid == null || types_Valid.Count == 0)

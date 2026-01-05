@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -31,7 +34,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("b9937ca2-b756-45e5-b891-5dd277b0d29e");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooTypeMergeSettingsParam()
             : base(typeof(TypeMergeSettings).Name, typeof(TypeMergeSettings).Name, typeof(TypeMergeSettings).FullName.Replace(".", " "), "Params", "SAM")

@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -235,19 +238,19 @@ namespace SAM.Core
         {
             int rowCount = 0;
             int columnCount = 0;
-            if(names != null && names.Length != 0)
+            if (names != null && names.Length != 0)
             {
                 rowCount++;
                 columnCount = names.Length;
             }
 
-            if(header != null && header.Count != 0)
+            if (header != null && header.Count != 0)
             {
                 rowCount += header.Count;
                 columnCount = Math.Max(columnCount, header.ConvertAll(x => x == null ? 0 : x.Length).Max());
             }
 
-            if(values != null && values.Count != 0)
+            if (values != null && values.Count != 0)
             {
                 rowCount += values.Count;
                 columnCount = Math.Max(columnCount, values.ConvertAll(x => x == null ? 0 : x.Length).Max());
@@ -256,9 +259,9 @@ namespace SAM.Core
             object[,] result = new object[rowCount, columnCount];
 
             int rowIndex = 0;
-            if(names != null && names.Length != 0)
+            if (names != null && names.Length != 0)
             {
-                for(int i=0; i < names.Length; i++)
+                for (int i = 0; i < names.Length; i++)
                 {
                     result[rowIndex, i] = names[i];
                 }
@@ -267,9 +270,9 @@ namespace SAM.Core
 
             if (header != null && header.Count != 0)
             {
-                foreach(object[] row in header)
+                foreach (object[] row in header)
                 {
-                    if(row != null)
+                    if (row != null)
                     {
                         for (int i = 0; i < row.Length; i++)
                         {
@@ -310,11 +313,11 @@ namespace SAM.Core
 
             if (values == null || values.Count == 0)
                 return;
-            
+
             List<object[]> values_Valid = new List<object[]>();
             List<object[]> values_Invalid = new List<object[]>();
 
-            foreach(object[] value in values)
+            foreach (object[] value in values)
             {
                 if (value == null || value.Length <= index || !(value[index] is IComparable))
                     values_Invalid.Add(value);
@@ -357,7 +360,7 @@ namespace SAM.Core
         public bool TryGetColumnName(int index, out string name)
         {
             name = null;
-            
+
             if (names == null)
                 return false;
 
@@ -373,7 +376,7 @@ namespace SAM.Core
             if (column == -1 && row == -1)
                 return false;
 
-            if(row != -1 && column != -1)
+            if (row != -1 && column != -1)
             {
                 if (row >= values.Count)
                     return false;
@@ -400,7 +403,7 @@ namespace SAM.Core
                 return false;
 
             bool result = false;
-            foreach(object[] row_Values in values)
+            foreach (object[] row_Values in values)
             {
                 if (column >= row_Values.Length)
                     continue;
@@ -430,7 +433,7 @@ namespace SAM.Core
                 return null;
 
             List<int> result = new List<int>();
-            for(int i=0; i < RowCount; i++)
+            for (int i = 0; i < RowCount; i++)
             {
                 string value = ToString(i, columnIndex);
                 if (Query.Compare(value, text, textComparisonType, caseSensitive))
@@ -450,7 +453,7 @@ namespace SAM.Core
 
             for (int i = 0; i < values.Length; i++)
             {
-                if(values[i] == null)
+                if (values[i] == null)
                 {
                     if (value == null)
                         return i;
@@ -469,9 +472,9 @@ namespace SAM.Core
         {
             if (index >= names.Length || index < 0)
                 return null;
-            
+
             object[] result = new object[values.Count];
-            for(int i = 0; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 result[i] = values[i][index];
             }
@@ -495,7 +498,7 @@ namespace SAM.Core
             object[,] result = new object[values.Count, indexes.Count()];
 
             int count = 0;
-            foreach(int index in indexes)
+            foreach (int index in indexes)
             {
                 object[] values = GetColumnValues(index);
                 if (values == null || values.Length == 0)
@@ -504,7 +507,7 @@ namespace SAM.Core
                     continue;
                 }
 
-                for(int i = 0; i < values.Length; i++)
+                for (int i = 0; i < values.Length; i++)
                     result[i, count] = values[i];
 
                 count++;
@@ -517,7 +520,7 @@ namespace SAM.Core
         {
             if (index < 0 || index >= names.Length)
                 return null;
-            
+
             return values[index];
         }
 
@@ -801,22 +804,22 @@ namespace SAM.Core
 
         public bool ConvertValues<T>(int columnIndex, T @default = default)
         {
-            if(names == null || values == null)
+            if (names == null || values == null)
             {
                 return false;
             }
 
-            if(columnIndex < 0)
+            if (columnIndex < 0)
             {
                 return false;
             }
 
-            if(columnIndex >= names.Length)
+            if (columnIndex >= names.Length)
             {
                 return false;
             }
 
-            foreach(object[] row in values)
+            foreach (object[] row in values)
             {
                 if (row == null || row.Length <= columnIndex)
                 {

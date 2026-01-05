@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -110,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 objectWrappers = new List<GH_ObjectWrapper>();
                 dataAccess.GetDataList(index, objectWrappers);
-                foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                 {
                     object value = objectWrapper?.Value;
                     if (value is IGH_Goo)
@@ -119,7 +122,7 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     List<Space> spaces = null;
-                    if(value is Zone)
+                    if (value is Zone)
                     {
                         spaces = analyticalModel.GetSpaces((Zone)value);
                     }
@@ -127,7 +130,7 @@ namespace SAM.Analytical.Grasshopper
                     {
                         spaces = new List<Space>() { (Space)value };
                     }
-                    else if(value is string)
+                    else if (value is string)
                     {
                         spaces = new List<Space>() { analyticalModel?.GetSpaces()?.Find(x => x?.Name == (string)value) };
                     }
@@ -219,19 +222,19 @@ namespace SAM.Analytical.Grasshopper
             for (int i = 0; i < spacesList.Count; i++)
             {
                 List<Space> spaces = spacesList[i];
-                if(spaces == null || spaces.Count == 0)
+                if (spaces == null || spaces.Count == 0)
                 {
                     continue;
                 }
 
-                string ventilationSystemTypeName = ventilationSystemTypeNames.Count > i ? ventilationSystemTypeNames[i] : null;              
+                string ventilationSystemTypeName = ventilationSystemTypeNames.Count > i ? ventilationSystemTypeNames[i] : null;
                 string heatingSystemTypeName = heatingSystemTypeNames.Count > i ? heatingSystemTypeNames[i] : null;
                 string coolingSystemTypeName = coolingSystemTypeNames.Count > i ? coolingSystemTypeNames[i] : null;
 
                 for (int j = 0; j < spaces.Count; j++)
                 {
                     Space space = spaces[j];
-                    if(space != null)
+                    if (space != null)
                     {
                         space = adjacencyCluster.GetObject<Space>(space.Guid);
                     }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -10,7 +13,7 @@ namespace SAM.Geometry.Spatial
             {
                 return false;
             }
-                
+
             double x = vector3D.X;
             double y = vector3D.Y;
             double z = vector3D.Z;
@@ -45,17 +48,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Plane plane)
         {
-            if(plane == null)
+            if (plane == null)
             {
                 return false;
             }
 
-            if(!IsValid(plane.Origin))
+            if (!IsValid(plane.Origin))
             {
                 return false;
             }
 
-            if(!IsValid(plane.Normal))
+            if (!IsValid(plane.Normal))
             {
                 return false;
             }
@@ -76,20 +79,20 @@ namespace SAM.Geometry.Spatial
             }
 
             Plane plane = polygon3D.GetPlane();
-            if(!IsValid(plane))
+            if (!IsValid(plane))
             {
                 return false;
             }
 
             List<Point3D> point3Ds = polygon3D.GetPoints();
-            if(point3Ds == null || point3Ds.Count < 3)
+            if (point3Ds == null || point3Ds.Count < 3)
             {
                 return false;
             }
 
-            foreach(Point3D point3D in point3Ds)
+            foreach (Point3D point3D in point3Ds)
             {
-                if(!IsValid(point3D))
+                if (!IsValid(point3D))
                 {
                     return false;
                 }
@@ -100,22 +103,22 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this BoundingBox3D boundingBox3D)
         {
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return false;
             }
 
-            if(!IsValid(boundingBox3D.Min))
+            if (!IsValid(boundingBox3D.Min))
             {
                 return false;
             }
 
-            if(!IsValid(boundingBox3D.Max))
+            if (!IsValid(boundingBox3D.Max))
             {
                 return false;
             }
 
-            if(boundingBox3D.Min.Equals(boundingBox3D.Max))
+            if (boundingBox3D.Min.Equals(boundingBox3D.Max))
             {
                 return false;
             }
@@ -125,17 +128,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Circle3D circle3D)
         {
-            if(circle3D == null)
+            if (circle3D == null)
             {
                 return false;
             }
 
-            if(!IsValid(circle3D.GetPlane()))
+            if (!IsValid(circle3D.GetPlane()))
             {
                 return false;
             }
 
-            if(double.IsNaN(circle3D.Radius))
+            if (double.IsNaN(circle3D.Radius))
             {
                 return false;
             }
@@ -145,25 +148,25 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Face3D face3D)
         {
-            if(face3D == null)
-            {
-                return false;
-            }
-            
-            if(!IsValid(face3D.GetPlane()))
+            if (face3D == null)
             {
                 return false;
             }
 
-            if(!Planar.Query.IsValid(face3D.ExternalEdge2D))
+            if (!IsValid(face3D.GetPlane()))
+            {
+                return false;
+            }
+
+            if (!Planar.Query.IsValid(face3D.ExternalEdge2D))
             {
                 return false;
             }
 
             List<Planar.IClosed2D> closed2Ds = face3D.InternalEdge2Ds;
-            if(closed2Ds != null && closed2Ds.Count != 0)
+            if (closed2Ds != null && closed2Ds.Count != 0)
             {
-                foreach(Planar.IClosed2D closed2D in closed2Ds)
+                foreach (Planar.IClosed2D closed2D in closed2Ds)
                 {
                     if (!Planar.Query.IsValid(closed2D))
                     {
@@ -177,17 +180,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Extrusion extrusion)
         {
-            if(extrusion == null)
+            if (extrusion == null)
             {
                 return false;
             }
 
-            if(!IsValid(extrusion.Vector))
+            if (!IsValid(extrusion.Vector))
             {
                 return false;
             }
 
-            if(!IsValid(extrusion.Face3D))
+            if (!IsValid(extrusion.Face3D))
             {
                 return false;
             }
@@ -197,17 +200,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Line3D line3D)
         {
-            if(line3D == null)
+            if (line3D == null)
             {
                 return false;
             }
 
-            if(!IsValid(line3D.Origin))
+            if (!IsValid(line3D.Origin))
             {
                 return false;
             }
 
-            if(!IsValid(line3D.Direction))
+            if (!IsValid(line3D.Direction))
             {
                 return false;
             }
@@ -217,7 +220,7 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this ICurve3D curve3D)
         {
-            if(curve3D == null)
+            if (curve3D == null)
             {
                 return false;
             }
@@ -288,7 +291,7 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            if(!IsValid(rectangle3D.GetPlane()))
+            if (!IsValid(rectangle3D.GetPlane()))
             {
                 return false;
             }
@@ -303,17 +306,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Segment3D segment3D)
         {
-            if(segment3D == null)
+            if (segment3D == null)
             {
                 return false;
             }
 
-            if(!IsValid(segment3D.GetStart()))
+            if (!IsValid(segment3D.GetStart()))
             {
                 return false;
             }
 
-            if(!IsValid(segment3D.Direction))
+            if (!IsValid(segment3D.Direction))
             {
                 return false;
             }
@@ -323,13 +326,13 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Shell shell)
         {
-            if(shell == null)
+            if (shell == null)
             {
                 return false;
             }
 
             List<Face3D> face3Ds = shell?.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return false;
             }
@@ -339,17 +342,17 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Sphere sphere)
         {
-            if(sphere == null)
+            if (sphere == null)
             {
                 return false;
             }
 
-            if(!IsValid(sphere.Origin))
+            if (!IsValid(sphere.Origin))
             {
                 return false;
             }
 
-            if(double.IsNaN(sphere.Radius))
+            if (double.IsNaN(sphere.Radius))
             {
                 return false;
             }
@@ -359,7 +362,7 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this IClosed3D closed3D)
         {
-            if(closed3D == null)
+            if (closed3D == null)
             {
                 return false;
             }
@@ -369,12 +372,12 @@ namespace SAM.Geometry.Spatial
 
         public static bool IsValid(this Surface surface)
         {
-            if(surface == null)
+            if (surface == null)
             {
                 return false;
             }
 
-            if(!IsValid(surface.ExternalEdge3D))
+            if (!IsValid(surface.ExternalEdge3D))
             {
                 return false;
             }
@@ -385,7 +388,7 @@ namespace SAM.Geometry.Spatial
         public static bool IsValid(this Triangle3D triangle3D)
         {
             List<Point3D> point3Ds = triangle3D?.GetPoints();
-            if(point3Ds == null || point3Ds.Count !=3)
+            if (point3Ds == null || point3Ds.Count != 3)
             {
                 return false;
             }

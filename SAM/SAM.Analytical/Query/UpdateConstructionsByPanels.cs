@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,23 +11,23 @@ namespace SAM.Analytical
     {
         public static AnalyticalModel UpdateConstructionsByPanels(this AnalyticalModel analyticalModel, IEnumerable<Panel> panels, double areaFactor, double maxDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(analyticalModel == null)
+            if (analyticalModel == null)
             {
                 return null;
             }
 
             AdjacencyCluster adjacencyCluster = UpdateConstructionsByPanels(analyticalModel.AdjacencyCluster, panels, areaFactor, maxDistance, tolerance_Angle, tolerance_Distance);
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return new AnalyticalModel(analyticalModel);
-            }    
+            }
 
             return new AnalyticalModel(analyticalModel, adjacencyCluster);
         }
 
         public static AdjacencyCluster UpdateConstructionsByPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Panel> panels, double areaFactor, double maxDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -32,15 +35,15 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
 
             List<Panel> panels_AdjacencyCluster = adjacencyCluster.GetPanels();
-            if(panels_AdjacencyCluster == null || panels_AdjacencyCluster.Count == 0)
+            if (panels_AdjacencyCluster == null || panels_AdjacencyCluster.Count == 0)
             {
                 return result;
             }
 
-            foreach(Panel panel in panels_AdjacencyCluster)
+            foreach (Panel panel in panels_AdjacencyCluster)
             {
                 Face3D face3D = panel?.GetFace3D();
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
@@ -50,13 +53,13 @@ namespace SAM.Analytical
                 List<Space> spaces = result.GetSpaces(panel);
 
                 Panel panel_New = PanelsByFace3D(panels, face3D, areaFactor, maxDistance, out List<double> intersectionAreas, tolerance_Angle, tolerance_Distance)?.FirstOrDefault();
-                if(panel_New == null)
+                if (panel_New == null)
                 {
-                    if(panel.PanelGroup == Analytical.PanelGroup.Floor && spaces != null && spaces.Count > 1)
+                    if (panel.PanelGroup == Analytical.PanelGroup.Floor && spaces != null && spaces.Count > 1)
                     {
                         panel_Updated = new Panel(panel, null);
                         panel_Updated = new Panel(panel_Updated, Analytical.PanelType.Air);
-                        if(panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
+                        if (panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
                         {
                             panel_Updated.FlipNormal(true, false);
                         }
@@ -65,7 +68,7 @@ namespace SAM.Analytical
 
                         result.AddObject(panel_Updated);
                     }
-                    
+
                     continue;
                 }
 
@@ -76,10 +79,10 @@ namespace SAM.Analytical
                 else
                 {
                     double area = face3D.GetArea();
-                    if(intersectionAreas[0]/area < areaFactor)
+                    if (intersectionAreas[0] / area < areaFactor)
                     {
                         panel_Updated = new Panel(panel, null);
-    
+
                         if (panel_Updated.Normal.SameHalf(Vector3D.WorldZ))
                         {
                             panel_Updated.FlipNormal(true, false);

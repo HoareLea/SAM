@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -17,7 +20,7 @@ namespace SAM.Geometry.Spatial
             //for(int i=0; i < shells.Count; i++)
             {
                 Shell shell = shells[i];
-                if(shell == null)
+                if (shell == null)
                 {
                     return;
                 }
@@ -25,7 +28,7 @@ namespace SAM.Geometry.Spatial
                 BoundingBox3D boundingBox3D = shell.GetBoundingBox();
 
                 List<Shell> shells_InRange = shells.FindAll(x => x != shell && boundingBox3D.InRange(x.GetBoundingBox(), tolerance_Distance));
-                if(shells_InRange == null || shells_InRange.Count == 0)
+                if (shells_InRange == null || shells_InRange.Count == 0)
                 {
                     shells_Result[i] = shell;
                     return;
@@ -42,7 +45,7 @@ namespace SAM.Geometry.Spatial
                         split = true;
                 }
 
-                if(split)
+                if (split)
                     shells_Result[i] = shell;
 
             });

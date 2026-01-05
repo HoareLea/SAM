@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -7,12 +10,12 @@ namespace SAM.Core
     {
         public static List<T> Repeat<T>(this IEnumerable<T> values, Period period_Destination, Period period_Source = Core.Period.Undefined)
         {
-            if(values == null || period_Destination == Core.Period.Undefined)
+            if (values == null || period_Destination == Core.Period.Undefined)
             {
                 return null;
             }
 
-            if(period_Source == Core.Period.Undefined)
+            if (period_Source == Core.Period.Undefined)
             {
                 period_Source = Query.Period(values.Count());
             }
@@ -74,20 +77,20 @@ namespace SAM.Core
             }
 
             IEnumerable<int> keys = indexedDoubles.Keys;
-            if(keys == null)
+            if (keys == null)
             {
                 return null;
             }
 
 
             IndexedDoubles result = new IndexedDoubles();
-            foreach(int key in keys)
+            foreach (int key in keys)
             {
                 double value = indexedDoubles[key];
 
                 for (int i = 0; i < count; i++)
                 {
-                    result.Add((key * count) + i ,value);
+                    result.Add((key * count) + i, value);
                 }
             }
 

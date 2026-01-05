@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +17,7 @@ namespace SAM.Analytical
 
         public static List<string> MissingMaterialsNames(this AdjacencyCluster adjacencyCluster, MaterialLibrary materialLibrary)
         {
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -29,7 +32,7 @@ namespace SAM.Analytical
 
         public static List<string> MissingMaterialsNames(this MaterialLibrary materialLibrary, IEnumerable<Construction> constructions)
         {
-            if(constructions == null)
+            if (constructions == null)
             {
                 return null;
             }
@@ -68,14 +71,14 @@ namespace SAM.Analytical
 
         public static List<string> MissingMaterialsNames(this MaterialLibrary materialLibrary, ApertureConstruction apertureConstruction)
         {
-            if(apertureConstruction == null)
+            if (apertureConstruction == null)
             {
                 return null;
             }
 
             List<ConstructionLayer> constructionLayers_1 = apertureConstruction?.FrameConstructionLayers;
             List<ConstructionLayer> constructionLayers_2 = apertureConstruction?.PaneConstructionLayers;
-            if(constructionLayers_1 == null && constructionLayers_2 == null)
+            if (constructionLayers_1 == null && constructionLayers_2 == null)
             {
                 return null;
             }
@@ -90,22 +93,22 @@ namespace SAM.Analytical
 
         public static List<string> MissingMaterialsNames(this MaterialLibrary materialLibrary, IEnumerable<ConstructionLayer> constructionLayers)
         {
-            if(constructionLayers == null)
+            if (constructionLayers == null)
             {
                 return null;
             }
 
             HashSet<string> names = new HashSet<string>();
 
-            foreach(ConstructionLayer constructionLayer in constructionLayers)
+            foreach (ConstructionLayer constructionLayer in constructionLayers)
             {
                 string name = constructionLayer?.Name;
-                if(string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     continue;
                 }
 
-                if(materialLibrary?.GetMaterial(name) != null)
+                if (materialLibrary?.GetMaterial(name) != null)
                 {
                     continue;
                 }
@@ -118,7 +121,7 @@ namespace SAM.Analytical
 
         public static List<string> MissingMaterialsNames(this ConstructionManager constructionManager)
         {
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 return null;
             }
@@ -147,10 +150,10 @@ namespace SAM.Analytical
             List<Construction> constructions = new List<Construction>();
             List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
 
-            foreach(Guid guid in guids)
+            foreach (Guid guid in guids)
             {
                 Construction construction = constructionManager.GetConstruction(guid);
-                if(construction != null)
+                if (construction != null)
                 {
                     constructions.Add(construction);
                     continue;

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -43,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooProfileParam() {Name = "profile", NickName = "profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profile", NickName = "profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -78,12 +81,12 @@ namespace SAM.Analytical.Grasshopper
 
             Profile profile = null;
             index = Params.IndexOfInputParam("profile_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref profile);
             }
 
-            if(profile == null)
+            if (profile == null)
             {
                 profile = new Profile(name, ProfileGroup.Gain);
             }
@@ -93,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("values_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<double> values = new List<double>();
                 if (dataAccess.GetDataList(index, values) && values != null && values.Count != 0)
@@ -113,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
                         category = profileType.Text();
                     }
 
-                    if(string.IsNullOrWhiteSpace( category))
+                    if (string.IsNullOrWhiteSpace(category))
                     {
                         if (Core.Query.TryConvert(category, out ProfileGroup profileGroup))
                         {
@@ -121,7 +124,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    if(!string.IsNullOrWhiteSpace(category))
+                    if (!string.IsNullOrWhiteSpace(category))
                     {
                         profile = new Profile(Guid.NewGuid(), profile, category);
                     }

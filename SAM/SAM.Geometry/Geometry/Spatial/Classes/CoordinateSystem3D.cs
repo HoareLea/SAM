@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Geometry.Spatial
@@ -20,7 +23,7 @@ namespace SAM.Geometry.Spatial
 
         public CoordinateSystem3D(Plane plane)
         {
-            if(plane != null)
+            if (plane != null)
             {
                 origin = plane.Origin;
                 axisX = plane.AxisX;
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Spatial
 
         public CoordinateSystem3D(CoordinateSystem3D coordinateSystem3D)
         {
-            if(coordinateSystem3D != null)
+            if (coordinateSystem3D != null)
             {
                 origin = coordinateSystem3D.Origin;
                 axisX = coordinateSystem3D.AxisX;
@@ -92,12 +95,12 @@ namespace SAM.Geometry.Spatial
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("AxisX"))
+            if (jObject.ContainsKey("AxisX"))
             {
                 axisX = new Vector3D(jObject.Value<JObject>("AxisX"));
             }

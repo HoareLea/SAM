@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -8,7 +11,7 @@ namespace SAM.Core
     {
         public static List<MethodInfo> MethodInfos(string assemblyName, string typeName, string methodName)
         {
-            List<MethodInfo> result = new ();
+            List<MethodInfo> result = new();
 
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -36,14 +39,14 @@ namespace SAM.Core
                         return null;
                     }
                 }
-                    
+
 
                 if (assembly == null)
                     return null;
 
                 assemblies = new Assembly[] { assembly };
             }
-            
+
 
             foreach (Assembly assembly in assemblies)
             {
@@ -109,24 +112,24 @@ namespace SAM.Core
             string typeName = null;
             string methodName = null;
 
-            if(!string.IsNullOrWhiteSpace(name))
+            if (!string.IsNullOrWhiteSpace(name))
             {
                 string[] values = name.Split('.');
-                if(values != null)
+                if (values != null)
                 {
                     int count = values.Length;
-                    if(count != 0)
+                    if (count != 0)
                     {
                         methodName = values[count - 1];
-                        if(count > 1)
+                        if (count > 1)
                         {
                             typeName = values[count - 2];
 
                             if (count > 2)
                             {
-                                List<string> values_Temp = new (values);
+                                List<string> values_Temp = new(values);
                                 assemblyName = string.Join(".", values_Temp.GetRange(0, count - 2));
-                                
+
                             }
                         }
                     }

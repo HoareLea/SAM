@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -72,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
             if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
@@ -86,10 +89,10 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetDataList(index, sAMObjects);
 
-            if(sAMObjects != null && sAMObjects.Count != 0)
+            if (sAMObjects != null && sAMObjects.Count != 0)
             {
                 AdjacencyCluster adjacencyCluster = null;
-                
+
                 if (sAMObject is AnalyticalModel)
                 {
                     AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
@@ -112,7 +115,7 @@ namespace SAM.Analytical.Grasshopper
                     return;
                 }
 
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
 
@@ -190,7 +193,7 @@ namespace SAM.Analytical.Grasshopper
                                 foreach (Space space in spaces)
                                 {
                                     InternalCondition internalCodintion_Space = space.InternalCondition;
-                                    if(internalCodintion_Space != null && internalCodintion_Space.Guid == internalCondition.Guid)
+                                    if (internalCodintion_Space != null && internalCodintion_Space.Guid == internalCondition.Guid)
                                     {
                                         space.InternalCondition = internalCondition;
                                         adjacencyCluster.AddObject(space);
@@ -208,7 +211,7 @@ namespace SAM.Analytical.Grasshopper
                             adjacencyCluster.AddObject((IAnalyticalObject)sAMObject_Temp);
                         }
                     }
-                    
+
                     if (sAMObject is AnalyticalModel)
                     {
                         sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
@@ -221,7 +224,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.SetData(index, sAMObject);
         }
     }

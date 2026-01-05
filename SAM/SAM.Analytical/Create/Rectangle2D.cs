@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 
 namespace SAM.Analytical
 {
@@ -16,7 +19,7 @@ namespace SAM.Analytical
             if (segmentable2D == null)
                 throw new System.NotImplementedException();
 
-           return Geometry.Planar.Create.Rectangle2D(segmentable2D.GetPoints());
+            return Geometry.Planar.Create.Rectangle2D(segmentable2D.GetPoints());
         }
     }
 }

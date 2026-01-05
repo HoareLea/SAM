@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -44,7 +47,7 @@ namespace SAM.Core.Grasshopper
             global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObject", NickName = "_sAMObject", Description = "SAM Object", Access = GH_ParamAccess.item };
             genericObject.DataMapping = GH_DataMapping.Graft;
             inputParamManager.AddParameter(genericObject, "_sAMObject", "_sAMObject", "SAM Object\nConnect item or list", GH_ParamAccess.item);
-            
+
             int index = inputParamManager.AddTextParameter("_parameter", "_parameter", "Parameter", GH_ParamAccess.item);
             inputParamManager[index].DataMapping = GH_DataMapping.Graft;
 
@@ -97,7 +100,7 @@ namespace SAM.Core.Grasshopper
             }
 
             object value = objectWrapper?.Value;
-            if(value is IGH_Goo)
+            if (value is IGH_Goo)
             {
                 value = (value as dynamic).Value;
             }
@@ -106,7 +109,7 @@ namespace SAM.Core.Grasshopper
 
             bool result = false;
 
-            if(name == "Name")
+            if (name == "Name")
             {
                 PropertyInfo[] propertyInfos = parameterizedSAMObject.GetType().GetProperties();
                 if (propertyInfos != null)
@@ -138,7 +141,7 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
-            if(!result)
+            if (!result)
             {
                 if (enums != null && enums.Count > 0)
                 {

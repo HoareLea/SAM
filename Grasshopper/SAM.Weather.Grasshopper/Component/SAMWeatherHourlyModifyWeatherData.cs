@@ -1,15 +1,17 @@
-﻿using Grasshopper.Kernel;
-using SAM.Weather.Grasshopper.Properties;
-using SAM.Core;
-using SAM.Core.Grasshopper;
-using SAM.Weather.Grasshopper;
-using System;
-using System.Collections.Generic;
-using SAM.Weather;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
+using SAM.Core;
+using SAM.Core.Grasshopper;
+using SAM.Weather;
+using SAM.Weather.Grasshopper;
+using SAM.Weather.Grasshopper.Properties;
+using System;
+using System.Collections.Generic;
 using System.Linq;
-using MathNet.Numerics;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -268,7 +270,7 @@ namespace SAM.Analytical.Grasshopper
                     for (int k = 0; k < hoursOfYear.Count; k++)
                     {
                         int hourOfYear = hoursOfYear[k];
-                        if(hourOfYear == -1)
+                        if (hourOfYear == -1)
                         {
                             continue;
                         }

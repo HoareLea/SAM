@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -7,13 +10,13 @@ namespace SAM.Geometry.Spatial
     {
         public static List<Face3D> Fill(this Face3D face3D, IEnumerable<Face3D> face3Ds, double offset = 0.1, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null || face3Ds == null)
+            if (face3D == null || face3Ds == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -21,21 +24,21 @@ namespace SAM.Geometry.Spatial
             Face2D face2D = plane.Convert(face3D);
 
             List<Face2D> face2Ds = new List<Face2D>();
-            
-            foreach(Face3D face3D_Temp in face3Ds)
+
+            foreach (Face3D face3D_Temp in face3Ds)
             {
-                if(face3D_Temp == null)
+                if (face3D_Temp == null)
                 {
                     continue;
                 }
 
                 Face2D face2D_Temp = plane.Convert(plane.Project(face3D_Temp));
-                if(face2D_Temp == null || !face2D_Temp.IsValid())
+                if (face2D_Temp == null || !face2D_Temp.IsValid())
                 {
                     continue;
                 }
 
-                if(face2D_Temp.GetArea() < tolerance_Area)
+                if (face2D_Temp.GetArea() < tolerance_Area)
                 {
                     continue;
                 }

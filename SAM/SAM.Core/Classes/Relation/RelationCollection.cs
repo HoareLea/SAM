@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,7 +20,7 @@ namespace SAM.Core
 
         public RelationCollection(IEnumerable<Relation> relations)
         {
-            if(relations != null)
+            if (relations != null)
             {
                 this.relations = relations.ToList().ConvertAll(x => x == null ? null : new Relation(x));
             }
@@ -50,7 +53,7 @@ namespace SAM.Core
 
         public bool Add(Relation relation)
         {
-            if(relation == null)
+            if (relation == null)
             {
                 return false;
             }
@@ -66,7 +69,7 @@ namespace SAM.Core
             relations.Add(result);
 
             return result;
-            
+
         }
 
         public Relation Add(string id, IEnumerable<Reference> references_1, IEnumerable<Reference> references_2)
@@ -80,19 +83,19 @@ namespace SAM.Core
 
         public RelationCollection FindAll(string id)
         {
-            if(relations == null || string.IsNullOrWhiteSpace(id))
+            if (relations == null || string.IsNullOrWhiteSpace(id))
             {
                 return null;
             }
             RelationCollection result = new RelationCollection();
             foreach (Relation relation in relations)
             {
-                if(relation == null)
+                if (relation == null)
                 {
                     continue;
                 }
 
-                if(relation.Id == id)
+                if (relation.Id == id)
                 {
                     result.Add(relation);
                 }
@@ -134,7 +137,7 @@ namespace SAM.Core
             RelationCollection result = new RelationCollection();
             foreach (Relation relation in relations)
             {
-                if(relation.Contains_1(reference))
+                if (relation.Contains_1(reference))
                 {
                     result.Add(relation);
                 }
@@ -159,7 +162,7 @@ namespace SAM.Core
 
         public RelationCollection FindAll(Func<Relation, bool> func)
         {
-            if(func == null)
+            if (func == null)
             {
                 return new RelationCollection(relations);
             }
@@ -215,7 +218,7 @@ namespace SAM.Core
 
         public bool Remove(Relation relation)
         {
-            if(relation == null)
+            if (relation == null)
             {
                 return false;
             }
@@ -226,15 +229,15 @@ namespace SAM.Core
         public bool Remove(string id)
         {
             RelationCollection relationCollection = FindAll(id);
-            if(relationCollection == null || relationCollection.Count == 0)
+            if (relationCollection == null || relationCollection.Count == 0)
             {
                 return false;
             }
 
             bool result = false;
-            foreach(Relation relation in relationCollection)
+            foreach (Relation relation in relationCollection)
             {
-                if(Remove(relation))
+                if (Remove(relation))
                 {
                     result = true;
                 }
@@ -291,44 +294,44 @@ namespace SAM.Core
         /// <returns>True if any references have been removed</returns>
         public bool Remove(Reference reference_1, Reference reference_2, string id = null)
         {
-            if(relations == null || relations.Count == 0)
+            if (relations == null || relations.Count == 0)
             {
                 return false;
             }
 
             bool result = false;
 
-            for(int i = relations.Count -1; i >= 0; i--)
+            for (int i = relations.Count - 1; i >= 0; i--)
             {
                 Relation relation = relations[i];
-                
-                if(id != null && relation.Id != id)
+
+                if (id != null && relation.Id != id)
                 {
                     continue;
                 }
-                
-                if((relation.Contains_1(reference_1) && relation.Contains_2(reference_2)) || (relation.Contains_1(reference_2) && relation.Contains_2(reference_1)))
+
+                if ((relation.Contains_1(reference_1) && relation.Contains_2(reference_2)) || (relation.Contains_1(reference_2) && relation.Contains_2(reference_1)))
                 {
                     HashSet<Reference> references_1 = relation.References_1;
                     HashSet<Reference> references_2 = relation.References_2;
 
                     bool removed = false;
-                    
+
                     if (references_1.Contains(reference_1) && references_2.Contains(reference_2))
                     {
                         references_1.Remove(reference_1);
                         references_2.Remove(reference_2);
                         removed = true;
                     }
-                    
-                    if(references_1.Contains(reference_2) && references_2.Contains(reference_1))
+
+                    if (references_1.Contains(reference_2) && references_2.Contains(reference_1))
                     {
                         references_1.Remove(reference_2);
                         references_2.Remove(reference_1);
                         removed = true;
                     }
 
-                    if(!removed)
+                    if (!removed)
                     {
                         continue;
                     }
@@ -351,7 +354,7 @@ namespace SAM.Core
 
         public bool Replace(Reference reference_ToBeReplaced, Reference reference)
         {
-            if(!reference_ToBeReplaced.IsValid() || !reference.IsValid())
+            if (!reference_ToBeReplaced.IsValid() || !reference.IsValid())
             {
                 return false;
             }
@@ -370,13 +373,13 @@ namespace SAM.Core
                 if (relation.Contains(reference_ToBeReplaced))
                 {
                     HashSet<Reference> references_1 = relation.References_1;
-                    if(references_1.Remove(reference_ToBeReplaced))
+                    if (references_1.Remove(reference_ToBeReplaced))
                     {
                         references_1.Add(reference);
                     }
 
                     HashSet<Reference> references_2 = relation.References_2;
-                    if(references_2.Remove(reference_ToBeReplaced))
+                    if (references_2.Remove(reference_ToBeReplaced))
                     {
                         references_2.Add(reference);
                     }
@@ -550,13 +553,13 @@ namespace SAM.Core
                 return false;
             }
 
-            if(jObject.ContainsKey("Relations"))
+            if (jObject.ContainsKey("Relations"))
             {
                 JArray jArray = jObject.Value<JArray>("Relations");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     relations = new List<Relation>();
-                    foreach(JObject jObject_Relation in jArray)
+                    foreach (JObject jObject_Relation in jArray)
                     {
                         Relation relation = Query.IJSAMObject<Relation>(jObject);
                         if (relation != null)
@@ -575,7 +578,7 @@ namespace SAM.Core
             JObject result = new JObject();
             result.Add("_type", Query.FullTypeName(this));
 
-            if(relations != null)
+            if (relations != null)
             {
                 JArray jArray = new JArray();
                 foreach (Relation relation in relations)
@@ -600,7 +603,7 @@ namespace SAM.Core
 
         public static implicit operator RelationCollection(List<Relation> relations)
         {
-            if(relations == null)
+            if (relations == null)
             {
                 return null;
             }
@@ -610,7 +613,7 @@ namespace SAM.Core
 
             return result;
         }
-        
+
         public static implicit operator RelationCollection(Relation[] relations)
         {
             if (relations == null)

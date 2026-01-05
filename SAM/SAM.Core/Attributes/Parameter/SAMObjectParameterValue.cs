@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -75,17 +78,17 @@ namespace SAM.Core.Attributes
                     return true;
             }
 
-            foreach(Type type_Temp in types)
+            foreach (Type type_Temp in types)
             {
                 if (typeof(IEnumerable).IsAssignableFrom(type_Temp))
                 {
                     if (type_Temp.IsGenericType && type_Temp.GenericTypeArguments[0] == type)
                     {
                         System.Reflection.ConstructorInfo[] constructorInfos = type_Temp.GetConstructors();
-                        foreach(System.Reflection.ConstructorInfo constructorInfo in constructorInfos)
+                        foreach (System.Reflection.ConstructorInfo constructorInfo in constructorInfos)
                         {
                             System.Reflection.ParameterInfo[] parameterInfos = constructorInfo.GetParameters();
-                            if(parameterInfos != null && parameterInfos.Length == 1)
+                            if (parameterInfos != null && parameterInfos.Length == 1)
                             {
                                 Type type_Parameter = parameterInfos[0].ParameterType;
 
@@ -96,19 +99,19 @@ namespace SAM.Core.Attributes
                                 }
                                 else if (typeof(IEnumerable).IsAssignableFrom(type_Parameter))
                                 {
-                                    if(type_Parameter.IsGenericType && type_Parameter.GenericTypeArguments[0] == type)
+                                    if (type_Parameter.IsGenericType && type_Parameter.GenericTypeArguments[0] == type)
                                     {
                                         dynamic list = Activator.CreateInstance(typeof(List<>).MakeGenericType(type));
                                         list.Add(object_In as dynamic);
 
-                                        if(type_Parameter.IsAssignableFrom(list.GetType()))
+                                        if (type_Parameter.IsAssignableFrom(list.GetType()))
                                         {
                                             object_Out = constructorInfo.Invoke(new object[] { list });
                                             return true;
                                         }
                                     }
                                 }
-                                
+
 
                             }
                         }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -33,18 +36,18 @@ namespace SAM.Geometry.Spatial
         public BoundingBox3D GetBoundingBox(double offset = 0)
         {
             BoundingBox3D boundingBox3D_1 = face3D?.GetBoundingBox(offset);
-            if(boundingBox3D_1 == null)
+            if (boundingBox3D_1 == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D_2 = boundingBox3D_1.GetMoved(vector) as BoundingBox3D;
-            if(boundingBox3D_2 == null)
+            if (boundingBox3D_2 == null)
             {
                 return boundingBox3D_1;
             }
 
-            return new BoundingBox3D(new BoundingBox3D[] { boundingBox3D_1, boundingBox3D_2});
+            return new BoundingBox3D(new BoundingBox3D[] { boundingBox3D_1, boundingBox3D_2 });
         }
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)

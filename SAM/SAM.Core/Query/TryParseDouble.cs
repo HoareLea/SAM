@@ -1,11 +1,14 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
         public static bool TryParseDouble(this string value, out double result)
         {
             result = double.NaN;
-            
+
             if (string.IsNullOrWhiteSpace(value))
                 return false;
 

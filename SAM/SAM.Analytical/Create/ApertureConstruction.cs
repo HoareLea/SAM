@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -15,7 +18,7 @@ namespace SAM.Analytical
 
         public static ApertureConstruction ApertureConstruction(ApertureType apertureType, string name, Construction paneConstruction, Construction frameConstruction = null)
         {
-            if(apertureType == ApertureType.Undefined || (paneConstruction == null && frameConstruction == null))
+            if (apertureType == ApertureType.Undefined || (paneConstruction == null && frameConstruction == null))
             {
                 return null;
             }

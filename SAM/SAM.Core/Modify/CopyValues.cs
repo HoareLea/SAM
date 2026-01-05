@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Data;
 
@@ -21,16 +24,16 @@ namespace SAM.Core
 
             return CopyValues(sAMObject, dataRow, dictionary);
         }
-        
+
         public static List<Enum> CopyValues(this SAMObject sAMObject, DataRow dataRow, Dictionary<Enum, string> names)
         {
-            if(sAMObject == null || dataRow == null || names == null)
+            if (sAMObject == null || dataRow == null || names == null)
             {
                 return null;
             }
 
             DataColumnCollection dataColumnCollection = dataRow.Table?.Columns;
-            if(dataColumnCollection == null || dataColumnCollection.Count == 0)
+            if (dataColumnCollection == null || dataColumnCollection.Count == 0)
             {
                 return null;
             }
@@ -38,20 +41,20 @@ namespace SAM.Core
             object[] values = dataRow.ItemArray;
 
             List<Enum> result = new List<Enum>();
-            foreach(KeyValuePair<Enum, string> keyValuePair in names)
+            foreach (KeyValuePair<Enum, string> keyValuePair in names)
             {
-                if(string.IsNullOrEmpty(keyValuePair.Value))
-                {
-                    continue;
-                }
-                
-                int index = dataColumnCollection.IndexOf(keyValuePair.Value);
-                if(index == -1)
+                if (string.IsNullOrEmpty(keyValuePair.Value))
                 {
                     continue;
                 }
 
-                if(!sAMObject.SetValue(keyValuePair.Key, values[index]))
+                int index = dataColumnCollection.IndexOf(keyValuePair.Value);
+                if (index == -1)
+                {
+                    continue;
+                }
+
+                if (!sAMObject.SetValue(keyValuePair.Key, values[index]))
                 {
                     continue;
                 }

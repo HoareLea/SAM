@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,8 +17,8 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = linearRing.Coordinates.ToSAM(tolerance);
             if (point2Ds == null || point2Ds.Count < 3)
                 return null;
-            
-            if(tolerance != 0)
+
+            if (tolerance != 0)
             {
                 List<Point2D> point2Ds_Temp = new List<Point2D>();
                 point2Ds_Temp.Add(point2Ds[0]);

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -51,8 +54,8 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_name_", NickName = "_ICname_", Description = "InternalCondition Name or SAM InternalCondition Object \n*use .GetDefaultLibrary and SelectByName \n to select requred IC ", Access = GH_ParamAccess.item };
                 genericObject.SetPersistentData("S39_OfficeOpen");
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
-                
-                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces \n*if none all spaces from model will be included", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces \n*if none all spaces from model will be included", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionLibraryParam { Name = "internalConditionLibrary_", NickName = "internalConditionLibrary_", Description = "SAM Analytical InternalConditionLibrary \n*optional", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -84,12 +87,12 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analyticals");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
+
             List<SAMObject> sAMObjects = new List<SAMObject>();
             if (!dataAccess.GetDataList(index, sAMObjects))
             {
@@ -98,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_name_");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -111,8 +114,8 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            
-            
+
+
             List<Space> spaces_Input = new List<Space>();
             index = Params.IndexOfInputParam("spaces_");
             if (index == -1 || !dataAccess.GetDataList(index, spaces_Input))

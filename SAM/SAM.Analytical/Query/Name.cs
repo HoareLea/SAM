@@ -1,35 +1,38 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static string Name(string uniqueName, bool includePrefix = true, bool includeName = true, bool includeGuid = true, bool includeId = true)
         {
-            if(string.IsNullOrWhiteSpace(uniqueName))
+            if (string.IsNullOrWhiteSpace(uniqueName))
             {
                 return uniqueName;
             }
 
-            if(!UniqueNameDecomposition(uniqueName, out string prefix, out string name, out System.Guid? guid, out int id))
+            if (!UniqueNameDecomposition(uniqueName, out string prefix, out string name, out System.Guid? guid, out int id))
             {
                 return uniqueName;
             }
 
-            if(!includePrefix)
+            if (!includePrefix)
             {
                 prefix = null;
             }
 
-            if(!includeName)
+            if (!includeName)
             {
                 name = null;
             }
 
-            if(!includeGuid)
+            if (!includeGuid)
             {
                 guid = null;
             }
 
-            if(!includeId)
+            if (!includeId)
             {
                 id = -1;
             }

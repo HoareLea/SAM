@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -34,7 +37,7 @@ namespace SAM.Core
 
         public static List<Type> Types(object @object, string path)
         {
-            if(@object == null || string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
+            if (@object == null || string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
             {
                 return null;
             }
@@ -50,7 +53,7 @@ namespace SAM.Core
                 return null;
             }
 
-            if(assembly == null)
+            if (assembly == null)
             {
                 return null;
             }
@@ -58,14 +61,14 @@ namespace SAM.Core
             List<Type> result = new List<Type>();
 
             Type[] types = assembly.GetTypes();
-            if(types == null || types.Length == 0)
+            if (types == null || types.Length == 0)
             {
                 return result;
             }
 
             foreach (Type type in types)
             {
-                if(type.IsInstanceOfType(@object))
+                if (type.IsInstanceOfType(@object))
                 {
                     result.Add(type);
                 }

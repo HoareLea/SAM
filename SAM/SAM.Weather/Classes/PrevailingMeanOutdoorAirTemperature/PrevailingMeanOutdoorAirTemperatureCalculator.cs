@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -28,13 +31,13 @@ namespace SAM.Weather
 
         public List<double> Calculate(WeatherData weatherData)
         {
-            if(PrevailingMeanOutdoorAirTemperatureCalculationMethod == null)
+            if (PrevailingMeanOutdoorAirTemperatureCalculationMethod == null)
             {
                 return null;
             }
 
             List<WeatherDay> weatherDays = weatherData?.WeatherDays();
-            if(weatherDays == null)
+            if (weatherDays == null)
             {
                 return null;
             }
@@ -70,7 +73,7 @@ namespace SAM.Weather
             for (int i = 0; i < weatherDays.Count(); i++)
             {
                 double? dryBulbTemperature = weatherDays?.ElementAt(i)?.Average(WeatherDataType.DryBulbTemperature);
-                if(dryBulbTemperature == null || !dryBulbTemperature.HasValue || double.IsNaN(dryBulbTemperature.Value))
+                if (dryBulbTemperature == null || !dryBulbTemperature.HasValue || double.IsNaN(dryBulbTemperature.Value))
                 {
                     continue;
                 }
@@ -85,7 +88,7 @@ namespace SAM.Weather
         public List<double> Calculate(IEnumerable<double> dryBulbTemperatures)
         {
             List<double> dryBulbTemperatures_Temp = dryBulbTemperatures?.ToList();
-            if(dryBulbTemperatures_Temp == null)
+            if (dryBulbTemperatures_Temp == null)
             {
                 return null;
             }
@@ -224,7 +227,7 @@ namespace SAM.Weather
 
         private List<double> Calculate(List<double> dryBulbTempartures, SimpleArithmeticMeanCalculationMethod simpleArithmeticMeanCalculationMethod)
         {
-            if(dryBulbTempartures == null || simpleArithmeticMeanCalculationMethod == null || simpleArithmeticMeanCalculationMethod.SequentialDays <= 0)
+            if (dryBulbTempartures == null || simpleArithmeticMeanCalculationMethod == null || simpleArithmeticMeanCalculationMethod.SequentialDays <= 0)
             {
                 return null;
             }
@@ -239,7 +242,7 @@ namespace SAM.Weather
             int sequentialDays = simpleArithmeticMeanCalculationMethod.SequentialDays;
 
             List<double> dryBulbTemperatures_Temp = new List<double>(dryBulbTempartures);
-            for(int i = 0; i < sequentialDays; i++)
+            for (int i = 0; i < sequentialDays; i++)
             {
                 double dryBulbTemperature = dryBulbTemperatures_Temp[dryBulbTemperatures_Temp.Count - i - 1];
                 dryBulbTemperatures_Temp.Insert(0, dryBulbTemperature);

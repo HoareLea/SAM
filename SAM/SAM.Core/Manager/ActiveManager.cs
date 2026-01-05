@@ -1,4 +1,7 @@
-﻿using SAM.Core.Attributes;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -186,7 +189,7 @@ namespace SAM.Core
             if (paths == null || paths.Length == 0)
                 return null;
 
-            foreach(string path in paths)
+            foreach (string path in paths)
             {
                 if (path == null)
                     continue;
@@ -228,7 +231,7 @@ namespace SAM.Core
                 return null;
 
             List<string> result = new List<string>();
-            foreach(string path in paths)
+            foreach (string path in paths)
             {
                 if (path == null)
                     continue;
@@ -259,7 +262,7 @@ namespace SAM.Core
                 return null;
 
             List<Type> result = new List<Type>();
-            foreach(KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
+            foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in associatedTypesDictionary)
             {
                 if (keyValuePair.Key == null || keyValuePair.Value == null)
                     continue;
@@ -285,7 +288,7 @@ namespace SAM.Core
             {
                 foreach (Enum @enum in Enum.GetValues(type_Temp))
                 {
-                    if(name == null)
+                    if (name == null)
                     {
                         result.Add(@enum);
                         continue;

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -25,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -81,7 +84,7 @@ Sources
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_openingAngles", NickName = "_openingAngles", Description = "Opening Angles", Access = GH_ParamAccess.list};
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_openingAngles", NickName = "_openingAngles", Description = "Opening Angles", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "descriptions_", NickName = "descriptions_", Description = "Descriptions", Access = GH_ParamAccess.list, Optional = true };
@@ -100,7 +103,7 @@ Sources
                 GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new () { Name = "_sizePaneOnly_", NickName = "_sizePaneOnly_", Description = "Size Pane Only", Access = GH_ParamAccess.item, Optional = true };
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new() { Name = "_sizePaneOnly_", NickName = "_sizePaneOnly_", Description = "Size Pane Only", Access = GH_ParamAccess.item, Optional = true };
                 param_Boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
 
@@ -143,11 +146,11 @@ Sources
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
+            if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
@@ -208,7 +211,7 @@ Sources
 
             index = Params.IndexOfInputParam("_sizePaneOnly_");
             bool paneSizeOnly = true;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref paneSizeOnly);
             }
@@ -248,7 +251,7 @@ Sources
 
                     double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
 
-                    PartOOpeningProperties partOOpeningProperties = new (width, height, openingAngle);
+                    PartOOpeningProperties partOOpeningProperties = new(width, height, openingAngle);
 
                     double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
@@ -256,7 +259,7 @@ Sources
                     if (profiles != null && profiles.Count != 0)
                     {
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
-                        ProfileOpeningProperties profileOpeningProperties = new (partOOpeningProperties.GetDischargeCoefficient(), profile);
+                        ProfileOpeningProperties profileOpeningProperties = new(partOOpeningProperties.GetDischargeCoefficient(), profile);
                         if (!double.IsNaN(factor))
                         {
                             profileOpeningProperties.Factor = factor;
@@ -274,7 +277,7 @@ Sources
                         singleOpeningProperties = partOOpeningProperties;
                     }
 
-                    if(descriptions != null && descriptions.Count != 0)
+                    if (descriptions != null && descriptions.Count != 0)
                     {
                         string description = descriptions.Count > i ? descriptions[i] : descriptions.Last();
                         singleOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
@@ -300,7 +303,7 @@ Sources
                     aperture_Temp.AddSingleOpeningProperties(singleOpeningProperties);
 
                     panel.RemoveAperture(aperture.Guid);
-                    if(panel.AddAperture(aperture_Temp))
+                    if (panel.AddAperture(aperture_Temp))
                     {
                         adjacencyCluster.AddObject(panel);
                         apertures_Result.Add(aperture_Temp);

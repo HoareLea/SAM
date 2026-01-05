@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +25,7 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = new List<Point2D>();
             foreach (Segment2D segment2D in segment2Ds)
             {
-                if(segment2D == null || segment2D.GetLength() < tolerance)
+                if (segment2D == null || segment2D.GetLength() < tolerance)
                 {
                     continue;
                 }
@@ -39,7 +42,7 @@ namespace SAM.Geometry.Planar
             {
                 BoundingBox2D boundingBox2D_1 = tuples[i].Item1;
                 Segment2D segment2D_1 = tuples[i].Item2;
-                
+
                 for (int j = i + 1; j < count; j++)
                 {
                     BoundingBox2D boundingBox2D_2 = tuples[j].Item1;
@@ -84,7 +87,7 @@ namespace SAM.Geometry.Planar
                         point2Ds_Intersection.Add(point2D_Intersection);
                     }
 
-                    if(point2Ds_Intersection == null || point2Ds_Intersection.Count == 0)
+                    if (point2Ds_Intersection == null || point2Ds_Intersection.Count == 0)
                     {
                         continue;
                     }
@@ -92,7 +95,7 @@ namespace SAM.Geometry.Planar
                     foreach (Point2D point2D_Intersection in point2Ds_Intersection)
                     {
                         Point2D point2D_Intersection_Temp = point2Ds.Find(x => point2D_Intersection.AlmostEquals(x, tolerance));
-                        if(point2D_Intersection_Temp == null)
+                        if (point2D_Intersection_Temp == null)
                         {
                             point2D_Intersection_Temp = point2D_Intersection;
                             Modify.Add(point2Ds, point2D_Intersection_Temp, tolerance);
@@ -210,7 +213,7 @@ namespace SAM.Geometry.Planar
 
             return result;
         }
-        
+
         /// <summary>
         /// Method splits face2Ds by intersection. Does not fully work if any of face2Ds are similar or overlaping
         /// </summary>
@@ -241,27 +244,27 @@ namespace SAM.Geometry.Planar
 
         public static List<Face2D> Split(this Face2D face2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(face2D == null || segmentable2Ds == null)
+            if (face2D == null || segmentable2Ds == null)
             {
                 return null;
             }
 
             BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
-            if(boundingBox2D == null)
+            if (boundingBox2D == null)
             {
                 return null;
             }
 
             List<ISegmentable2D> segmentable2Ds_All = new List<ISegmentable2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 BoundingBox2D boundingBox2D_Segmentable2D = segmentable2D?.GetBoundingBox();
-                if(boundingBox2D_Segmentable2D == null)
+                if (boundingBox2D_Segmentable2D == null)
                 {
                     continue;
                 }
 
-                if(!boundingBox2D.InRange(boundingBox2D_Segmentable2D, tolerance))
+                if (!boundingBox2D.InRange(boundingBox2D_Segmentable2D, tolerance))
                 {
                     continue;
                 }
@@ -269,7 +272,7 @@ namespace SAM.Geometry.Planar
                 segmentable2Ds_All.Add(segmentable2D);
             }
 
-            if(segmentable2Ds_All == null || segmentable2Ds_All.Count == 0)
+            if (segmentable2Ds_All == null || segmentable2Ds_All.Count == 0)
             {
                 return null;
             }
@@ -277,7 +280,7 @@ namespace SAM.Geometry.Planar
             IClosed2D externalEdge = face2D.ExternalEdge2D;
 
             ISegmentable2D segmentable2D_ExternalEdge = externalEdge as ISegmentable2D;
-            if(segmentable2D_ExternalEdge == null)
+            if (segmentable2D_ExternalEdge == null)
             {
                 return null;
             }
@@ -285,12 +288,12 @@ namespace SAM.Geometry.Planar
             segmentable2Ds_All.Add(segmentable2D_ExternalEdge);
 
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-            if(internalEdges != null && internalEdges.Count != 0)
+            if (internalEdges != null && internalEdges.Count != 0)
             {
-                foreach(IClosed2D internalEdge in internalEdges)
+                foreach (IClosed2D internalEdge in internalEdges)
                 {
                     ISegmentable2D segmentable2D_InternalEdge = internalEdge as ISegmentable2D;
-                    if(segmentable2D_InternalEdge == null)
+                    if (segmentable2D_InternalEdge == null)
                     {
                         continue;
                     }
@@ -303,7 +306,7 @@ namespace SAM.Geometry.Planar
             segment2Ds = segment2Ds.Snap(true, tolerance_Snap);
 
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segment2Ds, tolerance);
-            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }
@@ -314,13 +317,13 @@ namespace SAM.Geometry.Planar
 
             List<Face2D> result = new List<Face2D>();
             tuples.Sort((x, y) => y.Item1.GetArea().CompareTo(x.Item1.GetArea()));
-            while(tuples.Count > 0)
+            while (tuples.Count > 0)
             {
                 Polygon2D polygon2D_External = tuples[0].Item1;
                 tuples.RemoveAt(0);
 
                 List<Polygon2D> polygon2Ds_Internal = tuples.FindAll(x => polygon2D_External.Inside(x.Item2, tolerance)).ConvertAll(x => x.Item1);
-                if(polygon2Ds_Internal.Count != 0)
+                if (polygon2Ds_Internal.Count != 0)
                 {
                     tuples.RemoveAll(x => polygon2Ds_Internal.Contains(x.Item1));
                 }
@@ -434,7 +437,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             Vector2D direction = Direction(alignment);
-            if(direction == null)
+            if (direction == null)
                 return null;
 
             double angle_Height = System.Math.Min(rectangle2D.HeightDirection.Angle(direction), rectangle2D.HeightDirection.Angle(direction.GetNegated()));
@@ -506,7 +509,7 @@ namespace SAM.Geometry.Planar
 
             return Create.Polygon2Ds(segment2Ds_Inside, tolerance);
         }
-        
+
         public static List<Tuple<Face2D, T>> Split<T>(this Face2D face2D, IEnumerable<Tuple<Face2D, T>> tuples, double tolerance = Core.Tolerance.Distance)
         {
             if (face2D == null || tuples == null || tuples.Count() == 0)
@@ -520,7 +523,7 @@ namespace SAM.Geometry.Planar
             foreach (Tuple<Face2D, T> tuple in tuples)
             {
                 List<Face2D> face2Ds_Intersection = new List<Face2D>();
-                foreach(Face2D face2D_Temp in face2Ds_Temp)
+                foreach (Face2D face2D_Temp in face2Ds_Temp)
                 {
                     List<Face2D> face2Ds_Intersection_Temp = face2D_Temp.Intersection(tuple.Item1);
                     face2Ds_Intersection_Temp?.RemoveAll(x => x == null || x.GetArea() <= tolerance);
@@ -555,7 +558,7 @@ namespace SAM.Geometry.Planar
             if (face2Ds_Temp != null && face2Ds_Temp.Count != 0)
             {
                 int index = -1;
-                while(index < face2Ds_Temp.Count)
+                while (index < face2Ds_Temp.Count)
                 {
                     index++;
 

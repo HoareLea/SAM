@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -88,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
             if (adjacencyCluster == null)
                 adjacencyCluster = analyticalModel?.AdjacencyCluster;
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,9 +99,9 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster_Result = new AdjacencyCluster(adjacencyCluster);
             List<Aperture> apertures_Result = new List<Aperture>();
-            
+
             List<Panel> panels = adjacencyCluster_Result.GetPanels();
-            if(panels != null && panels.Count != 0)
+            if (panels != null && panels.Count != 0)
             {
 
                 List<Panel> panels_Result = new List<Panel>();
@@ -135,9 +138,9 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster_Result.AddObject(panel);
             }
 
-            if(analyticalModel != null)
+            if (analyticalModel != null)
                 dataAccess.SetData(0, new AnalyticalModel(analyticalModel, adjacencyCluster_Result));
-            else if(adjacencyCluster != null)
+            else if (adjacencyCluster != null)
                 dataAccess.SetData(0, adjacencyCluster_Result);
 
             dataAccess.SetDataList(1, apertures_Result.ConvertAll(x => new GooAperture(x)));

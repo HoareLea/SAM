@@ -1,15 +1,18 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static MechanicalSystemCategory MechanicalSystemCategory(this MechanicalSystem mechanicalSystem)
         {
-            if(mechanicalSystem == null)
+            if (mechanicalSystem == null)
             {
                 return Analytical.MechanicalSystemCategory.Undefined;
             }
 
-            if(mechanicalSystem is CoolingSystem)
+            if (mechanicalSystem is CoolingSystem)
             {
                 return Analytical.MechanicalSystemCategory.Cooling;
             }

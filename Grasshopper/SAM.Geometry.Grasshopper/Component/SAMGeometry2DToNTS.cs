@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -108,7 +111,7 @@ namespace SAM.Geometry.Grasshopper
             {
                 foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                 {
-                    if(sAMGeometry3D is Face3D)
+                    if (sAMGeometry3D is Face3D)
                     {
                         sAMGeometry2Ds.Add(Spatial.Query.Convert(Plane.WorldXY, (Face3D)sAMGeometry3D));
                     }

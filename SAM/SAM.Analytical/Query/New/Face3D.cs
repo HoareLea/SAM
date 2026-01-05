@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -16,7 +19,7 @@ namespace SAM.Analytical
             }
 
             List<IOpening> openings = hostPartition.GetOpenings();
-            if(openings == null || openings.Count == 0)
+            if (openings == null || openings.Count == 0)
             {
                 return result;
             }
@@ -27,7 +30,7 @@ namespace SAM.Analytical
             if (face2D == null)
                 return null;
 
-            foreach(IOpening opening in openings)
+            foreach (IOpening opening in openings)
             {
                 Face3D face3D_Aperture = opening?.Face3D;
                 if (face3D_Aperture == null)

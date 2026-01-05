@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> result = segment2Ds.FindAll(x => x != null && (x[0].AlmostEquals(point2D, tolerance) || x[1].AlmostEquals(point2D, tolerance)));
-            if(result != null && result.Count > 0)
+            if (result != null && result.Count > 0)
             {
                 return result;
             }
@@ -28,20 +31,20 @@ namespace SAM.Geometry.Planar
 
             Segment2D segment2D = null;
             Point2D point2D_Project = null;
-            
+
             double distance = double.MaxValue;
             List<int> indexes = new List<int>();
 
-            for (int i=0; i < segment2Ds.Count; i++)
+            for (int i = 0; i < segment2Ds.Count; i++)
             {
                 segment2D = segment2Ds[i];
-                if(segment2D == null)
+                if (segment2D == null)
                 {
                     continue;
                 }
 
                 double distance_Temp = segment2D.Distance(point2D);
-                if(distance_Temp < tolerance)
+                if (distance_Temp < tolerance)
                 {
                     point2D_Project = segment2D.Project(point2D);
 
@@ -66,7 +69,7 @@ namespace SAM.Geometry.Planar
                     return result;
                 }
 
-                if(distance_Temp < distance)
+                if (distance_Temp < distance)
                 {
                     distance = distance_Temp;
                     indexes.Clear();
@@ -83,7 +86,7 @@ namespace SAM.Geometry.Planar
 
             indexes.Reverse();
 
-            foreach(int index in indexes)
+            foreach (int index in indexes)
             {
                 segment2D = segment2Ds[index];
 
@@ -99,7 +102,7 @@ namespace SAM.Geometry.Planar
                         Segment2D segment2D_Temp = null;
 
                         point2D_Project = segment2D.Project(point2D);
-                        if(!segment2D.On(point2D_Project, tolerance))
+                        if (!segment2D.On(point2D_Project, tolerance))
                         {
                             segment2D_Temp = segment2D[0].Distance(point2D_Project) > segment2D[1].Distance(point2D_Project) ? new Segment2D(point2D_Project, segment2D[1]) : new Segment2D(segment2D[0], point2D_Project);
                         }

@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -65,7 +68,7 @@ namespace SAM.Geometry.Spatial
 
             Point3DCluster point3DCluster = new Point3DCluster(point3Ds, tolerance);
             List<List<Point3D>> point3DsList = point3DCluster.Combine();
-            if(point3DsList != null && point3DsList.Count != 0)
+            if (point3DsList != null && point3DsList.Count != 0)
             {
                 point3Ds = new List<Point3D>();
 
@@ -74,7 +77,7 @@ namespace SAM.Geometry.Spatial
                     point3Ds.Add(point3Ds_Temp.Average());
                 }
             }
-            
+
             foreach (Point3D point3D in point3Ds)
             {
                 List<Tuple<BoundingBox3D, Segment3D>> tuples_Temp = tuples.FindAll(x => x.Item1.Inside(point3D, true, tolerance));

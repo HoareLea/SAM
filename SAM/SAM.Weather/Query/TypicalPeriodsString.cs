@@ -1,4 +1,7 @@
-﻿namespace SAM.Weather
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Weather
 {
     /// <summary>
     /// The Query class provides static methods to query and manipulate WeatherData objects.

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Architectural
@@ -13,10 +16,10 @@ namespace SAM.Architectural
             }
 
             List<IMaterial> result = new List<IMaterial>();
-            foreach(MaterialLayer materialLayer in materialLayers)
+            foreach (MaterialLayer materialLayer in materialLayers)
             {
                 IMaterial material = materialLayer?.Material(materialLibrary);
-                if(material != null && result.Find(x => x.Name == material.Name) == null)
+                if (material != null && result.Find(x => x.Name == material.Name) == null)
                 {
                     result.Add(material);
                 }

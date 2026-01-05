@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -87,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
 
             foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp) && face3Ds_Temp != null)
+                if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds_Temp) && face3Ds_Temp != null)
                 {
                     face3Ds.AddRange(face3Ds_Temp);
                 }
@@ -106,7 +109,7 @@ namespace SAM.Analytical.Grasshopper
 
             string apertureTypeString = null;
             dataAccess.GetData(2, ref apertureTypeString);
-            if(!string.IsNullOrWhiteSpace(apertureTypeString))
+            if (!string.IsNullOrWhiteSpace(apertureTypeString))
             {
                 if (!Enum.TryParse(apertureTypeString, out apertureType))
                     apertureType = ApertureType.Window;
@@ -131,7 +134,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 framePercentage = false;
             }
-            if(framePercentage)
+            if (framePercentage)
             {
                 dataAccess.GetDataList(7, values);
             }
@@ -147,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Aperture> apertures = new List<Aperture>();
 
-                if(face3Ds != null)
+                if (face3Ds != null)
                 {
                     foreach (Face3D face3D in face3Ds)
                     {
@@ -170,7 +173,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 analyticalModel = ((AnalyticalModel)sAMObject);
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
@@ -197,7 +200,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 tuples_Result = new List<Tuple<Panel, Aperture>>();
-                for(int i=0; i < panels.Count; i++)
+                for (int i = 0; i < panels.Count; i++)
                 {
                     Panel panel = panels[i];
                     BoundingBox3D boundingBox3D = panel.GetBoundingBox(maxDistance);
@@ -217,7 +220,7 @@ namespace SAM.Analytical.Grasshopper
                         if (apertureConstruction_Temp == null)
                             continue;
 
-                        if(panel_Temp == null)
+                        if (panel_Temp == null)
                             panel_Temp = Create.Panel(panel);
 
                         List<Aperture> apertures_Temp = panel_Temp.AddApertures(apertureConstruction_Temp, tuple.Item2, trimGeometry, minArea, maxDistance);
@@ -227,7 +230,7 @@ namespace SAM.Analytical.Grasshopper
                         apertures_Temp.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel_Temp, x)));
                     }
 
-                    if(panel_Temp != null)
+                    if (panel_Temp != null)
                         adjacencyCluster.AddObject(panel_Temp);
                 }
             }

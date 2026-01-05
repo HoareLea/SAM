@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +26,7 @@ namespace SAM.Core
 
                 case ArithmeticOperator.Division:
                     return value_1 / value_2;
-                
+
                 case ArithmeticOperator.Multiplication:
                     return value_1 * value_2;
 
@@ -55,7 +58,7 @@ namespace SAM.Core
             double value_Min = Math.Min(value_Min_Temp, value_Max_Temp);
             double value_Max = Math.Max(value_Min_Temp, value_Max_Temp);
 
-            if(value < value_Min || value > value_Max)
+            if (value < value_Min || value > value_Max)
             {
                 return double.NaN;
             }
@@ -233,7 +236,7 @@ namespace SAM.Core
             for (int i = 1; i <= maxCount; i++)
             {
                 count = i;
-                
+
                 calculationValue = func.Invoke(result);
                 if (double.IsNaN(calculationValue))
                 {
@@ -278,7 +281,7 @@ namespace SAM.Core
 
         public static double Calculate_ByDivision(this Func<double, double> func, double value, double min, double max, int maxDivisions = 100, int maxCount = 100, double tolerance = Core.Tolerance.MacroDistance)
         {
-            if(func == null || double.IsNaN(min) || double.IsNaN(max))
+            if (func == null || double.IsNaN(min) || double.IsNaN(max))
             {
                 return double.NaN;
             }
@@ -286,7 +289,7 @@ namespace SAM.Core
             if (AlmostEqual(min, max, tolerance))
             {
                 double value_Temp = func.Invoke((min + max) / 2);
-                if(AlmostEqual(value_Temp, value, tolerance))
+                if (AlmostEqual(value_Temp, value, tolerance))
                 {
                     return (min + max) / 2;
                 }
@@ -299,9 +302,9 @@ namespace SAM.Core
                     return null;
                 }
 
-                if(count == 0)
+                if (count == 0)
                 {
-                    return new List<double> {min_Temp, max_Temp };
+                    return new List<double> { min_Temp, max_Temp };
                 }
 
                 double value = (max_Temp - min_Temp) / count;
@@ -316,16 +319,16 @@ namespace SAM.Core
             });
 
 
-            Func<SortedSet<double>, double, Tuple<double, double>> getMinAndMax = new((values, value) => 
-            { 
-                if(values == null || values.Count == 0)
+            Func<SortedSet<double>, double, Tuple<double, double>> getMinAndMax = new((values, value) =>
+            {
+                if (values == null || values.Count == 0)
                 {
                     return null;
                 }
 
-                if(values.Count == 1)
+                if (values.Count == 1)
                 {
-                    if(!AlmostEqual(values.First(), value, tolerance))
+                    if (!AlmostEqual(values.First(), value, tolerance))
                     {
                         return null;
                     }
@@ -333,9 +336,9 @@ namespace SAM.Core
                     return new Tuple<double, double>(values.First(), values.First());
                 }
 
-                if(values.First() > value)
+                if (values.First() > value)
                 {
-                    return new Tuple<double, double> (double.NaN, values.First());
+                    return new Tuple<double, double>(double.NaN, values.First());
                 }
 
                 if (values.Last() < value)
@@ -343,15 +346,15 @@ namespace SAM.Core
                     return new Tuple<double, double>(values.Last(), double.NaN);
                 }
 
-                for (int i =0; i < values.Count; i++)
+                for (int i = 0; i < values.Count; i++)
                 {
-                    if(values.ElementAt(i) > value)
+                    if (values.ElementAt(i) > value)
                     {
                         return new Tuple<double, double>(values.ElementAt(i - 1), values.ElementAt(i));
                     }
                 }
 
-                return null; 
+                return null;
             });
 
             Dictionary<double, double> dictionary = new Dictionary<double, double>();
@@ -360,21 +363,21 @@ namespace SAM.Core
             for (int i = 2; i <= maxDivisions; i++)
             {
                 List<double> values = divide.Invoke(min, max, i);
-                if(values == null || values.Count == 0)
+                if (values == null || values.Count == 0)
                 {
                     continue;
                 }
 
                 List<Tuple<double, double>> tuples = new List<Tuple<double, double>>();
-                foreach(double value_Temp in values)
+                foreach (double value_Temp in values)
                 {
-                    if(!dictionary.TryGetValue(value_Temp, out double calculatedValue))
+                    if (!dictionary.TryGetValue(value_Temp, out double calculatedValue))
                     {
                         calculatedValue = func.Invoke(value_Temp);
                         dictionary[value_Temp] = calculatedValue;
                     }
 
-                    if(double.IsNaN(calculatedValue))
+                    if (double.IsNaN(calculatedValue))
                     {
                         continue;
                     }
@@ -382,14 +385,14 @@ namespace SAM.Core
                     tuples.Add(new Tuple<double, double>(value_Temp, calculatedValue));
                 }
 
-                if(tuples == null || tuples.Count == 0)
+                if (tuples == null || tuples.Count == 0)
                 {
                     continue;
                 }
 
                 SortedSet<double> sortedSet = new SortedSet<double>(tuples.ConvertAll(x => x.Item2));
                 Tuple<double, double> tuple_Temp = getMinAndMax(sortedSet, value);
-                if(tuple_Temp == null)
+                if (tuple_Temp == null)
                 {
                     continue;
                 }
@@ -438,7 +441,7 @@ namespace SAM.Core
                 }
             }
 
-            if(tuple == null || maxCount == 0)
+            if (tuple == null || maxCount == 0)
             {
                 return double.NaN;
             }

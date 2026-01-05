@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -36,7 +39,7 @@ namespace SAM.Geometry.Spatial
         public static Face3D SimplifyByAngle(this Face3D face3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Plane plane = face3D?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Geometry.Planar
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
 
         public Vector2D(Point2D start, Point2D end)
         {
-            if(start != null && end != null)
+            if (start != null && end != null)
             {
                 coordinates = new double[2] { end[0] - start[0], end[1] - start[1] };
             }
@@ -27,7 +30,7 @@ namespace SAM.Geometry.Planar
 
         public Vector2D(Vector2D vector)
         {
-            if(vector != null)
+            if (vector != null)
             {
                 coordinates[0] = vector.coordinates[0];
                 coordinates[1] = vector.coordinates[1];
@@ -36,7 +39,7 @@ namespace SAM.Geometry.Planar
 
         public Vector2D(double[] coordinates)
         {
-            if(coordinates != null && coordinates.Length > 1)
+            if (coordinates != null && coordinates.Length > 1)
             {
                 this.coordinates[0] = coordinates[0];
                 this.coordinates[1] = coordinates[1];
@@ -433,13 +436,13 @@ namespace SAM.Geometry.Planar
 
         public bool Transform(ITransform2D transform2D)
         {
-            if(transform2D == null)
+            if (transform2D == null)
             {
                 return false;
             }
 
             Vector2D vector2D = Query.Transform(this, transform2D);
-            if(vector2D == null)
+            if (vector2D == null)
             {
                 return false;
             }

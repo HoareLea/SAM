@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -65,8 +68,8 @@ Notes:
             {
                 List<GH_SAMParam> result = [];
 
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "Source SAM AnalyticalModel", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "Source SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -150,7 +153,7 @@ Notes:
         {
             int index = -1;
 
-            AnalyticalModel analyticalModel= null;
+            AnalyticalModel analyticalModel = null;
             index = Params.IndexOfInputParam("_analyticalModel");
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel))
             {
@@ -169,7 +172,7 @@ Notes:
                 dataAccess.GetDataList(index, spaces);
             }
 
-            if(spaces is null || spaces.Count == 0)
+            if (spaces is null || spaces.Count == 0)
             {
                 spaces = adjacencyCluster.GetSpaces();
             }
@@ -191,7 +194,7 @@ Notes:
             List<double> openingsEffectiveEfficiency = [];
             List<double> openingsEffectiveAreaToFloorAreaRatios = [];
             List<string> openingsProfileNames = [];
-            for (int i =0; i < spaces.Count; i++)
+            for (int i = 0; i < spaces.Count; i++)
             {
                 if (spaces[i] == null)
                 {
@@ -202,7 +205,7 @@ Notes:
 
                 double floorArea = space?.GetValue<double>(SpaceParameter.Area) ?? double.NaN;
 
-                if(double.IsNaN(floorArea))
+                if (double.IsNaN(floorArea))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Area of space {0} [{1}] has not been provided.", space.Name ?? "???", space.Guid));
                 }
@@ -222,14 +225,14 @@ Notes:
 
                 List<string> openingProfileNames = [];
                 List<Panel> panels = adjacencyCluster.GetPanels(space);
-                if(panels != null)
+                if (panels != null)
                 {
                     foreach (Panel panel in panels)
                     {
                         bool external = panel.IsExternal() && Analytical.Query.BoundaryType(adjacencyCluster, panel) == BoundaryType.Exposed;
                         if (external)
                         {
-                            double area = panel.GetArea(); 
+                            double area = panel.GetArea();
 
                             if (panel.PanelType.PanelGroup() == PanelGroup.Wall)
                             {
@@ -238,11 +241,11 @@ Notes:
 
                             externalPanelsArea += area;
 
-                            if(panel.Apertures is List<Aperture> apertures)
+                            if (panel.Apertures is List<Aperture> apertures)
                             {
                                 foreach (Aperture aperture in apertures)
                                 {
-                                    if(!Analytical.Query.Transparent(aperture, materialLibrary))
+                                    if (!Analytical.Query.Transparent(aperture, materialLibrary))
                                     {
                                         continue;
                                     }
@@ -251,14 +254,14 @@ Notes:
 
                                     framesArea += aperture.GetArea(AperturePart.Frame);
 
-                                    if(aperture.TryGetValue(ApertureParameter.TotalSolarEnergyTransmittance, out double totalSolarEnergyTransmittance) && totalSolarEnergyTransmittance > windowTotalSolarEnergyTransmittance)
+                                    if (aperture.TryGetValue(ApertureParameter.TotalSolarEnergyTransmittance, out double totalSolarEnergyTransmittance) && totalSolarEnergyTransmittance > windowTotalSolarEnergyTransmittance)
                                     {
                                         windowTotalSolarEnergyTransmittance = totalSolarEnergyTransmittance;
                                     }
 
-                                    if(aperture.TryGetValue(ApertureParameter.OpeningProperties, out IOpeningProperties openingProperties) && openingProperties != null)
+                                    if (aperture.TryGetValue(ApertureParameter.OpeningProperties, out IOpeningProperties openingProperties) && openingProperties != null)
                                     {
-                                        if(openingProperties.TryGetValue(OpeningPropertiesParameter.Function, out string function))
+                                        if (openingProperties.TryGetValue(OpeningPropertiesParameter.Function, out string function))
                                         {
                                             openingProfileNames.Add(function);
                                         }

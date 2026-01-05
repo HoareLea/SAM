@@ -1,9 +1,10 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Linq;
 
 namespace SAM.Core.Grasshopper
 {
@@ -38,14 +39,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_M", NickName = "_values_M", Description = "Model/engine under test values", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_M", NickName = "_values_M", Description = "Model/engine under test values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_values_R", NickName = "_values_R", Description = "Reference values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -155,7 +156,7 @@ namespace SAM.Core.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("M");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, Core.Query.MeanError(values_M, values_R));
             }
@@ -188,7 +189,7 @@ namespace SAM.Core.Grasshopper
             int index_2 = Params.IndexOfOutputParam("MDUL");
             int index_3 = Params.IndexOfOutputParam("MDLL");
 
-            if(index_1 != -1 || index_2 != -1 || index_3 != -1)
+            if (index_1 != -1 || index_2 != -1 || index_3 != -1)
             {
                 double meanDifferenceError = Core.Query.MeanDifferenceError(values_M, values_R, out double lower, out double upper);
 

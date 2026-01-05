@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -85,9 +88,9 @@ namespace SAM.Analytical.Grasshopper
 
             List<Aperture> apertures = [];
             index = Params.IndexOfInputParam("apertures_");
-            if(index != -1)
+            if (index != -1)
             {
-                if(!dataAccess.GetDataList(index, apertures))
+                if (!dataAccess.GetDataList(index, apertures))
                 {
                     apertures = [];
                 }
@@ -99,18 +102,18 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject, true);
             }
-            else if(analyticalObject is AnalyticalModel)
+            else if (analyticalObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = (AnalyticalModel)analyticalObject;
 
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
                 }
             }
 
-            if(adjacencyCluster is null)
+            if (adjacencyCluster is null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -122,14 +125,14 @@ namespace SAM.Analytical.Grasshopper
                 apertures = adjacencyCluster.GetApertures();
             }
 
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
-                if(adjacencyCluster.GetPanel(aperture) is not Panel panel)
+                if (adjacencyCluster.GetPanel(aperture) is not Panel panel)
                 {
                     continue;
                 }
 
-                if(!aperture.RemoveValue(ApertureParameter.OpeningProperties))
+                if (!aperture.RemoveValue(ApertureParameter.OpeningProperties))
                 {
                     continue;
                 }
@@ -143,11 +146,11 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster.AddObject(panel);
             }
 
-            if(analyticalObject is AdjacencyCluster)
+            if (analyticalObject is AdjacencyCluster)
             {
                 analyticalObject = adjacencyCluster;
             }
-            else if(analyticalObject is AnalyticalModel analyticalModel_Temp)
+            else if (analyticalObject is AnalyticalModel analyticalModel_Temp)
             {
                 analyticalObject = new AnalyticalModel(analyticalModel_Temp, adjacencyCluster);
             }

@@ -1,14 +1,17 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
-        public static List<string> Descriptions<T>(params T[] excluded) where T: Enum
+        public static List<string> Descriptions<T>(params T[] excluded) where T : Enum
         {
             List<T> enums = Enums(excluded);
-            if(enums == null)
+            if (enums == null)
             {
                 return null;
             }

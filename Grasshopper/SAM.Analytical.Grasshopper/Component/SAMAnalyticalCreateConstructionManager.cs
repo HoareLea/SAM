@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -91,12 +94,12 @@ namespace SAM.Analytical.Grasshopper
 
             ConstructionManager constructionManager = null;
             index = Params.IndexOfInputParam("constructionManager_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 constructionManager = new ConstructionManager();
             }
@@ -128,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                if(constructions != null && constructions.Count != 0)
+                if (constructions != null && constructions.Count != 0)
                 {
                     constructions?.ForEach(x => constructionManager.Add(x));
                 }
@@ -187,18 +190,18 @@ namespace SAM.Analytical.Grasshopper
 
             bool removeUnusedMaterials = false;
             index = Params.IndexOfInputParam("removeUnused_");
-            if (index != -1  && dataAccess.GetData(index, ref removeUnusedMaterials))
+            if (index != -1 && dataAccess.GetData(index, ref removeUnusedMaterials))
             {
-                if(removeUnusedMaterials)
+                if (removeUnusedMaterials)
                 {
                     constructionManager.RemoveUnusedMaterials();
                 }
             }
 
             List<string> names = Analytical.Query.MissingMaterialsNames(constructionManager);
-            if(names != null && names.Count != 0)
+            if (names != null && names.Count != 0)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("{0}: {1}", "ConstructionManager is missing following materials:" , string.Join(", ", names)));
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("{0}: {1}", "ConstructionManager is missing following materials:", string.Join(", ", names)));
             }
 
             index = Params.IndexOfOutputParam("constructionManager");

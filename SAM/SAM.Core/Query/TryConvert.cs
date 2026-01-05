@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,7 +14,7 @@ namespace SAM.Core
         {
             result = default;
 
-            if(type == typeof(object))
+            if (type == typeof(object))
             {
                 result = @object;
                 return true;
@@ -25,7 +28,7 @@ namespace SAM.Core
             }
 
             Type type_Temp = Nullable.GetUnderlyingType(type);
-            if(type_Temp == null)
+            if (type_Temp == null)
             {
                 type_Temp = type;
             }
@@ -41,8 +44,8 @@ namespace SAM.Core
 
                     if (@object is IEnumerable)
                     {
-                        JArray jArray = new ();
-                        foreach(object @object_Temp in (IEnumerable)@object)
+                        JArray jArray = new();
+                        foreach (object @object_Temp in (IEnumerable)@object)
                         {
                             if (TryConvert(@object_Temp, out string value) && value != null)
                                 jArray.Add(value);
@@ -60,7 +63,7 @@ namespace SAM.Core
                     if (result == default)
                         result = @object.ToString();
                 }
-                    
+
                 return true;
             }
             else if (type_Temp == typeof(bool))
@@ -143,7 +146,7 @@ namespace SAM.Core
                     return false;
                 }
 
-                if(@object is Type)
+                if (@object is Type)
                 {
                     return false;
                 }
@@ -498,9 +501,9 @@ namespace SAM.Core
                             return true;
                         }
                     }
-                    else if(typeof(SAMColor).IsAssignableFrom(type_Temp))
+                    else if (typeof(SAMColor).IsAssignableFrom(type_Temp))
                     {
-                        if(int.TryParse((string)@object, out int int_color))
+                        if (int.TryParse((string)@object, out int int_color))
                         {
                             result = new SAMColor(Convert.ToColor(int_color));
                             return true;
@@ -508,18 +511,18 @@ namespace SAM.Core
                         else
                         {
                             string value = (string)@object;
-                            if(!string.IsNullOrWhiteSpace(value) && value.Contains(","))
+                            if (!string.IsNullOrWhiteSpace(value) && value.Contains(","))
                             {
                                 string[] values = value.Split(',');
-                                if(values.Length ==3)
+                                if (values.Length == 3)
                                 {
-                                    if(int.TryParse(values[0], out int r) && int.TryParse(values[1], out int g) && int.TryParse(values[2], out int b))
+                                    if (int.TryParse(values[0], out int r) && int.TryParse(values[1], out int g) && int.TryParse(values[2], out int b))
                                     {
                                         result = new SAMColor(System.Drawing.Color.FromArgb(r, g, b));
                                         return true;
                                     }
                                 }
-                                else if(values.Length == 4)
+                                else if (values.Length == 4)
                                 {
                                     if (int.TryParse(values[0], out int a) && int.TryParse(values[1], out int r) && int.TryParse(values[2], out int g) && int.TryParse(values[3], out int b))
                                     {
@@ -547,8 +550,8 @@ namespace SAM.Core
                         return true;
                     }
                 }
-                
-                if(type_Object == typeof(System.Drawing.Color))
+
+                if (type_Object == typeof(System.Drawing.Color))
                 {
                     result = new SAMColor((System.Drawing.Color)@object);
                     return true;
@@ -629,17 +632,17 @@ namespace SAM.Core
                     }
                 }
             }
-            else if(type_Temp.IsEnum)
+            else if (type_Temp.IsEnum)
             {
-                if(@object == null)
+                if (@object == null)
                 {
                     return false;
                 }
 
-                if(@object is string)
+                if (@object is string)
                 {
                     string @string = ((string)@object).Replace(" ", string.Empty).ToUpper();
-                    if(string.IsNullOrEmpty(@string))
+                    if (string.IsNullOrEmpty(@string))
                     {
                         return false;
                     }
@@ -654,7 +657,7 @@ namespace SAM.Core
                         }
 
                         string description = Description(@enum)?.Replace(" ", string.Empty)?.ToUpper();
-                        if(@string.Equals(description))
+                        if (@string.Equals(description))
                         {
                             result = @enum;
                             return true;

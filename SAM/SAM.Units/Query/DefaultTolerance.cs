@@ -1,10 +1,13 @@
-﻿namespace SAM.Units
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Units
 {
     public static partial class Query
     {
         public static double DefaultTolerance(this UnitType unitType)
         {
-            switch(unitType)
+            switch (unitType)
             {
                 case Units.UnitType.Celsius:
                     return 0.01;

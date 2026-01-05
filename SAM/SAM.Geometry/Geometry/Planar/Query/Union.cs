@@ -1,4 +1,7 @@
-﻿//using ClipperLib;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+//using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
@@ -44,7 +47,7 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> Union(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Tolerance.MicroDistance)
         {
-            if(polygon2D_1 == null || polygon2D_2 == null)
+            if (polygon2D_1 == null || polygon2D_2 == null)
             {
                 return null;
             }
@@ -61,7 +64,7 @@ namespace SAM.Geometry.Planar
             foreach (Polygon2D polygon2D in polygon2Ds)
             {
                 Polygon polygon = polygon2D?.ToNTS_Polygon(tolerance);
-                if(polygon == null)
+                if (polygon == null)
                 {
                     continue;
                 }
@@ -74,7 +77,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Polygon2D> result = new List<Polygon2D>();
-            foreach(Polygon polygon in polygons)
+            foreach (Polygon polygon in polygons)
             {
                 result.AddRange(polygon.ToSAM_Polygon2Ds(tolerance));
             }
@@ -121,14 +124,14 @@ namespace SAM.Geometry.Planar
                 return result;
             }
 
-            if(polygons.Count() == 1)
+            if (polygons.Count() == 1)
             {
                 result.Add(polygons.ElementAt(0));
                 return result;
             }
 
             NetTopologySuite.Geometries.Geometry geometry = new MultiPolygon(polygons.ToArray());
-            if(!geometry.IsValid)
+            if (!geometry.IsValid)
             {
                 geometry = GeometryFixer.Fix(geometry); //2023-09-12 https://github.com/NetTopologySuite/NetTopologySuite/issues/708
             }
@@ -142,7 +145,7 @@ namespace SAM.Geometry.Planar
                 double tolerance = Tolerance.Distance;
 
                 Polygon[] polygons_Temp = new Polygon[polygons.Count()];
-                for(int i =0; i < polygons_Temp.Length; i++)
+                for (int i = 0; i < polygons_Temp.Length; i++)
                 {
                     polygons_Temp[i] = SimplifyByTopologyPreservingSimplifier(polygons.ElementAt(i), tolerance);
                 }
@@ -178,7 +181,7 @@ namespace SAM.Geometry.Planar
             bool on_4 = segment2D_2.On(segment2D_1[1], tolerance);
 
             if (!on_1 && !on_2 && !on_3 && !on_4)
-                return new List<Segment2D>() { segment2D_1, segment2D_2};
+                return new List<Segment2D>() { segment2D_1, segment2D_2 };
 
             Point2D point2D_1;
             Point2D point2D_2;
@@ -206,7 +209,7 @@ namespace SAM.Geometry.Planar
 
             List<Segment2D> segment2Ds_Temp = new List<Segment2D>(segment2Ds);
 
-            while(segment2Ds_Temp.Count > 0)
+            while (segment2Ds_Temp.Count > 0)
             {
                 Segment2D segment2D = segment2Ds_Temp[0];
                 segment2Ds_Temp.RemoveAt(0);
@@ -222,8 +225,8 @@ namespace SAM.Geometry.Planar
             if (face2Ds == null)
                 return null;
 
-            List<Polygon> polygons = new List<Polygon>(); 
-            foreach(Face2D face2D in face2Ds)
+            List<Polygon> polygons = new List<Polygon>();
+            foreach (Face2D face2D in face2Ds)
             {
                 Polygon polygon = face2D?.ToNTS(tolerance);
                 if (polygon == null)
@@ -236,7 +239,7 @@ namespace SAM.Geometry.Planar
             {
                 polygons = Union(polygons);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 polygons = polygons.ConvertAll(x => SimplifyByDouglasPeucker(x, tolerance));
                 polygons = Union(polygons);
@@ -296,6 +299,6 @@ namespace SAM.Geometry.Planar
             }
 
             return null;
-        }      
+        }
     }
 }

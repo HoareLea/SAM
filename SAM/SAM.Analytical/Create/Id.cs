@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static string Id(this AdjacencyCluster adjacencyCluster, MechanicalSystemType mechanicalSystemType)
         {
-            if(adjacencyCluster == null || mechanicalSystemType == null)
+            if (adjacencyCluster == null || mechanicalSystemType == null)
             {
                 return null;
             }

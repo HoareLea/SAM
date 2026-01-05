@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -44,9 +47,9 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                
+
                 result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                
+
                 GooProfileLibraryParam gooProfileLibraryParam = new GooProfileLibraryParam { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical Profile Library", Access = GH_ParamAccess.item };
                 gooProfileLibraryParam.PersistentData.Append(new GooProfileLibrary(Analytical.Query.DefaultProfileLibrary()));
                 result.Add(new GH_SAMParam(gooProfileLibraryParam, ParamVisibility.Binding));
@@ -98,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
 
             buildingModel = new BuildingModel(buildingModel);
 
-            List<Profile> profiles = buildingModel.AddMissingProfiles(profileLibrary, out Dictionary<ProfileType, List<string>>  missingProfileNames);
+            List<Profile> profiles = buildingModel.AddMissingProfiles(profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames);
 
             index = Params.IndexOfOutputParam("buildingModel");
             if (index != -1)
@@ -112,9 +115,9 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 List<string> missingProfileNames_Temp = new List<string>();
-                if(missingProfileNames != null)
+                if (missingProfileNames != null)
                 {
-                    foreach(KeyValuePair<ProfileType, List<string>> keyValuePair in missingProfileNames)
+                    foreach (KeyValuePair<ProfileType, List<string>> keyValuePair in missingProfileNames)
                     {
                         missingProfileNames_Temp.AddRange(keyValuePair.Value);
                     }
@@ -122,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
 
                 dataAccess.SetDataList(index, missingProfileNames_Temp);
             }
-                
+
         }
     }
 }

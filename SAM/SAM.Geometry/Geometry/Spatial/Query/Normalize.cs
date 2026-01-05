@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -29,9 +32,9 @@ namespace SAM.Geometry.Spatial
             return result is T ? (T)result : default(T);
         }
 
-        public static T Normalize<T>(this Plane plane, T closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T: Planar.IClosed2D
+        public static T Normalize<T>(this Plane plane, T closed2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T : Planar.IClosed2D
         {
-            if(plane == null || closed2D == null)
+            if (plane == null || closed2D == null)
             {
                 return default(T);
             }
@@ -58,13 +61,13 @@ namespace SAM.Geometry.Spatial
             }
 
             Orientation orientation_Point3Ds = Orientation(plane.Convert(point2Ds), plane.Normal, tolerance_Angle, tolerance_Distance);
-            if(orientation_Point3Ds == Geometry.Orientation.Undefined || orientation_Point3Ds == Geometry.Orientation.Collinear)
+            if (orientation_Point3Ds == Geometry.Orientation.Undefined || orientation_Point3Ds == Geometry.Orientation.Collinear)
             {
                 return null;
             }
 
             List<Planar.Point2D> result = new List<Planar.Point2D>(point2Ds);
-            if (orientation_Point3Ds != orientation )
+            if (orientation_Point3Ds != orientation)
             {
                 result.Reverse();
             }
@@ -74,19 +77,19 @@ namespace SAM.Geometry.Spatial
 
         public static Planar.Face2D Normalize(this Plane plane, Planar.Face2D face2D, Orientation orientation = Geometry.Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(plane == null || face2D is null)
+            if (plane == null || face2D is null)
             {
                 return null;
             }
 
             Planar.IClosed2D externalEdge2D = face2D.ExternalEdge2D;
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return null;
             }
 
             externalEdge2D = Normalize(plane, externalEdge2D as dynamic, orientation, tolerance_Angle, tolerance_Distance);
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return null;
             }
@@ -96,13 +99,13 @@ namespace SAM.Geometry.Spatial
 
         public static Planar.Polygon2D Normalize(this Plane plane, Planar.Polygon2D polygon2D, Orientation orientation = Geometry.Orientation.CounterClockwise, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(plane == null || polygon2D == null)
+            if (plane == null || polygon2D == null)
             {
                 return null;
             }
 
             List<Planar.Point2D> point2Ds = Normalize(plane, polygon2D.Points, orientation, tolerance_Angle, tolerance_Distance);
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }
@@ -133,7 +136,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-           if(IsNormalized(plane, rectangle2D, orientation, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance))
+            if (IsNormalized(plane, rectangle2D, orientation, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance))
             {
                 return new Planar.Rectangle2D(rectangle2D);
             }

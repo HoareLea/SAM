@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Planar;
 using System;
@@ -20,12 +23,12 @@ namespace SAM.Analytical
             if (profile.values != null)
             {
                 values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
-                foreach(KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in profile.values)
+                foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in profile.values)
                 {
                     Tuple<Range<int>, AnyOf<double, Profile>> tuple = null;
                     if (keyValuePair.Value != null)
                         tuple = new Tuple<Range<int>, AnyOf<double, Profile>>(keyValuePair.Value.Item1?.Clone(), keyValuePair.Value.Item2?.Value as dynamic);
-                    
+
                     values[keyValuePair.Key] = tuple;
                 }
             }
@@ -45,7 +48,7 @@ namespace SAM.Analytical
             IEnumerable<int> indexes = indexedDoubles?.Keys;
             if (indexes != null)
             {
-                foreach(int index in indexes)
+                foreach (int index in indexes)
                 {
                     Add(index, indexedDoubles[index]);
                 }
@@ -171,7 +174,7 @@ namespace SAM.Analytical
         }
 
         public Profile(Profile profile, IndexedDoubles indexedDoubles)
-            :base(profile)
+            : base(profile)
         {
             category = profile?.category;
 
@@ -330,7 +333,7 @@ namespace SAM.Analytical
 
                 if (@object is double)
                 {
-                    value =(double)@object;
+                    value = (double)@object;
                 }
                 else if (@object is Profile)
                 {
@@ -338,13 +341,13 @@ namespace SAM.Analytical
 
                 }
 
-                if(value > result)
+                if (value > result)
                 {
                     result = value;
                 }
             }
 
-            if(result == double.MinValue)
+            if (result == double.MinValue)
             {
                 return double.NaN;
             }
@@ -430,7 +433,7 @@ namespace SAM.Analytical
             }
 
             Range<int> range = GetRange(index);
-            if(range == null || range.Count() == 1)
+            if (range == null || range.Count() == 1)
             {
                 values[index] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, value);
                 return true;
@@ -440,7 +443,7 @@ namespace SAM.Analytical
 
             values.Remove(range.Min);
 
-            for(int i = 0; i < range.Count(); i++)
+            for (int i = 0; i < range.Count(); i++)
             {
                 values[range.Min + i] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, values_Temp[i]);
             }
@@ -451,12 +454,12 @@ namespace SAM.Analytical
 
         public bool Update(int index, int count, double value)
         {
-            if(count <= 0)
+            if (count <= 0)
             {
                 return false;
             }
 
-            if(count == 1)
+            if (count == 1)
             {
                 Update(index, value);
             }
@@ -503,7 +506,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(values == null)
+            if (values == null)
             {
                 values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
                 values.Add(min, new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>(min, max), value));
@@ -519,12 +522,12 @@ namespace SAM.Analytical
 
         public bool Update(int index, Profile profile)
         {
-            if(profile == null)
+            if (profile == null)
             {
                 return false;
             }
 
-            if(values == null)
+            if (values == null)
             {
                 values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
             }
@@ -545,10 +548,10 @@ namespace SAM.Analytical
 
             List<Range<int>> ranges = new List<Range<int>>();
             HashSet<int> mins = new HashSet<int>();
-            for(int i=0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 Range<int> range_Temp = GetRange(min + i);
-                if(range_Temp != null)
+                if (range_Temp != null)
                 {
                     ranges.Add(range_Temp);
                     mins.Add(range_Temp.Min);
@@ -562,7 +565,7 @@ namespace SAM.Analytical
             Range<int> range = new Range<int>(min, max);
 
             double[] values_Temp = GetValues(range_ToRemove);
-            foreach(int min_Temp in mins)
+            foreach (int min_Temp in mins)
             {
                 values.Remove(min_Temp);
             }
@@ -570,7 +573,7 @@ namespace SAM.Analytical
             for (int i = 0; i < range_ToRemove.Count(); i++)
             {
                 int index_Temp = range_ToRemove.Min + i;
-                if(!range.In(index_Temp))
+                if (!range.In(index_Temp))
                 {
                     values[index_Temp] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, values_Temp[i]);
                 }
@@ -583,12 +586,12 @@ namespace SAM.Analytical
 
         public bool Remove(int count)
         {
-            if(count < 1)
+            if (count < 1)
             {
                 return false;
             }
 
-            if(values == null || values.Count == 0)
+            if (values == null || values.Count == 0)
             {
                 return false;
             }
@@ -596,7 +599,7 @@ namespace SAM.Analytical
             int max = Max;
 
             int min = max - count + 1;
-            if(min < Min)
+            if (min < Min)
             {
                 min = Min;
             }
@@ -635,9 +638,9 @@ namespace SAM.Analytical
                 }
             }
 
-            for(int i = range.Min; i <= range.Max; i++)
+            for (int i = range.Min; i <= range.Max; i++)
             {
-                if(values.ContainsKey(i))
+                if (values.ContainsKey(i))
                 {
                     values.Remove(i);
                 }
@@ -845,13 +848,13 @@ namespace SAM.Analytical
 
         public double[] GetValues(Range<int> range)
         {
-            if(range == null)
+            if (range == null)
             {
                 return null;
             }
 
             IndexedDoubles indexedDoubles = GetIndexedDoubles();
-            if(indexedDoubles == null)
+            if (indexedDoubles == null)
             {
                 return null;
             }
@@ -914,10 +917,10 @@ namespace SAM.Analytical
             //{
             //    if (i >= result.Length)
             //        break;
-                
+
             //    result[i] = this[i];
             //}
-                
+
 
             //int index;
 
@@ -981,7 +984,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Profile> profiles = new List<Profile>();
-            foreach(Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
+            foreach (Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
             {
                 if (tuple != null && tuple.Item2?.Value is Profile)
                     profiles.Add((Profile)tuple.Item2?.Value);
@@ -992,7 +995,7 @@ namespace SAM.Analytical
 
         public Profile GetProfile(int index)
         {
-            if(!TryGetValue(index, out Profile result, out double value))
+            if (!TryGetValue(index, out Profile result, out double value))
             {
                 return null;
             }
@@ -1017,16 +1020,16 @@ namespace SAM.Analytical
                 Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
 
                 Range<int> range = tuple?.Item1;
-                if(range == null)
+                if (range == null)
                 {
-                    if(keyValuePair.Key == index)
+                    if (keyValuePair.Key == index)
                     {
                         return new Range<int>(keyValuePair.Key);
                     }
                     continue;
                 }
 
-                if(range.In(index))
+                if (range.In(index))
                 {
                     return new Range<int>(range);
                 }
@@ -1093,7 +1096,7 @@ namespace SAM.Analytical
                 //    result++;
                 //}
 
-                foreach(Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
+                foreach (Tuple<Range<int>, AnyOf<double, Profile>> tuple in values.Values)
                 {
                     if (tuple.Item1 == null)
                     {
@@ -1120,7 +1123,7 @@ namespace SAM.Analytical
                 return values.First().Key;
             }
         }
-        
+
         public double MaxValue
         {
             get
@@ -1179,7 +1182,7 @@ namespace SAM.Analytical
                         value = (double)@object;
                         return true;
                     }
-                        
+
                     Profile profile_Temp = @object as Profile;
                     if (profile_Temp == null)
                     {
@@ -1214,7 +1217,7 @@ namespace SAM.Analytical
                 int count = max - min + 1;
 
                 int index_Temp = index;
-                while(index_Temp > max)
+                while (index_Temp > max)
                 {
                     index_Temp -= count;
                 }
@@ -1256,20 +1259,20 @@ namespace SAM.Analytical
             if (jObject.ContainsKey("Category"))
                 category = jObject.Value<string>("Category");
 
-            if(jObject.ContainsKey("Values"))
+            if (jObject.ContainsKey("Values"))
             {
                 JArray jArray = jObject.Value<JArray>("Values");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     values = new SortedList<int, Tuple<Range<int>, AnyOf<double, Profile>>>();
 
-                    foreach(JToken jToken in jArray)
+                    foreach (JToken jToken in jArray)
                     {
                         if (jToken.Type == JTokenType.Float)
                         {
                             values[values.Count == 0 ? 0 : values.Keys.Max() + 1] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)jToken);
                         }
-                        else if(jToken.Type == JTokenType.Array)
+                        else if (jToken.Type == JTokenType.Array)
                         {
                             JArray jArray_Temp = (JArray)jToken;
 
@@ -1282,7 +1285,7 @@ namespace SAM.Analytical
                                     break;
                                 case 2:
                                     jToken_Temp = jArray_Temp[1];
-                                    if(jToken_Temp.Type == JTokenType.Float)
+                                    if (jToken_Temp.Type == JTokenType.Float)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(null, (double)jToken_Temp);
                                     else if (jToken_Temp.Type == JTokenType.Integer)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), null);
@@ -1293,13 +1296,13 @@ namespace SAM.Analytical
                                     jToken_Temp = jArray_Temp[2];
                                     if (jToken_Temp.Type == JTokenType.Float)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), (double)jToken_Temp);
-                                    else if(jToken_Temp.Type == JTokenType.Object)
+                                    else if (jToken_Temp.Type == JTokenType.Object)
                                         values[(int)jArray_Temp[0]] = new Tuple<Range<int>, AnyOf<double, Profile>>(new Range<int>((int)jArray_Temp[0], (int)jArray_Temp[1]), new Profile((JObject)jToken_Temp));
                                     break;
                             }
                         }
                     }
-                }    
+                }
             }
 
             return true;
@@ -1314,7 +1317,7 @@ namespace SAM.Analytical
             if (category != null)
                 jObject.Add("Category", category);
 
-            if(values != null)
+            if (values != null)
             {
                 JArray jArray = new JArray();
                 foreach (KeyValuePair<int, Tuple<Range<int>, AnyOf<double, Profile>>> keyValuePair in values)
@@ -1325,15 +1328,15 @@ namespace SAM.Analytical
                     Tuple<Range<int>, AnyOf<double, Profile>> tuple = keyValuePair.Value;
                     if (tuple != null)
                     {
-                        if(tuple.Item1 != null)
+                        if (tuple.Item1 != null)
                             jArray_Temp.Add(tuple.Item1.Max);
 
                         AnyOf<double, Profile> value = tuple.Item2;
-                        if(value != null)
+                        if (value != null)
                         {
-                            if(value.Value is double)
+                            if (value.Value is double)
                                 jArray_Temp.Add(value.Value);
-                            else if(value.Value != null)
+                            else if (value.Value != null)
                                 jArray_Temp.Add((value.Value as Profile).ToJObject());
                         }
                     }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -6,13 +9,13 @@ namespace SAM.Core
     {
         public static List<List<T>> Graft<T>(this IEnumerable<T> values, int count)
         {
-            if(values == null || count <= 0)
+            if (values == null || count <= 0)
             {
                 return null;
             }
 
             List<List<T>> result = new List<List<T>>();
-            foreach(T value in values)
+            foreach (T value in values)
             {
                 List<T> list = new List<T>();
                 for (int i = 0; i < count; i++)

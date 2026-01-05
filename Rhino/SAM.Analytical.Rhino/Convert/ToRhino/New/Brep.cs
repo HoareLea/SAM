@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical.Rhino
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical.Rhino
     {
         public static global::Rhino.Geometry.Brep ToRhino(this IPartition partition, bool cutOpenings = false, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(partition == null)
+            if (partition == null)
             {
                 return null;
             }

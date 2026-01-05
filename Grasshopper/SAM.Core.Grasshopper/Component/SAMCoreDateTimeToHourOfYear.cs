@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -36,7 +39,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -71,7 +74,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_dateTime");
-            
+
             DateTime dateTime = DateTime.MinValue;
             if (index == -1 || !dataAccess.GetData(index, ref dateTime) || dateTime == null)
             {

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -11,49 +14,49 @@ namespace SAM.Analytical
         public static Aperture Rescale(this Aperture aperture, double scale, double tolerance = Core.Tolerance.MacroDistance)
         {
             Face3D face3D = aperture?.GetFace3D();
-            if(face3D is null)
+            if (face3D is null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane is null)
+            if (plane is null)
             {
                 return null;
             }
 
-            if(face3D.ExternalEdge2D is not Polygon2D externalEdge)
+            if (face3D.ExternalEdge2D is not Polygon2D externalEdge)
             {
                 return null;
             }
 
             double area = externalEdge.GetArea();
-            if(double.IsNaN(area))
+            if (double.IsNaN(area))
             {
                 return null;
             }
 
             double area_Temp = area * scale;
 
-            if(double.IsNaN(area_Temp) || Core.Query.AlmostEqual(area_Temp, 0, tolerance))
+            if (double.IsNaN(area_Temp) || Core.Query.AlmostEqual(area_Temp, 0, tolerance))
             {
                 return null;
             }
 
-            if(Core.Query.AlmostEqual(area_Temp, area, tolerance))
+            if (Core.Query.AlmostEqual(area_Temp, area, tolerance))
             {
                 return new Aperture(aperture);
             }
 
             Rectangle2D rectangle2D = Geometry.Planar.Create.Rectangle2D(externalEdge, tolerance);
-            if(rectangle2D is null)
+            if (rectangle2D is null)
             {
                 return null;
             }
 
             Func<double, double> func = (offset) =>
             {
-                if(externalEdge.Offset(offset) is not List<Polygon2D> polygon2Ds)
+                if (externalEdge.Offset(offset) is not List<Polygon2D> polygon2Ds)
                 {
                     return 0;
                 }
@@ -61,7 +64,7 @@ namespace SAM.Analytical
                 polygon2Ds.Sort((x, y) => x.GetArea().CompareTo(y.GetArea()));
 
                 double area_Offset = polygon2Ds.Last().GetArea();
-                if(double.IsNaN(area_Offset))
+                if (double.IsNaN(area_Offset))
                 {
                     return double.NaN;
                 }
@@ -70,14 +73,14 @@ namespace SAM.Analytical
 
             double start = 0;
             double end = System.Math.Max(rectangle2D.Width, rectangle2D.Height) / 2;
-            if(scale < 1)
+            if (scale < 1)
             {
                 end = -end;
             }
 
             double offset = Core.Query.Calculate_ByDivision(func, area_Temp, start, end, tolerance: tolerance);
 
-            if(double.IsNaN(offset))
+            if (double.IsNaN(offset))
             {
                 return null;
             }
@@ -92,10 +95,10 @@ namespace SAM.Analytical
             externalEdge = polygon2Ds[0];
 
             Face3D face3D_New = null;
-            if(face3D.InternalEdge2Ds is List<IClosed2D> internalEdges && internalEdges.Count != 0)
+            if (face3D.InternalEdge2Ds is List<IClosed2D> internalEdges && internalEdges.Count != 0)
             {
                 double area_InternalEdges = internalEdges.ConvertAll(x => x.GetArea()).Sum();
-                if(!double.IsNaN(area_InternalEdges) && area_InternalEdges > 0)
+                if (!double.IsNaN(area_InternalEdges) && area_InternalEdges > 0)
                 {
                     double area_Frame = (area - area_InternalEdges);
                     area_Temp = area - (area_Frame * scale);
@@ -108,7 +111,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(face3D_New is null)
+            if (face3D_New is null)
             {
                 face3D_New = new Face3D(plane.Convert(externalEdge));
             }

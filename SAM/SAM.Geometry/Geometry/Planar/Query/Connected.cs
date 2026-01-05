@@ -1,4 +1,7 @@
-﻿using QuickGraph;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using QuickGraph;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,7 +31,7 @@ namespace SAM.Geometry.Planar
             foreach (T segmentable2D in segmentable2Ds)
             {
                 List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();
-                if(segment2Ds_Temp == null)
+                if (segment2Ds_Temp == null)
                 {
                     continue;
                 }
@@ -36,7 +39,7 @@ namespace SAM.Geometry.Planar
                 //segment2Ds_Temp.ForEach(x => x.Round(tolerance));
 
                 segment2Ds.AddRange(segment2Ds_Temp);
-                
+
                 tuples.Add(new Tuple<BoundingBox2D, List<Point2D>, T>(segmentable2D.GetBoundingBox(), segmentable2D.GetPoints(), segmentable2D));
             }
 
@@ -56,19 +59,19 @@ namespace SAM.Geometry.Planar
             connectedComponentsAlgorithm.Compute();
 
             IDictionary<Point2D, int> components = connectedComponentsAlgorithm.Components;
-            if(components == null || components.Count == 0)
+            if (components == null || components.Count == 0)
             {
                 return null;
             }
 
             List<List<T>> result = Enumerable.Repeat<List<T>>(null, connectedComponentsAlgorithm.ComponentCount).ToList();
 
-            Parallel.For(0, connectedComponentsAlgorithm.ComponentCount, (int i) => 
+            Parallel.For(0, connectedComponentsAlgorithm.ComponentCount, (int i) =>
             {
                 List<T> segmentable2Ds_Temp = new List<T>();
                 foreach (KeyValuePair<Point2D, int> keyValuePair in components)
                 {
-                    if(keyValuePair.Value != i)
+                    if (keyValuePair.Value != i)
                     {
                         continue;
                     }

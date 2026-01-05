@@ -1,9 +1,11 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -290,12 +292,12 @@ namespace SAM.Analytical
 
             double groundElevation = 0;
 
-            if(adjacencyCluster.GetGroundPanels() is List<Panel> groundPanels && groundPanels.Count > 0)
+            if (adjacencyCluster.GetGroundPanels() is List<Panel> groundPanels && groundPanels.Count > 0)
             {
                 groundElevation = double.MinValue;
                 foreach (Panel groundPanel in groundPanels)
                 {
-                    if(groundPanel?.GetBoundingBox() is not BoundingBox3D boundingBox3D_GroundPanel)
+                    if (groundPanel?.GetBoundingBox() is not BoundingBox3D boundingBox3D_GroundPanel)
                     {
                         continue;
                     }
@@ -308,7 +310,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(groundElevation == double.MinValue)
+                if (groundElevation == double.MinValue)
                 {
                     groundElevation = 0;
                 }
@@ -326,7 +328,7 @@ namespace SAM.Analytical
 
         public static bool Merge(this AdjacencyCluster adjacencyCluster_Destination, AdjacencyCluster adjacencyCluster_Source, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
-            if(adjacencyCluster_Destination is null || adjacencyCluster_Source is null)
+            if (adjacencyCluster_Destination is null || adjacencyCluster_Source is null)
             {
                 return false;
             }
@@ -343,21 +345,21 @@ namespace SAM.Analytical
 
             //Find shade panels and boundingBoxes of source AdjacencyCluster
             Dictionary<Space, Shell> dictionary_Source = adjacencyCluster_Source.ShellDictionary();
-            if(dictionary_Source is not null)
+            if (dictionary_Source is not null)
             {
-                foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary_Source)
+                foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary_Source)
                 {
-                    if(adjacencyCluster_Source.GetPanels( keyValuePair.Key) is not List<Panel> panels_Space)
+                    if (adjacencyCluster_Source.GetPanels(keyValuePair.Key) is not List<Panel> panels_Space)
                     {
                         continue;
                     }
 
-                    foreach(Panel panel_Space in panels_Space)
+                    foreach (Panel panel_Space in panels_Space)
                     {
                         dictionary_Panel_Source_Shade.Remove(panel_Space.Guid);
                     }
 
-                    if(keyValuePair.Value?.GetBoundingBox() is not BoundingBox3D boundingBox3D_Space)
+                    if (keyValuePair.Value?.GetBoundingBox() is not BoundingBox3D boundingBox3D_Space)
                     {
                         continue;
                     }
@@ -375,26 +377,26 @@ namespace SAM.Analytical
             }
 
             //Check if there is no spaces
-            if(dictionary_Source is null || dictionary_Source.Count == 0)
+            if (dictionary_Source is null || dictionary_Source.Count == 0)
             {
                 //Return true if there was any shade panels merged to destination AnalyticalModel
                 return dictionary_Panel_Source_Shade.Count > 0;
             }
 
             Dictionary<Space, Shell> dictionary_Destination = adjacencyCluster_Destination.ShellDictionary();
-            
+
             //Remove destination shells which does not interfere
-            if(dictionary_Destination != null && dictionary_Destination.Count != 0)
+            if (dictionary_Destination != null && dictionary_Destination.Count != 0)
             {
                 Dictionary<Space, Shell> dictionary_Destination_Temp = [];
                 foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary_Destination)
                 {
-                    if(keyValuePair.Value.GetBoundingBox() is not BoundingBox3D boundingBox3D_Space)
+                    if (keyValuePair.Value.GetBoundingBox() is not BoundingBox3D boundingBox3D_Space)
                     {
                         continue;
                     }
 
-                    if(!boundingBox3D_Source.InRange(boundingBox3D_Space, tolerance_Distance))
+                    if (!boundingBox3D_Source.InRange(boundingBox3D_Space, tolerance_Distance))
                     {
                         continue;
                     }
@@ -406,7 +408,7 @@ namespace SAM.Analytical
             }
 
             //Iterating through all spaces from source
-            foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary_Source)
+            foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary_Source)
             {
                 Space space_Source = keyValuePair.Key;
                 Shell shell_Source = keyValuePair.Value;
@@ -418,7 +420,7 @@ namespace SAM.Analytical
 
                 //Find all spaces which interfere with source space
                 List<Tuple<Space, BoundingBox3D, Shell, Point3D>> tuples_Shell_Existing = [];
-                if(dictionary_Destination is not null)
+                if (dictionary_Destination is not null)
                 {
                     foreach (KeyValuePair<Space, Shell> keyValuePair_Temp in dictionary_Destination)
                     {
@@ -484,7 +486,7 @@ namespace SAM.Analytical
                     adjacencyCluster_Destination.RemoveObject(tuple_Shell_Existing.Item1);
 
                     //foreach (Tuple<BoundingBox3D, Shell, Point3D> tuple_Shell_New_Inside in tuples_Shell_New_Inside)
-                    for(int j = 0; j < tuples_Shell_New_Inside.Count; j++)
+                    for (int j = 0; j < tuples_Shell_New_Inside.Count; j++)
                     {
                         Tuple<BoundingBox3D, Shell, Point3D> tuple_Shell_New_Inside = tuples_Shell_New_Inside[j];
 
@@ -510,7 +512,7 @@ namespace SAM.Analytical
 
                             //Find existing panel
                             Panel panel = panels_Destination_Shell.Find(x => x.GetBoundingBox().Inside(internalPoint, true, tolerance_Distance) && x.Face3D.Inside(internalPoint, tolerance_Distance));
-                            if(panel is not null)
+                            if (panel is not null)
                             {
                                 //Copy data/links from existing panel to new panel
                                 List<Space> spaces_Panel = adjacencyCluster_Destination.GetSpaces(panel);
@@ -527,7 +529,7 @@ namespace SAM.Analytical
                             if (panel is null)
                             {
                                 panel = panels_Source_Shell.Find(x => x.GetBoundingBox().Inside(internalPoint, true, tolerance_Distance) && x.Face3D.Inside(internalPoint, tolerance_Distance));
-                                if(panel is not null)
+                                if (panel is not null)
                                 {
                                     panel = new Panel(Guid.NewGuid(), panel, face3D);
                                     adjacencyCluster_Destination.AddObject(panel);

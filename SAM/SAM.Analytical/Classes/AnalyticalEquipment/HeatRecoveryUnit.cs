@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -38,8 +41,8 @@ namespace SAM.Analytical
             this.summerDryBulbTemperature = summerDryBulbTemperature;
         }
 
-        public HeatRecoveryUnit(string name, 
-            double winterSensibleEfficiency, 
+        public HeatRecoveryUnit(string name,
+            double winterSensibleEfficiency,
             double winterLatentEfficiency,
             double summerSensibleEfficiency,
             double summerLatentEfficiency,
@@ -68,7 +71,7 @@ namespace SAM.Analytical
         public HeatRecoveryUnit(HeatRecoveryUnit heatRecoveryUnit)
             : base(heatRecoveryUnit)
         {
-            if(heatRecoveryUnit != null)
+            if (heatRecoveryUnit != null)
             {
                 winterSensibleEfficiency = heatRecoveryUnit.winterSensibleEfficiency;
                 winterLatentEfficiency = heatRecoveryUnit.winterLatentEfficiency;
@@ -196,7 +199,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("WinterSensibleEfficiency"))
+            if (jObject.ContainsKey("WinterSensibleEfficiency"))
             {
                 winterSensibleEfficiency = jObject.Value<double>("WinterSensibleEfficiency");
             }
@@ -245,7 +248,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            if(!double.IsNaN(winterSensibleEfficiency))
+            if (!double.IsNaN(winterSensibleEfficiency))
             {
                 jObject.Add("WinterSensibleEfficiency", winterSensibleEfficiency);
             }

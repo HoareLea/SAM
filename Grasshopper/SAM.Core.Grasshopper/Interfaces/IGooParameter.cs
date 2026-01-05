@@ -1,8 +1,11 @@
-﻿using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel.Types;
 
 namespace SAM.Core.Grasshopper
 {
-    public interface IGooParameter: IGH_Goo
+    public interface IGooParameter : IGH_Goo
     {
         string Name { get; }
     }

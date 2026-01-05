@@ -1,11 +1,14 @@
-﻿using System.Collections;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool TryGetObjects<T>(this ISAMLibrary sAMLibrary, out List<T> objects) where T: IJSAMObject
+        public static bool TryGetObjects<T>(this ISAMLibrary sAMLibrary, out List<T> objects) where T : IJSAMObject
         {
             objects = new List<T>();
             if (sAMLibrary == null)
@@ -15,21 +18,21 @@ namespace SAM.Core
 
             System.Type type = sAMLibrary?.GenericType;
 
-            if(!typeof(IJSAMObject).IsAssignableFrom(type))
+            if (!typeof(IJSAMObject).IsAssignableFrom(type))
             {
                 return false;
             }
 
             IEnumerable enumerable = (sAMLibrary as dynamic).GetObjects() as IEnumerable;
-            if(enumerable == null)
+            if (enumerable == null)
             {
                 return false;
             }
 
             objects = new List<T>();
-            foreach(object object_Temp in enumerable)
+            foreach (object object_Temp in enumerable)
             {
-                if(object_Temp is T)
+                if (object_Temp is T)
                 {
                     objects.Add((T)object_Temp);
                 }

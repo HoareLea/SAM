@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static HashSet<string> RemoveUnusedMaterials(this ConstructionManager constructionManager)
         {
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 return null;
             }
@@ -18,14 +21,14 @@ namespace SAM.Analytical
             }
 
             HashSet<string> names = new HashSet<string>();
-            
+
             List<Construction> constructions = constructionManager.Constructions;
-            if(constructions != null)
+            if (constructions != null)
             {
-                foreach(Construction construction in constructions)
+                foreach (Construction construction in constructions)
                 {
                     List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
-                    if(constructionLayers == null || constructionLayers.Count == 0)
+                    if (constructionLayers == null || constructionLayers.Count == 0)
                     {
                         continue;
                     }
@@ -56,10 +59,10 @@ namespace SAM.Analytical
             }
 
             HashSet<string> result = new HashSet<string>();
-            
+
             foreach (Core.IMaterial material in materials)
             {
-                if(!names.Contains(material.Name))
+                if (!names.Contains(material.Name))
                 {
                     constructionManager.Remove(material);
                     result.Add(material.Name);

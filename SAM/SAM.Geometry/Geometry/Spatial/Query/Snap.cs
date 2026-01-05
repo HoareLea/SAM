@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,13 +56,13 @@ namespace SAM.Geometry.Spatial
 
         public static Shell Snap(this Shell shell_Snapped, Shell shell_Snapping, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(shell_Snapped == null || shell_Snapping == null)
+            if (shell_Snapped == null || shell_Snapping == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D_Snapped = shell_Snapped.GetBoundingBox();
-            if(boundingBox3D_Snapped == null)
+            if (boundingBox3D_Snapped == null)
             {
                 return null;
             }
@@ -70,7 +73,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            if(!boundingBox3D_Snapped.InRange(boundingBox3D_Snapping, snapDistance))
+            if (!boundingBox3D_Snapped.InRange(boundingBox3D_Snapping, snapDistance))
             {
                 return new Shell(shell_Snapped);
             }
@@ -87,7 +90,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            for(int i= boundaries_Snapping.Count - 1; i <=0; i--)
+            for (int i = boundaries_Snapping.Count - 1; i <= 0; i--)
             {
                 BoundingBox3D boundingBox3D_Boundary_Snapping = boundaries_Snapping[i].Item1;
                 if (boundingBox3D_Boundary_Snapping == null || !boundingBox3D_Snapped.InRange(boundingBox3D_Boundary_Snapping, snapDistance))
@@ -97,10 +100,10 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds_Shell = new List<Face3D>();
-            for(int i=0; i < boundaries_Snapped.Count; i++)
+            for (int i = 0; i < boundaries_Snapped.Count; i++)
             {
                 BoundingBox3D boundingBox3D_Boundary_Snapped = boundaries_Snapped[i].Item1;
-                if(boundingBox3D_Boundary_Snapped == null)
+                if (boundingBox3D_Boundary_Snapped == null)
                 {
                     continue;
                 }
@@ -112,9 +115,9 @@ namespace SAM.Geometry.Spatial
                 }
 
                 List<Face3D> face3Ds = new List<Face3D>();
-                foreach(Tuple<BoundingBox3D, Face3D> boudnary_Snapping in boundaries_Snapping)
+                foreach (Tuple<BoundingBox3D, Face3D> boudnary_Snapping in boundaries_Snapping)
                 {
-                    if(!boundingBox3D_Boundary_Snapped.InRange(boudnary_Snapping.Item1, snapDistance))
+                    if (!boundingBox3D_Boundary_Snapped.InRange(boudnary_Snapping.Item1, snapDistance))
                     {
                         continue;
                     }
@@ -135,16 +138,16 @@ namespace SAM.Geometry.Spatial
 
             return new Shell(face3Ds_Shell);
         }
-        
+
         public static Shell Snap(this Shell shell, IEnumerable<Shell> shells_Snapping, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(shell == null || shells_Snapping == null)
+            if (shell == null || shells_Snapping == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
@@ -196,13 +199,13 @@ namespace SAM.Geometry.Spatial
             System.Threading.Tasks.Parallel.For(0, result.Count, (int i) =>
             {
                 Shell shell = result[i];
-                if(shell == null)
+                if (shell == null)
                 {
                     return;
                 }
 
                 Shell shell_Snap = shell.Snap(shells_Snapping, snapDistance, tolerance);
-                if(shell_Snap == null)
+                if (shell_Snap == null)
                 {
                     return;
                 }
@@ -219,13 +222,13 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -240,18 +243,18 @@ namespace SAM.Geometry.Spatial
             foreach (Face3D face3D_Temp in face3Ds_Snapping)
             {
                 BoundingBox3D boundingBox3D_Temp = face3D_Temp?.GetBoundingBox();
-                if(boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, snapDistance))
+                if (boundingBox3D_Temp == null || !boundingBox3D.InRange(boundingBox3D_Temp, snapDistance))
                 {
                     continue;
                 }
 
                 List<ISegmentable3D> segmentable3Ds = face3D_Temp.GetEdge3Ds()?.ConvertAll(x => x as ISegmentable3D);
-                if(segmentable3Ds == null)
+                if (segmentable3Ds == null)
                 {
                     continue;
                 }
-                
-                
+
+
                 foreach (ISegmentable3D segmentable3D in segmentable3Ds)
                 {
                     List<Segment3D> segment3Ds = segmentable3D?.GetSegments();
@@ -263,22 +266,22 @@ namespace SAM.Geometry.Spatial
                     foreach (Segment3D segment3D in segment3Ds)
                     {
                         BoundingBox3D boundingBox3D_Segment3D = segment3D.GetBoundingBox();
-                        if(boundingBox3D_Segment3D == null)
+                        if (boundingBox3D_Segment3D == null)
                         {
                             continue;
                         }
-                        
-                        for(int i=0; i < point3Ds_ExternalEdge3D.Count; i++)
+
+                        for (int i = 0; i < point3Ds_ExternalEdge3D.Count; i++)
                         {
                             Point3D point3D = point3Ds_ExternalEdge3D[i];
-                            if(!boundingBox3D_Segment3D.InRange(point3D, snapDistance))
+                            if (!boundingBox3D_Segment3D.InRange(point3D, snapDistance))
                             {
                                 continue;
                             }
 
                             Point3D point3D_Closest = segment3D.Closest(point3D, true);
                             double distance = point3D_Closest.Distance(point3D);
-                            if(distance > snapDistance)
+                            if (distance > snapDistance)
                             {
                                 continue;
                             }
@@ -287,8 +290,8 @@ namespace SAM.Geometry.Spatial
                             snapped = true;
                             //break;
                         }
-                        
-                        if(point3Ds_InternalEdge3Ds != null)
+
+                        if (point3Ds_InternalEdge3Ds != null)
                         {
                             foreach (List<Point3D> point3Ds in point3Ds_InternalEdge3Ds)
                             {
@@ -329,13 +332,13 @@ namespace SAM.Geometry.Spatial
 
         public static Face3D Snap(this Face3D face3D, IEnumerable<Shell> shells_Snapping, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(face3D == null || shells_Snapping == null)
+            if (face3D == null || shells_Snapping == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
@@ -346,26 +349,26 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
-            foreach(Shell shell in shells_Snapping)
+            foreach (Shell shell in shells_Snapping)
             {
                 BoundingBox3D boundingBox3D_Shell = shell?.GetBoundingBox();
-                if(boundingBox3D_Shell == null)
+                if (boundingBox3D_Shell == null)
                 {
                     continue;
                 }
 
-                if(!boundingBox3D.InRange(boundingBox3D_Shell, snapDistance))
+                if (!boundingBox3D.InRange(boundingBox3D_Shell, snapDistance))
                 {
                     continue;
                 }
 
                 List<Tuple<BoundingBox3D, Face3D>> boundaries = shell.Boundaries;
-                if(boundaries == null || boundaries.Count == 0)
+                if (boundaries == null || boundaries.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Tuple<BoundingBox3D, Face3D> boundary in boundaries)
+                foreach (Tuple<BoundingBox3D, Face3D> boundary in boundaries)
                 {
                     if (boundary.Item1 == null || !boundingBox3D.InRange(boundary.Item1, snapDistance))
                     {
@@ -376,7 +379,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return new Face3D(face3D); ;
             }
@@ -394,12 +397,12 @@ namespace SAM.Geometry.Spatial
 
         public static Shell Snap(this Shell shell, IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(shell == null)
+            if (shell == null)
             {
                 return null;
             }
 
-            if(point3Ds == null )
+            if (point3Ds == null)
             {
                 return new Shell(shell);
             }
@@ -411,33 +414,33 @@ namespace SAM.Geometry.Spatial
             }
 
             BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox();
-            if(boundingBox3D_Shell == null)
+            if (boundingBox3D_Shell == null)
             {
                 return new Shell(shell);
             }
 
             List<Point3D> point3Ds_Shell = point3Ds?.ToList().FindAll(x => boundingBox3D_Shell.InRange(x, tolerance));
-            if(point3Ds_Shell == null || point3Ds_Shell.Count == 0)
+            if (point3Ds_Shell == null || point3Ds_Shell.Count == 0)
             {
                 return new Shell(shell);
             }
 
             List<Face3D> face3Ds = shell.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return new Shell(face3Ds);
             }
 
-            for(int i = 0; i < face3Ds.Count; i++)
+            for (int i = 0; i < face3Ds.Count; i++)
             {
                 BoundingBox3D boundingBox3D_Face3D = face3Ds[i]?.GetBoundingBox();
-                if(boundingBox3D_Face3D == null)
+                if (boundingBox3D_Face3D == null)
                 {
                     continue;
                 }
 
                 List<Point3D> point3Ds_Face3D = point3Ds_Shell.FindAll(x => boundingBox3D_Face3D.InRange(x, tolerance));
-                if(point3Ds_Face3D == null || point3Ds_Face3D.Count == 0)
+                if (point3Ds_Face3D == null || point3Ds_Face3D.Count == 0)
                 {
                     continue;
                 }
@@ -452,24 +455,24 @@ namespace SAM.Geometry.Spatial
 
         public static Face3D Snap(this Face3D face3D, IEnumerable<Point3D> point3Ds, double tolerance = SAM.Core.Tolerance.Distance)
         {
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
-            if(point3Ds == null)
+            if (point3Ds == null)
             {
                 return new Face3D(face3D);
             }
 
             List<Point3D> point3Ds_Temp = point3Ds.ToList().FindAll(x => face3D.InRange(x, tolerance + tolerance));
-            if(point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+            if (point3Ds_Temp == null || point3Ds_Temp.Count == 0)
             {
                 return new Face3D(face3D);
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return new Face3D(face3D);
             }
@@ -479,7 +482,7 @@ namespace SAM.Geometry.Spatial
             IClosed2D externalEdge2D = face3D.ExternalEdge2D;
 
             List<Point2D> point2Ds_Edge = (externalEdge2D as ISegmentable2D)?.GetPoints();
-            if(point2Ds_Edge != null)
+            if (point2Ds_Edge != null)
             {
 
                 for (int i = 0; i < point2Ds_Edge.Count; i++)
@@ -487,11 +490,11 @@ namespace SAM.Geometry.Spatial
                     Point3D point3D = plane.Convert(point2Ds_Edge[i]);
 
                     int index = point3Ds_Temp.FindIndex(x => x.Distance(point3D) < tolerance);
-                    if(index != -1)
+                    if (index != -1)
                     {
                         point3D = point3Ds_Temp[index];
                         Point3D point3D_Project = plane.Project(point3D);
-                        if(point3D.Distance(point3D_Project) > tolerance)
+                        if (point3D.Distance(point3D_Project) > tolerance)
                         {
                             point3D = point3D_Project.Mid(point3D);
                         }
@@ -501,19 +504,19 @@ namespace SAM.Geometry.Spatial
                     }
                 }
 
-                if(updated)
+                if (updated)
                 {
                     externalEdge2D = new Polygon2D(point2Ds_Edge);
                 }
             }
 
             List<IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
-            if(internalEdge2Ds != null)
+            if (internalEdge2Ds != null)
             {
-                for(int i = 0; i < internalEdge2Ds.Count; i++)
+                for (int i = 0; i < internalEdge2Ds.Count; i++)
                 {
                     bool updated_Internal = false;
-                    
+
                     point2Ds_Edge = (internalEdge2Ds[i] as ISegmentable2D)?.GetPoints();
                     if (point2Ds_Edge != null)
                     {
@@ -546,7 +549,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(!updated)
+            if (!updated)
             {
                 return new Face3D(face3D);
             }

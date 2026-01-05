@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -14,13 +17,13 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double result = 0;
-            foreach(IHostPartition hostPartition in hostPartitions)
+            foreach (IHostPartition hostPartition in hostPartitions)
             {
 
                 Geometry.Spatial.Face3D face3D = hostPartition?.Face3D;
                 if (face3D == null)
                     continue;
-                
+
                 double area = face3D.GetArea();
                 if (double.IsNaN(area) || area == 0)
                     continue;

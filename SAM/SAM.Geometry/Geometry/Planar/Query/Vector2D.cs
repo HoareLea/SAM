@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Planar
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
@@ -9,7 +12,7 @@
         /// <returns></returns>
         public static Vector2D Vector2D(double angle)
         {
-            if(double.IsNaN(angle))
+            if (double.IsNaN(angle))
             {
                 return null;
             }

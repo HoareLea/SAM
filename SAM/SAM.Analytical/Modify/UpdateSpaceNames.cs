@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -8,7 +11,7 @@ namespace SAM.Analytical
         public static Dictionary<string, Space> UpdateSpaceNames(this AdjacencyCluster adjacencyCluster, string format = "{0} {1}")
         {
             List<Space> spaces = adjacencyCluster?.GetSpaces();
-            if(spaces == null || spaces.Count == 0)
+            if (spaces == null || spaces.Count == 0)
             {
                 return null;
             }
@@ -20,9 +23,9 @@ namespace SAM.Analytical
             foreach (Guid guid in guids)
             {
                 spaces = adjacencyCluster.GetSpaces();
-                
+
                 int spaceIndex = spaces.FindIndex(x => x.Guid == guid);
-                if(spaceIndex == -1)
+                if (spaceIndex == -1)
                 {
                     continue;
                 }
@@ -31,13 +34,13 @@ namespace SAM.Analytical
                 spaces.RemoveAt(spaceIndex);
 
                 string name = space.Name;
-                if(name == null)
+                if (name == null)
                 {
                     continue;
                 }
 
                 List<Space> spaces_Name = spaces.FindAll(x => x.Name == name);
-                if(spaces_Name == null || spaces_Name.Count == 0)
+                if (spaces_Name == null || spaces_Name.Count == 0)
                 {
                     continue;
                 }

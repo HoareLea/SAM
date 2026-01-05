@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
-using NetTopologySuite.Triangulate;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Triangulate;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {

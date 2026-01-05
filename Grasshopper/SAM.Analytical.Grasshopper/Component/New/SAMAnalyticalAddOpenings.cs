@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -65,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(2, false);
 
             List<IOpening> openings = new List<IOpening>();
-            if(!dataAccess.GetDataList(1, openings) || openings == null)
+            if (!dataAccess.GetDataList(1, openings) || openings == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -82,10 +85,10 @@ namespace SAM.Analytical.Grasshopper
             if (sAMObject is IHostPartition)
             {
                 IHostPartition hostPartition = (IHostPartition)sAMObject.Clone();
-                
-                foreach(IOpening opening in openings)
+
+                foreach (IOpening opening in openings)
                 {
-                    if(hostPartition.TryAddOpening(opening))
+                    if (hostPartition.TryAddOpening(opening))
                     {
                         openings_Added.Add(opening);
                     }
@@ -95,7 +98,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.SetDataList(1, openings_Added?.ConvertAll(x => new GooOpening(x)));
                 dataAccess.SetData(2, openings_Added != null && openings_Added.Count != 0);
             }
-            else if(sAMObject is BuildingModel)
+            else if (sAMObject is BuildingModel)
             {
                 BuildingModel buildingModel = new BuildingModel((BuildingModel)sAMObject);
 

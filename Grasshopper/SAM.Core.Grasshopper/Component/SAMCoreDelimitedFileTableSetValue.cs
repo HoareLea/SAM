@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -45,11 +48,11 @@ namespace SAM.Core.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooDelimitedFileTableParam() { Name = "_delimitedFileTable", NickName = "_delimitedFileTable", Description = "SAM DelimitedFileTable", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_values", NickName = "_values", Description = "Values", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_values", NickName = "_values", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "columns_", NickName = "columns_", Description = "Columns names or indexes", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "rows_", NickName = "rows_", Description = "Rows indexes", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "rows_", NickName = "rows_", Description = "Rows indexes", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                
+
 
                 return result.ToArray();
             }
@@ -76,7 +79,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_delimitedFileTable");
-            
+
             DelimitedFileTable delimitedFileTable = null;
             if (index == -1 || !dataAccess.GetData(index, ref delimitedFileTable) || delimitedFileTable == null)
             {
@@ -92,7 +95,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            for(int i=0; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] is IGH_Goo)
                     values[i] = (values[i] as dynamic).Value;
@@ -100,7 +103,7 @@ namespace SAM.Core.Grasshopper
 
             List<int> columns = null;
             index = Params.IndexOfInputParam("columns_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<object> columns_Object = new List<object>();
                 if (dataAccess.GetDataList(index, columns_Object))
@@ -111,7 +114,7 @@ namespace SAM.Core.Grasshopper
 
                         object column_Object = columns_Object[i];
                         int columnIndex_Object = -1;
-                        
+
                         if (Core.Query.IsNumeric(column_Object))
                             columnIndex_Object = System.Convert.ToInt32(column_Object);
                         else
@@ -138,7 +141,7 @@ namespace SAM.Core.Grasshopper
                     rows = null;
             }
 
-            if(rows == null && columns == null)
+            if (rows == null && columns == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -148,7 +151,7 @@ namespace SAM.Core.Grasshopper
 
             int columnIndex = columns == null || columns.Count == 0 ? -1 : columns[0];
             int rowIndex = rows == null || rows.Count == 0 ? -1 : rows[0];
-            for (int i =0; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 if (columns != null && i < columns.Count)
                     columnIndex = columns[i];

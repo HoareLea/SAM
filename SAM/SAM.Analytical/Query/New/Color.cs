@@ -1,16 +1,19 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static System.Drawing.Color Color(this IPartition partition)
         {
             System.Drawing.Color result = System.Drawing.Color.Empty;
-            if(partition == null)
+            if (partition == null)
             {
                 return result;
             }
 
-            if(partition is Wall)
+            if (partition is Wall)
             {
                 return System.Drawing.ColorTranslator.FromHtml("#FFB400");
             }
@@ -140,7 +143,7 @@
 
         public static System.Drawing.Color Color(this OpeningAnalyticalType openingAnalyticalType)
         {
-            switch(openingAnalyticalType)
+            switch (openingAnalyticalType)
             {
                 case Analytical.OpeningAnalyticalType.Door:
                     return Color(openingAnalyticalType, OpeningPart.Frame);
@@ -160,7 +163,7 @@
             switch (openingAnalyticalType)
             {
                 case Analytical.OpeningAnalyticalType.Door:
-                    switch(openingPart)
+                    switch (openingPart)
                     {
                         case OpeningPart.Frame:
                             return System.Drawing.Color.Brown;

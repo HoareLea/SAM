@@ -1,20 +1,23 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Convert
-    {  
+    {
         public static ApertureConstruction ToSAM(this OpeningType openingType)
         {
-            if(openingType == null)
+            if (openingType == null)
             {
                 return null;
             }
 
             ApertureType apertureType = ApertureType.Undefined;
-            if(openingType is WindowType)
+            if (openingType is WindowType)
             {
                 apertureType = ApertureType.Window;
             }
-            else if(openingType is DoorType)
+            else if (openingType is DoorType)
             {
                 apertureType = ApertureType.Door;
             }

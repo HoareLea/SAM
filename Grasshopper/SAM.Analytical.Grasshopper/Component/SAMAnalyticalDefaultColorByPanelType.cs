@@ -1,9 +1,12 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -77,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
 
             GH_ObjectWrapper objectWrapper = null;
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,9 +103,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 Aperture aperture = @object as Aperture;
                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                if(apertureConstruction != null)
+                if (apertureConstruction != null)
                 {
-                    switch(apertureConstruction.ApertureType)
+                    switch (apertureConstruction.ApertureType)
                     {
                         case ApertureType.Window:
                             color = Analytical.Query.Color(apertureConstruction.ApertureType, AperturePart.Pane);
@@ -113,10 +116,10 @@ namespace SAM.Analytical.Grasshopper
                             break;
                     }
 
-                    
+
                 }
             }
-            else if(@object is string)
+            else if (@object is string)
             {
                 PanelType panelType = Analytical.Query.PanelType((string)@object);
                 if (panelType != PanelType.Undefined)

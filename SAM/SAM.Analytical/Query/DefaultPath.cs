@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Reflection;
 
 namespace SAM.Analytical
@@ -9,7 +12,7 @@ namespace SAM.Analytical
         {
             if (setting == null)
                 return null;
-            
+
             string fileName;
             if (!setting.TryGetValue(analyticalSettingParameter, out fileName) || string.IsNullOrWhiteSpace(fileName))
                 return null;

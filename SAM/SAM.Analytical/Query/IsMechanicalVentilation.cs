@@ -1,16 +1,19 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static bool IsMechanicalVentilation(this VentilationSystem ventilationSystem)
         {
-            if(ventilationSystem == null)
+            if (ventilationSystem == null)
             {
                 return false;
             }
 
             MechanicalSystemType mechanicalSystemType = ventilationSystem?.Type;
-            if(!string.IsNullOrWhiteSpace(mechanicalSystemType?.Name))
+            if (!string.IsNullOrWhiteSpace(mechanicalSystemType?.Name))
             {
                 return IsMechanicalVentilation(mechanicalSystemType.Name);
             }
@@ -25,7 +28,7 @@
 
         public static bool IsMechanicalVentilation(string name)
         {
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return false;
             }

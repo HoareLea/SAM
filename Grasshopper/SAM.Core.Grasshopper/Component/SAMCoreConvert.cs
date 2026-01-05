@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -38,14 +41,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Geometry() { Name = "_geometry", NickName = "_geometry", Description = "Geometry", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Geometry() { Name = "_geometry", NickName = "_geometry", Description = "Geometry", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }

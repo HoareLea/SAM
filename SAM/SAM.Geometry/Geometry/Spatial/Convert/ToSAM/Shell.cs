@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -6,8 +9,8 @@ namespace SAM.Geometry.Spatial
     {
         public static Shell ToSAM_Shell(this Mesh3D mesh3D)
         {
-            List<Triangle3D> triangles =  mesh3D?.GetTriangles();
-            if(triangles == null || triangles.Count == 0)
+            List<Triangle3D> triangles = mesh3D?.GetTriangles();
+            if (triangles == null || triangles.Count == 0)
             {
                 return null;
             }

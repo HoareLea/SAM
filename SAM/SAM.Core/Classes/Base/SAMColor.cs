@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Drawing;
 
 namespace SAM.Core
@@ -105,7 +108,7 @@ namespace SAM.Core
             if (jObject.ContainsKey("Name"))
                 color = Convert.ToColor(jObject.Value<string>("Name"));
 
-            if(color.Equals(Color.Empty))
+            if (color.Equals(Color.Empty))
             {
                 alpha = jObject.Value<byte>("Alpha");
                 red = jObject.Value<byte>("Red");
@@ -122,7 +125,7 @@ namespace SAM.Core
             jObject.Add("_type", Query.FullTypeName(this));
 
             string name = Name;
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 jObject.Add("Alpha", alpha);
                 jObject.Add("Red", red);

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -94,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -116,7 +119,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            for(int i =0; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 if (values[i] is IGH_Goo)
                 {
@@ -150,35 +153,35 @@ namespace SAM.Analytical.Grasshopper
                 zoneCategory = null;
             }
 
-            if(zoneType == ZoneType.Undefined && zoneCategory ==null)
+            if (zoneType == ZoneType.Undefined && zoneCategory == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AnalyticalModel)
+            if (sAMObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
             }
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<string> values_String = values.ConvertAll(x => x?.ToString().Trim());
-            
+
             List<string> names = values_String.Distinct().ToList();
             names.RemoveAll(x => string.IsNullOrWhiteSpace(x));
 
-            if(zoneType != ZoneType.Undefined && string.IsNullOrWhiteSpace(zoneCategory))
+            if (zoneType != ZoneType.Undefined && string.IsNullOrWhiteSpace(zoneCategory))
             {
                 zoneCategory = zoneType.Text();
             }
@@ -186,19 +189,19 @@ namespace SAM.Analytical.Grasshopper
             List<Zone> zones_Result = new List<Zone>();
             foreach (string name_Temp in names)
             {
-                if(cleanSpacesByZoneCategory)
+                if (cleanSpacesByZoneCategory)
                 {
                     Zone zone_Temp = adjacencyCluster.GetZones()?.Find(x => x?.Name == name_Temp && x.GetValue<string>(ZoneParameter.ZoneCategory) == zoneCategory);
-                    if(zone_Temp != null)
+                    if (zone_Temp != null)
                     {
                         adjacencyCluster.RemoveObject<Zone>(zone_Temp.Guid);
                     }
                 }
-                
+
                 List<int> indexes = values_String.IndexesOf(name_Temp);
                 List<Space> spaces_Temp = indexes.ConvertAll(x => spaces[x]);
                 Zone zone = Analytical.Modify.UpdateZone(adjacencyCluster, name_Temp, zoneCategory, spaces_Temp.ToArray());
-                if(zone != null)
+                if (zone != null)
                 {
                     zones_Result.Add(zone);
                 }

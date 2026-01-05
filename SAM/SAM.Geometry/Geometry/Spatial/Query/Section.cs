@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -11,7 +14,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            if(!plane.Intersect(shell.GetBoundingBox(), tolerance_Snap))
+            if (!plane.Intersect(shell.GetBoundingBox(), tolerance_Snap))
             {
                 return null;
             }
@@ -23,7 +26,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Planar.Segment2D> segment2Ds = new List<Planar.Segment2D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 if (face3D.GetArea() <= tolerance_Distance)
                 {
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Spatial
                 }
 
                 PlanarIntersectionResult planarIntersectionResult = null;
-                if(includeInternalEdges)
+                if (includeInternalEdges)
                 {
                     planarIntersectionResult = Create.PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
                 }
@@ -47,7 +50,7 @@ namespace SAM.Geometry.Spatial
                 if (segmentable2Ds == null)
                     continue;
 
-                foreach(Planar.ISegmentable2D segmentable2D in segmentable2Ds)
+                foreach (Planar.ISegmentable2D segmentable2D in segmentable2Ds)
                 {
                     if (segmentable2D == null)
                         continue;
@@ -95,10 +98,10 @@ namespace SAM.Geometry.Spatial
 
             return Section(shell, plane, includeInternalEdges, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
-    
+
         public static List<Face3D> Section(this Extrusion extrusion, Plane plane, bool includeInternalEdges = true, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            if(extrusion == null || plane == null)
+            if (extrusion == null || plane == null)
             {
                 return null;
             }
@@ -109,48 +112,48 @@ namespace SAM.Geometry.Spatial
             }
 
             Shell shell = extrusion?.Shell();
-            if(shell == null)
+            if (shell == null)
             {
                 return null;
             }
 
-            return Section(shell, plane, includeInternalEdges,tolerance_Angle, tolerance_Distance, tolerance_Snap);
+            return Section(shell, plane, includeInternalEdges, tolerance_Angle, tolerance_Distance, tolerance_Snap);
         }
 
         public static List<Face3D> Section(this Shell shell, Face3D face3D, bool includeInternalEdges = true, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            if(shell == null || face3D == null)
+            if (shell == null || face3D == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox();
-            if(boundingBox3D_Face3D == null)
+            if (boundingBox3D_Face3D == null)
             {
                 return null;
             }
 
             List<Face3D> result = new List<Face3D>();
 
-            if(!boundingBox3D.InRange(boundingBox3D_Face3D, tolerance_Snap))
+            if (!boundingBox3D.InRange(boundingBox3D_Face3D, tolerance_Snap))
             {
                 return result;
             }
 
             List<Face3D> face3Ds = Section(shell, plane, includeInternalEdges, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return result;
             }
@@ -160,15 +163,15 @@ namespace SAM.Geometry.Spatial
             List<Planar.Face2D> face2Ds = face3Ds.ConvertAll(x => plane.Convert(x));
 
             List<Planar.Face2D> face2Ds_Intersection = new List<Planar.Face2D>();
-            foreach(Planar.Face2D face2D_Temp in face2Ds_Intersection)
+            foreach (Planar.Face2D face2D_Temp in face2Ds_Intersection)
             {
-                if(face2D_Temp == null)
+                if (face2D_Temp == null)
                 {
                     continue;
                 }
 
                 List<Planar.Face2D> face2Ds_Intersection_Temp = Planar.Query.Intersection(face2D, face2D_Temp, tolerance_Distance);
-                if(face2Ds_Intersection_Temp == null || face2Ds_Intersection_Temp.Count == 0)
+                if (face2Ds_Intersection_Temp == null || face2Ds_Intersection_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -176,7 +179,7 @@ namespace SAM.Geometry.Spatial
                 face2Ds_Intersection.AddRange(face2Ds_Intersection_Temp);
             }
 
-            if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+            if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
             {
                 return result;
             }

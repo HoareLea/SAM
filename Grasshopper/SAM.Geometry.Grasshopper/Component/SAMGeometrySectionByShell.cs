@@ -1,10 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 
 namespace SAM.Geometry.Grasshopper
 {
@@ -109,7 +112,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if(plane == null)
+            if (plane == null)
             {
 
             }
@@ -117,24 +120,24 @@ namespace SAM.Geometry.Grasshopper
             List<Face3D> face3Ds = new List<Face3D>();
             foreach (Shell shell in shells)
             {
-                if(shell == null)
+                if (shell == null)
                 {
                     continue;
                 }
 
                 Plane plane_Temp = plane;
-                if(plane_Temp == null)
+                if (plane_Temp == null)
                 {
                     plane_Temp = new Plane(shell.GetBoundingBox().GetCentroid(), Vector3D.WorldZ);
                 }
 
-                if(plane_Temp == null)
+                if (plane_Temp == null)
                 {
                     continue;
                 }
 
                 List<Face3D> face3Ds_Section = shell.Section(plane_Temp);
-                if(face3Ds_Section == null || face3Ds_Section.Count == 0)
+                if (face3Ds_Section == null || face3Ds_Section.Count == 0)
                 {
                     continue;
                 }
@@ -145,7 +148,7 @@ namespace SAM.Geometry.Grasshopper
             if (index != -1)
             {
                 dataAccess.SetDataList(index, face3Ds?.ConvertAll(x => new GooSAMGeometry(x)));
-            }                
+            }
         }
     }
 }

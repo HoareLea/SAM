@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -7,26 +10,26 @@ namespace SAM.Analytical
         public static void MergeCoplanarPartitionsBySpace(this BuildingModel buildingModel, Space space, bool validateHostPartitionType = true, double tolerance = Core.Tolerance.Distance)
         {
             List<IPartition> partitions = buildingModel?.GetPartitions(space);
-            if(partitions == null || partitions.Count == 0)
+            if (partitions == null || partitions.Count == 0)
             {
                 return;
             }
 
             List<IPartition> partitions_MergeCoplanar = partitions.MergeCoplanar(tolerance, out List<IPartition> redundantPartitions, validateHostPartitionType, tolerance, tolerance);
-            if(partitions_MergeCoplanar == null || partitions_MergeCoplanar.Count == 0)
+            if (partitions_MergeCoplanar == null || partitions_MergeCoplanar.Count == 0)
             {
                 return;
             }
 
-            if(redundantPartitions != null && redundantPartitions.Count != 0)
+            if (redundantPartitions != null && redundantPartitions.Count != 0)
             {
-                foreach(IPartition partition in redundantPartitions)
+                foreach (IPartition partition in redundantPartitions)
                 {
                     buildingModel.RemoveObject(partition);
                 }
             }
 
-            foreach(IPartition partition in partitions_MergeCoplanar)
+            foreach (IPartition partition in partitions_MergeCoplanar)
             {
                 buildingModel.Add(partition);
             }

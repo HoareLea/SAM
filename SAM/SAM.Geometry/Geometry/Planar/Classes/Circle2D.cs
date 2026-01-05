@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Geometry.Planar
@@ -171,13 +174,13 @@ namespace SAM.Geometry.Planar
 
         public bool Transform(ITransform2D transform2D)
         {
-            if(transform2D == null)
+            if (transform2D == null)
             {
                 return false;
             }
 
             Circle2D circle2D = Query.Transform(this, transform2D);
-            if(circle2D == null)
+            if (circle2D == null)
             {
                 return false;
             }

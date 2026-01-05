@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -29,7 +32,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 if (panel == null)
                     continue;
@@ -41,7 +44,7 @@ namespace SAM.Analytical
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     if (aperture == null)
                         continue;

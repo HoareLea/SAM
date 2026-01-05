@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -8,7 +11,7 @@ namespace SAM.Core
         {
             HashSet<int> result = new HashSet<int>();
 
-            for(int i=0; i < 24; i++)
+            for (int i = 0; i < 24; i++)
             {
                 result.Add(HourOfYear(dayOfYear, i));
             }
@@ -18,21 +21,21 @@ namespace SAM.Core
 
         public static HashSet<int> HoursOfYear(IEnumerable<int> daysOfYear)
         {
-            if(daysOfYear == null)
+            if (daysOfYear == null)
             {
                 return null;
             }
 
             HashSet<int> result = new HashSet<int>();
-            foreach(int dayOfYear in daysOfYear)
+            foreach (int dayOfYear in daysOfYear)
             {
                 HashSet<int> hoursOfYear = HoursOfYear(dayOfYear);
-                if(hoursOfYear == null)
+                if (hoursOfYear == null)
                 {
                     continue;
                 }
 
-                foreach(int hourOfYear in hoursOfYear)
+                foreach (int hourOfYear in hoursOfYear)
                 {
                     result.Add(hourOfYear);
                 }

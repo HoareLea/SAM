@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +10,7 @@ namespace SAM.Geometry.Object.Spatial
 {
     public static partial class Query
     {
-        public static Dictionary<T, Point3D> IntersectionDictionary<T>(this Segment3D segment3D, IEnumerable<T> face3DObjects, bool sort = true, double tolerance = Core.Tolerance.Distance) where T: IFace3DObject
+        public static Dictionary<T, Point3D> IntersectionDictionary<T>(this Segment3D segment3D, IEnumerable<T> face3DObjects, bool sort = true, double tolerance = Core.Tolerance.Distance) where T : IFace3DObject
         {
             if (segment3D == null || face3DObjects == null)
             {
@@ -15,19 +18,19 @@ namespace SAM.Geometry.Object.Spatial
             }
 
             BoundingBox3D boundingBox3D = segment3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
 
             Point3D point3D = segment3D[0];
-            if(point3D == null)
+            if (point3D == null)
             {
                 return null;
             }
 
             Vector3D vector3D = segment3D.Direction;
-            if(vector3D == null)
+            if (vector3D == null)
             {
                 return null;
             }
@@ -37,17 +40,17 @@ namespace SAM.Geometry.Object.Spatial
             foreach (T face3DObject in face3DObjects)
             {
                 BoundingBox3D boundingBox3D_Face3DObject = face3DObject?.Face3D.GetBoundingBox();
-                if(!boundingBox3D.InRange(boundingBox3D_Face3DObject, tolerance))
+                if (!boundingBox3D.InRange(boundingBox3D_Face3DObject, tolerance))
                 {
                     continue;
                 }
-                
+
                 Face3D face3D = face3DObject?.Face3D;
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
-                
+
                 PlanarIntersectionResult planarIntersectionResult = Geometry.Spatial.Create.PlanarIntersectionResult(face3D, point3D, vector3D, tolerance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 {
@@ -60,7 +63,7 @@ namespace SAM.Geometry.Object.Spatial
                     continue;
                 }
 
-                if(!segment3D.On(point3D_Intersection, tolerance))
+                if (!segment3D.On(point3D_Intersection, tolerance))
                 {
                     continue;
                 }

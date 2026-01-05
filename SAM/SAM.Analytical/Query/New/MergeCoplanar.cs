@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -47,12 +50,12 @@ namespace SAM.Analytical
                 List<IPartition> partitions_Offset = new List<IPartition>();
                 foreach (IPartition partition_Temp in partitions_Temp)
                 {
-                    if(partition.GetType() != partition_Temp?.GetType())
+                    if (partition.GetType() != partition_Temp?.GetType())
                     {
                         continue;
                     }
 
-                    if(validateHostPartitionType && hostPartitionType != null)
+                    if (validateHostPartitionType && hostPartitionType != null)
                     {
                         HostPartitionType hostPartitionType_Temp = (partition_Temp as IHostPartition)?.Type();
                         if (hostPartitionType_Temp != null && hostPartitionType != null)
@@ -148,7 +151,7 @@ namespace SAM.Analytical
                     }
 
                     IPartition partition_New = Create.Partition(partition_Old, guid, face3D, tolerance);
-                    if(partition_New is IHostPartition)
+                    if (partition_New is IHostPartition)
                     {
                         //Adding Openings from redundant Panels
                         foreach (IPartition partition_Redundant in tuples_Partition.ConvertAll(x => x.Item2))
@@ -165,7 +168,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(partition_New != null)
+                    if (partition_New != null)
                     {
                         result.Add(partition_New);
                     }

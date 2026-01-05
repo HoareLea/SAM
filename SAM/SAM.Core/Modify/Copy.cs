@@ -1,17 +1,20 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static List<Enum> Copy<T>(this T object_Source, T object_Destination, params Enum[] enums) where T: SAMObject
+        public static List<Enum> Copy<T>(this T object_Source, T object_Destination, params Enum[] enums) where T : SAMObject
         {
             if (object_Source == null || object_Destination == null || enums == null)
                 return null;
 
             List<Enum> result = new List<Enum>();
-            foreach(Enum @enum in enums)
+            foreach (Enum @enum in enums)
             {
                 if (!object_Source.TryGetValue(@enum, out object value))
                     continue;

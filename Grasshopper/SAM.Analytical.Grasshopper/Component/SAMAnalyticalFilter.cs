@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -61,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             AdjacencyCluster adjacencyCluster = null;
-            if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -77,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster_New = new AdjacencyCluster();
 
             List<object> objects = new List<object>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 adjacencyCluster_New.AddObject(space);
 
@@ -85,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
                 if (relatedObjects == null || relatedObjects.Count == 0)
                     continue;
 
-                foreach(IJSAMObject relatedObject in relatedObjects)
+                foreach (IJSAMObject relatedObject in relatedObjects)
                 {
                     if (!adjacencyCluster_New.AddObject(relatedObject))
                         continue;

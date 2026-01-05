@@ -1,8 +1,9 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Geometry.Grasshopper;
-using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -23,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -45,8 +46,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooExternalSpaceParam() { Name = "_externalSpaces_", NickName = "_externalSpaces_", Description = "ExternalSpaces to be removed", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooExternalSpaceParam() { Name = "_externalSpaces_", NickName = "_externalSpaces_", Description = "ExternalSpaces to be removed", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -91,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 adjacencyCluster.RemoveExternalSpaces(externalSpaces);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);

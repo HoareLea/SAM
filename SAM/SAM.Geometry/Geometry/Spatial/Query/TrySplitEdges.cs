@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -47,14 +50,14 @@ namespace SAM.Geometry.Spatial
                 }
 
                 List<Segment3D> segment3Ds = ((ISegmentable3D)edge_Splitting)?.GetSegments();
-                if(segment3Ds == null || segment3Ds.Count == 0)
+                if (segment3Ds == null || segment3Ds.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Segment3D segment3D in segment3Ds)
+                foreach (Segment3D segment3D in segment3Ds)
                 {
-                    if(!boundingBox3D_Split.InRange(segment3D, tolerance))
+                    if (!boundingBox3D_Split.InRange(segment3D, tolerance))
                     {
                         continue;
                     }
@@ -95,18 +98,18 @@ namespace SAM.Geometry.Spatial
                 foreach (Segment3D segment3D_Temp in segment3Ds_Temp)
                 {
                     List<Point3D> point3Ds_Temp = segment3D_Temp?.GetPoints();
-                    if(point3Ds_Temp == null || point3Ds_Temp.Count == 0)
+                    if (point3Ds_Temp == null || point3Ds_Temp.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach(Point3D point3D in point3Ds_Temp)
+                    foreach (Point3D point3D in point3Ds_Temp)
                     {
                         if (point3D == null || !polygon3D.On(point3D, tolerance))
                         {
                             continue;
                         }
-                        
+
                         if (point3Ds_Polygon3D.Find(x => x.Distance(point3D) < tolerance) != null)
                         {
                             continue;
@@ -200,7 +203,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(updated)
+            if (updated)
             {
                 result = plane.Convert(Planar.Create.Face2D(plane.Convert(externalEdge), internalEdges?.ConvertAll(x => plane.Convert(x))));
                 return true;
@@ -214,7 +217,7 @@ namespace SAM.Geometry.Spatial
         {
             result = null;
 
-            if(face3D_Split == null || face3Ds_Splitting == null)
+            if (face3D_Split == null || face3Ds_Splitting == null)
             {
                 return false;
             }
@@ -222,16 +225,16 @@ namespace SAM.Geometry.Spatial
 
             result = new Face3D(face3D_Split);
             bool @bool = false;
-            foreach(Face3D face3D_Splitting in face3Ds_Splitting)
+            foreach (Face3D face3D_Splitting in face3Ds_Splitting)
             {
-                if(TrySplitEdges(result, face3D_Splitting, out Face3D face3D, tolerance) && face3D != null)
+                if (TrySplitEdges(result, face3D_Splitting, out Face3D face3D, tolerance) && face3D != null)
                 {
                     result = face3D;
                     @bool = true;
                 }
             }
 
-            if(!@bool)
+            if (!@bool)
             {
                 result = null;
             }
@@ -248,16 +251,16 @@ namespace SAM.Geometry.Spatial
         {
             result = null;
 
-            if(shell_Split == null || face3Ds_Splitting == null)
+            if (shell_Split == null || face3Ds_Splitting == null)
             {
                 return false;
             }
 
             List<Face3D> face3Ds = shell_Split.Face3Ds;
             bool @bool = false;
-            for(int i=0; i < face3Ds.Count; i++)
+            for (int i = 0; i < face3Ds.Count; i++)
             {
-                if(TrySplitEdges(face3Ds[i], face3Ds_Splitting, out Face3D face3D, tolerance))
+                if (TrySplitEdges(face3Ds[i], face3Ds_Splitting, out Face3D face3D, tolerance))
                 {
                     face3Ds[i] = face3D;
                     @bool = true;

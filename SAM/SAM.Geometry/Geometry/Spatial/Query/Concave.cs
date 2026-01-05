@@ -1,23 +1,26 @@
-﻿namespace SAM.Geometry.Spatial
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
-        public static bool Concave<T>(this T closedPlanar3D) where T: IClosedPlanar3D, ISegmentable3D
+        public static bool Concave<T>(this T closedPlanar3D) where T : IClosedPlanar3D, ISegmentable3D
         {
-            if(closedPlanar3D == null)
+            if (closedPlanar3D == null)
             {
                 return false;
             }
 
             Plane plane = closedPlanar3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return false;
             }
 
 
             Planar.ISegmentable2D segmentable2D = plane.Convert(closedPlanar3D) as Planar.ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new System.NotImplementedException();
             }
@@ -28,7 +31,7 @@
         public static bool Concave(this Face3D face3D, bool externalEdge = true, bool internalEdges = true)
         {
             Plane plane = face3D?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return false;
             }

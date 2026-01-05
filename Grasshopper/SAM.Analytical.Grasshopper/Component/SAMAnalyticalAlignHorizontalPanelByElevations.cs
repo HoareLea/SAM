@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -90,7 +93,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_panel");
             Panel panel = null;
-            if(index == -1 || !dataAccess.GetData(index, ref panel) || panel == null)
+            if (index == -1 || !dataAccess.GetData(index, ref panel) || panel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
@@ -105,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<double> elevations = new List<double>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
                 object @object = objectWrapper.Value;
                 if (@object is IGH_Goo)
@@ -129,7 +132,7 @@ namespace SAM.Analytical.Grasshopper
                     elevation = ((Architectural.Level)@object).Elevation;
                 }
 
-                if(!double.IsNaN(elevation))
+                if (!double.IsNaN(elevation))
                 {
                     elevations.Add(elevation);
                 }
@@ -160,13 +163,13 @@ namespace SAM.Analytical.Grasshopper
 
             bool horizontal = Geometry.Object.Spatial.Query.Horizontal(panel, tolerance);
 
-            if(horizontal || (!horizontal && projectOnElevation))
+            if (horizontal || (!horizontal && projectOnElevation))
             {
                 double panelElevation = panel.MinElevation();
                 elevations.Sort((x, y) => System.Math.Abs(x - panelElevation).CompareTo(System.Math.Abs(y - panelElevation)));
                 if (System.Math.Abs(elevations[0] - panelElevation) <= maxDistance)
                 {
-                    if(!horizontal)
+                    if (!horizontal)
                     {
                         Geometry.Spatial.Face3D face3D = panel.GetFace3D();
 

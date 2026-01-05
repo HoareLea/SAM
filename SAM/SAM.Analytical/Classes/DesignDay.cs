@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Analytical
 {
@@ -15,7 +18,7 @@ namespace SAM.Analytical
         public DesignDay(DesignDay designDay)
             : base(designDay)
         {
-            if(designDay != null)
+            if (designDay != null)
             {
                 name = designDay.name;
                 description = designDay.description;
@@ -129,7 +132,7 @@ namespace SAM.Analytical
         public Weather.WeatherYear GetWeatherYear()
         {
             System.DateTime dateTime = GetDateTime();
-            if(dateTime == System.DateTime.MinValue)
+            if (dateTime == System.DateTime.MinValue)
             {
                 return null;
             }
@@ -145,7 +148,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("Name"))
+            if (jObject.ContainsKey("Name"))
             {
                 name = jObject.Value<string>("Name");
             }
@@ -180,16 +183,16 @@ namespace SAM.Analytical
 
         public override JObject ToJObject()
         {
-           JObject jObject = base.ToJObject();
+            JObject jObject = base.ToJObject();
             if (jObject == null)
                 return null;
 
-            if(name != null)
+            if (name != null)
             {
                 jObject.Add("Name", name);
             }
 
-            if(description != null)
+            if (description != null)
             {
                 jObject.Add("Description", description);
             }
@@ -198,7 +201,7 @@ namespace SAM.Analytical
             jObject.Add("Month", System.Convert.ToInt32(month));
             jObject.Add("Day", System.Convert.ToInt32(day));
 
-            if(loadType != LoadType.Undefined)
+            if (loadType != LoadType.Undefined)
             {
                 jObject.Add("LoadType", loadType.ToString());
             }

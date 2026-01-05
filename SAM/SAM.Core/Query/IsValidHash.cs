@@ -1,4 +1,7 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -10,17 +13,17 @@
         /// <returns>Is Valid Hash</returns>
         public static bool IsValidHash(string value, string hash)
         {
-            if(value == null && hash == null)
+            if (value == null && hash == null)
             {
                 return true;
             }
 
-            if(value == string.Empty && hash == string.Empty)
+            if (value == string.Empty && hash == string.Empty)
             {
                 return true;
             }
 
-            if(string.IsNullOrEmpty(value) || string.IsNullOrEmpty(hash))
+            if (string.IsNullOrEmpty(value) || string.IsNullOrEmpty(hash))
             {
                 return false;
             }

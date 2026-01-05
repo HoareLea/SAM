@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -15,12 +18,12 @@ namespace SAM.Analytical
 
 
             List<ExternalSpace> result = new List<ExternalSpace>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 List<Panel> panels = adjacencyCluster.GetPanels(space);
-                if(panels == null || panels.Count == 0)
+                if (panels == null || panels.Count == 0)
                 {
-                    continue; 
+                    continue;
                 }
 
                 ExternalSpace externalSpace = new ExternalSpace(space.Name, space.Location);
@@ -29,14 +32,14 @@ namespace SAM.Analytical
 
                 foreach (Panel panel in panels)
                 {
-                    List<Space> spaces_Panel =  adjacencyCluster.GetRelatedObjects<Space>(panel);
-                    if(spaces_Panel != null && spaces_Panel.Count > 1)
+                    List<Space> spaces_Panel = adjacencyCluster.GetRelatedObjects<Space>(panel);
+                    if (spaces_Panel != null && spaces_Panel.Count > 1)
                     {
                         Panel panel_New = new Panel(panel);
 
                         PanelType panelType = panel.PanelType;
 
-                        switch(panel.PanelGroup)
+                        switch (panel.PanelGroup)
                         {
                             case PanelGroup.Wall:
                                 panel_New = new Panel(panel_New, PanelType.WallExternal);
@@ -51,7 +54,7 @@ namespace SAM.Analytical
                                 break;
                         }
 
-                        if(panel_New.PanelType != panelType)
+                        if (panel_New.PanelType != panelType)
                         {
                             Construction construction_Default = Query.DefaultConstruction(panel_New.PanelType);
                             if (construction_Default != null)
@@ -67,7 +70,7 @@ namespace SAM.Analytical
 
                     Construction construction = null;
 
-                    switch(panel.PanelGroup)
+                    switch (panel.PanelGroup)
                     {
                         case PanelGroup.Roof:
                             construction = construction_Roof;
@@ -97,19 +100,19 @@ namespace SAM.Analytical
 
         public static List<ExternalSpace> ChangeExternalSpaces(this AdjacencyCluster adjacencyCluster, IEnumerable<Point3D> point3Ds, Construction construction_Wall, Construction construction_Floor, Construction construction_Roof, double silverSpace = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(adjacencyCluster == null || point3Ds == null)
+            if (adjacencyCluster == null || point3Ds == null)
             {
                 return null;
             }
 
             List<List<Space>> spacesList = adjacencyCluster.GetSpaces(point3Ds, false, silverSpace, tolerance);
-            if(spacesList == null)
+            if (spacesList == null)
             {
                 return null;
             }
 
             Dictionary<Guid, Space> dictioray = new Dictionary<Guid, Space>();
-            foreach(List<Space> spaces in spacesList)
+            foreach (List<Space> spaces in spacesList)
             {
                 spaces?.ForEach(x => dictioray[x.Guid] = x);
             }

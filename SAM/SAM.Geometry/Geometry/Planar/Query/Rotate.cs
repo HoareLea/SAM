@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -13,7 +16,7 @@ namespace SAM.Geometry.Planar
         /// <returns>Point2D</returns>
         public static Point2D Rotate(this Point2D point2D, Point2D point2D_Center, double angle)
         {
-            if(point2D == null || point2D_Center == null || double.IsNaN(angle))
+            if (point2D == null || point2D_Center == null || double.IsNaN(angle))
             {
                 return null;
             }
@@ -32,7 +35,7 @@ namespace SAM.Geometry.Planar
 
         public static Rectangle2D Rotate(this Rectangle2D rectangle2D, Point2D point2D, double angle)
         {
-            if(rectangle2D == null || point2D == null || double.IsNaN(angle))
+            if (rectangle2D == null || point2D == null || double.IsNaN(angle))
             {
                 return null;
             }
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<Point2D> point2Ds = Rotate(polygon2D.Points, point2D, angle);
-            if(point2Ds == null || point2Ds.Count == 0)
+            if (point2Ds == null || point2Ds.Count == 0)
             {
                 return null;
             }
@@ -69,7 +72,7 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<Point2D> result = new List<Point2D> (point2Ds);
+            List<Point2D> result = new List<Point2D>(point2Ds);
             for (int i = 0; i < result.Count; i++)
             {
                 result[i] = result[i].Rotate(point2D, angle);

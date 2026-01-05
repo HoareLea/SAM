@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using NetTopologySuite.IO;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Planar
     {
         public static List<T> ToSAM<T>(this NetTopologySuite.Geometries.Geometry geometry, double tolerance = Core.Tolerance.Distance) where T : ISAMGeometry2D
         {
-            if(geometry == null)
+            if (geometry == null)
             {
                 return null;
             }
@@ -35,9 +38,9 @@ namespace SAM.Geometry.Planar
                 List<Point2D> point2Ds = ToSAM((MultiPoint)geometry, tolerance);
                 if (point2Ds != null)
                 {
-                    foreach(Point2D point2D in point2Ds)
+                    foreach (Point2D point2D in point2Ds)
                     {
-                        if(point2D is T)
+                        if (point2D is T)
                         {
                             result.Add((T)(object)point2D);
                         }
@@ -52,11 +55,11 @@ namespace SAM.Geometry.Planar
                     result.Add((T)sAMGeometry2D);
                 }
             }
-             
+
             return result;
         }
 
-        public static List<T> ToSAM<T>(this IEnumerable<string> lines_NTS, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
+        public static List<T> ToSAM<T>(this IEnumerable<string> lines_NTS, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
             if (lines_NTS == null || lines_NTS.Count() == 0)
                 return null;

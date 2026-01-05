@@ -1,6 +1,9 @@
-﻿using SAM.Geometry.Spatial;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using Rhino.Geometry;
+using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Rhino
 {
@@ -9,14 +12,14 @@ namespace SAM.Analytical.Rhino
         public static Mesh ToRhino_Mesh(this Aperture aperture)
         {
             Face3D face3D = aperture?.GetFace3D();
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
-            
+
             Mesh mesh = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
-            if(mesh != null)
+            if (mesh != null)
             {
                 mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
             }
@@ -27,21 +30,21 @@ namespace SAM.Analytical.Rhino
 
         public static Mesh ToRhino_Mesh(this IPanel panel, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(panel == null)
+            if (panel == null)
             {
                 return null;
             }
 
-            List<Face3D> face3Ds = panel is ExternalPanel ? new List<Face3D>() {  panel.Face3D } : (panel as Panel)?.GetFace3Ds(cutApertures);
+            List<Face3D> face3Ds = panel is ExternalPanel ? new List<Face3D>() { panel.Face3D } : (panel as Panel)?.GetFace3Ds(cutApertures);
             if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
             Mesh result = null;
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
-                if(result == null)
+                if (result == null)
                 {
                     result = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
                 }
@@ -55,7 +58,7 @@ namespace SAM.Analytical.Rhino
                 }
             }
 
-            if(face3Ds.Count > 1)
+            if (face3Ds.Count > 1)
             {
                 result.Normals.ComputeNormals();
             }
@@ -65,14 +68,14 @@ namespace SAM.Analytical.Rhino
                 return null;
             }
 
-            if(panel is ExternalPanel)
+            if (panel is ExternalPanel)
             {
                 result.VertexColors.CreateMonotoneMesh(Query.Color((ExternalPanel)panel));
                 return result;
             }
 
             Panel panel_Temp = panel as Panel;
-            if(panel_Temp == null)
+            if (panel_Temp == null)
             {
                 return null;
             }
@@ -82,12 +85,12 @@ namespace SAM.Analytical.Rhino
             if (includeApertures)
             {
                 List<Aperture> apertures = panel_Temp.Apertures;
-                if(apertures != null && apertures.Count != 0)
+                if (apertures != null && apertures.Count != 0)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
                         Mesh mesh_Aperture = aperture.ToRhino_Mesh();
-                        if(mesh_Aperture != null)
+                        if (mesh_Aperture != null)
                         {
                             result.Append(mesh_Aperture);
                         }
@@ -103,16 +106,16 @@ namespace SAM.Analytical.Rhino
         public static Mesh ToRhino_Mesh(this AdjacencyCluster adjacencyCluster, bool cutApertures = true, bool includeApertures = true, double tolerance = Core.Tolerance.Distance)
         {
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return null;
             }
 
             List<Mesh> meshes = new List<Mesh>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Mesh mesh_Temp = panel?.ToRhino_Mesh(cutApertures, includeApertures, tolerance);
-                if(mesh_Temp == null)
+                if (mesh_Temp == null)
                 {
                     continue;
                 }

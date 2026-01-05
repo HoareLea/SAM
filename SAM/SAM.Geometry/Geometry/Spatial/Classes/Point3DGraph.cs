@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 
@@ -13,21 +16,21 @@ namespace SAM.Geometry.Spatial
         }
 
         public Point3DGraph(double tolerance)
-            :base(tolerance)
+            : base(tolerance)
         {
 
         }
 
         public Point3DGraph(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public Point3DGraph(Point3DGraph<T> point3DGraph)
-            :base(point3DGraph)
+            : base(point3DGraph)
         {
-      
+
         }
 
         public List<Point3DGraph<T>> Split()

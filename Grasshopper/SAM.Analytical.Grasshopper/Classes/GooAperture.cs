@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.Commands;
@@ -51,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
             System.Drawing.Color color_ExternalEdge = System.Drawing.Color.Empty;
             System.Drawing.Color color_InternalEdges = System.Drawing.Color.Empty;
 
-            if(Value.ApertureConstruction != null)
+            if (Value.ApertureConstruction != null)
             {
                 color_ExternalEdge = Analytical.Query.Color(Value.ApertureConstruction.ApertureType, false);
                 color_InternalEdges = Analytical.Query.Color(Value.ApertureConstruction.ApertureType, true);
@@ -69,9 +72,9 @@ namespace SAM.Analytical.Grasshopper
         public void DrawViewportWires(GH_PreviewWireArgs args, System.Drawing.Color color_ExternalEdge, System.Drawing.Color color_InternalEdges)
         {
             List<Face3D> face3Ds = new List<Face3D>();
-            
+
             Face3D face3D = Value?.GetFrameFace3D();
-            if(face3D != null)
+            if (face3D != null)
             {
                 face3Ds.Add(face3D);
             }
@@ -86,12 +89,12 @@ namespace SAM.Analytical.Grasshopper
                 face3Ds.AddRange(face3Ds_Pane);
             }
 
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return;
             }
 
-            foreach(Face3D face3D_Temp in face3Ds)
+            foreach (Face3D face3D_Temp in face3Ds)
             {
                 GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D_Temp));
                 gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
@@ -113,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
                 displayMaterial_Frame = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Frame);
             }
 
-            if(Value.Openable())
+            if (Value.Openable())
             {
                 displayMaterial_Pane = Query.DisplayMaterial(Value.ApertureConstruction.ApertureType, AperturePart.Pane, true);
             }
@@ -127,9 +130,9 @@ namespace SAM.Analytical.Grasshopper
             List<Face3D> face3Ds = null;
 
             face3Ds = Value.GetFace3Ds(AperturePart.Frame);
-            if(face3Ds != null)
+            if (face3Ds != null)
             {
-                foreach(Face3D face3D in face3Ds)
+                foreach (Face3D face3D in face3Ds)
                 {
                     GooPlanarBoundary3D gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(face3D));
                     gooPlanarBoundary3D.DrawViewportMeshes(args, displayMaterial_Frame);
@@ -150,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
             obj_guid = Guid.Empty;
-            
+
             return Rhino.Modify.BakeGeometry(Value, doc, att, out obj_guid);
         }
 
@@ -206,7 +209,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("d5f56261-608b-4cec-baa4-ca2fb29ab5be");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         bool IGH_PreviewObject.Hidden { get; set; }
 
@@ -352,7 +355,7 @@ namespace SAM.Analytical.Grasshopper
                     continue;
 
                 apertures.RemoveAll(x => x == null);
-                if(apertures.Count != 0)
+                if (apertures.Count != 0)
                 {
                     value = new GooAperture(apertures[0]);
                     return GH_GetterResult.success;
@@ -372,11 +375,11 @@ namespace SAM.Analytical.Grasshopper
             foreach (IGH_Goo goo in VolatileData.AllData(true))
             {
                 Guid guid = default;
-                
+
                 IGH_BakeAwareData bakeAwareData = goo as IGH_BakeAwareData;
                 if (bakeAwareData != null)
                     bakeAwareData.BakeGeometry(doc, att, out guid);
-                
+
                 obj_ids.Add(guid);
             }
         }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Linq;
 using System.Reflection;
@@ -32,7 +35,7 @@ namespace SAM.Core
         {
             if (jToken == null)
                 return System.Guid.Empty;
-            
+
             switch (jToken.Type)
             {
                 case JTokenType.String:

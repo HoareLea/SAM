@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -32,10 +35,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list, Optional = true};
+                GooSpaceParam gooSpaceParam = new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces. If not provided all Spaces from Analytical Model will be used and modified", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooSpaceParam, ParamVisibility.Binding));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile for ventilation.", Access = GH_ParamAccess.item, Optional = true};
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profile_", NickName = "profile_", Description = "SAM Analytical Profile for ventilation.", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
@@ -46,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlow_", NickName = "exhaustAirFlow_", Description = "Exhaust Air Flow [l/s]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerPerson_", NickName = "supplyAirFlowPerPerson_", Description = "Supply Air Flow Per Person [l/s/p]", Access = GH_ParamAccess.item, Optional = true};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "supplyAirFlowPerPerson_", NickName = "supplyAirFlowPerPerson_", Description = "Supply Air Flow Per Person [l/s/p]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "exhaustAirFlowPerPerson_", NickName = "exhaustAirFlowPerPerson_", Description = "Exhaust Air Flow Per Person [l/s/p]", Access = GH_ParamAccess.item, Optional = true };
@@ -75,7 +78,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model with ", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalConditions", NickName = "internalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "calculatedSupplyAirFlow", NickName = "calculatedSupplyAirFlow", Description = "CalculatedSupplyAirFlow [l/s]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
@@ -105,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analyticalModel");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -121,14 +124,14 @@ namespace SAM.Analytical.Grasshopper
             analyticalModel = new AnalyticalModel(analyticalModel);
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
             }
 
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("_spaces_");
-            if(index != -1)
+            if (index != -1)
             {
                 spaces = new List<Space>();
                 dataAccess.GetDataList(index, spaces);
@@ -144,7 +147,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref profile);
 
-            if(profile != null && profile.ProfileGroup != ProfileGroup.Ventilation)
+            if (profile != null && profile.ProfileGroup != ProfileGroup.Ventilation)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Profile");
                 return;
@@ -203,7 +206,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
-            if(profile != null)
+            if (profile != null)
             {
                 profileLibrary.Add(profile);
             }
@@ -221,7 +224,7 @@ namespace SAM.Analytical.Grasshopper
             foreach (Space space in spaces)
             {
                 Space space_Temp = adjacencyCluster.GetObject<Space>(space.Guid);
-                if(space_Temp == null)
+                if (space_Temp == null)
                 {
                     continue;
                 }
@@ -229,12 +232,12 @@ namespace SAM.Analytical.Grasshopper
                 space_Temp = new Space(space_Temp);
 
                 InternalCondition internalCondition_Temp = space_Temp.InternalCondition;
-                if(internalCondition_Temp == null)
+                if (internalCondition_Temp == null)
                 {
                     continue;
                 }
 
-                if(profile == null)
+                if (profile == null)
                 {
                     internalCondition_Temp.RemoveValue(InternalConditionParameter.VentilationProfileName);
                 }
@@ -243,7 +246,7 @@ namespace SAM.Analytical.Grasshopper
                     internalCondition_Temp.SetProfileName(profile.ProfileType, profile.Name);
                 }
 
-                if(double.IsNaN(supplyAirFlow))
+                if (double.IsNaN(supplyAirFlow))
                 {
                     internalCondition_Temp.RemoveValue(InternalConditionParameter.SupplyAirFlow);
                 }
@@ -336,12 +339,12 @@ namespace SAM.Analytical.Grasshopper
 
                 double calculatedSupplyAirFlow = space_Temp.CalculatedSupplyAirFlow();
                 double calculatedExhaustAirFlow = space_Temp.CalculatedExhaustAirFlow();
-                
+
                 double calculatedSupplyAirFlowPerPerson = double.NaN;
                 double calculatedExhaustAirFlowPerPerson = double.NaN;
-                
+
                 double occupancy = space_Temp.CalculatedOccupancy();
-                if(!double.IsNaN(occupancy) && occupancy > 0)
+                if (!double.IsNaN(occupancy) && occupancy > 0)
                 {
                     calculatedSupplyAirFlowPerPerson = calculatedSupplyAirFlow / occupancy;
                     calculatedExhaustAirFlowPerPerson = calculatedExhaustAirFlow / occupancy;
@@ -378,7 +381,7 @@ namespace SAM.Analytical.Grasshopper
 
 
             index = Params.IndexOfOutputParam("analyticalModel");
-            if(index != -1)
+            if (index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));

@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -15,19 +18,19 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Polygon> result = new List<Polygon>();
-            foreach(NetTopologySuite.Geometries.Geometry geometry in geometries)
+            foreach (NetTopologySuite.Geometries.Geometry geometry in geometries)
             {
-                if(geometry is Polygon)
+                if (geometry is Polygon)
                 {
                     result.Add((Polygon)geometry);
                 }
-                else if(geometry is MultiPolygon)
+                else if (geometry is MultiPolygon)
                 {
                     List<Polygon> polygons = Polygons((MultiPolygon)geometry);
                     if (polygons != null && polygons.Count > 0)
                         result.AddRange(polygons);
                 }
-                else if(geometry is LinearRing)
+                else if (geometry is LinearRing)
                 {
                     result.Add(new Polygon((LinearRing)geometry));
                 }

@@ -1,4 +1,7 @@
-﻿using Rhino.DocObjects;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.DocObjects;
 using Rhino.DocObjects.Tables;
 
 namespace SAM.Core.Rhino
@@ -11,7 +14,7 @@ namespace SAM.Core.Rhino
                 return null;
 
             int index = layerTable.Find(parentId, name, -1);
-            if(index == -1)
+            if (index == -1)
             {
                 index = layerTable.Add();
                 layerTable[index].Name = name;

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -31,9 +34,9 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileHeating_", NickName = "profileHeating_", Description = "SAM Analytical Profile for Heating", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGRadianProportion_", NickName = "emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGRadianProportion_", NickName = "emitterHTGRadianProportion_", Description = "Heating Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterHTGViewCoefficient_", NickName = "emitterHTGViewCoefficient_", Description = "Heating Emitter View Coefficient", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileCooling_", NickName = "profileCooling_", Description = "SAM Analytical Profile for Cooling", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "emitterCLGRadianProportion_", NickName = "emitterCLGRadianProportion_", Description = "Cooling Emitter Radiant Proportion", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -49,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -70,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analyticalModel");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -87,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("_spaces_");
-            if(index != -1)
+            if (index != -1)
             {
                 spaces = new List<Space>();
                 dataAccess.GetDataList(index, spaces);
@@ -154,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<InternalCondition> internalConditions = new List<InternalCondition>();
 
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 if (space == null)
                     continue;
@@ -166,13 +169,13 @@ namespace SAM.Analytical.Grasshopper
                 space_Temp = new Space(space_Temp);
 
                 InternalCondition internalCondition = space_Temp.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
 
                 if (profile_Heating != null)
                     internalCondition.SetValue(InternalConditionParameter.HeatingProfileName, profile_Heating.Name);
 
-                if(!double.IsNaN(heatingEmitterRadiantProportion))
+                if (!double.IsNaN(heatingEmitterRadiantProportion))
                     internalCondition.SetValue(InternalConditionParameter.HeatingEmitterRadiantProportion, heatingEmitterRadiantProportion);
 
                 if (!double.IsNaN(heatingEmitterCoefficient))
@@ -198,7 +201,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("AnalyticalModel");
-            if(index != -1)
+            if (index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));

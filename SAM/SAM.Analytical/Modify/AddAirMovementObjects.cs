@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -8,7 +11,7 @@ namespace SAM.Analytical
         public static List<IAirMovementObject> AddAirMovementObjects(this AnalyticalModel analyticalModel)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -20,7 +23,7 @@ namespace SAM.Analytical
             }
 
             List<AirHandlingUnit> airHandlingUnits_All = adjacencyCluster.GetObjects<AirHandlingUnit>();
-            if(airHandlingUnits_All == null)
+            if (airHandlingUnits_All == null)
             {
                 return null;
             }
@@ -29,30 +32,30 @@ namespace SAM.Analytical
 
             List<IAirMovementObject> result = new List<IAirMovementObject>();
 
-            List<AirHandlingUnit> airHandlingUnits = new List<AirHandlingUnit>(); 
-            foreach(VentilationSystem ventilationSystem in ventilationSystems)
+            List<AirHandlingUnit> airHandlingUnits = new List<AirHandlingUnit>();
+            foreach (VentilationSystem ventilationSystem in ventilationSystems)
             {
-                if(ventilationSystem == null)
+                if (ventilationSystem == null)
                 {
                     continue;
                 }
 
                 List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem);
-                if(spaces == null || spaces.Count == 0)
+                if (spaces == null || spaces.Count == 0)
                 {
                     continue;
                 }
 
-                if(ventilationSystem.TryGetValue(VentilationSystemParameter.SupplyUnitName, out string supplyName))
+                if (ventilationSystem.TryGetValue(VentilationSystemParameter.SupplyUnitName, out string supplyName))
                 {
                     AirHandlingUnit airHandlingUnit = airHandlingUnits_All.Find(x => x.Name == supplyName);
-                    if(airHandlingUnit != null)
+                    if (airHandlingUnit != null)
                     {
-                        if(airHandlingUnits.Find(x => x.Guid == airHandlingUnit.Guid) == null)
+                        if (airHandlingUnits.Find(x => x.Guid == airHandlingUnit.Guid) == null)
                         {
                             airHandlingUnits.Add(airHandlingUnit);
                         }
-                        
+
                         ObjectReference objectReference_AirHandlingUnit = new ObjectReference(airHandlingUnit);
 
                         foreach (Space space in spaces)

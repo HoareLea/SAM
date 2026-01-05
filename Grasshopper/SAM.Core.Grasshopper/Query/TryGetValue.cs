@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
@@ -12,7 +15,7 @@ namespace SAM.Core.Grasshopper
             if (dictionary == null)
                 return false;
 
-            foreach(KeyValuePair<Interval, T> keyValuePair in dictionary)
+            foreach (KeyValuePair<Interval, T> keyValuePair in dictionary)
             {
                 double value_Temp = System.Math.Round(value, System.MidpointRounding.ToEven);
 

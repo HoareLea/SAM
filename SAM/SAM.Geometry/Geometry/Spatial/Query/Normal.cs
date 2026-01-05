@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -7,14 +10,14 @@ namespace SAM.Geometry.Spatial
     {
         public static Vector3D Normal(this Plane plane, IEnumerable<Planar.Point2D> point2Ds)
         {
-            if(plane == null || point2Ds == null)
+            if (plane == null || point2Ds == null)
             {
                 return null;
             }
 
             int count = point2Ds.Count();
 
-            if(count < 3)
+            if (count < 3)
             {
                 return null;
             }
@@ -30,7 +33,7 @@ namespace SAM.Geometry.Spatial
                 Point3D point3D_3 = plane.Convert(point2Ds.ElementAt(index_3));
 
                 Vector3D normal = Normal(point3D_1, point3D_2, point3D_3);
-                if(normal == null || !normal.IsValid())
+                if (normal == null || !normal.IsValid())
                 {
                     continue;
                 }
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            if(count == 3)
+            if (count == 3)
             {
                 return Normal(point3Ds.ElementAt(0), point3Ds.ElementAt(1), point3Ds.ElementAt(2));
             }
@@ -114,7 +117,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
@@ -124,16 +127,16 @@ namespace SAM.Geometry.Spatial
             Plane plane = new Plane(origin, result);
 
             bool invalid = false;
-            foreach(Point3D point3D in point3Ds)
+            foreach (Point3D point3D in point3Ds)
             {
-                if(plane.Distance(point3D) > tolerance)
+                if (plane.Distance(point3D) > tolerance)
                 {
                     invalid = true;
                     break;
                 }
             }
 
-            if(invalid)
+            if (invalid)
             {
                 normal = new Vector3D();
                 for (int i = 0; i < count - 1; i++)
@@ -147,12 +150,12 @@ namespace SAM.Geometry.Spatial
 
                 double max = double.MinValue;
                 double max_Temp = double.MinValue;
-                foreach(Point3D point3D in point3Ds)
+                foreach (Point3D point3D in point3Ds)
                 {
                     double distance = double.NaN;
 
                     distance = plane.Distance(point3D);
-                    if(distance > max)
+                    if (distance > max)
                     {
                         max = distance;
                     }
@@ -164,7 +167,7 @@ namespace SAM.Geometry.Spatial
                     }
                 }
 
-                if(max_Temp < max)
+                if (max_Temp < max)
                 {
                     result = normal;
                 }

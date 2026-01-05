@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -116,15 +119,15 @@ namespace SAM.Analytical
             double result = 0;
 
             List<Space> spaces = adjacencyCluster.GetSpaces(zone);
-            if(spaces == null || spaces.Count == 0)
+            if (spaces == null || spaces.Count == 0)
             {
                 return result;
             }
 
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 double value = space.CalculatedSupplyAirFlow();
-                if(double.IsNaN(value))
+                if (double.IsNaN(value))
                 {
                     continue;
                 }

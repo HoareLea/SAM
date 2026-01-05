@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,7 +25,7 @@ namespace SAM.Analytical
         public static List<Panel> Cut(this Panel panel, Plane plane, double threshold, double tolerance)
         {
             List<Panel> panels = Cut(panel, plane, tolerance);
-            if(panels == null || panels.Count <= 1)
+            if (panels == null || panels.Count <= 1)
             {
                 return panels;
             }
@@ -30,43 +33,43 @@ namespace SAM.Analytical
             Point3D origin = plane.Origin;
             Line3D line3D = new Line3D(origin, plane.Normal);
 
-            foreach(Panel panel_Temp in panels)
+            foreach (Panel panel_Temp in panels)
             {
                 IClosedPlanar3D closedPlanar3D = panel_Temp?.Face3D?.GetExternalEdge3D();
-                if(closedPlanar3D == null)
+                if (closedPlanar3D == null)
                 {
                     continue;
                 }
 
                 ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
-                if(segmentable3D == null)
+                if (segmentable3D == null)
                 {
                     throw new System.NotImplementedException();
                 }
 
                 List<Point3D> point3Ds = segmentable3D.GetPoints();
-                if(point3Ds == null || point3Ds.Count == 0)
+                if (point3Ds == null || point3Ds.Count == 0)
                 {
                     continue;
                 }
 
                 double max = double.MinValue;
-                foreach(Point3D point3D in point3Ds)
+                foreach (Point3D point3D in point3Ds)
                 {
                     Point3D point3D_Project = line3D.Project(point3D);
-                    if(point3D_Project == null || !point3D_Project.IsValid())
+                    if (point3D_Project == null || !point3D_Project.IsValid())
                     {
                         continue;
                     }
 
                     double distance = point3D_Project.Distance(origin);
-                    if(distance > max)
+                    if (distance > max)
                     {
                         max = distance;
                     }
                 }
 
-                if(max < threshold)
+                if (max < threshold)
                 {
                     return new List<Panel>() { Create.Panel(panel) };
                 }
@@ -76,7 +79,7 @@ namespace SAM.Analytical
             return panels;
 
         }
-        
+
         public static List<Panel> Cut(this Panel panel, Plane plane, double tolerance = Tolerance.Distance)
         {
             if (plane == null)
@@ -87,7 +90,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Panel> result = new List<Panel>();
-            
+
             List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D, plane, tolerance);
             if (face3Ds == null || face3Ds.Count == 0)
             {
@@ -95,7 +98,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            foreach(Face3D face3D_New in face3Ds)
+            foreach (Face3D face3D_New in face3Ds)
             {
                 if (face3D_New == null)
                     continue;

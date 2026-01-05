@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry;
 using System.Collections.Generic;
 
@@ -12,12 +15,12 @@ namespace SAM.Analytical
                 return false;
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels == null)
+            if (panels == null)
             {
                 return false;
             }
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 panel.Normalize(includeApertures, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
                 adjacencyCluster.AddObject(panel);

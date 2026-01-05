@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -231,13 +234,13 @@ namespace SAM.Weather
                 return double.NaN;
             }
 
-            if(!dictionary.ContainsKey(name))
+            if (!dictionary.ContainsKey(name))
             {
                 return double.NaN;
             }
 
             double[] values = dictionary[name];
-            if(values == null)
+            if (values == null)
             {
                 return double.NaN;
             }
@@ -424,7 +427,7 @@ namespace SAM.Weather
             }
 
             WeatherHour result = new WeatherHour();
-            foreach(KeyValuePair<string, double[]> keyValuePair in dictionary)
+            foreach (KeyValuePair<string, double[]> keyValuePair in dictionary)
             {
                 result[keyValuePair.Key] = keyValuePair.Value[index];
             }
@@ -435,7 +438,7 @@ namespace SAM.Weather
         public List<WeatherHour> GetWeatherHours()
         {
             List<WeatherHour> result = new List<WeatherHour>();
-            for(int i=0; i < 24; i++)
+            for (int i = 0; i < 24; i++)
             {
                 result.Add(GetWeatherHour(i));
             }
@@ -445,13 +448,13 @@ namespace SAM.Weather
 
         public List<WeatherHour> GetWeatherHours(IEnumerable<int> hours)
         {
-            if(hours == null)
+            if (hours == null)
             {
                 return null;
             }
 
             List<WeatherHour> result = new List<WeatherHour>();
-            foreach(int hour in hours)
+            foreach (int hour in hours)
             {
                 result.Add(GetWeatherHour(hour));
             }

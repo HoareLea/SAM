@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -16,7 +19,7 @@ namespace SAM.Core
 
             int startIndex = 0;
             int index = text.IndexOf(openSymbol, startIndex);
-            while(index != -1)
+            while (index != -1)
             {
                 startIndex = text.IndexOf(closeSymbol, index);
 

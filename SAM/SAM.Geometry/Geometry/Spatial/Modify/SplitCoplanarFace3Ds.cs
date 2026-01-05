@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -13,11 +16,11 @@ namespace SAM.Geometry.Spatial
 
             List<Tuple<Shell, bool>> tuples = shells.ConvertAll(x => new Tuple<Shell, bool>(x, false));
 
-            Parallel.For(0, shells.Count, (int i) => 
+            Parallel.For(0, shells.Count, (int i) =>
             //for(int i=0; i < shells.Count; i++)
             {
                 Shell shell = tuples[i].Item1;
-                if(shell != null)
+                if (shell != null)
                 {
                     Shell shell_New = new Shell(tuples[i].Item1);
 
@@ -35,7 +38,7 @@ namespace SAM.Geometry.Spatial
                         }
                     }
 
-                    if(updated)
+                    if (updated)
                     {
                         tuples[i] = new Tuple<Shell, bool>(shell_New, true);
                     }
@@ -44,7 +47,7 @@ namespace SAM.Geometry.Spatial
             });
 
             shells.Clear();
-            shells.AddRange(tuples.ConvertAll(x =>x.Item1));
+            shells.AddRange(tuples.ConvertAll(x => x.Item1));
 
             return tuples.Find(x => x.Item2) != null;
         }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -7,7 +10,7 @@ namespace SAM.Core
     public class IndexedComplexModifier : IndexedModifier, IIndexedComplexModifier
     {
         public IndexedComplexModifier()
-            :base()
+            : base()
         {
 
         }
@@ -21,7 +24,7 @@ namespace SAM.Core
         public IndexedComplexModifier(IndexedComplexModifier complexModifier)
             : base(complexModifier)
         {
-            if(complexModifier != null)
+            if (complexModifier != null)
             {
                 Modifiers = complexModifier.Modifiers.ConvertAll(x => x.Clone());
             }
@@ -36,18 +39,18 @@ namespace SAM.Core
         public virtual bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("Modifiers"))
+            if (jObject.ContainsKey("Modifiers"))
             {
                 JArray jArray = jObject.Value<JArray>("Modifiers");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     Modifiers = new List<IIndexedModifier>();
-                    foreach(JObject jObject_Modifier in jArray)
+                    foreach (JObject jObject_Modifier in jArray)
                     {
                         Modifiers.Add(Query.IJSAMObject<IIndexedModifier>(jObject_Modifier));
                     }
@@ -62,7 +65,7 @@ namespace SAM.Core
         public virtual JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }
@@ -83,14 +86,14 @@ namespace SAM.Core
 
         public override bool ContainsIndex(int index)
         {
-            if(Modifiers == null)
+            if (Modifiers == null)
             {
                 return false;
             }
 
-            foreach(IIndexedModifier indexedModifier in Modifiers)
+            foreach (IIndexedModifier indexedModifier in Modifiers)
             {
-                if(indexedModifier.ContainsIndex(index))
+                if (indexedModifier.ContainsIndex(index))
                 {
                     return true;
                 }

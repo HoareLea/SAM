@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel.Types;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
@@ -10,14 +13,14 @@ namespace SAM.Analytical.Grasshopper
         public static bool TryConvertToPanelGeometries(this object @object, out List<ISAMGeometry3D> sAMGeometry3Ds, bool simplify = true)
         {
             sAMGeometry3Ds = null;
-            
+
             if (@object is IGH_GeometricGoo)
             {
                 sAMGeometry3Ds = ((IGH_GeometricGoo)@object).ToSAM(simplify);
                 return true;
             }
 
-            if(@object is ISAMGeometry3D)
+            if (@object is ISAMGeometry3D)
             {
                 sAMGeometry3Ds = new List<ISAMGeometry3D>() { (ISAMGeometry3D)@object };
                 return true;

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -26,12 +29,12 @@ namespace SAM.Analytical
 
         public static HostPartitionCategory HostPartitionCategory(this HostPartitionType hostPartitionType)
         {
-            if(hostPartitionType == null)
+            if (hostPartitionType == null)
             {
                 return Analytical.HostPartitionCategory.Undefined;
             }
 
-            if(hostPartitionType is WallType)
+            if (hostPartitionType is WallType)
             {
                 return Analytical.HostPartitionCategory.Wall;
             }
@@ -51,7 +54,7 @@ namespace SAM.Analytical
 
         public static HostPartitionCategory HostPartitionCategory(this PartitionAnalyticalType partitionAnalyticalType)
         {
-            switch(partitionAnalyticalType)
+            switch (partitionAnalyticalType)
             {
                 case Analytical.PartitionAnalyticalType.Air:
                     return Analytical.HostPartitionCategory.Undefined;

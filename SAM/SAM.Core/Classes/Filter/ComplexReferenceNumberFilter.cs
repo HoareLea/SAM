@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,14 +28,14 @@ namespace SAM.Core
         public ComplexReferenceNumberFilter(ComplexReferenceNumberFilter complexReferenceNumberFilter)
             : base(complexReferenceNumberFilter)
         {
-            if(complexReferenceNumberFilter != null)
+            if (complexReferenceNumberFilter != null)
             {
                 FilterLogicalOperator = complexReferenceNumberFilter.FilterLogicalOperator;
                 NumberComparisonType = complexReferenceNumberFilter.NumberComparisonType;
                 Value = complexReferenceNumberFilter.Value;
             }
         }
-        
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -60,16 +63,16 @@ namespace SAM.Core
 
         protected override bool IsValid(IEnumerable<object> values)
         {
-            if(values == null || values.Count() == 0)
+            if (values == null || values.Count() == 0)
             {
                 return false;
             }
 
-            foreach(object value in values)
+            foreach (object value in values)
             {
-                if(!Query.TryConvert(value, out double number))
+                if (!Query.TryConvert(value, out double number))
                 {
-                    if(FilterLogicalOperator == FilterLogicalOperator.And)
+                    if (FilterLogicalOperator == FilterLogicalOperator.And)
                     {
                         return false;
                     }
@@ -77,7 +80,7 @@ namespace SAM.Core
                     continue;
                 }
 
-                if(!Query.Compare(number, Value, NumberComparisonType))
+                if (!Query.Compare(number, Value, NumberComparisonType))
                 {
                     if (FilterLogicalOperator == FilterLogicalOperator.And)
                     {

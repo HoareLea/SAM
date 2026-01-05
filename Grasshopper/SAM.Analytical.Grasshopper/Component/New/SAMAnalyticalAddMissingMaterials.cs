@@ -1,4 +1,7 @@
-﻿//using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+//using Grasshopper.Kernel;
 //using SAM.Analytical.Grasshopper.Properties;
 //using SAM.Core.Grasshopper;
 //using System;
@@ -44,7 +47,7 @@
 //            get
 //            {
 //                List<GH_SAMParam> result = new List<GH_SAMParam>();
-                
+
 //                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
 //                GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam { Name = "_materialLibrary_", NickName = "_materialLibrary_", Description = "SAM Core Material Library", Access = GH_ParamAccess.item };

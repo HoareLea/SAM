@@ -1,10 +1,13 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
         public static Direction Opposite(this Direction direction)
         {
-            if(direction == Direction.Undefined)
+            if (direction == Direction.Undefined)
             {
                 return Direction.Undefined;
             }

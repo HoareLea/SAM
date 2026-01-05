@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
+using Newtonsoft.Json.Linq;
+using SAM.Architectural;
 using System.Collections.Generic;
 using System.Linq;
-using SAM.Architectural;
 
 namespace SAM.Analytical
 {
@@ -66,7 +68,7 @@ namespace SAM.Analytical
 
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     return;
                 }
@@ -79,7 +81,7 @@ namespace SAM.Analytical
         {
             get
             {
-                if(materialLayers == null)
+                if (materialLayers == null)
                 {
                     return null;
                 }
@@ -100,20 +102,20 @@ namespace SAM.Analytical
 
         public double GetThickness()
         {
-            if(materialLayers == null)
+            if (materialLayers == null)
             {
                 return double.NaN;
             }
 
             double result = 0;
-            foreach(MaterialLayer materialLayer in materialLayers)
+            foreach (MaterialLayer materialLayer in materialLayers)
             {
                 double thickness = materialLayer.Thickness;
-                if(double.IsNaN(thickness))
+                if (double.IsNaN(thickness))
                 {
                     continue;
                 }
-                
+
                 result += thickness;
             }
 

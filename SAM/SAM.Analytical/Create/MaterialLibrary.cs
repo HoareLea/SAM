@@ -1,17 +1,20 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
     public static partial class Create
     {
         public static MaterialLibrary MaterialLibrary(
-            string path, 
+            string path,
             string parameterName_Type,
             string parameterName_Name,
-            string parameterName_Description, 
-            string parameterName_DefaultThickness, 
-            string parameterName_ThermalConductivity, 
-            string parameterName_SpecificHeatCapacity, 
+            string parameterName_Description,
+            string parameterName_DefaultThickness,
+            string parameterName_ThermalConductivity,
+            string parameterName_SpecificHeatCapacity,
             string parameterName_Density,
             string parameterName_VapourDiffusionFactor,
             string parameterName_ExternalSolarReflectance,
@@ -26,8 +29,8 @@ namespace SAM.Analytical
             string parameterName_IsBlind,
             string parameterName_HeatTransferCoefficient,
             string parameterName_DynamicViscosity,
-            string name = null, 
-            int namesIndex = 0, 
+            string name = null,
+            int namesIndex = 0,
             int headerCount = 7)
         {
             if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))

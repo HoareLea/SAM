@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -11,7 +14,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Point2D> point2Ds = Reduce(polyline2D.GetPoints(), minDistance);
-            if(point2Ds == null || point2Ds.Count == 0)
+            if (point2Ds == null || point2Ds.Count == 0)
             {
                 return new Polyline2D(polyline2D);
             }
@@ -25,7 +28,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Point2D> point2Ds = polygon2D.GetPoints();
-            if(point2Ds.Count <= 3)
+            if (point2Ds.Count <= 3)
             {
                 return new Polygon2D(polygon2D);
             }
@@ -41,7 +44,7 @@ namespace SAM.Geometry.Planar
 
         public static Face2D Reduce(this Face2D face2D, double minDistance)
         {
-            if(face2D == null)
+            if (face2D == null)
             {
                 return null;
             }
@@ -49,7 +52,7 @@ namespace SAM.Geometry.Planar
             IClosed2D externalEdge2D = Reduce(face2D.ExternalEdge2D, minDistance);
 
             List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
-            if(internalEdge2Ds != null && internalEdge2Ds.Count != 0)
+            if (internalEdge2Ds != null && internalEdge2Ds.Count != 0)
             {
                 internalEdge2Ds = internalEdge2Ds.ConvertAll(x => Reduce(x, minDistance));
             }
@@ -59,17 +62,17 @@ namespace SAM.Geometry.Planar
 
         public static IClosed2D Reduce(IClosed2D closed2D, double minDistance)
         {
-            if(closed2D == null)
+            if (closed2D == null)
             {
                 return null;
             }
 
-            if(closed2D is Polygon2D)
+            if (closed2D is Polygon2D)
             {
                 return Reduce((Polygon2D)closed2D, minDistance);
             }
-            
-            if(closed2D is Face2D)
+
+            if (closed2D is Face2D)
             {
                 return Reduce((Face2D)closed2D, minDistance);
             }

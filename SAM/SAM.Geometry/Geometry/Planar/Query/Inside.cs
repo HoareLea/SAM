@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 
@@ -41,7 +44,7 @@ namespace SAM.Geometry.Planar
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                 return true;
 
-            foreach(IClosed2D closed2D in internalEdge2Ds)
+            foreach (IClosed2D closed2D in internalEdge2Ds)
                 if (closed2D.Inside(point2D, tolerance))
                     return false;
 

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -27,7 +30,7 @@ namespace SAM.Analytical
         }
 
         public IndexedDoubles Values { get; set; }
-        
+
         public override bool ContainsIndex(int index)
         {
             if (Values == null)
@@ -41,12 +44,12 @@ namespace SAM.Analytical
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("Values"))
+            if (jObject.ContainsKey("Values"))
             {
                 Values = Core.Query.IJSAMObject<IndexedDoubles>(jObject.Value<JObject>("Values"));
             }
@@ -77,12 +80,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
-            if(Values != null)
+            if (Values != null)
             {
                 result.Add("Values", Values.ToJObject());
             }

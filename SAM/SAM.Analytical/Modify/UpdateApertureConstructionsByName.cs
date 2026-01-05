@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,7 +24,7 @@ namespace SAM.Analytical
                     continue;
 
                 bool updated = false;
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     string name = aperture?.ApertureConstruction?.Name;
                     if (string.IsNullOrWhiteSpace(name))
@@ -40,7 +43,7 @@ namespace SAM.Analytical
                     if (apertureConstruction == null)
                         continue;
 
-                    if(!updated)
+                    if (!updated)
                     {
                         updated = true;
                         panel = new Panel(panel);
@@ -84,7 +87,7 @@ namespace SAM.Analytical
                 if (apertureConstruction == null)
                     continue;
 
-               apertures[i] = new Aperture(aperture, apertureConstruction);
+                apertures[i] = new Aperture(aperture, apertureConstruction);
             }
 
             return result;

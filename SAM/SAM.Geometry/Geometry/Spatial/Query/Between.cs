@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -30,10 +33,10 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                foreach(Face3D face3D_Cut in face3Ds_Cut)
+                foreach (Face3D face3D_Cut in face3Ds_Cut)
                 {
                     BoundingBox3D boundingBox3D = face3D_Cut?.GetBoundingBox();
-                    if(boundingBox3D == null)
+                    if (boundingBox3D == null)
                     {
                         continue;
                     }
@@ -41,7 +44,7 @@ namespace SAM.Geometry.Spatial
                     double value;
 
                     value = boundingBox3D.Min.Z;
-                    if(Core.Query.AlmostEqual(value, min) || value >= min)
+                    if (Core.Query.AlmostEqual(value, min) || value >= min)
                     {
                         value = boundingBox3D.Max.Z;
                         if (Core.Query.AlmostEqual(value, max) || value <= max)

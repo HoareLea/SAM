@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -110,7 +113,7 @@ namespace SAM.Core
 
         public static Type Type(this string typeName, TextComparisonType textComparisonType, bool ignoreCase = false, Func<Assembly, bool> func = null)
         {
-            if(string.IsNullOrWhiteSpace(typeName))
+            if (string.IsNullOrWhiteSpace(typeName))
             {
                 return null;
             }
@@ -123,9 +126,9 @@ namespace SAM.Core
 
             string typeName_Temp = ignoreCase ? typeName.ToLower() : typeName;
 
-            foreach(Assembly assembly in assemblies)
+            foreach (Assembly assembly in assemblies)
             {
-                if(func != null && !func.Invoke(assembly))
+                if (func != null && !func.Invoke(assembly))
                 {
                     continue;
                 }
@@ -140,12 +143,12 @@ namespace SAM.Core
                     continue;
                 }
 
-                if(types == null || types.Length == 0)
+                if (types == null || types.Length == 0)
                 {
                     continue;
                 }
-                 
-                foreach(Type type in types)
+
+                foreach (Type type in types)
                 {
                     string name;
 

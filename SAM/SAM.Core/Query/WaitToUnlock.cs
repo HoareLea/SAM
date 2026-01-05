@@ -1,10 +1,13 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
         public static bool WaitToUnlock(string path, int waitTime = 1000, int count = 10)
         {
-            if(string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
+            if (string.IsNullOrWhiteSpace(path) || !System.IO.File.Exists(path))
             {
                 return false;
             }
@@ -14,9 +17,9 @@
             bool result = false;
 
             int i = 0;
-            while(i <= count)
+            while (i <= count)
             {
-                if(!fileInfo.Locked())
+                if (!fileInfo.Locked())
                 {
                     result = true;
                     break;

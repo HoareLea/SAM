@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -36,14 +39,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_csv", NickName = "_csv", Description = "file path to csv text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));                return result.ToArray();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_csv", NickName = "_csv", Description = "file path to csv text", Access = GH_ParamAccess.item }, ParamVisibility.Binding)); return result.ToArray();
             }
         }
 

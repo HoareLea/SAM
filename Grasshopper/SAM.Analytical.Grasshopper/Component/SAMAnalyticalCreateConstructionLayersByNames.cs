@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -41,7 +44,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             int index = -1;
-            
+
             inputParamManager.AddTextParameter("_names", "_names", "Contruction Layer Name", GH_ParamAccess.list);
             index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses [m]", GH_ParamAccess.list);
             inputParamManager[index].Optional = true;
@@ -77,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             List<double> thicknesses = new List<double>();
             dataAccess.GetDataList(1, thicknesses);
 
-            if(names.Count != thicknesses.Count)
+            if (names.Count != thicknesses.Count)
             {
                 MaterialLibrary materialLibrary = null;
                 dataAccess.GetData(2, ref materialLibrary);
@@ -89,14 +92,14 @@ namespace SAM.Analytical.Grasshopper
                 for (int i = 0; i < names.Count - count; i++)
                 {
                     Material material = materialLibrary.GetObject<Material>(names[i + count]);
-                    if(material == null)
+                    if (material == null)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
                     }
 
                     double thickness = material.GetValue<double>(Core.MaterialParameter.DefaultThickness);
-                    if(double.IsNaN(thickness))
+                    if (double.IsNaN(thickness))
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
@@ -115,10 +118,10 @@ namespace SAM.Analytical.Grasshopper
 
             List<ConstructionLayer> constructionLayers = Create.ConstructionLayers(objects);
 
-            if(constructionLayers != null)
+            if (constructionLayers != null)
             {
                 double thickness = constructionLayers.ConvertAll(x => x.Thickness).Sum();
-                if(thickness >= 1)
+                if (thickness >= 1)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Thickness of construction layers exceed 1m");
                     return;

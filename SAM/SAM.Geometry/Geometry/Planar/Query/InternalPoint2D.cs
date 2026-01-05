@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
                 return ((Face)closed2D).GetInternalPoint2D(tolerance);
             }
 
-            if(closed2D is Triangle2D)
+            if (closed2D is Triangle2D)
             {
                 return ((Triangle2D)closed2D).GetCentroid();
             }

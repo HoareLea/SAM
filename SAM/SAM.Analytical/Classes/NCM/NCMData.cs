@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -8,7 +11,7 @@ namespace SAM.Analytical
     /// </summary>
     public class NCMData : ParameterizedSAMObject
     {
-        public NCMName NCMName { get; set; }  = "Unoccupied and Unconditioned";
+        public NCMName NCMName { get; set; } = "Unoccupied and Unconditioned";
 
         public NCMSystemType SystemType { get; set; } = NCMSystemType.NaturalVentilation;
 
@@ -36,7 +39,7 @@ namespace SAM.Analytical
 
         public string Description { get; set; } = null;
 
-        public string Name 
+        public string Name
         {
             get
             {
@@ -50,7 +53,7 @@ namespace SAM.Analytical
         }
 
         public NCMData()
-            :base()
+            : base()
         {
 
         }
@@ -61,9 +64,9 @@ namespace SAM.Analytical
         }
 
         public NCMData(NCMData nCMData)
-            :base(nCMData)
+            : base(nCMData)
         {
-            if(nCMData != null)
+            if (nCMData != null)
             {
                 LightingOccupancyControls = nCMData.LightingOccupancyControls;
                 LightingPhotoelectricControls = nCMData.LightingPhotoelectricControls;
@@ -83,8 +86,8 @@ namespace SAM.Analytical
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            
-            if(!result)
+
+            if (!result)
             {
                 return false;
             }
@@ -163,7 +166,7 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }

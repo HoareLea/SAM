@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -23,7 +26,7 @@ namespace SAM.Geometry.Planar
             for (int i = 2; i < point2Ds_Temp.Count - 1; i++)
             {
                 int sign_Temp = System.Math.Sign(Determinant(point2Ds_Temp[i - 1], point2Ds_Temp[i], point2Ds_Temp[i + 1]));
-                if(sign != sign_Temp)
+                if (sign != sign_Temp)
                 {
                     return true;
                 }
@@ -32,9 +35,9 @@ namespace SAM.Geometry.Planar
             return false;
         }
 
-        public static bool Concave<T>(this T segmentable2D) where T: ISegmentable2D, IClosed2D
+        public static bool Concave<T>(this T segmentable2D) where T : ISegmentable2D, IClosed2D
         {
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 return false;
             }
@@ -44,7 +47,7 @@ namespace SAM.Geometry.Planar
 
         public static bool Concave(this Face2D face2D, bool externalEdge = true, bool internalEdges = true)
         {
-            if(face2D == null)
+            if (face2D == null)
             {
                 return false;
             }

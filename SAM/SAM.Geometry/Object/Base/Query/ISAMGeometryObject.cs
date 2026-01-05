@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections;
 
 namespace SAM.Geometry.Object
@@ -17,23 +20,23 @@ namespace SAM.Geometry.Object
                 return (T)sAMGeometryObject;
             }
 
-            if(!recursive)
+            if (!recursive)
             {
                 return default(T);
             }
 
             if (sAMGeometryObject is IEnumerable)
             {
-                foreach(object @object in (IEnumerable)sAMGeometryObject)
+                foreach (object @object in (IEnumerable)sAMGeometryObject)
                 {
                     ISAMGeometryObject sAMGeometryObject_Temp = @object as ISAMGeometryObject;
-                    if(sAMGeometryObject_Temp == null)
+                    if (sAMGeometryObject_Temp == null)
                     {
                         continue;
                     }
 
                     T t = ISAMGeometryObject(sAMGeometryObject_Temp, func);
-                    if(t != null)
+                    if (t != null)
                     {
                         return t;
                     }

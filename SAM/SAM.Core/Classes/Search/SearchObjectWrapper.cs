@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -33,14 +36,14 @@ namespace SAM.Core
 
         public bool Add<T>(T item)
         {
-            if(item == null)
+            if (item == null)
             {
                 return false;
             }
 
             string text = func == null ? item.ToString() : func.Invoke(item);
 
-            if(!searchWrapper.Add(text))
+            if (!searchWrapper.Add(text))
             {
                 return false;
             }
@@ -56,12 +59,12 @@ namespace SAM.Core
 
         public void AddRange<T>(IEnumerable<T> items)
         {
-            if(items == null)
+            if (items == null)
             {
                 return;
             }
 
-            foreach(T item in items)
+            foreach (T item in items)
             {
                 Add(item);
             }
@@ -81,7 +84,7 @@ namespace SAM.Core
                 return false;
             }
 
-            if(dictionary.ContainsKey(text))
+            if (dictionary.ContainsKey(text))
             {
                 dictionary.Remove(text);
             }
@@ -107,17 +110,17 @@ namespace SAM.Core
 
         public T GetItem<T>(string text)
         {
-            if(dictionary == null)
+            if (dictionary == null)
             {
                 return default;
             }
 
-            if(!dictionary.TryGetValue(text, out object value))
+            if (!dictionary.TryGetValue(text, out object value))
             {
                 return default;
             }
 
-            if(!(value is T))
+            if (!(value is T))
             {
                 return default;
             }
@@ -138,13 +141,13 @@ namespace SAM.Core
         public List<object> Search(string text, bool sort = true)
         {
             List<string> texts = SearchTexts(text, sort);
-            if(texts == null)
+            if (texts == null)
             {
                 return null;
             }
 
             List<object> result = new List<object>();
-            foreach(string text_Result in texts)
+            foreach (string text_Result in texts)
             {
                 result.Add(dictionary[text_Result]);
             }

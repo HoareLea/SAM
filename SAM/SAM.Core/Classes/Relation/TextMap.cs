@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,7 +22,7 @@ namespace SAM.Core
         internal TextMap(TextMap textMap)
             : base(textMap)
         {
-            if(textMap.dictionary != null)
+            if (textMap.dictionary != null)
             {
                 dictionary = new Dictionary<string, HashSet<string>>();
                 foreach (KeyValuePair<string, HashSet<string>> keyValuePair in textMap.dictionary)
@@ -71,7 +74,7 @@ namespace SAM.Core
             }
 
             List<string> result = new List<string>();
-            foreach(string value in values)
+            foreach (string value in values)
             {
                 if (string.IsNullOrEmpty(value))
                 {
@@ -89,7 +92,7 @@ namespace SAM.Core
 
         public bool UpdateValue(string key, string value_Old, string value_New)
         {
-            if(string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value_New))
+            if (string.IsNullOrEmpty(key) || string.IsNullOrEmpty(value_New))
             {
                 return false;
             }
@@ -146,11 +149,11 @@ namespace SAM.Core
                 return null;
 
             List<string> result = new List<string>();
-            foreach(KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
+            foreach (KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
             {
-                foreach(string value in keyValuePair.Value)
+                foreach (string value in keyValuePair.Value)
                 {
-                    if(value.Compare(text, textComparisonType, caseSensitive))
+                    if (value.Compare(text, textComparisonType, caseSensitive))
                     {
                         result.Add(keyValuePair.Key);
                         break;
@@ -175,13 +178,13 @@ namespace SAM.Core
             HashSet<string> hashSet = new HashSet<string>();
             foreach (KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
             {
-                foreach(string value in keyValuePair.Value)
+                foreach (string value in keyValuePair.Value)
                 {
                     if (string.IsNullOrEmpty(value))
                         continue;
 
                     string[] values = value.Split(' ');
-                    for(int i = 0; i < values.Length; i++)
+                    for (int i = 0; i < values.Length; i++)
                     {
                         string value_Temp = values[i]?.Trim().ToLower();
                         if (!string.IsNullOrWhiteSpace(value_Temp))
@@ -215,7 +218,7 @@ namespace SAM.Core
                 int count_Key = int.MaxValue;
                 foreach (string value in keyValuePair.Value)
                 {
-                    if(value == null)
+                    if (value == null)
                     {
                         continue;
                     }
@@ -245,14 +248,14 @@ namespace SAM.Core
                     string[] values_2 = value_Temp.Split(' ');
 
                     int count_Value = 0;
-                    for (int i=0; i < values_1.Length; i++)
+                    for (int i = 0; i < values_1.Length; i++)
                     {
                         int count_1 = values_1[i].Length;
                         if (count_1 == 0)
                             continue;
 
                         int count_Temp = 0;
-                        for(int j= 0; j < values_2.Length; j++)
+                        for (int j = 0; j < values_2.Length; j++)
                         {
                             int count_2 = values_2[j].Length;
 
@@ -298,7 +301,7 @@ namespace SAM.Core
             }
 
             HashSet<string> result = new HashSet<string>();
-            foreach(HashSet<string> hashSet_Temp in sortedDictionary.Values)
+            foreach (HashSet<string> hashSet_Temp in sortedDictionary.Values)
                 foreach (string value in hashSet_Temp)
                     result.Add(value);
 
@@ -346,7 +349,7 @@ namespace SAM.Core
 
                     HashSet<string> values = new HashSet<string>();
 
-                    for(int i=1; i < jArray.Count; i++)
+                    for (int i = 1; i < jArray.Count; i++)
                         values.Add(jArray[i].ToString());
 
                     dictionary[jArray[0].ToString()] = values;
@@ -366,7 +369,7 @@ namespace SAM.Core
             if (dictionary == null || dictionary.Count == 0)
                 return result;
 
-            foreach(KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
+            foreach (KeyValuePair<string, HashSet<string>> keyValuePair in dictionary)
             {
                 if (keyValuePair.Key == null)
                     continue;
@@ -385,7 +388,7 @@ namespace SAM.Core
 
         public bool RemoveKey(string key)
         {
-            if(dictionary == null || key == null)
+            if (dictionary == null || key == null)
             {
                 return false;
             }
@@ -395,7 +398,7 @@ namespace SAM.Core
 
         public bool AddKey(string key)
         {
-            if(key == null)
+            if (key == null)
             {
                 return false;
             }
@@ -405,12 +408,12 @@ namespace SAM.Core
 
         public bool RemoveValue(string key, string value)
         {
-            if(key == null || value == null || dictionary == null)
+            if (key == null || value == null || dictionary == null)
             {
                 return false;
             }
 
-            if(!dictionary.TryGetValue(key, out HashSet<string> values) || values == null)
+            if (!dictionary.TryGetValue(key, out HashSet<string> values) || values == null)
             {
                 return false;
             }

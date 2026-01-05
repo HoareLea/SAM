@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -8,16 +11,16 @@ namespace SAM.Analytical
         public static void SimplifyByAngle(this AdjacencyCluster adjacencyCluster, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels == null)
+            if (panels == null)
             {
                 return;
             }
 
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Face3D face3D = panel?.GetFace3D();
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
@@ -25,19 +28,19 @@ namespace SAM.Analytical
                 face3D = face3D.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
                 Panel panel_New = Create.Panel(panel.Guid, panel, face3D);
                 List<Aperture> apertures = panel_New.Apertures;
-                if(apertures != null)
+                if (apertures != null)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
                         Face3D face3D_Aperture = aperture?.Face3D;
-                        if(face3D_Aperture == null)
+                        if (face3D_Aperture == null)
                         {
                             continue;
                         }
 
                         face3D_Aperture = face3D_Aperture.SimplifyByAngle(tolerance_Angle, tolerance_Distance);
                         Aperture aperture_New = Create.Aperture(aperture, face3D_Aperture, aperture.Guid);
-                        if(aperture_New != null)
+                        if (aperture_New != null)
                         {
                             panel_New.RemoveAperture(aperture.Guid);
                             panel_New.AddAperture(aperture_New);

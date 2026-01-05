@@ -1,5 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
-using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Analytical
 {
@@ -22,7 +24,7 @@ namespace SAM.Analytical
         public OpeningCaseData(OpeningCaseData openingCaseData)
             : base(openingCaseData)
         {
-            if(openingCaseData != null)
+            if (openingCaseData != null)
             {
                 openingAngle = openingCaseData.openingAngle;
             }
@@ -30,21 +32,21 @@ namespace SAM.Analytical
 
         public double OpeningAngle
         {
-            get 
-            { 
-                return openingAngle; 
+            get
+            {
+                return openingAngle;
             }
         }
 
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("OpeningAngle"))
+            if (jObject.ContainsKey("OpeningAngle"))
             {
                 openingAngle = jObject.Value<double>("OpeningAngle");
             }
@@ -55,12 +57,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result is null)
+            if (result is null)
             {
                 return result;
             }
 
-            if(!double.IsNaN(openingAngle))
+            if (!double.IsNaN(openingAngle))
             {
                 result.Add("OpeningAngle", openingAngle);
             }

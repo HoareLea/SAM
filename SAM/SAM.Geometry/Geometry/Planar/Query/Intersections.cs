@@ -1,4 +1,7 @@
-﻿using SAM.Math;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Math;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -57,7 +60,7 @@ namespace SAM.Geometry.Planar
                 if (point2Ds_Temp == null || point2Ds_Temp.Count == 0)
                     continue;
 
-                foreach(Point2D point2D_Temp in point2Ds_Temp)
+                foreach (Point2D point2D_Temp in point2Ds_Temp)
                 {
                     Point2D point2D = point2Ds.Find(x => x.AlmostEquals(point2D_Temp, tolerance));
                     if (point2D == null)
@@ -70,22 +73,22 @@ namespace SAM.Geometry.Planar
 
         public static List<Point2D> Intersections(this ISegmentable2D segmentable2D, Line2D line2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(line2D == null)
+            if (line2D == null)
             {
                 return null;
             }
 
             List<Segment2D> segment2Ds = segmentable2D?.GetSegments();
-            if(segment2Ds == null)
+            if (segment2Ds == null)
             {
                 return null;
             }
 
             List<Point2D> result = new List<Point2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
                 Point2D point2D = line2D.Intersection(segment2D, tolerance);
-                if(point2D == null)
+                if (point2D == null)
                 {
                     continue;
                 }

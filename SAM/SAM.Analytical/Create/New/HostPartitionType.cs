@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using SAM.Architectural;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -8,12 +10,12 @@ namespace SAM.Analytical
     {
         public static HostPartitionType HostPartitionType(this HostPartitionCategory hostPartitionCategory, string name, IEnumerable<MaterialLayer> materialLayers)
         {
-            if(name == null || materialLayers == null || hostPartitionCategory == HostPartitionCategory.Undefined)
+            if (name == null || materialLayers == null || hostPartitionCategory == HostPartitionCategory.Undefined)
             {
                 return null;
             }
 
-            switch(hostPartitionCategory)
+            switch (hostPartitionCategory)
             {
                 case HostPartitionCategory.Floor:
                     return new FloorType(name, materialLayers);
@@ -35,7 +37,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(hostPartitionType is WallType)
+            if (hostPartitionType is WallType)
             {
                 return new WallType((WallType)hostPartitionType, name);
             }

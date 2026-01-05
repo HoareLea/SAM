@@ -1,4 +1,7 @@
-﻿using System.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -6,15 +9,15 @@ namespace SAM.Core
     {
         public static string ShortText(this IComplexReference complexReference)
         {
-            if(complexReference == null)
+            if (complexReference == null)
             {
                 return null;
             }
 
-            if(complexReference is PathReference)
+            if (complexReference is PathReference)
             {
                 ObjectReference objectReference_Last = ((PathReference)complexReference)?.LastOrDefault();
-                if(objectReference_Last == null)
+                if (objectReference_Last == null)
                 {
                     return null;
                 }
@@ -22,7 +25,7 @@ namespace SAM.Core
                 return ShortText(objectReference_Last);
             }
 
-            if(complexReference is PropertyReference)
+            if (complexReference is PropertyReference)
             {
                 string propertyName = ((PropertyReference)complexReference).PropertyName;
                 if (!string.IsNullOrWhiteSpace(propertyName))
@@ -32,13 +35,13 @@ namespace SAM.Core
             }
 
             ObjectReference objectReference = complexReference as ObjectReference;
-            if(objectReference == null)
+            if (objectReference == null)
             {
                 return null;
             }
 
             string result = objectReference.Reference?.ToString();
-            if(!string.IsNullOrWhiteSpace(result))
+            if (!string.IsNullOrWhiteSpace(result))
             {
                 return result;
             }

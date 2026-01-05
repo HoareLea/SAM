@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Diagnostics;
 
@@ -8,7 +11,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public static Process ToUI(this global::Grasshopper.Kernel.Data.IGH_Structure gH_Structure)
         {
-            if(gH_Structure == null)
+            if (gH_Structure == null)
             {
                 return null;
             }

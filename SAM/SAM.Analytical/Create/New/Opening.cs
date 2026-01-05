@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -6,17 +9,17 @@ namespace SAM.Analytical
     {
         public static IOpening Opening(this OpeningType openingType, Face3D face3D)
         {
-            if(openingType == null || face3D == null || !face3D.IsValid())
+            if (openingType == null || face3D == null || !face3D.IsValid())
             {
                 return null;
             }
 
-            if(openingType is WindowType)
+            if (openingType is WindowType)
             {
                 return new Window((WindowType)openingType, face3D);
             }
 
-            if(openingType is DoorType)
+            if (openingType is DoorType)
             {
                 return new Door((DoorType)openingType, face3D);
             }
@@ -66,7 +69,7 @@ namespace SAM.Analytical
 
         public static IOpening Opening(System.Guid guid, IOpening opening, Face3D face3D, Point3D location)
         {
-            if(opening == null || face3D == null || location == null)
+            if (opening == null || face3D == null || location == null)
             {
                 return null;
             }
@@ -75,7 +78,7 @@ namespace SAM.Analytical
             plane = new Plane(plane, plane.Project(location));
 
             Face3D face3D_Temp = plane.Convert(plane.Convert(face3D));
-            if(face3D_Temp == null)
+            if (face3D_Temp == null)
             {
                 return null;
             }

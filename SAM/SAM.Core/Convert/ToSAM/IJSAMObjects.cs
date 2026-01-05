@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -35,7 +38,7 @@ namespace SAM.Core
             if (string.IsNullOrEmpty(path) || !File.Exists(path))
                 return null;
 
-            switch(sAMFileType)
+            switch (sAMFileType)
             {
                 case SAMFileType.Json:
                     return ToSAM_FromJsonFile(path);

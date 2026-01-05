@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
@@ -32,9 +35,9 @@ namespace SAM.Analytical.Grasshopper
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalUpdateConstructionsByConstructionManagerAndPanels()
-          : base("SAMAnalytical.UpdateConstructionsByConstructionManagerAndPanels", 
-                "SAMAnalytical.UpdateConstructionsByConstructionManagerAndPanels", 
-                "Update Constructions in Analytical Model By ConstructionManager and Panels", 
+          : base("SAMAnalytical.UpdateConstructionsByConstructionManagerAndPanels",
+                "SAMAnalytical.UpdateConstructionsByConstructionManagerAndPanels",
+                "Update Constructions in Analytical Model By ConstructionManager and Panels",
                 "SAM",
                 "Analytical04")
         {
@@ -168,22 +171,22 @@ namespace SAM.Analytical.Grasshopper
                         foreach (GooPanel gooPanel in gooPanels)
                         {
                             IPanel panel = gooPanel?.Value;
-                            if(panel == null)
+                            if (panel == null)
                             {
                                 continue;
                             }
 
                             panel = panels.Find(x => x.Guid == panel.Guid);
-                            if(panel == null)
+                            if (panel == null)
                             {
                                 continue;
                             }
 
-                            if(panel is Panel)
+                            if (panel is Panel)
                             {
                                 panel = Create.Panel((Panel)panel, construction_Temp);
                             }
-                            else if(panel is ExternalPanel)
+                            else if (panel is ExternalPanel)
                             {
                                 panel = new ExternalPanel(panel.Face3D, construction_Temp);
                             }
@@ -192,7 +195,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         List<IMaterial> materials = constructionManager.GetMaterials<IMaterial>(construction_Temp);
-                        if(materials != null && materials.Count != 0)
+                        if (materials != null && materials.Count != 0)
                         {
                             materials.ForEach(x => analyticalModel.AddMaterial(x));
                         }

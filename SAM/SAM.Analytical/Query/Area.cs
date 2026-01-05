@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -14,7 +17,7 @@ namespace SAM.Analytical
             bool filter = panelGroups != null && panelGroups.Length > 0;
 
             double result = 0;
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 if (filter && !panelGroups.Contains(panel.PanelType.PanelGroup()))
                     continue;
@@ -30,31 +33,31 @@ namespace SAM.Analytical
             paneArea = double.NaN;
             frameArea = double.NaN;
 
-            if(aperture == null)
+            if (aperture == null)
             {
                 return double.NaN;
             }
 
             Geometry.Spatial.Face3D face3D = aperture.Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return double.NaN;
             }
 
             Geometry.Planar.IClosed2D externalEdge2D = face3D.ExternalEdge2D;
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return double.NaN;
             }
 
             double result = externalEdge2D.GetArea();
-            if(double.IsNaN(result))
+            if (double.IsNaN(result))
             {
                 return double.NaN;
             }
 
             List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
-            if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
             {
                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                 if (apertureConstruction != null)
@@ -71,7 +74,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
             {
                 frameArea = 0;
                 paneArea = result;

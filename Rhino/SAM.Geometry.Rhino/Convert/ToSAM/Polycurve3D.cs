@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,21 +22,21 @@ namespace SAM.Geometry.Rhino
                     curve3Ds.Add(new Segment3D(curve.PointAtStart.ToSAM(), curve.PointAtEnd.ToSAM()));
             }
 
-            if(curve3Ds.TrueForAll(x => x is Segment3D))
+            if (curve3Ds.TrueForAll(x => x is Segment3D))
             {
                 List<Point3D> point3Ds = new List<Point3D>();
-                for(int i =0; i < curve3Ds.Count; i++)
+                for (int i = 0; i < curve3Ds.Count; i++)
                 {
                     point3Ds.Add(((Segment3D)curve3Ds[i]).GetStart());
                 }
 
                 point3Ds.Add(((Segment3D)curve3Ds.Last()).GetEnd());
 
-                if(point3Ds.Count > 2)
+                if (point3Ds.Count > 2)
                 {
-                    if(point3Ds.First().AlmostEquals(point3Ds.Last(), tolerance) && polyCurve.IsPlanar() && polyCurve.TryGetPlane(out global::Rhino.Geometry.Plane plane))
+                    if (point3Ds.First().AlmostEquals(point3Ds.Last(), tolerance) && polyCurve.IsPlanar() && polyCurve.TryGetPlane(out global::Rhino.Geometry.Plane plane))
                     {
-                        Plane plane_SAM = plane.ToSAM(); 
+                        Plane plane_SAM = plane.ToSAM();
 
                         point3Ds.RemoveAt(0);
                         return new Polygon3D(plane_SAM, point3Ds.ConvertAll(x => plane_SAM.Convert(x)));

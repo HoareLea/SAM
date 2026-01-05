@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -20,7 +23,7 @@ namespace SAM.Analytical
 
             List<Space> result = [];
 
-            if(point3Ds_Temp.Count == 0)
+            if (point3Ds_Temp.Count == 0)
             {
                 return result;
             }
@@ -33,32 +36,32 @@ namespace SAM.Analytical
 
             List<Guid> guids = [];
 
-            foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary)
+            foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary)
             {
-                if(keyValuePair.Value.GetBoundingBox() is not BoundingBox3D boundingBox3D )
+                if (keyValuePair.Value.GetBoundingBox() is not BoundingBox3D boundingBox3D)
                 {
                     continue;
                 }
 
                 List<Point3D> point3Ds_Shell = point3Ds_Temp.FindAll(x => boundingBox3D.InRange(x, tolerance_Distance));
-                if(point3Ds_Shell.Count == 0)
+                if (point3Ds_Shell.Count == 0)
                 {
                     continue;
                 }
 
                 Point3D point3D = point3Ds_Shell.Find(x => keyValuePair.Value.InRange(x, tolerance_Distance));
-                if(point3D is null)
+                if (point3D is null)
                 {
                     continue;
                 }
 
                 List<Panel> panels = adjacencyCluster.GetPanels(keyValuePair.Key);
-                if(panels != null && panels.Count > 0)
+                if (panels != null && panels.Count > 0)
                 {
-                    foreach(Panel panel in panels)
+                    foreach (Panel panel in panels)
                     {
                         List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                        if(spaces != null && spaces.Count == 1 && spaces[0].Guid == keyValuePair.Key.Guid)
+                        if (spaces != null && spaces.Count == 1 && spaces[0].Guid == keyValuePair.Key.Guid)
                         {
                             adjacencyCluster.RemoveObject(panel);
                             continue;
@@ -72,7 +75,7 @@ namespace SAM.Analytical
                 result.Add(keyValuePair.Key);
             }
 
-            if(guids == null || guids.Count == 0)
+            if (guids == null || guids.Count == 0)
             {
                 return result;
             }

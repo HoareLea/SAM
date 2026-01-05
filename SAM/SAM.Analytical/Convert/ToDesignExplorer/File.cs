@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +26,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(data == null || data.Count == 0)
+            if (data == null || data.Count == 0)
             {
                 return null;
             }
@@ -88,13 +91,13 @@ namespace SAM.Analytical
 
                 for (int j = i + 1; j < header.Count; j++)
                 {
-                    if(name == header[j])
+                    if (name == header[j])
                     {
                         indexes.Add(j);
                     }
                 }
 
-                if(indexes.Count == 0)
+                if (indexes.Count == 0)
                 {
                     continue;
                 }
@@ -103,14 +106,14 @@ namespace SAM.Analytical
 
                 name = name.Trim();
                 string unit = string.Empty;
-                if(name.LastIndexOf(']') == name.Length - 1 && name.LastIndexOf('[') > 0)
+                if (name.LastIndexOf(']') == name.Length - 1 && name.LastIndexOf('[') > 0)
                 {
                     int index = name.LastIndexOf('[');
                     name = name.Substring(0, index);
                     unit = name.Substring(index);
                 }
 
-                for(int x = 0; x < indexes.Count; x++)
+                for (int x = 0; x < indexes.Count; x++)
                 {
                     header[indexes[x]] = string.Format("{0} {1} {2}", name, x + 1, unit).Trim();
                 }
@@ -118,10 +121,10 @@ namespace SAM.Analytical
 
             List<string> result = [string.Join(",", header)];
 
-            foreach(Dictionary<int, object> dictionary in values)
+            foreach (Dictionary<int, object> dictionary in values)
             {
                 List<string> line = Enumerable.Repeat(string.Empty, header.Count).ToList();
-                foreach(KeyValuePair<int, object> keyValuePair in dictionary)
+                foreach (KeyValuePair<int, object> keyValuePair in dictionary)
                 {
                     line[keyValuePair.Key] = keyValuePair.Value?.ToString() ?? string.Empty;
                 }
@@ -224,7 +227,7 @@ namespace SAM.Analytical
                 double peakCoolingLoadPerArea = double.NaN;
                 double peakCoolingLoadPerVolume = double.NaN;
 
-                if(!double.IsNaN(volume))
+                if (!double.IsNaN(volume))
                 {
                     consumptionHeatingPerVolume = double.IsNaN(consumptionHeating) ? double.NaN : consumptionHeating / volume;
                     peakHeatingLoadPerVolume = double.IsNaN(peakHeatingLoad) ? double.NaN : peakHeatingLoad / volume;

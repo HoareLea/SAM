@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -39,13 +42,13 @@ namespace SAM.Core
 
         public static bool Add(this JObject jObject, Tag tag)
         {
-            if(jObject == null || tag == null)
+            if (jObject == null || tag == null)
             {
                 return false;
             }
 
             JObject jObject_Tag = tag.ToJObject();
-            if(jObject_Tag == null)
+            if (jObject_Tag == null)
             {
                 return false;
             }

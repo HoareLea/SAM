@@ -1,4 +1,7 @@
-﻿//'SAM' + SAM.Core.Revit.Query.ParameterNamePrefix($Object_1) + '_PeakDate'
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+//'SAM' + SAM.Core.Revit.Query.ParameterNamePrefix($Object_1) + '_PeakDate'
 //2 + 50 + SAM.Core.Revit.Query.Number($Object_1) + $Object_2
 //(2 + 50) / $Object_2
 //(2 + 10) < $Object_2
@@ -115,7 +118,7 @@ namespace SAM.Core
 
             string @operator = Query.Operator(CommandOperator.Text);
 
-            if(text_Trim.Length >= 2 && text_Trim[0] == @operator[0] && text_Trim[text_Trim.Length - 1] == @operator[0])
+            if (text_Trim.Length >= 2 && text_Trim[0] == @operator[0] && text_Trim[text_Trim.Length - 1] == @operator[0])
             {
                 value = text_Trim.Substring(1, text_Trim.Length - 2);
                 return true;
@@ -201,13 +204,13 @@ namespace SAM.Core
 
             text_Trim = text_Trim.Substring(index_Start);
             List<Command> commands = Create.Commands(text_Trim, new Enum[] { CommandOperator.MemberSeparator });
-            if(commands != null && commands.Count != 0)
+            if (commands != null && commands.Count != 0)
             {
                 commands.RemoveAt(0);
                 if (commands.Count != 0)
                     members = commands.FindAll(x => !x.IsOperator(out Enum @enum_Temp));
             }
-            
+
             return true;
         }
 
@@ -225,7 +228,7 @@ namespace SAM.Core
         {
             return IsComment(out string comment);
         }
-        
+
         public bool IsEmpty()
         {
             return string.IsNullOrWhiteSpace(text);
@@ -294,7 +297,7 @@ namespace SAM.Core
         public override bool Equals(object obj)
         {
             Command command = obj as Command;
-            if(command == null)
+            if (command == null)
             {
                 return false;
             }
@@ -304,7 +307,7 @@ namespace SAM.Core
 
         public override int GetHashCode()
         {
-            if(text == null)
+            if (text == null)
             {
                 return -1;
             }

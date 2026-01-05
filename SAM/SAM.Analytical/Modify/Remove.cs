@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -78,12 +81,12 @@ namespace SAM.Analytical
             List<Guid> result = new List<Guid>();
             foreach (KeyValuePair<Type, List<SAMObject>> keyValuePair in dictionary)
             {
-                if(keyValuePair.Key.IsAssignableFrom(typeof(Panel)))
+                if (keyValuePair.Key.IsAssignableFrom(typeof(Panel)))
                 {
-                    foreach(Panel panel in keyValuePair.Value)
+                    foreach (Panel panel in keyValuePair.Value)
                     {
                         List<Guid> guids_Panel = Remove(adjacencyCluster, panel);
-                        if(guids_Panel != null)
+                        if (guids_Panel != null)
                         {
                             result.AddRange(guids_Panel);
                         }
@@ -108,47 +111,47 @@ namespace SAM.Analytical
 
         public static List<Guid> Remove(this AdjacencyCluster adjacencyCluster, Panel panel)
         {
-            if(adjacencyCluster == null || panel == null)
+            if (adjacencyCluster == null || panel == null)
             {
                 return null;
             }
 
             Panel panel_AdjacencyCluster = adjacencyCluster.GetObject<Panel>(panel.Guid);
-            if(panel_AdjacencyCluster == null)
+            if (panel_AdjacencyCluster == null)
             {
                 return null;
             }
 
             List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(panel_AdjacencyCluster);
-            if(spaces != null && spaces.Count() != 0)
+            if (spaces != null && spaces.Count() != 0)
             {
                 List<Tuple<Space, double>> tuples = new List<Tuple<Space, double>>();
                 Dictionary<Guid, Panel> dictionary = new Dictionary<Guid, Panel>();
                 foreach (Space space_Temp in spaces)
                 {
                     Shell shell = adjacencyCluster.Shell(space_Temp);
-                    if(shell == null)
+                    if (shell == null)
                     {
                         continue;
                     }
 
                     double volume = shell.Volume();
-                    if(double.IsNaN(volume))
+                    if (double.IsNaN(volume))
                     {
                         continue;
                     }
 
                     tuples.Add(new Tuple<Space, double>(space_Temp, volume));
 
-                    List<Panel> panels =  adjacencyCluster.GetRelatedObjects<Panel>(space_Temp);
-                    foreach(Panel panel_Temp in panels)
+                    List<Panel> panels = adjacencyCluster.GetRelatedObjects<Panel>(space_Temp);
+                    foreach (Panel panel_Temp in panels)
                     {
-                        if(panel_Temp == null)
+                        if (panel_Temp == null)
                         {
                             continue;
                         }
 
-                        if(panel_Temp.Guid == panel.Guid)
+                        if (panel_Temp.Guid == panel.Guid)
                         {
                             continue;
                         }
@@ -157,7 +160,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(tuples != null && tuples.Count != 0)
+                if (tuples != null && tuples.Count != 0)
                 {
                     Space space = tuples[0].Item1;
                     tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));

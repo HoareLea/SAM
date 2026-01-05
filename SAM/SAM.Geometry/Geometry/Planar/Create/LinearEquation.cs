@@ -1,4 +1,7 @@
-﻿using SAM.Math;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Math;
 
 namespace SAM.Geometry.Planar
 {
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Planar
     {
         public static LinearEquation LinearEquation(this Point2D point2D_1, Point2D point2D_2)
         {
-            if(point2D_1 == point2D_2 || point2D_1 == null)
+            if (point2D_1 == point2D_2 || point2D_1 == null)
             {
                 return null;
             }

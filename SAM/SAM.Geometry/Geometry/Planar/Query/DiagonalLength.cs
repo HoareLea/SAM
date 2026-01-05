@@ -1,16 +1,19 @@
-﻿namespace SAM.Geometry.Planar
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
         public static double DiagonalLength(this BoundingBox2D boundingBox2D)
         {
-            if(boundingBox2D == null || !boundingBox2D.IsValid())
+            if (boundingBox2D == null || !boundingBox2D.IsValid())
             {
                 return double.NaN;
             }
 
             Segment2D[] segment2Ds = boundingBox2D.GetDiagonals();
-            if(segment2Ds == null || segment2Ds.Length == 0)
+            if (segment2Ds == null || segment2Ds.Length == 0)
             {
                 return double.NaN;
             }

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
         public static double MaxThickness(this ApertureConstruction apertureConstruction)
         {
-            if(apertureConstruction == null)
+            if (apertureConstruction == null)
             {
                 return double.NaN;
             }
@@ -20,7 +23,7 @@ namespace SAM.Analytical
             }
 
             double result = 0;
-            if(constructionLayers_Pane != null)
+            if (constructionLayers_Pane != null)
             {
                 result = constructionLayers_Pane.ConvertAll(x => x.Thickness).Sum();
             }

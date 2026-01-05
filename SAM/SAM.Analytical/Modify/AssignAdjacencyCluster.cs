@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -15,7 +18,7 @@ namespace SAM.Analytical
             {
                 ((LogicalFilter)filter).Filters?.ForEach(x => AssignAdjacencyCluster(x, adjacencyCluster));
             }
-            else if(filter is IRelationFilter)
+            else if (filter is IRelationFilter)
             {
                 AssignAdjacencyCluster(((IRelationFilter)filter).Filter, adjacencyCluster);
             }

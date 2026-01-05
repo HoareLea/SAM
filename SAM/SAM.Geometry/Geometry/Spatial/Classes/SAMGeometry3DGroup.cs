@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +20,7 @@ namespace SAM.Geometry.Spatial
 
         public SAMGeometry3DGroup(SAMGeometry3DGroup sAMGeometry3DGroup)
         {
-            if(sAMGeometry3DGroup != null)
+            if (sAMGeometry3DGroup != null)
             {
                 coordinateSystem3D = sAMGeometry3DGroup.coordinateSystem3D == null ? null : new CoordinateSystem3D(sAMGeometry3DGroup.coordinateSystem3D);
                 sAMGeometry3Ds = sAMGeometry3DGroup.sAMGeometry3Ds?.ConvertAll(x => x?.Clone() as ISAMGeometry3D);
@@ -26,7 +29,7 @@ namespace SAM.Geometry.Spatial
 
         public SAMGeometry3DGroup(CoordinateSystem3D coordinateSystem3D)
         {
-            this.coordinateSystem3D = coordinateSystem3D == null ? null : new CoordinateSystem3D(coordinateSystem3D); 
+            this.coordinateSystem3D = coordinateSystem3D == null ? null : new CoordinateSystem3D(coordinateSystem3D);
         }
 
         private SAMGeometry3DGroup(CoordinateSystem3D coordinateSystem3D, IEnumerable<ISAMGeometry3D> sAMGeometry3Ds)
@@ -38,7 +41,7 @@ namespace SAM.Geometry.Spatial
         public SAMGeometry3DGroup(IEnumerable<ISAMGeometry3D> sAMGeometry3Ds)
         {
             coordinateSystem3D = CoordinateSystem3D.World;
-            this.sAMGeometry3Ds = sAMGeometry3Ds == null ? null : sAMGeometry3Ds.ToList().ConvertAll(x => x.Clone() as ISAMGeometry3D); 
+            this.sAMGeometry3Ds = sAMGeometry3Ds == null ? null : sAMGeometry3Ds.ToList().ConvertAll(x => x.Clone() as ISAMGeometry3D);
         }
 
         public SAMGeometry3DGroup(JObject jObject)
@@ -48,18 +51,18 @@ namespace SAM.Geometry.Spatial
 
         public bool Add(ISAMGeometry3D sAMGeometry3D)
         {
-            if(sAMGeometry3D == null || coordinateSystem3D == null)
+            if (sAMGeometry3D == null || coordinateSystem3D == null)
             {
                 return false;
             }
 
             Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(CoordinateSystem3D.World, coordinateSystem3D);
-            if(transform3D == null)
+            if (transform3D == null)
             {
                 return false;
             }
 
-            if(sAMGeometry3Ds == null)
+            if (sAMGeometry3Ds == null)
             {
                 sAMGeometry3Ds = new List<ISAMGeometry3D>();
             }
@@ -72,7 +75,7 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                if(sAMGeometry3Ds == null)
+                if (sAMGeometry3Ds == null)
                 {
                     return -1;
                 }
@@ -92,7 +95,7 @@ namespace SAM.Geometry.Spatial
 
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     sAMGeometry3Ds[index] = null;
                     return;
@@ -110,23 +113,23 @@ namespace SAM.Geometry.Spatial
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("CoordinateSystem3D"))
+            if (jObject.ContainsKey("CoordinateSystem3D"))
             {
                 coordinateSystem3D = new CoordinateSystem3D(jObject.Value<JObject>("CoordinateSystem3D"));
             }
 
-            if(jObject.ContainsKey("SAMGeometry3Ds"))
+            if (jObject.ContainsKey("SAMGeometry3Ds"))
             {
                 JArray jArray = jObject.Value<JArray>("SAMGeometry3Ds");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     sAMGeometry3Ds = new List<ISAMGeometry3D>();
-                    foreach(JObject jObject_Temp in jArray)
+                    foreach (JObject jObject_Temp in jArray)
                     {
                         sAMGeometry3Ds.Add(Core.Query.IJSAMObject<ISAMGeometry3D>(jObject_Temp));
                     }
@@ -139,7 +142,7 @@ namespace SAM.Geometry.Spatial
         public IEnumerator<ISAMGeometry3D> GetEnumerator()
         {
             List<ISAMGeometry3D> sAMGeometry3Ds_Temp = new List<ISAMGeometry3D>();
-            if(sAMGeometry3Ds != null)
+            if (sAMGeometry3Ds != null)
             {
                 Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D, CoordinateSystem3D.World);
                 foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
@@ -153,7 +156,7 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            if(vector3D == null)
+            if (vector3D == null)
             {
                 return null;
             }
@@ -165,7 +168,7 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetTransformed(Transform3D transform3D)
         {
-            if(transform3D == null)
+            if (transform3D == null)
             {
                 return null;
             }
@@ -180,17 +183,17 @@ namespace SAM.Geometry.Spatial
             JObject result = new JObject();
             result.Add("_type", Core.Query.FullTypeName(this));
 
-            if(coordinateSystem3D != null)
+            if (coordinateSystem3D != null)
             {
                 result.Add("CoordinateSystem3D", coordinateSystem3D.ToJObject());
             }
 
-            if(sAMGeometry3Ds != null)
+            if (sAMGeometry3Ds != null)
             {
                 JArray jArray = new JArray();
-                foreach(ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
+                foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
                 {
-                    if(sAMGeometry3D == null)
+                    if (sAMGeometry3D == null)
                     {
                         continue;
                     }

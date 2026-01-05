@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Spatial
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
@@ -9,23 +12,23 @@
 
             Point3D point3D_1 = curve3D.GetStart();
             Point3D point3D_2 = curve3D.GetEnd();
-            
-            if(point3D_1 == null && point3D_2 == null)
+
+            if (point3D_1 == null && point3D_2 == null)
             {
                 return null;
             }
 
-            if(point3D_1 == null)
+            if (point3D_1 == null)
             {
                 return point3D_2;
             }
 
-            if(point3D_2 == null)
+            if (point3D_2 == null)
             {
                 return point3D_1;
             }
 
-            if(point3D_1.Distance(point3D) < point3D_2.Distance(point3D))
+            if (point3D_1.Distance(point3D) < point3D_2.Distance(point3D))
             {
                 return point3D_1;
             }

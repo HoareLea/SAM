@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -44,7 +47,7 @@ namespace SAM.Analytical
         public FeatureShade(FeatureShade featureShade)
             : base(featureShade)
         {
-            if(featureShade is not null)
+            if (featureShade is not null)
             {
                 description = featureShade.description;
                 surfaceHeight = featureShade.surfaceHeight;
@@ -135,7 +138,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(description is not null)
+            if (description is not null)
             {
                 jObject.Add("Description", description);
             }

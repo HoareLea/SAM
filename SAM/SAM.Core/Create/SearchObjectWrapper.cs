@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -8,11 +11,11 @@ namespace SAM.Core
         public static SearchObjectWrapper SearchObjectWrapper<T>(IEnumerable<T> items, Func<T, string> func, bool caseSensitive = false)
         {
             Func<object, string> func_Object = null;
-            if(func != null)
+            if (func != null)
             {
                 func_Object = new Func<object, string>((object @object) =>
                 {
-                    if(!(@object is T))
+                    if (!(@object is T))
                     {
                         return null;
                     }

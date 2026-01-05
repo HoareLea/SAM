@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -19,7 +22,7 @@ namespace SAM.Analytical
 
         public CaseData(CaseData caseData)
         {
-            if(caseData != null)
+            if (caseData != null)
             {
                 name = caseData.name;
             }
@@ -27,9 +30,9 @@ namespace SAM.Analytical
 
         public string Name
         {
-            get 
-            { 
-                return name; 
+            get
+            {
+                return name;
             }
         }
 

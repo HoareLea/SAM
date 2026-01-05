@@ -1,11 +1,14 @@
-﻿
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+
 namespace SAM.Core
 {
     public static partial class Create
     {
         public static IndexedDoubles IndexedDoubles(this IndexedDoubles indexedDoubles, int start, int end)
         {
-            if(indexedDoubles == null)
+            if (indexedDoubles == null)
             {
                 return null;
             }
@@ -13,7 +16,7 @@ namespace SAM.Core
             IndexedDoubles result = new IndexedDoubles();
             for (int i = start; i < end; i++)
             {
-                if(!indexedDoubles.ContainsIndex(i))
+                if (!indexedDoubles.ContainsIndex(i))
                 {
                     continue;
                 }

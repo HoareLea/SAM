@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,16 +11,16 @@ namespace SAM.Geometry.Object.Spatial
     {
         public static BoundingBox3D BoundingBox3D<T>(this IEnumerable<T> face3DObjects, double offset = 0) where T : IFace3DObject
         {
-            if(face3DObjects == null || face3DObjects.Count() == 0)
+            if (face3DObjects == null || face3DObjects.Count() == 0)
             {
                 return null;
             }
 
             List<BoundingBox3D> boundingBox3Ds = new List<BoundingBox3D>();
-            foreach(T face3DObject in face3DObjects)
+            foreach (T face3DObject in face3DObjects)
             {
                 BoundingBox3D boundingBox3D = face3DObject?.Face3D?.GetBoundingBox(offset);
-                if(boundingBox3D == null)
+                if (boundingBox3D == null)
                 {
                     continue;
                 }
@@ -25,7 +28,7 @@ namespace SAM.Geometry.Object.Spatial
                 boundingBox3Ds.Add(boundingBox3D);
             }
 
-            if(boundingBox3Ds.Count == 0)
+            if (boundingBox3Ds.Count == 0)
             {
                 return null;
             }

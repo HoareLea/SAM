@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -25,7 +28,7 @@ namespace SAM.Core
             ComplexReference = complexReferenceFilter?.ComplexReference?.Clone();
             SAMObjectRelationCluster = complexReferenceFilter?.SAMObjectRelationCluster;
         }
-        
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -50,7 +53,7 @@ namespace SAM.Core
             }
 
             bool result = IsValid(values);
-            if(Inverted)
+            if (Inverted)
             {
                 result = !result;
             }
@@ -68,7 +71,7 @@ namespace SAM.Core
                 return result;
             }
 
-            if(ComplexReference != null)
+            if (ComplexReference != null)
             {
                 result.Add("ComplexReference", ComplexReference.ToJObject());
             }

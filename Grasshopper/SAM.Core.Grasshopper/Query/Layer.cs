@@ -1,4 +1,7 @@
-﻿namespace SAM.Core.Grasshopper
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core.Grasshopper
 {
     public static partial class Query
     {
@@ -8,7 +11,7 @@
                 return null;
 
             int count = layerTable.Count;
-            for(int i=0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 Rhino.DocObjects.Layer layer = layerTable[i];
                 if (layer == null)

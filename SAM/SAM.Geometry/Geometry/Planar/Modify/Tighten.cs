@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
         {
             if (lineStrings == null || lineStrings.Count == 0)
                 return;
-            
+
             List<LineString> lineStrings_Short = lineStrings.FindAll(x => x.Length < tolerance && x.Coordinates.Length > 1);
             if (lineStrings_Short == null || lineStrings_Short.Count == 0)
                 return;

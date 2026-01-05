@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -11,7 +14,7 @@ namespace SAM.Core
                 return null;
 
             HashSet<Type> result = new HashSet<Type>();
-            foreach(Attributes.AssociatedTypes parameterTypes_Temp in parameterTypes)
+            foreach (Attributes.AssociatedTypes parameterTypes_Temp in parameterTypes)
             {
                 if (parameterTypes_Temp == null)
                     continue;

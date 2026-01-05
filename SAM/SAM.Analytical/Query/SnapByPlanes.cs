@@ -1,6 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Spatial;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -22,7 +25,7 @@ namespace SAM.Analytical
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 result.Add(panel?.SnapByPlanes(planes, maxDistance, tolerance));
             }
@@ -32,7 +35,7 @@ namespace SAM.Analytical
 
         public static List<Panel> SnapByPlanes(this IEnumerable<Panel> panels, IEnumerable<double> elevations, double maxDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(panels == null)
+            if (panels == null)
             {
                 return null;
             }

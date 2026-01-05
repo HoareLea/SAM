@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -119,12 +122,12 @@ namespace SAM.Analytical
 
         public List<ConstructionLayer> GetConstructionLayers(AperturePart aperturePart)
         {
-            if(aperturePart == AperturePart.Undefined)
+            if (aperturePart == AperturePart.Undefined)
             {
                 return null;
             }
 
-            switch(aperturePart)
+            switch (aperturePart)
             {
                 case AperturePart.Frame:
                     return FrameConstructionLayers;
@@ -138,13 +141,13 @@ namespace SAM.Analytical
 
         public double GetThickness(AperturePart aperturePart)
         {
-            if(aperturePart == AperturePart.Undefined)
+            if (aperturePart == AperturePart.Undefined)
             {
                 return double.NaN;
             }
 
             List<ConstructionLayer> constructionLayers = GetConstructionLayers(aperturePart);
-            if(constructionLayers == null || constructionLayers.Count == 0)
+            if (constructionLayers == null || constructionLayers.Count == 0)
             {
                 return 0;
             }
@@ -157,7 +160,7 @@ namespace SAM.Analytical
             double paneThickness = GetPaneThickness();
             double frameThickness = GetFrameThickness();
 
-            if(double.IsNaN(paneThickness) && double.IsNaN(frameThickness))
+            if (double.IsNaN(paneThickness) && double.IsNaN(frameThickness))
             {
                 return double.NaN;
             }

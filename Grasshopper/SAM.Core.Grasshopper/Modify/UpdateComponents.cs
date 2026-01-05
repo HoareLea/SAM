@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -58,7 +61,7 @@ namespace SAM.Core.Grasshopper
             foreach (GH_SAMComponent gH_SAMComponent in gH_SAMComponents)
             {
                 GH_SAMComponent gH_SAMComponent_New = DuplicateComponent(gH_SAMComponent, out Log log_Temp);
-                if(gH_SAMComponent_New == null)
+                if (gH_SAMComponent_New == null)
                 {
                     continue;
                 }
@@ -72,7 +75,7 @@ namespace SAM.Core.Grasshopper
             }
 
             List<GH_SAMComponent> result = new List<GH_SAMComponent>();
-            foreach(Tuple<GH_SAMComponent, GH_SAMComponent> tuple in tuples)
+            foreach (Tuple<GH_SAMComponent, GH_SAMComponent> tuple in tuples)
             {
                 //tuple.Item2.ExpireSolution(false);
                 result.Add(tuple.Item2);

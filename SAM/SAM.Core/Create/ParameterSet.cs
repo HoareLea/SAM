@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -38,7 +41,7 @@ namespace SAM.Core
         {
             if (@object == null || typeMap == null)
                 return null;
-            
+
             return ParameterSet(@object, @object.GetType().Assembly, type_destination, typeMap);
         }
 

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
         public static Aperture Aperture(this ApertureConstruction apertureConstruction, Face3D face3D)
         {
-            if(apertureConstruction == null || face3D == null || !face3D.IsValid())
+            if (apertureConstruction == null || face3D == null || !face3D.IsValid())
             {
                 return null;
             }
@@ -23,7 +26,7 @@ namespace SAM.Analytical
             }
 
             Guid guid_Temp = aperture.Guid;
-            if(guid != null && guid.HasValue && guid.Value != Guid.Empty)
+            if (guid != null && guid.HasValue && guid.Value != Guid.Empty)
             {
                 guid_Temp = guid.Value;
             }

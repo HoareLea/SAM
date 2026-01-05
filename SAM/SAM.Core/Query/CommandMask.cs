@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -56,7 +59,7 @@ namespace SAM.Core
                 result[i] = !apostrophe && braketCount == 0;
             }
 
-            if(includeComment)
+            if (includeComment)
             {
                 string @operator = Operator(CommandOperator.Comment);
                 List<int> indexes = text.IndexesOf(@operator);

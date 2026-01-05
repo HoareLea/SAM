@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,7 +16,7 @@ namespace SAM.Analytical
                 return Analytical.DefaultGasType.Undefined;
 
             List<string> names = new List<string>();
-            
+
             if (gasMaterial.TryGetValue(GasMaterialParameter.DefaultGasType, out string defaultGasType_String) && !string.IsNullOrWhiteSpace(defaultGasType_String))
             {
                 DefaultGasType defaultGasType = Core.Query.Enum<DefaultGasType>(defaultGasType_String);
@@ -21,10 +24,10 @@ namespace SAM.Analytical
                 {
                     return defaultGasType;
                 }
-                
+
                 names.Add(defaultGasType_String);
             }
-            
+
             names.Add(gasMaterial.Name);
             names.Add(gasMaterial.DisplayName);
             names.Add(gasMaterial.Description);
@@ -34,7 +37,7 @@ namespace SAM.Analytical
 
         public static DefaultGasType DefaultGasType(params string[] values)
         {
-            if(values == null || values.Length == 0)
+            if (values == null || values.Length == 0)
             {
                 return Analytical.DefaultGasType.Undefined;
             }

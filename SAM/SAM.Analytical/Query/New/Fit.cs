@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +19,13 @@ namespace SAM.Analytical
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             Face3D face3D_Opening = opening.Face3D;
-            if(face3D_Opening == null)
+            if (face3D_Opening == null)
             {
                 return null;
             }
@@ -31,7 +34,7 @@ namespace SAM.Analytical
             Geometry.Planar.Face2D face2D_Opening = plane.Convert(face3D_Opening);
 
             Geometry.Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Geometry.Planar.ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new NotImplementedException();
             }
@@ -39,13 +42,13 @@ namespace SAM.Analytical
             double area = face2D_Opening.GetArea();
 
             List<Geometry.Planar.Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Opening, face2D, tolerance);
-            if(face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+            if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
             {
                 return null;
             }
 
             double area_Difference = face2Ds_Difference.ConvertAll(x => x.GetArea()).Sum();
-            if(area_Difference <= tolerance || area_Difference >= (areaFactor * area))
+            if (area_Difference <= tolerance || area_Difference >= (areaFactor * area))
             {
                 return null;
             }
@@ -58,7 +61,7 @@ namespace SAM.Analytical
             Geometry.Planar.Vector2D vector2D_Y = null;
             foreach (Geometry.Planar.Point2D point2D in boundingBox2D.GetPoints())
             {
-                if(face2D.Inside(point2D, tolerance) || face2D.On(point2D, tolerance))
+                if (face2D.Inside(point2D, tolerance) || face2D.On(point2D, tolerance))
                 {
                     continue;
                 }
@@ -87,13 +90,13 @@ namespace SAM.Analytical
 
             }
 
-            if(vector2D_X == null && vector2D_Y == null)
+            if (vector2D_X == null && vector2D_Y == null)
             {
                 return null;
             }
 
             vector2D = new Geometry.Planar.Vector2D(vector2D_X == null ? 0 : vector2D_X.X, vector2D_Y == null ? 0 : vector2D_Y.Y);
-            if(vector2D.Length <= tolerance)
+            if (vector2D.Length <= tolerance)
             {
                 return null;
             }
@@ -115,10 +118,10 @@ namespace SAM.Analytical
             return null;
 
         }
-    
+
         public static IOpening Fit(this IOpening opening, IEnumerable<IPartition> partitions, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(opening == null || partitions == null)
+            if (opening == null || partitions == null)
             {
                 return null;
             }
@@ -148,12 +151,12 @@ namespace SAM.Analytical
                 openings.Add(opening_Temp);
             }
 
-            if(openings == null || openings.Count == 0)
+            if (openings == null || openings.Count == 0)
             {
                 return null;
             }
 
-            if(openings.Count == 1)
+            if (openings.Count == 1)
             {
                 return openings[0];
             }
@@ -164,10 +167,10 @@ namespace SAM.Analytical
 
             return tuples.FirstOrDefault()?.Item2;
         }
-    
+
         public static List<IOpening> Fit(this IEnumerable<IOpening> openings, IEnumerable<IPartition> partitions, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(openings == null || partitions == null)
+            if (openings == null || partitions == null)
             {
                 return null;
             }

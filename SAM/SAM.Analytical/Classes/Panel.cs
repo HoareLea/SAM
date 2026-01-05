@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry;
 using SAM.Geometry.Planar;
@@ -119,7 +122,7 @@ namespace SAM.Analytical
 
             if (panel.apertures != null)
                 apertures_All.AddRange(panel.apertures);
-            
+
             if (apertures_All.Count > 0)
             {
                 foreach (Aperture aperture in apertures_All)
@@ -267,19 +270,19 @@ namespace SAM.Analytical
         /// <returns>Net Area</returns>
         public double GetAreaNet()
         {
-            if(apertures == null || apertures.Count == 0)
+            if (apertures == null || apertures.Count == 0)
             {
                 return GetArea();
             }
 
             List<Face3D> face3Ds = GetFace3Ds(true);
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return double.NaN;
             }
 
             face3Ds = face3Ds.FindAll(x => x != null);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return double.NaN;
             }
@@ -647,9 +650,9 @@ namespace SAM.Analytical
             if (apertures == null || apertures.Count == 0)
                 return false;
 
-            for(int i=0; i < apertures.Count; i++)
+            for (int i = 0; i < apertures.Count; i++)
             {
-                if(apertures[i].Guid.Equals(guid))
+                if (apertures[i].Guid.Equals(guid))
                 {
                     apertures.RemoveAt(i);
                     return true;
@@ -826,7 +829,7 @@ namespace SAM.Analytical
                 }
 
                 Plane plane = planarBoundary3D.Plane;
-                if(plane == null)
+                if (plane == null)
                 {
                     return null;
                 }

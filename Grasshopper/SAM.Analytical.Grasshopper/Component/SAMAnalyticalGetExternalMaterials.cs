@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -52,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
             gooMaterialLibraryParam.Optional = true;
             inputParamManager.AddParameter(gooMaterialLibraryParam, "_materialLibrary", "_materialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
         }
-        
+
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
@@ -73,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             AdjacencyCluster adjacencyCluster = null;
-            if(!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -90,10 +93,10 @@ namespace SAM.Analytical.Grasshopper
             if (materialLibrary == null)
                 materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
 
-            if(spaces != null && spaces.Count != 0)
+            if (spaces != null && spaces.Count != 0)
             {
                 List<Space> spaces_Temp = new List<Space>();
-                
+
                 DataTree<GooMaterial> dataTree_Materials = new DataTree<GooMaterial>();
                 DataTree<GooPanel> dataTree_Panels = new DataTree<GooPanel>();
                 DataTree<double> dataTree_Areas = new DataTree<double>();

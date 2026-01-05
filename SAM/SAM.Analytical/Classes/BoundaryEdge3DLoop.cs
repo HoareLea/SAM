@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
@@ -39,7 +42,7 @@ namespace SAM.Analytical
         {
             if (boundaryEdge3Ds == null)
                 return null;
-            
+
             return new BoundingBox3D(boundaryEdge3Ds.ConvertAll(x => x.GetBoundingBox(offset)));
         }
 
@@ -51,7 +54,7 @@ namespace SAM.Analytical
 
         public void Transform(Transform3D transform3D)
         {
-            if (boundaryEdge3Ds == null || boundaryEdge3Ds.Count == 0|| transform3D == null)
+            if (boundaryEdge3Ds == null || boundaryEdge3Ds.Count == 0 || transform3D == null)
                 return;
 
             boundaryEdge3Ds.ForEach(x => x.Transform(transform3D));

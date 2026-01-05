@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 
@@ -9,15 +12,15 @@ namespace SAM.Analytical
         public static Dictionary<Guid, Color> AssignSpaceColors(this AdjacencyCluster adjacencyCluster)
         {
             List<Space> spaces = adjacencyCluster?.GetSpaces();
-            if(spaces == null || spaces.Count == 0)
+            if (spaces == null || spaces.Count == 0)
             {
                 return null;
             }
             Dictionary<string, Tuple<Color, List<Space>>> dictionary = new Dictionary<string, Tuple<Color, List<Space>>>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 InternalCondition internalCondition = space?.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                 {
                     continue;
                 }
@@ -28,12 +31,12 @@ namespace SAM.Analytical
                 }
 
                 string name = internalCondition.Name;
-                if(string.IsNullOrWhiteSpace(name))
+                if (string.IsNullOrWhiteSpace(name))
                 {
                     continue;
                 }
 
-                if(!dictionary.TryGetValue(name, out Tuple<Color, List<Space>> tuple) || tuple == null)
+                if (!dictionary.TryGetValue(name, out Tuple<Color, List<Space>> tuple) || tuple == null)
                 {
                     tuple = new Tuple<Color, List<Space>>(sAMColor.ToColor(), new List<Space>());
                     dictionary[name] = tuple;
@@ -51,12 +54,12 @@ namespace SAM.Analytical
                 List<Color> colors = Core.Create.Colors(color, spaces_Color.Count, 0, 0.8);
                 //MD to control order of colors first raw and than variations
                 colors.Reverse();
-                if(colors == null || colors.Count != spaces_Color.Count)
+                if (colors == null || colors.Count != spaces_Color.Count)
                 {
                     continue;
                 }
 
-                for(int i = 0; i < colors.Count; i++)
+                for (int i = 0; i < colors.Count; i++)
                 {
                     spaces_Color[i].SetValue(SpaceParameter.Color, colors[i]);
                     result[spaces_Color[i].Guid] = colors[i];

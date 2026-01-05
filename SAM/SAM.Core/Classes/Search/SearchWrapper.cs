@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,16 +13,16 @@ namespace SAM.Core
         private bool caseSensitive;
         private char[] separators;
         private Dictionary<string, List<string>> dictionary;
-        
+
         public SearchWrapper(IEnumerable<string> texts, IEnumerable<char> separators, bool caseSensitive)
         {
             this.caseSensitive = caseSensitive;
-            if(separators != null)
+            if (separators != null)
             {
                 this.separators = separators.ToArray();
             }
 
-            if(texts != null)
+            if (texts != null)
             {
                 foreach (string value in texts)
                 {
@@ -38,19 +41,19 @@ namespace SAM.Core
 
         public SearchWrapper(SearchWrapper searchWrapper)
         {
-            if(searchWrapper != null)
+            if (searchWrapper != null)
             {
                 caseSensitive = searchWrapper.caseSensitive;
-                
+
                 separators = searchWrapper.separators == null ? null : new List<char>(searchWrapper.separators).ToArray();
-                
-                if(searchWrapper.dictionary != null)
+
+                if (searchWrapper.dictionary != null)
                 {
                     dictionary = new Dictionary<string, List<string>>();
-                    foreach(string key in dictionary.Keys)
+                    foreach (string key in dictionary.Keys)
                     {
                         List<string> values = dictionary[key];
-                        if(values != null)
+                        if (values != null)
                         {
                             values = new List<string>(values);
                         }
@@ -81,12 +84,12 @@ namespace SAM.Core
 
         public bool Remove(string text)
         {
-            if(text == null || dictionary == null)
+            if (text == null || dictionary == null)
             {
                 return false;
             }
 
-            if(!dictionary.ContainsKey(text))
+            if (!dictionary.ContainsKey(text))
             {
                 return false;
             }
@@ -154,7 +157,7 @@ namespace SAM.Core
                     continue;
                 }
 
-                if(!caseSensitive)
+                if (!caseSensitive)
                 {
                     if (keyValuePair.Key.ToLower() == text.ToLower())
                     {
@@ -166,18 +169,18 @@ namespace SAM.Core
                 List<string> values_2 = keyValuePair.Value;
 
                 List<Tuple<string, string>> tuples = new List<Tuple<string, string>>();
-                foreach(string value_1 in values_1)
+                foreach (string value_1 in values_1)
                 {
-                    foreach(string value_2 in values_2)
+                    foreach (string value_2 in values_2)
                     {
-                        if(value_2.Contains(value_1))
+                        if (value_2.Contains(value_1))
                         {
                             tuples.Add(new Tuple<string, string>(value_1, value_2));
                         }
                     }
                 }
 
-                if(tuples == null || tuples.Count == 0)
+                if (tuples == null || tuples.Count == 0)
                 {
                     continue;
                 }
@@ -185,7 +188,7 @@ namespace SAM.Core
                 tuples.Sort((x, y) => y.Item1.CompareTo(x.Item1));
 
                 string value_Temp = string.Join(string.Empty, values_2);
-                foreach(Tuple<string, string> tuple in tuples)
+                foreach (Tuple<string, string> tuple in tuples)
                 {
                     value_Temp = value_Temp.Replace(tuple.Item1, string.Empty);
                 }
@@ -201,15 +204,15 @@ namespace SAM.Core
         public List<string> Search(string text, bool sort = true)
         {
             Dictionary<string, double> scoreDictionary = GetScoreDictionary(text);
-            if(scoreDictionary == null)
+            if (scoreDictionary == null)
             {
                 return null;
             }
 
             List<Tuple<string, double>> tuples = new List<Tuple<string, double>>();
-            foreach(string key in scoreDictionary.Keys)
+            foreach (string key in scoreDictionary.Keys)
             {
-                if(scoreDictionary[key] == 0)
+                if (scoreDictionary[key] == 0)
                 {
                     continue;
                 }
@@ -217,7 +220,7 @@ namespace SAM.Core
                 tuples.Add(new Tuple<string, double>(key, scoreDictionary[key]));
             }
 
-            if(sort)
+            if (sort)
             {
                 tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));
             }
@@ -227,12 +230,12 @@ namespace SAM.Core
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("CaseSensitive"))
+            if (jObject.ContainsKey("CaseSensitive"))
             {
                 caseSensitive = jObject.Value<bool>("CaseSensitive");
             }
@@ -240,12 +243,12 @@ namespace SAM.Core
             if (jObject.ContainsKey("Separators"))
             {
                 JArray jArray = jObject.Value<JArray>("Separators");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     List<char> separators_temp = new List<char>();
-                    foreach(string separator_String in jArray)
+                    foreach (string separator_String in jArray)
                     {
-                        if(separator_String == null || separator_String.Length == 0)
+                        if (separator_String == null || separator_String.Length == 0)
                         {
                             continue;
                         }
@@ -257,10 +260,10 @@ namespace SAM.Core
                 }
             }
 
-            if(jObject.ContainsKey("Texts"))
+            if (jObject.ContainsKey("Texts"))
             {
                 JArray jArray = jObject.Value<JArray>("Texts");
-                foreach(string text in jArray)
+                foreach (string text in jArray)
                 {
                     Add(text);
                 }
@@ -272,25 +275,25 @@ namespace SAM.Core
         public JObject ToJObject()
         {
             JObject result = new JObject();
-            
+
             result.Add("CaseSensitive", caseSensitive);
 
-            if(separators != null)
+            if (separators != null)
             {
                 JArray jArray = new JArray();
-                foreach(char separator in separators)
+                foreach (char separator in separators)
                 {
                     jArray.Add(separator.ToString());
                 }
                 result.Add("Separators", jArray);
             }
 
-            if(dictionary != null)
+            if (dictionary != null)
             {
                 JArray jArray = new JArray();
                 foreach (string text in dictionary.Keys)
                 {
-                    if(text == null)
+                    if (text == null)
                     {
                         continue;
                     }

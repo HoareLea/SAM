@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -6,19 +9,19 @@ namespace SAM.Core
     public class IndexedDoubles : IndexedObjects<double>
     {
         public IndexedDoubles()
-            :base()
+            : base()
         {
 
         }
 
         public IndexedDoubles(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public IndexedDoubles(IndexedDoubles indexedDoubles)
-            :base(indexedDoubles)
+            : base(indexedDoubles)
         {
 
         }
@@ -44,15 +47,15 @@ namespace SAM.Core
         public void Sum(IndexedDoubles indexedDoubles)
         {
             IEnumerable<int> keys = indexedDoubles?.Keys;
-            if(keys == null)
+            if (keys == null)
             {
                 return;
             }
 
-            foreach(int index in keys)
+            foreach (int index in keys)
             {
                 double value = indexedDoubles[index];
-                if(double.IsNaN(value) || value == 0)
+                if (double.IsNaN(value) || value == 0)
                 {
                     continue;
                 }
@@ -67,15 +70,15 @@ namespace SAM.Core
 
             int result = -1;
             double max = double.MinValue;
-            foreach(int key in keys)
+            foreach (int key in keys)
             {
                 double value = this[key];
-                if(double.IsNaN(value))
+                if (double.IsNaN(value))
                 {
                     continue;
                 }
 
-                if(value > max)
+                if (value > max)
                 {
                     max = value;
                     result = key;
@@ -112,7 +115,7 @@ namespace SAM.Core
         public double GetMaxValue()
         {
             int index = GetMaxValueIndex();
-            if(index == -1)
+            if (index == -1)
             {
                 return double.NaN;
             }
@@ -134,17 +137,17 @@ namespace SAM.Core
         public double GetSum()
         {
             IEnumerable<int> keys = Keys;
-            if(keys == null)
+            if (keys == null)
             {
                 return double.NaN;
             }
 
 
             double result = 0;
-            foreach(int key in keys)
+            foreach (int key in keys)
             {
                 double value = this[key];
-                if(double.IsNaN(value))
+                if (double.IsNaN(value))
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -48,7 +51,7 @@ namespace SAM.Analytical
                 List<Panel> panels_Temp = null;
 
                 panels_Temp = panels?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
-                if(panels_Temp == null || panels_Temp.Count == 0)
+                if (panels_Temp == null || panels_Temp.Count == 0)
                     panels_Temp = panels_All?.ToList().FindAll(x => PanelGroup(x.PanelType) == Analytical.PanelGroup.Wall);
 
                 if (panels_Temp != null && panels_Temp.Count > 0)

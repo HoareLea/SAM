@@ -1,7 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using Grasshopper.Kernel;
-using SAM.Core;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -24,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         }
 
         static int ToIndex(char value) => value - 'A';
-        
+
         static char ToChar(int value) => (char)('A' + value);
 
         public bool CanInsertParameter(GH_ParameterSide side, int index)
@@ -51,7 +53,7 @@ namespace SAM.Analytical.Grasshopper
         }
 
         public bool DestroyParameter(GH_ParameterSide side, int index) => CanRemoveParameter(side, index);
-        
+
         public void VariableParameterMaintenance() { }
 
         public override void AddedToDocument(GH_Document document)
@@ -112,11 +114,11 @@ namespace SAM.Analytical.Grasshopper
                 string filter = string.Empty;
                 if (DA.GetData(i, ref filter) && filter is object)
                 {
-                    if(Core.Convert.ToSAM<Panel>(filter) is List<Panel> panels && panels.Count != 0)
+                    if (Core.Convert.ToSAM<Panel>(filter) is List<Panel> panels && panels.Count != 0)
                     {
                         panel = panels[0];
                     }
-                    else if(Core.Query.TryConvert(filter, out double value))
+                    else if (Core.Query.TryConvert(filter, out double value))
                     {
                         ratio = value;
                     }

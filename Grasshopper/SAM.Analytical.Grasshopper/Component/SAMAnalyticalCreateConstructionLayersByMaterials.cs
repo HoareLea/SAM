@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -89,25 +92,25 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> thicknesses = new List<double>();
             index = Params.IndexOfInputParam("_thicknesses_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, thicknesses);
             }
 
-            if(materials.Count != thicknesses.Count)
+            if (materials.Count != thicknesses.Count)
             {
                 int count = thicknesses.Count;
                 for (int i = 0; i < materials.Count - count; i++)
                 {
                     Material material = materials[i + count] as Material;
-                    if(material == null)
+                    if (material == null)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
                     }
 
                     double thickness = material.GetValue<double>(Core.MaterialParameter.DefaultThickness);
-                    if(double.IsNaN(thickness))
+                    if (double.IsNaN(thickness))
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
@@ -140,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("constructionLayers");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetDataList(index, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
             }

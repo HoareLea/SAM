@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -9,13 +12,13 @@ namespace SAM.Analytical
             spaces_Supply = null;
             spaces_Exhaust = null;
 
-            if(adjacencyCluster == null || string.IsNullOrWhiteSpace(ventilationUnitName))
+            if (adjacencyCluster == null || string.IsNullOrWhiteSpace(ventilationUnitName))
             {
                 return null;
             }
 
             List<VentilationSystem> ventilationSystems = adjacencyCluster.VentilationSystems(ventilationUnitName, out List<VentilationSystem> ventilationSystems_Supply, out List<VentilationSystem> ventilationSystems_Exhaust);
-            if(ventilationSystems == null || ventilationSystems.Count == 0)
+            if (ventilationSystems == null || ventilationSystems.Count == 0)
             {
                 return null;
             }
@@ -26,11 +29,11 @@ namespace SAM.Analytical
             foreach (VentilationSystem ventilationSystem in ventilationSystems_Supply)
             {
                 List<Space> spaces_VentilationSystem = adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem);
-                if(spaces_VentilationSystem != null)
+                if (spaces_VentilationSystem != null)
                 {
-                    foreach(Space space in spaces_VentilationSystem)
+                    foreach (Space space in spaces_VentilationSystem)
                     {
-                        if(spaces_Supply.Find(x => x.Guid == space.Guid) == null)
+                        if (spaces_Supply.Find(x => x.Guid == space.Guid) == null)
                         {
                             spaces_Supply.Add(space);
                             if (result.Find(x => x.Guid == space.Guid) == null)

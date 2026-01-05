@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace SAM.Analytical.Grasshopper
@@ -18,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
 
         public static GH_Mesh ToGrasshopper_Mesh(this IPartition partition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(partition == null)
+            if (partition == null)
             {
                 return null;
             }

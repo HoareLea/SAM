@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -9,12 +12,12 @@ namespace SAM.Geometry.Object
         private SAMGeometryObjectCollection sAMGeometryObjectCollection;
 
         public GeometryObjectModel(GeometryObjectModel geometryObjectModel)
-            :base(geometryObjectModel)
+            : base(geometryObjectModel)
         {
-            if(geometryObjectModel?.sAMGeometryObjectCollection != null)
+            if (geometryObjectModel?.sAMGeometryObjectCollection != null)
             {
                 sAMGeometryObjectCollection = new SAMGeometryObjectCollection();
-                foreach(ISAMGeometryObject sAMGeometryObject in geometryObjectModel.sAMGeometryObjectCollection)
+                foreach (ISAMGeometryObject sAMGeometryObject in geometryObjectModel.sAMGeometryObjectCollection)
                 {
                     sAMGeometryObjectCollection.Add(sAMGeometryObject);
                 }
@@ -22,25 +25,25 @@ namespace SAM.Geometry.Object
         }
 
         public GeometryObjectModel(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public GeometryObjectModel()
-            :base()
+            : base()
         {
 
         }
 
         public bool Add(ISAMGeometryObject sAMGeometryObject)
         {
-            if(sAMGeometryObject == null)
+            if (sAMGeometryObject == null)
             {
                 return false;
             }
 
-            if(sAMGeometryObjectCollection == null)
+            if (sAMGeometryObjectCollection == null)
             {
                 sAMGeometryObjectCollection = new SAMGeometryObjectCollection();
             }
@@ -51,7 +54,7 @@ namespace SAM.Geometry.Object
 
         public List<T> GetSAMGeometryObjects<T>(Func<T, bool> func = null) where T : ISAMGeometryObject
         {
-            if(sAMGeometryObjectCollection == null)
+            if (sAMGeometryObjectCollection == null)
             {
                 return null;
             }
@@ -59,7 +62,7 @@ namespace SAM.Geometry.Object
             List<T> result = new List<T>();
             foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
             {
-                if(!(sAMGeometryObject is T))
+                if (!(sAMGeometryObject is T))
                 {
                     continue;
                 }
@@ -68,7 +71,7 @@ namespace SAM.Geometry.Object
 
                 if (func != null)
                 {
-                    if(!func.Invoke(t))
+                    if (!func.Invoke(t))
                     {
                         continue;
                     }
@@ -90,7 +93,7 @@ namespace SAM.Geometry.Object
             foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
             {
                 T t = Query.ISAMGeometryObject(sAMGeometryObject, func, recursive);
-                if(t != null)
+                if (t != null)
                 {
                     return t;
                 }
@@ -102,18 +105,18 @@ namespace SAM.Geometry.Object
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 result = new JObject();
             }
 
-            if(sAMGeometryObjectCollection != null)
+            if (sAMGeometryObjectCollection != null)
             {
                 JArray jArray = new JArray();
 
                 foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjectCollection)
                 {
-                    if(sAMGeometryObject == null)
+                    if (sAMGeometryObject == null)
                     {
                         continue;
                     }
@@ -128,12 +131,12 @@ namespace SAM.Geometry.Object
 
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("GeometryObjects"))
+            if (jObject.ContainsKey("GeometryObjects"))
             {
                 JArray jArray = jObject.Value<JArray>("GeometryObjects");
 
@@ -141,7 +144,7 @@ namespace SAM.Geometry.Object
                 foreach (JObject jObject_GeometryObject in jArray)
                 {
                     ISAMGeometryObject sAMGeometryObject = Core.Create.IJSAMObject<ISAMGeometryObject>(jObject_GeometryObject);
-                    if(sAMGeometryObject != null)
+                    if (sAMGeometryObject != null)
                     {
                         sAMGeometryObjectCollection.Add(sAMGeometryObject);
                     }

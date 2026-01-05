@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -8,13 +11,13 @@ namespace SAM.Analytical
     {
         public static double DaylightFactor(this AdjacencyCluster adjacencyCluster, Space space)
         {
-            if(adjacencyCluster == null || space == null)
+            if (adjacencyCluster == null || space == null)
             {
                 return double.NaN;
             }
 
             List<Panel> panels = adjacencyCluster.GetPanels(space);
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return double.NaN;
             }
@@ -25,14 +28,14 @@ namespace SAM.Analytical
             foreach (Panel panel in panels)
             {
                 Face3D face3D_Panel = panel?.GetFace3D();
-                if(face3D_Panel == null)
+                if (face3D_Panel == null)
                 {
                     continue;
                 }
 
 
                 double area_Panel = face3D_Panel.GetArea();
-                if(double.IsNaN(area_Panel))
+                if (double.IsNaN(area_Panel))
                 {
                     continue;
                 }
@@ -40,29 +43,29 @@ namespace SAM.Analytical
                 area += area_Panel;
 
                 BoundaryType boundaryType = adjacencyCluster.BoundaryType(panel);
-                if(boundaryType != Analytical.BoundaryType.Exposed)
+                if (boundaryType != Analytical.BoundaryType.Exposed)
                 {
                     continue;
                 }
 
                 double tilt = panel.GetTilt();
-                if(double.IsNaN(tilt))
+                if (double.IsNaN(tilt))
                 {
                     continue;
                 }
 
                 List<Tuple<double, double>> tuples = new List<Tuple<double, double>>();
-                if(panel.TryGetValue(PanelParameter.LightTransmittance, out double lightTransmittance) && !double.IsNaN(lightTransmittance) && lightTransmittance > 0)
+                if (panel.TryGetValue(PanelParameter.LightTransmittance, out double lightTransmittance) && !double.IsNaN(lightTransmittance) && lightTransmittance > 0)
                 {
                     tuples.Add(new Tuple<double, double>(area_Panel, lightTransmittance));
                 }
 
                 List<Aperture> apertures = panel.Apertures;
-                if(apertures != null && apertures.Count != 0)
+                if (apertures != null && apertures.Count != 0)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
-                        if(aperture == null)
+                        if (aperture == null)
                         {
                             continue;
                         }
@@ -81,14 +84,14 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(tuples == null || tuples.Count == 0)
+                if (tuples == null || tuples.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Tuple<double, double> tuple in tuples)
+                foreach (Tuple<double, double> tuple in tuples)
                 {
-                    if(tilt < 90)
+                    if (tilt < 90)
                     {
                         double temp_1 = tilt / 90.0;
                         double temp_2 = temp_1 * 45.0;
@@ -108,7 +111,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(area == 0 || result == 0)
+            if (area == 0 || result == 0)
             {
                 return 0;
             }

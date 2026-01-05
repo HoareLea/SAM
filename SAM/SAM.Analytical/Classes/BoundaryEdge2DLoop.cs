@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
@@ -92,7 +95,7 @@ namespace SAM.Analytical
                 return double.NaN;
 
             double perimeter = 0;
-            foreach(BoundaryEdge2D boundaryEdge2D in boundaryEdge2Ds)
+            foreach (BoundaryEdge2D boundaryEdge2D in boundaryEdge2Ds)
             {
                 ICurve2D curve2D = boundaryEdge2D.Curve2D;
                 if (curve2D == null)

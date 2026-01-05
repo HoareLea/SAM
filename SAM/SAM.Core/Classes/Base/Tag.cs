@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Drawing;
 
@@ -255,12 +258,12 @@ namespace SAM.Core
 
         public T GetValue<T>()
         {
-            if(value is T)
+            if (value is T)
             {
                 return (T)value;
             }
 
-            if(!Query.TryConvert(value, out T result))
+            if (!Query.TryConvert(value, out T result))
             {
                 return default(T);
             }
@@ -310,26 +313,26 @@ namespace SAM.Core
 
             ValueType valueType = ValueType;
             jObject.Add("ValueType", valueType.ToString());
-            
-            if(valueType != ValueType.Undefined)
+
+            if (valueType != ValueType.Undefined)
             {
                 object value = null;
-                switch(valueType)
+                switch (valueType)
                 {
                     case ValueType.Boolean:
-                        if(Query.TryConvert(Value, out bool @bool))
+                        if (Query.TryConvert(Value, out bool @bool))
                         {
                             value = @bool;
                         }
                         break;
-                    
+
                     case ValueType.Color:
                         if (Query.TryConvert(Value, out Color color))
                         {
                             value = new SAMColor(color).ToJObject();
                         }
                         break;
-                    
+
                     case ValueType.DateTime:
                         if (Query.TryConvert(Value, out DateTime dateTime))
                         {
@@ -370,7 +373,7 @@ namespace SAM.Core
                         break;
                 }
 
-                if(value != null)
+                if (value != null)
                 {
                     jObject.Add("Value", value as dynamic);
                 }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.IO;
 using System.Net;
 
@@ -26,17 +29,17 @@ namespace SAM.Core
             httpWebRequest.UserAgent = userAgent;
 
             string json = null;
-            
+
             using (WebResponse webResponse = httpWebRequest.GetResponse())
             {
                 Stream stream = webResponse.GetResponseStream();
-                if(stream != null)
+                if (stream != null)
                 {
                     using (StreamReader streamReader = new StreamReader(stream))
                     {
                         json = streamReader.ReadToEnd();
                     }
-                }   
+                }
             }
 
             if (string.IsNullOrWhiteSpace(json))

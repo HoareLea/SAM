@@ -1,20 +1,23 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static OpeningAnalyticalType OpeningAnalyticalType(this IOpening opening)
         {
-            if(opening == null)
+            if (opening == null)
             {
                 return Analytical.OpeningAnalyticalType.Undefined;
             }
 
-            if(opening is Door)
+            if (opening is Door)
             {
                 return Analytical.OpeningAnalyticalType.Door;
             }
 
-            if(opening is Window)
+            if (opening is Window)
             {
                 return Analytical.OpeningAnalyticalType.Window;
             }

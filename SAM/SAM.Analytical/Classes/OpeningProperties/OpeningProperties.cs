@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -9,7 +12,7 @@ namespace SAM.Analytical
     public class OpeningProperties : ParameterizedSAMObject, ISingleOpeningProperties
     {
         public double Factor { get; set; } = 1;
-        
+
         private double dischargeCoefficient { get; set; }
 
         public OpeningProperties()
@@ -23,14 +26,14 @@ namespace SAM.Analytical
         }
 
         public OpeningProperties(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
         }
 
         public OpeningProperties(OpeningProperties openingProperties)
             : base(openingProperties)
         {
-            if(openingProperties != null)
+            if (openingProperties != null)
             {
                 Factor = openingProperties.Factor;
                 dischargeCoefficient = openingProperties.dischargeCoefficient;
@@ -45,12 +48,12 @@ namespace SAM.Analytical
 
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("DischargeCoefficient"))
+            if (jObject.ContainsKey("DischargeCoefficient"))
             {
                 dischargeCoefficient = jObject.Value<double>("DischargeCoefficient");
             }
@@ -66,12 +69,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }
 
-            if(!double.IsNaN(dischargeCoefficient))
+            if (!double.IsNaN(dischargeCoefficient))
             {
                 jObject.Add("DischargeCoefficient", dischargeCoefficient);
             }

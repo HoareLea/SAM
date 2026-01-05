@@ -1,4 +1,7 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -7,7 +10,7 @@
             if (profileType == ProfileType.Undefined || profileType == ProfileType.Other)
                 return Analytical.ProfileGroup.Undefined;
 
-            switch(profileType)
+            switch (profileType)
             {
                 case ProfileType.Dehumidification:
                 case ProfileType.Humidification:

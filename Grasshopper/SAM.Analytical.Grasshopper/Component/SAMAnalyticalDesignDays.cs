@@ -1,10 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
+using SAM.Weather.Grasshopper;
 using System;
 using System.Collections.Generic;
-using SAM.Weather.Grasshopper;
-using SAM.Analytical.Grasshopper.Properties;
-using SAM.Weather;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -44,9 +47,9 @@ namespace SAM.Analytical.Grasshopper
                 GooWeatherDataParam gooWeatherData = new GooWeatherDataParam() { Name = "_weatherData", NickName = "_weatherData", Description = "SAM Weather WeatherData", Access = GH_ParamAccess.item, Optional = false };
                 result.Add(new GH_SAMParam(gooWeatherData, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayTemp_", NickName = "heatingDesignDayTemp_", Description = "Heating DesignDay Temperature", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayTemp_", NickName = "heatingDesignDayTemp_", Description = "Heating DesignDay Temperature", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayRelativeHumidity_", NickName = "heatingDesignDayRelativeHumidity_", Description = "Heating DesignDay Relative Humidity [%]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayWindspeed_", NickName = "heatingDesignDayWindspeed_", Description = "Heating DesignDay Windspeed", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "heatingDesignDayWindspeed_", NickName = "heatingDesignDayWindspeed_", Description = "Heating DesignDay Windspeed", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -88,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
 
 
             index = Params.IndexOfOutputParam("weatherData");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, new GooWeatherData(weatherData));
             }
@@ -103,15 +106,15 @@ namespace SAM.Analytical.Grasshopper
             if (index_HeatingDesignDay != -1)
             {
                 DesignDay designDay = weatherData?.HeatingDesignDay();
-                if(designDay != null)
+                if (designDay != null)
                 {
                     index = Params.IndexOfInputParam("heatingDesignDayTemp_");
-                    if(index != -1)
+                    if (index != -1)
                     {
                         double temperature = double.NaN;
-                        if(dataAccess.GetData(index, ref temperature) && !double.IsNaN(temperature))
+                        if (dataAccess.GetData(index, ref temperature) && !double.IsNaN(temperature))
                         {
-                            for(int i=0; i < 24; i++)
+                            for (int i = 0; i < 24; i++)
                             {
                                 designDay[WeatherDataType.DryBulbTemperature, i] = temperature;
                             }

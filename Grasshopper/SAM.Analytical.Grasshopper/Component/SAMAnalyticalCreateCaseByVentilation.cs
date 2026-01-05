@@ -1,9 +1,10 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
-using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -293,178 +294,153 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
             index = Params.IndexOfInputParam("description_");
             if (index != -1 && !dataAccess.GetData(index, ref description)) description = null;
 
-            // Work on a modifiable copy of the cluster
-            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-
-            List<Space> spaces = [];
-            List<InternalCondition> internalConditions = [];
-
-            if (adjacencyCluster is not null)
+            List<IAnalyticalObject> analyticalObjects = [];
+            index = Params.IndexOfInputParam("_spaces/zones");
+            if (index != -1)
             {
-                adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
-
-                // Scope selection (Spaces or Zones)
-                List<IAnalyticalObject> analyticalObjects = [];
-                index = Params.IndexOfInputParam("_spaces/zones");
-                if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
-                {
-                    foreach (IAnalyticalObject analyticalObject_Temp in analyticalObjects)
-                    {
-                        if (analyticalObject_Temp is not SAMObject sAMObject)
-                            continue;
-
-                        List<Space> spaces_Temp = [];
-                        if (analyticalObject_Temp is Space space)
-                        {
-                            spaces_Temp.Add(adjacencyCluster.GetObject<Space>(sAMObject.Guid));
-                        }
-                        else if (analyticalObject_Temp is Zone zone)
-                        {
-                            spaces_Temp = adjacencyCluster.GetSpaces(zone);
-                        }
-
-                        spaces.AddRange(spaces_Temp);
-                    }
-                }
-
-                if (spaces is null || spaces.Count == 0)
-                {
-                    spaces = adjacencyCluster.GetSpaces();
-                }
+                dataAccess.GetDataList(index, analyticalObjects);
             }
 
-            if (adjacencyCluster != null && spaces != null && spaces.Count != 0)
+            //// Work on a modifiable copy of the cluster
+            //AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+
+            //List<Space> spaces = [];
+            //List<InternalCondition> internalConditions = [];
+
+            //if (adjacencyCluster is not null)
+            //{
+            //    adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
+
+            //    // Scope selection (Spaces or Zones)
+            //    List<IAnalyticalObject> analyticalObjects = [];
+            //    index = Params.IndexOfInputParam("_spaces/zones");
+            //    if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
+            //    {
+            //        foreach (IAnalyticalObject analyticalObject_Temp in analyticalObjects)
+            //        {
+            //            if (analyticalObject_Temp is not SAMObject sAMObject)
+            //                continue;
+
+            //            List<Space> spaces_Temp = [];
+            //            if (analyticalObject_Temp is Space space)
+            //            {
+            //                spaces_Temp.Add(adjacencyCluster.GetObject<Space>(sAMObject.Guid));
+            //            }
+            //            else if (analyticalObject_Temp is Zone zone)
+            //            {
+            //                spaces_Temp = adjacencyCluster.GetSpaces(zone);
+            //            }
+
+            //            spaces.AddRange(spaces_Temp);
+            //        }
+            //    }
+
+            //    if (spaces is null || spaces.Count == 0)
+            //    {
+            //        spaces = adjacencyCluster.GetSpaces();
+            //    }
+            //}
+
+            //if (adjacencyCluster != null && spaces != null && spaces.Count != 0)
+            //{
+            //    foreach (Space space in spaces)
+            //    {
+            //        if (space?.InternalCondition is not InternalCondition internalCondition)
+            //            continue;
+
+            //        if (function is null)
+            //        {
+            //            internalCondition.RemoveValue(InternalConditionParameter.VentilationFunction);
+            //        }
+            //        else
+            //        {
+            //            Function function_Temp = Analytical.Convert.ToSAM_Function(function);
+            //            if (function_Temp is not null)
+            //            {
+            //                FunctionType functionType = function_Temp.GetFunctionType();
+
+            //                if (functionType == FunctionType.tcmvc || functionType == FunctionType.tcmvn || functionType == FunctionType.tmmvn)
+            //                {
+            //                    int vent_Index = 3; // ACH token index for these function types
+
+            //                    if (!double.IsNaN(ach))
+            //                    {
+            //                        function_Temp[vent_Index] = ach;
+            //                    }
+            //                    else if (!double.IsNaN(m3h))
+            //                    {
+            //                        double volume = space.Volume(adjacencyCluster);
+            //                        if (!double.IsNaN(volume))
+            //                        {
+            //                            function_Temp[vent_Index] = Core.Query.Round(m3h / volume, Tolerance.MacroDistance);
+            //                        }
+            //                    }
+            //                }
+            //            }
+
+            //            internalCondition.SetValue(InternalConditionParameter.VentilationFunction, function_Temp?.ToString() ?? function);
+            //        }
+
+            //        if (description is null)
+            //            internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionDescription);
+            //        else
+            //            internalCondition.SetValue(InternalConditionParameter.VentilationFunctionDescription, description);
+
+            //        if (double.IsNaN(factor))
+            //            internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionFactor);
+            //        else
+            //            internalCondition.SetValue(InternalConditionParameter.VentilationFunctionFactor, factor);
+
+            //        if (double.IsNaN(setback))
+            //            internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionSetback);
+            //        else
+            //            internalCondition.SetValue(InternalConditionParameter.VentilationFunctionSetback, setback);
+
+            //        space.InternalCondition = internalCondition;
+            //        internalConditions.Add(internalCondition);
+            //        adjacencyCluster.AddObject(space);
+            //    }
+            //}
+
+            //if (adjacencyCluster != null)
+            //{
+            //    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+            //}
+
+            int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            bool concatenate = true;
+            if (index_Concatenate != -1)
             {
-                foreach (Space space in spaces)
-                {
-                    if (space?.InternalCondition is not InternalCondition internalCondition)
-                        continue;
-
-                    if (function is null)
-                    {
-                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunction);
-                    }
-                    else
-                    {
-                        Function function_Temp = Analytical.Convert.ToSAM_Function(function);
-                        if (function_Temp is not null)
-                        {
-                            FunctionType functionType = function_Temp.GetFunctionType();
-
-                            if (functionType == FunctionType.tcmvc || functionType == FunctionType.tcmvn || functionType == FunctionType.tmmvn)
-                            {
-                                int vent_Index = 3; // ACH token index for these function types
-
-                                if (!double.IsNaN(ach))
-                                {
-                                    function_Temp[vent_Index] = ach;
-                                }
-                                else if (!double.IsNaN(m3h))
-                                {
-                                    double volume = space.Volume(adjacencyCluster);
-                                    if (!double.IsNaN(volume))
-                                    {
-                                        function_Temp[vent_Index] = Core.Query.Round(m3h / volume, Tolerance.MacroDistance);
-                                    }
-                                }
-                            }
-                        }
-
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunction, function_Temp?.ToString() ?? function);
-                    }
-
-                    if (description is null)
-                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionDescription);
-                    else
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionDescription, description);
-
-                    if (double.IsNaN(factor))
-                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionFactor);
-                    else
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionFactor, factor);
-
-                    if (double.IsNaN(setback))
-                        internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionSetback);
-                    else
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionSetback, setback);
-
-                    space.InternalCondition = internalCondition;
-                    internalConditions.Add(internalCondition);
-                    adjacencyCluster.AddObject(space);
-                }
+                dataAccess.GetData(index_Concatenate, ref concatenate);
             }
 
-            if (adjacencyCluster != null)
+            if (!concatenate)
             {
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                analyticalModel = new AnalyticalModel(analyticalModel);
+                analyticalModel.RemoveValue("CaseDescription");
             }
+
+            analyticalModel = Create.AnalyticalModel_ByVentilation(analyticalModel,
+            function,
+            ach,
+            m3h,
+            factor,
+            setback,
+            description,
+            analyticalObjects);
 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
-                bool concatenate = true;
-                if (index_Concatenate != -1)
-                {
-                    dataAccess.GetData(index_Concatenate, ref concatenate);
-                }
 
                 string caseDescription = string.Empty;
-                if (concatenate)
+                if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
                 {
-                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
-                    {
-                        caseDescription = string.Empty;
-                    }
+                    caseDescription = string.Empty;
                 }
 
-                if (string.IsNullOrWhiteSpace(caseDescription))
-                {
-                    caseDescription = "Case";
-                }
-                else
-                {
-                    caseDescription += "_";
-                }
-
-                string sufix = "ByVentilation_";
-                if (!double.IsNaN(ach))
-                {
-                    sufix += string.Format("{0}ach", ach);
-                }
-
-                if (m3h != 0)
-                {
-                    sufix += string.Format("{0}m3h", m3h);
-                }
-
-                if (factor != 0)
-                {
-                    sufix += string.Format("F{0}", factor);
-                }
-
-                if (setback != 0)
-                {
-                    sufix += string.Format("sb{0}", setback);
-                }
-
-                string value = caseDescription + sufix;
-
-                dataAccess.SetData(index, value);
+                dataAccess.SetData(index, caseDescription);
             }
-
-            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
-            {
-                caseDataCollection = new CaseDataCollection();
-            }
-            else
-            {
-                caseDataCollection = new CaseDataCollection(caseDataCollection);
-            }
-
-            caseDataCollection.Add(new VentilationCaseData(ach));
-
-            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");
@@ -472,6 +448,80 @@ If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
             {
                 dataAccess.SetData(index, analyticalModel);
             }
+
+            //index = Params.IndexOfOutputParam("CaseDescription");
+            //if (index != -1)
+            //{
+            //    int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            //    bool concatenate = true;
+            //    if (index_Concatenate != -1)
+            //    {
+            //        dataAccess.GetData(index_Concatenate, ref concatenate);
+            //    }
+
+            //    string caseDescription = string.Empty;
+            //    if (concatenate)
+            //    {
+            //        if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+            //        {
+            //            caseDescription = string.Empty;
+            //        }
+            //    }
+
+            //    if (string.IsNullOrWhiteSpace(caseDescription))
+            //    {
+            //        caseDescription = "Case";
+            //    }
+            //    else
+            //    {
+            //        caseDescription += "_";
+            //    }
+
+            //    string sufix = "ByVentilation_";
+            //    if (!double.IsNaN(ach))
+            //    {
+            //        sufix += string.Format("{0}ach", ach);
+            //    }
+
+            //    if (m3h != 0)
+            //    {
+            //        sufix += string.Format("{0}m3h", m3h);
+            //    }
+
+            //    if (factor != 0)
+            //    {
+            //        sufix += string.Format("F{0}", factor);
+            //    }
+
+            //    if (setback != 0)
+            //    {
+            //        sufix += string.Format("sb{0}", setback);
+            //    }
+
+            //    string value = caseDescription + sufix;
+
+            //    dataAccess.SetData(index, value);
+            //}
+
+            //if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            //{
+            //    caseDataCollection = new CaseDataCollection();
+            //}
+            //else
+            //{
+            //    caseDataCollection = new CaseDataCollection(caseDataCollection);
+            //}
+
+            //caseDataCollection.Add(new VentilationCaseData(ach));
+
+            //analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
+
+            //// Output
+            //index = Params.IndexOfOutputParam("CaseAModel");
+            //if (index != -1)
+            //{
+            //    dataAccess.SetData(index, analyticalModel);
+            //}
         }
     }
 }

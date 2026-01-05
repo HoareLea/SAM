@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -67,7 +70,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<SAMObject> sAMObjects = new List<SAMObject>();
             index = Params.IndexOfInputParam("_analyticals");
-            if(index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null || sAMObjects.Count == 0)
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null || sAMObjects.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -75,38 +78,38 @@ namespace SAM.Analytical.Grasshopper
 
 
             List<Panel> panels = new List<Panel>();
-            foreach(SAMObject sAMObject in sAMObjects)
+            foreach (SAMObject sAMObject in sAMObjects)
             {
-                if(sAMObject is Panel)
+                if (sAMObject is Panel)
                 {
                     panels.Add((Panel)sAMObject);
                 }
-                else if(sAMObject is AnalyticalModel)
+                else if (sAMObject is AnalyticalModel)
                 {
                     panels = ((AnalyticalModel)sAMObject).GetPanels();
                 }
-                else if(sAMObject is AdjacencyCluster)
+                else if (sAMObject is AdjacencyCluster)
                 {
                     panels = ((AdjacencyCluster)sAMObject).GetPanels();
                 }
             }
 
-            if(panels == null)
+            if (panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             Dictionary<PanelType, List<Panel>> dictionary = new Dictionary<PanelType, List<Panel>>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
                 PanelType panelType = panel.PanelType;
-                if(!dictionary.TryGetValue(panelType, out List<Panel> panels_PanelType))
+                if (!dictionary.TryGetValue(panelType, out List<Panel> panels_PanelType))
                 {
                     panels_PanelType = new List<Panel>();
                     dictionary[panelType] = panels_PanelType;
@@ -115,7 +118,7 @@ namespace SAM.Analytical.Grasshopper
                 panels_PanelType.Add(panel);
             }
 
-            foreach(KeyValuePair<PanelType, List<Panel>> keyValuePair in dictionary)
+            foreach (KeyValuePair<PanelType, List<Panel>> keyValuePair in dictionary)
             {
                 index = Params.IndexOfOutputParam(keyValuePair.Key.ToString());
                 if (index != -1)

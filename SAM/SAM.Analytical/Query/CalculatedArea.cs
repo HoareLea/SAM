@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
         public static double CalculatedArea(this Space space, AdjacencyCluster adjacencyCluster = null)
         {
-            if(space == null)
+            if (space == null)
             {
                 return double.NaN;
             }
@@ -19,38 +22,38 @@ namespace SAM.Analytical
 
             result = double.NaN;
 
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 Shell shell = adjacencyCluster.Shell(space);
-                if(shell != null)
+                if (shell != null)
                 {
                     List<Face3D> face3Ds = shell.Section();
-                    if(face3Ds != null && face3Ds.Count != 0)
+                    if (face3Ds != null && face3Ds.Count != 0)
                     {
                         result = 0;
-                        foreach(Face3D face3D in face3Ds)
+                        foreach (Face3D face3D in face3Ds)
                         {
-                            if(face3D == null)
+                            if (face3D == null)
                             {
                                 continue;
                             }
 
                             double area = face3D.GetArea();
-                            if(double.IsNaN(area))
+                            if (double.IsNaN(area))
                             {
                                 continue;
                             }
                             result += area;
                         }
 
-                        if(result == 0)
+                        if (result == 0)
                         {
                             result = double.NaN;
                         }
                     }
                 }
 
-                if(double.IsNaN(result))
+                if (double.IsNaN(result))
                 {
                     List<Panel> panels = GeomericalFloorPanels(adjacencyCluster, space);
                     if (panels != null && panels.Count != 0)

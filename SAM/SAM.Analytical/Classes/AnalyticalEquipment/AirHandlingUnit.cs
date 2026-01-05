@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -42,7 +45,7 @@ namespace SAM.Analytical
         public AirHandlingUnit(AirHandlingUnit airHandlingUnit)
             : base(airHandlingUnit)
         {
-            if(airHandlingUnit != null)
+            if (airHandlingUnit != null)
             {
                 winterSupplyTemperature = airHandlingUnit.winterSupplyTemperature;
                 summerSupplyTemperature = airHandlingUnit.summerSupplyTemperature;
@@ -83,7 +86,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("SummerSupplyTemperature"))
+            if (jObject.ContainsKey("SummerSupplyTemperature"))
             {
                 summerSupplyTemperature = jObject.Value<double>("SummerSupplyTemperature");
             }
@@ -138,7 +141,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            if(!double.IsNaN(summerSupplyTemperature))
+            if (!double.IsNaN(summerSupplyTemperature))
             {
                 jObject.Add("SummerSupplyTemperature", summerSupplyTemperature);
             }

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -21,10 +24,10 @@ namespace SAM.Analytical
             }
 
             Shell shell = adjacencyCluster.Shell(space);
-            if(shell != null)
+            if (shell != null)
             {
                 volume = shell.Volume();
-                if(!double.IsNaN(volume) && volume > 0)
+                if (!double.IsNaN(volume) && volume > 0)
                 {
                     return volume;
                 }

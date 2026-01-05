@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -45,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "internalCondition_", NickName = "internalCondition_", Description = "Source SAM Analytical InternalCondition", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "Internal Condition Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "areaPerPerson_", NickName = "areaPerPerson_", Description = "Area Per Person, default 10 m2/person", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                
+
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "occupancyProfile_", NickName = "occupancyProfile_", Description = "Occupancy Profile", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancySensibleGainPerPerson_", NickName = "occupancySensibleGainPerPerson_", Description = "Occupancy Sensible Gain Per Person [W/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "occupancyLatentGainPerPerson_", NickName = "occupancyLatentGainPerPerson_", Description = "Occupancy Latent Gain Per Person [W/p]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
@@ -173,11 +176,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("occupancyProfile_");
-            if(index != -1)
+            if (index != -1)
             {
                 Profile profile = null;
                 string profileName = null;
-                if(dataAccess.GetData(index, ref profile))
+                if (dataAccess.GetData(index, ref profile))
                 {
                     profileName = profile.Name;
                 }
@@ -186,7 +189,7 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.GetData(index, ref profileName);
                 }
 
-                if(!string.IsNullOrEmpty(profileName))
+                if (!string.IsNullOrEmpty(profileName))
                 {
                     internalCondition.SetValue(InternalConditionParameter.OccupancyProfileName, profileName);
                 }
@@ -631,7 +634,7 @@ namespace SAM.Analytical.Grasshopper
                 if (dataAccess.GetData(index, ref analyticalObject))
                 {
                     NCMData nCMData = analyticalObject as NCMData;
-                    if(nCMData != null)
+                    if (nCMData != null)
                     {
                         internalCondition.SetValue(InternalConditionParameter.NCMData, nCMData);
                     }
@@ -648,7 +651,7 @@ namespace SAM.Analytical.Grasshopper
 
 
             index = Params.IndexOfOutputParam("internalCondition");
-            if(index != -1)
+            if (index != -1)
             {
 
                 dataAccess.SetData(index, new GooInternalCondition(internalCondition));

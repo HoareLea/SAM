@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Weather
 {
@@ -6,13 +9,13 @@ namespace SAM.Weather
     {
         public static bool Compare(this WeatherHour weatherHour, WeatherDataType weatherDataType, double value, NumberComparisonType numberComparisonType)
         {
-            if(weatherHour == null || weatherDataType == WeatherDataType.Undefined)
+            if (weatherHour == null || weatherDataType == WeatherDataType.Undefined)
             {
                 return false;
             }
 
             double value_WeatherHour = weatherHour[weatherDataType];
-            if(double.IsNaN(value_WeatherHour))
+            if (double.IsNaN(value_WeatherHour))
             {
                 return false;
             }

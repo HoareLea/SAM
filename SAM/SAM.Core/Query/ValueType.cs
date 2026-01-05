@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Drawing;
 
 namespace SAM.Core
 {
@@ -6,22 +9,22 @@ namespace SAM.Core
     {
         public static ValueType ValueType(this object @object)
         {
-            if(@object == null)
+            if (@object == null)
             {
                 return Core.ValueType.Undefined;
             }
 
-            if(@object is IJSAMObject)
+            if (@object is IJSAMObject)
             {
                 return Core.ValueType.IJSAMObject;
             }
 
-            if(@object is int)
+            if (@object is int)
             {
                 return Core.ValueType.Integer;
             }
 
-            if(@object is string)
+            if (@object is string)
             {
                 return Core.ValueType.String;
             }
@@ -31,17 +34,17 @@ namespace SAM.Core
                 return Core.ValueType.Double;
             }
 
-            if(@object is System.Guid)
+            if (@object is System.Guid)
             {
                 return Core.ValueType.Guid;
             }
 
-            if(@object is bool)
+            if (@object is bool)
             {
                 return Core.ValueType.Boolean;
             }
 
-            if(@object is Color)
+            if (@object is Color)
             {
                 return Core.ValueType.Color;
             }

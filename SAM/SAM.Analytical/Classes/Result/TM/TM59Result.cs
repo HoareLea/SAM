@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -7,18 +10,18 @@ namespace SAM.Analytical
     public class TM59Result : TMResult
     {
         private HashSet<TM59SpaceApplication> tM59SpaceApplications;
-        
+
         private int occupiedHours;
         private int maxExceedableHours;
 
         private bool pass;
 
         public TM59Result(
-            string name, 
-            string source, 
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
-            int occupiedHours, 
+            int occupiedHours,
             int maxExceedableHours,
             bool pass,
             params TM59SpaceApplication[] tM59SpaceApplications)
@@ -27,13 +30,13 @@ namespace SAM.Analytical
             this.occupiedHours = occupiedHours;
             this.maxExceedableHours = maxExceedableHours;
             this.pass = pass;
-            this.tM59SpaceApplications = tM59SpaceApplications == null ? null : new HashSet<TM59SpaceApplication> (tM59SpaceApplications);
+            this.tM59SpaceApplications = tM59SpaceApplications == null ? null : new HashSet<TM59SpaceApplication>(tM59SpaceApplications);
         }
 
         public TM59Result(
-            Guid guid, 
-            string name, 
-            string source, 
+            Guid guid,
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,

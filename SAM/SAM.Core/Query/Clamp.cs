@@ -1,4 +1,7 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -26,7 +29,7 @@
 
         public static Range<T> Clamp<T>(this Range<T> range, T min, T max)
         {
-            if(range == null)
+            if (range == null)
             {
                 return null;
             }

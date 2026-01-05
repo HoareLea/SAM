@@ -1,15 +1,18 @@
-﻿namespace SAM.Units
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Units
 {
     public static partial class Convert
     {
         public static double ByUnitType(double value, UnitType from, UnitType to)
         {
-            if(from == to)
+            if (from == to)
             {
                 return value;
             }
-            
-            
+
+
             switch (from)
             {
                 case UnitType.Meter:
@@ -29,7 +32,7 @@
                     break;
 
                 case UnitType.Kelvin:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.Celsius:
                             return value + Factor.KelvinToCelsius;
@@ -51,7 +54,7 @@
                     break;
 
                 case UnitType.Fahrenheit:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.Kelvin:
                             return ByUnitType(ByUnitType(value, from, UnitType.Celsius), UnitType.Celsius, to);
@@ -62,7 +65,7 @@
                     break;
 
                 case UnitType.KilogramPerKilogram:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.GramPerKilogram:
                             return value * 1000;
@@ -81,7 +84,7 @@
                     break;
 
                 case UnitType.GramPerKilogram:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.KilogramPerKilogram:
                             return value / 1000;
@@ -92,7 +95,7 @@
                     break;
 
                 case UnitType.Percent:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.Unitless:
                             return value / 100;
@@ -100,7 +103,7 @@
                     break;
 
                 case UnitType.Unitless:
-                    switch(to)
+                    switch (to)
                     {
                         case UnitType.Percent:
                             return value * 100;
@@ -201,17 +204,17 @@
 
         public static double ByUnitType(double value, UnitType from, UnitStyle unitStyle)
         {
-            if(double.IsNaN(value))
+            if (double.IsNaN(value))
             {
                 return double.NaN;
             }
 
-            if(from == UnitType.Undefined || unitStyle == UnitStyle.Undefined)
+            if (from == UnitType.Undefined || unitStyle == UnitStyle.Undefined)
             {
                 return value;
             }
 
-            switch(unitStyle)
+            switch (unitStyle)
             {
                 case UnitStyle.Imperial:
                     return ToImperial(value, from);

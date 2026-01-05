@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using NetTopologySuite.Geometries;
 using SAM.Analytical.Classes;
 using SAM.Analytical.Grasshopper.Properties;
@@ -26,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -66,9 +69,9 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = [];
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() {Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Heights", NickName = "Heights", Description = "SAM Heights", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Heights", NickName = "Heights", Description = "SAM Heights", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return [.. result];
             }
         }
@@ -89,23 +92,23 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analyticalObject");
             IAnalyticalObject? analyticalObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref analyticalObject))
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(analyticalObject is AdjacencyCluster adjacencyCluster_Temp)
+            if (analyticalObject is AdjacencyCluster adjacencyCluster_Temp)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster_Temp, true);
             }
-            else if(analyticalObject is AnalyticalModel analyticalModel)
+            else if (analyticalObject is AnalyticalModel analyticalModel)
             {
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.AdjacencyCluster, true);
             }
 
-            if(adjacencyCluster is null)
+            if (adjacencyCluster is null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -154,11 +157,11 @@ namespace SAM.Analytical.Grasshopper
             List<double> heights = [];
             List<ISpace> spaces_Result = [];
 
-            if(spaces != null && spaces.Count != 0)
+            if (spaces != null && spaces.Count != 0)
             {
                 foreach (Space space in spaces)
                 {
-                    if(adjacencyCluster.GetObject<Space>(space.Guid) is not Space space_Temp)
+                    if (adjacencyCluster.GetObject<Space>(space.Guid) is not Space space_Temp)
                     {
                         continue;
                     }
@@ -182,7 +185,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    if(segment2Ds is null || segment2Ds.Count == 0)
+                    if (segment2Ds is null || segment2Ds.Count == 0)
                     {
                         continue;
                     }
@@ -202,14 +205,14 @@ namespace SAM.Analytical.Grasshopper
                         continue;
                     }
 
-                    foreach(Face2D face2D in face2Ds)
+                    foreach (Face2D face2D in face2Ds)
                     {
                         (Coordinate center, double width, double height) coordinate = PolygonLabelCoordinate.LargestAxisAlignedRectangle(face2D.ToNTS(), aspect, clerance);
 
 
                         Point2D point2D = coordinate.center.ToSAM();
 
-                        if(plane.Convert(point2D) is not Point3D point3D)
+                        if (plane.Convert(point2D) is not Point3D point3D)
                         {
                             continue;
                         }
@@ -217,7 +220,7 @@ namespace SAM.Analytical.Grasshopper
                         Point3D location = new Point3D(point3D.X, point3D.Y, space.Location.Z);
                         space_Temp = new Space(space_Temp, space_Temp.Name, location);
                         adjacencyCluster.AddObject(space_Temp);
-                        
+
                         spaces_Result.Add(space_Temp);
                         heights.Add(coordinate.height * heightFactor);
 
@@ -237,7 +240,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("AnalyticalObject");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, new GooAnalyticalObject(analyticalObject));
             }

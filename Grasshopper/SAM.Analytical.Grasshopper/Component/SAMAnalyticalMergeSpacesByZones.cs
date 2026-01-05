@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -116,11 +119,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
+            if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
@@ -134,7 +137,7 @@ namespace SAM.Analytical.Grasshopper
                 objectWrappers = new List<GH_ObjectWrapper>();
                 if (dataAccess.GetDataList(index, objectWrappers) && objectWrappers != null)
                 {
-                    foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                    foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                     {
                         object value = objectWrapper.Value;
                         if (value is IGH_Goo)
@@ -142,14 +145,14 @@ namespace SAM.Analytical.Grasshopper
                             value = (value as dynamic).Value;
                         }
 
-                        if(value is Zone)
+                        if (value is Zone)
                         {
                             zones.Add((Zone)value);
                         }
-                        else if(value is string)
+                        else if (value is string)
                         {
                             Zone zone = adjacencyCluster.GetZones((string)value).FirstOrDefault();
-                            if(zone != null)
+                            if (zone != null)
                             {
                                 zones.Add(zone);
                             }
@@ -172,13 +175,13 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<PanelType> panelTypes = new List<PanelType>();
-            if(airOnly)
+            if (airOnly)
             {
                 panelTypes.Add(PanelType.Air);
             }
             else
             {
-                foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+                foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
                 {
                     panelTypes.Add(panelType);
                 }
@@ -192,7 +195,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels_Result = null;
             List<Space> spaces_Result = null;
 
-            if(zones != null)
+            if (zones != null)
             {
 
                 panels_Result = new List<Panel>();
@@ -201,7 +204,7 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Zone zone in zones)
                 {
                     List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone);
-                    if(spaces != null && spaces.Count > 1)
+                    if (spaces != null && spaces.Count > 1)
                     {
                         List<Space> spaces_Merge = adjacencyCluster.MergeSpaces(out List<Panel> panels_Merge, panelTypes, spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid));
                         if (spaces_Merge != null)

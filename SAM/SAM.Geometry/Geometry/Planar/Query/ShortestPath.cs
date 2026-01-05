@@ -1,4 +1,7 @@
-﻿using QuickGraph;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using QuickGraph;
 using QuickGraph.Algorithms.Observers;
 using QuickGraph.Algorithms.ShortestPath;
 using System.Collections.Generic;
@@ -41,13 +44,13 @@ namespace SAM.Geometry.Planar
             }
 
             Point2D point2D_Start_Temp = point2D_Start;
-            if(point2D_Start_Temp != null)
+            if (point2D_Start_Temp != null)
             {
                 List<Segment2D> segment2Ds_Connected = segment2Ds.Connect(point2D_Start_Temp, PointConnectMethod.Ends, tolerance);
-                if(segment2Ds_Connected != null)
+                if (segment2Ds_Connected != null)
                 {
                     Point2D point2D = segment2Ds_Connected.Find(x => x[0].AlmostEquals(point2D_Start_Temp, tolerance))?[0];
-                    if(point2D == null)
+                    if (point2D == null)
                         point2D = segment2Ds_Connected.Find(x => x[1].AlmostEquals(point2D_Start_Temp, tolerance))?[1];
 
                     if (point2D == null)

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Weather;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,7 +18,7 @@ namespace SAM.Analytical
         public static List<double> MaxIndoorComfortTemperatures(this WeatherYear weatherYear, TM52BuildingCategory tM52BuildingCategory, double acceptableTemperatureDifference = double.NaN)
         {
             List<WeatherDay> weatherDays = weatherYear?.WeatherDays;
-            if(weatherDays == null || weatherDays.Count == 0)
+            if (weatherDays == null || weatherDays.Count == 0)
             {
                 return null;
             }
@@ -25,7 +28,7 @@ namespace SAM.Analytical
 
         public static List<double> MaxIndoorComfortTemperatures(this IEnumerable<WeatherDay> weatherDays, TM52BuildingCategory tM52BuildingCategory, int startDayIndex, int endDayIndex, double acceptableTemperatureDifference = double.NaN)
         {
-            if(weatherDays == null || weatherDays.Count() == 0)
+            if (weatherDays == null || weatherDays.Count() == 0)
             {
                 return null;
             }

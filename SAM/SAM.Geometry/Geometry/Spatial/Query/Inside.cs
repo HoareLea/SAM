@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -38,7 +41,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Dictionary<ISegmentable3D, Face3D> dictionary = new Dictionary<ISegmentable3D, Face3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
                 if (segmentable3D == null)
@@ -60,13 +63,13 @@ namespace SAM.Geometry.Spatial
 
         public static bool Inside(this BoundingBox3D boundingBox3D, ISegmentable3D segmentable3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(boundingBox3D == null || segmentable3D == null)
+            if (boundingBox3D == null || segmentable3D == null)
             {
                 return false;
             }
 
             List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if(segment3Ds == null || segment3Ds.Count == 0)
+            if (segment3Ds == null || segment3Ds.Count == 0)
             {
                 return false;
             }
@@ -76,19 +79,19 @@ namespace SAM.Geometry.Spatial
 
         public static bool Inside(this BoundingBox3D boundingBox3D, Face3D face3D, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(boundingBox3D == null || face3D == null)
+            if (boundingBox3D == null || face3D == null)
             {
                 return false;
             }
 
             IClosedPlanar3D closedPlanar3D = face3D.GetExternalEdge3D();
-            if(closedPlanar3D == null)
+            if (closedPlanar3D == null)
             {
                 return false;
             }
 
             ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
-            if(segmentable3D == null)
+            if (segmentable3D == null)
             {
                 throw new System.NotImplementedException();
             }
@@ -98,25 +101,25 @@ namespace SAM.Geometry.Spatial
 
         public static bool Inside(this BoundingBox3D boundingBox3D, Shell shell, bool acceptOnEdge = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(boundingBox3D == null || shell == null)
+            if (boundingBox3D == null || shell == null)
             {
                 return false;
             }
 
             List<Face3D> face3Ds = shell.Face3Ds;
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return false;
             }
 
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
 
-                if(!Inside(boundingBox3D, face3D, acceptOnEdge, tolerance))
+                if (!Inside(boundingBox3D, face3D, acceptOnEdge, tolerance))
                 {
                     return false;
                 }

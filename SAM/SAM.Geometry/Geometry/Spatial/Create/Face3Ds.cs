@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Spatial
             if (face2Ds == null)
                 return null;
 
-            if(edgeOrientationMethod != EdgeOrientationMethod.Undefined)
+            if (edgeOrientationMethod != EdgeOrientationMethod.Undefined)
             {
                 face2Ds = face2Ds.ConvertAll(x => Planar.Create.Face2D(x.ExternalEdge2D, x.InternalEdge2Ds, edgeOrientationMethod));
             }

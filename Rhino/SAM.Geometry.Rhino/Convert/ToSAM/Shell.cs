@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -12,7 +15,7 @@ namespace SAM.Geometry.Rhino
             {
                 return null;
             }
-            
+
             List<ISAMGeometry3D> sAMGeometry3Ds = ToSAM(brep, simplify);
             if (sAMGeometry3Ds == null || sAMGeometry3Ds.Count == 0)
             {
@@ -26,7 +29,7 @@ namespace SAM.Geometry.Rhino
             }
 
             List<Face3D> face3Ds = [];
-            foreach(ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
+            foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
             {
                 Face3D face3D = sAMGeometry3D as Face3D;
                 if (face3D == null)
@@ -47,7 +50,7 @@ namespace SAM.Geometry.Rhino
 
         public static Shell ToSAM_Shell(this global::Rhino.Geometry.Extrusion extrusion, bool simplify = true)
         {
-            if(extrusion is null)
+            if (extrusion is null)
             {
                 return null;
             }

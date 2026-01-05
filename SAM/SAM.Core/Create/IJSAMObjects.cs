@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq; // Required for working with JSON
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq; // Required for working with JSON
 using System.Collections.Generic; // Required for using List<>
 using System.Linq; // Required for using Enumerable.Repeat() and Enumerable.ToList()
 using System.Threading.Tasks; // Required for using Parallel.For()

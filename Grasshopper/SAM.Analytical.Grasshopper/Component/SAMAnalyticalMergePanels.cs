@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -45,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
@@ -111,21 +114,21 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
+            if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
 
             double maxDistance = 0.2;
             index = Params.IndexOfInputParam("maxDistance_");
-            if(index != -1)
+            if (index != -1)
             {
                 double maxDistance_Temp = maxDistance;
-                if(dataAccess.GetData(index, ref maxDistance_Temp) && !double.IsNaN(maxDistance_Temp))
+                if (dataAccess.GetData(index, ref maxDistance_Temp) && !double.IsNaN(maxDistance_Temp))
                 {
                     maxDistance = maxDistance_Temp;
                 }
@@ -168,14 +171,14 @@ namespace SAM.Analytical.Grasshopper
             foreach (Panel panel in panels)
             {
                 List<Panel> panels_Temp = adjacencyCluster.MergePanel(panel.Guid, maxDistance, minArea, thinnessRatio, tolerance);
-                if(panels_Temp == null || panels_Temp.Count == 0)
+                if (panels_Temp == null || panels_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Panel panel_Temp in panels_Temp)
+                foreach (Panel panel_Temp in panels_Temp)
                 {
-                    if(panels_Merge.Find(x => x.Guid == panel_Temp.Guid) == null)
+                    if (panels_Merge.Find(x => x.Guid == panel_Temp.Guid) == null)
                     {
                         panels_Merge.Add(panel_Temp);
                     }

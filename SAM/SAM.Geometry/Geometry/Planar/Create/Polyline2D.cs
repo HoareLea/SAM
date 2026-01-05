@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -17,15 +20,15 @@ namespace SAM.Geometry.Planar
             }
 
             List<Segment2D> segment2Ds = null;
-            if(split)
+            if (split)
             {
                 segment2Ds = segmentable2Ds.Split(tolerance);
             }
             else
             {
                 segment2Ds = new List<Segment2D>();
-                
-                foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+
+                foreach (ISegmentable2D segmentable2D in segmentable2Ds)
                 {
                     List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();
                     if (segment2Ds_Temp == null)
@@ -38,7 +41,7 @@ namespace SAM.Geometry.Planar
             List<Point2D> point2Ds = Query.UniquePoint2Ds(segment2Ds, tolerance);
 
             Point2D point2D = null;
-            foreach(Point2D point2D_Temp in point2Ds)
+            foreach (Point2D point2D_Temp in point2Ds)
             {
                 List<Segment2D> segment2Ds_Closest = segment2Ds.FindAll(x => x[0].Distance(point2D_Temp) <= tolerance || x[1].Distance(point2D_Temp) <= tolerance);
                 if (segment2Ds_Closest != null && segment2Ds_Closest.Count == 1)
@@ -49,7 +52,7 @@ namespace SAM.Geometry.Planar
                 point2D = segment2Ds[0][0];
 
             List<Point2D> point2Ds_Result = new List<Point2D>() { point2D };
-            while(point2D != null)
+            while (point2D != null)
             {
                 List<Segment2D> segment2Ds_Closest = segment2Ds.FindAll(x => x[0].Distance(point2D) <= tolerance || x[1].Distance(point2D) <= tolerance);
                 if (segment2Ds_Closest == null || segment2Ds_Closest.Count == 0)
@@ -64,9 +67,9 @@ namespace SAM.Geometry.Planar
                 {
                     break;
                 }
-                    
 
-                foreach(Point2D point2D_Result in point2Ds_Result)
+
+                foreach (Point2D point2D_Result in point2Ds_Result)
                 {
                     point2Ds_Temp.RemoveAll(x => x.Distance(point2D_Result) <= tolerance);
                 }

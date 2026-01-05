@@ -1,5 +1,7 @@
-﻿using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -25,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -48,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new Geometry.Grasshopper.GooSAMGeometryParam { Name = "points_", NickName = "points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Geometry.Grasshopper.GooSAMGeometryParam { Name = "points_", NickName = "points_", Description = "Points", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean { Name = "_removeExtPanels_", NickName = "_removeExtPanels_", Description = "Remove External Panels", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
@@ -83,14 +85,14 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
+
             SAMObject sAMObject_Temp = null;
-            if(!dataAccess.GetData(index, ref sAMObject_Temp) || sAMObject_Temp == null)
+            if (!dataAccess.GetData(index, ref sAMObject_Temp) || sAMObject_Temp == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -109,7 +111,7 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
             }
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -118,14 +120,14 @@ namespace SAM.Analytical.Grasshopper
 
             List<ISAMGeometry> sAMGeometries = [];
             index = Params.IndexOfInputParam("points_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, sAMGeometries);
             }
 
             bool removePanels = true;
             index = Params.IndexOfInputParam("_removeExtPanels_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref removePanels);
             }
@@ -133,11 +135,11 @@ namespace SAM.Analytical.Grasshopper
             Dictionary<Space, Shell> dictionary = adjacencyCluster?.ShellDictionary();
 
             List<Space> result = [];
-            if(sAMGeometries != null)
+            if (sAMGeometries != null)
             {
                 foreach (ISAMGeometry sAMGeometry in sAMGeometries)
                 {
-                    if(sAMGeometry is not Point3D point3D)
+                    if (sAMGeometry is not Point3D point3D)
                     {
                         continue;
                     }

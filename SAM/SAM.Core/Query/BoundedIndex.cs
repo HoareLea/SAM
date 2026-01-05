@@ -1,29 +1,32 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
         public static int BoundedIndex(this Range<int> range, int index)
         {
-            if(range == null)
+            if (range == null)
             {
                 return int.MinValue;
             }
 
-            if(range.In(index))
+            if (range.In(index))
             {
                 return index;
             }
 
             int count = range.Count();
 
-            if(index < range.Min)
+            if (index < range.Min)
             {
                 int difference = range.Min - index - 1;
                 int reminder = difference % count;
                 return range.Max - reminder;
             }
 
-            if(index > range.Max)
+            if (index > range.Max)
             {
                 int difference = index - range.Max - 1;
                 int reminder = difference % count;
@@ -43,7 +46,7 @@
         {
             int max = count - 1;
 
-            if(max < 0)
+            if (max < 0)
             {
                 return int.MinValue;
             }

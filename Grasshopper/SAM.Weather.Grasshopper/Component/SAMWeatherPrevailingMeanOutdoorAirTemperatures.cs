@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper;
 using SAM.Weather.Grasshopper.Properties;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -85,7 +88,7 @@ namespace SAM.Weather.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             bool run = false;
             index = Params.IndexOfInputParam("_run");
             if (index == -1 || !dataAccess.GetData(index, ref run))
@@ -107,7 +110,7 @@ namespace SAM.Weather.Grasshopper
                 return;
             }
 
-            if(!(weatherObject is WeatherData) && !(weatherObject is WeatherYear))
+            if (!(weatherObject is WeatherData) && !(weatherObject is WeatherYear))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -115,12 +118,12 @@ namespace SAM.Weather.Grasshopper
 
             int sequentialDays = int.MinValue;
             index = Params.IndexOfInputParam("_sequentialDays_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref sequentialDays);
             }
 
-            if(sequentialDays == int.MinValue || sequentialDays == int.MaxValue)
+            if (sequentialDays == int.MinValue || sequentialDays == int.MaxValue)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -140,9 +143,9 @@ namespace SAM.Weather.Grasshopper
             if (dryBulbTemperatures != null)
             {
                 List<double> dryBulbTemperatures_Temp = new List<double>();
-                foreach(double dryBulbTemperature in dryBulbTemperatures)
+                foreach (double dryBulbTemperature in dryBulbTemperatures)
                 {
-                    for(int i=0; i < 24; i++)
+                    for (int i = 0; i < 24; i++)
                     {
                         dryBulbTemperatures_Temp.Add(dryBulbTemperature);
                     }

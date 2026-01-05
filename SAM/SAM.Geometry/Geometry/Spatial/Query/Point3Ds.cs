@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -6,13 +9,13 @@ namespace SAM.Geometry.Spatial
     {
         public static List<Point3D> Point3Ds(this IClosed3D closed3D)
         {
-            if(closed3D is Face3D)
+            if (closed3D is Face3D)
             {
                 return Point3Ds((Face3D)closed3D, true, true);
             }
-            
-            
-            if(!(closed3D is ICurvable3D))
+
+
+            if (!(closed3D is ICurvable3D))
             {
                 throw new System.NotImplementedException();
             }
@@ -20,7 +23,7 @@ namespace SAM.Geometry.Spatial
             return ((ICurvable3D)closed3D).GetCurves()?.ConvertAll(x => x.GetStart());
 
         }
-        
+
         public static List<Point3D> Point3Ds(this Face3D face3D, bool externalEdge = true, bool internalEdges = true)
         {
             if (face3D == null)
@@ -28,7 +31,7 @@ namespace SAM.Geometry.Spatial
 
             List<Point3D> result = new List<Point3D>();
 
-            if(externalEdge)
+            if (externalEdge)
             {
                 ICurvable3D curvable3D = face3D.GetExternalEdge3D() as ICurvable3D;
                 if (curvable3D != null)
@@ -42,9 +45,9 @@ namespace SAM.Geometry.Spatial
             if (internalEdges)
             {
                 List<IClosedPlanar3D> closedPlanar3Ds = face3D.GetInternalEdge3Ds();
-                if(closedPlanar3Ds != null)
+                if (closedPlanar3Ds != null)
                 {
-                    foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                    foreach (IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
                     {
                         ICurvable3D curvable3D = closedPlanar3D as ICurvable3D;
                         if (curvable3D != null)

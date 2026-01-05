@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -123,7 +126,7 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Point3D> point3Ds = new List<Point3D>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
                 if (Query.TryGetSAMGeometries(objectWrapper, out List<Point3D> point3Ds_Temp) && point3Ds_Temp != null && point3Ds_Temp.Count > 0)
                     point3Ds.AddRange(point3Ds_Temp);
@@ -157,21 +160,21 @@ namespace SAM.Geometry.Grasshopper
             List<Shell> shells_Out = new List<Shell>();
             foreach (Shell shell in shells)
             {
-                if(shell == null)
+                if (shell == null)
                 {
                     continue;
                 }
 
-                foreach(Point3D point3D in point3Ds)
+                foreach (Point3D point3D in point3Ds)
                 {
-                    if(shell.On(point3D, tolerance) || shell.Inside(point3D, silverSpacing, tolerance))
+                    if (shell.On(point3D, tolerance) || shell.Inside(point3D, silverSpacing, tolerance))
                     {
                         shells_In.Add(shell);
                         break;
                     }
                 }
 
-                if(!shells_In.Contains(shell))
+                if (!shells_In.Contains(shell))
                 {
                     shells_Out.Add(shell);
                 }

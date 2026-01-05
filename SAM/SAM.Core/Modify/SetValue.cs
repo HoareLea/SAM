@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -10,13 +13,13 @@ namespace SAM.Core
     {
         public static bool SetValue<T>(XAttribute xAttribute, T value)
         {
-            if(xAttribute == null)
+            if (xAttribute == null)
             {
                 return false;
             }
 
             string @string = string.Empty;
-            if(value == null)
+            if (value == null)
             {
                 xAttribute.SetValue(@string);
             }
@@ -27,7 +30,7 @@ namespace SAM.Core
 
         public static bool SetValue<T>(XElement xElement, string attributeName, T value)
         {
-            if(xElement == null || string.IsNullOrWhiteSpace(attributeName))
+            if (xElement == null || string.IsNullOrWhiteSpace(attributeName))
             {
                 return false;
             }
@@ -150,11 +153,11 @@ namespace SAM.Core
             if (assembly == null)
             {
                 List<ParameterSet> parameterSets = parameterizedSAMObject.GetParameterSets();
-                if(parameterSets != null)
+                if (parameterSets != null)
                 {
-                    foreach(ParameterSet parameterSet_Temp in parameterSets)
+                    foreach (ParameterSet parameterSet_Temp in parameterSets)
                     {
-                        if(parameterSet_Temp.Contains(name))
+                        if (parameterSet_Temp.Contains(name))
                         {
                             parameterSet = parameterSet_Temp;
                             break;
@@ -165,7 +168,7 @@ namespace SAM.Core
                 if (parameterSet == null)
                 {
                     parameterSet = parameterizedSAMObject.GetParameterSet(parameterizedSAMObject.GetType().Assembly);
-                    if(parameterSet == null)
+                    if (parameterSet == null)
                     {
                         parameterSet = new ParameterSet(parameterizedSAMObject.GetType().Assembly);
                         parameterizedSAMObject.Add(parameterSet);

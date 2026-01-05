@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,13 +11,13 @@ namespace SAM.Geometry.Spatial
     {
         public static double Area(this Shell shell, Plane plane, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
-            if(shell == null || plane == null)
+            if (shell == null || plane == null)
             {
                 return double.NaN;
             }
 
             List<Face3D> face3Ds = shell.Section(plane, true, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return 0;
             }
@@ -41,26 +44,26 @@ namespace SAM.Geometry.Spatial
         public static double Area(this Face3D face3D, Range<double> range, int dimensionIndex = 2, double tolerance = Tolerance.Distance)
         {
             List<Face3D> face3Ds = face3D.Cut(range, dimensionIndex, tolerance);
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return double.NaN;
             }
 
-            if(face3Ds.Count == 0)
+            if (face3Ds.Count == 0)
             {
                 return 0;
             }
 
             double result = 0;
-            foreach(Face3D face3D_Temp in face3Ds)
+            foreach (Face3D face3D_Temp in face3Ds)
             {
-                if(face3D_Temp == null)
+                if (face3D_Temp == null)
                 {
                     continue;
                 }
 
                 double area = face3D_Temp.GetArea();
-                if(double.IsNaN(area))
+                if (double.IsNaN(area))
                 {
                     continue;
                 }

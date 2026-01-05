@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static AnalyticalModel UpdateHeatTransferCoefficients(this AnalyticalModel analyticalModel, bool duplicateConstructions, bool duplicateApertureConstructions, out List<Construction> constructions, out List<ApertureConstruction> apertureConstructions )
+        public static AnalyticalModel UpdateHeatTransferCoefficients(this AnalyticalModel analyticalModel, bool duplicateConstructions, bool duplicateApertureConstructions, out List<Construction> constructions, out List<ApertureConstruction> apertureConstructions)
         {
             AnalyticalModel result = null;
 
@@ -49,10 +52,10 @@ namespace SAM.Analytical
                 if (panels == null || panels.Count == 0)
                     continue;
 
-                if(duplicateConstructions)
+                if (duplicateConstructions)
                 {
                     Dictionary<double, List<Panel>> dictionary = new Dictionary<double, List<Panel>>();
-                    foreach(Panel panel in panels)
+                    foreach (Panel panel in panels)
                     {
                         if (panel == null)
                             continue;
@@ -60,7 +63,7 @@ namespace SAM.Analytical
                         double tilt = System.Math.Round(panel.Tilt(), 0) * System.Math.PI / 180;
 
                         List<Panel> panels_Tilt = null;
-                        if(!dictionary.TryGetValue(tilt, out panels_Tilt))
+                        if (!dictionary.TryGetValue(tilt, out panels_Tilt))
                         {
                             panels_Tilt = new List<Panel>();
                             dictionary[tilt] = panels_Tilt;
@@ -94,7 +97,7 @@ namespace SAM.Analytical
                     }
                     else
                     {
-                        foreach(KeyValuePair<double, List<Panel>> keyValuePair in dictionary)
+                        foreach (KeyValuePair<double, List<Panel>> keyValuePair in dictionary)
                         {
                             string name = GetSAMTypeName(construction, keyValuePair.Key);
                             if (string.IsNullOrWhiteSpace(name))
@@ -198,7 +201,7 @@ namespace SAM.Analytical
                 if (apertures == null || apertures.Count == 0)
                     continue;
 
-                if(duplicateApertureConstructions)
+                if (duplicateApertureConstructions)
                 {
                     Dictionary<double, List<Aperture>> dictionary = new Dictionary<double, List<Aperture>>();
                     foreach (Aperture aperture in apertures)
@@ -346,7 +349,7 @@ namespace SAM.Analytical
             bool result = false;
             foreach (ConstructionLayer constructionLayer in constructionLayers_In)
             {
-                if(constructionLayer == null)
+                if (constructionLayer == null)
                 {
                     constructionLayers_Out.Add(new ConstructionLayer(constructionLayer));
                     continue;
@@ -411,12 +414,12 @@ namespace SAM.Analytical
 
             return result;
         }
-    
+
         private static string GetMaterialName(DefaultGasType defaultGasType, double thickness, double heatTransferCoefficient, double tilt)
         {
             if (double.IsNaN(thickness) || double.IsNaN(heatTransferCoefficient) || double.IsNaN(tilt))
                 return null;
-            
+
             double tilt_Degree = System.Math.Round(tilt * 180 / System.Math.PI, 0);
             double thickness_Millimetres = System.Math.Round(thickness * 1000, 0);
             double heatTransferCoefficient_Rounded = System.Math.Round(heatTransferCoefficient, 3);

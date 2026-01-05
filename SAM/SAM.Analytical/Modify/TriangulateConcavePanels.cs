@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -10,7 +13,7 @@ namespace SAM.Analytical
             triangulatedPanels = null;
 
             List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels == null)
+            if (panels == null)
             {
                 return null;
             }
@@ -19,7 +22,7 @@ namespace SAM.Analytical
             List<Panel> result = new List<Panel>();
             foreach (Panel panel in panels)
             {
-                if(!Geometry.Object.Spatial.Query.Concave(panel))
+                if (!Geometry.Object.Spatial.Query.Concave(panel))
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 
 namespace SAM.Geometry.Planar
 {
@@ -11,15 +14,15 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            if(sAMGeometry2D is Polygon2D)
+            if (sAMGeometry2D is Polygon2D)
             {
                 return ToNTS((IClosed2D)sAMGeometry2D, tolerance);
             }
 
-            if(sAMGeometry2D is Point2D)
+            if (sAMGeometry2D is Point2D)
             {
                 Coordinate coordinate = ToNTS((Point2D)sAMGeometry2D);
-                if(coordinate == null)
+                if (coordinate == null)
                 {
                     return null;
                 }

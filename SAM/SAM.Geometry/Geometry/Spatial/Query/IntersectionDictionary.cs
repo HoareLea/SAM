@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -11,7 +14,7 @@ namespace SAM.Geometry.Spatial
             if (face3Ds == null || point3D == null || vector3D == null)
                 return null;
 
-            List<Tuple<Point3D, Face3D>> tuples= new List<Tuple<Point3D, Face3D>>();
+            List<Tuple<Point3D, Face3D>> tuples = new List<Tuple<Point3D, Face3D>>();
             List<Point3D> point3Ds = new List<Point3D>();
             foreach (Face3D face3D in face3Ds)
             {
@@ -40,7 +43,7 @@ namespace SAM.Geometry.Spatial
 
 
             Dictionary<Face3D, Point3D> result = new Dictionary<Face3D, Point3D>();
-            foreach(Point3D point3D_Temp in point3Ds)
+            foreach (Point3D point3D_Temp in point3Ds)
             {
                 foreach (Tuple<Point3D, Face3D> tuple in tuples.FindAll(x => x.Item1 == point3D_Temp))
                     result[tuple.Item2] = tuple.Item1;

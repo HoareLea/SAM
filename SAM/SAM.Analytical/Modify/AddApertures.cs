@@ -1,4 +1,7 @@
-﻿using MathNet.Numerics;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using MathNet.Numerics;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -19,9 +22,9 @@ namespace SAM.Analytical
                 return null;
 
             List<Aperture> result = AddApertures(panels, apertureConstruction, closedPlanar3Ds, trimGeometry, minArea, maxDistance, tolerance);
-            if(result != null && result.Count != 0)
+            if (result != null && result.Count != 0)
             {
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
                     adjacencyCluster.AddObject(panel);
                 }
@@ -87,10 +90,10 @@ namespace SAM.Analytical
             }
 
             List<Aperture> result = new List<Aperture>();
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 List<Aperture> apertures_New = AddApertures(new Panel[] { panel }, aperture.ApertureConstruction, new IClosedPlanar3D[] { aperture.GetFace3D() }, trimGeometry, minArea, maxDistance, tolerance);
-                if(apertures_New != null)
+                if (apertures_New != null)
                 {
                     result.AddRange(apertures_New);
                 }
@@ -154,7 +157,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Tuple<ApertureConstruction, List<Aperture>>> tuples = new List<Tuple<ApertureConstruction, List<Aperture>>>();
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
                 if (apertureConstruction == null)
@@ -306,9 +309,9 @@ namespace SAM.Analytical
 
                         area_Current = face2D.GetArea();
 
-                        if(area_Current.AlmostEqual(area_Panel, tolerance_Area))
+                        if (area_Current.AlmostEqual(area_Panel, tolerance_Area))
                         {
-                            if(strikes > 12)
+                            if (strikes > 12)
                             {
                                 return null;
                             }
@@ -364,7 +367,7 @@ namespace SAM.Analytical
             if (area_Target < tolerance_Area)
                 return null;
 
-            if(!face3D.Rectangular(tolerance_Area))
+            if (!face3D.Rectangular(tolerance_Area))
             {
                 return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
             }
@@ -380,7 +383,7 @@ namespace SAM.Analytical
 
             double elevation_Bottom = System.Math.Min(boundingBox3D.Min.Z + sillHeight, boundingBox3D_Offset.Max.Z);
             double elevation_Top = System.Math.Min(elevation_Bottom + height, boundingBox3D_Offset.Max.Z);
-            if(elevation_Top == elevation_Bottom)
+            if (elevation_Top == elevation_Bottom)
             {
                 return AddApertures(panel, apertureConstruction, ratio, tolerance_Area, tolerance);
             }
@@ -452,7 +455,7 @@ namespace SAM.Analytical
 
                 double elevation = (elevation_Top + elevation_Bottom) / 2;
 
-                if(elevation + (height / 2) > boundingBox3D_Offset.Max.Z)
+                if (elevation + (height / 2) > boundingBox3D_Offset.Max.Z)
                 {
                     elevation = boundingBox3D_Offset.Max.Z - (height / 2);
                 }
@@ -492,7 +495,7 @@ namespace SAM.Analytical
                             {
                                 double separation_Temp = separation;
 
-                                if(!keepSeparationDistance)
+                                if (!keepSeparationDistance)
                                 {
                                     double length = segment3D.GetLength();
 
@@ -584,7 +587,7 @@ namespace SAM.Analytical
                         Func<double, double> getArea = new Func<double, double>((double x) =>
                         {
                             List<Polygon2D> polygon2Ds = getPolygon2Ds.Invoke(x);
-                            if(polygon2Ds == null || polygon2Ds.Count == 0)
+                            if (polygon2Ds == null || polygon2Ds.Count == 0)
                             {
                                 return double.NaN;
                             }
@@ -601,16 +604,16 @@ namespace SAM.Analytical
                 }
             }
 
-            if(face3Ds_Aperture == null || face3Ds_Aperture.Count == 0)
+            if (face3Ds_Aperture == null || face3Ds_Aperture.Count == 0)
             {
                 return null;
             }
 
             List<Aperture> result = new List<Aperture>();
-            foreach(Face3D face3D_Aperture in face3Ds_Aperture)
+            foreach (Face3D face3D_Aperture in face3Ds_Aperture)
             {
                 List<Aperture> apertures = panel.AddApertures(apertureConstruction, face3D_Aperture, false, tolerance_Area, tolerance, tolerance);
-                if(apertures == null)
+                if (apertures == null)
                 {
                     continue;
                 }
@@ -648,7 +651,7 @@ namespace SAM.Analytical
             Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
-            
+
             Plane plane = face3D.GetPlane();
             if (plane == null)
                 return null;
@@ -767,7 +770,7 @@ namespace SAM.Analytical
             }
 
             ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-            foreach(Face2D face2D_Aperture_New in face2Ds_Aperture_New)
+            foreach (Face2D face2D_Aperture_New in face2Ds_Aperture_New)
             {
 
                 if (face2D_Aperture_New == null)
@@ -784,7 +787,7 @@ namespace SAM.Analytical
                 Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
 
                 Aperture aperture_New = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
-                if(result.Find(x => x.Guid == aperture.Guid) == null)
+                if (result.Find(x => x.Guid == aperture.Guid) == null)
                 {
                     aperture_New = new Aperture(aperture.Guid, aperture_New);
                 }

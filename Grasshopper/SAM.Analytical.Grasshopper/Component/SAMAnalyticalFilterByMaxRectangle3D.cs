@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -87,9 +90,9 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels_In = new List<Panel>();
             List<object> objects_Out = new List<object>();
-            
-            for(int i=0; i < panels.Count; i++)
-            {              
+
+            for (int i = 0; i < panels.Count; i++)
+            {
                 Panel panel = Create.Panel(panels[i]);
                 if (panel == null)
                 {
@@ -97,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 Geometry.Spatial.Rectangle3D rectangle3D = Geometry.Object.Spatial.Query.MaxRectangle3D(panel);
-                if(rectangle3D == null || rectangle3D.Width < panelMinDimension || rectangle3D.Height < panelMinDimension)
+                if (rectangle3D == null || rectangle3D.Width < panelMinDimension || rectangle3D.Height < panelMinDimension)
                 {
                     objects_Out.Add(panel);
                 }
@@ -107,12 +110,12 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 List<Aperture> apertures = panel.Apertures;
-                if(apertures == null || apertures.Count == 0)
+                if (apertures == null || apertures.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     rectangle3D = Geometry.Object.Spatial.Query.MaxRectangle3D(aperture);
                     if (rectangle3D == null || rectangle3D.Width < apertureMinDimension || rectangle3D.Height < apertureMinDimension)

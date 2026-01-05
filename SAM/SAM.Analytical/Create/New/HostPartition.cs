@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -6,12 +9,12 @@ namespace SAM.Analytical
     {
         public static IHostPartition HostPartition(this Face3D face3D, HostPartitionType hostPartitionType = null, double tolerance = Core.Tolerance.Angle)
         {
-            if(face3D == null || !face3D.IsValid())
+            if (face3D == null || !face3D.IsValid())
             {
                 return null;
             }
 
-            if(hostPartitionType == null)
+            if (hostPartitionType == null)
             {
                 hostPartitionType = Query.DefaultHostPartitionType(face3D, tolerance);
             }
@@ -21,12 +24,12 @@ namespace SAM.Analytical
                 return new Wall((WallType)hostPartitionType, face3D);
             }
 
-            if(hostPartitionType is RoofType)
+            if (hostPartitionType is RoofType)
             {
                 return new Roof((RoofType)hostPartitionType, face3D);
             }
 
-            if(hostPartitionType is FloorType)
+            if (hostPartitionType is FloorType)
             {
                 return new Floor((FloorType)hostPartitionType, face3D);
             }

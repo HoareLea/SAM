@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Weather;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -106,7 +109,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(!Core.Query.TryGetEnum(@string, out TM52BuildingCategory tM52BuildingCategory) || tM52BuildingCategory == TM52BuildingCategory.Undefined)
+            if (!Core.Query.TryGetEnum(@string, out TM52BuildingCategory tM52BuildingCategory) || tM52BuildingCategory == TM52BuildingCategory.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -117,16 +120,16 @@ namespace SAM.Analytical.Grasshopper
             List<double> runningMeanTemperatures = new List<double>();
             List<double> dailyAverageTemperatures = new List<double>();
 
-            foreach(WeatherYear weatherYear in weatherData.WeatherYears)
+            foreach (WeatherYear weatherYear in weatherData.WeatherYears)
             {
                 List<double> dailyAverageTemperatures_Temp = weatherYear?.WeatherDays.ConvertAll(x => x.Average(WeatherDataType.DryBulbTemperature));
-                if(dailyAverageTemperatures_Temp != null)
+                if (dailyAverageTemperatures_Temp != null)
                 {
                     dailyAverageTemperatures.AddRange(dailyAverageTemperatures_Temp);
                 }
-                
+
                 List<double> maxIndoorComfortTemperatures_Temp = Analytical.Query.MaxIndoorComfortTemperatures(weatherYear, tM52BuildingCategory);
-                if(maxIndoorComfortTemperatures_Temp != null)
+                if (maxIndoorComfortTemperatures_Temp != null)
                 {
                     maxIndoorComfortTemperatures.AddRange(maxIndoorComfortTemperatures_Temp);
                 }
@@ -138,20 +141,20 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 List<double> runningMeanTemperatures_Temp = Weather.Query.RunningMeanDryBulbTemperatures(weatherYear);
-                if(runningMeanTemperatures_Temp != null)
+                if (runningMeanTemperatures_Temp != null)
                 {
                     runningMeanTemperatures.AddRange(runningMeanTemperatures_Temp);
                 }
             }
 
-            if(dayOfYears != null && dayOfYears.Count != 0)
+            if (dayOfYears != null && dayOfYears.Count != 0)
             {
                 List<double> maxIndoorComfortTemperatures_Temp = new List<double>();
                 List<double> minIndoorComfortTemperatures_Temp = new List<double>();
                 List<double> runningMeanTemperatures_Temp = new List<double>();
                 List<double> dailyAverageTemperatures_Temp = new List<double>();
 
-                foreach(int dayOfYear in dayOfYears)
+                foreach (int dayOfYear in dayOfYears)
                 {
                     int boundedDayOfYear = Core.Query.BoundedIndex(dailyAverageTemperatures.Count, dayOfYear);
 

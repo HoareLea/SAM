@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
@@ -16,7 +19,7 @@ namespace SAM.Analytical
             face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
 
             List<Panel> result = new List<Panel>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 System.Guid guid = panel.Guid;
                 while (result.Find(x => x.Guid == guid) != null)

@@ -1,4 +1,7 @@
-﻿using System.Reflection;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Reflection;
 
 namespace SAM.Core
 {
@@ -12,7 +15,7 @@ namespace SAM.Core
             string resourcesDirectoryName = setting?.GetValue<string>(CoreSettingParameter.ResourcesDirectoryName);
 
             string result = System.IO.Path.Combine(UserSAMDirectory(), resourcesDirectoryName);
-            if(!System.IO.Directory.Exists(result))
+            if (!System.IO.Directory.Exists(result))
             {
                 result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName);
             }
@@ -46,7 +49,7 @@ namespace SAM.Core
             name = name.Replace(".", @"\");
 
             string result = System.IO.Path.Combine(UserSAMDirectory(), resourcesDirectoryName, name);
-            if(!System.IO.Directory.Exists(result))
+            if (!System.IO.Directory.Exists(result))
             {
                 result = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(ExecutingAssemblyDirectory()), resourcesDirectoryName, name);
             }

@@ -1,4 +1,7 @@
-﻿using System.ComponentModel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.ComponentModel;
 
 namespace SAM.Weather
 {
@@ -11,12 +14,12 @@ namespace SAM.Weather
         /// Undefined
         /// </summary>
         [Description("Undefined")] Undefined,
-        
+
         /// <summary>
         /// Global Solar Radiation [W/m2]
         /// </summary>
         [Description("Global Solar Radiation [W/m2]")] GlobalSolarRadiation,
-        
+
         /// <summary>
         /// Diffuse Solar Radiation [W/m2]
         /// </summary>

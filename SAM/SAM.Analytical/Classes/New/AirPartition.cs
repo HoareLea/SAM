@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using SAM.Geometry.Spatial;
 using System;
@@ -7,7 +10,7 @@ namespace SAM.Analytical
 {
     public class AirPartition : BuildingElement<BuildingElementType>, IPartition
     {
-        
+
         public AirPartition(AirPartition airPartition)
             : base(airPartition)
         {

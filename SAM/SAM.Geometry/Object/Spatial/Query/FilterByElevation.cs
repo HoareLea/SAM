@@ -1,11 +1,14 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Object.Spatial
 {
     public static partial class Query
     {
-        public static List<T> FilterByElevation<T>(this IEnumerable<T> face3DObjects, double elevation, out List<T> lower, out List<T> upper, double tolerance = Core.Tolerance.Distance) where T: IFace3DObject
+        public static List<T> FilterByElevation<T>(this IEnumerable<T> face3DObjects, double elevation, out List<T> lower, out List<T> upper, double tolerance = Core.Tolerance.Distance) where T : IFace3DObject
         {
             lower = null;
             upper = null;
@@ -17,14 +20,14 @@ namespace SAM.Geometry.Object.Spatial
             upper = new List<T>();
 
             List<T> result = new List<T>();
-            foreach(T face3DObject in face3DObjects)
+            foreach (T face3DObject in face3DObjects)
             {
                 BoundingBox3D boundingBox3D = face3DObject?.Face3D.GetBoundingBox();
-                if(boundingBox3D == null)
+                if (boundingBox3D == null)
                 {
                     continue;
                 }
-                
+
                 double min = boundingBox3D.Min.Z;
                 double max = boundingBox3D.Max.Z;
 

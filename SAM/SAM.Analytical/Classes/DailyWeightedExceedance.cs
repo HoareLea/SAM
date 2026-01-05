@@ -1,18 +1,21 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
 {
-    public class DailyWeightedExceedance: IAnalyticalObject
+    public class DailyWeightedExceedance : IAnalyticalObject
     {
         private int dayIndex;
         private IndexedDoubles temperatureDifferences;
 
         public DailyWeightedExceedance(DailyWeightedExceedance dailyWeightedExceedance)
         {
-            if(dailyWeightedExceedance != null)
+            if (dailyWeightedExceedance != null)
             {
                 dayIndex = dailyWeightedExceedance.dayIndex;
                 temperatureDifferences = dailyWeightedExceedance.temperatureDifferences == null ? null : new IndexedDoubles(dailyWeightedExceedance.temperatureDifferences);
@@ -57,7 +60,7 @@ namespace SAM.Analytical
         private Dictionary<double, int> GetCountDictionary()
         {
             IEnumerable<int> keys = temperatureDifferences?.Keys;
-            if(keys == null)
+            if (keys == null)
             {
                 return null;
             }
@@ -79,19 +82,19 @@ namespace SAM.Analytical
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("DayIndex"))
+            if (jObject.ContainsKey("DayIndex"))
             {
                 dayIndex = jObject.Value<int>("DayIndex");
             }
 
             if (jObject.ContainsKey("TemperatureDifferences"))
             {
-                temperatureDifferences = new IndexedDoubles( jObject.Value<JObject>("TemperatureDifferences"));
+                temperatureDifferences = new IndexedDoubles(jObject.Value<JObject>("TemperatureDifferences"));
             }
 
             return true;
@@ -102,12 +105,12 @@ namespace SAM.Analytical
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(dayIndex != -1)
+            if (dayIndex != -1)
             {
                 jObject.Add("DayIndex", dayIndex);
             }
 
-            if(temperatureDifferences != null)
+            if (temperatureDifferences != null)
             {
                 jObject.Add("TemperatureDifferences", temperatureDifferences.ToJObject());
             }
@@ -148,7 +151,7 @@ namespace SAM.Analytical
             get
             {
                 double weightedExceedance = WeightedExceedance;
-                if(double.IsNaN(weightedExceedance))
+                if (double.IsNaN(weightedExceedance))
                 {
                     return false;
                 }

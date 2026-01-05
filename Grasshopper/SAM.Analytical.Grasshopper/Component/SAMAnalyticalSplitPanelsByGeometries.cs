@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -70,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -85,20 +88,20 @@ namespace SAM.Analytical.Grasshopper
 
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             index = Params.IndexOfInputParam("_geometries");
-            if(index != -1)
+            if (index != -1)
             {
                 List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
                 dataAccess.GetDataList(index, objectWrappers);
-                if(objectWrappers != null)
+                if (objectWrappers != null)
                 {
-                    foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                    foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                     {
-                        if(objectWrapper.Value is IFace3DObject)
+                        if (objectWrapper.Value is IFace3DObject)
                         {
                             geometry3Ds.Add(((IFace3DObject)objectWrapper.Value).Face3D);
                             continue;
                         }
-                        
+
                         if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds) && face3Ds != null)
                         {
                             face3Ds.ForEach(x => geometry3Ds.Add(x));
@@ -132,14 +135,14 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = null;
 
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 HashSet<Guid> panelGuids = null;
                 index = Params.IndexOfInputParam("spaces_");
                 if (index != -1)
                 {
                     List<Space> spaces = new List<Space>();
-                    if(dataAccess.GetDataList(index, spaces) && spaces != null)
+                    if (dataAccess.GetDataList(index, spaces) && spaces != null)
                     {
                         panelGuids = new HashSet<Guid>();
                         foreach (Space space in spaces)
@@ -148,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
                 }
-                if(geometry3Ds != null)
+                if (geometry3Ds != null)
                 {
                     panels = adjacencyCluster.SplitPanels(geometry3Ds, panelGuids);
                 }
@@ -164,7 +167,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, new GooAnalyticalObject(analyticalObject));
             }

@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -45,7 +48,7 @@ namespace SAM.Core.Grasshopper
         {
             if (values == null)
                 values = new List<string>();
-            
+
             writer.SetString("Values", string.Join("\n", values));
 
             if (value == null)
@@ -59,7 +62,7 @@ namespace SAM.Core.Grasshopper
         public override bool Read(GH_IReader reader)
         {
             string text = null;
-            
+
             if (reader.TryGetString("Values", ref text) && !string.IsNullOrWhiteSpace(text))
                 values = text.Split('\n').ToList();
 
@@ -71,7 +74,7 @@ namespace SAM.Core.Grasshopper
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             //this.menu = menu;
-            
+
             foreach (string value in values)
                 Menu_AppendItem(menu, value, Menu_Changed, true, value.Equals(this.value)).Tag = value;
         }
@@ -117,14 +120,14 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if(!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
+            if (!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             HashSet<string> values = new HashSet<string>();
-            foreach(SAMObject sAMObject in sAMObjects)
+            foreach (SAMObject sAMObject in sAMObjects)
             {
                 string name = null;
                 if (!Core.Query.TryGetValue(sAMObject, "Name", out name))

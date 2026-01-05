@@ -1,16 +1,19 @@
-﻿namespace SAM.Geometry.Rhino
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Rhino
 {
     public static partial class Convert
     {
         public static Spatial.Rectangle3D ToSAM(this global::Rhino.Geometry.Rectangle3d rectangle3d)
         {
-            if(!rectangle3d.IsValid)
+            if (!rectangle3d.IsValid)
             {
                 return null;
             }
 
             Spatial.Plane plane = rectangle3d.Plane.ToSAM();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }

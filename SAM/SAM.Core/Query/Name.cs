@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core.Attributes;
 using System;
 using System.Linq;
@@ -35,7 +38,7 @@ namespace SAM.Core
             string result = null;
 
             ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
-            if(parameterProperties != null)
+            if (parameterProperties != null)
             {
                 result = parameterProperties.Name;
             }

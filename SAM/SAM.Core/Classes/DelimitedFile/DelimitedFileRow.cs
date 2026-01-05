@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -21,7 +24,7 @@ namespace SAM.Core
         public bool TryGetValue<T>(int index, out T value)
         {
             value = default(T);
-            if( index < 0 || index >= Count)
+            if (index < 0 || index >= Count)
             {
                 return false;
             }

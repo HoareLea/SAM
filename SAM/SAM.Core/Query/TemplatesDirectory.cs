@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Reflection;
 
 namespace SAM.Core
@@ -7,14 +10,14 @@ namespace SAM.Core
     {
         public static string TemplatesDirectory(Assembly assembly)
         {
-            string resourcesDirectory =  ResourcesDirectory(ActiveSetting.Setting, assembly);
-            if(string.IsNullOrWhiteSpace(resourcesDirectory))
+            string resourcesDirectory = ResourcesDirectory(ActiveSetting.Setting, assembly);
+            if (string.IsNullOrWhiteSpace(resourcesDirectory))
             {
                 return null;
             }
 
             string templatesDirectoryName = ActiveSetting.Setting.GetValue<string>(CoreSettingParameter.TemplatesDirectoryName);
-            if(string.IsNullOrWhiteSpace(templatesDirectoryName))
+            if (string.IsNullOrWhiteSpace(templatesDirectoryName))
             {
                 return null;
             }

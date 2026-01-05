@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,12 +29,12 @@ namespace SAM.Analytical
                 List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(panel);
                 PanelType panelType = panel.PanelType;
 
-                if(spaces == null || spaces.Count == 0)
+                if (spaces == null || spaces.Count == 0)
                 {
                     if (panelType != PanelType.SolarPanel)
                         panelType = PanelType.Shade;
                 }
-                else if(spaces.Count == 1)
+                else if (spaces.Count == 1)
                 {
                     double elevation = double.NaN;
 
@@ -56,10 +59,10 @@ namespace SAM.Analytical
                                     break;
                             }
                             break;
-                        
+
                         case PanelType.Wall:
                         case PanelType.WallInternal:
-                            
+
                             elevation = Geometry.Object.Spatial.Query.MaxElevation(panel);
 
                             if (elevation - elevation_Ground < Tolerance.MacroDistance)
@@ -114,13 +117,13 @@ namespace SAM.Analytical
                         case PanelType.Roof:
                             elevation = Geometry.Object.Spatial.Query.MaxElevation(panel);
                             panelType_Normal = Query.PanelType(panel.Normal);
-                            if(panelType_Normal == PanelType.Floor)
+                            if (panelType_Normal == PanelType.Floor)
                             {
                                 if (elevation < elevation_Ground)
                                 {
                                     panelType = PanelType.UndergroundSlab;
                                 }
-                                else if(System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
+                                else if (System.Math.Abs(elevation - elevation_Ground) < Tolerance.MacroDistance)
                                 {
                                     panelType = PanelType.SlabOnGrade;
                                 }
@@ -140,16 +143,16 @@ namespace SAM.Analytical
                         case PanelType.Undefined:
                             panelType = Query.PanelType(panel.Normal);
                             break;
-                    }                 
+                    }
 
                 }
-                else if(spaces.Count > 1)
+                else if (spaces.Count > 1)
                 {
                     switch (panelType)
                     {
                         case PanelType.Shade:
                         case PanelType.SolarPanel:
-                        //case PanelType.Air:
+                            //case PanelType.Air:
                             panelType = Query.PanelType(panel.Normal);
                             switch (panelType.PanelGroup())
                             {
@@ -180,7 +183,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(panelType != panel.PanelType)
+                if (panelType != panel.PanelType)
                 {
                     Panel panel_New = new Panel(panel, panelType);
                     adjacencyCluster.AddObject(panel_New);

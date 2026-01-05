@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 namespace SAM.Analytical
 {
     public static partial class Modify
@@ -37,21 +40,21 @@ namespace SAM.Analytical
 
             MechanicalSystemType mechanicalSystemType = mechanicalSystem.Type;
 
-            foreach(Space space in spaces_Temp)
+            foreach (Space space in spaces_Temp)
             {
-                if(space == null)
+                if (space == null)
                 {
                     continue;
                 }
 
-                if(!allowMultipleSystems)
+                if (!allowMultipleSystems)
                 {
                     List<MechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<MechanicalSystem>(space);
-                    if(mechanicalSystems_Space != null)
+                    if (mechanicalSystems_Space != null)
                     {
-                        foreach(MechanicalSystem mechanicalSystem_Space in mechanicalSystems_Space)
+                        foreach (MechanicalSystem mechanicalSystem_Space in mechanicalSystems_Space)
                         {
-                            if(mechanicalSystem_Space.MechanicalSystemCategory() == mechanicalSystemType.MechanicalSystemCategory())
+                            if (mechanicalSystem_Space.MechanicalSystemCategory() == mechanicalSystemType.MechanicalSystemCategory())
                             {
                                 adjacencyCluster.RemoveRelation(space, mechanicalSystem_Space);
                             }
@@ -60,10 +63,10 @@ namespace SAM.Analytical
                 }
 
                 InternalCondition internalCondition = space.InternalCondition;
-                if(internalCondition != null)
+                if (internalCondition != null)
                 {
                     InternalConditionParameter? internalConditionParameter = Query.SystemTypeInternalConditionParameter(mechanicalSystem.MechanicalSystemCategory());
-                    if(internalConditionParameter != null && internalConditionParameter.HasValue)
+                    if (internalConditionParameter != null && internalConditionParameter.HasValue)
                     {
                         internalCondition.SetValue(internalConditionParameter.Value, mechanicalSystem.Name);
                         space.InternalCondition = internalCondition;

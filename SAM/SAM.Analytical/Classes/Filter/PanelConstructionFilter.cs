@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     public class PanelConstructionFilter : RelationFilter<Construction>
     {
         public PanelConstructionFilter(IFilter filter)
-            :base(filter)
+            : base(filter)
         {
 
         }
@@ -26,7 +29,7 @@ namespace SAM.Analytical
         public override Construction GetRelative(IJSAMObject jSAMObject)
         {
             Panel panel = jSAMObject as Panel;
-            if(panel == null)
+            if (panel == null)
             {
                 return null;
             }

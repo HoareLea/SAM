@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -12,25 +15,25 @@ namespace SAM.Analytical
             List<System.Guid> guids = new List<System.Guid>();
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return guids;
             }
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
-                if(panel.Construction != null && panel.PanelType != PanelType.Air)
+                if (panel.Construction != null && panel.PanelType != PanelType.Air)
                 {
                     continue;
                 }
 
                 List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                if(spaces != null && spaces.Count > 1)
+                if (spaces != null && spaces.Count > 1)
                 {
                     continue;
                 }

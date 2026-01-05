@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
-using System.Collections.Generic;
+using Newtonsoft.Json.Linq;
 using SAM.Architectural;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -43,7 +45,7 @@ namespace SAM.Analytical
                 this.paneMaterialLayers = new List<MaterialLayer>(paneMaterialLayers).ConvertAll(x => new MaterialLayer(x));
             }
 
-            if(frameMaterialLayers != null)
+            if (frameMaterialLayers != null)
             {
                 this.frameMaterialLayers = new List<MaterialLayer>(frameMaterialLayers).ConvertAll(x => new MaterialLayer(x));
             }
@@ -91,7 +93,7 @@ namespace SAM.Analytical
         {
             get
             {
-                if(frameMaterialLayers == null)
+                if (frameMaterialLayers == null)
                 {
                     return null;
                 }
@@ -135,12 +137,12 @@ namespace SAM.Analytical
 
         public List<MaterialLayer> GetMaterialLayers(OpeningPart openingPart)
         {
-            if(openingPart == OpeningPart.Undefined)
+            if (openingPart == OpeningPart.Undefined)
             {
                 return null;
             }
 
-            switch(openingPart)
+            switch (openingPart)
             {
                 case OpeningPart.Frame:
                     return FrameMaterialLayers;
@@ -154,13 +156,13 @@ namespace SAM.Analytical
 
         public double GetThickness(OpeningPart openingPart)
         {
-            if(openingPart == OpeningPart.Undefined)
+            if (openingPart == OpeningPart.Undefined)
             {
                 return double.NaN;
             }
 
             List<MaterialLayer> materialLayers = GetMaterialLayers(openingPart);
-            if(materialLayers == null || materialLayers.Count == 0)
+            if (materialLayers == null || materialLayers.Count == 0)
             {
                 return 0;
             }

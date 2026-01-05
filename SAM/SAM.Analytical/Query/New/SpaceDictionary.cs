@@ -1,11 +1,13 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
+using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using SAM.Architectural;
 
 namespace SAM.Analytical
 {

@@ -1,9 +1,11 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-
-using SAM.Architectural;
 
 namespace SAM.Analytical
 {
@@ -95,7 +97,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(materialLibrary != null && result != null && result.Count != 0)
+            if (materialLibrary != null && result != null && result.Count != 0)
             {
                 buildingModel.UpdateMaterials(hostPartitionType.MaterialLayers, materialLibrary, out HashSet<string> missingMaterialsNames);
             }
@@ -105,7 +107,7 @@ namespace SAM.Analytical
 
         public static List<IPartition> UpdateHostPartitionType(this BuildingModel buildingModel, HostPartitionType hostPartitionType, Func<IPartition, bool> function, IEnumerable<IPartition> partitions = null, MaterialLibrary materialLibrary = null)
         {
-            if(function == null)
+            if (function == null)
             {
                 return null;
             }
@@ -129,7 +131,7 @@ namespace SAM.Analytical
             double tolerance_Angle = Tolerance.Angle,
             double tolerance_Distance = Tolerance.Distance)
         {
-            if(buildingModel == null)
+            if (buildingModel == null)
             {
                 return null;
             }
@@ -142,11 +144,11 @@ namespace SAM.Analytical
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition is AirPartition)
+                    if (partition is AirPartition)
                     {
                         return false;
                     }
-                    else if(partition is IHostPartition)
+                    else if (partition is IHostPartition)
                     {
                         IHostPartition hostPartition = partition as IHostPartition;
                         if (hostPartition == null)
@@ -161,20 +163,20 @@ namespace SAM.Analytical
                 });
 
                 List<IPartition> partitions_Update = buildingModel.UpdateHostPartitionType(curtainWallType, function, partitions, materialLibrary);
-                if(partitions_Update != null)
+                if (partitions_Update != null)
                 {
-                    foreach(IPartition partition_Update in partitions_Update)
+                    foreach (IPartition partition_Update in partitions_Update)
                     {
                         dictionary[partition_Update.Guid] = partition_Update;
                     }
                 }
             }
 
-            if(internalWallType != null)
+            if (internalWallType != null)
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition == null)
+                    if (partition == null)
                     {
                         return false;
                     }
@@ -214,12 +216,12 @@ namespace SAM.Analytical
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition == null)
+                    if (partition == null)
                     {
                         return false;
                     }
 
-                    if(partition is AirPartition)
+                    if (partition is AirPartition)
                     {
                         if (Query.HostPartitionCategory(partition, tolerance_Angle) != HostPartitionCategory.Wall)
                         {
@@ -227,7 +229,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(!buildingModel.External(partition))
+                    if (!buildingModel.External(partition))
                     {
                         return false;
                     }
@@ -264,7 +266,7 @@ namespace SAM.Analytical
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition == null)
+                    if (partition == null)
                     {
                         return false;
                     }
@@ -282,7 +284,7 @@ namespace SAM.Analytical
                         return false;
                     }
 
-                    if(partition is IHostPartition)
+                    if (partition is IHostPartition)
                     {
                         IHostPartition hostPartition = partition as IHostPartition;
                         if (buildingModel.GetMaterialType(hostPartition) == MaterialType.Transparent)
@@ -313,7 +315,7 @@ namespace SAM.Analytical
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition == null)
+                    if (partition == null)
                     {
                         return false;
                     }
@@ -349,7 +351,7 @@ namespace SAM.Analytical
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
-                    if(partition == null)
+                    if (partition == null)
                     {
                         return false;
                     }
@@ -512,7 +514,7 @@ namespace SAM.Analytical
                     return true;
                 });
 
-                List<IPartition> partitions_Update = buildingModel.UpdateHostPartitionType(undergroundCeilingFloorType, function , partitions, materialLibrary);
+                List<IPartition> partitions_Update = buildingModel.UpdateHostPartitionType(undergroundCeilingFloorType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)
@@ -522,7 +524,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(roofType != null)
+            if (roofType != null)
             {
                 Func<IPartition, bool> function = new Func<IPartition, bool>((IPartition partition) =>
                 {
@@ -554,7 +556,7 @@ namespace SAM.Analytical
                     return true;
                 });
 
-                List<IPartition> partitions_Update = buildingModel.UpdateHostPartitionType(roofType, function , partitions, materialLibrary);
+                List<IPartition> partitions_Update = buildingModel.UpdateHostPartitionType(roofType, function, partitions, materialLibrary);
                 if (partitions_Update != null)
                 {
                     foreach (IPartition partition_Update in partitions_Update)

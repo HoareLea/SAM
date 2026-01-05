@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -269,7 +272,7 @@ namespace SAM.Math
             foreach (JArray jArray_Row in jArray_Column)
             {
                 List<double> values = new List<double>();
-                foreach(double value in jArray_Row)
+                foreach (double value in jArray_Row)
                     values.Add(value);
 
                 valuesList.Add(values);
@@ -290,7 +293,7 @@ namespace SAM.Math
 
             JArray jArray_Column = new JArray();
 
-            for (int i=0; i < values.GetLength(0); i++)
+            for (int i = 0; i < values.GetLength(0); i++)
             {
                 JArray jArray_Row = new JArray();
                 for (int j = 0; j < values.GetLength(1); j++)
@@ -307,11 +310,11 @@ namespace SAM.Math
         public override int GetHashCode()
         {
             int result = int.MinValue;
-            for(int i=0; i < values.GetLength(0); i++)
+            for (int i = 0; i < values.GetLength(0); i++)
             {
                 for (int j = 0; j < values.GetLength(1); j++)
                 {
-                    if(result == int.MinValue)
+                    if (result == int.MinValue)
                         result = values[i, j].GetHashCode();
                     else
                         result = result ^ values[i, j].GetHashCode();
@@ -412,7 +415,7 @@ namespace SAM.Math
 
                     values_Temp[index_column, index_row] = values[i, j];
                 }
-                    
+
             }
 
             return new Matrix(values_Temp);
@@ -450,16 +453,16 @@ namespace SAM.Math
                 return double.NaN;
 
             int count = values.GetLength(0);
-            
+
             if (count == 1)
                 return values[0, 0];
 
-            if(count == 2)
+            if (count == 2)
                 return (values[0, 0] * values[1, 1]) - (values[1, 0] * values[0, 1]);
 
             if (count == 3)
-                return 
-                    + (values[0, 0] * ((values[1, 1] * values[2, 2]) - (values[1, 2] * values[2, 1])))
+                return
+                    +(values[0, 0] * ((values[1, 1] * values[2, 2]) - (values[1, 2] * values[2, 1])))
                     - (values[0, 1] * ((values[1, 0] * values[2, 2]) - (values[1, 2] * values[2, 0])))
                     + (values[0, 2] * ((values[1, 0] * values[2, 1]) - (values[1, 1] * values[2, 0])));
 

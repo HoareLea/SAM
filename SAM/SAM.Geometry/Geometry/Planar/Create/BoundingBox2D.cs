@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -20,7 +23,7 @@ namespace SAM.Geometry.Planar
             if (count == 1)
                 return result;
 
-            for(int i =1; i < count; i++)
+            for (int i = 1; i < count; i++)
                 result.Include(segmentable2Ds.ElementAt(i).GetBoundingBox(offset));
 
             return result;

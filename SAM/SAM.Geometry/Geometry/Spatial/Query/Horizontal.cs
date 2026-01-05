@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Spatial
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
@@ -13,7 +16,7 @@
         public static bool Horizontal(this IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
         {
             Plane plane = closedPlanar3D?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return false;
             }

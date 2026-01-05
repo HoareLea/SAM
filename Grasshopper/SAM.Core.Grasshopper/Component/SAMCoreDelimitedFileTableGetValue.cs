@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -47,7 +50,7 @@ namespace SAM.Core.Grasshopper
                 result.Add(new GH_SAMParam(new GooDelimitedFileTableParam() { Name = "_delimitedFileTable", NickName = "_delimitedFileTable", Description = "SAM DelimitedFileTable", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_column", NickName = "_column", Description = "Column name or index", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "row_", NickName = "row_", Description = "Row index", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                
+
 
                 return result.ToArray();
             }
@@ -74,7 +77,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_delimitedFileTable");
-            
+
             DelimitedFileTable delimitedFileTable = null;
             if (index == -1 || !dataAccess.GetData(index, ref delimitedFileTable) || delimitedFileTable == null)
             {
@@ -84,7 +87,7 @@ namespace SAM.Core.Grasshopper
 
             object column = null;
             index = Params.IndexOfInputParam("_column");
-            if(index == -1 || !dataAccess.GetData(index, ref column))
+            if (index == -1 || !dataAccess.GetData(index, ref column))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -109,7 +112,7 @@ namespace SAM.Core.Grasshopper
                 else
                     column = column.ToString();
             }
-                
+
 
             int row = -1;
             index = Params.IndexOfInputParam("row_");
@@ -117,11 +120,11 @@ namespace SAM.Core.Grasshopper
                 row = -1;
 
             object[] result = null;
-            if(row is -1)
+            if (row is -1)
             {
                 if (column is int)
                     result = delimitedFileTable.GetColumnValues((int)column);
-                else if(column is string)
+                else if (column is string)
                     result = delimitedFileTable.GetColumnValues((string)column);
             }
             else

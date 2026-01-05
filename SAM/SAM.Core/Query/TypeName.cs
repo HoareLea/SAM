@@ -1,4 +1,7 @@
-﻿using System.Runtime.InteropServices;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Runtime.InteropServices;
 
 namespace SAM.Core
 {
@@ -6,7 +9,7 @@ namespace SAM.Core
     {
         public static string TypeName(this object @object)
         {
-            if(@object == null)
+            if (@object == null)
             {
                 return null;
             }

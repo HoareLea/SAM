@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using System.Collections.Generic;
 using System.Linq;
@@ -27,7 +30,7 @@ namespace SAM.Core
             min = default;
             max = default;
 
-            if(values != null)
+            if (values != null)
             {
                 List<T> list = values.ToList();
                 max = list.Max();
@@ -65,8 +68,8 @@ namespace SAM.Core
         public bool Add(T value)
         {
             bool result = false;
-            
-            if((value as dynamic) > (max as dynamic))
+
+            if ((value as dynamic) > (max as dynamic))
             {
                 max = value;
                 result = true;
@@ -84,7 +87,7 @@ namespace SAM.Core
         public bool Add(Range<T> value)
         {
             bool result = false;
-            if(value == null)
+            if (value == null)
             {
                 return false;
             }
@@ -152,7 +155,7 @@ namespace SAM.Core
 
         public bool In(Range<T> range)
         {
-            if(range == null)
+            if (range == null)
             {
                 return false;
             }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -41,7 +44,7 @@ namespace SAM.Analytical
                 Profile profile_SpaceAirMovement = spaceAirMovement.Profile;
                 profile_SpaceAirMovement.Multiply(spaceAirMovement.AirFlow);
 
-                if(profile == null)
+                if (profile == null)
                 {
                     profile = profile_SpaceAirMovement;
                 }
@@ -51,7 +54,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(profile == null)
+            if (profile == null)
             {
                 return double.NaN;
             }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Spatial
             if (result.Count == 0)
                 return result;
 
-            foreach(Face3D face3D_New in result)
+            foreach (Face3D face3D_New in result)
             {
                 Point3D point3D = face3D_New?.InternalPoint3D();
                 if (point3D == null)
@@ -99,7 +102,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
-            foreach(Face3D face3D_Temp in face3Ds)
+            foreach (Face3D face3D_Temp in face3Ds)
             {
                 PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, face3D_Temp, tolerance_Angle, tolerance_Distance);
                 if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
@@ -119,16 +122,16 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Cut(this IEnumerable<Face3D> face3Ds, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
 
             List<List<Face3D>> face3DsList = Enumerable.Repeat<List<Face3D>>(null, face3Ds.Count()).ToList();
-            System.Threading.Tasks.Parallel.For(0, face3DsList.Count, (int i) => 
+            System.Threading.Tasks.Parallel.For(0, face3DsList.Count, (int i) =>
             {
                 Face3D face3D = face3Ds.ElementAt(i);
-                if(face3D == null)
+                if (face3D == null)
                 {
                     return;
                 }
@@ -148,9 +151,9 @@ namespace SAM.Geometry.Spatial
 
             List<Face3D> result = new List<Face3D>();
 
-            foreach(List<Face3D> face3Ds_Temp in face3DsList)
+            foreach (List<Face3D> face3Ds_Temp in face3DsList)
             {
-                if(face3Ds_Temp == null || face3Ds_Temp.Count == 0)
+                if (face3Ds_Temp == null || face3Ds_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -163,13 +166,13 @@ namespace SAM.Geometry.Spatial
 
         public static List<Shell> Cut(this Shell shell, Plane plane, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
-            if(shell == null || plane == null)
+            if (shell == null || plane == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = shell.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
@@ -181,16 +184,16 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds_Section = shell.Section(plane, true, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-            if(face3Ds_Section == null || face3Ds_Section.Count == 0)
+            if (face3Ds_Section == null || face3Ds_Section.Count == 0)
             {
                 return new List<Shell>() { new Shell(shell) };
             }
 
             List<Face3D> face3Ds_Cut = new List<Face3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 List<Face3D> face3Ds_Cut_Temp = Cut(face3D, plane, tolerance_Distance);
-                if(face3Ds_Cut_Temp == null || face3Ds_Cut_Temp.Count == 0)
+                if (face3Ds_Cut_Temp == null || face3Ds_Cut_Temp.Count == 0)
                 {
                     face3Ds_Cut.Add(face3D);
                 }
@@ -240,7 +243,7 @@ namespace SAM.Geometry.Spatial
 
                     Vector3D vector3D = plane.Normal * silverSpacing;
 
-                    if(shell.Inside((Point3D)point3D.GetMoved(vector3D), silverSpacing, tolerance_Distance))
+                    if (shell.Inside((Point3D)point3D.GetMoved(vector3D), silverSpacing, tolerance_Distance))
                     {
                         face3Ds_Above.Add(face3D_Cut);
                     }
@@ -257,17 +260,17 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Shell> result = new List<Shell>();
-            while(face3Ds_Section.Count > 0)
+            while (face3Ds_Section.Count > 0)
             {
                 Face3D face3D_Section = face3Ds_Section[0];
                 face3Ds_Section.RemoveAt(0);
 
-                if(face3D_Section == null)
+                if (face3D_Section == null)
                 {
                     continue;
                 }
 
-                foreach(List<Face3D> face3Ds_Temp in new List<List<Face3D>>() { face3Ds_Above, face3Ds_Below })
+                foreach (List<Face3D> face3Ds_Temp in new List<List<Face3D>>() { face3Ds_Above, face3Ds_Below })
                 {
                     List<Face3D> face3Ds_Temp_Temp = new List<Face3D>(face3Ds_Temp);
                     face3Ds_Temp_Temp.AddRange(face3Ds_Section);
@@ -295,19 +298,19 @@ namespace SAM.Geometry.Spatial
 
         public static List<Shell> Cut(this Shell shell, IEnumerable<Plane> planes, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance, double tolerance_Snap = Tolerance.MacroDistance)
         {
-            if(shell == null || planes == null)
+            if (shell == null || planes == null)
             {
                 return null;
             }
 
             List<Shell> result = new List<Shell>() { shell };
-            foreach(Plane plane in planes)
+            foreach (Plane plane in planes)
             {
                 List<Shell> shells_Temp = new List<Shell>();
                 foreach (Shell shell_Temp in result)
                 {
                     List<Shell> shells_Cut = shell_Temp.Cut(plane, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-                    if(shells_Cut == null || shells_Cut.Count == 0)
+                    if (shells_Cut == null || shells_Cut.Count == 0)
                     {
                         shells_Temp.Add(shell_Temp);
                     }
@@ -324,7 +327,7 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Cut(this Face3D face3D, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
         {
-            if(face3D == null || planes == null)
+            if (face3D == null || planes == null)
             {
                 return null;
             }
@@ -335,7 +338,7 @@ namespace SAM.Geometry.Spatial
                 for (int i = result.Count - 1; i >= 0; i--)
                 {
                     List<Face3D> face3Ds = result[i].Cut(plane, tolerance);
-                    if(face3Ds == null || face3Ds.Count  < 2)
+                    if (face3Ds == null || face3Ds.Count < 2)
                     {
                         continue;
                     }
@@ -350,15 +353,15 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Cut(this IEnumerable<Face3D> face3Ds, IEnumerable<Plane> planes, double tolerance = Tolerance.Distance)
         {
-            if(face3Ds == null || planes == null)
+            if (face3Ds == null || planes == null)
             {
                 return null;
             }
 
             List<Face3D> result = new List<Face3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
@@ -377,7 +380,7 @@ namespace SAM.Geometry.Spatial
 
             return result;
         }
-        
+
         public static List<Face3D> Cut(this Face3D face3D, Range<double> range, int dimensionIndex, double tolerance = Tolerance.Distance)
         {
             if (face3D == null || range == null)
@@ -404,7 +407,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds = face3D.Cut(new Plane[] { Create.Plane(range.Min, dimensionIndex), Create.Plane(range.Max, dimensionIndex) }, tolerance);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return result;
             }

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,13 +19,13 @@ namespace SAM.Analytical
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             Face3D face3D_Aperture = aperture.GetFace3D();
-            if(face3D_Aperture == null)
+            if (face3D_Aperture == null)
             {
                 return null;
             }
@@ -31,7 +34,7 @@ namespace SAM.Analytical
             Geometry.Planar.Face2D face2D_Aperture = plane.Convert(face3D_Aperture);
 
             Geometry.Planar.ISegmentable2D segmentable2D = face2D.ExternalEdge2D as Geometry.Planar.ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new NotImplementedException();
             }
@@ -39,13 +42,13 @@ namespace SAM.Analytical
             double area = face2D_Aperture.GetArea();
 
             List<Geometry.Planar.Face2D> face2Ds_Difference = Geometry.Planar.Query.Difference(face2D_Aperture, face2D, tolerance);
-            if(face2Ds_Difference == null || face2Ds_Difference.Count == 0)
+            if (face2Ds_Difference == null || face2Ds_Difference.Count == 0)
             {
                 return null;
             }
 
             double area_Difference = face2Ds_Difference.ConvertAll(x => x.GetArea()).Sum();
-            if(area_Difference <= tolerance || area_Difference >= (areaFactor * area))
+            if (area_Difference <= tolerance || area_Difference >= (areaFactor * area))
             {
                 return null;
             }
@@ -58,7 +61,7 @@ namespace SAM.Analytical
             Geometry.Planar.Vector2D vector2D_Y = null;
             foreach (Geometry.Planar.Point2D point2D in boundingBox2D.GetPoints())
             {
-                if(face2D.Inside(point2D, tolerance) || face2D.On(point2D, tolerance))
+                if (face2D.Inside(point2D, tolerance) || face2D.On(point2D, tolerance))
                 {
                     continue;
                 }
@@ -87,13 +90,13 @@ namespace SAM.Analytical
 
             }
 
-            if(vector2D_X == null && vector2D_Y == null)
+            if (vector2D_X == null && vector2D_Y == null)
             {
                 return null;
             }
 
             vector2D = new Geometry.Planar.Vector2D(vector2D_X == null ? 0 : vector2D_X.X, vector2D_Y == null ? 0 : vector2D_Y.Y);
-            if(vector2D.Length <= tolerance)
+            if (vector2D.Length <= tolerance)
             {
                 return null;
             }
@@ -115,10 +118,10 @@ namespace SAM.Analytical
             return null;
 
         }
-    
+
         public static Aperture Fit(this Aperture aperture, IEnumerable<Panel> panels, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(aperture == null || panels == null)
+            if (aperture == null || panels == null)
             {
                 return null;
             }
@@ -148,12 +151,12 @@ namespace SAM.Analytical
                 apertures.Add(aperture_Temp);
             }
 
-            if(apertures == null || apertures.Count == 0)
+            if (apertures == null || apertures.Count == 0)
             {
                 return null;
             }
 
-            if(apertures.Count == 1)
+            if (apertures.Count == 1)
             {
                 return apertures[0];
             }
@@ -164,10 +167,10 @@ namespace SAM.Analytical
 
             return tuples.FirstOrDefault()?.Item2;
         }
-    
+
         public static List<Aperture> Fit(this IEnumerable<Aperture> apertures, IEnumerable<Panel> panels, double areaFactor = 0.5, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(apertures == null || panels == null)
+            if (apertures == null || panels == null)
             {
                 return null;
             }

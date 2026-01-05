@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
@@ -32,7 +35,7 @@ namespace SAM.Analytical
             if (plane.Normal.Perpendicular(plane_closedPlanar3D.Normal, tolerance))
             {
                 return false;
-            } 
+            }
 
             Point3D point3D_ClosedPlanar3D = plane_closedPlanar3D.Origin;
             Point3D point3D_ClosedPlanar3D_Projected = plane.Project(plane_closedPlanar3D.Origin);

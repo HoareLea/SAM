@@ -1,4 +1,7 @@
-﻿using SAM.Core.Attributes;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,21 +13,21 @@ namespace SAM.Core
         public static List<Enum> Enums(SAMObject sAMObject, bool notPublic = false)
         {
             Type type = sAMObject?.GetType();
-            if(type == null)
+            if (type == null)
             {
                 return null;
             }
 
             List<Enum> enums = Enums(type, notPublic);
-            if(enums == null || enums.Count == 0)
+            if (enums == null || enums.Count == 0)
             {
                 return null;
             }
 
-            List<Enum> result = new ();
+            List<Enum> result = new();
             foreach (Enum @enum in enums)
             {
-                if(sAMObject.HasParameter(@enum))
+                if (sAMObject.HasParameter(@enum))
                 {
                     result.Add(@enum);
                 }
@@ -42,7 +45,7 @@ namespace SAM.Core
             if (dictionary == null)
                 return null;
 
-            List<Enum> result = new ();
+            List<Enum> result = new();
             foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in dictionary)
             {
                 if (!keyValuePair.Value.IsValid(type))
@@ -81,7 +84,7 @@ namespace SAM.Core
             if (dictionary == null)
                 return null;
 
-            List<Enum> result = new ();
+            List<Enum> result = new();
             foreach (KeyValuePair<Type, AssociatedTypes> keyValuePair in dictionary)
             {
                 if (!keyValuePair.Value.IsValid(type))
@@ -105,13 +108,13 @@ namespace SAM.Core
             if (types == null)
                 return null;
 
-            List<Enum> result = new ();
-            foreach(Type type in types)
+            List<Enum> result = new();
+            foreach (Type type in types)
             {
-                if (type == null )
+                if (type == null)
                     continue;
 
-                if(type.IsEnum)
+                if (type.IsEnum)
                 {
                     foreach (Enum @enum in System.Enum.GetValues(type))
                     {
@@ -121,7 +124,7 @@ namespace SAM.Core
                 else
                 {
                     List<Enum> enums = Enums(type, false);
-                    if(enums != null)
+                    if (enums != null)
                     {
                         result.AddRange(enums);
                     }
@@ -142,7 +145,7 @@ namespace SAM.Core
             {
                 T value = (T)array.GetValue(i);
 
-                if(excluded != null && excluded.Contains(value))
+                if (excluded != null && excluded.Contains(value))
                 {
                     continue;
                 }

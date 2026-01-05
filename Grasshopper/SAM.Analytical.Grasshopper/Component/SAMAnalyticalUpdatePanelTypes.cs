@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -43,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 GH_SAMParam[] result = new GH_SAMParam[2];
-                result[0] = new GH_SAMParam(new GooAnalyticalObjectParam() {Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "modified SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 return result;
             }
@@ -73,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = new List<Panel>();
             index = Params.IndexOfInputParam("_panels_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, panels);
             }
@@ -85,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
                 groundElevation = 0;
             }
 
-            if(analyticalObject is AdjacencyCluster)
+            if (analyticalObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
 
@@ -93,7 +96,7 @@ namespace SAM.Analytical.Grasshopper
 
                 analyticalObject = adjacencyCluster;
             }
-            else if(analyticalObject is AnalyticalModel)
+            else if (analyticalObject is AnalyticalModel)
             {
                 AdjacencyCluster adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
 

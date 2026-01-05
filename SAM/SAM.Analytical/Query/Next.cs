@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -7,22 +10,22 @@ namespace SAM.Analytical
     {
         public static int Next<T>(this IEnumerable<T> values, T value, int itemCount, int start = 0)
         {
-            if(values == null)
+            if (values == null)
             {
                 return -1;
             }
 
             int length = values.Count();
-            if(length == 0 || length <= itemCount || length <= start)
+            if (length == 0 || length <= itemCount || length <= start)
             {
                 return -1;
             }
 
             int count = 0;
-            for(int i = start; i < length; i++)
+            for (int i = start; i < length; i++)
             {
                 T value_Current = values.ElementAt(i);
-                if(value_Current as dynamic == value as dynamic)
+                if (value_Current as dynamic == value as dynamic)
                 {
                     count++;
                 }
@@ -31,7 +34,7 @@ namespace SAM.Analytical
                     count = 0;
                 }
 
-                if(count == itemCount)
+                if (count == itemCount)
                 {
                     return i;
                 }

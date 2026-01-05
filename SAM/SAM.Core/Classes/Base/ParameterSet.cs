@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
@@ -22,10 +25,10 @@ namespace SAM.Core
                 foreach (KeyValuePair<string, object> keyValuePair in parameterSet.dictionary)
                 {
                     object @object = keyValuePair.Value;
-                    if(@object is IJSAMObject)
+                    if (@object is IJSAMObject)
                     {
                         object @object_Temp = ((IJSAMObject)@object).Clone();
-                        if(object_Temp != null)
+                        if (object_Temp != null)
                         {
                             @object = @object_Temp;
                         }
@@ -316,7 +319,7 @@ namespace SAM.Core
 
         public System.Drawing.Color ToColor(string name)
         {
-            SAMColor sAMColor = ToSAMObject<SAMColor>(name); 
+            SAMColor sAMColor = ToSAMObject<SAMColor>(name);
 
             if (sAMColor == null)
                 return System.Drawing.Color.Empty;
@@ -439,7 +442,7 @@ namespace SAM.Core
                 {
                     if (keyValuePair.Value is IJSAMObject)
                         jObject_Temp.Add("Value", ((IJSAMObject)keyValuePair.Value).ToJObject());
-                    else if(keyValuePair.Value is JArray)
+                    else if (keyValuePair.Value is JArray)
                         jObject_Temp.Add("Value", (JArray)keyValuePair.Value);
                     else
                         jObject_Temp.Add("Value", keyValuePair.Value as dynamic);

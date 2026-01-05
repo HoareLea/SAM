@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static Dictionary<ProfileType, List<string>> MissingProfileNameDictionary(this AnalyticalModel analyticalModel)
         {
-            if(analyticalModel == null)
+            if (analyticalModel == null)
             {
                 return null;
             }
@@ -16,21 +19,21 @@ namespace SAM.Analytical
 
         public static Dictionary<ProfileType, List<string>> MissingProfileNameDictionary(this ProfileLibrary profileLibrary, IEnumerable<InternalCondition> internalConditions)
         {
-            if(profileLibrary == null || internalConditions == null)
+            if (profileLibrary == null || internalConditions == null)
             {
                 return null;
             }
 
             Dictionary<ProfileType, List<string>> result = new Dictionary<ProfileType, List<string>>();
-            foreach(InternalCondition internalCondition in internalConditions)
+            foreach (InternalCondition internalCondition in internalConditions)
             {
                 Dictionary<ProfileType, string> dictionary_Temp = MissingProfileNameDictionary(profileLibrary, internalCondition);
-                if(dictionary_Temp == null || dictionary_Temp.Count == 0)
+                if (dictionary_Temp == null || dictionary_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(KeyValuePair<ProfileType, string> keyValuePair in dictionary_Temp)
+                foreach (KeyValuePair<ProfileType, string> keyValuePair in dictionary_Temp)
                 {
                     if (!result.TryGetValue(keyValuePair.Key, out List<string> names))
                     {
@@ -50,13 +53,13 @@ namespace SAM.Analytical
 
         public static Dictionary<ProfileType, string> MissingProfileNameDictionary(this ProfileLibrary profileLibrary, InternalCondition internalCondition)
         {
-            if(profileLibrary == null || internalCondition == null)
+            if (profileLibrary == null || internalCondition == null)
             {
                 return null;
             }
 
             Dictionary<ProfileType, string> dictionary = internalCondition.GetProfileTypeDictionary();
-            if(dictionary == null)
+            if (dictionary == null)
             {
                 return null;
             }
@@ -64,13 +67,13 @@ namespace SAM.Analytical
             Dictionary<ProfileType, string> result = new Dictionary<ProfileType, string>();
             foreach (KeyValuePair<ProfileType, string> keyValuePair in dictionary)
             {
-                if(string.IsNullOrEmpty(keyValuePair.Value))
+                if (string.IsNullOrEmpty(keyValuePair.Value))
                 {
                     continue;
                 }
 
                 Profile profile = internalCondition.GetProfile(keyValuePair.Key, profileLibrary);
-                if(profile != null)
+                if (profile != null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using SAM.Core.Grasshopper.Properties;
@@ -42,7 +45,7 @@ namespace SAM.Core.Grasshopper
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         //Here we control name, nickname, description, category, sub-category as deafult we use typeofclass name
         public GooRelationClusterParam()

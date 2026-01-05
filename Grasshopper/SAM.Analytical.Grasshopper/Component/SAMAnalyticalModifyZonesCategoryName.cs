@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -81,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             IAnalyticalObject analyticalObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,12 +99,12 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = null;
 
-            if(analyticalObject is AnalyticalModel)
+            if (analyticalObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)analyticalObject);
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
             }
-            else if(analyticalObject is AdjacencyCluster)
+            else if (analyticalObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
@@ -113,13 +116,13 @@ namespace SAM.Analytical.Grasshopper
                 zones = adjacencyCluster.GetZones();
             }
 
-            if(zones != null && zones.Count != 0 && zoneCategory != null)
+            if (zones != null && zones.Count != 0 && zoneCategory != null)
             {
                 HashSet<Guid> guids = new HashSet<Guid>(zones.ConvertAll(x => x.Guid));
 
                 zones = adjacencyCluster.GetZones()?.FindAll(x => x != null && guids.Contains(x.Guid));
 
-                for(int i =0; i < zones.Count; i++)
+                for (int i = 0; i < zones.Count; i++)
                 {
                     Zone zone = new Zone(zones[i]);
 

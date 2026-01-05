@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -58,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(2);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooProfileLibraryParam() { Name = "profileLibrary_", NickName = "profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileLibraryParam() { Name = "profileLibrary_", NickName = "profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 return result.ToArray();
             }
@@ -106,12 +109,12 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
                 dataAccess.GetData(index, ref profileLibrary);
 
-            if(profileLibrary == null)
+            if (profileLibrary == null)
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
 
             bool includeInvalid = true;
             index = Params.IndexOfInputParam("_includeInvalid_");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.GetData(index, ref includeInvalid);
 
             Core.NumberComparisonType numberComparisonType = Core.NumberComparisonType.Less;
@@ -130,10 +133,10 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
             List<Space> spaces = null;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 List<Space> spaces_All = adjacencyCluster.GetSpaces();
-                if(spaces_All != null)
+                if (spaces_All != null)
                 {
                     spaces = new List<Space>();
                     foreach (Space space in spaces_All)
@@ -142,9 +145,9 @@ namespace SAM.Analytical.Grasshopper
                             continue;
 
                         double area = space.CalculatedArea(adjacencyCluster);
-                        if(double.IsNaN(area))
+                        if (double.IsNaN(area))
                         {
-                            if(includeInvalid)
+                            if (includeInvalid)
                             {
                                 space.InternalCondition = internalCondition;
                                 adjacencyCluster.AddObject(space);
@@ -152,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                             }
                             continue;
                         }
-                        
+
                         if (!Core.Query.Compare(area, value, numberComparisonType))
                             continue;
 

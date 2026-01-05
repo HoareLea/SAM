@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -24,7 +27,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -108,7 +111,7 @@ namespace SAM.Weather.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             bool run = false;
             index = Params.IndexOfInputParam("_run");
             if (index == -1 || !dataAccess.GetData(index, ref run))
@@ -140,7 +143,7 @@ namespace SAM.Weather.Grasshopper
                 weatherDataType = Core.Query.Enum<WeatherDataType>(weatherDataTypeString);
             }
 
-            if(weatherDataType == WeatherDataType.Undefined)
+            if (weatherDataType == WeatherDataType.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -148,12 +151,12 @@ namespace SAM.Weather.Grasshopper
 
             double percentage = double.NaN;
             index = Params.IndexOfInputParam("_percentage_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref percentage);
             }
 
-            if(double.IsNaN(percentage))
+            if (double.IsNaN(percentage))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -201,7 +204,7 @@ namespace SAM.Weather.Grasshopper
                         List<WeatherHour> weatherHours = weatherYear?.GetWeatherHours();
                         for (int i = 0; i < weatherHours.Count; i++)
                         {
-                            tuples.Add(new Tuple<int, WeatherHour> (i, weatherHours[i]));
+                            tuples.Add(new Tuple<int, WeatherHour>(i, weatherHours[i]));
                         }
                     }
                 }
@@ -217,7 +220,7 @@ namespace SAM.Weather.Grasshopper
             else if (weatherObject is WeatherDay)
             {
                 List<WeatherHour> weatherHours = ((WeatherDay)weatherObject).GetWeatherHours();
-                for(int i = 0; i< weatherHours.Count; i++)
+                for (int i = 0; i < weatherHours.Count; i++)
                 {
                     tuples.Add(new Tuple<int, WeatherHour>(i, weatherHours[i]));
                 }
@@ -225,25 +228,25 @@ namespace SAM.Weather.Grasshopper
 
             tuples.RemoveAll(x => x.Item2 == null || double.IsNaN(x.Item2[weatherDataType]));
 
-            if(!double.IsNaN(minValue))
+            if (!double.IsNaN(minValue))
             {
                 tuples.RemoveAll(x => x.Item2[weatherDataType] < minValue);
             }
 
             double value = double.NaN;
 
-            if(average)
+            if (average)
             {
                 double min = double.MaxValue;
                 double max = double.MinValue;
-                foreach(Tuple<int, WeatherHour> tuple in tuples)
+                foreach (Tuple<int, WeatherHour> tuple in tuples)
                 {
                     double value_Temp = tuple.Item2[weatherDataType];
-                    if(value_Temp < min)
+                    if (value_Temp < min)
                     {
                         min = value_Temp;
                     }
-                    if(value_Temp > max)
+                    if (value_Temp > max)
                     {
                         max = value_Temp;
                     }
@@ -278,7 +281,7 @@ namespace SAM.Weather.Grasshopper
 
             foreach (Tuple<int, WeatherHour> tuple in tuples)
             {
-                if(tuple.Item2.Compare(weatherDataType, value, numberComparisonType))
+                if (tuple.Item2.Compare(weatherDataType, value, numberComparisonType))
                 {
                     weatherHours_In.Add(tuple.Item2);
                     indexes_In.Add(tuple.Item1);
@@ -297,7 +300,7 @@ namespace SAM.Weather.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("weatherHours_In");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetDataList(index, weatherHours_In?.ConvertAll(x => new GooWeatherObject(x)));
             }

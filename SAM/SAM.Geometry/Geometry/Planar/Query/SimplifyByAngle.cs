@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -73,17 +76,17 @@ namespace SAM.Geometry.Planar
             }
 
             IClosed2D externalEdge = face2D.ExternalEdge2D;
-            if(externalEdge is Polygon2D)
+            if (externalEdge is Polygon2D)
             {
                 externalEdge = SimplifyByAngle((Polygon2D)externalEdge, tolerane_Angle);
             }
 
             List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
-            if (internalEdge2Ds != null && internalEdge2Ds.Count!= 0)
+            if (internalEdge2Ds != null && internalEdge2Ds.Count != 0)
             {
-                for(int i=0; i < internalEdge2Ds.Count; i++)
+                for (int i = 0; i < internalEdge2Ds.Count; i++)
                 {
-                    if(internalEdge2Ds[i] is Polygon2D)
+                    if (internalEdge2Ds[i] is Polygon2D)
                     {
                         internalEdge2Ds[i] = SimplifyByAngle((Polygon2D)internalEdge2Ds[i], tolerane_Angle);
                     }

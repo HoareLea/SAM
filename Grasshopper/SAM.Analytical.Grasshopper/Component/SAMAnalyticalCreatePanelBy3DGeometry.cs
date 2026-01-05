@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -79,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 string panelType_String = null;
-                if(dataAccess.GetData(index, ref panelType_String))
+                if (dataAccess.GetData(index, ref panelType_String))
                 {
                     panelType = Analytical.Query.PanelType(panelType_String);
                 }
@@ -109,19 +112,19 @@ namespace SAM.Analytical.Grasshopper
 
             bool simplify = true;
             index = Params.IndexOfInputParam("simplify_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref simplify);
             }
 
             List<ISAMGeometry3D> geometry3Ds = null;
             index = Params.IndexOfInputParam("3Dgeometry_");
-            if(index != -1)
+            if (index != -1)
             {
                 object @object = null;
-                if(dataAccess.GetData(index, ref @object))
+                if (dataAccess.GetData(index, ref @object))
                 {
-                    if(!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
+                    if (!Query.TryConvertToPanelGeometries(@object, out geometry3Ds, simplify))
                     {
                         geometry3Ds = null;
                     }
@@ -137,28 +140,28 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = null;
 
-            if(panel == null)
+            if (panel == null)
             {
-                if(geometry3Ds == null)
+                if (geometry3Ds == null)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid Data");
                     return;
                 }
 
                 PanelType panelType_Temp = PanelType.Undefined;
-                if(panelType != null && panelType.HasValue)
+                if (panelType != null && panelType.HasValue)
                 {
                     panelType_Temp = panelType.Value;
                 }
 
                 panels = Create.Panels(geometry3Ds, panelType_Temp, construction, minArea, tolerance);
 
-                if(panels != null && (panelType == null || !panelType.HasValue))
+                if (panels != null && (panelType == null || !panelType.HasValue))
                 {
                     for (int i = 0; i < panels.Count; i++)
                     {
                         panelType_Temp = Analytical.Query.PanelType(panels[i]?.GetFace3D()?.GetPlane()?.Normal);
-                        if(panelType_Temp != PanelType.Undefined)
+                        if (panelType_Temp != PanelType.Undefined)
                         {
                             panels[i] = Create.Panel(panels[i], panelType_Temp);
                         }
@@ -167,7 +170,7 @@ namespace SAM.Analytical.Grasshopper
             }
             else
             {
-                panels = new List<Panel> {  Create.Panel(Guid.NewGuid(), panel) };
+                panels = new List<Panel> { Create.Panel(Guid.NewGuid(), panel) };
             }
 
             if (panels == null || panels.Count == 0)
@@ -177,7 +180,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("panel");
-            if(index != -1)
+            if (index != -1)
             {
                 if (panels.Count == 1)
                 {

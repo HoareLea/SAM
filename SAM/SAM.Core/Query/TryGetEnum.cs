@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -29,7 +32,7 @@ namespace SAM.Core
                 }
             }
 
-            List<string> texts = new ();
+            List<string> texts = new();
             string text_Temp = null;
 
             foreach (Enum @enum_Temp in array)
@@ -66,15 +69,15 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryGetEnum<T>(this string text, out T @enum) where T: Enum
+        public static bool TryGetEnum<T>(this string text, out T @enum) where T : Enum
         {
             @enum = default;
-            if(!TryGetEnum(text, typeof(T), out Enum @enum_Temp))
+            if (!TryGetEnum(text, typeof(T), out Enum @enum_Temp))
             {
                 return false;
             }
 
-            if(enum_Temp is T)
+            if (enum_Temp is T)
             {
                 @enum = (T)enum_Temp;
                 return true;

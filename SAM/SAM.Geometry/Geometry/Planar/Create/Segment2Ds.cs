@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -210,7 +213,7 @@ namespace SAM.Geometry.Planar
 
                 Point2D point2D_Start = segment2D.GetStart();
                 List<Segment2D> segment2Ds_Start = segment2Ds.FindAll(x => point2D_Start.AlmostEquals(x.GetStart(), tolerance) || point2D_Start.AlmostEquals(x.GetEnd(), tolerance));
-                if(segment2Ds_Start.Count == 1 || !unconnectedOnly)
+                if (segment2Ds_Start.Count == 1 || !unconnectedOnly)
                 {
                     segment2D_Temp = new Segment2D(point2D_Start, point2D_Start.GetMoved(vector2D.GetNegated()));
                     boundingBox_Temp = segment2D_Temp.GetBoundingBox(tolerance);
@@ -233,18 +236,18 @@ namespace SAM.Geometry.Planar
             {
                 for (int j = i + 1; j < tuples_Extensions.Count; j++)
                 {
-                    if(tuples_Extensions[i].Item1.InRange(tuples_Extensions[j].Item1, tolerance))
+                    if (tuples_Extensions[i].Item1.InRange(tuples_Extensions[j].Item1, tolerance))
                     {
                         Segment2D segment2D_1 = tuples_Extensions[i].Item2;
                         Segment2D segment2D_2 = tuples_Extensions[j].Item2;
 
-                        if(!segment2D_1.Direction.SameHalf(segment2D_2.Direction))
+                        if (!segment2D_1.Direction.SameHalf(segment2D_2.Direction))
                         {
                             if (segment2D_1.Collinear(segment2D_2, tolerance) && (segment2D_1.On(segment2D_2[0], tolerance) || segment2D_1.On(segment2D_2[1], tolerance)))
                             {
                                 List<Point2D> point2Ds = new List<Point2D>() { segment2D_1[0], segment2D_1[1], segment2D_2[0], segment2D_2[1] };
                                 point2Ds.RemoveAll(x => !segment2D_1.On(x, tolerance) || !segment2D_2.On(x, tolerance));
-                                if(point2Ds.Count >= 2)
+                                if (point2Ds.Count >= 2)
                                 {
                                     Query.ExtremePoints(point2Ds, out Point2D point2D_1, out Point2D point2D_2);
                                     if (point2D_1 != null && point2D_2 != null && point2D_1.Distance(point2D_2) >= tolerance)
@@ -297,9 +300,9 @@ namespace SAM.Geometry.Planar
                 segment2Ds_Extension[i] = new Segment2D(tuple_Extension.Item2[0], point2D);
             });
 
-            foreach(Segment2D segment2D_Extension in segment2Ds_Extension)
+            foreach (Segment2D segment2D_Extension in segment2Ds_Extension)
             {
-                if(segment2D_Extension != null)
+                if (segment2D_Extension != null)
                 {
                     segment2Ds.Add(segment2D_Extension);
                 }

@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -16,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
                 if (variable is GooPanel)
                 {
                     List<Aperture> apertures_Temp = (((GooPanel)variable).Value as Panel).Apertures;
-                    if(apertures_Temp != null)
+                    if (apertures_Temp != null)
                     {
                         apertures.AddRange(apertures_Temp);
                     }
@@ -45,5 +48,5 @@ namespace SAM.Analytical.Grasshopper
 
             Rhino.Modify.BakeGeometry_ByApertureType(rhinoDoc, apertures, includeFrame);
         }
-  }
+    }
 }

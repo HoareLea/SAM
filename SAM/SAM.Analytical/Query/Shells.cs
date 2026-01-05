@@ -1,10 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
 
 namespace SAM.Analytical
 {
@@ -209,7 +212,7 @@ namespace SAM.Analytical
 
                 Dictionary<Panel, List<ISegmentable2D>> dictionary = panels_Bottom.SectionDictionary<ISegmentable2D>(plane, tolerance_Distance);
 
-                if(dictionary != null)
+                if (dictionary != null)
                 {
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary)
@@ -253,7 +256,7 @@ namespace SAM.Analytical
                 //Top
                 dictionary = panels.SectionDictionary<ISegmentable2D>(plane, tolerance_Distance);
 
-                if(dictionary != null)
+                if (dictionary != null)
                 {
                     List<Segment2D> segment2Ds = new List<Segment2D>();
                     foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary)
@@ -849,7 +852,7 @@ namespace SAM.Analytical
 
             for (int i = result.Count - 1; i >= 0; i--)
             {
-                if(!valids[i])
+                if (!valids[i])
                 {
                     result.RemoveAt(i);
                 }

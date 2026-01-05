@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -135,7 +138,7 @@ namespace SAM.Geometry.Spatial
             Point3D point3D_1 = segment3D[0];
             Point3D point3D_2 = segment3D[1];
 
-            if(!InRange(new BoundingBox3D(point3D_1, point3D_2)))
+            if (!InRange(new BoundingBox3D(point3D_1, point3D_2)))
             {
                 return false;
             }
@@ -299,7 +302,7 @@ namespace SAM.Geometry.Spatial
         {
             return Query.InRange(this, boundingBox3D, tolerance);
         }
-        
+
         public override ISAMGeometry Clone()
         {
             return new BoundingBox3D(this);
@@ -422,7 +425,7 @@ namespace SAM.Geometry.Spatial
 
         public bool Include(Point3D point3D)
         {
-            if(point3D == null)
+            if (point3D == null)
             {
                 return false;
             }
@@ -434,7 +437,7 @@ namespace SAM.Geometry.Spatial
 
         public bool Include(IEnumerable<Point3D> point3Ds)
         {
-            if(point3Ds == null || point3Ds.Count() == 0)
+            if (point3Ds == null || point3Ds.Count() == 0)
             {
                 return false;
             }
@@ -446,10 +449,10 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetTransformed(Transform3D transform3D)
         {
-            if(transform3D == null)
+            if (transform3D == null)
             {
                 return null;
-            }    
+            }
 
             return Query.Transform(this, transform3D);
         }
@@ -462,7 +465,7 @@ namespace SAM.Geometry.Spatial
         public override bool Equals(object obj)
         {
             BoundingBox3D boundingBox3D = obj as BoundingBox3D;
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return false;
             }

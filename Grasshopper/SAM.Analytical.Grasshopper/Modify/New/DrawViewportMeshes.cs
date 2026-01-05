@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Rhino.Geometry;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -29,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
                 IHostPartition hostPartition = hostPartitions[i];
 
                 Geometry.Spatial.Face3D face3D = hostPartition?.Face3D;
-                if(face3D == null)
+                if (face3D == null)
                 {
                     return;
                 }

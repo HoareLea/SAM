@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 
@@ -69,12 +72,12 @@ namespace SAM.Analytical
             get
             {
                 List<string> values = new List<string>();
-                if(!string.IsNullOrWhiteSpace(group))
+                if (!string.IsNullOrWhiteSpace(group))
                 {
                     values.Add(group);
                 }
 
-                if(!string.IsNullOrWhiteSpace(name))
+                if (!string.IsNullOrWhiteSpace(name))
                 {
                     values.Add(name);
                 }
@@ -111,12 +114,12 @@ namespace SAM.Analytical
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Name"))
+            if (jObject.ContainsKey("Name"))
             {
                 name = jObject.Value<string>("Name");
             }
@@ -144,7 +147,7 @@ namespace SAM.Analytical
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(name != null)
+            if (name != null)
             {
                 jObject.Add("Name", name);
             }
@@ -181,7 +184,7 @@ namespace SAM.Analytical
 
         public static implicit operator NCMName(string value)
         {
-            if(value == null)
+            if (value == null)
             {
                 return null;
             }

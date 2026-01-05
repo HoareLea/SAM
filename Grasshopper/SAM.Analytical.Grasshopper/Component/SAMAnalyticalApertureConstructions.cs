@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -43,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, AdjacencyCluster", GH_ParamAccess.item);
-            
+
             index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
@@ -71,22 +74,22 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.SetData(1, false);
 
             SAMObject sAMObject = null;
-            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<Panel> panels = null;
-            if(sAMObject is Panel)
+            if (sAMObject is Panel)
             {
                 panels = new List<Panel>() { (Panel)sAMObject };
             }
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
             {
                 panels = ((AdjacencyCluster)sAMObject).GetPanels();
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 panels = ((AnalyticalModel)sAMObject).AdjacencyCluster?.GetPanels();
             }
@@ -103,7 +106,7 @@ namespace SAM.Analytical.Grasshopper
 
             PanelType panelType = PanelType.Undefined;
 
-            if(objectWrapper != null)
+            if (objectWrapper != null)
             {
                 if (objectWrapper.Value is GH_String)
                     panelType = Analytical.Query.PanelType(((GH_String)objectWrapper.Value).Value);

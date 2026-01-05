@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -32,28 +35,28 @@ namespace SAM.Geometry.Spatial
         {
             distance = double.NaN;
 
-            if(segmentable3D == null || point3D == null)
+            if (segmentable3D == null || point3D == null)
             {
                 return null;
             }
 
             List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if(segment3Ds == null || segment3Ds.Count == 0)
+            if (segment3Ds == null || segment3Ds.Count == 0)
             {
                 return null;
             }
 
             double distance_Min = double.MaxValue;
             Point3D result = null;
-            foreach(Segment3D segment3D in segment3Ds)
+            foreach (Segment3D segment3D in segment3Ds)
             {
-                if(segment3D == null)
+                if (segment3D == null)
                 {
                     continue;
                 }
 
                 Point3D point3D_Temp = segment3D.Closest(point3D, true);
-                if(point3D_Temp == null)
+                if (point3D_Temp == null)
                 {
                     continue;
                 }

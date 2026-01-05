@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -34,7 +37,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name of Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_profiles", NickName = "_profiles", Description = "Names of the profiles or SAM Analytical Profiles to be used", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_typeOrGroup", NickName = "_typeOrGroup", Description = "SAM Analytical ProfileType or ProfileGroup", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new GooProfileLibraryParam() { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooProfileLibraryParam() { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical ProfileLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }
@@ -44,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooProfileParam() {Name = "Profile", NickName = "Profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooProfileParam() { Name = "Profile", NickName = "Profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -64,7 +67,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_name");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -108,14 +111,14 @@ namespace SAM.Analytical.Grasshopper
             ProfileType profileType = ProfileType.Undefined;
             ProfileGroup profileGroup = ProfileGroup.Undefined;
 
-            if(!Core.Query.TryConvert(typeOrGroup, out profileType))
+            if (!Core.Query.TryConvert(typeOrGroup, out profileType))
                 if (!Core.Query.TryConvert(typeOrGroup, out profileGroup))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
                 }
 
-            if(profileType == ProfileType.Undefined && profileGroup == ProfileGroup.Undefined)
+            if (profileType == ProfileType.Undefined && profileGroup == ProfileGroup.Undefined)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -130,7 +133,7 @@ namespace SAM.Analytical.Grasshopper
             if (profileLibrary == null)
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
 
-            if(profileLibrary == null)
+            if (profileLibrary == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -138,27 +141,27 @@ namespace SAM.Analytical.Grasshopper
 
             List<string> names = new List<string>();
             profileLibrary = new ProfileLibrary(profileLibrary);
-            foreach(GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper gH_ObjectWrapper in objectWrappers)
             {
                 object @object = gH_ObjectWrapper?.Value;
                 if (@object == null)
                     continue;
 
-                if(@object is GH_String)
+                if (@object is GH_String)
                 {
                     names.Add(((GH_String)@object).Value);
                 }
                 else if (gH_ObjectWrapper.Value is GooProfile)
                 {
-                    Profile profile_Temp  =((GooProfile)gH_ObjectWrapper.Value).Value;
+                    Profile profile_Temp = ((GooProfile)gH_ObjectWrapper.Value).Value;
                     profileLibrary.Add(profile_Temp);
                     names.Add(profile_Temp.Name);
                 }
-                else if(@object is string)
+                else if (@object is string)
                 {
                     names.Add((string)@object);
                 }
-                else if(gH_ObjectWrapper.Value is Profile)
+                else if (gH_ObjectWrapper.Value is Profile)
                 {
                     Profile profile_Temp = (Profile)gH_ObjectWrapper.Value;
                     profileLibrary.Add(profile_Temp);
@@ -166,7 +169,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(names == null || names.Count == 0)
+            if (names == null || names.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

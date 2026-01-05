@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -10,7 +13,7 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             Point3D point3D_Temp = point3Ds.Find(x => x.Distance(point3D) <= tolerance);
-            if(point3D_Temp == null)
+            if (point3D_Temp == null)
             {
                 point3Ds.Add(point3D);
                 return true;
@@ -21,7 +24,7 @@ namespace SAM.Geometry.Spatial
 
         public static bool Add(this List<Point3D> point3Ds, double x, double y, double z)
         {
-            if(point3Ds == null)
+            if (point3Ds == null)
             {
                 return false;
             }

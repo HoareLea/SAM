@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using SAM.Geometry.Spatial;
 
@@ -24,7 +27,7 @@ namespace SAM.Analytical
 
         }
 
-        public Floor(System.Guid guid,FloorType floorType, Face3D face3D)
+        public Floor(System.Guid guid, FloorType floorType, Face3D face3D)
             : base(guid, floorType, face3D)
         {
 

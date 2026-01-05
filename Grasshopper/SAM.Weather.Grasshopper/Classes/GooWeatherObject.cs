@@ -1,12 +1,15 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
-using SAM.Weather.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Weather.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.Linq;
+using System.Windows.Forms;
 
 namespace SAM.Weather.Grasshopper
 {
@@ -32,7 +35,7 @@ namespace SAM.Weather.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("b96713e0-5cde-4774-a061-0f3490d3d0a5");
 
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 

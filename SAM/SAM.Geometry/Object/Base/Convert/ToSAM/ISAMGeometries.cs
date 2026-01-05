@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Object.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Object.Planar;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Object
@@ -34,7 +37,7 @@ namespace SAM.Geometry.Object
                 foreach (ISAMGeometry2DObject sAMGeometry2DObject in (IEnumerable<ISAMGeometry2DObject>)sAMGeometryObject)
                 {
                     List<ISAMGeometry> geometries = ToSAM_ISAMGeometry(sAMGeometry2DObject);
-                    if(geometries != null)
+                    if (geometries != null)
                     {
                         result.AddRange(geometries);
                     }

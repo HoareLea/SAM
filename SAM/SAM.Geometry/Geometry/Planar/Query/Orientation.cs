@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -68,18 +71,18 @@ namespace SAM.Geometry.Planar
 
         public static Orientation Orientation(this IClosed2D closed2D)
         {
-            if(closed2D == null)
+            if (closed2D == null)
             {
                 return Geometry.Orientation.Undefined;
             }
 
-            if(closed2D is Face2D)
+            if (closed2D is Face2D)
             {
                 return Orientation(((Face2D)closed2D).ExternalEdge2D);
             }
-            
+
             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new System.NotImplementedException();
             }

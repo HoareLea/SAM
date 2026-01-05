@@ -1,15 +1,18 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
 {
     public static partial class Create
     {
-        public static GuidCollection GuidCollection<T>(this IEnumerable<T> ts, string name = null, ParameterSet parameterSet = null, bool allowDuplicates = false) where T: IParameterizedSAMObject, ISAMObject
+        public static GuidCollection GuidCollection<T>(this IEnumerable<T> ts, string name = null, ParameterSet parameterSet = null, bool allowDuplicates = false) where T : IParameterizedSAMObject, ISAMObject
         {
             HashSet<Guid> guids = new HashSet<Guid>();
             GuidCollection result = new GuidCollection(name, parameterSet);
-            if(ts != null)
+            if (ts != null)
             {
                 foreach (T t in ts)
                 {

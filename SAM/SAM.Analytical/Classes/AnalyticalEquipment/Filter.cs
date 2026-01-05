@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -69,7 +72,7 @@ namespace SAM.Analytical
 
             set
             {
-                if(double.IsNaN(value))
+                if (double.IsNaN(value))
                 {
                     efficiency = value;
                     return;

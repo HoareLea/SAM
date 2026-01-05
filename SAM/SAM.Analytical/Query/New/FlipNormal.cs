@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -8,26 +11,26 @@ namespace SAM.Analytical
         public static IPartition FlipNormal(this IPartition partition, bool includeOpenings, bool flipX = true, double tolerance = Core.Tolerance.Distance)
         {
             Face3D face3D = partition?.Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
             face3D.FlipNormal(flipX);
 
-            if(partition is AirPartition)
+            if (partition is AirPartition)
             {
                 return new AirPartition(partition.Guid, face3D);
             }
 
             IHostPartition hostPartition = partition as IHostPartition;
-            if(hostPartition == null)
+            if (hostPartition == null)
             {
                 throw new System.NotImplementedException();
             }
 
             hostPartition = Create.Partition(hostPartition, partition.Guid, face3D, tolerance);
-            if(includeOpenings)
+            if (includeOpenings)
             {
                 List<IOpening> openings = hostPartition.GetOpenings();
                 if (openings != null)

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.IO;
@@ -27,12 +30,12 @@ namespace SAM.Core
 
         public static bool ToFile(IJSAMObject jSAMObject, string path)
         {
-            if(jSAMObject == null)
+            if (jSAMObject == null)
             {
                 return false;
             }
 
-            return ToFile(new IJSAMObject[] { jSAMObject}, path);
+            return ToFile(new IJSAMObject[] { jSAMObject }, path);
         }
 
         public static bool ToFile(IJSAMObject jSAMObject, string path, SAMFileType sAMFileType)
@@ -63,7 +66,7 @@ namespace SAM.Core
 
         public static bool ToFile(this IEnumerable<DelimitedFileRow> delimitedFileRows, DelimitedFileType delimitedFileType, string path)
         {
-            if(string.IsNullOrEmpty(path) || delimitedFileRows == null || delimitedFileType == DelimitedFileType.Undefined)
+            if (string.IsNullOrEmpty(path) || delimitedFileRows == null || delimitedFileType == DelimitedFileType.Undefined)
             {
                 return false;
             }

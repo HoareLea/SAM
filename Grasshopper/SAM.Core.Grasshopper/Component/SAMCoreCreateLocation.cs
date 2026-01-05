@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             Location location = Core.Query.DefaultLocation();
-            
+
             inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, location.Name);
             inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item, location.Elevation);
             inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item, location.Latitude);

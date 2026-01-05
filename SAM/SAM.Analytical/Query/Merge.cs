@@ -1,5 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 
 namespace SAM.Analytical
 {
@@ -7,7 +9,7 @@ namespace SAM.Analytical
     {
         public static AnalyticalModel Merge(this AnalyticalModel analyticalModel, Type type, MergeSettings mergeSettings)
         {
-            if(analyticalModel == null || type == null || mergeSettings == null)
+            if (analyticalModel == null || type == null || mergeSettings == null)
             {
                 return null;
             }
@@ -18,7 +20,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(Modify.Merge(adjacencyCluster, type, mergeSettings))
+            if (Modify.Merge(adjacencyCluster, type, mergeSettings))
             {
                 return new AnalyticalModel(analyticalModel, adjacencyCluster);
             }

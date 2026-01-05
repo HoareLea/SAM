@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -32,7 +35,7 @@ namespace SAM.Core
 
             return double.NaN;
         }
-        
+
         public static List<double> Combine(this IEnumerable<double> values, int count, CombineType combineType, bool includeIncomplete = true)
         {
             if (values == null || combineType == CombineType.Undefined)
@@ -65,23 +68,23 @@ namespace SAM.Core
 
         public static List<double> Combine(this IEnumerable<double> values, Period period_Destination, CombineType combineType, Period period_Source = Core.Period.Hourly, bool includeIncomplete = true, int year = 2007)
         {
-            if(values == null || period_Destination == Core.Period.Undefined || combineType == CombineType.Undefined)
+            if (values == null || period_Destination == Core.Period.Undefined || combineType == CombineType.Undefined)
             {
                 return null;
             }
 
 
-            if(period_Source == Core.Period.Undefined)
+            if (period_Source == Core.Period.Undefined)
             {
                 period_Source = Period(values.Count());
             }
 
-            if(period_Source == period_Destination)
+            if (period_Source == period_Destination)
             {
                 return new List<double>(values);
             }
 
-            if(period_Destination != Core.Period.Monthly)
+            if (period_Destination != Core.Period.Monthly)
             {
                 int count = Count(period_Destination, period_Source);
                 if (count == -1)
@@ -92,14 +95,14 @@ namespace SAM.Core
                 return Combine(values, count, combineType, includeIncomplete);
             }
 
-            if(period_Source == Core.Period.Weekly)
+            if (period_Source == Core.Period.Weekly)
             {
                 return null;
             }
 
             List<double> result = new List<double>();
 
-            switch(period_Source)
+            switch (period_Source)
             {
                 case Core.Period.Daily:
                     for (int i = 1; i <= 12; i++)
@@ -143,10 +146,10 @@ namespace SAM.Core
 
             return null;
         }
-    
+
         public static IndexedDoubles Combine(this IndexedDoubles indexedDoubles, Period period_Destination, CombineType combineType, Period period_Source = Core.Period.Hourly, bool includeIncomplete = true, int year = 2007)
         {
-            if(indexedDoubles == null)
+            if (indexedDoubles == null)
             {
                 return null;
             }
@@ -156,12 +159,12 @@ namespace SAM.Core
                 period_Source = Period(indexedDoubles);
             }
 
-            if(period_Source == Core.Period.Undefined)
+            if (period_Source == Core.Period.Undefined)
             {
                 return null;
             }
 
-            if(period_Destination == period_Source)
+            if (period_Destination == period_Source)
             {
                 return new IndexedDoubles(indexedDoubles);
             }

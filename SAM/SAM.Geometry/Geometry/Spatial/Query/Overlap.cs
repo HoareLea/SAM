@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -21,7 +24,7 @@ namespace SAM.Geometry.Spatial
             Plane plane_1 = face3D_1?.GetPlane();
             if (plane_1 == null)
                 return false;
-            
+
             Plane plane_2 = face3D_2.GetPlane();
             if (plane_2 == null)
                 return false;

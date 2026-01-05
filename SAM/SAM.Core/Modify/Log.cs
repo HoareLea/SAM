@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 
 namespace SAM.Core
 {
@@ -6,18 +9,18 @@ namespace SAM.Core
     {
         public static bool Log(this string path, string format, params object[] values)
         {
-            if(format == null || string.IsNullOrWhiteSpace(path))
+            if (format == null || string.IsNullOrWhiteSpace(path))
             {
                 return false;
             }
 
             string directory = System.IO.Path.GetDirectoryName(path);
-            if(string.IsNullOrWhiteSpace(directory))
+            if (string.IsNullOrWhiteSpace(directory))
             {
                 return false;
             }
 
-            if(!Create.Directory(directory))
+            if (!Create.Directory(directory))
             {
                 return false;
             }
@@ -28,7 +31,7 @@ namespace SAM.Core
             {
                 logRecord.Write(path);
             }
-            catch(Exception )
+            catch (Exception)
             {
                 return false;
             }

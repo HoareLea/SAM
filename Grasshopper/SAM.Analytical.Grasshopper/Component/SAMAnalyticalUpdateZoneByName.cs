@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -86,7 +89,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -115,7 +118,7 @@ namespace SAM.Analytical.Grasshopper
                 zoneCategory = null;
             }
 
-            if(!Enum.TryParse(zoneCategory, out ZoneType zoneType))
+            if (!Enum.TryParse(zoneCategory, out ZoneType zoneType))
             {
                 zoneType = ZoneType.Undefined;
             }
@@ -127,21 +130,21 @@ namespace SAM.Analytical.Grasshopper
                 zoneCategory = null;
             }
 
-            if(zoneType == ZoneType.Undefined && zoneCategory ==null)
+            if (zoneType == ZoneType.Undefined && zoneCategory == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             Zone zone = null;
-            if(sAMObject is AnalyticalModel)
+            if (sAMObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)sAMObject);
                 AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    if(zoneCategory != null)
+                    if (zoneCategory != null)
                     {
                         zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, spaces.ToArray());
                     }
@@ -149,11 +152,11 @@ namespace SAM.Analytical.Grasshopper
                     {
                         zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
                     }
-                    
+
                     sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 if (zoneCategory != null)

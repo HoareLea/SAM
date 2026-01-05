@@ -1,4 +1,7 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Create
     {
@@ -15,8 +18,8 @@
             double radiantProportion = double.NaN;
             double viewCoefficient = double.NaN;
             System.Guid guid = System.Guid.Empty;
-            
-            switch(emitterType)
+
+            switch (emitterType)
             {
                 case EmitterType.WarmAirHeater:
                     radiantProportion = 0;

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -70,7 +73,7 @@ namespace SAM.Core.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             IRelationCluster relationCluster = null;
             index = Params.IndexOfInputParam("_relationCluster");
             if (index == -1 || !dataAccess.GetData(index, ref relationCluster) || relationCluster == null)
@@ -81,11 +84,11 @@ namespace SAM.Core.Grasshopper
 
             string fullTypeName = null;
             index = Params.IndexOfInputParam("_type_");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.GetData(index, ref fullTypeName);
 
             Type type = null;
-            if(!string.IsNullOrWhiteSpace(fullTypeName))
+            if (!string.IsNullOrWhiteSpace(fullTypeName))
             {
                 try
                 {
@@ -95,12 +98,12 @@ namespace SAM.Core.Grasshopper
                 {
                     type = null;
                 }
-                
+
             }
 
-            
+
             index = Params.IndexOfOutputParam("Objects");
-            if(index != -1)
+            if (index != -1)
             {
                 List<object> result = null;
 

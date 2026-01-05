@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -63,7 +66,7 @@ namespace SAM.Analytical
             {
                 return null;
             }
-                
+
             VentilationSystemType ventilationSystemType = internalCondition.GetSystemType<VentilationSystemType>(systemTypeLibrary);
             string systemTypeName = ventilationSystemType?.Name;
             if (string.IsNullOrWhiteSpace(systemTypeName))
@@ -91,16 +94,16 @@ namespace SAM.Analytical
             if (ventilationSystems != null && ventilationSystems.Count != 0)
             {
                 ventilationSystems = ventilationSystems.FindAll(x => x.Type?.Name == systemTypeName);
-                if(ventilationSystems != null && ventilationSystems.Count != 0)
+                if (ventilationSystems != null && ventilationSystems.Count != 0)
                 {
                     for (int i = ventilationSystems.Count - 1; i >= 0; i--)
                     {
                         VentilationSystem ventilationSystem_Temp = ventilationSystems[i];
 
-                        if(!string.IsNullOrWhiteSpace(supplyUnitName_Temp))
+                        if (!string.IsNullOrWhiteSpace(supplyUnitName_Temp))
                         {
                             string unitName = ventilationSystem_Temp.GetValue<string>(VentilationSystemParameter.SupplyUnitName);
-                            if(unitName != supplyUnitName_Temp)
+                            if (unitName != supplyUnitName_Temp)
                             {
                                 ventilationSystems.RemoveAt(i);
                                 continue;
@@ -119,20 +122,20 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(ventilationSystems != null && ventilationSystems.Count != 0)
+                if (ventilationSystems != null && ventilationSystems.Count != 0)
                 {
                     result = ventilationSystems[0];
                 }
             }
 
-            if(result != null)
+            if (result != null)
             {
                 adjacencyCluster.AssignMechanicalSystem(result, spaces, allowMultipleSystems);
             }
             else
             {
                 result = adjacencyCluster.AddMechanicalSystem(ventilationSystemType, spaces, allowMultipleSystems) as VentilationSystem;
-                if(result != null)
+                if (result != null)
                 {
                     //Supply Air Handling Unit
                     if (!string.IsNullOrWhiteSpace(supplyUnitName_Temp))

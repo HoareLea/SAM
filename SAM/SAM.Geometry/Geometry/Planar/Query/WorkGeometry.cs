@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 
 namespace SAM.Geometry.Planar
 {
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Planar
     {
         public static NetTopologySuite.Geometries.Geometry WorkGeometry(NetTopologySuite.Geometries.Geometry geometry, double tolerance = Core.Tolerance.MacroDistance)
         {
-            if(geometry == null)
+            if (geometry == null)
             {
                 return null;
             }

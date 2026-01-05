@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Units
@@ -7,15 +10,15 @@ namespace SAM.Units
     {
         public static UnitType UnitType(this UnitStyle unitStyle, UnitCategory unitCategory)
         {
-            if(unitStyle == UnitStyle.Undefined || unitCategory == UnitCategory.Undefined)
+            if (unitStyle == UnitStyle.Undefined || unitCategory == UnitCategory.Undefined)
             {
                 return Units.UnitType.Undefined;
             }
 
-            switch(unitStyle)
+            switch (unitStyle)
             {
                 case UnitStyle.SI:
-                    switch(unitCategory)
+                    switch (unitCategory)
                     {
                         case UnitCategory.AirFlow:
                             return Units.UnitType.CubicMeterPerSecond;

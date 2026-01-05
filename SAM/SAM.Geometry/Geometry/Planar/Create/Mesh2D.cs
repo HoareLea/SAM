@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static Mesh2D Mesh2D(this IEnumerable< Triangle2D> triangle2Ds, double tolerance = Core.Tolerance.Distance)
+        public static Mesh2D Mesh2D(this IEnumerable<Triangle2D> triangle2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (triangle2Ds == null || triangle2Ds.Count() == 0)
             {

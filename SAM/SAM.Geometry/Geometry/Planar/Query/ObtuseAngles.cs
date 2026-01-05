@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<bool> ObtuseAngles<T>(this T segmentable2D) where T: IClosed2D, ISegmentable2D
+        public static List<bool> ObtuseAngles<T>(this T segmentable2D) where T : IClosed2D, ISegmentable2D
         {
             List<double> determinats = Determinants(segmentable2D);
             if (determinats == null)
@@ -24,7 +27,7 @@ namespace SAM.Geometry.Planar
 
             Orientation orientation = Orientation(point2Ds, true);
 
-            switch(orientation)
+            switch (orientation)
             {
                 case Geometry.Orientation.Clockwise:
                     return determinats.ConvertAll(x => x < 0);

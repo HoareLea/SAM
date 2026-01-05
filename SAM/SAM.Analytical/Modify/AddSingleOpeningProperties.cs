@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -16,12 +19,12 @@ namespace SAM.Analytical
                 return aperture.SetValue(ApertureParameter.OpeningProperties, singleOpeningProperties);
             }
 
-            if(openingProperties is MultipleOpeningProperties)
+            if (openingProperties is MultipleOpeningProperties)
             {
                 MultipleOpeningProperties multipleOpeningProperties = (MultipleOpeningProperties)openingProperties;
 
                 List<ISingleOpeningProperties> singleOpeningProperties_Temp = multipleOpeningProperties.SingleOpeningProperties;
-                if(singleOpeningProperties_Temp == null)
+                if (singleOpeningProperties_Temp == null)
                 {
                     singleOpeningProperties_Temp = new List<ISingleOpeningProperties>();
                 }
@@ -33,7 +36,7 @@ namespace SAM.Analytical
                 return aperture.SetValue(ApertureParameter.OpeningProperties, multipleOpeningProperties);
             }
 
-            if(openingProperties is ISingleOpeningProperties)
+            if (openingProperties is ISingleOpeningProperties)
             {
                 List<ISingleOpeningProperties> singleOpeningProperties_Temp = new List<ISingleOpeningProperties>() { (ISingleOpeningProperties)openingProperties, singleOpeningProperties };
 

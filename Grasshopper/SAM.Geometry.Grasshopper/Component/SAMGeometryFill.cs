@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -99,7 +102,7 @@ namespace SAM.Geometry.Grasshopper
             List<Face3D> face3Ds = new List<Face3D>();
             foreach (GH_ObjectWrapper objectWrapper_Temp in objectWrappers)
             {
-                if(Query.TryGetSAMGeometries(objectWrapper_Temp, out face3Ds_Temp))
+                if (Query.TryGetSAMGeometries(objectWrapper_Temp, out face3Ds_Temp))
                 {
                     face3Ds.AddRange(face3Ds_Temp);
                 }

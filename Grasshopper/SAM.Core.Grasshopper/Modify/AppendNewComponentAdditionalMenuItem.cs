@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using System.Windows.Forms;
 
@@ -18,15 +21,15 @@ namespace SAM.Core.Grasshopper
 
                 string latestComponentVersion = gH_SAMComponent.LatestComponentVersion;
                 if (!string.IsNullOrWhiteSpace(latestComponentVersion))
-                    text = string.Format("{0} ({1})", text, latestComponentVersion); 
-                
+                    text = string.Format("{0} ({1})", text, latestComponentVersion);
+
                 ToolStripMenuItem toolStripMenuItem = GH_DocumentObject.Menu_AppendItem(menu, text, OnGetNewComponentClick, Properties.Resources.SAM_Small);
                 if (toolStripMenuItem != null)
                     toolStripMenuItem.Tag = gH_Component.InstanceGuid;
 
                 return toolStripMenuItem;
             }
-                
+
             return null;
         }
 

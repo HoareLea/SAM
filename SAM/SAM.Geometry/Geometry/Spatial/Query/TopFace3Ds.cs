@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -18,18 +21,18 @@ namespace SAM.Geometry.Spatial
 
             BoundingBox3D boundingBox3D = new BoundingBox3D(face3Ds_Temp.ConvertAll(x => x.GetBoundingBox()));
             if (System.Math.Abs(boundingBox3D.Max.Z - boundingBox3D.Min.Z) < tolerance)
-                return new List<Face3D> (face3Ds);
+                return new List<Face3D>(face3Ds);
 
             Plane plane = Plane.WorldXY;
 
             List<Planar.ISegmentable2D> segmentable2Ds = new List<Planar.ISegmentable2D>();
 
             Dictionary<Face3D, Planar.Face2D> dictionary = new Dictionary<Face3D, Planar.Face2D>();
-            foreach(Face3D face3D in face3Ds_Temp)
+            foreach (Face3D face3D in face3Ds_Temp)
             {
                 //if (plane.Coplanar(face3D))
                 //    continue;
-                
+
                 Face3D face3D_Project = plane.Project(face3D);
                 if (face3D_Project == null)
                     continue;
@@ -47,7 +50,7 @@ namespace SAM.Geometry.Spatial
                 foreach (Planar.IClosed2D closed2D in closed2Ds)
                 {
                     Planar.ISegmentable2D segmentable2D = closed2D as Planar.ISegmentable2D;
-                    if(segmentable2D != null)
+                    if (segmentable2D != null)
                         segmentable2Ds.Add(segmentable2D);
                 }
             }
@@ -60,12 +63,12 @@ namespace SAM.Geometry.Spatial
 
             Vector3D vector3D = new Vector3D(0, 0, boundingBox3D.Height);
 
-            foreach(KeyValuePair<Face3D, Planar.Face2D> keyValuePair in dictionary)
+            foreach (KeyValuePair<Face3D, Planar.Face2D> keyValuePair in dictionary)
             {
                 Plane plane_Temp = keyValuePair.Key?.GetPlane();
                 if (plane_Temp == null)
                     continue;
-                
+
                 Planar.Face2D face2D = keyValuePair.Value;
                 if (face2D == null)
                     continue;
@@ -91,7 +94,7 @@ namespace SAM.Geometry.Spatial
 
                     Segment3D segment3D = new Segment3D(point3D, point3D.GetMoved(vector3D) as Point3D);
 
-                    foreach(Face3D face3D in face3Ds_Temp)
+                    foreach (Face3D face3D in face3Ds_Temp)
                     {
                         if (keyValuePair.Key == face3D)
                             continue;

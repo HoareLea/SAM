@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -6,13 +9,13 @@ namespace SAM.Core
     {
         public static List<string> Paths(this string directory, string fileName, params string[] extensions)
         {
-            if(string.IsNullOrWhiteSpace(directory) || string.IsNullOrWhiteSpace(fileName) || extensions == null || extensions.Length == 0)
+            if (string.IsNullOrWhiteSpace(directory) || string.IsNullOrWhiteSpace(fileName) || extensions == null || extensions.Length == 0)
             {
                 return null;
             }
 
             List<string> result = new List<string>();
-            foreach(string extension in extensions)
+            foreach (string extension in extensions)
             {
                 string path = System.IO.Path.Combine(directory, string.Format("{0}.{1}", fileName, extension));
                 result.Add(path);

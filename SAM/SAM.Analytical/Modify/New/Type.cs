@@ -1,19 +1,22 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Modify
     {
         public static bool Type(this IHostPartition hostPartition, HostPartitionType hostPartitionType)
         {
-            if(hostPartition == null || hostPartitionType == null)
+            if (hostPartition == null || hostPartitionType == null)
             {
                 return false;
             }
 
-            if(hostPartition is Wall && hostPartitionType is WallType)
+            if (hostPartition is Wall && hostPartitionType is WallType)
             {
                 ((Wall)hostPartition).Type = (WallType)hostPartitionType;
             }
-            else if(hostPartition is Roof && hostPartitionType is RoofType)
+            else if (hostPartition is Roof && hostPartitionType is RoofType)
             {
                 ((Roof)hostPartition).Type = (RoofType)hostPartitionType;
             }

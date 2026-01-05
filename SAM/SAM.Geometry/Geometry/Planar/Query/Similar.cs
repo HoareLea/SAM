@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -56,7 +59,7 @@ namespace SAM.Geometry.Planar
 
             List<IClosed2D> internalEdge2Ds_1 = face2D_1.InternalEdge2Ds;
             List<IClosed2D> internalEdge2Ds_2 = face2D_1.InternalEdge2Ds;
-            if(internalEdge2Ds_1 == internalEdge2Ds_2)
+            if (internalEdge2Ds_1 == internalEdge2Ds_2)
             {
                 return true;
             }
@@ -66,15 +69,15 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            if(internalEdge2Ds_1.Count != internalEdge2Ds_2.Count)
+            if (internalEdge2Ds_1.Count != internalEdge2Ds_2.Count)
             {
                 return false;
             }
 
-            foreach(IClosed2D internalEdge2D_1 in internalEdge2Ds_1)
+            foreach (IClosed2D internalEdge2D_1 in internalEdge2Ds_1)
             {
                 int index = internalEdge2Ds_2.FindIndex(x => Similar(internalEdge2D_1, x, tolerance));
-                if(index == -1)
+                if (index == -1)
                 {
                     return false;
                 }
@@ -93,9 +96,9 @@ namespace SAM.Geometry.Planar
             if (closed2D_1 == null || closed2D_2 == null)
                 return false;
 
-            if(closed2D_1 is Face2D || closed2D_2 is Face2D)
+            if (closed2D_1 is Face2D || closed2D_2 is Face2D)
             {
-                if(closed2D_1 is Face2D && closed2D_2 is Face2D)
+                if (closed2D_1 is Face2D && closed2D_2 is Face2D)
                 {
                     return Similar((Face2D)closed2D_1, (Face2D)closed2D_2, tolerance);
                 }
@@ -104,7 +107,7 @@ namespace SAM.Geometry.Planar
             }
 
             ISegmentable2D segmentable2D_1 = closed2D_1 as ISegmentable2D;
-            if(segmentable2D_1 == null)
+            if (segmentable2D_1 == null)
             {
                 throw new System.NotImplementedException();
             }

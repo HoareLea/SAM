@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -11,7 +14,7 @@ namespace SAM.Geometry.Planar
             {
                 return double.NaN;
             }
-                
+
             List<Point2D> point2Ds_Temp = new List<Point2D>(point2Ds);
             if (point2Ds_Temp.FindIndex(x => x == null) != -1)
             {
@@ -30,7 +33,7 @@ namespace SAM.Geometry.Planar
                 point2Ds_Temp.Add(point2Ds_Temp[0]);
                 count++;
             }
-                
+
 
             return System.Math.Abs(point2Ds_Temp.Take(count - 1).Select((p, i) => (point2Ds_Temp[i + 1].X - p.X) * (point2Ds_Temp[i + 1].Y + p.Y)).Sum() / 2);
         }

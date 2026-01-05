@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -61,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item};
+                GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item };
                 locationParam.SetPersistentData(Core.Query.DefaultLocation());
                 result.Add(new GH_SAMParam(locationParam, ParamVisibility.Voluntary));
 
@@ -135,7 +138,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("partitions_");
             List<IPartition> partitions = null;
-            if(index != -1)
+            if (index != -1)
             {
                 partitions = new List<IPartition>();
                 dataAccess.GetDataList(index, partitions);
@@ -187,12 +190,12 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref materialLibrary);
 
             BuildingModel buildingModel = Create.BuildingModel(shells, partitions, groundElevation, true, materialLibrary, 0.01, minArea, maxDistance, maxAngle, silverSpacing, tolerance, Core.Tolerance.Angle);
-            if(buildingModel != null)
+            if (buildingModel != null)
             {
                 if (partitions == null || partitions.Count == 0)
                 {
                     HostPartitionTypeLibrary hostPartitionTypeLibrary = Analytical.Query.DefaultHostPartitionTypeLibrary();
-                    
+
                     buildingModel.UpdateHostPartitionType(
                         curtainWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.CurtainWall),
                         internalWallType: hostPartitionTypeLibrary.GetHostPartitionType<WallType>(PartitionAnalyticalType.InternalWall),

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -38,17 +41,17 @@ namespace SAM.Analytical
 
         public bool AddSimpleEquipments(FlowClassification flowClassification, params ISimpleEquipment[] simpleEquipments)
         {
-            if(simpleEquipments == null || simpleEquipments.Length == 0)
+            if (simpleEquipments == null || simpleEquipments.Length == 0)
             {
                 return false;
             }
 
-            if(complexEquipmentModel == null)
+            if (complexEquipmentModel == null)
             {
                 complexEquipmentModel = new ComplexEquipmentModel();
             }
 
-            if(simpleEquipments.Length == 1)
+            if (simpleEquipments.Length == 1)
             {
                 complexEquipmentModel.Add(simpleEquipments[0]);
             }
@@ -58,7 +61,7 @@ namespace SAM.Analytical
 
         public bool InsertAfterSimpleEquipment(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
         {
-            if(complexEquipmentModel == null)
+            if (complexEquipmentModel == null)
             {
                 return false;
             }
@@ -78,12 +81,12 @@ namespace SAM.Analytical
 
         public bool RemoveSimpleEquipment(ISimpleEquipment simpleEquipment)
         {
-            if(simpleEquipment == null)
+            if (simpleEquipment == null)
             {
-                return false; 
+                return false;
             }
 
-            if(complexEquipmentModel == null)
+            if (complexEquipmentModel == null)
             {
                 return false;
             }
@@ -94,7 +97,7 @@ namespace SAM.Analytical
         public List<ISimpleEquipment> GetSimpleEquipments(FlowClassification flowClassification, bool sort = true)
         {
             List<ISimpleEquipment> result = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
-            if(sort && result != null && result.Count > 1)
+            if (sort && result != null && result.Count > 1)
             {
                 result = complexEquipmentModel.Sort(result, flowClassification, Direction.In);
             }
@@ -102,7 +105,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification) where T: ISimpleEquipment
+        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification) where T : ISimpleEquipment
         {
             return GetSimpleEquipments<T>(flowClassification, null);
         }
@@ -115,15 +118,15 @@ namespace SAM.Analytical
         public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification, Func<T, bool> func) where T : ISimpleEquipment
         {
             List<ISimpleEquipment> simpleEquipments = complexEquipmentModel?.GetSimpleEquipments(flowClassification);
-            if(simpleEquipments == null || simpleEquipments.Count == 0)
+            if (simpleEquipments == null || simpleEquipments.Count == 0)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+            foreach (ISimpleEquipment simpleEquipment in simpleEquipments)
             {
-                if(!(simpleEquipment is T))
+                if (!(simpleEquipment is T))
                 {
                     continue;
                 }
@@ -152,7 +155,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("ComplexEquipmentModel"))
+            if (jObject.ContainsKey("ComplexEquipmentModel"))
             {
                 complexEquipmentModel = Core.Query.IJSAMObject<ComplexEquipmentModel>(jObject.Value<JObject>("ComplexEquipmentModel"));
             }
@@ -166,7 +169,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            if(complexEquipmentModel != null)
+            if (complexEquipmentModel != null)
             {
                 jObject.Add("ComplexEquipmentModel", complexEquipmentModel.ToJObject());
             }

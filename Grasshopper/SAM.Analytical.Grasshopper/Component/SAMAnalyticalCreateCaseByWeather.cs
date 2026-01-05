@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -196,64 +199,33 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
                 dataAccess.GetData(index, ref weatherData);
             }
 
-            // Apply weather to a copy when provided
-            if (weatherData != null)
+            int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            bool concatenate = true;
+            if (index_Concatenate != -1)
             {
-                analyticalModel = new AnalyticalModel(analyticalModel); // copy of the base model (original stays unchanged)
-                analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
+                dataAccess.GetData(index_Concatenate, ref concatenate);
             }
+
+            if (!concatenate)
+            {
+                analyticalModel = new AnalyticalModel(analyticalModel);
+                analyticalModel.RemoveValue("CaseDescription");
+            }
+
+            analyticalModel = Create.AnalyticalModel_ByWeatherData(analyticalModel, weatherData);
 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
-                bool concatenate = true;
-                if (index_Concatenate != -1)
-                {
-                    dataAccess.GetData(index_Concatenate, ref concatenate);
-                }
 
                 string caseDescription = string.Empty;
-                if (concatenate)
+                if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
                 {
-                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
-                    {
-                        caseDescription = string.Empty;
-                    }
+                    caseDescription = string.Empty;
                 }
 
-                if (string.IsNullOrWhiteSpace(caseDescription))
-                {
-                    caseDescription = "Case";
-                }
-                else
-                {
-                    caseDescription += "_";
-                }
-
-                string sufix = "ByWeather_";
-                if (!string.IsNullOrWhiteSpace(weatherData?.Name))
-                {
-                    sufix += weatherData.Name;
-                }
-
-                string value = caseDescription + sufix;
-
-                dataAccess.SetData(index, value);
+                dataAccess.SetData(index, caseDescription);
             }
-
-            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
-            {
-                caseDataCollection = new CaseDataCollection();
-            }
-            else
-            {
-                caseDataCollection = new CaseDataCollection(caseDataCollection);
-            }
-
-            caseDataCollection.Add(new WeatherCaseData(weatherData?.Name));
-
-            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             // Output
             index = Params.IndexOfOutputParam("CaseAModel");
@@ -261,6 +233,72 @@ When provided, the component copies _baseAModel_ (original stays unchanged) and 
             {
                 dataAccess.SetData(index, analyticalModel);
             }
+
+            //// Apply weather to a copy when provided
+            //if (weatherData != null)
+            //{
+            //    analyticalModel = new AnalyticalModel(analyticalModel); // copy of the base model (original stays unchanged)
+            //    analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, weatherData);
+            //}
+
+            //index = Params.IndexOfOutputParam("CaseDescription");
+            //if (index != -1)
+            //{
+            //    int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            //    bool concatenate = true;
+            //    if (index_Concatenate != -1)
+            //    {
+            //        dataAccess.GetData(index_Concatenate, ref concatenate);
+            //    }
+
+            //    string caseDescription = string.Empty;
+            //    if (concatenate)
+            //    {
+            //        if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+            //        {
+            //            caseDescription = string.Empty;
+            //        }
+            //    }
+
+            //    if (string.IsNullOrWhiteSpace(caseDescription))
+            //    {
+            //        caseDescription = "Case";
+            //    }
+            //    else
+            //    {
+            //        caseDescription += "_";
+            //    }
+
+            //    string sufix = "ByWeather_";
+            //    if (!string.IsNullOrWhiteSpace(weatherData?.Name))
+            //    {
+            //        sufix += weatherData.Name;
+            //    }
+
+            //    string value = caseDescription + sufix;
+
+            //    dataAccess.SetData(index, value);
+            //}
+
+            //if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
+            //{
+            //    caseDataCollection = new CaseDataCollection();
+            //}
+            //else
+            //{
+            //    caseDataCollection = new CaseDataCollection(caseDataCollection);
+            //}
+
+            //caseDataCollection.Add(new WeatherCaseData(weatherData?.Name));
+
+            //analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
+
+            //// Output
+            //index = Params.IndexOfOutputParam("CaseAModel");
+            //if (index != -1)
+            //{
+            //    dataAccess.SetData(index, analyticalModel);
+            //}
         }
     }
 }

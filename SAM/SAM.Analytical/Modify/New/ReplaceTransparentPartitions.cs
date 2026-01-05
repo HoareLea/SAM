@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -13,48 +16,48 @@ namespace SAM.Analytical
             }
 
             List<HostPartitionType> hostPartitionTypes = buildingModel.GetHostPartitionTypes();
-            if(hostPartitionTypes == null || hostPartitionTypes.Count == 0)
+            if (hostPartitionTypes == null || hostPartitionTypes.Count == 0)
             {
                 return null;
             }
 
             List<IHostPartition> result = new List<IHostPartition>();
-            foreach(HostPartitionType hostPartitionType in hostPartitionTypes)
+            foreach (HostPartitionType hostPartitionType in hostPartitionTypes)
             {
-                if(hostPartitionType == null)
+                if (hostPartitionType == null)
                 {
                     continue;
                 }
 
-                if(!buildingModel.Transparent(hostPartitionType))
+                if (!buildingModel.Transparent(hostPartitionType))
                 {
                     continue;
                 }
 
                 List<IHostPartition> hostPartitions = buildingModel.GetHostPartitions(hostPartitionType);
-                if(hostPartitions == null || hostPartitions.Count == 0)
+                if (hostPartitions == null || hostPartitions.Count == 0)
                 {
                     continue;
                 }
 
                 WindowType windowType = new WindowType(hostPartitionType.Name, hostPartitionType.MaterialLayers);
 
-                foreach(IHostPartition hostPartition in hostPartitions)
+                foreach (IHostPartition hostPartition in hostPartitions)
                 {
                     PartitionAnalyticalType partitionAnalyticalType = buildingModel.PartitionAnalyticalType(hostPartition, tolerance_Angle, tolerance_Distance);
-                    if(partitionAnalyticalType == PartitionAnalyticalType.Undefined)
+                    if (partitionAnalyticalType == PartitionAnalyticalType.Undefined)
                     {
                         continue;
                     }
 
                     HostPartitionType hostPartitionType_Default = Query.DefaultHostPartitionType(partitionAnalyticalType);
-                    if(hostPartitionType_Default == null)
+                    if (hostPartitionType_Default == null)
                     {
                         continue;
                     }
 
                     Geometry.Spatial.IClosedPlanar3D externalEdge3D = hostPartition.Face3D?.GetExternalEdge3D();
-                    if(externalEdge3D == null)
+                    if (externalEdge3D == null)
                     {
                         continue;
                     }
@@ -64,7 +67,7 @@ namespace SAM.Analytical
                     hostPartition.Type(hostPartitionType_Default);
 
                     List<IOpening> openings = hostPartition.GetOpenings();
-                    if(openings != null && openings.Count != 0)
+                    if (openings != null && openings.Count != 0)
                     {
                         openings.ForEach(x => hostPartition.RemoveOpening(x.Guid));
                     }
@@ -79,7 +82,7 @@ namespace SAM.Analytical
                         face3Ds = Geometry.Spatial.Query.Offset(face3D, offset, true, false, tolerance_Distance);
                     }
 
-                    foreach(Geometry.Spatial.Face3D face3D_New in face3Ds)
+                    foreach (Geometry.Spatial.Face3D face3D_New in face3Ds)
                     {
                         Window window = new Window(windowType, face3D_New);
                         hostPartition.AddOpening(window, tolerance_Distance);

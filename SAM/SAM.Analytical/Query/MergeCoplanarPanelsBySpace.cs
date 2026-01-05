@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
         public static AdjacencyCluster MergeCoplanarPanelsBySpace(this AdjacencyCluster adjacencyCluster, double offset, ref List<Panel> redundantPanels, bool validateConstruction = true, bool validatePanelGroup = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -15,12 +18,12 @@ namespace SAM.Analytical
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
 
             List<Space> spaces = adjacencyCluster.GetSpaces();
-            if(spaces == null || spaces.Count == 0)
+            if (spaces == null || spaces.Count == 0)
             {
                 return result;
             }
 
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 List<Panel> panels = adjacencyCluster?.GetPanels(space);
                 if (panels == null || panels.Count == 0)
@@ -29,42 +32,42 @@ namespace SAM.Analytical
                 }
 
                 List<Tuple<List<Guid>, List<Panel>>> tuples = new List<Tuple<List<Guid>, List<Panel>>>();
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
                     List<Space> spaces_Panel = adjacencyCluster.GetSpaces(panel);
 
                     List<Guid> guids = spaces_Panel?.ConvertAll(x => x.Guid);
-                    if(guids == null)
+                    if (guids == null)
                     {
                         guids = new List<Guid>();
                     }
 
                     Tuple<List<Guid>, List<Panel>> tuple = tuples.Find(x => x.Item1.Count == guids.Count && x.Item1.TrueForAll(y => guids.Contains(y)));
-                    if(tuple == null)
+                    if (tuple == null)
                     {
                         tuple = new Tuple<List<Guid>, List<Panel>>(guids, new List<Panel>());
                         tuples.Add(tuple);
                     }
 
                     int index = tuple.Item2.FindIndex(x => x.Guid == panel.Guid);
-                    if(index == -1)
+                    if (index == -1)
                     {
                         tuple.Item2.Add(panel);
                     }
                 }
 
-                if(tuples == null || tuples.Count == 0)
+                if (tuples == null || tuples.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Tuple<List<Guid>, List<Panel>> tuple in tuples)
+                foreach (Tuple<List<Guid>, List<Panel>> tuple in tuples)
                 {
-                    if(tuple.Item2 == null || tuple.Item2.Count < 2)
+                    if (tuple.Item2 == null || tuple.Item2.Count < 2)
                     {
                         continue;
                     }
-                    
+
                     List<Panel> mergedPanels = null;
                     List<Panel> redundantPanels_Temp = new List<Panel>();
 
@@ -85,7 +88,7 @@ namespace SAM.Analytical
                     if (redundantPanels_Temp != null && redundantPanels_Temp.Count != 0)
                     {
                         result.Remove(redundantPanels_Temp);
-                        if(redundantPanels == null)
+                        if (redundantPanels == null)
                         {
                             redundantPanels = new List<Panel>();
                         }

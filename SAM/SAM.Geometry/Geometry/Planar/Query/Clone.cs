@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Planar
     {
         public static List<Point2D> Clone(this IEnumerable<Point2D> point2Ds)
         {
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }

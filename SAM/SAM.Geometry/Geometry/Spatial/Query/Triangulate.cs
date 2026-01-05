@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -96,7 +99,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            if(point3Ds == null || point3Ds.Count() == 0)
+            if (point3Ds == null || point3Ds.Count() == 0)
             {
                 return Planar.Query.Triangulate(face2D, tolerance)?.ConvertAll(x => plane.Convert(x));
             }
@@ -217,7 +220,7 @@ namespace SAM.Geometry.Spatial
                     triangle3D = new Triangle3D(point3DList[i][j - 1], point3DList[i + 1][j - 1], point3DList[i + 1][j]);
                     result.Add(triangle3D);
 
-                    if(point3DList[i][j - 1] != point3DList[i][j])
+                    if (point3DList[i][j - 1] != point3DList[i][j])
                     {
                         triangle3D = new Triangle3D(point3DList[i][j - 1], point3DList[i + 1][j], point3DList[i][j]);
                         result.Add(triangle3D);
@@ -230,7 +233,7 @@ namespace SAM.Geometry.Spatial
 
         public static List<Triangle3D> Triangulate(this Circle3D circle3D, int density)
         {
-            if(circle3D == null || density < 1)
+            if (circle3D == null || density < 1)
             {
                 return null;
             }
@@ -243,7 +246,7 @@ namespace SAM.Geometry.Spatial
 
             Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(circle3D.Center), circle3D.Radius);
             List<Planar.Triangle2D> triangle2Ds = Planar.Query.Triangulate(circle2D, density);
-            if(triangle2Ds == null || triangle2Ds.Count == 0)
+            if (triangle2Ds == null || triangle2Ds.Count == 0)
             {
                 return null;
             }

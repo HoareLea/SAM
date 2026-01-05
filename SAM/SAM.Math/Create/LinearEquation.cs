@@ -1,10 +1,13 @@
-﻿namespace SAM.Math
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Math
 {
     public static partial class Create
     {
         public static LinearEquation LinearEquation(double x_1, double y_1, double x_2, double y_2)
         {
-            if(double.IsNaN(x_1) || double.IsNaN(x_2) || double.IsNaN(y_1) || double.IsNaN(y_2))
+            if (double.IsNaN(x_1) || double.IsNaN(x_2) || double.IsNaN(y_1) || double.IsNaN(y_2))
             {
                 return null;
             }
@@ -13,7 +16,7 @@
             double b = double.NaN;
 
             double x = x_2 - x_1;
-            if(x == 0)
+            if (x == 0)
             {
                 return null;
             }

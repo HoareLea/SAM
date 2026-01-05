@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,12 +19,12 @@ namespace SAM.Geometry.Planar
 
         public TransformGroup2D(IEnumerable<ITransform2D> transform2Ds)
         {
-            if(transform2Ds != null)
+            if (transform2Ds != null)
             {
                 this.transform2Ds = new List<ITransform2D>();
-                foreach(ITransform2D transform2D in transform2Ds)
+                foreach (ITransform2D transform2D in transform2Ds)
                 {
-                    if(transform2D == null)
+                    if (transform2D == null)
                     {
                         continue;
                     }
@@ -38,10 +41,10 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            if(jObject.ContainsKey("Transform2Ds"))
+            if (jObject.ContainsKey("Transform2Ds"))
             {
                 transform2Ds = new List<ITransform2D>();
-                foreach(JObject jObject_Transform2D in jObject.Value<JArray>("Transform2Ds"))
+                foreach (JObject jObject_Transform2D in jObject.Value<JArray>("Transform2Ds"))
                 {
                     transform2Ds.Add(Core.Query.IJSAMObject<ITransform2D>(jObject_Transform2D));
                 }
@@ -57,14 +60,14 @@ namespace SAM.Geometry.Planar
 
         public void Inverse()
         {
-            if(transform2Ds == null)
+            if (transform2Ds == null)
             {
                 return;
             }
 
             transform2Ds.Reverse();
 
-            foreach(ITransform2D transform2D in transform2Ds)
+            foreach (ITransform2D transform2D in transform2Ds)
             {
                 transform2D.Inverse();
             }
@@ -75,12 +78,12 @@ namespace SAM.Geometry.Planar
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(transform2Ds != null)
+            if (transform2Ds != null)
             {
                 JArray jArray = new JArray();
-                foreach(Transform2D transform2D in transform2Ds)
+                foreach (Transform2D transform2D in transform2Ds)
                 {
-                    if(transform2D == null)
+                    if (transform2D == null)
                     {
                         continue;
                     }

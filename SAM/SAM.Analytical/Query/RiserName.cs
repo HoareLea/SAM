@@ -1,11 +1,14 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
         public static string RiserName(this MechanicalSystemCategory mechanicalSystemCategory, int index = 1)
         {
             string prefix = RiserNamePrefix(mechanicalSystemCategory);
-            if(prefix == null)
+            if (prefix == null)
             {
                 return null;
             }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -27,12 +30,12 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
-                if(!panel.Transparent(materialLibrary))
+                if (!panel.Transparent(materialLibrary))
                 {
                     continue;
                 }

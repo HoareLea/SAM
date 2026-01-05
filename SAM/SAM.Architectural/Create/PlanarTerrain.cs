@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Architectural
 {
@@ -7,7 +10,7 @@ namespace SAM.Architectural
         public static PlanarTerrain PlanarTerrain(double elevation)
         {
             Plane plane = Geometry.Spatial.Create.Plane(elevation);
-            if(plane  == null)
+            if (plane == null)
             {
                 return null;
             }

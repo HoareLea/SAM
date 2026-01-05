@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.DocObjects;
@@ -38,7 +41,7 @@ namespace SAM.Analytical.Grasshopper
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)
         {
             obj_guid = Guid.Empty;
-            
+
             if (Value?.AdjacencyCluster == null)
                 return false;
 
@@ -104,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
                 target = (Y)(object)Value;
                 return true;
             }
-            
+
             if (typeof(Y).IsAssignableFrom(typeof(GH_Mesh)))
             {
                 target = (Y)(object)Value.ToGrasshopper_Mesh();
@@ -133,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("01466a73-e3f3-495d-b794-bd322c9edfa0");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public bool Hidden { get; set; }
 
@@ -204,8 +207,8 @@ namespace SAM.Analytical.Grasshopper
             Menu_AppendItem(menu, "Bake By BoundaryType", Menu_BakeByBoundaryType, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Discharge Coefficient", Menu_BakeByDischargeCoefficient, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Save As...", Menu_SaveAs, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
-            
-            if(System.IO.File.Exists(Query.AnalyticalUIPath()))
+
+            if (System.IO.File.Exists(Query.AnalyticalUIPath()))
             {
                 Menu_AppendItem(menu, "Open in UI", Menu_OpenInUI, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
             }

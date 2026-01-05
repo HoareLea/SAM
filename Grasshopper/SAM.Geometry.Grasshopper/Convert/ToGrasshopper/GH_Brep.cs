@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace SAM.Geometry.Grasshopper
@@ -18,8 +21,8 @@ namespace SAM.Geometry.Grasshopper
 
         public static GH_Brep ToGrasshopper_Brep(this Spatial.Face3D face3D, double tolerance = Core.Tolerance.MacroDistance)
         {
-            Brep brep =Rhino.Convert.ToRhino_Brep(face3D, tolerance);
-            if(brep == null)
+            Brep brep = Rhino.Convert.ToRhino_Brep(face3D, tolerance);
+            if (brep == null)
             {
                 return null;
             }

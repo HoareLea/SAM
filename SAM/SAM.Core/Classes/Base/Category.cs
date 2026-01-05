@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -21,7 +24,7 @@ namespace SAM.Core
 
         public Category(Category category)
         {
-            if(category != null)
+            if (category != null)
             {
                 name = category.name;
                 subCategory = category.subCategory == null ? null : new Category(category.subCategory);
@@ -56,7 +59,7 @@ namespace SAM.Core
 
         public string ToString(string separator)
         {
-            if(separator == null)
+            if (separator == null)
             {
                 separator = string.Empty;
             }
@@ -64,9 +67,9 @@ namespace SAM.Core
             List<string> values = new List<string>();
 
             List<Category> categories = this.SubCategories();
-            if(categories != null)
+            if (categories != null)
             {
-                foreach(Category category in categories)
+                foreach (Category category in categories)
                 {
                     string name_Category = category?.Name;
                     if (name_Category == null)
@@ -76,7 +79,7 @@ namespace SAM.Core
                     }
 
                     values.Add(name_Category);
-                }    
+                }
             }
 
             values.Add(name == null ? string.Empty : name);
@@ -88,17 +91,17 @@ namespace SAM.Core
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Name"))
+            if (jObject.ContainsKey("Name"))
             {
                 name = jObject.Value<string>("Name");
             }
 
-            if(jObject.ContainsKey("SubCategory"))
+            if (jObject.ContainsKey("SubCategory"))
             {
                 subCategory = new Category(jObject.Value<JObject>("SubCategory"));
             }
@@ -110,8 +113,8 @@ namespace SAM.Core
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
-            
-            if(name != null)
+
+            if (name != null)
             {
                 jObject.Add("Name", name);
             }

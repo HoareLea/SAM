@@ -1,16 +1,19 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
-using SAM.Geometry.Spatial;
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
-    public abstract class HostPartition<T> : BuildingElement<T>, IHostPartition where T: HostPartitionType
+    public abstract class HostPartition<T> : BuildingElement<T>, IHostPartition where T : HostPartitionType
     {
         private List<IOpening> openings;
-        
+
         public HostPartition(HostPartition<T> hostPartition)
             : base(hostPartition)
         {
@@ -39,7 +42,7 @@ namespace SAM.Analytical
             : base(guid, hostPartition, face3D)
         {
             List<IOpening> openings = hostPartition?.GetOpenings();
-            if(openings != null)
+            if (openings != null)
             {
                 Plane plane = face3D?.GetPlane();
 
@@ -57,15 +60,15 @@ namespace SAM.Analytical
 
         public List<O> GetOpenings<O>() where O : IOpening
         {
-            if(openings == null)
+            if (openings == null)
             {
                 return null;
             }
 
             List<O> result = new List<O>();
-            foreach(IOpening opening in openings)
+            foreach (IOpening opening in openings)
             {
-                if(opening is O)
+                if (opening is O)
                 {
                     result.Add((O)opening.Clone());
                 }
@@ -76,19 +79,19 @@ namespace SAM.Analytical
 
         public IOpening RemoveOpening(Guid guid)
         {
-            if(openings == null || openings.Count == 0)
+            if (openings == null || openings.Count == 0)
             {
                 return null;
             }
 
-            foreach(IOpening opening in openings)
+            foreach (IOpening opening in openings)
             {
-                if(opening == null)
+                if (opening == null)
                 {
                     continue;
                 }
 
-                if(opening.Guid == guid)
+                if (opening.Guid == guid)
                 {
                     openings.Remove(opening);
                     return opening;
@@ -106,13 +109,13 @@ namespace SAM.Analytical
             }
 
             Face3D face3D = Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -129,7 +132,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(!plane.Coplanar(plane_Opening, tolerance))
+            if (!plane.Coplanar(plane_Opening, tolerance))
             {
                 return null;
             }
@@ -138,7 +141,7 @@ namespace SAM.Analytical
             Face2D face2D_Opening = plane.Convert(face3D_Opening);
 
             List<Face2D> face2Ds_Intersection = Geometry.Planar.Query.Intersection(face2D, face2D_Opening, tolerance);
-            if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+            if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
             {
                 return null;
             }
@@ -151,18 +154,18 @@ namespace SAM.Analytical
             }
 
             int index = openings.FindIndex(x => x.Guid == opening.Guid);
-            if(index != -1)
+            if (index != -1)
             {
                 openings.RemoveAt(index);
             }
 
             List<IOpening> result = new List<IOpening>();
-            for(int i = 0; i < face3Ds_Intersection.Count; i++)
+            for (int i = 0; i < face3Ds_Intersection.Count; i++)
             {
                 Guid guid = i == 0 ? opening.Guid : Guid.NewGuid();
 
                 IOpening opening_Intersection = Create.Opening(guid, opening, face3Ds_Intersection[i]);
-                if(opening_Intersection == null)
+                if (opening_Intersection == null)
                 {
                     continue;
                 }
@@ -170,7 +173,7 @@ namespace SAM.Analytical
                 result.Add(opening_Intersection);
             }
 
-            if(result != null && result.Count != 0)
+            if (result != null && result.Count != 0)
             {
                 openings.AddRange(result);
             }
@@ -180,7 +183,7 @@ namespace SAM.Analytical
 
         public bool HasOpening(Guid guid)
         {
-            if(openings == null || openings.Count == 0)
+            if (openings == null || openings.Count == 0)
             {
                 return false;
             }
@@ -250,19 +253,19 @@ namespace SAM.Analytical
         public List<Face3D> GetFace3Ds(bool cutOpenings = false, double tolerance = Tolerance.Distance)
         {
             Face3D face3D = Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
             List<Face3D> result = face3D.FixEdges(tolerance);
-            if(!cutOpenings || result == null || result.Count == 0)
+            if (!cutOpenings || result == null || result.Count == 0)
             {
                 return result;
             }
 
             List<Face3D> face3Ds_Openings = openings?.ConvertAll(x => x?.Face3D);
-            if(face3Ds_Openings == null || face3Ds_Openings.Count == 0)
+            if (face3Ds_Openings == null || face3Ds_Openings.Count == 0)
             {
                 return result;
             }

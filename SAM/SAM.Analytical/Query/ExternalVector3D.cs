@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -9,7 +12,7 @@ namespace SAM.Analytical
         {
             if (adjacencyCluster == null || panel == null || space == null)
                 return null;
-            
+
             List<Panel> panels = adjacencyCluster.GetRelatedObjects<Panel>(space);
             if (panels.Find(x => x.Guid == panel.Guid) == null)
                 return null;

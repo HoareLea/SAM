@@ -1,18 +1,21 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
-        public static List<double> Determinants<T>(this T segmentable2D) where T: IClosed2D, ISegmentable2D
+        public static List<double> Determinants<T>(this T segmentable2D) where T : IClosed2D, ISegmentable2D
         {
             return Determinants(segmentable2D?.GetPoints());
         }
 
         public static List<double> Determinants(this IEnumerable<Point2D> point2Ds)
         {
-            if(point2Ds == null || point2Ds.Count() < 3)
+            if (point2Ds == null || point2Ds.Count() < 3)
             {
                 return null;
             }

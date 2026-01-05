@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -32,7 +35,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces or Zones, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces or Zones, if nothing connected all spaces from AnalyticalModel will be used", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "name_", NickName = "name_", Description = "NCM Name\n *Type under inspect of NCM Data in Internal Condition", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "systemType_", NickName = "systemType_", Description = "System Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
@@ -55,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -77,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analyticalModel");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,22 +99,22 @@ namespace SAM.Analytical.Grasshopper
 
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
             index = Params.IndexOfInputParam("_spaces_");
-            if(index != -1)
+            if (index != -1)
             {
                 spaces = new List<Space>();
                 dataAccess.GetDataList(index, objectWrappers);
-                if(objectWrappers != null && objectWrappers.Count != 0)
+                if (objectWrappers != null && objectWrappers.Count != 0)
                 {
-                    foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+                    foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                     {
-                        if(objectWrapper.Value is Space)
+                        if (objectWrapper.Value is Space)
                         {
                             spaces.Add((Space)objectWrapper.Value);
                         }
-                        else if(objectWrapper.Value is Zone)
+                        else if (objectWrapper.Value is Zone)
                         {
                             List<Space> spaces_Temp = adjacencyCluster.GetRelatedObjects<Space>((Zone)objectWrapper.Value);
-                            if(spaces_Temp != null && spaces_Temp.Count != 0)
+                            if (spaces_Temp != null && spaces_Temp.Count != 0)
                             {
                                 spaces.AddRange(spaces_Temp);
                             }
@@ -257,9 +260,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Space> spaces_Result = new List<Space>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
-                if(space == null)
+                if (space == null)
                 {
                     continue;
                 }
@@ -267,7 +270,7 @@ namespace SAM.Analytical.Grasshopper
                 Space space_Temp = new Space(space);
 
                 InternalCondition internalCondition = space_Temp.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                 {
                     continue;
                 }
@@ -286,7 +289,7 @@ namespace SAM.Analytical.Grasshopper
                     nCMData.Name = name;
                 }
 
-                if(nCMSystemType != null && nCMSystemType.HasValue)
+                if (nCMSystemType != null && nCMSystemType.HasValue)
                 {
                     nCMData.SystemType = nCMSystemType.Value;
                 }
@@ -301,7 +304,7 @@ namespace SAM.Analytical.Grasshopper
                     nCMData.LightingOccupancyControls = lightingOccupancyControls.Value;
                 }
 
-                if(lightingPhotoelectricBackSpaceSensor != null && lightingPhotoelectricBackSpaceSensor.HasValue)
+                if (lightingPhotoelectricBackSpaceSensor != null && lightingPhotoelectricBackSpaceSensor.HasValue)
                 {
                     nCMData.LightingPhotoelectricBackSpaceSensor = lightingPhotoelectricBackSpaceSensor.Value;
                 }
@@ -331,7 +334,7 @@ namespace SAM.Analytical.Grasshopper
                     nCMData.AirPermeability = airPermeability.Value;
                 }
 
-                if(description != null)
+                if (description != null)
                 {
                     nCMData.Description = description;
                 }
@@ -345,7 +348,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analyticalModel");
-            if(index != -1)
+            if (index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, analyticalModel.ProfileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));

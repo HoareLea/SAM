@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -23,10 +26,10 @@ namespace SAM.Analytical
                     continue;
 
                 List<Geometry.Spatial.Face3D> face3Ds = new List<Geometry.Spatial.Face3D>();
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
                     Geometry.Spatial.Face3D face3D = null;
-                    if(!dictionary_Shell.TryGetValue(panel.Guid, out face3D))
+                    if (!dictionary_Shell.TryGetValue(panel.Guid, out face3D))
                     {
                         face3D = panel.GetFace3D();
                         dictionary_Shell[panel.Guid] = face3D;

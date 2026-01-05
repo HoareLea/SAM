@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 
@@ -44,7 +47,7 @@ namespace SAM.Geometry.Object.Spatial
         public Point3DObject(Point3D point3D, PointAppearance pointAppearance)
             : base(point3D)
         {
-            if(pointAppearance != null)
+            if (pointAppearance != null)
             {
                 PointAppearance = new PointAppearance(pointAppearance);
             }
@@ -52,12 +55,12 @@ namespace SAM.Geometry.Object.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("PointAppearance"))
+            if (jObject.ContainsKey("PointAppearance"))
             {
                 PointAppearance = new PointAppearance(jObject.Value<JObject>("PointAppearance"));
             }
@@ -70,12 +73,12 @@ namespace SAM.Geometry.Object.Spatial
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }
 
-            if(PointAppearance != null)
+            if (PointAppearance != null)
             {
                 jObject.Add("PointAppearance", PointAppearance.ToJObject());
             }

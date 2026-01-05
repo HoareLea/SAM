@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,16 +11,16 @@ namespace SAM.Geometry.Planar
     {
         public static void MergeOverlaps(this List<Face2D> face2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(face2Ds == null || face2Ds.Count < 2)
+            if (face2Ds == null || face2Ds.Count < 2)
             {
                 return;
             }
 
             List<Tuple<Face2D, BoundingBox2D>> tuples = new List<Tuple<Face2D, BoundingBox2D>>();
-            foreach(Face2D face2D in face2Ds)
+            foreach (Face2D face2D in face2Ds)
             {
                 BoundingBox2D boundingBox2D = face2D?.GetBoundingBox();
-                if(boundingBox2D == null)
+                if (boundingBox2D == null)
                 {
                     continue;
                 }
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Planar
                 Tuple<Face2D, BoundingBox2D> tuple = tuples[0];
 
                 List<Tuple<Face2D, BoundingBox2D>> tuples_Temp = tuples.FindAll(x => tuple.Item2.InRange(x.Item2, tolerance));
-                if(tuples_Temp.Count < 2)
+                if (tuples_Temp.Count < 2)
                 {
                     face2Ds_Temp.Add(tuple.Item1);
                     tuples.RemoveAt(0);
@@ -40,14 +43,14 @@ namespace SAM.Geometry.Planar
 
                 List<Face2D> face2Ds_Split = tuples_Temp.ConvertAll(x => x.Item1).Split(tolerance);
                 List<Tuple<Face2D, List<Face2D>>> tuples_Split = new List<Tuple<Face2D, List<Face2D>>>();
-                foreach(Face2D face2D_Split in face2Ds_Split)
+                foreach (Face2D face2D_Split in face2Ds_Split)
                 {
-                    if(face2D_Split == null)
+                    if (face2D_Split == null)
                     {
                         continue;
                     }
 
-                    if(face2D_Split.GetArea() < tolerance)
+                    if (face2D_Split.GetArea() < tolerance)
                     {
                         continue;
                     }
@@ -70,11 +73,11 @@ namespace SAM.Geometry.Planar
                 }
 
                 List<Tuple<double, List<Face2D>, List<Face2D>>> tuples_InvertedThinnessRatio = new List<Tuple<double, List<Face2D>, List<Face2D>>>();
-                foreach(Tuple<Face2D, List<Face2D>> tuple_Split in tuples_Split)
+                foreach (Tuple<Face2D, List<Face2D>> tuple_Split in tuples_Split)
                 {
                     Face2D face2D_Split = tuple_Split.Item1;
 
-                    foreach(Face2D face2D in tuple_Split.Item2)
+                    foreach (Face2D face2D in tuple_Split.Item2)
                     {
                         List<Face2D> face2Ds_Split_Before = new List<Face2D>(tuple_Split.Item2);
                         face2Ds_Split_Before.Remove(face2D);
@@ -83,7 +86,7 @@ namespace SAM.Geometry.Planar
                         foreach (Face2D face2D_Split_Before in face2Ds_Split_Before)
                         {
                             List<Face2D> face2D_Split_After_Temp = face2D_Split_Before.Difference(face2D_Split, tolerance);
-                            if(face2D_Split_After_Temp != null && face2D_Split_After_Temp.Count != 0)
+                            if (face2D_Split_After_Temp != null && face2D_Split_After_Temp.Count != 0)
                             {
                                 face2D_Split_After.AddRange(face2D_Split_After_Temp);
                             }
@@ -107,9 +110,9 @@ namespace SAM.Geometry.Planar
 
                 face2Ds.Clear();
                 face2Ds.AddRange(face2Ds_Temp);
-                foreach(Tuple<Face2D, BoundingBox2D> tuple_Temp in tuples)
+                foreach (Tuple<Face2D, BoundingBox2D> tuple_Temp in tuples)
                 {
-                    if(tuple_InvertedThinnessRatio.Item2.Contains(tuple_Temp.Item1))
+                    if (tuple_InvertedThinnessRatio.Item2.Contains(tuple_Temp.Item1))
                     {
                         continue;
                     }

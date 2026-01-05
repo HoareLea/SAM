@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -15,7 +18,7 @@ namespace SAM.Core
         /// <returns>Decompressed string</returns>
         public static string Decompress(this string @string)
         {
-            if(@string == null)
+            if (@string == null)
             {
                 return null;
             }
@@ -40,7 +43,7 @@ namespace SAM.Core
 
         public static List<T> Decompress<T>(this string @string) where T : IJSAMObject
         {
-            if(string.IsNullOrWhiteSpace(@string))
+            if (string.IsNullOrWhiteSpace(@string))
             {
                 return null;
             }

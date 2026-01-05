@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -72,7 +75,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "zones", NickName = "zones", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "zones", NickName = "zones", Description = "SAM Analytical Zones", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -96,7 +99,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = analyticalObject is AnalyticalModel ? ((AnalyticalModel)analyticalObject).AdjacencyCluster : analyticalObject as AdjacencyCluster;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
             }
@@ -107,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 double offset_Temp = double.NaN;
-                if(dataAccess.GetData(index, ref offset_Temp) && !double.IsNaN(offset_Temp))
+                if (dataAccess.GetData(index, ref offset_Temp) && !double.IsNaN(offset_Temp))
                 {
                     offset = offset_Temp;
                 }
@@ -126,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("spaces_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<Space> spaces_Temp = new List<Space>();
 
@@ -155,42 +158,42 @@ namespace SAM.Analytical.Grasshopper
 
             List<Zone> zones = null;
 
-            if(spaces != null)
+            if (spaces != null)
             {
 
                 zones = new List<Zone>();
                 foreach (Space space in spaces)
                 {
-                    Func<Panel, double> func = new Func<Panel, double>((Panel panel) => 
+                    Func<Panel, double> func = new Func<Panel, double>((Panel panel) =>
                     {
-                        if(panel == null)
+                        if (panel == null)
                         {
                             return 0;
                         }
 
-                        if(panels != null)
+                        if (panels != null)
                         {
                             return panels.Find(x => x.Guid == panel.Guid) != null ? offset : 0;
                         }
 
-                        if(!adjacencyCluster.External(panel))
+                        if (!adjacencyCluster.External(panel))
                         {
                             return 0;
                         }
 
                         List<Aperture> apertures = panel.Apertures;
 
-                        if(apertures == null || apertures.Count == 0)
+                        if (apertures == null || apertures.Count == 0)
                         {
                             return 0;
                         }
 
-                        return offset; 
+                        return offset;
                     });
 
 
                     List<Space> spaces_Split = adjacencyCluster.SplitSpace_2(space.Guid, func, minSectionOffset: minOffset / 2, adjustmentOffset: minOffset);
-                    if(spaces_Split == null || spaces_Split.Count < 2)
+                    if (spaces_Split == null || spaces_Split.Count < 2)
                     {
                         continue;
                     }
@@ -198,7 +201,7 @@ namespace SAM.Analytical.Grasshopper
                     Zone zone = new Zone(space.Name);
 
                     adjacencyCluster.AddObject(zone);
-                    foreach(Space space_Split in spaces_Split)
+                    foreach (Space space_Split in spaces_Split)
                     {
                         adjacencyCluster.AddRelation(zone, space_Split);
                     }
@@ -207,11 +210,11 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(analyticalObject is AnalyticalModel)
+            if (analyticalObject is AnalyticalModel)
             {
                 analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
             }
-            else if(analyticalObject is AdjacencyCluster)
+            else if (analyticalObject is AdjacencyCluster)
             {
                 analyticalObject = adjacencyCluster;
             }

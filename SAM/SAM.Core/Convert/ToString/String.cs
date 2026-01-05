@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Drawing;
@@ -31,12 +34,12 @@ namespace SAM.Core
             return json;
         }
 
-        public static string ToString<T>(this IEnumerable<T> jSAMObjects) where T: IJSAMObject
+        public static string ToString<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject
         {
             return ToString(jSAMObjects, Formatting.Indented);
         }
 
-        public static string ToString<T>(this IEnumerable<T> jSAMObjects, Formatting formatting) where T :IJSAMObject
+        public static string ToString<T>(this IEnumerable<T> jSAMObjects, Formatting formatting) where T : IJSAMObject
         {
             if (jSAMObjects == null)
                 return null;
@@ -44,7 +47,7 @@ namespace SAM.Core
             JArray jArray = new JArray();
             foreach (T jSAMObject in jSAMObjects)
             {
-                if(jSAMObject == null)
+                if (jSAMObject == null)
                 {
                     continue;
                 }

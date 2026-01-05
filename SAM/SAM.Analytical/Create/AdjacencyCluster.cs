@@ -1,6 +1,7 @@
-﻿using NetTopologySuite.Algorithm;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Core;
-using SAM.Geometry;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -14,7 +15,7 @@ namespace SAM.Analytical
     {
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, IEnumerable<Space> spaces, double elevation_Ground = 0, double silverSpacing = Tolerance.MacroDistance, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
-            if(shells == null)
+            if (shells == null)
             {
                 return null;
             }
@@ -30,12 +31,12 @@ namespace SAM.Analytical
             List<Space> spaces_Temp = spaces == null ? new List<Space>() : new List<Space>(spaces);
 
             List<Tuple<BoundingBox3D, Face3D, Panel>> tuples = new List<Tuple<BoundingBox3D, Face3D, Panel>>();
-            
+
             int index = 1;
-            foreach(Shell shell in shells_Temp)
+            foreach (Shell shell in shells_Temp)
             {
                 Space space = spaces_Temp.Find(x => shell.GetBoundingBox().InRange(x.Location, tolerance_Distance) && shell.Inside(x.Location, silverSpacing, tolerance_Distance));
-                if(space == null)
+                if (space == null)
                 {
                     while (spaces_Temp.Find(x => x.Name == string.Format("{0} {1}", "Space", index)) != null)
                     {
@@ -46,18 +47,18 @@ namespace SAM.Analytical
                 }
 
                 List<Face3D> face3Ds = shell.Section();
-                if(face3Ds != null && face3Ds.Count != 0)
+                if (face3Ds != null && face3Ds.Count != 0)
                 {
                     double area = 0;
-                    foreach(Face3D face3D in face3Ds)
+                    foreach (Face3D face3D in face3Ds)
                     {
-                        if(face3D == null)
+                        if (face3D == null)
                         {
                             continue;
                         }
 
                         double area_Temp = face3D.GetArea();
-                        if(!double.IsNaN(area_Temp) && area_Temp > 0)
+                        if (!double.IsNaN(area_Temp) && area_Temp > 0)
                         {
                             area += area_Temp;
                         }
@@ -68,19 +69,19 @@ namespace SAM.Analytical
                 }
 
                 double volume = shell.Volume(silverSpacing, tolerance_Distance);
-                if(!double.IsNaN(volume))
+                if (!double.IsNaN(volume))
                 {
                     space.SetValue(SpaceParameter.Volume, volume);
                 }
 
                 result.AddObject(space);
 
-                foreach(Face3D face3D in shell.Face3Ds)
+                foreach (Face3D face3D in shell.Face3Ds)
                 {
                     Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
 
                     Tuple<BoundingBox3D, Face3D, Panel> tuple = tuples.Find(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.InRange(point3D, tolerance_Distance));
-                    if(tuple == null)
+                    if (tuple == null)
                     {
                         PanelType panelType = Query.PanelType(face3D.GetPlane().Normal, tolerance_Angle);
 
@@ -131,10 +132,10 @@ namespace SAM.Analytical
             Construction construction_Roof = Query.DefaultConstruction(PanelType.Roof);
 
             List<Polygon2D> polygon2Ds = Geometry.Planar.Create.Polygon2Ds(segmentable2Ds, tolerance);
-            if(polygon2Ds != null && polygon2Ds.Count != 0)
+            if (polygon2Ds != null && polygon2Ds.Count != 0)
             {
                 List<Tuple<Segment2D, Panel, Space>> tuples = new List<Tuple<Segment2D, Panel, Space>>();
-                for(int i=0; i < polygon2Ds.Count; i++)
+                for (int i = 0; i < polygon2Ds.Count; i++)
                 {
                     Polygon2D polygon2D = polygon2Ds[i]?.SimplifyByAngle();
                     if (polygon2D == null)
@@ -155,7 +156,7 @@ namespace SAM.Analytical
 
                     segment2Ds = Geometry.Planar.Query.Snap(segment2Ds, true);
 
-                    foreach(Segment2D segment2D in segment2Ds)
+                    foreach (Segment2D segment2D in segment2Ds)
                     {
                         Segment3D segment3D_Min = plane_Min.Convert(segment2D);
                         Segment3D segment3D_Max = plane_Max.Convert(segment2D);
@@ -163,7 +164,7 @@ namespace SAM.Analytical
                         Polygon3D polygon3D = new Polygon3D(new Point3D[] { segment3D_Max[0], segment3D_Max[1], segment3D_Min[1], segment3D_Min[0] });
                         Panel panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));
 
-                        tuples.Add(new Tuple<Segment2D, Panel, Space> (segment2D, panel, space));
+                        tuples.Add(new Tuple<Segment2D, Panel, Space>(segment2D, panel, space));
                     }
 
                     Polygon3D polygon3D_Min = plane_Min.Convert(polygon2D);
@@ -188,7 +189,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                while(tuples.Count > 0)
+                while (tuples.Count > 0)
                 {
                     Tuple<Segment2D, Panel, Space> tuple = tuples[0];
                     Segment2D segment2D = tuple.Item1;
@@ -218,10 +219,10 @@ namespace SAM.Analytical
                 return null;
 
             Plane plane_Default = Plane.WorldXY;
-            plane_Default.Move(new Vector3D(0,0, elevation_Ground));
+            plane_Default.Move(new Vector3D(0, 0, elevation_Ground));
 
             Dictionary<Face2D, Face3D> dictionary_Project = new Dictionary<Face2D, Face3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 Face3D face3D_Project = plane_Default.Project(face3D);
                 if (face3D_Project == null)
@@ -242,12 +243,12 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<Face2D, List<Face3D>> dictionary_Common = new Dictionary<Face2D, List<Face3D>>();
-            foreach(KeyValuePair<Face2D, Face3D> keyValuePair_Project in dictionary_Project)
+            foreach (KeyValuePair<Face2D, Face3D> keyValuePair_Project in dictionary_Project)
             {
                 Face2D face2D = null;
-                foreach(Face2D face2D_Temp in face2Ds)
+                foreach (Face2D face2D_Temp in face2Ds)
                 {
-                    if(face2D_Temp.InRange(keyValuePair_Project.Key.GetInternalPoint2D(), tolerance))
+                    if (face2D_Temp.InRange(keyValuePair_Project.Key.GetInternalPoint2D(), tolerance))
                     {
                         face2D = face2D_Temp;
                         break;
@@ -259,15 +260,15 @@ namespace SAM.Analytical
 
                 if (!dictionary_Common.ContainsKey(face2D))
                     dictionary_Common[face2D] = new List<Face3D>();
-                
+
                 dictionary_Common[face2D].Add(keyValuePair_Project.Value);
             }
 
             List<AdjacencyCluster> adjacencyClusters = new List<AdjacencyCluster>();
-            foreach(List<Face3D> face3Ds_Common in dictionary_Common.Values)
+            foreach (List<Face3D> face3Ds_Common in dictionary_Common.Values)
             {
                 Dictionary<double, List<Face2D>> dictionary = new Dictionary<double, List<Face2D>>();
-                foreach(Face3D face3D in face3Ds_Common)
+                foreach (Face3D face3D in face3Ds_Common)
                 {
                     BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
                     if (boundingBox3D == null)
@@ -281,7 +282,7 @@ namespace SAM.Analytical
                         continue;
 
                     List<Face2D> face2Ds_Elevation = null;
-                    if(!dictionary.TryGetValue(elevation, out face2Ds_Elevation))
+                    if (!dictionary.TryGetValue(elevation, out face2Ds_Elevation))
                     {
                         face2Ds_Elevation = new List<Face2D>();
                         dictionary[elevation] = face2Ds_Elevation;
@@ -291,10 +292,10 @@ namespace SAM.Analytical
                 }
 
                 List<double> elevations = dictionary.Keys.ToList();
-                if(!elevations.Contains(elevation_Ground))
+                if (!elevations.Contains(elevation_Ground))
                 {
                     elevations.Sort();
-                    for(int i=1; i < elevations.Count; i++)
+                    for (int i = 1; i < elevations.Count; i++)
                     {
                         if (elevation_Ground > elevations[i])
                             continue;
@@ -303,7 +304,7 @@ namespace SAM.Analytical
                         break;
                     }
 
-                    if(!dictionary.ContainsKey(elevation_Ground))
+                    if (!dictionary.ContainsKey(elevation_Ground))
                         dictionary[elevation_Ground] = dictionary[elevations.Last()];
                 }
 
@@ -380,7 +381,7 @@ namespace SAM.Analytical
                 }
 
                 Shell shell_Merge = shell.Merge(tolerance_Distance);
-                if(shell_Merge == null)
+                if (shell_Merge == null)
                 {
                     shell_Merge = new Shell(shell);
                 }
@@ -463,17 +464,17 @@ namespace SAM.Analytical
             }
 
             List<double> elevations = new List<double>();
-            foreach(Shell shell_Temp in shells_Temp)
+            foreach (Shell shell_Temp in shells_Temp)
             {
                 BoundingBox3D boundingBox3D = shell_Temp?.GetBoundingBox();
-                if(boundingBox3D == null)
+                if (boundingBox3D == null)
                 {
                     continue;
                 }
 
                 double elevation = Core.Query.Round(boundingBox3D.Min.Z, silverSpacing);
                 int index = elevations.FindIndex(x => elevation.AlmostEqual(x, silverSpacing));
-                if(index == -1)
+                if (index == -1)
                 {
                     elevations.Add(elevation);
                 }
@@ -481,7 +482,7 @@ namespace SAM.Analytical
 
             elevations.Sort();
             List<Architectural.Level> levels = new List<Architectural.Level>();
-            for(int i =0; i < elevations.Count; i++)
+            for (int i = 0; i < elevations.Count; i++)
             {
                 levels.Add(new Architectural.Level("Level " + i.ToString(), elevations[i]));
             }
@@ -550,7 +551,7 @@ namespace SAM.Analytical
                         continue;
 
                     Space space_Temp = new Space(space);
-                    if(!double.IsNaN(volume_Shell))
+                    if (!double.IsNaN(volume_Shell))
                     {
                         space_Temp.SetValue(SpaceParameter.Volume, volume_Shell);
                     }
@@ -560,7 +561,7 @@ namespace SAM.Analytical
                         space_Temp.SetValue(SpaceParameter.Area, area_Shell);
                     }
 
-                    if(level != null)
+                    if (level != null)
                     {
                         space_Temp.SetValue(SpaceParameter.LevelName, level.Name);
                     }
@@ -664,7 +665,7 @@ namespace SAM.Analytical
 
                             //Panel panel_New_Temp = null;
                             List<Panel> panels_New_Temp = null;
-                            
+
                             if (tuples_Face2D != null && tuples_Face2D.Count != 0)
                             {
                                 tuples_Face2D.Sort((x, y) => y.Item3.CompareTo(x.Item3));
@@ -682,7 +683,7 @@ namespace SAM.Analytical
                             else
                             {
                                 //Find The Closest Panel
-                                
+
                                 Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
                                 List<Tuple<Face2D, Panel, double>> tuples_Face2D_Distance = tuples_Face2D_All.ConvertAll(x => new Tuple<Face2D, Panel, double>(x.Item1, x.Item2, x.Item2.Distance(point3D)));
                                 tuples_Face2D_Distance.RemoveAll(x => x.Item3 > maxDistance);
@@ -703,12 +704,12 @@ namespace SAM.Analytical
                             {
                                 Panel panel_New_Temp = panels_New_Temp[0];
                                 List<Aperture> apertures = null;
-                                for(int i = 1; i < panels_New_Temp.Count;i++)
+                                for (int i = 1; i < panels_New_Temp.Count; i++)
                                 {
                                     List<Aperture> apertures_Temp = panels_New_Temp[i]?.Apertures;
-                                    if(apertures_Temp != null)
+                                    if (apertures_Temp != null)
                                     {
-                                        if(apertures == null)
+                                        if (apertures == null)
                                         {
                                             apertures = new List<Aperture>();
                                         }
@@ -716,7 +717,7 @@ namespace SAM.Analytical
                                         apertures.AddRange(apertures_Temp);
                                     }
                                 }
-                                
+
                                 Guid guid = panel_New_Temp.Guid;
                                 while (result.GetObject<Panel>(guid) != null)
                                     guid = Guid.NewGuid();
@@ -758,7 +759,7 @@ namespace SAM.Analytical
             //Creating Shade Panels
             List<List<Panel>> tuples = Enumerable.Repeat<List<Panel>>(null, panels.Count()).ToList();
 
-            for(int i =0; i < panels.Count(); i++)
+            for (int i = 0; i < panels.Count(); i++)
             //Parallel.For(0, panels.Count(), (int i) =>
             {
                 Panel panel = panels.ElementAt(i);
@@ -829,10 +830,10 @@ namespace SAM.Analytical
                         continue;
 
                     Face3D face3D_New_Snap = face3D_New.Snap(shells, silverSpacing, tolerance_Distance);
-                    if(face3D_New_Snap != null)
+                    if (face3D_New_Snap != null)
                     {
                         face3D_New = face3D_New_Snap;
-                    }    
+                    }
 
                     Panel panel_New = new Panel(guid, panel, face3D_New, null, true, minArea);
                     tuples[i].Add(panel_New);
@@ -861,7 +862,7 @@ namespace SAM.Analytical
                 //for (int i = 0; i < spaceCount; i++)
                 {
                     Space space = spaces_Check[i];
-                    
+
                     Shell shell = result.Shell(space);
 
                     BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
@@ -891,7 +892,7 @@ namespace SAM.Analytical
 
                 foreach (Guid guid in guids)
                 {
-                    if(guid == Guid.Empty)
+                    if (guid == Guid.Empty)
                     {
                         continue;
                     }
@@ -910,7 +911,7 @@ namespace SAM.Analytical
 
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Shell> shells, double elevationGround = 0, double thinnessRatio = 0.001, double minArea = 0.1, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
-            if(shells == null)
+            if (shells == null)
             {
                 return null;
             }
@@ -918,7 +919,7 @@ namespace SAM.Analytical
             shells = shells.Split(silverSpacing, tolerance_Angle, tolerance_Distance);
 
             List<Panel> panels = new List<Panel>();
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
                 List<Panel> panels_Shell = Panels(shell, silverSpacing, tolerance_Distance);
                 if (panels_Shell != null && panels_Shell.Count != 0)
@@ -928,7 +929,7 @@ namespace SAM.Analytical
             }
 
             AdjacencyCluster result = AdjacencyCluster(shells, null, panels, true, true, thinnessRatio, minArea, maxDistance, maxAngle, silverSpacing, tolerance_Distance, tolerance_Angle);
-            if(result != null)
+            if (result != null)
             {
                 result.Cut(elevationGround, null, tolerance_Distance);
                 result.UpdatePanelTypes(elevationGround);
@@ -939,7 +940,7 @@ namespace SAM.Analytical
         }
 
         public static AdjacencyCluster AdjacencyCluster(this IEnumerable<Space> spaces, IEnumerable<Panel> panels, double offset = 0.1, bool addMissingSpaces = false, bool addMissingPanels = false, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
-        {     
+        {
             List<Shell> shells = panels.Shells(offset, maxDistance, tolerance_Distance);
             if (shells == null || shells.Count == 0)
                 return null;
@@ -977,7 +978,7 @@ namespace SAM.Analytical
 
             tuples.Add(new Tuple<double, List<Face2D>>(elevations[0], face2Ds[elevations[0]]));
 
-            for(int i=1; i < elevations.Count - 1; i++)
+            for (int i = 1; i < elevations.Count - 1; i++)
             {
                 double elevation_Top = elevations[i - 1];
                 double elevation_Bottom = elevations[i];
@@ -994,7 +995,7 @@ namespace SAM.Analytical
                     face2Ds_Bottom.ConvertAll(x => x.Edge2Ds).ForEach(x => closed2Ds.AddRange(x));
 
                 List<ISegmentable2D> segmentable2Ds = new List<ISegmentable2D>();
-                foreach(IClosed2D closed2D in closed2Ds)
+                foreach (IClosed2D closed2D in closed2Ds)
                 {
                     ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
                     if (segmentable2D == null)
@@ -1014,7 +1015,7 @@ namespace SAM.Analytical
                 face2Ds_All.AddRange(face2Ds_Bottom);
 
                 List<IClosed2D> internalEdge2Ds = new List<IClosed2D>();
-                foreach(Face2D face2D_New in face2Ds_New)
+                foreach (Face2D face2D_New in face2Ds_New)
                 {
                     List<IClosed2D> internalEdge2Ds_New = face2D_New.InternalEdge2Ds;
                     if (internalEdge2Ds_New == null || internalEdge2Ds_New.Count == 0)
@@ -1086,12 +1087,12 @@ namespace SAM.Analytical
                         result.AddObject(space);
 
                     List<Segment2D> segment2Ds = new List<Segment2D>();
-                    foreach(IClosed2D closed2D in face2D.Edge2Ds)
+                    foreach (IClosed2D closed2D in face2D.Edge2Ds)
                     {
                         ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
-                        if(segmentable2D == null)
+                        if (segmentable2D == null)
                             segmentable2D = closed2D as ISegmentable2D;
-                        
+
                         if (segmentable2D == null)
                             continue;
 
@@ -1113,14 +1114,14 @@ namespace SAM.Analytical
                         Polygon3D polygon3D = Geometry.Spatial.Create.Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] }, tolerance); //new Polygon3D(new Point3D[] { segment3D_Top[0], segment3D_Top[1], segment3D_Bottom[1], segment3D_Bottom[0] });
                         if (polygon3D == null)
                             continue;
-                        
+
                         panel = new Panel(construction_Wall, PanelType.Wall, new Face3D(polygon3D));
 
                         tuples_Point3D.Add(new Tuple<Point3D, Panel, Space>(Geometry.Spatial.Query.Mid(plane_Bottom.Convert(segment2D)), panel, space));
                     }
 
                     List<Face2D> face2Ds_Space_Top = tuple_Top.Item2.FindAll(x => face2D.On(x.GetInternalPoint2D()) || face2D.Inside(x.GetInternalPoint2D()));
-                    foreach(Face2D face2D_Top in face2Ds_Space_Top)
+                    foreach (Face2D face2D_Top in face2Ds_Space_Top)
                     {
                         Face3D face3D_Top = plane_Top.Convert(face2D_Top);
                         if (face3D_Top == null)
@@ -1150,7 +1151,7 @@ namespace SAM.Analytical
                     double area = face2D.GetArea();
                     double height = elevation_Top - elevation_Bottom;
                     double volume = area * height;
-                    
+
                     ParameterSet parameterSet_Space = new ParameterSet(typeof(Space).Assembly);
                     space.Add(parameterSet_Space);
 

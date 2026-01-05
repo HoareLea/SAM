@@ -1,11 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using static System.Runtime.CompilerServices.RuntimeHelpers;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -24,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -113,15 +115,15 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<global::Rhino.Geometry.Brep> breps = new List<global::Rhino.Geometry.Brep>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
                 object @object = objectWrapper?.Value;
-                if(@object == null)
+                if (@object == null)
                 {
                     continue;
                 }
 
-                if(@object is IGH_Goo)
+                if (@object is IGH_Goo)
                 {
                     @object = (@object as dynamic).Value;
                 }
@@ -136,20 +138,20 @@ namespace SAM.Analytical.Grasshopper
                     breps.Add((global::Rhino.Geometry.Brep)@object);
                     continue;
                 }
-                if(@object is global::Rhino.Geometry.Extrusion)
+                if (@object is global::Rhino.Geometry.Extrusion)
                 {
                     global::Rhino.Geometry.Extrusion extrusion = (global::Rhino.Geometry.Extrusion)@object;
                     breps.Add(extrusion.ToBrep(true));
                     continue;
                 }
-               
-                if(@object is global::Rhino.Geometry.Mesh)
+
+                if (@object is global::Rhino.Geometry.Mesh)
                 {
                     global::Rhino.Geometry.Mesh mesh = (global::Rhino.Geometry.Mesh)@object;
-                    if(mesh.IsClosed)
+                    if (mesh.IsClosed)
                     {
                         global::Rhino.Geometry.Brep brep = global::Rhino.Geometry.Brep.CreateFromMesh(mesh, true);
-                        if(brep != null)
+                        if (brep != null)
                         {
                             breps.Add(brep);
                             continue;
@@ -178,9 +180,9 @@ namespace SAM.Analytical.Grasshopper
             foreach (global::Rhino.Geometry.Brep brep in breps)
             {
                 Shell shell = Geometry.Rhino.Convert.ToSAM_Shell(brep);
-                if(shell != null)
+                if (shell != null)
                 {
-                    if(!shell.IsClosed(tolerance * 10))
+                    if (!shell.IsClosed(tolerance * 10))
                     {
                         if (Geometry.Spatial.Query.TryClose(shell, out Shell shell_Closed, silverSpacing, tolerance * 100) && shell_Closed != null)
                         {

@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -70,9 +73,9 @@ namespace SAM.Analytical.Rhino
                 }
 
                 List<Aperture> apertures = panel.Apertures;
-                if(apertures != null)
+                if (apertures != null)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
                         aperture.ToRhino(includeFrame)?.ForEach(x => result.Add(x));
                     }
@@ -86,7 +89,7 @@ namespace SAM.Analytical.Rhino
 
         public static List<Brep> ToRhino(this Aperture aperture, bool includeFrame = false)
         {
-            if(aperture == null)
+            if (aperture == null)
             {
                 return null;
             }
@@ -118,16 +121,16 @@ namespace SAM.Analytical.Rhino
             }
 
             List<Face3D> face3Ds = panel is Panel ? ((Panel)panel).GetFace3Ds(cutApertures) : new List<Face3D>() { panel.Face3D };
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
             List<Brep> result = new List<Brep>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D, tolerance);
-                if(brep == null)
+                if (brep == null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.obscure;
 
@@ -32,19 +35,19 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 Param_Boolean param_Boolean = null;
-                
+
                 GH_SAMParam[] result = new GH_SAMParam[3];
-                
+
                 result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
 
-                param_Boolean = new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item};
+                param_Boolean = new Param_Boolean() { Name = "_duplicateConstructions", NickName = "_duplicateConstructions", Description = "Duplicate Constructions", Access = GH_ParamAccess.item };
                 param_Boolean.PersistentData.Append(new GH_Boolean(true));
                 result[1] = new GH_SAMParam(param_Boolean, ParamVisibility.Binding);
 
                 param_Boolean = new Param_Boolean() { Name = "_duplicateApertureConstructions", NickName = "_duplicateApertureConstructions", Description = "Duplicate Aperture Constructions", Access = GH_ParamAccess.item };
                 param_Boolean.PersistentData.Append(new GH_Boolean(true));
                 result[2] = new GH_SAMParam(param_Boolean, ParamVisibility.Binding);
-                
+
                 return result;
             }
         }
@@ -54,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 GH_SAMParam[] result = new GH_SAMParam[3];
-                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
+                result[0] = new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding);
                 result[1] = new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Constructions", Description = "Modified SAM Analytical Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 result[2] = new GH_SAMParam(new GooApertureConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "Modified SAM Analytical ApertureConstructions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary);
                 return result;

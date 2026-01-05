@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -10,11 +13,11 @@ namespace SAM.Analytical
         private int maxExceedableSummerHours;
 
         public TM59NaturalVentilationResult(
-            string name, 
-            string source, 
-            string reference, 
+            string name,
+            string source,
+            string reference,
             TM52BuildingCategory tM52BuildingCategory,
-            int occupiedHours, 
+            int occupiedHours,
             int maxExceedableHours,
             int summerOccupiedHours,
             int maxExceedableSummerHours,
@@ -29,9 +32,9 @@ namespace SAM.Analytical
         }
 
         public TM59NaturalVentilationResult(
-            Guid guid, 
-            string name, 
-            string source, 
+            Guid guid,
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -17,7 +20,7 @@ namespace SAM.Analytical
         public HeatingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double offTemperature)
             : base(name, fluidSupplyTemperature, fluidReturnTemperature, contactFactor, offTemperature)
         {
- 
+
         }
 
         public HeatingCoil(string name, double fluidSupplyTemperature, double fluidReturnTemperature, double contactFactor, double summerOffTemperature, double winterOffTemperature)

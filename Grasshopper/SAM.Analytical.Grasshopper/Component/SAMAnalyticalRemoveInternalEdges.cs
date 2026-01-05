@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -58,7 +61,7 @@ namespace SAM.Analytical.Grasshopper
             if (!dataAccess.GetData(0, ref sAMObject))
                 return;
 
-            if(sAMObject is Panel)
+            if (sAMObject is Panel)
             {
                 Panel panel = Create.Panel((Panel)sAMObject);
                 panel = Create.Panel(panel.Guid, panel, new Face3D(panel.GetFace3D().GetExternalEdge3D()), null, false);
@@ -94,16 +97,16 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Panel panel in panels_Updated)
                     adjacencyCluster.AddObject(panel);
             }
-            
-            if(analyticalModel == null && adjacencyCluster == null)
+
+            if (analyticalModel == null && adjacencyCluster == null)
             {
                 dataAccess.SetData(0, sAMObject);
                 return;
             }
 
-            if(analyticalModel != null)
+            if (analyticalModel != null)
             {
-                if(adjacencyCluster == null)
+                if (adjacencyCluster == null)
                 {
                     dataAccess.SetData(0, sAMObject);
                     return;

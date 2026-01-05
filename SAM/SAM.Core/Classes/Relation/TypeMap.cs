@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core.Attributes;
 using System;
 using System.Collections.Generic;
@@ -16,11 +19,11 @@ namespace SAM.Core
         private List<Tuple<string, string, string, string, string, string>> tuples;
 
         internal TypeMap(TypeMap typeMap)
-            :base(typeMap)
+            : base(typeMap)
         {
             tuples = typeMap?.tuples?.ConvertAll(x => new Tuple<string, string, string, string, string, string>(x.Item1, x.Item2, x.Item3, x.Item4, x.Item5, x.Item6));
         }
-        
+
         internal TypeMap()
         {
             tuples = new List<Tuple<string, string, string, string, string, string>>();
@@ -38,7 +41,7 @@ namespace SAM.Core
                 return false;
 
             bool result = Add(GetId(type_1), GetId(type_2), name_1, name_2, formula_1, formula_2);
-            if(result)
+            if (result)
             {
                 AddType(type_1);
                 AddType(type_2);
@@ -61,7 +64,7 @@ namespace SAM.Core
 
             string name_Temp = @enum.ToString();
             ParameterProperties parameterProperties = ParameterProperties.Get(@enum);
-            if(parameterProperties != null)
+            if (parameterProperties != null)
                 name_Temp = parameterProperties.Name;
 
             if (name_Temp == null)
@@ -74,7 +77,7 @@ namespace SAM.Core
 
             return result;
         }
-        
+
         public bool Add(string id_1, string id_2, string name_1, string name_2, string formula_1 = null, string formula_2 = null)
         {
             if (string.IsNullOrEmpty(id_1) || string.IsNullOrEmpty(id_2) || string.IsNullOrEmpty(name_1) || string.IsNullOrEmpty(name_2))
@@ -208,10 +211,10 @@ namespace SAM.Core
             tuples = new List<Tuple<string, string, string, string, string, string>>();
 
             JArray jArray_Map = jObject.Value<JArray>("Map");
-            if(jArray_Map != null)
+            if (jArray_Map != null)
             {
-                
-                foreach(JArray jArray in jArray_Map)
+
+                foreach (JArray jArray in jArray_Map)
                 {
                     if (jArray.Count < 4)
                         continue;
@@ -231,7 +234,7 @@ namespace SAM.Core
                         tuples.Add(tuple);
                 }
 
- 
+
             }
 
             return true;
@@ -264,7 +267,7 @@ namespace SAM.Core
                 if (!valid)
                     valid = tuple.Item1.Equals(id_1);
 
-                if(!valid)
+                if (!valid)
                     valid = tuple.Item1.Equals(string.Format("::{0}", id_1));
 
                 if (!valid)
@@ -310,7 +313,7 @@ namespace SAM.Core
                 return null;
 
             List<string> result = new List<string>();
-            foreach(int i in indexes)
+            foreach (int i in indexes)
                 result.Add(index == 1 ? tuples[i].Item3 : tuples[i].Item4);
 
             return result;
@@ -360,7 +363,7 @@ namespace SAM.Core
 
             result = Type.GetType(id.Substring(2), false);
 
-            if(includeInDictionary)
+            if (includeInDictionary)
             {
                 if (dictionary == null)
                     dictionary = new Dictionary<string, Type>();

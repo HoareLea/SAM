@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Drawing;
 
 namespace SAM.Geometry.Object
@@ -6,10 +9,10 @@ namespace SAM.Geometry.Object
     public class TextAppearance : Appearance
     {
         public double Height { get; set; }
-        
+
         public string FontFamilyName { get; set; }
 
-        public TextAppearance(Color color, double height, string fontFamilyName) 
+        public TextAppearance(Color color, double height, string fontFamilyName)
             : base(color)
         {
             Height = height;
@@ -17,15 +20,15 @@ namespace SAM.Geometry.Object
         }
 
         public TextAppearance(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public TextAppearance(TextAppearance textAppearance)
-            :base(textAppearance)
+            : base(textAppearance)
         {
-            if(textAppearance != null)
+            if (textAppearance != null)
             {
                 Height = textAppearance.Height;
                 FontFamilyName = textAppearance.FontFamilyName;
@@ -35,7 +38,7 @@ namespace SAM.Geometry.Object
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }
@@ -45,7 +48,7 @@ namespace SAM.Geometry.Object
                 jObject.Add("Height", Height);
             }
 
-            if(!string.IsNullOrEmpty(FontFamilyName))
+            if (!string.IsNullOrEmpty(FontFamilyName))
             {
                 jObject.Add("FontFamilyName", FontFamilyName);
             }
@@ -55,7 +58,7 @@ namespace SAM.Geometry.Object
 
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }

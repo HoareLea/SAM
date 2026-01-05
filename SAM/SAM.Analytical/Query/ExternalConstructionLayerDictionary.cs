@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -12,7 +15,7 @@ namespace SAM.Analytical
                 return null;
 
             Dictionary<Panel, ConstructionLayer> result = new Dictionary<Panel, ConstructionLayer>();
-            foreach(IPanel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 Panel panel_Temp = adjacencyCluster.GetObject<Panel>(panel.Guid);
                 if (panel_Temp == null)

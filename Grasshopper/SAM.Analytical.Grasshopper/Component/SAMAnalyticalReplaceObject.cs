@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -41,8 +44,8 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_existingObjects", NickName = "_existingObjects", Description = "SAM Objects", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_newObjects", NickName = "_newObjects", Description = "SAM Objects", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_existingObjects", NickName = "_existingObjects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMObjectParam() { Name = "_newObjects", NickName = "_newObjects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical Construction Manager", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
@@ -51,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
                 @boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Connect a boolean toggle to run.", Access = GH_ParamAccess.item };
                 @boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(@boolean, ParamVisibility.Binding));
-                
+
                 return result.ToArray();
             }
         }
@@ -75,7 +78,7 @@ namespace SAM.Analytical.Grasshopper
 
             bool run = false;
             index = Params.IndexOfInputParam("_run");
-            if(index != -1 )
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref run);
             }
@@ -111,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(sAMObject_Existing.Count != sAMObject_New.Count)
+            if (sAMObject_Existing.Count != sAMObject_New.Count)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -124,13 +127,13 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 constructionManager = Analytical.Query.DefaultConstructionManager();
             }
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
             }
@@ -139,27 +142,27 @@ namespace SAM.Analytical.Grasshopper
 
             ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
-            for(int i =0; i < sAMObject_Existing.Count; i++)
+            for (int i = 0; i < sAMObject_Existing.Count; i++)
             {
                 IJSAMObject jSAMObject_Existing = sAMObject_Existing[i];
                 IJSAMObject jSAMObject_New = sAMObject_New[i];
-                if(sAMObject_Existing == null || sAMObject_New == null)
+                if (sAMObject_Existing == null || sAMObject_New == null)
                 {
                     continue;
                 }
 
-                if(jSAMObject_Existing is ApertureConstruction)
+                if (jSAMObject_Existing is ApertureConstruction)
                 {
                     bool replaced = Analytical.Modify.Replace(adjacencyCluster, (ApertureConstruction)jSAMObject_Existing, jSAMObject_New as ApertureConstruction);
-                    if(replaced)
+                    if (replaced)
                     {
                         ApertureConstruction apertureConstruction = (ApertureConstruction)jSAMObject_New;
                         List<IMaterial> materials = constructionManager.GetMaterials<IMaterial>(apertureConstruction);
-                        if(materials != null)
+                        if (materials != null)
                         {
-                            foreach(IMaterial material in materials)
+                            foreach (IMaterial material in materials)
                             {
-                                if(!materialLibrary.Contains(material))
+                                if (!materialLibrary.Contains(material))
                                 {
                                     materialLibrary.Add(material);
                                 }
@@ -167,7 +170,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         List<string> names = materialLibrary.MissingMaterialsNames(apertureConstruction);
-                        if(names != null && names.Count > 0)
+                        if (names != null && names.Count > 0)
                         {
                             AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Fllowing materials are missing: {0}", string.Join(", ", names)));
                         }

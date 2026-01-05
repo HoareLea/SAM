@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -193,7 +196,7 @@ namespace SAM.Analytical
             {
                 gaps = Array.Empty<Gap>();
             }
-            
+
             if (gaps.Count != System.Math.Max(0, layers.Count - 1))
             {
                 throw new ArgumentException("gaps.Count must equal layers.Count - 1.");

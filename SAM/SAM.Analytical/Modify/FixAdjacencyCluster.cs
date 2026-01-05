@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -20,7 +23,7 @@ namespace SAM.Analytical
                 return;
 
             Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> dictionary = new Dictionary<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>>();
-            foreach(Panel panel in panels_AdjacencyCluster)
+            foreach (Panel panel in panels_AdjacencyCluster)
             {
                 if (panel == null)
                     continue;
@@ -34,13 +37,13 @@ namespace SAM.Analytical
                     continue;
 
                 PanelGroup panelGroup = panel.PanelGroup;
-                if(!dictionary.TryGetValue(panelGroup, out Dictionary<string, Tuple<Construction, List<Panel>>> dictionary_Temp))
+                if (!dictionary.TryGetValue(panelGroup, out Dictionary<string, Tuple<Construction, List<Panel>>> dictionary_Temp))
                 {
                     dictionary_Temp = new Dictionary<string, Tuple<Construction, List<Panel>>>();
                     dictionary[panelGroup] = dictionary_Temp;
                 }
 
-                if(!dictionary_Temp.TryGetValue(name, out Tuple<Construction, List<Panel>> tuple))
+                if (!dictionary_Temp.TryGetValue(name, out Tuple<Construction, List<Panel>> tuple))
                 {
                     tuple = new Tuple<Construction, List<Panel>>(construction, new List<Panel>());
                     dictionary_Temp[name] = tuple;
@@ -55,18 +58,18 @@ namespace SAM.Analytical
 
             panels = new List<Panel>();
             prefixes_Panel = new List<string>();
-            
+
             apertures = new List<Aperture>();
             prefixes_Aperture = new List<string>();
 
             foreach (KeyValuePair<PanelGroup, Dictionary<string, Tuple<Construction, List<Panel>>>> keyValuePair_PanelGroup in dictionary)
             {
-                foreach(KeyValuePair<string, Tuple<Construction, List<Panel>>> keyValuePair_Name in keyValuePair_PanelGroup.Value)
+                foreach (KeyValuePair<string, Tuple<Construction, List<Panel>>> keyValuePair_Name in keyValuePair_PanelGroup.Value)
                 {
                     Construction construction = keyValuePair_Name.Value.Item1;
 
                     List<Panel> panels_Temp = keyValuePair_Name.Value.Item2;
-                    for(int i =0; i < panels_Temp.Count; i++)
+                    for (int i = 0; i < panels_Temp.Count; i++)
                     {
                         panels_Temp[i] = new Panel(panels_Temp[i], construction);
                         adjacencyCluster.AddObject(panels_Temp[i]);
@@ -75,10 +78,10 @@ namespace SAM.Analytical
                     List<Panel> panels_Temp_External = panels_Temp?.FindAll(x => x.PanelGroup == PanelGroup.Floor || x.PanelGroup == PanelGroup.Roof);
                     if (panels_Temp_External != null && panels_Temp_External.Count != 0)
                     {
-                        foreach(Panel panel in panels_Temp_External)
+                        foreach (Panel panel in panels_Temp_External)
                         {
                             List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                            if(spaces== null || spaces.Count == 0)
+                            if (spaces == null || spaces.Count == 0)
                             {
                                 adjacencyCluster.AddObject(new Panel(panel, PanelType.Shade));
                             }
@@ -97,7 +100,7 @@ namespace SAM.Analytical
                         Panel panel = panels_Temp[i];
                         Panel panel_New = null;
 
-                        List <Space> spaces = adjacencyCluster.GetSpaces(panel);
+                        List<Space> spaces = adjacencyCluster.GetSpaces(panel);
                         if (spaces == null || spaces.Count == 0)
                         {
                             panel_New = new Panel(panel, PanelType.Shade);
@@ -107,7 +110,7 @@ namespace SAM.Analytical
 
                         bool external = spaces.Count == 1;
                         PanelType panelType = panel.PanelType;
-                        if(panelType == PanelType.Wall)
+                        if (panelType == PanelType.Wall)
                         {
                             panelType = external ? PanelType.WallExternal : PanelType.WallInternal;
                             panel = new Panel(panel, panelType);
@@ -161,7 +164,7 @@ namespace SAM.Analytical
                                 name_New = "SIM_INT_SLD_Core" + name_Panel.Substring(("SIM_EXT_SLD").Length);
                                 prefix = "SIM_INT_SLD_Core";
                             }
-                                
+
                         }
 
                         if (string.IsNullOrWhiteSpace(name_New))
@@ -170,7 +173,7 @@ namespace SAM.Analytical
                         if (!dictionary_Construction.TryGetValue(name_New, out Construction construction_New) || construction_New == null)
                         {
                             construction_New = new Construction(construction, name_New);
-                        }  
+                        }
 
                         panel_New = new Panel(panel, construction_New);
                         if (external)
@@ -179,19 +182,19 @@ namespace SAM.Analytical
                             panel_New = new Panel(panel_New, PanelType.WallInternal);
 
                         System.Drawing.Color color = Query.Color(panel_New.PanelType);
-                        if(color != System.Drawing.Color.Empty)
+                        if (color != System.Drawing.Color.Empty)
                         {
                             panel_New.SetValue(PanelParameter.Color, color);
                             construction_New.SetValue(ConstructionParameter.Color, color);
                         }
 
                         List<Aperture> apertures_Panel = panel_New.Apertures;
-                        if(apertures_Panel != null && apertures_Panel.Count != 0)
+                        if (apertures_Panel != null && apertures_Panel.Count != 0)
                         {
-                            foreach(Aperture aperture in apertures_Panel)
+                            foreach (Aperture aperture in apertures_Panel)
                             {
                                 ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                                if(apertureConstruction != null)
+                                if (apertureConstruction != null)
                                 {
                                     string name_Aperture = apertureConstruction.Name;
                                     //string prefix_Aperture = null;
@@ -231,11 +234,11 @@ namespace SAM.Analytical
                                         apertureConstruction_New = new ApertureConstruction(apertureConstruction, name_New);
                                     }
 
-                                    if(apertureConstruction_New.ApertureType == ApertureType.Door)
+                                    if (apertureConstruction_New.ApertureType == ApertureType.Door)
                                     {
                                         color = Query.Color(apertureConstruction_New.ApertureType, AperturePart.Frame);
                                     }
-                                    else if(apertureConstruction_New.ApertureType == ApertureType.Window)
+                                    else if (apertureConstruction_New.ApertureType == ApertureType.Window)
                                     {
                                         color = Query.Color(apertureConstruction_New.ApertureType, AperturePart.Pane);
                                     }

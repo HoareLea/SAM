@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -12,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new ("5324c64c-7cd4-4298-bcab-d780275c278a");
+        public override Guid ComponentGuid => new("5324c64c-7cd4-4298-bcab-d780275c278a");
 
         /// <summary>
         /// The latest version of this component
@@ -45,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_analyticalModels", NickName = "_analyticalModels", Description = "Analytical Models", Access = GH_ParamAccess.list };
+                GooAnalyticalModelParam analyticalModelParam = new() { Name = "_analyticalModels", NickName = "_analyticalModels", Description = "Analytical Models", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 Param_FilePath param_FilePath = new Param_FilePath
@@ -105,7 +108,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<string> lines = Analytical.Convert.ToDesignExplorer(analyticalModels);
 
-            if(lines != null && !string.IsNullOrWhiteSpace(path))
+            if (lines != null && !string.IsNullOrWhiteSpace(path))
             {
                 System.IO.File.WriteAllLines(path, lines);
             }

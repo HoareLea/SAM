@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using System;
 
@@ -23,7 +26,7 @@ namespace SAM.Core
         {
 
         }
-        
+
         public LiquidMaterial(Guid guid, string name)
             : base(guid, name)
         {
@@ -42,7 +45,7 @@ namespace SAM.Core
         }
 
         public LiquidMaterial(string name, Guid guid, LiquidMaterial liquidMaterial, string displayName, string description)
-            :base(name, guid, liquidMaterial, displayName, description)
+            : base(name, guid, liquidMaterial, displayName, description)
         {
 
         }

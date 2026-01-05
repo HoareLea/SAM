@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -68,17 +71,17 @@ namespace SAM.Analytical.Grasshopper
 
 
             SAMObject sAMObject = null;
-            if(!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             AdjacencyCluster adjacencyCluster = sAMObject as AdjacencyCluster;
-            if(adjacencyCluster == null && sAMObject is AnalyticalModel)
+            if (adjacencyCluster == null && sAMObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -88,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
             foreach (Space space in spaces)
                 adjacencyCluster.UpdateSpace(space);
 
-            if(sAMObject is AnalyticalModel)
+            if (sAMObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = ((AnalyticalModel)sAMObject);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);

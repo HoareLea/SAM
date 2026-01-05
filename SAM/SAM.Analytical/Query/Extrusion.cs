@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -56,9 +59,9 @@ namespace SAM.Analytical
 
                     vector3D_Extrusion = normal * thickness;
                     face3D_Extrusion = face3D;
-                    
+
                     break;
-                
+
                 case Analytical.PanelGroup.Roof:
 
                     if (!normal.SameHalf(Vector3D.WorldZ))
@@ -68,7 +71,7 @@ namespace SAM.Analytical
                     face3D_Extrusion = face3D;
 
                     break;
-                
+
                 default:
 
                     bool rectangular = Geometry.Planar.Query.Rectangular(externalEdge2D, out Geometry.Planar.Rectangle2D rectangle2D, tolernace);

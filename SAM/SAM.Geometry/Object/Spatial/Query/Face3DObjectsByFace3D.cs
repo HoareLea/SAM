@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,20 +18,20 @@ namespace SAM.Geometry.Object.Spatial
         public static List<T> Face3DObjectsByFace3D<T>(this IEnumerable<T> face3DObjects, Face3D face3D, double areaFactor, double maxDistance, out List<double> intersectionAreas, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T : IFace3DObject
         {
             intersectionAreas = null;
-            
+
             if (face3DObjects == null || face3D == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
@@ -36,13 +39,13 @@ namespace SAM.Geometry.Object.Spatial
             Geometry.Planar.Face2D face2D = plane.Convert(face3D);
 
             double area = face2D.GetArea();
-            if(area < tolerance_Distance)
+            if (area < tolerance_Distance)
             {
                 return null;
             }
 
-            List<Tuple<T, double>> tuples = new List<Tuple<T, double>>(); 
-            foreach(T face3DObject in face3DObjects)
+            List<Tuple<T, double>> tuples = new List<Tuple<T, double>>();
+            foreach (T face3DObject in face3DObjects)
             {
                 Face3D face3D_Face3DObject = face3DObject?.Face3D;
                 if (face3D_Face3DObject == null)
@@ -51,47 +54,47 @@ namespace SAM.Geometry.Object.Spatial
                 }
 
                 Plane plane_Face3DObject = face3D_Face3DObject.GetPlane();
-                if(plane_Face3DObject == null)
+                if (plane_Face3DObject == null)
                 {
                     continue;
                 }
 
-                if(plane.Normal.SmallestAngle(plane_Face3DObject.Normal) > tolerance_Angle)
+                if (plane.Normal.SmallestAngle(plane_Face3DObject.Normal) > tolerance_Angle)
                 {
                     continue;
                 }
 
                 BoundingBox3D boundingBox3D_Panel = face3D_Face3DObject.GetBoundingBox();
-                if(boundingBox3D_Panel == null)
+                if (boundingBox3D_Panel == null)
                 {
                     continue;
                 }
 
-                if(!boundingBox3D.InRange(boundingBox3D_Panel, maxDistance))
+                if (!boundingBox3D.InRange(boundingBox3D_Panel, maxDistance))
                 {
                     continue;
                 }
 
                 double distance = face3D.Distance(face3D_Face3DObject, tolerance_Angle, tolerance_Distance);
-                if(distance > maxDistance)
+                if (distance > maxDistance)
                 {
                     continue;
                 }
 
                 Geometry.Planar.Face2D face2D_Panel = plane.Convert(plane.Project(face3D_Face3DObject));
-                if(face3D_Face3DObject == null)
+                if (face3D_Face3DObject == null)
                 {
                     continue;
                 }
 
                 List<Geometry.Planar.Face2D> face2Ds = Geometry.Planar.Query.Intersection(face2D, face2D_Panel, tolerance_Distance);
-                if(face2Ds == null || face2Ds.Count == 0)
+                if (face2Ds == null || face2Ds.Count == 0)
                 {
                     continue;
                 }
 
                 double area_Intersection = face2Ds.ConvertAll(x => x.GetArea()).Sum();
-                if(area_Intersection / area < areaFactor)
+                if (area_Intersection / area < areaFactor)
                 {
                     continue;
                 }
@@ -100,7 +103,7 @@ namespace SAM.Geometry.Object.Spatial
 
             }
 
-            if(tuples == null || tuples.Count == 0)
+            if (tuples == null || tuples.Count == 0)
             {
                 return null;
             }

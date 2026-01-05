@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
@@ -75,7 +78,7 @@ namespace SAM.Geometry.Planar
             }
 
             IClosed2D externalEdge2D = face2D.ExternalEdge2D;
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return null;
             }
@@ -83,7 +86,7 @@ namespace SAM.Geometry.Planar
             List<IClosed2D> internalEdge2Ds = face2D.InternalEdge2Ds;
 
             List<IClosed2D> edge2Ds = new List<IClosed2D>() { externalEdge2D };
-            if(internalEdge2Ds != null)
+            if (internalEdge2Ds != null)
             {
                 edge2Ds.AddRange(internalEdge2Ds);
             }
@@ -140,7 +143,7 @@ namespace SAM.Geometry.Planar
                 }
 
                 double area = polygon2D.GetArea();
-                if(double.IsNaN(area))
+                if (double.IsNaN(area))
                 {
                     continue;
                 }
@@ -167,7 +170,7 @@ namespace SAM.Geometry.Planar
                 }
 
                 tuples_Temp.Sort((x, y) => y.Item3.CompareTo(x.Item3));
-                if(tuples_Temp[0] == tuple)
+                if (tuples_Temp[0] == tuple)
                 {
                     externalEdges_New.Add(tuple.Item1);
                     continue;
@@ -188,7 +191,7 @@ namespace SAM.Geometry.Planar
                 List<Face2D> face2Ds_Fixed = new List<Face2D>();
 
                 List<Face2D> face2Ds_Fixed_Temp = face2D_New.FixEdges(tolerance);
-                if(face2Ds_Fixed_Temp == null || face2Ds_Fixed_Temp.Count == 0)
+                if (face2Ds_Fixed_Temp == null || face2Ds_Fixed_Temp.Count == 0)
                 {
                     face2Ds_Fixed.Add(face2D_New);
                 }
@@ -197,15 +200,15 @@ namespace SAM.Geometry.Planar
                     face2Ds_Fixed.AddRange(face2Ds_Fixed_Temp);
                 }
 
-                foreach(Face2D face2D_Fixed in face2Ds_Fixed)
+                foreach (Face2D face2D_Fixed in face2Ds_Fixed)
                 {
                     Point2D point2D = face2D_Fixed?.InternalPoint2D(tolerance);
-                    if(point2D == null)
+                    if (point2D == null)
                     {
                         continue;
                     }
 
-                    if(!face2D.Inside(point2D, tolerance))
+                    if (!face2D.Inside(point2D, tolerance))
                     {
                         continue;
                     }
@@ -224,16 +227,16 @@ namespace SAM.Geometry.Planar
 
             Polygon2D result = new Polygon2D(polygon2D);
 
-            List<Point2D> point2Ds =  polygon2D.Intersections(segmentable2Ds, tolerance);
+            List<Point2D> point2Ds = polygon2D.Intersections(segmentable2Ds, tolerance);
             if (point2Ds == null || point2Ds.Count == 0)
                 return result;
-            
-            foreach(Point2D point2D in point2Ds)
+
+            foreach (Point2D point2D in point2Ds)
                 result.InsertClosest(point2D, tolerance);
 
             return result;
         }
-    
+
         public static Polyline2D Cut(this Polyline2D polyline2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Tolerance.Distance)
         {
             if (polyline2D == null || segmentable2Ds == null)

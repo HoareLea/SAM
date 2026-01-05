@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Math
@@ -52,7 +55,7 @@ namespace SAM.Math
             {
                 xArray = bilinearInterpolation.xArray?.Clone<double>();
                 yArray = bilinearInterpolation.yArray?.Clone<double>();
-                if(bilinearInterpolation.values != null)
+                if (bilinearInterpolation.values != null)
                 {
                     values = new double[bilinearInterpolation.values.GetLength(0), bilinearInterpolation.values.GetLength(1)];
                     for (int i = 0; i < bilinearInterpolation.values.GetLength(0); i++)
@@ -63,7 +66,7 @@ namespace SAM.Math
                         }
                     }
                 }
-                
+
             }
         }
 
@@ -114,7 +117,7 @@ namespace SAM.Math
         public bool Load(string path, string separator = "\t")
         {
             double[,] data = Core.Create.Array(path, separator, true, double.NaN);
-            if(data == null)
+            if (data == null)
             {
                 return false;
             }
@@ -230,7 +233,7 @@ namespace SAM.Math
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(xArray != null)
+            if (xArray != null)
             {
                 jObject.Add("XArray", new JArray(xArray));
             }
@@ -240,7 +243,7 @@ namespace SAM.Math
                 jObject.Add("YArray", new JArray(yArray));
             }
 
-            if(values != null)
+            if (values != null)
             {
                 JArray jArray = Core.Query.JArray(values);
                 jObject.Add("Values", jArray);

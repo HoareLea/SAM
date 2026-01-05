@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -63,11 +66,11 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.GetDataList(0, panelTypeStrings);
 
             List<PanelType> panelTypes = null;
-            if(panelTypeStrings != null && panelTypeStrings.Count > 0)
+            if (panelTypeStrings != null && panelTypeStrings.Count > 0)
             {
                 panelTypes = new List<PanelType>();
 
-                foreach(string panelTypeString in panelTypeStrings)
+                foreach (string panelTypeString in panelTypeStrings)
                 {
                     PanelType panelType;
                     if (Enum.TryParse(panelTypeString, out panelType))
@@ -81,7 +84,7 @@ namespace SAM.Analytical.Grasshopper
 
             panelTypes?.RemoveAll(x => x == PanelType.Undefined || x == PanelType.Air);
 
-            if(panelTypes == null || panelTypes.Count == 0)
+            if (panelTypes == null || panelTypes.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;

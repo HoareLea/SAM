@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Drawing;
 
 namespace SAM.Geometry.Object
@@ -7,22 +10,22 @@ namespace SAM.Geometry.Object
     {
         public double Thickness { get; set; }
 
-        public PointAppearance(Color color, double thickness) 
+        public PointAppearance(Color color, double thickness)
             : base(color)
         {
             Thickness = thickness;
         }
 
         public PointAppearance(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
 
         public PointAppearance(PointAppearance pointAppearance)
-            :base(pointAppearance)
+            : base(pointAppearance)
         {
-            if(pointAppearance != null)
+            if (pointAppearance != null)
             {
                 Thickness = pointAppearance.Thickness;
             }
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Object
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }
@@ -46,7 +49,7 @@ namespace SAM.Geometry.Object
 
         public override bool FromJObject(JObject jObject)
         {
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }

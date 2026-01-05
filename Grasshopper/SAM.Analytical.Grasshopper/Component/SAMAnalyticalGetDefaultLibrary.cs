@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -42,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -84,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
 
                 Menu_AppendItem(menu, name, Menu_Changed, Core.Convert.ToBitmap(Resources.SAM3), true, @enum.ToString() == value).Tag = @enum;
             }
-                
+
         }
 
         private void Menu_Changed(object sender, EventArgs e)
@@ -133,21 +136,21 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             object @object = null;
-            foreach(Enum @enum in enums)
+            foreach (Enum @enum in enums)
             {
-                if(@enum.ToString().Equals(value))
+                if (@enum.ToString().Equals(value))
                 {
                     @object = @enum;
                     break;
                 }
             }
 
-            if(@object == null)
+            if (@object == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
+
             ISAMLibrary sAMLibrary = ActiveSetting.Setting.GetValue<ISAMLibrary>((Enum)@object);
 
             index = Params.IndexOfOutputParam("Library");
@@ -157,12 +160,12 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("Objects");
             if (index != -1)
             {
-                if(sAMLibrary.TryGetObjects(out List<IJSAMObject> jSAMObjects))
+                if (sAMLibrary.TryGetObjects(out List<IJSAMObject> jSAMObjects))
                 {
                     dataAccess.SetDataList(index, jSAMObjects);
                 }
             }
-                
+
         }
     }
 }

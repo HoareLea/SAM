@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -49,11 +52,11 @@ namespace SAM.Core
             }
 
             LogRecord result = logRecord.Clone();
-            if(result != null)
+            if (result != null)
             {
                 logRecords.Add(result);
             }
-            
+
 
             return result;
         }
@@ -75,7 +78,7 @@ namespace SAM.Core
             {
                 if (logRecord == null)
                     continue;
-                
+
                 LogRecord logRecord_New = logRecord.Clone();
                 if (logRecord_New == null)
                     continue;
@@ -99,7 +102,7 @@ namespace SAM.Core
             logRecords = new List<LogRecord>();
 
             JArray jArray = jObject.Value<JArray>("LogRecords");
-            if(jArray != null)
+            if (jArray != null)
             {
                 foreach (JObject jObject_Temp in jArray)
                     logRecords.Add(new LogRecord(jObject_Temp));
@@ -145,7 +148,7 @@ namespace SAM.Core
             {
                 System.IO.File.AppendAllText(path, ToString() + Environment.NewLine);
             }
-            catch(Exception)
+            catch (Exception)
             {
                 return false;
             }

@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
@@ -81,7 +84,7 @@ namespace SAM.Math.Grasshopper
         {
             if (Value == null)
                 return typeof(Matrix).Name;
-            
+
             return Value?.GetType().Name;
         }
 
@@ -158,7 +161,7 @@ namespace SAM.Math.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("79fbe851-272a-4c4e-8d0a-6033eed12102");
 
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 

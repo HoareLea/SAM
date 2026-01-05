@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -23,7 +26,7 @@ namespace SAM.Analytical
         public ApertureCaseData(ApertureCaseData apertureCaseData)
             : base(apertureCaseData)
         {
-            if(apertureCaseData != null)
+            if (apertureCaseData != null)
             {
                 ratios = apertureCaseData.Ratios;
             }
@@ -31,25 +34,25 @@ namespace SAM.Analytical
 
         public List<double> Ratios
         {
-            get 
-            { 
-                return ratios?.ToList(); 
+            get
+            {
+                return ratios?.ToList();
             }
         }
 
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Ratios"))
+            if (jObject.ContainsKey("Ratios"))
             {
                 ratios = [];
                 JArray jArray = jObject.Value<JArray>("Ratios");
-                foreach(double value in jArray)
+                foreach (double value in jArray)
                 {
                     ratios.Add(value);
                 }
@@ -61,12 +64,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result is null)
+            if (result is null)
             {
                 return result;
             }
 
-            if(ratios != null)
+            if (ratios != null)
             {
                 result.Add("Rations", new JArray(ratios));
             }

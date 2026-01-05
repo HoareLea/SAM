@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -15,7 +18,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Tuple<BoundingBox2D, Face2D>> tuples = new List<Tuple<BoundingBox2D, Face2D>>();
-            foreach(Face2D face2D in face2Ds_Union)
+            foreach (Face2D face2D in face2Ds_Union)
             {
                 BoundingBox2D boundingBox2D = face2D?.GetBoundingBox();
                 if (boundingBox2D == null)
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Planar
                 if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                     continue;
 
-                foreach(IClosed2D closed2D in internalEdge2Ds)
+                foreach (IClosed2D closed2D in internalEdge2Ds)
                 {
                     BoundingBox2D boundingBox2D = closed2D?.GetBoundingBox(tolerance);
                     if (boundingBox2D == null)

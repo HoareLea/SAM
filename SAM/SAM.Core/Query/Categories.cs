@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -6,7 +9,7 @@ namespace SAM.Core
     {
         public static List<Category> SubCategories(this Category category)
         {
-            if(category == null)
+            if (category == null)
             {
                 return null;
             }
@@ -14,13 +17,13 @@ namespace SAM.Core
             List<Category> result = new List<Category>();
 
             Category subCategory = category.SubCategory;
-            if(subCategory == null)
+            if (subCategory == null)
             {
                 return result;
             }
 
             List<Category> subCategories = SubCategories(subCategory);
-            if(subCategories != null)
+            if (subCategories != null)
             {
                 result.AddRange(subCategories);
             }

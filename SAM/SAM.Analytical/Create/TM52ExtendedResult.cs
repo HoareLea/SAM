@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
         public static TM52ExtendedResult TM52ExtendedResult(TM52ExtendedResult tM52ExtendedResult, int startIndex, int endIndex)
         {
-            if(tM52ExtendedResult == null || startIndex > endIndex)
+            if (tM52ExtendedResult == null || startIndex > endIndex)
             {
                 return null;
             }
@@ -37,7 +40,7 @@ namespace SAM.Analytical
             IndexedDoubles minAcceptableTemperatures = new IndexedDoubles();
             IndexedDoubles maxAcceptableTemperatures = new IndexedDoubles();
             IndexedDoubles operativeTemperatures = new IndexedDoubles();
-            foreach(int hourIndex in hourIndexes)
+            foreach (int hourIndex in hourIndexes)
             {
                 if (occupiedHourIndices_Old.Contains(hourIndex))
                 {

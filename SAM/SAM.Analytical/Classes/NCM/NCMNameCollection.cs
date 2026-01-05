@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections;
 using System.Collections.Generic;
@@ -16,7 +19,7 @@ namespace SAM.Analytical
 
         public NCMNameCollection(IEnumerable<NCMName> nCMNames)
         {
-            if(nCMNames != null)
+            if (nCMNames != null)
             {
                 this.nCMNames = new List<NCMName>(nCMNames);
             }
@@ -29,7 +32,7 @@ namespace SAM.Analytical
 
         public bool Add(NCMName nCMName)
         {
-            if(nCMName == null)
+            if (nCMName == null)
             {
                 return false;
             }
@@ -40,19 +43,19 @@ namespace SAM.Analytical
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
             nCMNames = new List<NCMName>();
 
-            if(jObject.ContainsKey("NCMNames"))
+            if (jObject.ContainsKey("NCMNames"))
             {
                 JArray jArray = jObject.Value<JArray>("NCMNames");
-                foreach(JObject jObject_NCMName in jArray)
+                foreach (JObject jObject_NCMName in jArray)
                 {
-                    if(jObject_NCMName == null)
+                    if (jObject_NCMName == null)
                     {
                         continue;
                     }
@@ -75,12 +78,12 @@ namespace SAM.Analytical
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(nCMNames != null)
+            if (nCMNames != null)
             {
                 JArray jArray = new JArray();
-                foreach(NCMName nCMName in nCMNames)
+                foreach (NCMName nCMName in nCMNames)
                 {
-                    if(nCMName == null)
+                    if (nCMName == null)
                     {
                         continue;
                     }

@@ -1,10 +1,13 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
     public static partial class Create
     {
-        public static Face2D Face2D(this IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, EdgeOrientationMethod edgeOrientationMethod= EdgeOrientationMethod.Opposite)
+        public static Face2D Face2D(this IClosed2D externalEdge, IEnumerable<IClosed2D> internalEdges, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite)
         {
             return Planar.Face2D.Create(externalEdge, internalEdges, edgeOrientationMethod);
         }

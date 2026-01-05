@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Rhino
         //In case of Non planar brep we mesh it and then convert to brep then merge cooplanar  and then create ISAMGeometry
         public static List<ISAMGeometry3D> ToSAM(this Brep brep, bool simplify = true, bool orinetNormals = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(brep == null)
+            if (brep == null)
             {
                 return null;
             }
@@ -29,11 +32,11 @@ namespace SAM.Geometry.Rhino
 
             if (brepFaces != null && brepFaces.Count != 0)
             {
-                foreach(BrepFace brepFace in brepFaces)
+                foreach (BrepFace brepFace in brepFaces)
                 {
                     Mesh mesh = Mesh.CreateFromSurface(brepFace.UnderlyingSurface(), ActiveSetting.GetMeshingParameters());
                     Brep brep_Mesh = Brep.CreateFromMesh(mesh, true);
-                    if(brep_Mesh != null)
+                    if (brep_Mesh != null)
                     {
                         brep_Mesh.MergeCoplanarFaces(unitScale * tolerance);
 
@@ -43,7 +46,7 @@ namespace SAM.Geometry.Rhino
                 }
             }
 
-            
+
             List<Face3D> face3Ds = [];
             foreach (BrepFace brepFace in brepFaces_Planar)
             {
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Rhino
                     plane = plane_BrepFace.ToSAM();
 
                     Vector3D normal = brepFace.NormalAt(0.5, 0.5).ToSAM();
-                    if(normal != null)
+                    if (normal != null)
                     {
                         if (!plane.Normal.SameHalf(normal))
                         {
@@ -61,7 +64,7 @@ namespace SAM.Geometry.Rhino
                         }
                     }
                 }
-                
+
                 List<IClosedPlanar3D> closedPlanar3Ds = [];
                 foreach (BrepLoop brepLoop in brepFace.Loops)
                 {
@@ -69,7 +72,7 @@ namespace SAM.Geometry.Rhino
                     if (geometry3D is Polycurve3D)
                     {
                         List<Point3D> point3Ds = ((Polycurve3D)geometry3D).Explode().ConvertAll(x => x.GetStart());
-                        if(plane == null)
+                        if (plane == null)
                         {
                             PlaneFitResult planeFitResult = global::Rhino.Geometry.Plane.FitPlaneToPoints(point3Ds.ConvertAll(x => x.ToRhino()), out global::Rhino.Geometry.Plane plane_Rhino);
                             if (planeFitResult != PlaneFitResult.Failure && plane_Rhino != null)
@@ -83,11 +86,11 @@ namespace SAM.Geometry.Rhino
                             geometry3D = new Polygon3D(plane, point3Ds.ConvertAll(x => plane.Convert(plane.Project(x))));
                         }
                     }
-                    else if(geometry3D is Polyline3D)
+                    else if (geometry3D is Polyline3D)
                     {
                         Polyline3D polyline3D = (Polyline3D)geometry3D;
                         List<Point3D> point3Ds = polyline3D.Points;
-                        if(polyline3D.IsClosed())
+                        if (polyline3D.IsClosed())
                         {
                             point3Ds.RemoveAt(point3Ds.Count - 1);
                         }
@@ -117,15 +120,15 @@ namespace SAM.Geometry.Rhino
 
             List<ISAMGeometry3D> result = [];
 
-            if(brep.IsSolid)
+            if (brep.IsSolid)
             {
-                Shell shell = new (face3Ds);
-                if(orinetNormals)
+                Shell shell = new(face3Ds);
+                if (orinetNormals)
                 {
                     shell.OrientNormals();
                 }
 
-                if(brepFaces != null && brepFaces.Count != 0)
+                if (brepFaces != null && brepFaces.Count != 0)
                 {
                     if (!shell.IsClosed(Core.Tolerance.MacroDistance))
                     {

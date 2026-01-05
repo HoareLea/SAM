@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -13,7 +16,7 @@ namespace SAM.Analytical
         {
             if (panels == null)
                 return null;
-            
+
             List<Panel> redundantPanels = new List<Panel>();
 
             if (validatePanelGroup)
@@ -73,7 +76,7 @@ namespace SAM.Analytical
             {
                 result.Remove(redundantPanels);
             }
-                
+
 
             if (mergedPanels != null && mergedPanels.Count != 0)
             {
@@ -118,14 +121,14 @@ namespace SAM.Analytical
                 List<Panel> panels_Offset = new List<Panel>();
                 foreach (Panel panel_Temp in panels_Temp)
                 {
-                    if(validateConstruction)
+                    if (validateConstruction)
                     {
                         Construction construction_Temp = panel_Temp.Construction;
                         Construction construction = panel.Construction;
 
                         if (construction_Temp != null && construction != null)
                         {
-                            if(!(string.IsNullOrEmpty(construction_Temp.Name) && string.IsNullOrEmpty(construction.Name)))
+                            if (!(string.IsNullOrEmpty(construction_Temp.Name) && string.IsNullOrEmpty(construction.Name)))
                             {
                                 if (!construction_Temp.Name.Equals(construction.Name))
                                     continue;

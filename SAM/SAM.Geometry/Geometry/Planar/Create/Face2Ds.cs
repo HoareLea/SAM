@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,16 +37,16 @@ namespace SAM.Geometry.Planar
             return Face2Ds(segmentable2Ds, EdgeOrientationMethod.Undefined, tolerance);
         }
 
-        public static List<Face2D> Face2Ds<T>(this IClosed2D externalEdge2D, IEnumerable<T> internalEdge2Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Undefined, double tolerance = Core.Tolerance.MicroDistance) where T: IClosed2D
+        public static List<Face2D> Face2Ds<T>(this IClosed2D externalEdge2D, IEnumerable<T> internalEdge2Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Undefined, double tolerance = Core.Tolerance.MicroDistance) where T : IClosed2D
         {
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return null;
             }
 
             List<Face2D> result = new List<Face2D>();
 
-            if(internalEdge2Ds == null || internalEdge2Ds.Count() == 0)
+            if (internalEdge2Ds == null || internalEdge2Ds.Count() == 0)
             {
                 result.Add(new Face2D(externalEdge2D));
                 return result;
@@ -93,23 +96,23 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if(closed2D is ISegmentable2D)
+                if (closed2D is ISegmentable2D)
                 {
                     segmentable2Ds.Add((ISegmentable2D)closed2D);
                 }
-                else if(closed2D is Face2D)
+                else if (closed2D is Face2D)
                 {
                     Face2D face2D = closed2D as Face2D;
                     ISegmentable2D segmentable2D_Temp = face2D.ExternalEdge2D as ISegmentable2D;
-                    if(segmentable2D_Temp == null)
+                    if (segmentable2D_Temp == null)
                     {
                         throw new NotImplementedException();
                     }
                     segmentable2Ds.Add(segmentable2D_Temp);
 
-                    if(face2D.InternalEdge2Ds != null)
+                    if (face2D.InternalEdge2Ds != null)
                     {
-                        foreach(IClosed2D internalEdge2D in face2D.InternalEdge2Ds)
+                        foreach (IClosed2D internalEdge2D in face2D.InternalEdge2Ds)
                         {
                             segmentable2D_Temp = internalEdge2D as ISegmentable2D;
                             if (segmentable2D_Temp == null)
@@ -164,23 +167,23 @@ namespace SAM.Geometry.Planar
                 }
 
                 Point2D point2D = face2D.GetInternalPoint2D(tolerance);
-                if(point2D == null)
+                if (point2D == null)
                 {
                     continue;
                 }
 
-                if(!boundingBox2D.Inside(point2D, tolerance))
+                if (!boundingBox2D.Inside(point2D, tolerance))
                 {
                     continue;
                 }
 
-                if(!externalEdge2D.Inside(point2D, tolerance))
+                if (!externalEdge2D.Inside(point2D, tolerance))
                 {
                     continue;
                 }
 
-                Tuple<BoundingBox2D, IClosed2D>  tuple = tuples?.FindAll(x => x.Item1.Inside(point2D, tolerance))?.Find(x => x.Item2.Inside(point2D, tolerance));
-                if(tuple != null)
+                Tuple<BoundingBox2D, IClosed2D> tuple = tuples?.FindAll(x => x.Item1.Inside(point2D, tolerance))?.Find(x => x.Item2.Inside(point2D, tolerance));
+                if (tuple != null)
                 {
                     continue;
                 }
@@ -196,7 +199,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<Face2D> Face2Ds<T>(this IEnumerable<T> segmentable2Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Undefined, double tolerance = Core.Tolerance.MicroDistance) where T: ISegmentable2D
+        public static List<Face2D> Face2Ds<T>(this IEnumerable<T> segmentable2Ds, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Undefined, double tolerance = Core.Tolerance.MicroDistance) where T : ISegmentable2D
         {
             if (segmentable2Ds == null)
                 return null;
@@ -225,7 +228,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if(edgeOrientationMethod != EdgeOrientationMethod.Undefined)
+                if (edgeOrientationMethod != EdgeOrientationMethod.Undefined)
                 {
                     face2D = Face2D(face2D.ExternalEdge2D, face2D.InternalEdge2Ds, edgeOrientationMethod);
                 }

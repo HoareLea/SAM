@@ -1,22 +1,25 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Modify
     {
         public static bool UpdateByType(this IRelationFilter relationFilter, System.Type type, IFilter filter)
         {
-            if(relationFilter == null || type == null)
+            if (relationFilter == null || type == null)
             {
                 return false;
             }
 
-            if(type.IsAssignableFrom(relationFilter.GetType()))
+            if (type.IsAssignableFrom(relationFilter.GetType()))
             {
                 relationFilter.Filter = filter;
                 return true;
             }
 
             IFilter result = relationFilter.Filter;
-            if(result == null)
+            if (result == null)
             {
                 return false;
             }

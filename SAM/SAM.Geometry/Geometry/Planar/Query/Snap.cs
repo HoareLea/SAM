@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 using NetTopologySuite.Operation.Overlay.Snap;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Planar
     {
         public static Point2D Snap(this IEnumerable<ISegmentable2D> segmentable2Ds, Point2D point2D, double snapDistance = double.MaxValue)
         {
-            if(segmentable2Ds == null || point2D == null)
+            if (segmentable2Ds == null || point2D == null)
             {
                 return null;
             }
@@ -20,7 +23,7 @@ namespace SAM.Geometry.Planar
             {
                 Point2D point2D_Closets_Temp = segmentable2D.Closest(point2D);
                 double distance_Temp = point2D.Distance(point2D_Closets_Temp);
-                if(distance_Temp < snapDistance && distance > distance_Temp)
+                if (distance_Temp < snapDistance && distance > distance_Temp)
                 {
                     point2D_Closets = point2D_Closets_Temp;
                 }
@@ -41,7 +44,7 @@ namespace SAM.Geometry.Planar
 
             return point2D.Distance(result) < snapDistance ? result : new Point2D(point2D);
         }
-        
+
         public static List<Polygon2D> Snap(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
             LinearRing linearRing_1 = (polygon2D_1 as IClosed2D)?.ToNTS(tolerance);
@@ -67,7 +70,7 @@ namespace SAM.Geometry.Planar
 
             return geometries.ToList().ConvertAll(x => (x as Polygon));
         }
-        
+
         public static List<Face2D> Snap(this Face2D face2D_1, Face2D face2D_2, double snapDistance, double tolerance = Core.Tolerance.Distance)
         {
             Polygon polygon_1 = Convert.ToNTS(face2D_1 as Face, tolerance);
@@ -101,7 +104,7 @@ namespace SAM.Geometry.Planar
 
             return geometries.ToList().ConvertAll(x => x.ToSAM(tolerance));
         }
-    
+
         public static Polygon2D Snap(this Polygon2D polygon2D, IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.Distance)
         {
             if (polygon2D == null || segmentable2Ds == null)
@@ -191,10 +194,10 @@ namespace SAM.Geometry.Planar
             externalEdge = new Polygon2D(point2Ds_Edge);
 
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-            if(internalEdges != null)
+            if (internalEdges != null)
             {
-                
-                for(int i =0; i < internalEdges.Count; i++)
+
+                for (int i = 0; i < internalEdges.Count; i++)
                 {
                     if (externalEdge == null || !(externalEdge is ISegmentable2D))
                         continue;
@@ -252,9 +255,9 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> result = new List<Segment2D>();
-            foreach(Segment2D segment2D in segment2Ds)
+            foreach (Segment2D segment2D in segment2Ds)
             {
-                if(segment2D == null)
+                if (segment2D == null)
                 {
                     result.Add(null);
                     continue;
@@ -328,7 +331,7 @@ namespace SAM.Geometry.Planar
             result.RemoveAll(x => x.GetLength() <= tolerance);
             return result;
         }
-        
+
         /// <summary>
         /// Snaps face2D to given face2Ds
         /// </summary>
@@ -339,7 +342,7 @@ namespace SAM.Geometry.Planar
         /// <returns>Snapped Face2D</returns>
         public static Face2D Snap(this Face2D face2D, IEnumerable<Face2D> face2Ds, double snapDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(face2D == null || face2Ds == null)
+            if (face2D == null || face2Ds == null)
             {
                 return null;
             }
@@ -357,7 +360,7 @@ namespace SAM.Geometry.Planar
             List<List<Point2D>> point2Ds_InternalEdge2Ds = internalEdge2Ds?.ConvertAll(x => x.GetPoints());
 
             bool snapped = false;
-            foreach(Face2D face2D_Temp in face2Ds)
+            foreach (Face2D face2D_Temp in face2Ds)
             {
                 BoundingBox2D boundingBox2D_Temp = face2D_Temp?.GetBoundingBox();
                 if (boundingBox2D_Temp == null || !boundingBox2D.InRange(boundingBox2D_Temp, snapDistance))

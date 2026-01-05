@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -83,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             IAnalyticalObject analyticalObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -99,20 +102,20 @@ namespace SAM.Analytical.Grasshopper
 
             HashSet<PanelGroup> panelGroups = null;
             index = Params.IndexOfInputParam("_panelGroups_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<string> values = new List<string>();
-                if(dataAccess.GetDataList(index, values) && values != null && values.Count != 0)
+                if (dataAccess.GetDataList(index, values) && values != null && values.Count != 0)
                 {
                     panelGroups = new HashSet<PanelGroup>();
-                    foreach(string value in values)
+                    foreach (string value in values)
                     {
                         panelGroups.Add(SAM.Core.Query.Enum<PanelGroup>(value));
                     }
                 }
             }
 
-            if(panelGroups == null || panelGroups.Count == 0)
+            if (panelGroups == null || panelGroups.Count == 0)
             {
                 panelGroups = new HashSet<PanelGroup>();
                 foreach (PanelGroup panelGroup in Enum.GetValues(typeof(PanelGroup)))
@@ -122,11 +125,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(analyticalObject is AdjacencyCluster)
+            if (analyticalObject is AdjacencyCluster)
             {
                 adjacencyCluster = (AdjacencyCluster)analyticalObject;
             }
-            else if(analyticalObject is AnalyticalModel)
+            else if (analyticalObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
             }
@@ -141,22 +144,22 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels_Windows = new List<Panel>();
 
             List<Panel> panels_Space = adjacencyCluster?.GetRelatedObjects<Panel>(space);
-            if(panels_Space != null)
+            if (panels_Space != null)
             {
-                foreach(Panel panel in panels_Space)
+                foreach (Panel panel in panels_Space)
                 {
-                    if(panel == null)
+                    if (panel == null)
                     {
                         continue;
                     }
 
-                    if(!panelGroups.Contains(panel.PanelGroup))
+                    if (!panelGroups.Contains(panel.PanelGroup))
                     {
                         continue;
                     }
 
                     List<Space> spaces_Panel = adjacencyCluster?.GetRelatedObjects<Space>(panel);
-                    if(spaces_Panel == null || spaces_Panel.Count == 0)
+                    if (spaces_Panel == null || spaces_Panel.Count == 0)
                     {
                         continue;
                     }
@@ -165,15 +168,15 @@ namespace SAM.Analytical.Grasshopper
 
                     bool hasWindows = false;
                     bool hasDoors = false;
-                    if(apertures != null)
+                    if (apertures != null)
                     {
                         hasDoors = apertures.Find(x => x != null && x.ApertureType == ApertureType.Door) != null;
                         hasWindows = apertures.Find(x => x != null && x.ApertureType == ApertureType.Window) != null;
                     }
 
-                    foreach(Space space_Panel in spaces_Panel)
+                    foreach (Space space_Panel in spaces_Panel)
                     {
-                        if(space_Panel.Guid == space.Guid)
+                        if (space_Panel.Guid == space.Guid)
                         {
                             continue;
                         }

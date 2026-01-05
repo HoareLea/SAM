@@ -1,4 +1,7 @@
-﻿using NetTopologySuite.Geometries;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using NetTopologySuite.Geometries;
 
 namespace SAM.Geometry.Planar
 {
@@ -22,7 +25,7 @@ namespace SAM.Geometry.Planar
 
         public static Point2D ToSAM(this System.Numerics.Complex complex)
         {
-            if(complex == null)
+            if (complex == null)
             {
                 return null;
             }

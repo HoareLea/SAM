@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 
 namespace SAM.Analytical
 {
@@ -20,7 +23,7 @@ namespace SAM.Analytical
             guid = null;
             id = -1;
 
-            if(uniqueName == null)
+            if (uniqueName == null)
             {
                 return false;
             }
@@ -31,16 +34,16 @@ namespace SAM.Analytical
                 return true;
             }
 
-            foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+            foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
-                if(name.StartsWith(UniqueNamePrefix(panelType) + ":"))
+                if (name.StartsWith(UniqueNamePrefix(panelType) + ":"))
                 {
                     prefix = UniqueNamePrefix(panelType);
                     break;
                 }
             }
 
-            if(prefix == null)
+            if (prefix == null)
             {
                 foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
                 {
@@ -52,7 +55,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(prefix != null)
+            if (prefix != null)
             {
                 name = name.Substring(prefix.Length + 1).Trim();
             }
@@ -63,7 +66,7 @@ namespace SAM.Analytical
                 int count_Max = int.MaxValue.ToString().Length;
 
                 int index_Start = name.LastIndexOf("[");
-                if(index_Start >= 0)
+                if (index_Start >= 0)
                 {
                     int count = index_End - index_Start - 1;
                     if (count > 0)
@@ -71,7 +74,7 @@ namespace SAM.Analytical
                         string value = name.Substring(index_Start + 1, count);
                         if (count > count_Max)
                         {
-                            if(Guid.TryParse(value, out Guid guid_Temp))
+                            if (Guid.TryParse(value, out Guid guid_Temp))
                             {
                                 guid = guid_Temp;
                                 name = name.Substring(0, index_Start).Trim();
@@ -102,7 +105,7 @@ namespace SAM.Analytical
                             string value = name.Substring(index_Start + 1, count);
                             if (count > count_Max)
                             {
-                                if(guid == null)
+                                if (guid == null)
                                 {
                                     if (Guid.TryParse(value, out Guid guid_Temp))
                                     {
@@ -113,7 +116,7 @@ namespace SAM.Analytical
                             }
                             else
                             {
-                                if(id == -1)
+                                if (id == -1)
                                 {
                                     if (int.TryParse(value, out int @int))
                                     {

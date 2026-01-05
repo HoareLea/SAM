@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,7 +18,7 @@ namespace SAM.Weather
 
             int count_Temp = dailyMeanDryBulbOutdoorTemperatures.Count();
 
-            double[] factors = new double[] { 1, 0.8, 0.6, 0.5, 0.4, 0.3, 0.2};
+            double[] factors = new double[] { 1, 0.8, 0.6, 0.5, 0.4, 0.3, 0.2 };
 
             List<double> values = new List<double>();
             for (int i = 1; i <= 7; i++)

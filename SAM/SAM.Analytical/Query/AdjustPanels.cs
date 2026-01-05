@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -23,17 +26,17 @@ namespace SAM.Analytical
             }
 
             Face2D face2D = plane.Convert(face3D);
-            if(face2D == null)
+            if (face2D == null)
             {
                 return null;
             }
 
             List<Tuple<Panel, BoundingBox2D, Face2D>> tuples = new List<Tuple<Panel, BoundingBox2D, Face2D>>();
             List<Point2D> point2Ds = new List<Point2D>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Face2D face2D_Panel = plane.Convert(panel?.GetFace3D());
-                if(face2D_Panel == null || !face2D_Panel.IsValid() || face2D_Panel.GetArea() < tolerance)
+                if (face2D_Panel == null || !face2D_Panel.IsValid() || face2D_Panel.GetArea() < tolerance)
                 {
                     continue;
                 }
@@ -56,63 +59,63 @@ namespace SAM.Analytical
                 tuples.Add(new Tuple<Panel, BoundingBox2D, Face2D>(panel, boundingBox2D, face2D_Panel));
             }
 
-            if(tuples == null || tuples.Count == 0)
+            if (tuples == null || tuples.Count == 0)
             {
                 return null;
             }
 
             List<Triangle2D> triangle2Ds = face2D.Triangulate(point2Ds, tolerance);
-            if(triangle2Ds == null|| triangle2Ds.Count == 0)
+            if (triangle2Ds == null || triangle2Ds.Count == 0)
             {
                 return null;
             }
 
             List<Panel> panels_Temp = new List<Panel>();
-            foreach(Triangle2D triangle2D in triangle2Ds)
+            foreach (Triangle2D triangle2D in triangle2Ds)
             {
                 BoundingBox2D boundingBox2D = triangle2D?.GetBoundingBox();
-                if(boundingBox2D == null)
+                if (boundingBox2D == null)
                 {
                     continue;
                 }
 
                 Point2D point2D = triangle2D.GetCentroid();
-                if(point2D == null)
+                if (point2D == null)
                 {
                     continue;
                 }
 
                 List<Tuple<Panel, BoundingBox2D, Face2D>> tuples_Temp = tuples.FindAll(x => x.Item2.InRange(boundingBox2D, tolerance));
-                if(tuples_Temp == null || tuples_Temp.Count == 0)
+                if (tuples_Temp == null || tuples_Temp.Count == 0)
                 {
                     tuples_Temp = new List<Tuple<Panel, BoundingBox2D, Face2D>>(tuples);
                     tuples_Temp.Sort((x, y) => x.Item3.Distance(point2D, tolerance).CompareTo(y.Item3.Distance(point2D, tolerance)));
                     tuples_Temp = new List<Tuple<Panel, BoundingBox2D, Face2D>>() { tuples_Temp[0] };
                 }
-                
-                if(tuples_Temp != null && tuples_Temp.Count > 1)
+
+                if (tuples_Temp != null && tuples_Temp.Count > 1)
                 {
                     List<Tuple<Panel, BoundingBox2D, Face2D>> tuples_Temp_Temp = tuples_Temp.FindAll(x => x.Item3.InRange(point2D, tolerance));
-                    if(tuples_Temp_Temp == null || tuples_Temp_Temp.Count == 0)
+                    if (tuples_Temp_Temp == null || tuples_Temp_Temp.Count == 0)
                     {
                         tuples_Temp_Temp = tuples_Temp;
                     }
 
-                    if(tuples_Temp_Temp.Count > 1)
+                    if (tuples_Temp_Temp.Count > 1)
                     {
                         Face2D face2D_Triangle2D = new Face2D(triangle2D);
 
                         List<Tuple<Tuple<Panel, BoundingBox2D, Face2D>, double>> tuples_Area = new List<Tuple<Tuple<Panel, BoundingBox2D, Face2D>, double>>();
-                        foreach(Tuple<Panel, BoundingBox2D, Face2D> tuple in tuples_Temp_Temp)
+                        foreach (Tuple<Panel, BoundingBox2D, Face2D> tuple in tuples_Temp_Temp)
                         {
                             List<Face2D> face2Ds_Intersection = face2D_Triangle2D.Intersection(tuple.Item3, tolerance);
-                            if(face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
+                            if (face2Ds_Intersection == null || face2Ds_Intersection.Count == 0)
                             {
                                 continue;
                             }
 
                             double area = face2Ds_Intersection.ConvertAll(x => x.GetArea()).Sum();
-                            if(area < tolerance)
+                            if (area < tolerance)
                             {
                                 continue;
                             }
@@ -127,7 +130,7 @@ namespace SAM.Analytical
 
                 }
 
-                if(tuples_Temp == null || tuples_Temp.Count == 0)
+                if (tuples_Temp == null || tuples_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -137,13 +140,13 @@ namespace SAM.Analytical
                 Plane plane_Panel = panel.Plane;
 
                 Triangle3D triangle3D = plane_Panel.Project(plane.Convert(triangle2D));
-                if(triangle3D == null)
+                if (triangle3D == null)
                 {
                     continue;
                 }
 
                 panel = Create.Panel(Guid.NewGuid(), panel, new Face3D(triangle3D), null, true, tolerance, maxDistance);
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }

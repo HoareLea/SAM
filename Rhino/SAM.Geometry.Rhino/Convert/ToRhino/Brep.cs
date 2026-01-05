@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
@@ -112,7 +115,7 @@ namespace SAM.Geometry.Rhino
 
         public static global::Rhino.Geometry.Brep ToRhino_Brep(this Triangle3D triangle3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
+            if (triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
             {
                 return null;
             }
@@ -128,7 +131,7 @@ namespace SAM.Geometry.Rhino
             double unitScale = Query.UnitScale();
 
             global::Rhino.Geometry.Brep[] breps = global::Rhino.Geometry.Brep.CreatePlanarBreps(polylineCurves, unitScale * tolerance);
-            if(breps == null || breps.Length == 0)
+            if (breps == null || breps.Length == 0)
             {
                 return null;
             }
@@ -138,7 +141,7 @@ namespace SAM.Geometry.Rhino
 
         public static global::Rhino.Geometry.Brep ToRhino_Brep(this IClosedPlanar3D externalEdge3D, IEnumerable<IClosedPlanar3D> internalEdge3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(externalEdge3D == null)
+            if (externalEdge3D == null)
             {
                 return null;
             }
@@ -148,22 +151,22 @@ namespace SAM.Geometry.Rhino
             IClosed2D externalEdge2D = plane.Convert(externalEdge3D);
 
             List<IClosed2D> internalEdge2Ds = null;
-            if(internalEdge3Ds != null)
+            if (internalEdge3Ds != null)
             {
                 internalEdge2Ds = new List<IClosed2D>();
 
                 foreach (IClosedPlanar3D internalEdge3D in internalEdge3Ds)
                 {
                     IClosed2D internalEdge2D = plane.Convert(plane.Project(internalEdge3D));
-                    if(internalEdge2D != null)
+                    if (internalEdge2D != null)
                     {
                         internalEdge2Ds.Add(internalEdge2D);
                     }
                 }
             }
 
-            List<Face3D> face3Ds = Spatial.Create.Face3Ds(externalEdge2D, internalEdge2Ds, plane, tolerance : tolerance);
-            if(face3Ds == null || face3Ds.Count == 0)
+            List<Face3D> face3Ds = Spatial.Create.Face3Ds(externalEdge2D, internalEdge2Ds, plane, tolerance: tolerance);
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
@@ -172,25 +175,25 @@ namespace SAM.Geometry.Rhino
             foreach (Face3D face3D in face3Ds)
             {
                 List<Face3D> face3Ds_FixEdges = face3D.FixEdges();
-                if(face3Ds_FixEdges == null || face3Ds_FixEdges.Count == 0)
+                if (face3Ds_FixEdges == null || face3Ds_FixEdges.Count == 0)
                 {
                     face3Ds_FixEdges = new List<Face3D>() { face3D };
                 }
 
-                foreach(Face3D face3D_FixEdge in face3Ds_FixEdges)
+                foreach (Face3D face3D_FixEdge in face3Ds_FixEdges)
                 {
                     IClosedPlanar3D externalEdge3D_Face3D = face3D_FixEdge?.GetExternalEdge3D();
-                    if(externalEdge3D_Face3D != null)
+                    if (externalEdge3D_Face3D != null)
                     {
                         closed3Ds.Add(externalEdge3D_Face3D);
                     }
 
                     List<IClosedPlanar3D> internalEdge3Ds_Face3D = face3D_FixEdge?.GetInternalEdge3Ds();
-                    if(internalEdge3Ds_Face3D != null)
+                    if (internalEdge3Ds_Face3D != null)
                     {
-                        foreach(IClosedPlanar3D internalEdge3D_Face3D in internalEdge3Ds_Face3D)
+                        foreach (IClosedPlanar3D internalEdge3D_Face3D in internalEdge3Ds_Face3D)
                         {
-                            if(internalEdge3D_Face3D == null)
+                            if (internalEdge3D_Face3D == null)
                             {
                                 continue;
                             }

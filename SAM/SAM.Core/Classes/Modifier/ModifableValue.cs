@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -30,9 +33,9 @@ namespace SAM.Core
         }
 
         public IModifier Modifier { get; set; }
-        
+
         public double Value { get; set; }
-        
+
         public static implicit operator ModifiableValue(double value)
         {
             return new ModifiableValue(value);
@@ -57,13 +60,13 @@ namespace SAM.Core
 
             return true;
         }
-        
+
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
-            
-            if(!double.IsNaN(Value))
+
+            if (!double.IsNaN(Value))
             {
                 jObject.Add("Value", Value);
             }

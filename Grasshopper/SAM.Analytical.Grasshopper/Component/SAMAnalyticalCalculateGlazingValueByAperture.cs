@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -308,9 +311,9 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
 
-                    if(double.IsNaN(hi))
+                    if (double.IsNaN(hi))
                     {
-                        if(double.IsNaN(emissivity))
+                        if (double.IsNaN(emissivity))
                         {
                             AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid emissivity for layer");
                             return;
@@ -320,9 +323,9 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     Glazing.Result result = Glazing.Compute(layers, gaps, null, he, hi);
-                    if(result != null)
+                    if (result != null)
                     {
-                        GH_Path gH_Path = new (i);
+                        GH_Path gH_Path = new(i);
 
                         tvs.Add(new GH_Number(Core.Query.Round(result.Tv, Tolerance.MacroDistance)), gH_Path);
                         rvExts.Add(new GH_Number(Core.Query.Round(result.RvExt, Tolerance.MacroDistance)), gH_Path);

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -771,7 +774,7 @@ namespace SAM.Geometry.Spatial
                 {
                     continue;
                 }
-                   
+
                 double elevation_Min = boundingBox3D.Min.Z;
                 Tuple<double, List<Tuple<Face2D, BoundingBox2D>>> tuple = tuples.Find(x => System.Math.Abs(x.Item1 - elevation_Min) < tolerance);
                 if (tuple == null)
@@ -860,7 +863,7 @@ namespace SAM.Geometry.Spatial
                     List<Face2D> face2Ds_Bottom_Temp = face2Ds_Top_Temp.Union();
 
                     List<Face3D> face3Ds_Shell = new List<Face3D>();
-                    foreach(Face2D face2D_Bottom_Temp in face2Ds_Bottom_Temp)
+                    foreach (Face2D face2D_Bottom_Temp in face2Ds_Bottom_Temp)
                     {
                         Point2D point2D = face2D_Bottom_Temp.GetInternalPoint2D();
                         if (point2D == null)
@@ -872,7 +875,7 @@ namespace SAM.Geometry.Spatial
                             elevation_Top = face2Ds_Top[index].Item1;
 
                         double elevation_Bottom = tuple_Bottom.Item1;
-                         
+
                         Plane plane_Top = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Top)) as Plane;
                         Plane plane_Bottom = Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation_Bottom)) as Plane;
                         Plane plane_Bottom_Flipped = new Plane(plane_Bottom);
@@ -929,7 +932,7 @@ namespace SAM.Geometry.Spatial
                         face3Ds_Shell.Add(face3D_Bottom);
                     }
 
-                    if(face3Ds_Shell != null && face3Ds_Shell.Count > 0)
+                    if (face3Ds_Shell != null && face3Ds_Shell.Count > 0)
                     {
                         Shell shell = new Shell(face3Ds_Shell);
                         Shell shell_Merge = shell.Merge(tolerance);
@@ -1158,7 +1161,7 @@ namespace SAM.Geometry.Spatial
 
                 List<Face3D> face3Ds_Bottom = face2Ds.ConvertAll(x => new Face3D(plane_Bottom, x));
 
-                Vector3D vector3D = new Vector3D(0, 0, tuple.Item2.ConvertAll(x => x.GetBoundingBox().Max.Z - tuple.Item1 ).Max());
+                Vector3D vector3D = new Vector3D(0, 0, tuple.Item2.ConvertAll(x => x.GetBoundingBox().Max.Z - tuple.Item1).Max());
 
                 List<Shell> shells = face3Ds_Bottom.ConvertAll(x => Shell(x, vector3D, tolerance_Distance));
                 if (shells == null || shells.Count == 0)
@@ -1170,7 +1173,7 @@ namespace SAM.Geometry.Spatial
             });
 
             List<List<Shell>> shellsList_Split = Enumerable.Repeat<List<Shell>>(null, shellsList.Count).ToList();
-            Parallel.For(0, shellsList.Count, (int i) => 
+            Parallel.For(0, shellsList.Count, (int i) =>
             {
                 List<Shell> shells = shellsList[i];
                 if (shells == null || shells.Count == 0)
@@ -1210,9 +1213,9 @@ namespace SAM.Geometry.Spatial
                 }
             });
 
-            foreach(List<Shell> shells in shellsList_Split)
+            foreach (List<Shell> shells in shellsList_Split)
             {
-                if(shells == null || shells.Count == 0)
+                if (shells == null || shells.Count == 0)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Query
     {
@@ -12,11 +15,11 @@
         /// <returns>Calculated Infiltration Sensible Gain [W]</returns>
         public static double CalculatedInfiltrationSensibleGain(this Space space, double dryBulbTemperature_Outside, double dryBulbTemperature_Inside, double density_Outside)
         {
-            if(space == null|| double.IsNaN(dryBulbTemperature_Inside) || double.IsNaN(density_Outside))
+            if (space == null || double.IsNaN(dryBulbTemperature_Inside) || double.IsNaN(density_Outside))
             {
                 return double.NaN;
             }
-            
+
             double vapourizationLatentHeat = Core.Query.VapourizationLatentHeat(dryBulbTemperature_Inside);
             if (double.IsNaN(vapourizationLatentHeat))
             {

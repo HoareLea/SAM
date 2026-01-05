@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static BoundaryType BoundaryType(this AnalyticalModel analyticalModel, Panel panel)
         {
-            if(panel  == null || analyticalModel == null)
+            if (panel == null || analyticalModel == null)
             {
                 return Analytical.BoundaryType.Undefined;
             }
@@ -28,38 +31,38 @@ namespace SAM.Analytical
             }
 
             Panel panel_Temp = panel as Panel;
-            if(panel_Temp == null)
+            if (panel_Temp == null)
             {
                 return Analytical.BoundaryType.Undefined;
             }
 
-            if(panel_Temp.Adiabatic())
+            if (panel_Temp.Adiabatic())
             {
                 return Analytical.BoundaryType.Adiabatic;
             }
 
-            if(adjacencyCluster.Shade(panel_Temp))
+            if (adjacencyCluster.Shade(panel_Temp))
             {
                 return Analytical.BoundaryType.Shade;
             }
-            
-            if(adjacencyCluster.Ground(panel_Temp))
+
+            if (adjacencyCluster.Ground(panel_Temp))
             {
                 return Analytical.BoundaryType.Ground;
             }
 
-            if(adjacencyCluster.ExposedToSun(panel_Temp))
+            if (adjacencyCluster.ExposedToSun(panel_Temp))
             {
                 return Analytical.BoundaryType.Exposed;
             }
 
             List<Space> spaces = adjacencyCluster.GetSpaces(panel_Temp);
-            if(spaces != null && spaces.Count >= 2)
+            if (spaces != null && spaces.Count >= 2)
             {
                 return Analytical.BoundaryType.Linked;
             }
 
-            if(panel_Temp.PanelType == Analytical.PanelType.Shade || panel_Temp.PanelType == Analytical.PanelType.SolarPanel)
+            if (panel_Temp.PanelType == Analytical.PanelType.Shade || panel_Temp.PanelType == Analytical.PanelType.SolarPanel)
             {
                 return Analytical.BoundaryType.Shade;
             }

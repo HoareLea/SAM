@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Math;
 
 namespace SAM.Geometry.Planar
@@ -142,7 +145,7 @@ namespace SAM.Geometry.Planar
 
         public static ITransform2D GetMirrorX(Point2D point2D)
         {
-            if(point2D == null)
+            if (point2D == null)
             {
                 return null;
             }

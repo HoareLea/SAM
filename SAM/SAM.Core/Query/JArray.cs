@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -22,11 +25,11 @@ namespace SAM.Core
 
         public static JArray JArray<T>(this T[,] values)
         {
-            if(values == null)
+            if (values == null)
             {
                 return null;
             }
-            
+
             JArray result = new JArray();
             for (int i = 0; i < values.GetLength(0); i++)
             {

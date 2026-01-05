@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
-using SAM.Geometry.Spatial;
-using SAM.Geometry.Planar;
-using System;
-using System.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Object.Spatial;
+using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -11,7 +14,7 @@ namespace SAM.Analytical
     {
         public static List<Panel> SnapByElevations(this IEnumerable<Panel> panels, IEnumerable<double> elevations, int maxIterations = 1, double maxTolerance = Core.Tolerance.MacroDistance, double minTolerance = Core.Tolerance.MicroDistance)
         {
-            if(panels == null)
+            if (panels == null)
             {
                 return null;
             }
@@ -21,16 +24,16 @@ namespace SAM.Analytical
             List<Panel> panels_Other = new List<Panel>();
             foreach (Panel panel in panels)
             {
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
-                if(panel.Horizontal(maxTolerance))
+                if (panel.Horizontal(maxTolerance))
                 {
                     panels_Horizontal.Add(panel);
                 }
-                else if(panel.Rectangular(maxTolerance))
+                else if (panel.Rectangular(maxTolerance))
                 {
                     panels_Rectangular.Add(panel);
                 }
@@ -75,7 +78,7 @@ namespace SAM.Analytical
                     panels_Rectangular = SnapByElevations_Ends(panels_Rectangular, elevations, maxTolerance, minTolerance);
                     panels_Rectangular = SnapByElevations_Intersections(panels_Rectangular, elevations, maxTolerance, minTolerance);
 
-                    if(count != -1)
+                    if (count != -1)
                     {
                         dictionary = SpacingDictionary(panels_Rectangular, maxTolerance, minTolerance);
                         if (dictionary == null || dictionary.Count == 0)
@@ -84,12 +87,12 @@ namespace SAM.Analytical
                         }
 
                         int count_Temp = dictionary.Count;
-                        if(count_Temp > count)
+                        if (count_Temp > count)
                         {
                             panels_Rectangular = panels_Rectangular_Temp;
                             break;
                         }
-                        else if(count_Temp == count)
+                        else if (count_Temp == count)
                         {
                             break;
                         }
@@ -101,16 +104,16 @@ namespace SAM.Analytical
                 if (panels_Rectangular != null && panels_Rectangular.Count != 0)
                 {
                     result.AddRange(panels_Rectangular);
-                    foreach(Panel panel_Rectangular in panels_Rectangular)
+                    foreach (Panel panel_Rectangular in panels_Rectangular)
                     {
                         BoundingBox3D boundingBox3D = panel_Rectangular?.GetBoundingBox();
-                        if(boundingBox3D == null)
+                        if (boundingBox3D == null)
                         {
                             continue;
                         }
 
                         Face3D face3D = panel_Rectangular.GetFace3D();
-                        if(face3D == null)
+                        if (face3D == null)
                         {
                             continue;
                         }
@@ -118,10 +121,10 @@ namespace SAM.Analytical
                         dictionary_Segmentable3D[boundingBox3D] = new List<ISegmentable3D>();
 
                         List<IClosedPlanar3D> edge3Ds = face3D.GetEdge3Ds();
-                        foreach(IClosedPlanar3D edge3D in edge3Ds)
+                        foreach (IClosedPlanar3D edge3D in edge3Ds)
                         {
                             ISegmentable3D segmentable3D = edge3D as ISegmentable3D;
-                            if(segmentable3D == null)
+                            if (segmentable3D == null)
                             {
                                 continue;
                             }
@@ -134,15 +137,15 @@ namespace SAM.Analytical
             }
 
             //Horizontal
-            if(panels_Horizontal.Count != 0)
+            if (panels_Horizontal.Count != 0)
             {
-                foreach(Panel panel in panels_Horizontal)
+                foreach (Panel panel in panels_Horizontal)
                 {
                     List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
                     BoundingBox3D boundingBox3D = panel.GetBoundingBox();
-                    foreach(KeyValuePair<BoundingBox3D, List<ISegmentable3D>> keyValuePair in dictionary_Segmentable3D)
+                    foreach (KeyValuePair<BoundingBox3D, List<ISegmentable3D>> keyValuePair in dictionary_Segmentable3D)
                     {
-                        if(!boundingBox3D.InRange(keyValuePair.Key, maxTolerance))
+                        if (!boundingBox3D.InRange(keyValuePair.Key, maxTolerance))
                         {
                             continue;
                         }
@@ -150,14 +153,14 @@ namespace SAM.Analytical
                         segmentable3Ds.AddRange(keyValuePair.Value);
                     }
 
-                    if(segmentable3Ds == null || segmentable3Ds.Count == 0)
+                    if (segmentable3Ds == null || segmentable3Ds.Count == 0)
                     {
                         result.Add(new Panel(panel));
                         continue;
                     }
 
                     Panel panel_Temp = panel.SnapByEnds(segmentable3Ds, maxTolerance, minTolerance);
-                    if(panel_Temp == null)
+                    if (panel_Temp == null)
                     {
                         panel_Temp = panel;
                     }
@@ -226,7 +229,7 @@ namespace SAM.Analytical
             }
 
             Dictionary<Panel, List<ISegmentable2D>> dictionary = new Dictionary<Panel, List<ISegmentable2D>>();
-            foreach(double elevation in elevations)
+            foreach (double elevation in elevations)
             {
                 Plane plane = Plane.WorldXY.GetMoved(Vector3D.WorldZ * elevation) as Plane;
 
@@ -238,7 +241,7 @@ namespace SAM.Analytical
 
                 foreach (KeyValuePair<Panel, List<ISegmentable2D>> keyValuePair in dictionary_Temp)
                 {
-                    if(dictionary.ContainsKey(keyValuePair.Key))
+                    if (dictionary.ContainsKey(keyValuePair.Key))
                     {
                         continue;
                     }
@@ -352,12 +355,12 @@ namespace SAM.Analytical
 
             foreach (Tuple<Panel, List<Segment2D>> tuple in tuples)
             {
-                if(tuple.Item2 == null || tuple.Item2.Count == 0)
+                if (tuple.Item2 == null || tuple.Item2.Count == 0)
                 {
                     result.Add(tuple.Item1);
                     continue;
                 }
-                
+
                 List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap_Panel = new List<Tuple<Point2D, Segment2D, bool>>();
                 foreach (Segment2D segment2D in tuple.Item2)
                 {
@@ -385,7 +388,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(!segment2D.IsValid() || segment2D.GetLength() < minTolerance)
+                    if (!segment2D.IsValid() || segment2D.GetLength() < minTolerance)
                     {
                         continue;
                     }
@@ -404,7 +407,7 @@ namespace SAM.Analytical
                     Segment3D segment3D = plane.Convert(segment2D);
 
                     Face3D face3D = new Face3D(new Polygon3D(new Point3D[] { segment3D[0], segment3D[1], segment3D[1].GetMoved(vector3D) as Point3D, segment3D[0].GetMoved(vector3D) as Point3D }));
-                    if(face3D.IsValid())
+                    if (face3D.IsValid())
                     {
                         Panel panel = Create.Panel(guid, tuple.Item1, face3D, null, true, minTolerance, maxTolerance);
                         //Panel panel = Create.Panel(guid, tuple.Item1, new PlanarBoundary3D()));
@@ -480,25 +483,25 @@ namespace SAM.Analytical
             }
 
             List<Tuple<Point2D, Segment2D, bool>> tuples_Point2D_Snap = new List<Tuple<Point2D, Segment2D, bool>>();
-            foreach(Tuple<Point2D, Segment2D, bool> tuple in tuples_Point2D)
+            foreach (Tuple<Point2D, Segment2D, bool> tuple in tuples_Point2D)
             {
                 List<Segment2D> segment2Ds_Temp = new List<Segment2D>();
-                foreach(Tuple<Segment2D, BoundingBox2D> tuple_Segment2D in tuples_Segment2D)
+                foreach (Tuple<Segment2D, BoundingBox2D> tuple_Segment2D in tuples_Segment2D)
                 {
-                    if(!tuple_Segment2D.Item2.InRange(tuple.Item1, maxTolerance))
+                    if (!tuple_Segment2D.Item2.InRange(tuple.Item1, maxTolerance))
                     {
                         continue;
                     }
 
                     double distance = tuple_Segment2D.Item1.Distance(tuple.Item1);
-                    if(distance <= maxTolerance && distance>= minTolerance)
+                    if (distance <= maxTolerance && distance >= minTolerance)
                     {
                         segment2Ds_Temp.Add(tuple_Segment2D.Item1);
                     }
                 }
 
                 segment2Ds_Temp.Remove(tuple.Item2);
-                if(segment2Ds_Temp.Count < 1)
+                if (segment2Ds_Temp.Count < 1)
                 {
                     continue;
                 }
@@ -506,7 +509,7 @@ namespace SAM.Analytical
                 Vector2D direction = tuple.Item3 ? direction = tuple.Item2.Direction.GetNegated() : tuple.Item2.Direction;
 
                 List<Point2D> point2D_Intersections = Geometry.Planar.Query.Intersections(tuple.Item1, direction, segment2Ds_Temp, false, true, true, true, minTolerance);
-                if(point2D_Intersections == null || point2D_Intersections.Count == 0)
+                if (point2D_Intersections == null || point2D_Intersections.Count == 0)
                 {
                     continue;
                 }
@@ -515,9 +518,9 @@ namespace SAM.Analytical
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
-                if(!dictionary.ContainsKey(panel))
+                if (!dictionary.ContainsKey(panel))
                 {
                     result.Add(panel);
                 }

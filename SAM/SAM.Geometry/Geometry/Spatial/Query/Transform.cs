@@ -1,4 +1,7 @@
-﻿using SAM.Math;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Math;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -140,13 +143,13 @@ namespace SAM.Geometry.Spatial
             }
 
             Face3D face3D = extrusion?.Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
             Vector3D vector3D = extrusion.Vector;
-            if(vector3D == null)
+            if (vector3D == null)
             {
                 return null;
             }
@@ -197,11 +200,11 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Plane plane = rectangle3D.GetPlane();
-            
+
             plane = plane.Transform(matrix4D);
 
             Vector3D vector3D_Width = rectangle3D.WidthDirection * rectangle3D.Width;
-            Vector3D vector3D_Height  = rectangle3D.HeightDirection * rectangle3D.Height;
+            Vector3D vector3D_Height = rectangle3D.HeightDirection * rectangle3D.Height;
 
             Planar.Vector2D vector2D_Width = plane.Convert(vector3D_Width.Transform(matrix4D));
             Planar.Vector2D vector2D_Height = plane.Convert(vector3D_Height.Transform(matrix4D));
@@ -309,7 +312,7 @@ namespace SAM.Geometry.Spatial
 
         public static CoordinateSystem3D Transform(this CoordinateSystem3D coordinateSystem3D, Matrix4D matrix4D)
         {
-            if(coordinateSystem3D == null || matrix4D == null)
+            if (coordinateSystem3D == null || matrix4D == null)
             {
                 return null;
             }

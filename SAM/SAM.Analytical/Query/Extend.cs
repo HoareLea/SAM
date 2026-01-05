@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
@@ -69,8 +72,8 @@ namespace SAM.Analytical
             if (segment2Ds_Panel == null || segment2Ds_Panel.Count == 0)
                 return null;
 
-            List <Segment2D> segment2Ds = new List<Segment2D>();
-            for(int i = 0; i < segment2Ds_Panel.Count; i++)
+            List<Segment2D> segment2Ds = new List<Segment2D>();
+            for (int i = 0; i < segment2Ds_Panel.Count; i++)
             {
                 Segment2D segment2D = segment2Ds_Panel[i];
 
@@ -80,7 +83,7 @@ namespace SAM.Analytical
                 if (vector2D_1 != null)
                     segment2D = new Segment2D(segment2D[0].GetMoved(vector2D_1), segment2D[1]);
 
-                if(vector2D_2 != null)
+                if (vector2D_2 != null)
                     segment2D = new Segment2D(segment2D[0], segment2D[1].GetMoved(vector2D_2));
 
                 segment2Ds.Add(segment2D);
@@ -135,10 +138,10 @@ namespace SAM.Analytical
                     panels_Temp.Add(panel_Temp);
             }
 
-            List<Plane> planes =  panels_Temp.ConvertAll(x => x.Plane);
+            List<Plane> planes = panels_Temp.ConvertAll(x => x.Plane);
 
             List<Panel> panels_Cut = new List<Panel>();
-            foreach(Panel panel in panels_Temp)
+            foreach (Panel panel in panels_Temp)
             {
                 List<Panel> panels_Cut_Temp = panel.Cut(planes, tolerance);
                 if (panels_Cut_Temp == null || panels_Cut_Temp.Count == 0)
@@ -152,12 +155,12 @@ namespace SAM.Analytical
             Vector3D vector3D = Vector3D.WorldZ.GetNegated();
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels_Cut)
+            foreach (Panel panel in panels_Cut)
             {
                 Point3D point3D = panel.GetInternalPoint3D();
 
                 bool remove = false;
-                for(int i=0; i < face3Ds.Count; i++)
+                for (int i = 0; i < face3Ds.Count; i++)
                 {
                     Face3D face3D = face3Ds[i];
                     if (face3D == null)
@@ -171,7 +174,7 @@ namespace SAM.Analytical
                     if (point3D_Intersection == null)
                         continue;
 
-                    if(point3D.Z > point3D_Intersection.Z && System.Math.Abs(point3D.Z - point3D_Intersection.Z) > tolerance)
+                    if (point3D.Z > point3D_Intersection.Z && System.Math.Abs(point3D.Z - point3D_Intersection.Z) > tolerance)
                     {
                         remove = true;
                         break;
@@ -186,7 +189,7 @@ namespace SAM.Analytical
 
             return result;
         }
-    
+
         public static Panel Extend(this Panel panel, Plane plane, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (plane == null)
@@ -221,7 +224,7 @@ namespace SAM.Analytical
             List<Point3D> point3Ds_Projected = point3Ds.ConvertAll(x => line3D.Project(x));
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            for(int i =0; i < point3Ds.Count; i++)
+            for (int i = 0; i < point3Ds.Count; i++)
             {
                 if (point3Ds[i] == null || point3Ds_Projected[i] == null)
                     continue;

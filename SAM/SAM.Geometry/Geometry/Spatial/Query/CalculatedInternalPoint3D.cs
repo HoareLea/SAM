@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
@@ -21,15 +24,15 @@ namespace SAM.Geometry.Spatial
             double distance = boundingBox3D.Min.Distance(boundingBox3D.Max);
 
             List<Tuple<Point3D, double>> tuples = new List<Tuple<Point3D, double>>();
-            foreach(KeyValuePair<Face3D, Vector3D> keyValuePair in dictionary)
+            foreach (KeyValuePair<Face3D, Vector3D> keyValuePair in dictionary)
             {
-                if(keyValuePair.Key == null || keyValuePair.Value == null)
+                if (keyValuePair.Key == null || keyValuePair.Value == null)
                 {
                     continue;
                 }
 
                 Vector3D vector3D = keyValuePair.Value.GetNegated() * distance;
-                
+
                 Point3D point3D = keyValuePair.Key.InternalPoint3D();
 
                 Segment3D segment3D = new Segment3D(point3D, vector3D);
@@ -49,7 +52,7 @@ namespace SAM.Geometry.Spatial
                     continue;
 
                 double distance_Min = double.MaxValue;
-                foreach(Face3D face3D in dictionary.Keys)
+                foreach (Face3D face3D in dictionary.Keys)
                 {
                     double distance_Min_Temp = face3D.Distance(point3D_Mid, tolerance);
                     if (distance_Min_Temp < distance_Min)
@@ -61,7 +64,7 @@ namespace SAM.Geometry.Spatial
             }
 
             Point3D point3D_Internal = shell.InternalPoint3D(silverSpacing, tolerance);
-            if(point3D_Internal != null)
+            if (point3D_Internal != null)
             {
                 double distance_Min = double.MaxValue;
                 foreach (Face3D face3D in dictionary.Keys)
@@ -76,7 +79,7 @@ namespace SAM.Geometry.Spatial
 
             if (tuples.Count == 0)
                 return null;
-            
+
             tuples.Sort((x, y) => y.Item2.CompareTo(x.Item2));
 
             return tuples[0].Item1;

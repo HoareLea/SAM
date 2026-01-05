@@ -1,4 +1,7 @@
-﻿namespace SAM.Analytical.Grasshopper
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical.Grasshopper
 {
     public static partial class Query
     {
@@ -7,7 +10,7 @@
             string fileName = "SAM Analytical.exe";
 
             string path = System.IO.Path.Combine(Core.Query.ExecutingAssemblyDirectory(), fileName);
-            if(!System.IO.Path.Exists(path))
+            if (!System.IO.Path.Exists(path))
             {
                 string path_Temp = System.IO.Path.Combine(System.IO.Path.GetDirectoryName(Core.Query.ExecutingAssemblyDirectory()), fileName);
                 if (System.IO.Path.Exists(path_Temp))

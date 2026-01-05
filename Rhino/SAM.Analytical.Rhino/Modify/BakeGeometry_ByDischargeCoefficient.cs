@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -27,7 +30,7 @@ namespace SAM.Analytical.Rhino
 
             SortedDictionary<double, List<Aperture>> dictionary = new SortedDictionary<double, List<Aperture>>();
             List<Aperture> apertures_NoDischargeCoefficient = new List<Aperture>();
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 if (aperture == null)
                 {
@@ -35,10 +38,10 @@ namespace SAM.Analytical.Rhino
                 }
 
                 double dischargeCoefficient = 0;
-                if(aperture.TryGetValue(ApertureParameter.OpeningProperties, out IOpeningProperties openingProperties) && openingProperties != null)
+                if (aperture.TryGetValue(ApertureParameter.OpeningProperties, out IOpeningProperties openingProperties) && openingProperties != null)
                 {
                     dischargeCoefficient = openingProperties.GetDischargeCoefficient();
-                    if(double.IsNaN(dischargeCoefficient))
+                    if (double.IsNaN(dischargeCoefficient))
                     {
                         dischargeCoefficient = 0;
                     }
@@ -46,13 +49,13 @@ namespace SAM.Analytical.Rhino
 
                 dischargeCoefficient = Core.Query.Round(dischargeCoefficient, Core.Tolerance.MacroDistance);
 
-                if(dischargeCoefficient == 0)
+                if (dischargeCoefficient == 0)
                 {
                     apertures_NoDischargeCoefficient.Add(aperture);
                     continue;
                 }
 
-                if(!dictionary.TryGetValue(dischargeCoefficient, out List<Aperture> apertures_Temp) || apertures_Temp == null)
+                if (!dictionary.TryGetValue(dischargeCoefficient, out List<Aperture> apertures_Temp) || apertures_Temp == null)
                 {
                     apertures_Temp = new List<Aperture>();
                     dictionary[dischargeCoefficient] = apertures_Temp;
@@ -88,7 +91,7 @@ namespace SAM.Analytical.Rhino
 
                 objectAttributes.LayerIndex = layer.Index;
 
-                foreach(Aperture aperture in keyValuePair.Value)
+                foreach (Aperture aperture in keyValuePair.Value)
                 {
                     if (BakeGeometry(aperture, rhinoDoc, objectAttributes, out Guid guid))
                     {

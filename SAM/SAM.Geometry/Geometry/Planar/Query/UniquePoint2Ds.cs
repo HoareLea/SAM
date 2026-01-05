@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -10,7 +13,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             HashSet<Point2D> result = new HashSet<Point2D>();
-            foreach(ISegmentable2D segmentable2D in segmentable2Ds)
+            foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 List<Point2D> point2Ds = segmentable2D?.GetPoints();
                 if (point2Ds == null || point2Ds.Count == 0)
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                foreach(Point2D point2D in point2Ds)
+                foreach (Point2D point2D in point2Ds)
                 {
                     result.Add(point2D);
                 }

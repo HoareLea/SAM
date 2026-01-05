@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -19,7 +22,7 @@ namespace SAM.Analytical
             }
 
             MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
-            if(materialLibrary == null)
+            if (materialLibrary == null)
             {
                 materialLibrary = new MaterialLibrary("Default MaterialLibrary");
             }
@@ -27,37 +30,37 @@ namespace SAM.Analytical
             List<Construction> constructions = null;
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels != null && panels.Count != 0)
+            if (panels != null && panels.Count != 0)
             {
                 for (int i = 0; i < panels.Count; i++)
                 {
                     Panel panel = panels[i];
-                    
+
                     Construction construction = panel?.Construction;
-                    if(construction == null)
+                    if (construction == null)
                     {
                         continue;
                     }
 
                     constructions = constructionManager.GetConstructions(construction.Name);
-                    if(constructions == null || constructions.Count == 0)
+                    if (constructions == null || constructions.Count == 0)
                     {
                         continue;
                     }
 
                     construction = constructions[0];
 
-                    if(constructions.Count > 1)
+                    if (constructions.Count > 1)
                     {
-                        foreach(Construction construction_Temp in constructions)
+                        foreach (Construction construction_Temp in constructions)
                         {
-                            if(!construction_Temp.TryGetValue(ConstructionParameter.DefaultPanelType, out string string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
+                            if (!construction_Temp.TryGetValue(ConstructionParameter.DefaultPanelType, out string string_PanelType) || string.IsNullOrWhiteSpace(string_PanelType))
                             {
                                 continue;
                             }
 
                             PanelType panelType = Core.Query.Enum<PanelType>(string_PanelType);
-                            if(panelType == panel.PanelType)
+                            if (panelType == panel.PanelType)
                             {
                                 construction = construction_Temp;
                                 break;
@@ -65,7 +68,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(construction == null)
+                    if (construction == null)
                     {
                         continue;
                     }
@@ -75,15 +78,15 @@ namespace SAM.Analytical
                     adjacencyCluster.AddObject(panel);
 
                     List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
-                    if(constructionLayers == null || constructionLayers.Count == 0)
+                    if (constructionLayers == null || constructionLayers.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach(ConstructionLayer constructionLayer in constructionLayers)
+                    foreach (ConstructionLayer constructionLayer in constructionLayers)
                     {
                         IMaterial material = constructionManager.GetMaterial(constructionLayer.Name);
-                        if(material == null)
+                        if (material == null)
                         {
                             continue;
                         }
@@ -94,11 +97,11 @@ namespace SAM.Analytical
             }
 
             constructions = adjacencyCluster.GetObjects<Construction>();
-            if(constructions != null && constructions.Count != 0)
+            if (constructions != null && constructions.Count != 0)
             {
-                foreach(Construction construction in constructions)
+                foreach (Construction construction in constructions)
                 {
-                    if(construction == null)
+                    if (construction == null)
                     {
                         continue;
                     }
@@ -138,7 +141,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(construction_Temp == null)
+                    if (construction_Temp == null)
                     {
                         continue;
                     }

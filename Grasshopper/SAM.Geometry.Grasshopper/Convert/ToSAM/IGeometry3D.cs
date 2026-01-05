@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel.Types;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace SAM.Geometry.Grasshopper
@@ -10,7 +13,7 @@ namespace SAM.Geometry.Grasshopper
             if (curve.Value is LineCurve)
                 return Rhino.Convert.ToSAM(((LineCurve)curve.Value).Line);
             else
-                return Rhino.Convert.ToSAM( curve.Value, simplify);
+                return Rhino.Convert.ToSAM(curve.Value, simplify);
         }
     }
 }

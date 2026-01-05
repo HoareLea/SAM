@@ -1,7 +1,10 @@
-﻿using System.Linq;
-using System.Collections.Generic;
-using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -10,12 +13,12 @@ namespace SAM.Analytical
         public static void SplitMaterialsByThickness(this AnalyticalModel analyticalModel, bool includeConstructions = true, bool includeApertureConstructions = true)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel?.AdjacencyCluster;
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return;
             }
 
-            if(!includeConstructions && !includeApertureConstructions)
+            if (!includeConstructions && !includeApertureConstructions)
             {
                 return;
             }
@@ -43,7 +46,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(includeApertureConstructions)
+            if (includeApertureConstructions)
             {
                 apertureConstructions = adjacencyCluster.GetApertureConstructions();
                 if (apertureConstructions != null)
@@ -67,16 +70,16 @@ namespace SAM.Analytical
                 }
             }
 
-            if(constructionLayers == null || constructionLayers.Count == 0)
+            if (constructionLayers == null || constructionLayers.Count == 0)
             {
                 return;
             }
 
             List<Tuple<string, ConstructionLayer>> tuples = new List<Tuple<string, ConstructionLayer>>();
-            while(constructionLayers.Count != 0)
+            while (constructionLayers.Count != 0)
             {
                 ConstructionLayer constructionLayer = constructionLayers[0];
-                if(constructionLayer == null)
+                if (constructionLayer == null)
                 {
                     constructionLayers.RemoveAt(0);
                     continue;
@@ -85,7 +88,7 @@ namespace SAM.Analytical
                 string name = constructionLayer.Name;
 
                 List<ConstructionLayer> constructionLayers_Name = constructionLayers.FindAll(x => x.Name == name);
-                if(constructionLayers_Name == null || constructionLayers.Count < 2)
+                if (constructionLayers_Name == null || constructionLayers.Count < 2)
                 {
                     constructionLayers.RemoveAt(0);
                     continue;
@@ -94,19 +97,19 @@ namespace SAM.Analytical
                 constructionLayers.RemoveAt(0);
 
                 IEnumerable<double> thicknesses = constructionLayers_Name.ConvertAll(x => x.Thickness).Distinct();
-                if(thicknesses == null || thicknesses.Count() < 2)
+                if (thicknesses == null || thicknesses.Count() < 2)
                 {
                     continue;
                 }
 
-                foreach(double thickness in thicknesses)
+                foreach (double thickness in thicknesses)
                 {
                     ConstructionLayer constructionLayer_New = new ConstructionLayer(string.Format("{0}_{1}", name, thickness), thickness);
                     tuples.Add(new Tuple<string, ConstructionLayer>(name, constructionLayer_New));
                 }
             }
 
-            if(tuples == null || tuples.Count == 0)
+            if (tuples == null || tuples.Count == 0)
             {
                 return;
             }
@@ -228,12 +231,12 @@ namespace SAM.Analytical
             }
 
             MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
-            if(materialLibrary != null)
+            if (materialLibrary != null)
             {
-                foreach(Tuple<string, ConstructionLayer> tuple in tuples)
+                foreach (Tuple<string, ConstructionLayer> tuple in tuples)
                 {
                     Material material = materialLibrary.GetMaterial(tuple.Item1) as Material;
-                    if(material == null)
+                    if (material == null)
                     {
                         continue;
                     }
@@ -249,7 +252,7 @@ namespace SAM.Analytical
                     analyticalModel.AddMaterial(material);
                 }
 
-                
+
             }
         }
     }

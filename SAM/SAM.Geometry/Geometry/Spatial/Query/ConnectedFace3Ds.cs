@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +11,7 @@ namespace SAM.Geometry.Spatial
     {
         public static List<Face3D> ConnectedFace3Ds(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Distance, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null || face3Ds == null)
+            if (face3D == null || face3Ds == null)
             {
                 return null;
             }
@@ -21,17 +24,17 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
-            for(int i = face3Ds_Temp.Count - 1; i >= 0; i--)
+            for (int i = face3Ds_Temp.Count - 1; i >= 0; i--)
             {
                 Face3D face3D_Temp = face3Ds_Temp[i];
-                
+
                 if (face3D_Temp == null)
                 {
                     face3Ds_Temp.RemoveAt(i);
                     continue;
                 }
 
-                if(face3D.Distance(face3D_Temp, tolerance_Angle, tolerance_Distance) > tolerance_Distance)
+                if (face3D.Distance(face3D_Temp, tolerance_Angle, tolerance_Distance) > tolerance_Distance)
                 {
                     continue;
                 }
@@ -41,7 +44,7 @@ namespace SAM.Geometry.Spatial
             }
 
             int count = result.Count;
-            for(int i=0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 List<Face3D> face3Ds_Connected = result[i].ConnectedFace3Ds(face3Ds_Temp, tolerance_Angle, tolerance_Distance);
                 if (face3Ds_Connected == null || face3Ds_Connected.Count == 0)
@@ -70,7 +73,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Point3D> point3Ds = new List<Point3D>();
-            foreach(IClosedPlanar3D edge3D in edge3Ds)
+            foreach (IClosedPlanar3D edge3D in edge3Ds)
             {
                 ISegmentable3D segmentable3D = edge3D as ISegmentable3D;
                 if (segmentable3D == null)
@@ -84,18 +87,18 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                foreach(Segment3D segment3D in segment3Ds_Temp)
+                foreach (Segment3D segment3D in segment3Ds_Temp)
                 {
                     Point3D point3D = segment3D.Mid();
-                    if(point3D == null)
+                    if (point3D == null)
                     {
                         continue;
                     }
 
-                    if(segment3Ds_Excluded != null)
+                    if (segment3Ds_Excluded != null)
                     {
                         Segment3D segment3D_Excluded = segment3Ds_Excluded.Find(x => x.On(point3D, tolerance));
-                        if(segment3D_Excluded != null)
+                        if (segment3D_Excluded != null)
                         {
                             continue;
                         }
@@ -120,7 +123,7 @@ namespace SAM.Geometry.Spatial
                     continue;
                 }
 
-                if(!boundingBox3D.InRange(boundingBox3D_Temp, tolerance))
+                if (!boundingBox3D.InRange(boundingBox3D_Temp, tolerance))
                 {
                     continue;
                 }
@@ -152,17 +155,17 @@ namespace SAM.Geometry.Spatial
                     segment3Ds_Temp.RemoveAll(x => x == null || x.GetLength() < tolerance);
 
                     bool connected = false;
-                    foreach(Point3D point3D in point3Ds)
+                    foreach (Point3D point3D in point3Ds)
                     {
                         Segment3D segment3D_Temp = segment3Ds_Temp.Find(x => x.On(point3D, tolerance));
-                        if(segment3Ds_Temp != null)
+                        if (segment3Ds_Temp != null)
                         {
                             connected = true;
                             break;
                         }
                     }
 
-                    if(connected)
+                    if (connected)
                     {
                         result.Add(face3D_Temp);
                         break;
@@ -171,7 +174,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(result == null || result.Count == 0)
+            if (result == null || result.Count == 0)
             {
                 return result;
             }

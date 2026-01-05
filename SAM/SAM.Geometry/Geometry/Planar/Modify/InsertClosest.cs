@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -44,7 +47,7 @@ namespace SAM.Geometry.Planar
             if (point2D_Closest.AlmostEquals(segment2D_Temp[0], tolerance))
                 return segment2D_Temp[0];
 
-            if(point2D_Closest.AlmostEquals(segment2D_Temp[1], tolerance))
+            if (point2D_Closest.AlmostEquals(segment2D_Temp[1], tolerance))
                 return segment2D_Temp[1];
 
             segment2Ds[index] = new Segment2D(segment2D_Temp[0], point2D_Closest);

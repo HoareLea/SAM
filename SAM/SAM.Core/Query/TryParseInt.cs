@@ -1,4 +1,7 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -6,7 +9,7 @@
         {
             result = default;
 
-            if(TryParseDouble(value, out double @double))
+            if (TryParseDouble(value, out double @double))
             {
                 result = System.Convert.ToInt32(@double);
                 return true;

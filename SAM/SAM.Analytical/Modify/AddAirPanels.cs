@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -11,21 +14,21 @@ namespace SAM.Analytical
     {
         public static List<Panel> AddAirPanels(this AdjacencyCluster adjacencyCluster, IEnumerable<Plane> planes, IEnumerable<Space> spaces = null, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance, double tolerance_Snap = Core.Tolerance.MacroDistance)
         {
-            if(adjacencyCluster == null || planes == null)
+            if (adjacencyCluster == null || planes == null)
             {
                 return null;
             }
 
             List<Panel> result = new List<Panel>();
             foreach (Plane plane in planes)
-            { 
-                if(plane == null)
+            {
+                if (plane == null)
                 {
                     continue;
                 }
 
                 List<Panel> panels = AddAirPanels(adjacencyCluster, plane, spaces, silverSpacing, tolerance_Angle, tolerance_Distance, tolerance_Snap);
-                if(panels != null && panels.Count > 0)
+                if (panels != null && panels.Count > 0)
                 {
                     result.AddRange(panels);
                 }
@@ -50,23 +53,23 @@ namespace SAM.Analytical
                 return result;
             }
 
-            if(spaces != null)
+            if (spaces != null)
             {
-                for(int i = spaces_Temp.Count - 1; i >= 0; i--)
+                for (int i = spaces_Temp.Count - 1; i >= 0; i--)
                 {
                     Guid guid = spaces_Temp[i].Guid;
 
                     bool exists = false;
-                    foreach(Space space in spaces)
+                    foreach (Space space in spaces)
                     {
-                        if(space.Guid == guid)
+                        if (space.Guid == guid)
                         {
                             exists = true;
                             break;
                         }
                     }
 
-                    if(exists)
+                    if (exists)
                     {
                         continue;
                     }
@@ -95,7 +98,7 @@ namespace SAM.Analytical
                 }
 
                 shells_Cut.RemoveAll(x => x == null || x.GetBoundingBox() == null);
-                if(shells_Cut.Count <= 1)
+                if (shells_Cut.Count <= 1)
                 {
                     continue;
                 }
@@ -110,7 +113,7 @@ namespace SAM.Analytical
 
             List<Face3D> face3Ds_Existing = panels_Existing?.ConvertAll(x => x.GetFace3D());
 
-            List <Tuple<Space, List<Tuple<Space, List<Panel>>>>> tuples_New = Enumerable.Repeat<Tuple<Space, List<Tuple<Space, List<Panel>>>>>(null, tuples.Count).ToList();
+            List<Tuple<Space, List<Tuple<Space, List<Panel>>>>> tuples_New = Enumerable.Repeat<Tuple<Space, List<Tuple<Space, List<Panel>>>>>(null, tuples.Count).ToList();
 
             Parallel.For(0, tuples.Count, (int i) =>
             //for(int i=0; i < tuples.Count; i++)
@@ -185,9 +188,9 @@ namespace SAM.Analytical
 
             });
 
-            foreach(Tuple<Space, List<Tuple<Space, List<Panel>>>> tuple in tuples_New)
+            foreach (Tuple<Space, List<Tuple<Space, List<Panel>>>> tuple in tuples_New)
             {
-                if(tuple == null)
+                if (tuple == null)
                 {
                     continue;
                 }
@@ -197,13 +200,13 @@ namespace SAM.Analytical
                 List<IJSAMObject> relatedObjects = adjacencyCluster.GetRelatedObjects(space_Old)?.FindAll(x => !(x is Panel));
                 adjacencyCluster.RemoveObject<Space>(space_Old.Guid);
 
-                foreach(Tuple<Space, List<Panel>> tuple_Space_New in tuple.Item2)
+                foreach (Tuple<Space, List<Panel>> tuple_Space_New in tuple.Item2)
                 {
                     Space space_New = tuple_Space_New.Item1;
 
                     adjacencyCluster.AddObject(space_New);
 
-                    if(relatedObjects != null)
+                    if (relatedObjects != null)
                     {
                         foreach (IJSAMObject relatedObject in relatedObjects)
                         {
@@ -216,7 +219,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    foreach(Panel panel in tuple_Space_New.Item2)
+                    foreach (Panel panel in tuple_Space_New.Item2)
                     {
                         adjacencyCluster.AddObject(panel);
                         adjacencyCluster.AddRelation(space_New, panel);

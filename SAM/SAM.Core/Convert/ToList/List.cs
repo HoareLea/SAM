@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -42,7 +45,7 @@ namespace SAM.Core
                 return null;
 
             List<T> result = new List<T>();
-            foreach(object @object in jArray)
+            foreach (object @object in jArray)
             {
                 object object_Temp = @object;
 
@@ -64,11 +67,11 @@ namespace SAM.Core
 
                 if (!tryConvert)
                 {
-                    if(!skipInvalid)
+                    if (!skipInvalid)
                         result.Add(default);
-                    
+
                     continue;
-                }    
+                }
 
                 T value = default;
                 if (!Query.TryConvert(object_Temp, out value))
@@ -78,7 +81,7 @@ namespace SAM.Core
 
                     value = default;
                 }
-                    
+
                 result.Add(value);
             }
 

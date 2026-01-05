@@ -1,4 +1,7 @@
-﻿using Grasshopper.GUI;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using System;
@@ -9,7 +12,7 @@ namespace SAM.Core.Grasshopper
 {
     public class GH_SAMComponentButtonAttributes : GH_SAMComponentAttributes
     {
-        public GH_SAMComponentButtonAttributes(GH_Component component) 
+        public GH_SAMComponentButtonAttributes(GH_Component component)
             : base(component)
         {
         }

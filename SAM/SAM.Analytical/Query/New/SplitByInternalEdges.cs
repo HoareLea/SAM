@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -16,12 +19,12 @@ namespace SAM.Analytical
                 return null;
 
             List<IPartition> result = new List<IPartition>();
-            for(int i=0; i < face3Ds.Count; i++)
+            for (int i = 0; i < face3Ds.Count; i++)
             {
                 System.Guid guid = i == 0 ? partition.Guid : System.Guid.NewGuid();
 
                 IPartition partition_Temp = Create.Partition(partition, guid, face3Ds[i], tolerance);
-                if(partition_Temp == null)
+                if (partition_Temp == null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -17,12 +20,12 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(panel.Apertures is not List<Aperture> apertures || apertures.Count == 0)
+            if (panel.Apertures is not List<Aperture> apertures || apertures.Count == 0)
             {
                 return null;
             }
 
-            if(apertureGuids != null && apertureGuids.Any())
+            if (apertureGuids != null && apertureGuids.Any())
             {
                 for (int i = apertures.Count - 1; i >= 0; i--)
                 {
@@ -33,12 +36,12 @@ namespace SAM.Analytical
                 }
             }
 
-            if(apertures is null || apertures.Count == 0)
+            if (apertures is null || apertures.Count == 0)
             {
                 return null;
             }
 
-            if(panel.Plane is not Plane plane)
+            if (panel.Plane is not Plane plane)
             {
                 return null;
             }
@@ -55,7 +58,7 @@ namespace SAM.Analytical
             }
 
             List<List<Tuple<Aperture, Polygon2D>>> tuples_Group = [];
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 if ((plane.Convert(aperture?.GetExternalEdge3D()) as ISegmentable2D)?.GetPoints() is not List<Point2D> point2Ds || point2Ds.Count < 3)
                 {
@@ -69,7 +72,7 @@ namespace SAM.Analytical
 
             bool updated = true;
 
-            while(updated)
+            while (updated)
             {
                 updated = false;
 
@@ -97,11 +100,11 @@ namespace SAM.Analytical
                                 Guid guid_2 = aperture_2.Guid;
 
                                 int index = tuples_Distance.FindIndex(x => (x.Item1 == guid_1 && x.Item2 == guid_2) || (x.Item1 == guid_2 && x.Item2 == guid_1));
-                                if(index == -1)
+                                if (index == -1)
                                 {
                                     index = tuples_Distance.Count;
                                     tuples_Distance.Add(new Tuple<Guid, Guid, double>(guid_1, guid_2, polygon2D_1.Distance(polygon2D_2)));
-                                    
+
                                 }
 
                                 if (tuples_Distance[index].Item3 > distance)
@@ -114,7 +117,7 @@ namespace SAM.Analytical
 
                             }
 
-                            if(match)
+                            if (match)
                             {
                                 break;
                             }
@@ -131,7 +134,7 @@ namespace SAM.Analytical
                         tuples_Group.Remove(tuples_Group_2);
                     }
 
-                    if(updated)
+                    if (updated)
                     {
                         break;
                     }
@@ -158,9 +161,9 @@ namespace SAM.Analytical
                 double area_External = 0;
                 double area_Internal = 0;
 
-                foreach(Face3D face3D in face3Ds)
+                foreach (Face3D face3D in face3Ds)
                 {
-                    if(face3D.GetExternalEdge3D() is not IClosedPlanar3D externalEdge)
+                    if (face3D.GetExternalEdge3D() is not IClosedPlanar3D externalEdge)
                     {
                         continue;
                     }
@@ -168,12 +171,12 @@ namespace SAM.Analytical
                     double area = double.NaN;
 
                     area = externalEdge.GetArea();
-                    if(!double.IsNaN(area))
+                    if (!double.IsNaN(area))
                     {
                         area_External += area;
                     }
 
-                    if(face3D.GetInternalEdge3Ds() is not List<IClosedPlanar3D> internalEdges || internalEdges.Count == 0)
+                    if (face3D.GetInternalEdge3Ds() is not List<IClosedPlanar3D> internalEdges || internalEdges.Count == 0)
                     {
                         if (!double.IsNaN(area))
                         {
@@ -183,7 +186,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    foreach(IClosedPlanar3D internalEdge in internalEdges)
+                    foreach (IClosedPlanar3D internalEdge in internalEdges)
                     {
                         area = internalEdge.GetArea();
                         if (!double.IsNaN(area))
@@ -193,7 +196,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(double.IsNaN(area_External) || Core.Query.AlmostEqual(area_External, Core.Tolerance.MacroDistance))
+                if (double.IsNaN(area_External) || Core.Query.AlmostEqual(area_External, Core.Tolerance.MacroDistance))
                 {
                     continue;
                 }
@@ -221,14 +224,14 @@ namespace SAM.Analytical
                     rectangle2D_External.Move(rectangle2D.HeightDirection * difference / 2);
                 }
 
-                if(rectangle2D_External.GetArea() < Core.Tolerance.MacroDistance)
+                if (rectangle2D_External.GetArea() < Core.Tolerance.MacroDistance)
                 {
                     continue;
                 }
 
-                foreach(Aperture aperture_Temp in tuples.ConvertAll(x => x.Item1))
+                foreach (Aperture aperture_Temp in tuples.ConvertAll(x => x.Item1))
                 {
-                    if(!panel.RemoveAperture(aperture_Temp.Guid))
+                    if (!panel.RemoveAperture(aperture_Temp.Guid))
                     {
                         continue;
                     }
@@ -236,7 +239,7 @@ namespace SAM.Analytical
                     removedApertures.Add(aperture_Temp);
                 }
 
-                if(removeOverlap)
+                if (removeOverlap)
                 {
                     if (panel.Apertures is List<Aperture> apertures_Existing && apertures_Existing.Count != 0)
                     {
@@ -264,7 +267,7 @@ namespace SAM.Analytical
 
                 Polygon3D polygon3D = plane.Convert(new Polygon2D(rectangle2D_External.GetPoints()));
 
-                Aperture aperture_New = new (Guid.NewGuid(), aperture, new Face3D(polygon3D));
+                Aperture aperture_New = new(Guid.NewGuid(), aperture, new Face3D(polygon3D));
                 panel.AddAperture(aperture_New, tolerance_Distance: Core.Tolerance.MacroDistance);
                 result.Add(aperture_New);
 

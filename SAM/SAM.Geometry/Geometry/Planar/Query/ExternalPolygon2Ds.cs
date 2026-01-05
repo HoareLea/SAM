@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -46,7 +49,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<Polygon2D> polygon2Ds = Create.Polygon2Ds(segmentable2Ds, maxDistance, false, tolerance);
-            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }

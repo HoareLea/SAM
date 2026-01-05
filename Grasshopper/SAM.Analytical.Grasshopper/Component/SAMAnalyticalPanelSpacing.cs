@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -26,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -113,13 +116,13 @@ namespace SAM.Analytical.Grasshopper
             Dictionary<Point3D, List<Panel>> dictionary = Analytical.Query.SpacingDictionary(panels, max, min);
 
             index = Params.IndexOfOutputParam("points");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetDataList(index, dictionary?.Keys.ToList().ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x)));
             }
 
             index = Params.IndexOfOutputParam("panels");
-            if(index != -1)
+            if (index != -1)
             {
                 DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
 

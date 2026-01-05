@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -17,14 +20,14 @@ namespace SAM.Analytical
             int index_Destination = delimitedFileTable.GetColumnIndex(columnName_Destination);
 
             ConstructionLibrary result = new ConstructionLibrary(constructionLibrary.Name);
-            for(int i =0; i < delimitedFileTable.RowCount; i++)
+            for (int i = 0; i < delimitedFileTable.RowCount; i++)
             {
                 string name_Template = delimitedFileTable.ToString(i, index_Source);
                 if (string.IsNullOrWhiteSpace(name_Template))
                     continue;
 
                 string name_Destination = name_Template;
-                if(index_Destination != -1)
+                if (index_Destination != -1)
                     name_Destination = delimitedFileTable.ToString(i, index_Destination);
 
                 if (string.IsNullOrWhiteSpace(name_Destination))

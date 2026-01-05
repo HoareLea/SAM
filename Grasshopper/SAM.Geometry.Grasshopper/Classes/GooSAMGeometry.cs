@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Newtonsoft.Json.Linq;
@@ -80,7 +83,7 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is IBoundable2D)
                 {
                     BoundingBox2D boundingBox2D = ((IBoundable2D)Value).GetBoundingBox();
-                    return Rhino.Convert.ToRhino( new BoundingBox3D(new Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)));
+                    return Rhino.Convert.ToRhino(new BoundingBox3D(new Point3D(boundingBox2D.Min.X, boundingBox2D.Min.Y, -1), new Point3D(boundingBox2D.Max.X, boundingBox2D.Max.Y, 1)));
                 }
 
                 if (Value is Point2D)
@@ -164,9 +167,9 @@ namespace SAM.Geometry.Grasshopper
                 if (source is SAMGeometry2DObjectCollection)
                 {
                     List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
-                    foreach(ISAMGeometry2DObject sAMGeometry2DObject in (SAMGeometry2DObjectCollection)source)
+                    foreach (ISAMGeometry2DObject sAMGeometry2DObject in (SAMGeometry2DObjectCollection)source)
                     {
-                        if(sAMGeometry2DObject is IFace2DObject)
+                        if (sAMGeometry2DObject is IFace2DObject)
                         {
                             sAMGeometry2Ds.Add(((IFace2DObject)sAMGeometry2DObject).Face2D);
                         }
@@ -228,7 +231,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if(source is Rectangle3d)
+            if (source is Rectangle3d)
             {
                 Value = Rhino.Convert.ToSAM((Rectangle3d)source);
                 return true;
@@ -276,7 +279,7 @@ namespace SAM.Geometry.Grasshopper
                 return true;
             }
 
-            if(source is Mesh)
+            if (source is Mesh)
             {
                 Value = Rhino.Convert.ToSAM((Mesh)source);
             }
@@ -289,7 +292,7 @@ namespace SAM.Geometry.Grasshopper
             if (source is Brep)
             {
                 List<ISAMGeometry3D> sAMGeometry3Ds = Rhino.Convert.ToSAM(((Brep)source));
-                if(sAMGeometry3Ds != null && sAMGeometry3Ds.Count != 0)
+                if (sAMGeometry3Ds != null && sAMGeometry3Ds.Count != 0)
                 {
                     Value = sAMGeometry3Ds[0];
                     return true;
@@ -376,9 +379,9 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if(typeof(Y) == typeof(Rectangle3d))
+            if (typeof(Y) == typeof(Rectangle3d))
             {
-                if(Value is Rectangle3D)
+                if (Value is Rectangle3D)
                 {
                     target = (Y)(object)Rhino.Convert.ToRhino((Rectangle3D)Value);
                     return true;
@@ -429,14 +432,14 @@ namespace SAM.Geometry.Grasshopper
                 if (Value is Shell)
                 {
                     Mesh mesh = Rhino.Convert.ToRhino_Mesh((Shell)Value);
-                    if(mesh != null)
+                    if (mesh != null)
                     {
                         target = (Y)(object)new GH_Mesh(mesh);
                         return true;
                     }
                 }
 
-                if(Value is Mesh3D)
+                if (Value is Mesh3D)
                 {
                     target = (Y)(object)new GH_Mesh(Rhino.Convert.ToRhino((Mesh3D)Value));
                     return true;

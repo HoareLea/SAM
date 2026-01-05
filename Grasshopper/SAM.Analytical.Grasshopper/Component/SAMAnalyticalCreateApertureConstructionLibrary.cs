@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -85,24 +88,24 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref apertureConstructionLibrary);
             }
 
-            if(apertureConstructionLibrary == null)
+            if (apertureConstructionLibrary == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             index = Params.IndexOfInputParam("apertureConstructions_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<ApertureConstruction> apertureConstructions = new List<ApertureConstruction>();
-                if(dataAccess.GetDataList(index, apertureConstructions))
+                if (dataAccess.GetDataList(index, apertureConstructions))
                 {
                     apertureConstructions?.ForEach(x => apertureConstructionLibrary.Add(x));
                 }
             }
 
             index = Params.IndexOfOutputParam("apertureConstructionLibrary");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, new GooApertureConstructionLibrary(apertureConstructionLibrary));
             }

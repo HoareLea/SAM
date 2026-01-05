@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
@@ -27,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -83,7 +86,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new Param_String { Name = "stringProfile", NickName = "stringProfile", Description = "String Profile", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                
+
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "heatingProfile", NickName = "heatingProfile", Description = "SAM Analytical Heating Profile", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Integer() { Name = "heatingHourIndex", NickName = "heatingHourIndex", Description = "Heating Hour Index", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
 
@@ -133,7 +136,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_coolingSeasonSetPoint");
             double coolingTemperature = double.NaN;
-            if(index != -1)
+            if (index != -1)
             {
                 if (!dataAccess.GetData(index, ref coolingTemperature))
                 {
@@ -160,20 +163,20 @@ namespace SAM.Analytical.Grasshopper
                         continue;
                     }
 
-                    if(freeCoolingProfile == null ? false : freeCoolingProfile[i] == 1)
+                    if (freeCoolingProfile == null ? false : freeCoolingProfile[i] == 1)
                     {
                         seasonTypes[i] = SeasonType.FreeCooling;
                         continue;
                     }
 
-                    if(coolingProfile == null ? false : coolingProfile[i] == 1)
+                    if (coolingProfile == null ? false : coolingProfile[i] == 1)
                     {
                         seasonTypes[i] = SeasonType.Cooling;
                         continue;
-                    } 
+                    }
                 }
 
-                if(heatingProfile != null)
+                if (heatingProfile != null)
                 {
                     dataTree_HeatingHourIndex = Query.DataTree(heatingProfile.GetValues().ToList().ConvertAll(x => x == 1));
                 }

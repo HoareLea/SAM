@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -11,11 +14,11 @@ namespace SAM.Analytical
         private int nightHoursNumberExceeding26;
 
         public TM59NaturalVentilationBedroomResult(
-            string name, 
-            string source, 
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
-            int occupiedHours, 
+            int occupiedHours,
             int maxExceedableHours,
             int hoursExceedingComfortRange,
             int annualNightOccupiedHours,
@@ -32,9 +35,9 @@ namespace SAM.Analytical
         }
 
         public TM59NaturalVentilationBedroomResult(
-            Guid guid, 
-            string name, 
-            string source, 
+            Guid guid,
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,

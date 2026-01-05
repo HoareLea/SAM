@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -9,7 +12,7 @@ using System.Windows.Forms;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class GooConstructionLayer: GooJSAMObject<ConstructionLayer>
+    public class GooConstructionLayer : GooJSAMObject<ConstructionLayer>
     {
         public GooConstructionLayer()
             : base()
@@ -74,17 +77,17 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if(source is IGH_Goo)
+            if (source is IGH_Goo)
             {
                 object value = (source as dynamic).Value;
                 ConstructionLayer constructionLayer = value as ConstructionLayer;
-                if(constructionLayer != null)
+                if (constructionLayer != null)
                 {
                     Value = constructionLayer;
                     return true;
                 }
             }
-            
+
             return base.CastFrom(source);
         }
 
@@ -98,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("8ebc44e2-3c71-401c-acd5-1f9903cb49ee");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public GooConstructionLayerParam()
             : base(typeof(ConstructionLayer).Name, typeof(ConstructionLayer).Name, typeof(ConstructionLayer).FullName.Replace(".", " "), "Params", "SAM")

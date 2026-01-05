@@ -1,4 +1,7 @@
-﻿ using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -45,8 +48,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "_point3Ds", NickName = "_point3Ds", Description = "Space locations to be changed to ExternalSpaces", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "_point3Ds", NickName = "_point3Ds", Description = "Space locations to be changed to ExternalSpaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_Wall", NickName = "construction_Wall", Description = "Wall Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_Floor", NickName = "construction_Floor", Description = "Floor Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_Roof", NickName = "construction_Roof", Description = "Roof Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
@@ -96,7 +99,7 @@ namespace SAM.Analytical.Grasshopper
 
             Construction construction_Wall = null;
             index = Params.IndexOfInputParam("construction_Wall");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref construction_Wall);
             }
@@ -118,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
             List<ExternalSpace> externalSpaces = null;
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
                 externalSpaces = adjacencyCluster.ChangeExternalSpaces(point3Ds, construction_Wall, construction_Floor, construction_Roof);
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);

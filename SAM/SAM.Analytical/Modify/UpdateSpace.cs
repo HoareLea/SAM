@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,7 +20,7 @@ namespace SAM.Analytical
                 return false;
 
             Dictionary<Space, Shell> dictionary = new Dictionary<Space, Shell>();
-            foreach(Space space_Temp in spaces)
+            foreach (Space space_Temp in spaces)
             {
                 Shell shell = adjacencyCluster.Shell(space_Temp);
                 if (shell == null)
@@ -32,7 +35,7 @@ namespace SAM.Analytical
 
             Space space_Result = null;
 
-            if(dictionary.Count > 1)
+            if (dictionary.Count > 1)
             {
                 point3D = point3D.GetMoved(Vector3D.WorldZ * silverSpacing) as Point3D;
                 foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary)

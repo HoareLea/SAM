@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Weather
 {
@@ -18,7 +21,7 @@ namespace SAM.Weather
 
         public SimpleArithmeticMeanCalculationMethod(SimpleArithmeticMeanCalculationMethod simpleArithmeticMeanCalculationMethod)
         {
-            if(simpleArithmeticMeanCalculationMethod != null)
+            if (simpleArithmeticMeanCalculationMethod != null)
             {
                 SequentialDays = simpleArithmeticMeanCalculationMethod.SequentialDays;
             }
@@ -31,12 +34,12 @@ namespace SAM.Weather
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("SequentialDays"))
+            if (jObject.ContainsKey("SequentialDays"))
             {
                 SequentialDays = jObject.Value<int>("SequentialDays");
             }

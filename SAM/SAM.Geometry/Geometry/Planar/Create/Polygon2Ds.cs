@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Planar
         public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Face2D> face2Ds = Face2Ds(segmentable2Ds, EdgeOrientationMethod.Undefined, tolerance);
-            if(face2Ds == null)
+            if (face2Ds == null)
             {
                 return null;
             }
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
             foreach (Face2D face2D in face2Ds)
             {
                 Polygon2D polygon2D = face2D?.ExternalEdge2D as Polygon2D;
-                if(polygon2D == null)
+                if (polygon2D == null)
                 {
                     continue;
                 }
@@ -36,7 +39,7 @@ namespace SAM.Geometry.Planar
                 }
 
                 List<Tuple<Polygon2D, BoundingBox2D, double>> tuples_Similar = tuples.FindAll(x => System.Math.Abs(x.Item3 - area) <= tolerance);
-                if(tuples_Similar != null && tuples_Similar.Count != 0)
+                if (tuples_Similar != null && tuples_Similar.Count != 0)
                 {
                     tuples_Similar = tuples_Similar.FindAll(x => boundingBox2D.InRange(x.Item2, tolerance));
                     if (tuples_Similar != null && tuples_Similar.Count != 0)
@@ -48,19 +51,19 @@ namespace SAM.Geometry.Planar
                         }
                     }
                 }
-                
+
                 tuples.Add(new Tuple<Polygon2D, BoundingBox2D, double>(polygon2D, boundingBox2D, area));
             }
 
-            foreach(Face2D face2D in face2Ds)
+            foreach (Face2D face2D in face2Ds)
             {
                 IEnumerable<Polygon2D> polygon2Ds = face2D?.InternalEdge2Ds?.Cast<Polygon2D>();
-                if(polygon2Ds == null || polygon2Ds.Count() == 0)
+                if (polygon2Ds == null || polygon2Ds.Count() == 0)
                 {
                     continue;
                 }
 
-                foreach(Polygon2D polygon2D in polygon2Ds)
+                foreach (Polygon2D polygon2D in polygon2Ds)
                 {
                     BoundingBox2D boundingBox2D = polygon2D?.GetBoundingBox();
                     if (boundingBox2D == null)
@@ -77,7 +80,7 @@ namespace SAM.Geometry.Planar
                     List<Polygon2D> polygon2Ds_Temp = new List<Polygon2D>() { polygon2D };
 
                     List<Tuple<Polygon2D, BoundingBox2D, double>> tuples_Internal = tuples.FindAll(x => area + tolerance > x.Item3);
-                    if(tuples_Internal != null && tuples_Internal.Count != 0)
+                    if (tuples_Internal != null && tuples_Internal.Count != 0)
                     {
                         tuples_Internal = tuples_Internal.FindAll(x => boundingBox2D.Inside(x.Item2.GetCentroid(), tolerance));
                         if (tuples_Internal != null && tuples_Internal.Count != 0)
@@ -86,14 +89,14 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    if(polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
+                    if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach(Polygon2D polygon2D_Temp in polygon2Ds_Temp)
+                    foreach (Polygon2D polygon2D_Temp in polygon2Ds_Temp)
                     {
-                        if(polygon2D_Temp != polygon2D)
+                        if (polygon2D_Temp != polygon2D)
                         {
                             boundingBox2D = polygon2D_Temp?.GetBoundingBox();
                             if (boundingBox2D == null)
@@ -131,7 +134,7 @@ namespace SAM.Geometry.Planar
         public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, double maxDistance, bool unconnectedOnly = false, double tolerance = Core.Tolerance.MicroDistance)
         {
             List<Segment2D> segment2Ds = Segment2Ds(segmentable2Ds, maxDistance, unconnectedOnly, tolerance);
-            if(segment2Ds == null || segment2Ds.Count == 0)
+            if (segment2Ds == null || segment2Ds.Count == 0)
             {
                 return null;
             }

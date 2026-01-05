@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -28,7 +31,7 @@ namespace SAM.Core
                 return;
             }
 
-            if(actions == null)
+            if (actions == null)
             {
                 actions = new List<Action>();
             }
@@ -43,7 +46,7 @@ namespace SAM.Core
                 return;
             }
 
-            if(this.actions == null)
+            if (this.actions == null)
             {
                 this.actions = new List<Action>();
             }

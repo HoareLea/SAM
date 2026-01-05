@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
@@ -7,7 +10,7 @@ namespace SAM.Geometry.Planar
     {
         public static List<Face2D> SplitByInternalEdges(this Face2D face2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(face2D == null)
+            if (face2D == null)
             {
                 return null;
             }
@@ -40,17 +43,17 @@ namespace SAM.Geometry.Planar
                 }
 
                 List<Point2D> point2Ds_InternalEdge = internalEdge.GetPoints();
-                if(point2Ds_InternalEdge == null || point2Ds_InternalEdge.Count == 0)
+                if (point2Ds_InternalEdge == null || point2Ds_InternalEdge.Count == 0)
                 {
                     continue;
                 }
 
                 segmentable2Ds.Add(internalEdge);
 
-                foreach(Point2D point2D_InternalEdge in point2Ds_InternalEdge)
+                foreach (Point2D point2D_InternalEdge in point2Ds_InternalEdge)
                 {
                     Point2D point2D_Closest = Closest(externalEdge, point2Ds_InternalEdge);
-                    if(point2D_Closest == null)
+                    if (point2D_Closest == null)
                     {
                         continue;
                     }
@@ -71,11 +74,11 @@ namespace SAM.Geometry.Planar
                 {
                     continue;
                 }
-                
+
                 tuples.Sort((x, y) => x.Item1.Distance(x.Item2).CompareTo(y.Item1.Distance(y.Item2)));
 
                 List<Segment2D> segment2Ds_Tuples = new List<Segment2D>();
-                foreach(Tuple<Point2D, Point2D> tuple in tuples)
+                foreach (Tuple<Point2D, Point2D> tuple in tuples)
                 {
                     if (tuple.Item1.Distance(tuple.Item2) <= tolerance)
                     {
@@ -88,7 +91,7 @@ namespace SAM.Geometry.Planar
 
                 Segment2D segment2D_1 = segment2Ds_Tuples[0];
                 Segment2D segment2D_2 = segment2Ds_Tuples.Find(x => x.Distance(segment2D_1) > segment2D_1.GetLength());
-                if(segment2D_2 == null)
+                if (segment2D_2 == null)
                 {
                     segment2D_2 = segment2Ds_Tuples.Find(x => x.Distance(segment2D_1) >= tolerance);
                 }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -31,21 +34,21 @@ namespace SAM.Analytical
                 if (panelTypes.Count == 1 && panelTypes[0].Equals(panelType_Construction))
                     continue;
 
-                if(panelTypes.Contains(panelType_Construction))
+                if (panelTypes.Contains(panelType_Construction))
                 {
                     panels.RemoveAll(x => x.PanelType == panelType_Construction);
                     panelTypes.Remove(panelType_Construction);
                 }
 
-                
-                foreach(PanelType panelType in panelTypes)
+
+                foreach (PanelType panelType in panelTypes)
                 {
                     Construction construction_PanelType = updateNames ? new Construction(construction, string.Format("{0} ({1})", construction.Name, Core.Query.Description(panelType))) : new Construction(construction, Guid.NewGuid());
 
                     construction_PanelType.SetValue(ConstructionParameter.DefaultPanelType, panelType.Text());
-                    
+
                     List<Panel> panels_PanelType = panels.FindAll(x => x.PanelType == panelType);
-                    foreach(Panel panel in panels_PanelType)
+                    foreach (Panel panel in panels_PanelType)
                     {
                         Panel panel_New = new Panel(panel, construction_PanelType);
                         adjacencyCluster.AddObject(panel_New);

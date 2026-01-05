@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -48,10 +51,10 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureParam() { Name = "apertures_", NickName = "apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() 
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number()
                 {
-                    Name = "_dischargeCoefficients", 
-                    NickName = "_dischargeCoefficients", 
+                    Name = "_dischargeCoefficients",
+                    NickName = "_dischargeCoefficients",
                     Description = @"Discharge Coefficients (dimensionless)
                 DefaulDefault  discharge coefficient: 0.62 (typical for a sharp-edged rectangular opening).
                 Discharge coefficients account for the ‘friction’ of an opening; the lower the coefficient, the more the aperture resists flow.
@@ -119,11 +122,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
+            if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
@@ -220,7 +223,7 @@ namespace SAM.Analytical.Grasshopper
                     {
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
                         ProfileOpeningProperties profileOpeningProperties = new ProfileOpeningProperties(dischargeCoefficient, profile);
-                        if(!double.IsNaN(factor))
+                        if (!double.IsNaN(factor))
                         {
                             profileOpeningProperties.Factor = factor;
                         }
@@ -238,7 +241,7 @@ namespace SAM.Analytical.Grasshopper
                         singleOpeningProperties = openingProperties;
                     }
 
-                    if(descriptions != null && descriptions.Count != 0)
+                    if (descriptions != null && descriptions.Count != 0)
                     {
                         string description = descriptions.Count > i ? descriptions[i] : descriptions.Last();
                         singleOpeningProperties.SetValue(OpeningPropertiesParameter.Description, description);
@@ -263,7 +266,7 @@ namespace SAM.Analytical.Grasshopper
                     aperture_Temp.AddSingleOpeningProperties(singleOpeningProperties);
 
                     panel.RemoveAperture(aperture.Guid);
-                    if(panel.AddAperture(aperture_Temp))
+                    if (panel.AddAperture(aperture_Temp))
                     {
                         adjacencyCluster.AddObject(panel);
                         apertures_Result.Add(aperture_Temp);

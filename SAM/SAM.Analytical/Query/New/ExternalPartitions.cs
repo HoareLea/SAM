@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Object.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -23,14 +26,14 @@ namespace SAM.Analytical
             if (partitions == null)
                 return null;
 
-            Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0 , 0, elevation)) as Plane; 
+            Plane plane = Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
 
             Dictionary<IPartition, List<ISegmentable2D>> dictionary = partitions.SectionDictionary<IPartition, ISegmentable2D>(plane, tolerance_Distance);
 
             List<Segment2D> segment2Ds = new List<Segment2D>();
-            foreach(KeyValuePair<IPartition, List<ISegmentable2D>> keyValuePair in dictionary)
+            foreach (KeyValuePair<IPartition, List<ISegmentable2D>> keyValuePair in dictionary)
             {
-                foreach(ISegmentable2D segmentable2D in keyValuePair.Value)
+                foreach (ISegmentable2D segmentable2D in keyValuePair.Value)
                 {
                     segment2Ds.AddRange(segmentable2D.GetSegments());
                 }
@@ -39,7 +42,7 @@ namespace SAM.Analytical
             segment2Ds = segment2Ds.Split(tolerance_Distance);
 
             List<Polygon2D> polygon2Ds = segment2Ds.ExternalPolygon2Ds(snapTolerance, tolerance_Distance);
-            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return null;
             }
@@ -55,14 +58,14 @@ namespace SAM.Analytical
 
             HashSet<Guid> guids = new HashSet<Guid>();
 
-            foreach(KeyValuePair<IPartition, List<ISegmentable2D>> keyValuePair in dictionary)
+            foreach (KeyValuePair<IPartition, List<ISegmentable2D>> keyValuePair in dictionary)
             {
                 List<Segment2D> segment2Ds_Split = new List<Segment2D>();
                 foreach (ISegmentable2D segmentable2D in keyValuePair.Value)
                 {
                     List<Segment2D> segment2Ds_Temp = segmentable2D.GetSegments();
 
-                    foreach(Segment2D segment2D_Temp in segment2Ds_Temp)
+                    foreach (Segment2D segment2D_Temp in segment2Ds_Temp)
                     {
                         List<Segment2D> segment2Ds_Split_Temp = segment2Ds.FindAll(x => segment2D_Temp.On(x.Mid(), tolerance_Distance));
                         if (segment2Ds_Split_Temp != null)
@@ -74,26 +77,26 @@ namespace SAM.Analytical
                 BoundingBox3D boundingBox3D = partition?.Face3D?.GetBoundingBox();
                 Plane plane_Bottom = Plane.WorldXY.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z)) as Plane;
 
-                foreach (Segment2D segment2D  in segment2Ds_Split)
+                foreach (Segment2D segment2D in segment2Ds_Split)
                 {
-                    if(segment2D == null || segment2D.GetLength() <= snapTolerance)
+                    if (segment2D == null || segment2D.GetLength() <= snapTolerance)
                     {
                         continue;
                     }
-                    
+
                     Point2D point2D = segment2D.Mid();
 
                     List<IPartition> partitions_Temp = null;
 
                     Polygon2D polygon2D = polygon2Ds.Find(x => x.On(point2D, snapTolerance));
-                    if(polygon2D != null)
+                    if (polygon2D != null)
                     {
                         partitions_Temp = result;
                     }
                     else
                     {
                         polygon2D = polygon2Ds.Find(x => x.Inside(point2D, snapTolerance));
-                        if(polygon2D != null)
+                        if (polygon2D != null)
                         {
                             partitions_Temp = internalPartitions;
                         }
@@ -103,7 +106,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(partitions_Temp == null)
+                    if (partitions_Temp == null)
                     {
                         continue;
                     }
@@ -115,7 +118,7 @@ namespace SAM.Analytical
                     Face3D face3D = Geometry.Spatial.Create.Face3D(plane_Bottom.Convert(segment2D), boundingBox3D.Max.Z - boundingBox3D.Min.Z);
 
                     IPartition partition_New = Create.Partition(partition, guid, face3D, tolerance_Distance);
-                    if(partition_New == null)
+                    if (partition_New == null)
                     {
                         continue;
                     }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -109,7 +112,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_systemTypeLibrary_");
             SystemTypeLibrary systemTypeLibrary = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref systemTypeLibrary);
             }
@@ -128,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_supplyUnitName_");
             string supplyUnitName = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref supplyUnitName);
             }
@@ -140,7 +143,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_exhaustUnitName_");
             string exhaustUnitName = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref exhaustUnitName);
             }
@@ -152,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_ventilationRiserName_");
             string ventilationRiserName = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref ventilationRiserName);
             }
@@ -164,7 +167,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_heatingRiserName_");
             string heatingRiserName = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref heatingRiserName);
             }
@@ -176,7 +179,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_coolingRiserName_");
             string coolingRiserName = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref coolingRiserName);
             }
@@ -206,18 +209,18 @@ namespace SAM.Analytical.Grasshopper
                 {
                     analyticalEquipments = new List<IAnalyticalEquipment>();
 
-                    foreach(MechanicalSystem mechanicalSystem in mechanicalSystems)
+                    foreach (MechanicalSystem mechanicalSystem in mechanicalSystems)
                     {
-                        if(!(mechanicalSystem is VentilationSystem))
+                        if (!(mechanicalSystem is VentilationSystem))
                         {
                             continue;
                         }
 
                         string[] names = new string[] { mechanicalSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName), mechanicalSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName) };
 
-                        foreach(string name in names)
+                        foreach (string name in names)
                         {
-                            if(string.IsNullOrEmpty(name))
+                            if (string.IsNullOrEmpty(name))
                             {
                                 continue;
                             }
@@ -257,7 +260,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, analyticalObject);
             }

@@ -1,4 +1,7 @@
-﻿using QuickGraph;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using QuickGraph;
 using QuickGraph.Algorithms.Observers;
 using QuickGraph.Algorithms.ShortestPath;
 using System.Collections.Generic;
@@ -18,7 +21,7 @@ namespace SAM.Geometry.Planar
         /// <returns>List of Point2Ds representing the longest path</returns>
         public static List<Point2D> LongestPath(this IEnumerable<ISegmentable2D> segmentable2Ds, Point2D point2D_Start = null, double tolerance = Core.Tolerance.Distance)
         {
-            if(segmentable2Ds == null)
+            if (segmentable2Ds == null)
             {
                 return null;
             }
@@ -28,12 +31,12 @@ namespace SAM.Geometry.Planar
             foreach (ISegmentable2D segmentable2D in segmentable2Ds)
             {
                 List<Segment2D> segment2Ds_Temp = segmentable2D?.GetSegments();
-                if(segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
+                if (segment2Ds_Temp == null || segment2Ds_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                for(int i =0; i < segment2Ds_Temp.Count; i++)
+                for (int i = 0; i < segment2Ds_Temp.Count; i++)
                 {
                     //segment2Ds_Temp[i].Round(tolerance);
                     segment2Ds.Add(segment2Ds_Temp[i]);
@@ -132,7 +135,7 @@ namespace SAM.Geometry.Planar
 
             if (point2D_Start == null)
                 point2D_Start = tuples[0].Item2;
-            
+
             Point2D point2D_End = tuples[0].Item3;
 
             if (point2D_Start == null || point2D_End == null)
@@ -153,18 +156,18 @@ namespace SAM.Geometry.Planar
             }
 
             List<Point2D> result = new List<Point2D>();
-            if(edges.Count() == 0)
+            if (edges.Count() == 0)
             {
                 return result;
             }
 
-            foreach(Edge<Point2D> edge_Temp in edges)
+            foreach (Edge<Point2D> edge_Temp in edges)
             {
                 Point2D point2D = edge_Temp.Source;
 
-                foreach(Point2D point2D_Unique in point2Ds_Unique)
+                foreach (Point2D point2D_Unique in point2Ds_Unique)
                 {
-                    if(point2D_Unique.AlmostEquals(point2D))
+                    if (point2D_Unique.AlmostEquals(point2D))
                     {
                         point2D = point2D_Unique;
                         break;

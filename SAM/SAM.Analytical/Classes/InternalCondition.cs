@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -51,7 +54,7 @@ namespace SAM.Analytical
         public string GetProfileName(ProfileType profileType)
         {
             InternalConditionParameter? internalConditionParameter = Query.InternalConditionParameter(profileType);
-            if(internalConditionParameter == null || !internalConditionParameter.HasValue)
+            if (internalConditionParameter == null || !internalConditionParameter.HasValue)
             {
                 return null;
             }
@@ -70,7 +73,7 @@ namespace SAM.Analytical
             return SetValue(internalConditionParameter.Value, name);
         }
 
-        public string GetSystemTypeName<T>() where T: ISystemType
+        public string GetSystemTypeName<T>() where T : ISystemType
         {
             if (typeof(T) == typeof(VentilationSystemType))
                 return GetValue<string>(InternalConditionParameter.VentilationSystemTypeName);
@@ -147,7 +150,7 @@ namespace SAM.Analytical
             return result;
         }
 
-        public T GetSystemType<T>(SystemTypeLibrary systemTypeLibrary) where T: ISystemType
+        public T GetSystemType<T>(SystemTypeLibrary systemTypeLibrary) where T : ISystemType
         {
             if (systemTypeLibrary == null)
                 return default;

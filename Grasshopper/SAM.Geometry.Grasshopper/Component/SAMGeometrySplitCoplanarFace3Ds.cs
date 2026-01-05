@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -111,9 +114,9 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<Shell> shells = new List<Shell>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(Query.TryGetSAMGeometries(objectWrapper, out List<Shell> shells_Temp) && shells_Temp != null)
+                if (Query.TryGetSAMGeometries(objectWrapper, out List<Shell> shells_Temp) && shells_Temp != null)
                 {
                     shells.AddRange(shells_Temp);
                 }
@@ -121,7 +124,7 @@ namespace SAM.Geometry.Grasshopper
 
             double tolerance_Angle = Core.Tolerance.Angle;
             index = Params.IndexOfInputParam("angleTolerance_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref tolerance_Angle);
             }
@@ -141,7 +144,7 @@ namespace SAM.Geometry.Grasshopper
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
 
-            if(index_Updated != -1)
+            if (index_Updated != -1)
                 dataAccess.SetData(index_Updated, result);
         }
     }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -13,7 +16,7 @@ namespace SAM.Core
         }
 
         public IntegerId(IntegerId integerId)
-            :base(integerId)
+            : base(integerId)
         {
             id = integerId.id;
         }
@@ -56,7 +59,7 @@ namespace SAM.Core
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }

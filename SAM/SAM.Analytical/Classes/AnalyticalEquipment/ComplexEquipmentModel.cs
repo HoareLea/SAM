@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,10 +16,10 @@ namespace SAM.Analytical
         }
 
         public ComplexEquipmentModel(ComplexEquipmentModel complexEquipmentModel)
-            :base(complexEquipmentModel)
+            : base(complexEquipmentModel)
         {
             List<ISimpleEquipment> simpleEquipments = complexEquipmentModel.GetObjects();
-            if(simpleEquipments != null)
+            if (simpleEquipments != null)
             {
                 simpleEquipments?.ForEach(x => AddObject(x?.Clone()));
             }
@@ -46,7 +49,7 @@ namespace SAM.Analytical
 
         public bool AddRelation(FlowClassification flowClassification, Direction direction, ISimpleEquipment simpleEquipment_1, ISimpleEquipment simpleEquipment_2)
         {
-            if(flowClassification == FlowClassification.Undefined || simpleEquipment_1 == null || simpleEquipment_2 == null)
+            if (flowClassification == FlowClassification.Undefined || simpleEquipment_1 == null || simpleEquipment_2 == null)
             {
                 return false;
             }
@@ -54,13 +57,13 @@ namespace SAM.Analytical
             string id = null;
 
             id = Query.Id(flowClassification, direction);
-            if(string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return false;
             }
 
             bool result = AddRelation(id, simpleEquipment_1, simpleEquipment_2) != null;
-            if(!result)
+            if (!result)
             {
                 return false;
             }
@@ -90,7 +93,7 @@ namespace SAM.Analytical
 
         public bool AddRelations(FlowClassification flowClassification, params ISimpleEquipment[] simpleEquipments)
         {
-            if(simpleEquipments == null || simpleEquipments.Length == 0)
+            if (simpleEquipments == null || simpleEquipments.Length == 0)
             {
                 return false;
             }
@@ -105,15 +108,15 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if(simpleEquipments.Length == 1)
+            if (simpleEquipments.Length == 1)
             {
                 return AddRelation(flowClassification, direction, simpleEquipments[0]);
             }
 
             bool result = false;
-            for (int i=0; i < simpleEquipments.Length - 1; i++)
+            for (int i = 0; i < simpleEquipments.Length - 1; i++)
             {
-                if(AddRelation(flowClassification, direction, simpleEquipments[i], simpleEquipments[i + 1]))
+                if (AddRelation(flowClassification, direction, simpleEquipments[i], simpleEquipments[i + 1]))
                 {
                     result = true;
                 }
@@ -134,18 +137,18 @@ namespace SAM.Analytical
 
         public bool InsertAfter(FlowClassification flowClassification, ISimpleEquipment simpleEquipment_ToBeInserted, ISimpleEquipment simpleEquipment)
         {
-            if(simpleEquipment_ToBeInserted == null || simpleEquipment == null)
+            if (simpleEquipment_ToBeInserted == null || simpleEquipment == null)
             {
                 return false;
             }
 
-            if(!Contains(simpleEquipment))
+            if (!Contains(simpleEquipment))
             {
                 return false;
             }
 
             List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
-            if(simpleEquipments == null || simpleEquipments.Count == 0)
+            if (simpleEquipments == null || simpleEquipments.Count == 0)
             {
                 return false;
             }
@@ -155,7 +158,7 @@ namespace SAM.Analytical
             Reference reference = GetReference(simpleEquipment).Value;
 
             int index = simpleEquipments.FindIndex(x => GetReference(x).Value == reference);
-            if(index == -1)
+            if (index == -1)
             {
                 return false;
             }
@@ -241,18 +244,18 @@ namespace SAM.Analytical
             return GetObjects(x => HasFlowClassification(x, flowClassification));
         }
 
-        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification) where T: ISimpleEquipment
+        public List<T> GetSimpleEquipments<T>(FlowClassification flowClassification) where T : ISimpleEquipment
         {
             List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
-            if(simpleEquipments == null)
+            if (simpleEquipments == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+            foreach (ISimpleEquipment simpleEquipment in simpleEquipments)
             {
-                if(simpleEquipment is T)
+                if (simpleEquipment is T)
                 {
                     result.Add((T)simpleEquipment);
                 }
@@ -261,20 +264,20 @@ namespace SAM.Analytical
             return result;
         }
 
-        public List<T> GetSimpleEquipments<T>() where T: ISimpleEquipment
+        public List<T> GetSimpleEquipments<T>() where T : ISimpleEquipment
         {
             return GetObjects(x => x is T).ConvertAll(x => (T)x);
         }
 
         public List<ISimpleEquipment> GetSimpleEquipments(ISimpleEquipment simpleEquipment, FlowClassification flowClassification, Direction direction)
         {
-            if(simpleEquipment == null)
+            if (simpleEquipment == null)
             {
                 return null;
             }
 
             string id = Query.Id(flowClassification, direction);
-            if(string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return null;
             }
@@ -285,7 +288,7 @@ namespace SAM.Analytical
         public HashSet<FlowClassification> GetFlowClassifications(ISimpleEquipment simpleEquipment)
         {
             RelationCollection relationCollection = GetRelations(simpleEquipment);
-            if(relationCollection == null)
+            if (relationCollection == null)
             {
                 return null;
             }
@@ -308,21 +311,21 @@ namespace SAM.Analytical
         public HashSet<FlowClassification> GetFlowClassifications()
         {
             List<ISimpleEquipment> simpleEquipments = GetObjects();
-            if(simpleEquipments == null)
+            if (simpleEquipments == null)
             {
                 return null;
             }
 
             HashSet<FlowClassification> result = new HashSet<FlowClassification>();
-            foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+            foreach (ISimpleEquipment simpleEquipment in simpleEquipments)
             {
                 HashSet<FlowClassification> flowClassifications = GetFlowClassifications(simpleEquipment);
-                if(flowClassifications == null || flowClassifications.Count == 0)
+                if (flowClassifications == null || flowClassifications.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(FlowClassification flowClassification in flowClassifications)
+                foreach (FlowClassification flowClassification in flowClassifications)
                 {
                     result.Add(flowClassification);
                 }
@@ -334,7 +337,7 @@ namespace SAM.Analytical
         public bool HasFlowClassification(ISimpleEquipment simpleEquipment, FlowClassification flowClassification)
         {
             HashSet<FlowClassification> flowClassifications = GetFlowClassifications(simpleEquipment);
-            if(flowClassifications == null || flowClassifications.Count == 0)
+            if (flowClassifications == null || flowClassifications.Count == 0)
             {
                 return false;
             }
@@ -360,7 +363,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(flowClassification_Temp != flowClassification)
+                if (flowClassification_Temp != flowClassification)
                 {
                     continue;
                 }
@@ -382,7 +385,7 @@ namespace SAM.Analytical
         /// </summary>
         /// <param name="flowClassification">Flow Calssification</param>
         /// <returns></returns>
-        public List<T> TerminalSimpleEquipments<T>(FlowClassification flowClassification) where T: ISimpleEquipment
+        public List<T> TerminalSimpleEquipments<T>(FlowClassification flowClassification) where T : ISimpleEquipment
         {
             List<ISimpleEquipment> simpleEquipments = GetSimpleEquipments(flowClassification);
             if (simpleEquipments == null)
@@ -390,7 +393,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(simpleEquipments.Count < 2)
+            if (simpleEquipments.Count < 2)
             {
                 return simpleEquipments.FindAll(x => x is T).ConvertAll(x => (T)x);
             }
@@ -402,7 +405,7 @@ namespace SAM.Analytical
             List<T> result = new List<T>();
 
             simpleEquipment = simpleEquipments.First();
-            if(simpleEquipment is T)
+            if (simpleEquipment is T)
             {
                 result.Add((T)simpleEquipment);
             }
@@ -418,13 +421,13 @@ namespace SAM.Analytical
 
         public List<ISimpleEquipment> Sort(IEnumerable<ISimpleEquipment> simpleEquipments, FlowClassification flowClassification, Direction direction)
         {
-            if(simpleEquipments == null)
+            if (simpleEquipments == null)
             {
                 return null;
             }
 
             List<ISimpleEquipment> result = new List<ISimpleEquipment>();
-            if(simpleEquipments.Count() == 0)
+            if (simpleEquipments.Count() == 0)
             {
                 return result;
             }
@@ -444,7 +447,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(simpleEquipment_Current == null)
+                if (simpleEquipment_Current == null)
                 {
                     simpleEquipment_Current = simpleEquipments_Temp[0];
                 }
@@ -453,13 +456,13 @@ namespace SAM.Analytical
                 result.Add(simpleEquipment_Current);
 
                 List<ISimpleEquipment> simpleEquipments_Related = GetSimpleEquipments(simpleEquipment_Current, flowClassification, direction);
-                while(simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
+                while (simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
                 {
                     simpleEquipment_Current = simpleEquipments_Related[0];
                     simpleEquipments_Temp.Remove(simpleEquipment_Current);
                     result.Add(simpleEquipment_Current);
                     simpleEquipments_Related = GetSimpleEquipments(simpleEquipment_Current, flowClassification, direction);
-                    if(simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
+                    if (simpleEquipments_Related != null && simpleEquipments_Related.Count > 0)
                     {
                         foreach (ISimpleEquipment simpleEquipment in result)
                         {
@@ -474,25 +477,25 @@ namespace SAM.Analytical
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("SimpleEquipments"))
+            if (jObject.ContainsKey("SimpleEquipments"))
             {
                 JArray jArray = jObject.Value<JArray>("SimpleEquipments");
-                if(jArray != null)
+                if (jArray != null)
                 {
-                    foreach(JObject jObject_SimpleEquipment in jArray)
+                    foreach (JObject jObject_SimpleEquipment in jArray)
                     {
-                        if(jObject_SimpleEquipment == null)
+                        if (jObject_SimpleEquipment == null)
                         {
                             continue;
                         }
 
                         ISimpleEquipment simpleEquipment = Core.Query.IJSAMObject<ISimpleEquipment>(jObject_SimpleEquipment);
-                        if(simpleEquipment != null)
+                        if (simpleEquipment != null)
                         {
                             Add(simpleEquipment);
                         }
@@ -500,7 +503,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(jObject.ContainsKey("Relations"))
+            if (jObject.ContainsKey("Relations"))
             {
                 JArray jArray = jObject.Value<JArray>("Relations");
                 if (jArray != null)
@@ -529,13 +532,13 @@ namespace SAM.Analytical
             JObject result = new JObject();
             result.Add("_type", Core.Query.FullTypeName(this));
 
-            List<ISimpleEquipment> simpleEquipments =  GetObjects();
-            if(simpleEquipments != null)
+            List<ISimpleEquipment> simpleEquipments = GetObjects();
+            if (simpleEquipments != null)
             {
                 JArray jArray = new JArray();
-                foreach(ISimpleEquipment simpleEquipment in simpleEquipments)
+                foreach (ISimpleEquipment simpleEquipment in simpleEquipments)
                 {
-                    if(simpleEquipment == null)
+                    if (simpleEquipment == null)
                     {
                         continue;
                     }
@@ -547,12 +550,12 @@ namespace SAM.Analytical
             }
 
             RelationCollection relationCollection = GetRelations();
-            if(relationCollection != null)
+            if (relationCollection != null)
             {
                 JArray jArray = new JArray();
-                foreach(Relation relation in relationCollection)
+                foreach (Relation relation in relationCollection)
                 {
-                    if(relation == null)
+                    if (relation == null)
                     {
                         continue;
                     }

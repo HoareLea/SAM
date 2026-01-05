@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static List<T> Systems<T>(this AdjacencyCluster adjacencyCluster, Space space) where T : MechanicalSystem
         {
-            if(adjacencyCluster == null || space == null)
+            if (adjacencyCluster == null || space == null)
             {
                 return null;
             }

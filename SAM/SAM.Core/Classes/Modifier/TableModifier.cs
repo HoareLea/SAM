@@ -1,7 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
 
 namespace SAM.Core
 {
@@ -21,27 +23,27 @@ namespace SAM.Core
         public TableModifier(TableModifier tableModifier)
             : base(tableModifier)
         {
-            if(tableModifier != null)
+            if (tableModifier != null)
             {
-                if(tableModifier.headers != null)
+                if (tableModifier.headers != null)
                 {
-                    foreach(KeyValuePair<int, string> keyValuePair in tableModifier.headers)
+                    foreach (KeyValuePair<int, string> keyValuePair in tableModifier.headers)
                     {
                         headers[keyValuePair.Key] = keyValuePair.Value;
                     }
                 }
 
-                if(tableModifier.values != null)
+                if (tableModifier.values != null)
                 {
-                    foreach(SortedDictionary<int, double> sortedDictionary in tableModifier.values)
+                    foreach (SortedDictionary<int, double> sortedDictionary in tableModifier.values)
                     {
-                        if(sortedDictionary == null)
+                        if (sortedDictionary == null)
                         {
                             continue;
                         }
 
                         SortedDictionary<int, double> sortedDictionary_New = new SortedDictionary<int, double>();
-                        foreach(KeyValuePair<int, double> keyValuePair in sortedDictionary)
+                        foreach (KeyValuePair<int, double> keyValuePair in sortedDictionary)
                         {
                             sortedDictionary_New[keyValuePair.Key] = keyValuePair.Value;
                         }
@@ -55,7 +57,7 @@ namespace SAM.Core
         }
 
         public TableModifier(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
@@ -63,23 +65,23 @@ namespace SAM.Core
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("Extrapolate"))
+            if (jObject.ContainsKey("Extrapolate"))
             {
                 Extrapolate = jObject.Value<bool>("Extrapolate");
             }
 
-            if(jObject.ContainsKey("Headers"))
+            if (jObject.ContainsKey("Headers"))
             {
                 JArray jArray = jObject.Value<JArray>("Headers");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     headers = new SortedDictionary<int, string>();
-                    foreach(JArray jArray_Header in jArray)
+                    foreach (JArray jArray_Header in jArray)
                     {
                         headers[((JValue)jArray_Header[0]).Value<int>()] = ((JValue)jArray_Header[1]).Value<string>();
                     }
@@ -112,20 +114,20 @@ namespace SAM.Core
         {
             get
             {
-                if(headers == null)
+                if (headers == null)
                 {
                     return null;
                 }
 
                 List<string> result = new List<string>();
-                if(headers.Count == 0)
+                if (headers.Count == 0)
                 {
                     return result;
                 }
 
-                for(int i = headers.Keys.First(); i <= headers.Keys.Max(); i++)
+                for (int i = headers.Keys.First(); i <= headers.Keys.Max(); i++)
                 {
-                    if(!headers.TryGetValue(i, out string header))
+                    if (!headers.TryGetValue(i, out string header))
                     {
                         header = null;
                     }
@@ -139,7 +141,7 @@ namespace SAM.Core
             set
             {
                 headers.Clear();
-                if(value == null)
+                if (value == null)
                 {
                     return;
                 }
@@ -153,14 +155,14 @@ namespace SAM.Core
 
         public int GetHeaderIndex(string name)
         {
-            if(headers == null || headers.Count == 0)
+            if (headers == null || headers.Count == 0)
             {
                 return -1;
             }
 
-            foreach(KeyValuePair<int, string> keyValuePair in headers)
+            foreach (KeyValuePair<int, string> keyValuePair in headers)
             {
-                if(name == keyValuePair.Value)
+                if (name == keyValuePair.Value)
                 {
                     return keyValuePair.Key;
                 }
@@ -171,15 +173,15 @@ namespace SAM.Core
 
         public bool AddValues(IDictionary<int, double> values)
         {
-            if(values == null)
+            if (values == null)
             {
                 return false;
             }
 
             SortedDictionary<int, double> values_Temp = new SortedDictionary<int, double>();
-            foreach(KeyValuePair<int, string> keyValuePair in headers)
+            foreach (KeyValuePair<int, string> keyValuePair in headers)
             {
-                if(!values.TryGetValue(keyValuePair.Key, out double value))
+                if (!values.TryGetValue(keyValuePair.Key, out double value))
                 {
                     continue;
                 }
@@ -193,7 +195,7 @@ namespace SAM.Core
 
         public bool AddValues(IDictionary<string, double> values, bool addMissingHeaders = false)
         {
-            if(values == null)
+            if (values == null)
             {
                 return false;
             }
@@ -202,9 +204,9 @@ namespace SAM.Core
             foreach (KeyValuePair<string, double> keyValuePair in values)
             {
                 int index = GetHeaderIndex(keyValuePair.Key);
-                if(index == -1)
+                if (index == -1)
                 {
-                    if(!addMissingHeaders)
+                    if (!addMissingHeaders)
                     {
                         continue;
                     }
@@ -242,13 +244,13 @@ namespace SAM.Core
 
         public Dictionary<int, double> GetDictionary(int rowIndex)
         {
-            if(rowIndex < 0 || values == null || values.Count == 0 || values.Count <= rowIndex)
+            if (rowIndex < 0 || values == null || values.Count == 0 || values.Count <= rowIndex)
             {
                 return null;
             }
 
             Dictionary<int, double> result = new Dictionary<int, double>();
-            foreach(KeyValuePair<int, double> keyValuePair in values[rowIndex])
+            foreach (KeyValuePair<int, double> keyValuePair in values[rowIndex])
             {
                 result[keyValuePair.Key] = keyValuePair.Value;
             }
@@ -258,7 +260,7 @@ namespace SAM.Core
 
         public Dictionary<int, double> GetDictionary(int rowIndex, IEnumerable<int> columnIndexes)
         {
-            if(columnIndexes == null)
+            if (columnIndexes == null)
             {
                 return null;
             }
@@ -268,7 +270,7 @@ namespace SAM.Core
             Dictionary<int, double> result = new Dictionary<int, double>();
             foreach (int columnIndex in columnIndexes)
             {
-                if(!sortedDictionary.TryGetValue(columnIndex, out double value))
+                if (!sortedDictionary.TryGetValue(columnIndex, out double value))
                 {
                     continue;
                 }
@@ -281,14 +283,14 @@ namespace SAM.Core
 
         public List<int> FindIndexes(IDictionary<int, double> values)
         {
-            if(values == null || this.values == null || headers == null)
+            if (values == null || this.values == null || headers == null)
             {
                 return null;
             }
 
             List<int> result = new List<int>();
 
-            for(int i=0; i < this.values.Count; i++)
+            for (int i = 0; i < this.values.Count; i++)
             {
                 SortedDictionary<int, double> sortedDictionary = this.values[i];
 
@@ -312,12 +314,12 @@ namespace SAM.Core
 
         public bool RemoveColumn(int index)
         {
-            if(index < 0)
+            if (index < 0)
             {
                 return false;
             }
 
-            if(!headers.Remove(index))
+            if (!headers.Remove(index))
             {
                 return false;
             }
@@ -332,7 +334,7 @@ namespace SAM.Core
 
         public int RowCount
         {
-            get 
+            get
             {
                 if (values != null)
                 {
@@ -348,13 +350,13 @@ namespace SAM.Core
             columnHeader = null;
             rowHeaders = null;
 
-            if(headers == null || headers.Count == 0)
+            if (headers == null || headers.Count == 0)
             {
                 return null;
             }
 
             double[,] result = null;
-            if(headers.Count < 3)
+            if (headers.Count < 3)
             {
                 columnHeader = Headers?.ToList();
                 rowHeaders = new List<List<string>>()
@@ -393,7 +395,7 @@ namespace SAM.Core
             }
 
             IEnumerable<double> uniqueValues = GetColumnValues(columnIndex_ToRemove).Distinct();
-            foreach(double uniqueValue in uniqueValues)
+            foreach (double uniqueValue in uniqueValues)
             {
                 headers_Temp[headers_Temp.Keys.Max() + 1] = uniqueValue.ToString();
             }
@@ -403,13 +405,13 @@ namespace SAM.Core
             TableModifier tableModifier = new TableModifier(ArithmeticOperator, headers_Temp.Values);
 
             List<SortedDictionary<int, double>> sortedDictionaries = new List<SortedDictionary<int, double>>(values);
-            while(sortedDictionaries.Count > 0)
+            while (sortedDictionaries.Count > 0)
             {
                 Dictionary<int, double> dictionary_Full = new Dictionary<int, double>(values[0]);
                 Dictionary<int, double> dictionary_Filtered = GetDictionary(sortedDictionaries, 0, headerIndexes);
 
                 List<int> indexes = FindIndexes(sortedDictionaries, dictionary_Filtered);
-                foreach(int index in indexes)
+                foreach (int index in indexes)
                 {
                     double uniqueValue = sortedDictionaries[index][columnIndex_ToRemove];
                     int columnIndex_UniqueValue = tableModifier.GetHeaderIndex(uniqueValue.ToString());
@@ -423,7 +425,7 @@ namespace SAM.Core
             }
 
             rowHeaders = new List<List<string>>();
-            foreach(int index in headerIndexes)
+            foreach (int index in headerIndexes)
             {
                 rowHeaders.Add(tableModifier.GetColumnValues(index).ConvertAll(x => x.ToString()));
             }
@@ -509,17 +511,17 @@ namespace SAM.Core
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
             result.Add("Extrapolate", Extrapolate);
 
-            if(headers != null)
+            if (headers != null)
             {
                 JArray jArray = new JArray();
-                foreach(KeyValuePair<int, string> keyValuePair in headers)
+                foreach (KeyValuePair<int, string> keyValuePair in headers)
                 {
                     jArray.Add(new JArray() { keyValuePair.Key, keyValuePair.Value });
                 }
@@ -527,10 +529,10 @@ namespace SAM.Core
                 result.Add("Headers", jArray);
             }
 
-            if(values != null)
+            if (values != null)
             {
                 JArray jArray_Values = new JArray();
-                foreach(SortedDictionary<int, double> sortedDictionary in values)
+                foreach (SortedDictionary<int, double> sortedDictionary in values)
                 {
                     JArray jArray_Row = new JArray();
                     foreach (KeyValuePair<int, double> keyValuePair in sortedDictionary)

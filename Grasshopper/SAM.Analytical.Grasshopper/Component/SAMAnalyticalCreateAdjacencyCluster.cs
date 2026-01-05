@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -28,14 +31,14 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
         public SAMAnalyticalCreateAdjacencyCluster()
           : base("SAMAnalytical.CreateAdjacencyCluster", "SAMAnalytical.CreateAdjacencyCluster",
-              "Create AdjacencyCluster for Horizontal Floors and Roofs only, Use only Top Floors or Roof shape ONLY this will generate Walls and close Spaces. For 3D shapes use 'Create.SAMAdjacencyCluster' from Topologic \n " 
+              "Create AdjacencyCluster for Horizontal Floors and Roofs only, Use only Top Floors or Roof shape ONLY this will generate Walls and close Spaces. For 3D shapes use 'Create.SAMAdjacencyCluster' from Topologic \n "
                 + "---->   ------\n        |\n        |    First Floor\n---->   ------\n        |\n        |   Ground Floor\n        -------\n\nSECTION"
                 , "SAM", "Analytical")
         {
@@ -85,19 +88,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (objectWrapper == null || objectWrapper.Value == null)
                     continue;
-                
-                if(objectWrapper.Value is ISAMGeometry)
+
+                if (objectWrapper.Value is ISAMGeometry)
                 {
                     sAMGeometries.Add((ISAMGeometry)objectWrapper.Value);
                 }
-                else if(objectWrapper.Value is GooSAMGeometry)
+                else if (objectWrapper.Value is GooSAMGeometry)
                 {
                     sAMGeometries.Add(((GooSAMGeometry)objectWrapper.Value).Value);
                 }
-                else if(objectWrapper.Value is IGH_GeometricGoo)
+                else if (objectWrapper.Value is IGH_GeometricGoo)
                 {
                     object @object = Geometry.Grasshopper.Convert.ToSAM(objectWrapper.Value as dynamic);
-                    if(@object is IEnumerable)
+                    if (@object is IEnumerable)
                         sAMGeometries.AddRange(((IEnumerable)@object).Cast<ISAMGeometry>());
                     else
                         sAMGeometries.Add(@object as dynamic);
@@ -121,23 +124,23 @@ namespace SAM.Analytical.Grasshopper
             List<ISegmentable3D> segmentable3Ds = new List<ISegmentable3D>();
 
             Plane plane_Default = Plane.WorldXY;
-            foreach(ISAMGeometry sAMGeometry in sAMGeometries)
+            foreach (ISAMGeometry sAMGeometry in sAMGeometries)
             {
                 if (sAMGeometry is Face3D)
                 {
                     face3Ds.Add((Face3D)sAMGeometry);
                     continue;
                 }
-                else if(sAMGeometry is ISegmentable3D)
+                else if (sAMGeometry is ISegmentable3D)
                 {
                     ISegmentable3D segmentable3D = (ISegmentable3D)sAMGeometry;
                     segmentable3Ds.Add(segmentable3D);
 
                 }
-                else if(sAMGeometry is ICurvable3D)
+                else if (sAMGeometry is ICurvable3D)
                 {
                     List<ICurve3D> curve3Ds = ((ICurvable3D)sAMGeometry).GetCurves();
-                    if(curve3Ds != null && curve3Ds.Count != 0)
+                    if (curve3Ds != null && curve3Ds.Count != 0)
                     {
                         if (curve3Ds.TrueForAll(x => x is Segment3D))
                         {
@@ -146,7 +149,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                         else
                         {
-                            foreach(ICurve3D curve3D in curve3Ds)
+                            foreach (ICurve3D curve3D in curve3Ds)
                                 if (curve3D is ISegmentable3D)
                                     segmentable3Ds.Add((ISegmentable3D)curve3D);
                         }
@@ -156,7 +159,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Dictionary<double, List<ISegmentable2D>> dictionary = new Dictionary<double, List<ISegmentable2D>>();
-            foreach(ISegmentable3D segmentable3D in segmentable3Ds)
+            foreach (ISegmentable3D segmentable3D in segmentable3Ds)
             {
                 BoundingBox3D boundingBox3D = segmentable3D.GetBoundingBox();
                 if (boundingBox3D == null)

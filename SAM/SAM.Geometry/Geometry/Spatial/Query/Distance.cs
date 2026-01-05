@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Spatial
@@ -13,7 +16,7 @@ namespace SAM.Geometry.Spatial
             }
 
             IClosedPlanar3D closedPlanar3D_1_Temp = closedPlanar3D_1;
-            if(closedPlanar3D_1_Temp is Face3D)
+            if (closedPlanar3D_1_Temp is Face3D)
             {
                 closedPlanar3D_1_Temp = ((Face3D)closedPlanar3D_1_Temp).GetExternalEdge3D();
             }
@@ -25,13 +28,13 @@ namespace SAM.Geometry.Spatial
             }
 
             PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(new Face3D(closedPlanar3D_1_Temp), new Face3D(closedPlanar3D_2_Temp), tolerance_Angle, tolerance_Distance);
-            if(planarIntersectionResult != null && planarIntersectionResult.Intersecting)
+            if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
             {
                 return 0;
             }
 
             ISegmentable3D segmentable3D_1 = closedPlanar3D_1_Temp as ISegmentable3D;
-            if(segmentable3D_1 == null)
+            if (segmentable3D_1 == null)
             {
                 throw new System.NotImplementedException();
             }
@@ -60,7 +63,7 @@ namespace SAM.Geometry.Spatial
             }
 
             double result = double.MaxValue;
-            foreach(Segment3D segment3D_1 in segment3Ds_1)
+            foreach (Segment3D segment3D_1 in segment3Ds_1)
             {
                 foreach (Segment3D segment3D_2 in segment3Ds_2)
                 {
@@ -77,22 +80,22 @@ namespace SAM.Geometry.Spatial
 
         public static double Distance(this ISegmentable3D segmentable3D, Point3D point3D)
         {
-            if(segmentable3D == null || point3D == null)
+            if (segmentable3D == null || point3D == null)
             {
                 return double.NaN;
             }
 
             List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if(segment3Ds == null || segment3Ds.Count == 0)
+            if (segment3Ds == null || segment3Ds.Count == 0)
             {
                 return double.NaN;
             }
 
             double result = double.MaxValue;
-            foreach(Segment3D segment3D in segment3Ds)
+            foreach (Segment3D segment3D in segment3Ds)
             {
                 double distance = segment3D.Distance(point3D);
-                if(distance < result)
+                if (distance < result)
                 {
                     result = distance;
                 }

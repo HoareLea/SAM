@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -15,13 +18,13 @@ namespace SAM.Geometry.Object.Spatial
             return boundingBox3D.Min.Z;
         }
 
-        public static double MinElevation<T>(this IEnumerable<T> face3DObjects) where T: IFace3DObject
+        public static double MinElevation<T>(this IEnumerable<T> face3DObjects) where T : IFace3DObject
         {
             if (face3DObjects == null || face3DObjects.Count() == 0)
                 return double.NaN;
-            
+
             double result = double.MaxValue;
-            foreach(T face3DObject in face3DObjects)
+            foreach (T face3DObject in face3DObjects)
             {
                 if (face3DObject == null)
                     continue;
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Object.Spatial
                     result = minElevation;
             }
 
-            if(result == double.MaxValue)
+            if (result == double.MaxValue)
             {
                 return double.NaN;
             }

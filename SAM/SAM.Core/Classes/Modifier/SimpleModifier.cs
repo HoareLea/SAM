@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -7,7 +10,7 @@ namespace SAM.Core
         public ArithmeticOperator ArithmeticOperator { get; set; }
 
         public SimpleModifier()
-            :base()
+            : base()
         {
 
         }
@@ -15,7 +18,7 @@ namespace SAM.Core
         public SimpleModifier(SimpleModifier simpleModifier)
             : base(simpleModifier)
         {
-            if(simpleModifier != null)
+            if (simpleModifier != null)
             {
                 ArithmeticOperator = simpleModifier.ArithmeticOperator;
             }
@@ -30,7 +33,7 @@ namespace SAM.Core
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
@@ -46,7 +49,7 @@ namespace SAM.Core
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return result;
             }

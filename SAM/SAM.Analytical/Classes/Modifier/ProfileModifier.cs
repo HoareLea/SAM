@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -29,9 +32,9 @@ namespace SAM.Analytical
         }
 
         public double Setback { get; set; }
-        
+
         private Profile Profile { get; set; }
-        
+
         public override bool ContainsIndex(int index)
         {
             if (Profile == null)
@@ -45,17 +48,17 @@ namespace SAM.Analytical
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("Profile"))
+            if (jObject.ContainsKey("Profile"))
             {
                 Profile = Core.Query.IJSAMObject<Profile>(jObject.Value<JObject>("Profile"));
             }
 
-            if(jObject.ContainsKey("Setback"))
+            if (jObject.ContainsKey("Setback"))
             {
                 Setback = jObject.Value<double>("Setback");
             }
@@ -86,17 +89,17 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
-            if(Profile != null)
+            if (Profile != null)
             {
                 result.Add("Profile", Profile.ToJObject());
             }
 
-            if(!double.IsNaN(Setback))
+            if (!double.IsNaN(Setback))
             {
                 result.Add("Setback", Setback);
             }

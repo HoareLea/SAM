@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -58,7 +61,7 @@ namespace SAM.Weather
             this.elevation = elevation;
 
             weatherYears = new List<WeatherYear>();
-            if(weatherYear != null)
+            if (weatherYear != null)
             {
                 weatherYears.Add(weatherYear.Clone());
             }
@@ -163,7 +166,7 @@ namespace SAM.Weather
         public WeatherHour GetWeatherHour(DateTime dateTime)
         {
             WeatherYear weatherYear = this[dateTime.Year];
-            if(weatherYear == null)
+            if (weatherYear == null)
             {
                 return null;
             }
@@ -334,7 +337,7 @@ namespace SAM.Weather
 
         public IndexedDoubles GetIndexedDoubles(string name)
         {
-            if(this.weatherYears == null)
+            if (this.weatherYears == null)
             {
                 return null;
             }
@@ -345,7 +348,7 @@ namespace SAM.Weather
             weatherYears.RemoveAll(x => x == null);
             weatherYears.Sort((x, y) => x.Year.CompareTo(y.Year));
 
-            if(weatherYears == null || weatherYears.Count == 0)
+            if (weatherYears == null || weatherYears.Count == 0)
             {
                 return result;
             }
@@ -359,7 +362,7 @@ namespace SAM.Weather
                 int index = (int)(dateTime_Temp - dateTime).TotalHours;
 
                 IndexedDoubles indexedDoubles = weatherYear.GetIndexedDoubles(name);
-                foreach(int key in indexedDoubles.Keys)
+                foreach (int key in indexedDoubles.Keys)
                 {
                     result[index + key] = indexedDoubles[key];
                 }

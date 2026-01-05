@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
@@ -8,22 +11,22 @@ using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Forms;
-using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
     public class GooPanel : GooJSAMObject<IPanel>, IGH_PreviewData, IGH_BakeAwareData
     {
-        public BoundaryType? BoundaryType { get; }  = null;
-        
-        public bool ShowAll { get; set; }  = true;
-        
+        public BoundaryType? BoundaryType { get; } = null;
+
+        public bool ShowAll { get; set; } = true;
+
         public GooPanel()
             : base()
         {
@@ -78,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Panel panel = Value as Panel;
-            if(panel == null)
+            if (panel == null)
             {
                 return;
             }
@@ -117,7 +120,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(!ShowAll)
+            if (!ShowAll)
             {
                 Point3D point3D_CameraLocation = Geometry.Rhino.Convert.ToSAM(RhinoDoc.ActiveDoc.Views.ActiveView.ActiveViewport.CameraLocation);
                 if (point3D_CameraLocation == null)
@@ -146,7 +149,7 @@ namespace SAM.Analytical.Grasshopper
 
             args.Pipeline.DrawBrepShaded(brep, displayMaterial);
 
-            if(Value is Panel)
+            if (Value is Panel)
             {
                 List<Aperture> apertures = ((Panel)Value).Apertures;
                 if (apertures != null)
@@ -178,17 +181,17 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool result = Rhino.Modify.BakeGeometry(Value, doc, att, out List<Guid> obj_guids);
-            if(!result)
+            if (!result)
             {
                 return false;
             }
 
-            if(obj_guids == null || obj_guids.Count ==0)
+            if (obj_guids == null || obj_guids.Count == 0)
             {
                 return false;
             }
 
-            if(obj_guids.Count == 1)
+            if (obj_guids.Count == 1)
             {
                 obj_guid = obj_guids[0];
                 return result;
@@ -197,7 +200,7 @@ namespace SAM.Analytical.Grasshopper
             int index = doc.Groups.Add(Value.Guid.ToString());
 
             Group group = doc.Groups.ElementAt(index);
-            foreach(Guid guid in obj_guids)
+            foreach (Guid guid in obj_guids)
             {
                 doc.Groups.AddToGroup(index, guid);
             }
@@ -259,10 +262,10 @@ namespace SAM.Analytical.Grasshopper
     public class GooPanelParam : GH_PersistentParam<GooPanel>, IGH_PreviewObject, IGH_BakeAwareObject
     {
         private bool showAll = true;
-        
+
         public override Guid ComponentGuid => new Guid("278B438C-43EA-4423-999F-B6A906870939");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         bool IGH_PreviewObject.Hidden { get; set; }
 
@@ -318,12 +321,12 @@ namespace SAM.Analytical.Grasshopper
             if (getObject.CommandResult() != Result.Success)
                 return GH_GetterResult.cancel;
 
-            if(getObject.ObjectCount == 0)
+            if (getObject.ObjectCount == 0)
                 return GH_GetterResult.cancel;
 
             values = new List<GooPanel>();
 
-            for (int i =0; i < getObject.ObjectCount; i++)
+            for (int i = 0; i < getObject.ObjectCount; i++)
             {
                 ObjRef objRef = getObject.Object(i);
 
@@ -356,10 +359,10 @@ namespace SAM.Analytical.Grasshopper
 
                         if (panels_Old != null && panels_Old.Count != 0)
                         {
-                            for(int j =0; j < panels.Count; j++)
+                            for (int j = 0; j < panels.Count; j++)
                             {
                                 Panel panel_Old = panels_Old.Closest(panels[j].GetInternalPoint3D());
-                                if(panel_Old != null)
+                                if (panel_Old != null)
                                 {
                                     panels[j] = Create.Panel(panel_Old.Guid, panel_Old, panels[j].GetFace3D());
                                 }
@@ -461,7 +464,7 @@ namespace SAM.Analytical.Grasshopper
         public void BakeGeometry(RhinoDoc doc, ObjectAttributes att, List<Guid> obj_ids)
         {
             foreach (var value in VolatileData.AllData(true))
-            {               
+            {
                 Guid uuid = default;
                 (value as IGH_BakeAwareData)?.BakeGeometry(doc, att, out uuid);
                 obj_ids.Add(uuid);
@@ -485,7 +488,7 @@ namespace SAM.Analytical.Grasshopper
 
         public override void AppendAdditionalMenuItems(ToolStripDropDown menu)
         {
-            Menu_AppendItem(menu, "Show All", Menu_ShowAll, Core.Convert.ToBitmap(Resources.SAM3) , VolatileData.AllData(true).Any(), showAll).Tag = showAll;
+            Menu_AppendItem(menu, "Show All", Menu_ShowAll, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any(), showAll).Tag = showAll;
 
             Menu_AppendItem(menu, "Bake By Type", Menu_BakeByPanelType, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
             Menu_AppendItem(menu, "Bake By Construction", Menu_BakeByConstruction, Core.Convert.ToBitmap(Resources.SAM3), VolatileData.AllData(true).Any());
@@ -533,9 +536,9 @@ namespace SAM.Analytical.Grasshopper
 
         public override bool Read(GH_IReader reader)
         {
-            if(reader != null)
+            if (reader != null)
                 reader.TryGetBoolean(GetType().FullName, ref showAll);
-            
+
             return base.Read(reader);
         }
 

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -74,24 +77,24 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             IAnalyticalObject analyticalObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if(analyticalObject is AnalyticalModel)
+            if (analyticalObject is AnalyticalModel)
             {
                 AnalyticalModel analyticalModel = new AnalyticalModel((AnalyticalModel)analyticalObject);
                 AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster.UpdateSpaceNames();
-                    
+
                     analyticalObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
             }
-            else if(analyticalObject is AdjacencyCluster)
+            else if (analyticalObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
                 adjacencyCluster.UpdateSpaceNames();

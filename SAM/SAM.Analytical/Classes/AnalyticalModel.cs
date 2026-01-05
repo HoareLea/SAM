@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Architectural;
 using SAM.Core;
 using SAM.Geometry;
@@ -71,7 +74,7 @@ namespace SAM.Analytical
                 return;
 
             description = analyticalModel.description;
-            
+
             if (analyticalModel.location != null)
                 location = new Location(analyticalModel.location);
 
@@ -256,7 +259,7 @@ namespace SAM.Analytical
                 name = value;
             }
         }
-        
+
         public ProfileLibrary ProfileLibrary
         {
             get
@@ -267,7 +270,7 @@ namespace SAM.Analytical
                 return new ProfileLibrary(profileLibrary);
             }
         }
-        
+
         public bool AddInternalCondition(InternalCondition internalCondition)
         {
             if (internalCondition == null)
@@ -465,7 +468,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(func is not null)
+                if (func is not null)
                 {
                     apertures = apertures.FindAll(func.Invoke);
                 }
@@ -674,7 +677,7 @@ namespace SAM.Analytical
         {
             return adjacencyCluster?.GetZones();
         }
-        
+
         public bool HasMaterial(IMaterial material)
         {
             if (material == null || materialLibrary == null)
@@ -712,7 +715,7 @@ namespace SAM.Analytical
         {
             if (type == null || guids == null)
                 return null;
-            
+
             if (typeof(Space).IsAssignableFrom(type) || typeof(Panel).IsAssignableFrom(type) || typeof(Aperture).IsAssignableFrom(type) || typeof(Result).IsAssignableFrom(type) || typeof(Group).IsAssignableFrom(type) || typeof(MechanicalSystem).IsAssignableFrom(type) || typeof(SpaceAirMovement).IsAssignableFrom(type) || typeof(AirHandlingUnitAirMovement).IsAssignableFrom(type) || typeof(IAnalyticalEquipment).IsAssignableFrom(type))
             {
                 return adjacencyCluster.Remove(type, guids);
@@ -730,7 +733,7 @@ namespace SAM.Analytical
             Dictionary<Type, List<SAMObject>> dictionary = Core.Query.TypeDictionary(sAMObjects);
 
             List<Guid> result = new List<Guid>();
-            foreach(KeyValuePair<Type, List<SAMObject>> keyValuePair in dictionary)
+            foreach (KeyValuePair<Type, List<SAMObject>> keyValuePair in dictionary)
             {
                 List<Guid> guids = Remove(keyValuePair.Key, keyValuePair.Value.ConvertAll(x => x.Guid));
                 if (guids != null && guids.Count > 0)
@@ -739,7 +742,7 @@ namespace SAM.Analytical
 
             return result;
         }
-        
+
         public List<Aperture> ReplaceApertureConstruction(IEnumerable<Guid> guids, ApertureConstruction apertureConstruction)
         {
             return adjacencyCluster?.ReplaceApertureConstruction(guids, apertureConstruction);
@@ -749,11 +752,11 @@ namespace SAM.Analytical
         {
             return adjacencyCluster?.ReplaceConstruction(guids, construction, apertureConstruction, offset);
         }
-        
+
         public List<Panel> ReplaceTransparentPanels(double offset = 0)
         {
             List<Panel> result = adjacencyCluster?.ReplaceTransparentPanels(materialLibrary, offset);
-            if(result != null && result.Count > 0)
+            if (result != null && result.Count > 0)
             {
                 IEnumerable<IMaterial> materials = Query.Materials(result, ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary));
                 if (materials != null)
@@ -762,7 +765,7 @@ namespace SAM.Analytical
             }
             return result;
         }
-        
+
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
@@ -789,11 +792,21 @@ namespace SAM.Analytical
 
             return jObject;
         }
-        
+
         public void Transform(Transform3D transform3D)
         {
             if (adjacencyCluster != null)
                 adjacencyCluster.Transform(transform3D);
+        }
+
+        public TJSAMObject GetObject<TJSAMObject>(ObjectReference objectReference) where TJSAMObject : IJSAMObject
+        {
+            if (adjacencyCluster.GetObject(objectReference) is not TJSAMObject result)
+            {
+                return default;
+            }
+
+            return result;
         }
     }
 }

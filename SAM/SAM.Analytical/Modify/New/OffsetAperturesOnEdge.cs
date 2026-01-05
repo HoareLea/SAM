@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,13 +24,13 @@ namespace SAM.Analytical
             }
 
             List<IOpening> result = new List<IOpening>();
-            foreach(IHostPartition hostPartition in hostPartitions)
+            foreach (IHostPartition hostPartition in hostPartitions)
             {
                 List<IOpening> openings = hostPartition?.GetOpenings();
-                if(openings != null && openings.Count != 0)
+                if (openings != null && openings.Count != 0)
                 {
                     List<IOpening> openings_Offset = hostPartition.OffsetAperturesOnEdge(distance, tolerance);
-                    if(openings_Offset != null && openings_Offset.Count != 0)
+                    if (openings_Offset != null && openings_Offset.Count != 0)
                     {
                         buildingModel.Add(hostPartition);
                         result.AddRange(openings_Offset);
@@ -104,13 +107,13 @@ namespace SAM.Analytical
                 closedPlanar3D = plane.Convert(polygon2Ds.Last());
 
                 IOpening opening_New = Create.Opening(opening.Guid, opening, new Face3D(closedPlanar3D), opening.Face3D.GetPlane().Origin);
-                if(opening_New == null)
+                if (opening_New == null)
                 {
                     continue;
                 }
 
                 List<IOpening> openings_New = hostPartition.AddOpening(opening_New, tolerance);
-                if(openings_New != null)
+                if (openings_New != null)
                 {
                     result.AddRange(openings_New);
                 }

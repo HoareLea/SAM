@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -11,7 +14,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            switch(tM52BuildingCategory)
+            switch (tM52BuildingCategory)
             {
                 case TM52BuildingCategory.CategoryI:
                     return new Range<double>(-3, 2);

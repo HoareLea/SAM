@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Segment2D> result = new List<Segment2D>();
-            
+
             if (segment2Ds.Count < 2)
                 return result;
 
@@ -22,7 +25,7 @@ namespace SAM.Geometry.Planar
             if (segment2Ds_Split.Count < 2)
                 return result;
 
-            foreach(Segment2D segment2D in segment2Ds_Split)
+            foreach (Segment2D segment2D in segment2Ds_Split)
             {
                 Point2D point2D = segment2D?.Mid();
                 if (point2D == null)

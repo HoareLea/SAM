@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -6,7 +9,7 @@ namespace SAM.Core
     public class Expression : IJSAMObject
     {
         private string text;
-        
+
         public Expression(string text)
         {
             this.text = text;
@@ -68,7 +71,7 @@ namespace SAM.Core
         public override bool Equals(object obj)
         {
             Expression expression = obj as Expression;
-            if(expression == null)
+            if (expression == null)
             {
                 return false;
             }
@@ -78,7 +81,7 @@ namespace SAM.Core
 
         public override int GetHashCode()
         {
-            if(text == null)
+            if (text == null)
             {
                 return -1;
             }

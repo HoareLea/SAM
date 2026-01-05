@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -88,7 +91,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if(index == -1 || !dataAccess.GetDataList(index, panels) || panels == null)
+            if (index == -1 || !dataAccess.GetDataList(index, panels) || panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;

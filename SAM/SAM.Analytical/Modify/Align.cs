@@ -1,8 +1,11 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
-using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical
 {
@@ -16,13 +19,13 @@ namespace SAM.Analytical
             }
 
             List<Panel> panels_Temp = panels.FilterByElevation(elevation, out List<Panel> panels_Lower, out List<Panel> panels_Upper, tolerance_Distance);
-            if(panels_Temp == null || panels_Temp.Count == 0)
+            if (panels_Temp == null || panels_Temp.Count == 0)
             {
                 return;
             }
-            
+
             List<Panel> panels_Reference = panels.FilterByElevation(referenceElevation, out panels_Lower, out panels_Upper);
-            if(panels_Reference == null || panels_Reference.Count == 0)
+            if (panels_Reference == null || panels_Reference.Count == 0)
             {
                 return;
             }
@@ -56,10 +59,10 @@ namespace SAM.Analytical
 
             Align(panels_Temp, dictionary_Reference, maxDistance, tolerance_Angle, tolerance_Distance);
 
-            for(int i=0; i < indexes.Count; i++)
+            for (int i = 0; i < indexes.Count; i++)
             {
                 int index = indexes[i];
-                if(index == -1)
+                if (index == -1)
                 {
                     continue;
                 }
@@ -109,7 +112,7 @@ namespace SAM.Analytical
                 foreach (Segment2D segment2D_Temp in segment2Ds_Temp)
                 {
                     double distance = segment2D_Temp.Distance(segment2D, Core.Tolerance.MacroDistance);
-                    if(distance < tolerance_Distance)
+                    if (distance < tolerance_Distance)
                     {
                         segment2Ds_Result = null;
                         break;
@@ -199,7 +202,7 @@ namespace SAM.Analytical
                 panels_Temp.Remove(panel);
                 Dictionary<Panel, List<ISAMGeometry3D>> panels_Connected = Geometry.Object.Spatial.Query.IntersectionDictionary(panel, panels_Temp, tolerance_Angle, tolerance_Distance);
 
-                panel = new Panel(panel); 
+                panel = new Panel(panel);
                 panel.Move(vector3D);
                 panels[i] = panel;
 
@@ -220,24 +223,24 @@ namespace SAM.Analytical
                             Point3D point3D = null;
 
                             List<ISAMGeometry3D> geometry3Ds = panels_Connected[panel_Connected];
-                            foreach(ISAMGeometry3D sAMGeometry3D in geometry3Ds)
+                            foreach (ISAMGeometry3D sAMGeometry3D in geometry3Ds)
                             {
-                                if(sAMGeometry3D is Segment3D)
+                                if (sAMGeometry3D is Segment3D)
                                 {
                                     point3D = ((Segment3D)sAMGeometry3D).Mid();
                                 }
-                                else if(sAMGeometry3D is Point3D)
+                                else if (sAMGeometry3D is Point3D)
                                 {
                                     point3D = (Point3D)sAMGeometry3D;
                                 }
 
-                                if(point3D != null)
+                                if (point3D != null)
                                 {
                                     break;
                                 }
                             }
 
-                            if(point3D != null)
+                            if (point3D != null)
                             {
                                 List<Panel> panels_Connected_Temp = Query.Panels(point3D, panels, true, tolerance_Distance);
                                 if (panels_Connected_Temp != null && panels_Connected_Temp.Count != 1)
@@ -249,7 +252,7 @@ namespace SAM.Analytical
                             }
 
                         }
-                        
+
                         Face3D face3D_Connected = panel_Connected?.GetFace3D();
                         if (face3D_Connected == null)
                             continue;
@@ -257,10 +260,10 @@ namespace SAM.Analytical
                         Face3D face3D_Connected_New = null;
 
                         PlanarIntersectionResult planarIntersectionResult_Temp = Geometry.Spatial.Create.PlanarIntersectionResult(plane_Panel, face3D_Connected, tolerance_Angle, tolerance_Distance);
-                        if(planarIntersectionResult_Temp != null && planarIntersectionResult_Temp.Intersecting)
+                        if (planarIntersectionResult_Temp != null && planarIntersectionResult_Temp.Intersecting)
                         {
                             List<ISegmentable3D> segmentable3Ds = planarIntersectionResult_Temp.GetGeometry3Ds<ISegmentable3D>();
-                            if(segmentable3Ds != null && segmentable3Ds.Count > 0)
+                            if (segmentable3Ds != null && segmentable3Ds.Count > 0)
                             {
                                 List<Face3D> face3Ds = Geometry.Spatial.Query.Cut(face3D_Connected, plane_Panel, tolerance_Distance);
                                 if (face3Ds != null && face3Ds.Count != 0)
@@ -274,7 +277,7 @@ namespace SAM.Analytical
                         {
                             face3D_Connected_New = Geometry.Spatial.Query.Extend(face3D_Connected, plane_Panel, tolerance_Angle, tolerance_Distance);
                         }
-                        
+
                         if (face3D_Connected_New == null)
                             continue;
 

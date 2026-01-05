@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -85,28 +88,28 @@ namespace SAM.Geometry.Spatial
                 face3Ds.AddRange(boundaries_2.ConvertAll(x => x.Item2));
             }
 
-            if(face3Ds.Count < 3)
+            if (face3Ds.Count < 3)
             {
                 return null;
             }
 
             List<Face3D> face3Ds_Shell_1 = shell_1.Face3Ds;
-            System.Threading.Tasks.Parallel.For(0, face3Ds.Count, (int i) => 
+            System.Threading.Tasks.Parallel.For(0, face3Ds.Count, (int i) =>
             {
                 face3Ds[i] = face3Ds[i].Snap(face3Ds_Shell_1, tolerance_Distance, tolerance_Distance);
             });
 
             List<Shell> result = new List<Shell>();
-            while(face3Ds.Count >= 3)
+            while (face3Ds.Count >= 3)
             {
                 Face3D face3D = face3Ds[0];
                 List<Face3D> face3Ds_Shell = face3D?.ConnectedFace3Ds(face3Ds, tolerance_Angle, silverSpacing);
                 face3Ds.RemoveAt(0);
-                
-                if(face3Ds_Shell != null && face3Ds_Shell.Count > 2)
+
+                if (face3Ds_Shell != null && face3Ds_Shell.Count > 2)
                 {
                     Shell shell = Create.Shell(face3Ds_Shell, silverSpacing, tolerance_Distance);
-                    if(shell != null)
+                    if (shell != null)
                     {
                         result.Add(shell);
                         face3Ds.RemoveAll(x => face3Ds_Shell.Contains(x));
@@ -128,26 +131,26 @@ namespace SAM.Geometry.Spatial
         /// <returns>Shells</returns>
         public static List<Shell> Difference(this Shell shell, IEnumerable<Shell> shells, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(shell == null || shells == null)
+            if (shell == null || shells == null)
             {
                 return null;
             }
 
             List<Shell> result = new List<Shell>() { shell };
-            foreach(Shell shell_Temp in shells)
+            foreach (Shell shell_Temp in shells)
             {
                 List<Shell> result_New = new List<Shell>();
-                foreach(Shell shell_Result in result)
+                foreach (Shell shell_Result in result)
                 {
                     List<Shell> shells_Difference = Difference(shell_Result, shell_Temp, silverSpacing, tolerance_Angle, tolerance_Distance);
-                    if(shells_Difference != null && shells_Difference.Count != 0)
+                    if (shells_Difference != null && shells_Difference.Count != 0)
                     {
                         result_New.AddRange(shells_Difference);
                     }
                 }
 
                 result = result_New;
-                if(result == null || result.Count == 0)
+                if (result == null || result.Count == 0)
                 {
                     break;
                 }
@@ -158,13 +161,13 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Difference(this Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null || face3Ds == null)
+            if (face3D == null || face3Ds == null)
             {
                 return null;
             }
 
             PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(face3D, face3Ds, tolerance_Angle, tolerance_Distance);
-            if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
             {
                 return new List<Face3D>() { new Face3D(face3D) };
             }

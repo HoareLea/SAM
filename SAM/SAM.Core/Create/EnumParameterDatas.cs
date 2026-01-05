@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,26 +11,26 @@ namespace SAM.Core
     {
         public static List<EnumParameterData> EnumParameterDatas(params Type[] enumTypes)
         {
-            if(enumTypes == null)
+            if (enumTypes == null)
             {
                 return null;
             }
 
             HashSet<Enum> enums = new HashSet<Enum>();
-            foreach(Type type in enumTypes)
+            foreach (Type type in enumTypes)
             {
-                if(type == null || !type.IsEnum)
+                if (type == null || !type.IsEnum)
                 {
                     continue;
                 }
 
                 Array array = Enum.GetValues(type);
-                if(array == null)
+                if (array == null)
                 {
                     continue;
                 }
 
-                foreach(Enum @enum in array)
+                foreach (Enum @enum in array)
                 {
                     enums.Add(@enum);
                 }
@@ -40,16 +43,16 @@ namespace SAM.Core
 
         public static List<EnumParameterData> EnumParameterDatas(params Enum[] enums)
         {
-            if(enums == null)
+            if (enums == null)
             {
                 return null;
             }
 
             List<EnumParameterData> result = new List<EnumParameterData>();
-            foreach(Enum @enum in enums)
+            foreach (Enum @enum in enums)
             {
                 EnumParameterData enumParameterData = new EnumParameterData(@enum);
-                if(enumParameterData == null || enumParameterData.ParameterProperties == null)
+                if (enumParameterData == null || enumParameterData.ParameterProperties == null)
                 {
                     continue;
                 }

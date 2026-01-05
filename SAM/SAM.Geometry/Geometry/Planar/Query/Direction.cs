@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Planar
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Planar
 {
     public static partial class Query
     {
@@ -6,7 +9,7 @@
         {
             if (alignment == Alignment.Undefined)
                 return null;
-            
+
             switch (alignment)
             {
                 case Alignment.Vertical:

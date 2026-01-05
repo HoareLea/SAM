@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -22,39 +25,39 @@ namespace SAM.Analytical
             List<Profile> result = new List<Profile>();
 
             List<Space> spaces = buildingModel.GetSpaces();
-            if(spaces == null || spaces.Count == 0)
+            if (spaces == null || spaces.Count == 0)
             {
                 return result;
             }
 
             missingProfileNames = new Dictionary<ProfileType, List<string>>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 InternalCondition internalCondition = space?.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                 {
                     continue;
                 }
 
                 IEnumerable<ProfileType> profileTypes = internalCondition.GetProfileTypes();
-                if(profileTypes == null || profileTypes.Count() == 0)
+                if (profileTypes == null || profileTypes.Count() == 0)
                 {
                     continue;
                 }
 
-                foreach(ProfileType profileType in profileTypes)
+                foreach (ProfileType profileType in profileTypes)
                 {
                     Profile profile = buildingModel.GetProfile(internalCondition, profileType);
-                    if(profile == null)
+                    if (profile == null)
                     {
-                        if(!missingProfileNames.TryGetValue(profileType, out List<string> names))
+                        if (!missingProfileNames.TryGetValue(profileType, out List<string> names))
                         {
                             names = new List<string>();
                             missingProfileNames[profileType] = names;
                         }
 
                         string name = internalCondition.GetProfileName(profileType);
-                        if(!names.Contains(name))
+                        if (!names.Contains(name))
                         {
                             names.Add(name);
                         }

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
@@ -33,7 +36,7 @@ namespace SAM.Analytical
 
             Plane plane = Plane.WorldXY;
 
-            if(plane.Coplanar(planarBoundary3D.Plane))
+            if (plane.Coplanar(planarBoundary3D.Plane))
                 return rectangle2D.Height;
 
             Vector3D vector3D_WidthDirection = plane.Convert(rectangle2D.WidthDirection);

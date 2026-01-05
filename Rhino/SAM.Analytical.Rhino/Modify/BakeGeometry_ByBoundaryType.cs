@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -40,7 +43,7 @@ namespace SAM.Analytical.Rhino
                 if (panel is ExternalPanel)
                 {
                     layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, panel.GetType().Name, Query.Color((ExternalPanel)panel));
-                    
+
                     objectAttributes.LayerIndex = layer_Temp.Index;
 
                     if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
@@ -51,7 +54,7 @@ namespace SAM.Analytical.Rhino
                 }
 
                 Panel panel_Temp = panel as Panel;
-                if(panel_Temp == null)
+                if (panel_Temp == null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿//using ClipperLib;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+//using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
@@ -119,16 +122,16 @@ namespace SAM.Geometry.Planar
         /// <param name="segment2D_2">Second Segment2D</param>
         /// <param name="tolerance">Tolerance</param>
         /// <returns>Intersection Geometry</returns>
-        public static T Intersection<T>(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
+        public static T Intersection<T>(this Segment2D segment2D_1, Segment2D segment2D_2, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
-            if(segment2D_1 == null || segment2D_2 == null)
+            if (segment2D_1 == null || segment2D_2 == null)
             {
                 return default;
             }
 
             LineString lineString_1 = segment2D_1.ToNTS(tolerance);
             LineString lineString_2 = segment2D_2.ToNTS(tolerance);
-            
+
             NetTopologySuite.Geometries.Geometry geometry = lineString_1?.Intersection(lineString_2);
             if (geometry == null || geometry.IsEmpty)
             {
@@ -142,7 +145,7 @@ namespace SAM.Geometry.Planar
                 if (polyline2D.Points.Count == 2 && typeof(T).IsAssignableFrom(typeof(Segment2D)))
                     return (T)(object)(new Segment2D(polyline2D[0], polyline2D[1]));
             }
-            else if(geometry is Point)
+            else if (geometry is Point)
             {
                 Point2D point2D = ((Point)geometry).ToSAM(tolerance);
                 if (typeof(T) == typeof(Point2D))
@@ -201,30 +204,30 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> Intersection(this Polygon2D polygon2D_1, Polygon2D polygon2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(polygon2D_1 == null || polygon2D_2 == null)
+            if (polygon2D_1 == null || polygon2D_2 == null)
             {
                 return null;
             }
 
             List<Face2D> face2Ds = Intersection(new Face2D(polygon2D_1), new Face2D(polygon2D_2), tolerance);
-            if(face2Ds == null)
+            if (face2Ds == null)
             {
                 return null;
             }
 
             List<Polygon2D> result = new List<Polygon2D>();
-            foreach(Face2D face2D in face2Ds)
+            foreach (Face2D face2D in face2Ds)
             {
                 List<IClosed2D> edge2Ds = face2D.Edge2Ds;
-                if(edge2Ds == null || edge2Ds.Count == 0)
+                if (edge2Ds == null || edge2Ds.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(IClosed2D edge2D in edge2Ds)
+                foreach (IClosed2D edge2D in edge2Ds)
                 {
                     ISegmentable2D segmentable2D = edge2D as ISegmentable2D;
-                    if(segmentable2D == null)
+                    if (segmentable2D == null)
                     {
                         continue;
                     }
@@ -236,9 +239,9 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        public static List<T> Intersection<T>(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance) where T: ISAMGeometry2D
+        public static List<T> Intersection<T>(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
-            if(face2D_1 == null || face2D_2 == null)
+            if (face2D_1 == null || face2D_2 == null)
             {
                 return null;
             }
@@ -249,9 +252,9 @@ namespace SAM.Geometry.Planar
             }
 
             List<Face2D> face2Ds_1 = face2D_1.FixEdges(tolerance);
-            if(face2Ds_1 == null || face2Ds_1.Count == 0)
+            if (face2Ds_1 == null || face2Ds_1.Count == 0)
             {
-                face2Ds_1 = new List<Face2D>() { face2D_1};
+                face2Ds_1 = new List<Face2D>() { face2D_1 };
             }
 
             List<Face2D> face2Ds_2 = face2D_2.FixEdges(tolerance);
@@ -263,7 +266,7 @@ namespace SAM.Geometry.Planar
             List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
             foreach (Face2D face2D_1_Temp in face2Ds_1)
             {
-                if(face2D_1_Temp == null || face2D_1_Temp.GetArea() < tolerance)
+                if (face2D_1_Temp == null || face2D_1_Temp.GetArea() < tolerance)
                 {
                     continue;
                 }
@@ -295,7 +298,7 @@ namespace SAM.Geometry.Planar
                     }
 
                     NetTopologySuite.Geometries.Geometry geometry_1 = polygon_1;
-                    if(!geometry_1.IsValid)
+                    if (!geometry_1.IsValid)
                     {
                         geometry_1 = GeometryFixer.Fix(geometry_1);
                     }
@@ -311,7 +314,7 @@ namespace SAM.Geometry.Planar
                     {
                         geometry = geometry_1.Intersection(geometry_2);
                     }
-                    catch(System.Exception)
+                    catch (System.Exception)
                     {
 
                         try
@@ -366,11 +369,11 @@ namespace SAM.Geometry.Planar
                         result.Add(face2D);
                     }
                 }
-                else if(geometry_Temp is LineString)
+                else if (geometry_Temp is LineString)
                 {
                     result.Add(((LineString)geometry_Temp).ToSAM(tolerance));
                 }
-                else if(geometry_Temp is LinearRing)
+                else if (geometry_Temp is LinearRing)
                 {
                     result.Add(((LinearRing)geometry_Temp).ToSAM(tolerance));
                 }
@@ -382,12 +385,12 @@ namespace SAM.Geometry.Planar
 
         public static List<T> Intersection<T>(this Face2D face2D, Segment2D segment2D, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
-            if(face2D == null || segment2D == null)
+            if (face2D == null || segment2D == null)
             {
                 return null;
             }
 
-            if(!segment2D.IsValid() || segment2D.GetLength() < tolerance)
+            if (!segment2D.IsValid() || segment2D.GetLength() < tolerance)
             {
                 return null;
             }
@@ -403,7 +406,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<T> result = new List<T>();
-            foreach(Face2D face2D_Temp in face2Ds)
+            foreach (Face2D face2D_Temp in face2Ds)
             {
                 Polygon polygon = face2D_Temp?.ToNTS(tolerance);
                 if (polygon == null)
@@ -422,9 +425,9 @@ namespace SAM.Geometry.Planar
 
                     List<NetTopologySuite.Geometries.Geometry> geometries = new List<NetTopologySuite.Geometries.Geometry>();
 
-                    if(geometry is GeometryCollection)
+                    if (geometry is GeometryCollection)
                     {
-                        foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
+                        foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry)
                         {
                             geometries.Add(geometry_Temp);
                         }
@@ -434,7 +437,7 @@ namespace SAM.Geometry.Planar
                         geometries.Add(geometry);
                     }
 
-                    foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
+                    foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in geometries)
                     {
                         if (geometry_Temp is LineString)
                         {
@@ -462,7 +465,7 @@ namespace SAM.Geometry.Planar
                         else if (geometry_Temp is Point)
                         {
                             Point2D point2D = ((Point)geometry_Temp).ToSAM();
-                            if(point2D is T)
+                            if (point2D is T)
                             {
                                 result.Add((T)(object)point2D);
                             }
@@ -474,7 +477,7 @@ namespace SAM.Geometry.Planar
                     //SAM Method
 
                     List<IClosed2D> closed2Ds = face2D.Edge2Ds;
-                    if(closed2Ds == null || closed2Ds.Count == 0)
+                    if (closed2Ds == null || closed2Ds.Count == 0)
                     {
                         continue;
                     }
@@ -482,19 +485,19 @@ namespace SAM.Geometry.Planar
                     List<Point2D> point2Ds = new List<Point2D>();
                     foreach (IClosed2D closed2D in closed2Ds)
                     {
-                        if(closed2D == null)
+                        if (closed2D == null)
                         {
                             continue;
                         }
 
                         ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
-                        if(segmentable2D == null)
+                        if (segmentable2D == null)
                         {
                             throw new System.NotImplementedException();
                         }
 
                         List<Point2D> point2Ds_Intersections = Intersections(segment2D, segmentable2D);
-                        if(point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
+                        if (point2Ds_Intersections == null || point2Ds_Intersections.Count == 0)
                         {
                             continue;
                         }
@@ -508,16 +511,16 @@ namespace SAM.Geometry.Planar
                     point2Ds.SortByDistance(segment2D[0]);
 
                     List<bool> values = new List<bool>();
-                    for(int i =0; i < point2Ds.Count - 1; i++)
+                    for (int i = 0; i < point2Ds.Count - 1; i++)
                     {
                         Segment2D segment2D_Temp = new Segment2D(point2Ds[i], point2Ds[i + 1]);
 
                         Point2D point2D_Mid = segment2D_Temp.Mid();
 
                         bool value = false;
-                        if(face2D.Inside(point2D_Mid, tolerance) || face2D.On(point2D_Mid, tolerance))
+                        if (face2D.Inside(point2D_Mid, tolerance) || face2D.On(point2D_Mid, tolerance))
                         {
-                            if(segment2D_Temp is T)
+                            if (segment2D_Temp is T)
                             {
                                 result.Add((T)(object)segment2D_Temp);
                             }
@@ -527,7 +530,7 @@ namespace SAM.Geometry.Planar
                         values.Add(value);
                     }
 
-                    if(face2D.On(point2Ds[0], tolerance) && !values[0])
+                    if (face2D.On(point2Ds[0], tolerance) && !values[0])
                     {
                         if (point2Ds[0] is T)
                         {
@@ -545,9 +548,9 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    for(int i = 1; i < point2Ds.Count - 1; i++)
+                    for (int i = 1; i < point2Ds.Count - 1; i++)
                     {
-                        if(!values[i - 1] && !values[i])
+                        if (!values[i - 1] && !values[i])
                         {
                             if (point2Ds[count] is T)
                             {
@@ -563,13 +566,13 @@ namespace SAM.Geometry.Planar
 
         public static List<T> Intersection<T>(this IClosed2D closed2D_1, IClosed2D closed2D_2, double tolerance = Core.Tolerance.MicroDistance) where T : ISAMGeometry2D
         {
-            if(closed2D_1 == null || closed2D_2 == null)
+            if (closed2D_1 == null || closed2D_2 == null)
             {
                 return null;
             }
 
             Face2D face2D_1 = null;
-            if(closed2D_1 is Face2D)
+            if (closed2D_1 is Face2D)
             {
                 face2D_1 = (Face2D)closed2D_1;
             }

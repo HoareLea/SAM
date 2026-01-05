@@ -1,5 +1,8 @@
-﻿using System.ComponentModel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Core.Attributes;
+using System.ComponentModel;
 
 namespace SAM.Analytical
 {
@@ -17,7 +20,7 @@ namespace SAM.Analytical
         [ParameterProperties("Infiltration Gain", "Infiltration Gain [W]"), DoubleParameterValue()] InfiltrationGain,
         [ParameterProperties("Air Movement Gain", "Air Movement Gain [W]"), DoubleParameterValue()] AirMovementGain,
         [ParameterProperties("Building Heat Transfer", "Building Heat Transfer [W]"), DoubleParameterValue()] BuildingHeatTransfer,
-        [ParameterProperties("Glazing External Conduction", "Glazing External Conduction [W]"), DoubleParameterValue()] GlazingExternalConduction, 
+        [ParameterProperties("Glazing External Conduction", "Glazing External Conduction [W]"), DoubleParameterValue()] GlazingExternalConduction,
         [ParameterProperties("Opaque External Conduction", "Opaque External Conduction [W]"), DoubleParameterValue()] OpaqueExternalConduction,
         [ParameterProperties("Occupancy Sensible Gain", "Occupancy Sensible Gain [W]"), DoubleParameterValue()] OccupancySensibleGain,
         [ParameterProperties("Occupancy Latent Gain", "Occupancy Latent Gain [W]"), DoubleParameterValue()] OccupancyLatentGain,

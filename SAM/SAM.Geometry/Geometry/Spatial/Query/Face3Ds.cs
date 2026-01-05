@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -15,24 +18,24 @@ namespace SAM.Geometry.Spatial
                 if (geometry3D is Segment3D)
                     continue;
 
-                if(geometry3D is Shell)
+                if (geometry3D is Shell)
                 {
                     List<Face3D> face3Ds = ((Shell)geometry3D).Face3Ds;
-                    if(face3Ds != null && face3Ds.Count > 0)
+                    if (face3Ds != null && face3Ds.Count > 0)
                     {
                         result.AddRange(face3Ds);
                         continue;
                     }
                 }
 
-                if(geometry3D is Mesh3D)
+                if (geometry3D is Mesh3D)
                 {
                     List<Triangle3D> triangle3Ds = ((Mesh3D)geometry3D).GetTriangles();
-                    if(triangle3Ds != null && triangle3Ds.Count != 0)
+                    if (triangle3Ds != null && triangle3Ds.Count != 0)
                     {
-                        foreach(Triangle3D triangle3D in triangle3Ds)
+                        foreach (Triangle3D triangle3D in triangle3Ds)
                         {
-                            if(triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
+                            if (triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
                             {
                                 continue;
                             }
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Spatial
                 if (geometry3D is IClosedPlanar3D)
                 {
                     IClosedPlanar3D closedPlanar3D = (IClosedPlanar3D)geometry3D;
-                    if(closedPlanar3D.GetArea() < tolerance)
+                    if (closedPlanar3D.GetArea() < tolerance)
                     {
                         continue;
                     }
@@ -85,13 +88,13 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Face3Ds(this PlanarIntersectionResult planarIntersectionResult, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
             {
                 return null;
             }
 
             Plane plane = planarIntersectionResult.Plane;
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -99,7 +102,7 @@ namespace SAM.Geometry.Spatial
             List<Face3D> result = new List<Face3D>();
 
             List<Planar.ISegmentable2D> segmentable2Ds = planarIntersectionResult.GetGeometry2Ds<Planar.ISegmentable2D>();
-            if(segmentable2Ds == null || segmentable2Ds.Count < 3)
+            if (segmentable2Ds == null || segmentable2Ds.Count < 3)
             {
                 return result;
             }
@@ -108,7 +111,7 @@ namespace SAM.Geometry.Spatial
             segment2Ds = Planar.Query.Snap(segment2Ds, true, snapTolerance);
 
             List<Planar.Face2D> face2Ds = Planar.Create.Face2Ds(segmentable2Ds, EdgeOrientationMethod.Undefined, tolerance);
-            if(face2Ds == null || face2Ds.Count == 0)
+            if (face2Ds == null || face2Ds.Count == 0)
             {
                 return result;
             }

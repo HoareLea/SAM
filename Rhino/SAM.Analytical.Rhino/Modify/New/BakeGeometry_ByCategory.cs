@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -48,7 +51,7 @@ namespace SAM.Analytical.Rhino
                 if (BakeGeometry(partition, rhinoDoc, objectAttributes, out guid, cutOpenings, tolerance))
                     guids.Add(guid);
 
-                if(partition is IHostPartition)
+                if (partition is IHostPartition)
                 {
                     List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
                     if (openings == null || openings.Count == 0)

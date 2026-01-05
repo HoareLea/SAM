@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -102,13 +105,13 @@ namespace SAM.Analytical.Grasshopper
 
             Analytical.Modify.RemoveOverlapApertures(panels, out removedApertures, tolerance);
 
-            for(int i=0; i < adjacencyClusters.Count; i++)
+            for (int i = 0; i < adjacencyClusters.Count; i++)
             {
                 adjacencyClusters[i] = new AdjacencyCluster(adjacencyClusters[i]);
                 Analytical.Modify.RemoveOverlapApertures(adjacencyClusters[i], out List<Aperture> removedApertures_Temp, tolerance);
-                if(removedApertures_Temp != null && removedApertures_Temp.Count > 0)
+                if (removedApertures_Temp != null && removedApertures_Temp.Count > 0)
                 {
-                    if(removedApertures == null)
+                    if (removedApertures == null)
                     {
                         removedApertures = new List<Aperture>();
                     }

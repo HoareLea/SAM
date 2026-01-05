@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -45,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean;
 
@@ -65,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_ACH", NickName = "_airflow_ACH", Description = "Airflow [ACH]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpSpM2", NickName = "_airflow_LpSpM2", Description = "Airflow [l/s/m2]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_airflow_LpS", NickName = "_airflow_LpS", Description = "Airflow [l/s]", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                
+
 
 
                 return result.ToArray();
@@ -94,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
             if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
@@ -106,10 +109,10 @@ namespace SAM.Analytical.Grasshopper
             AdjacencyCluster adjacencyCluster = null;
             if (sAMObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -132,7 +135,7 @@ namespace SAM.Analytical.Grasshopper
 
             double airflow_LpSpP = double.NaN;
             index = Params.IndexOfInputParam("_airflow_LpSpP");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.GetData(index, ref airflow_LpSpP);
 
             double airflow_ACH = double.NaN;
@@ -149,17 +152,17 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("_airflow_LpS");
             if (index != -1)
                 dataAccess.GetData(index, ref airflow_LpS);
-            
-            List <Space> spaces = new List<Space>();
+
+            List<Space> spaces = new List<Space>();
             index = Params.IndexOfInputParam("_spaces");
             if (index != -1)
                 dataAccess.GetDataList(index, spaces);
 
             List<Space> spaces_Temp = adjacencyCluster.GetSpaces();
-            if(spaces != null && spaces.Count != 0)
+            if (spaces != null && spaces.Count != 0)
                 spaces_Temp = spaces_Temp.FindAll(x => x != null && spaces.Find(y => y != null && y.Guid == x.Guid) != null);
 
-            if(supplyAirFlow || exhaustAirFlow || outsideSupplyAirFlow)
+            if (supplyAirFlow || exhaustAirFlow || outsideSupplyAirFlow)
             {
                 foreach (Space space in spaces_Temp)
                 {
@@ -230,7 +233,7 @@ namespace SAM.Analytical.Grasshopper
 
                     Space space_New = new Space(space);
 
-                    if(supplyAirFlow)
+                    if (supplyAirFlow)
                         space_New.SetValue(SpaceParameter.SupplyAirFlow, airflow);
 
                     if (exhaustAirFlow)
@@ -249,7 +252,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("Analytical");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.SetData(index, sAMObject);
         }
     }

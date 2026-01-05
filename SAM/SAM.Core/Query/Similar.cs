@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -6,7 +9,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool Similar<T>(this IEnumerable<T> items_1, IEnumerable<T> items_2) where T :IComparable
+        public static bool Similar<T>(this IEnumerable<T> items_1, IEnumerable<T> items_2) where T : IComparable
         {
             return Similar(items_1, items_2, null);
         }
@@ -55,7 +58,7 @@ namespace SAM.Core
 
             for (int i = 0; i < count; i++)
             {
-                if(!equatableFunc.Invoke(items_1.ElementAt(i), items_2.ElementAt(i)))
+                if (!equatableFunc.Invoke(items_1.ElementAt(i), items_2.ElementAt(i)))
                 {
                     return false;
                 }

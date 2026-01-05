@@ -1,4 +1,7 @@
-﻿namespace SAM.Weather
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Weather
 {
     /// <summary>
     /// A static partial class that contains methods for querying weather data.
@@ -54,7 +57,7 @@
         /// <returns>True if the value is retrieved successfully, false otherwise.</returns>
         public static bool TryGetValue(this WeatherDay weatherDay, WeatherDataType weatherDataType, int index, out double value)
         {
-            
+
             value = default;
             if (weatherDay == null || weatherDataType == WeatherDataType.Undefined)
             {

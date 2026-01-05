@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -13,15 +16,15 @@ namespace SAM.Analytical
             }
 
             List<Space> result = new List<Space>();
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 Point3D point3D = space?.Location;
-                if(point3D == null)
+                if (point3D == null)
                 {
                     continue;
                 }
 
-                if(shell.InRange(point3D, tolerance))
+                if (shell.InRange(point3D, tolerance))
                 {
                     result.Add(space);
                 }

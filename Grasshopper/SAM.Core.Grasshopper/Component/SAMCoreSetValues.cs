@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -37,14 +40,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                
+
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObject", NickName = "_sAMObject", Description = "SAM Object", Access = GH_ParamAccess.item };
                 genericObject.DataMapping = GH_DataMapping.Graft;
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
@@ -78,7 +81,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_sAMObject");
-            
+
             SAMObject sAMObject = null;
             if (index == -1 || !dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
             {
@@ -88,7 +91,7 @@ namespace SAM.Core.Grasshopper
 
             List<string> names = new List<string>();
             index = Params.IndexOfInputParam("_parameters");
-            if(index == -1 || !dataAccess.GetDataList(index, names) || names == null)
+            if (index == -1 || !dataAccess.GetDataList(index, names) || names == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -106,7 +109,7 @@ namespace SAM.Core.Grasshopper
             sAMObject = sAMObject.Clone();
 
             List<string> names_Result = new List<string>();
-            for (int i=0; i < names.Count; i++)
+            for (int i = 0; i < names.Count; i++)
             {
                 string name = names[i];
                 if (name == null)
@@ -134,7 +137,7 @@ namespace SAM.Core.Grasshopper
                 List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
                 if (enums != null && enums.Count > 0)
                 {
-                    if(value == null)
+                    if (value == null)
                     {
                         foreach (Enum @enum in enums)
                         {
@@ -166,7 +169,7 @@ namespace SAM.Core.Grasshopper
             index = Params.IndexOfOutputParam("SAMObject");
             if (index != -1)
                 dataAccess.SetData(index, sAMObject);
-            
+
             index = Params.IndexOfOutputParam("Names");
             if (index != -1)
                 dataAccess.SetDataList(index, names_Result);

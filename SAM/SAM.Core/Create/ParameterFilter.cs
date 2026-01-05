@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 
 namespace SAM.Core
 {
@@ -6,7 +9,7 @@ namespace SAM.Core
     {
         public static ParameterFilter ParameterFilter(string name, string value, TextComparisonType textComparisonType)
         {
-            if(string.IsNullOrWhiteSpace(name))
+            if (string.IsNullOrWhiteSpace(name))
             {
                 return null;
             }
@@ -17,7 +20,7 @@ namespace SAM.Core
         public static ParameterFilter ParameterFilter(Enum @enum, string value, TextComparisonType textComparisonType)
         {
             Attributes.ParameterProperties parameterProperties = Attributes.ParameterProperties.Get(@enum);
-            if(parameterProperties == null)
+            if (parameterProperties == null)
             {
                 return null;
             }

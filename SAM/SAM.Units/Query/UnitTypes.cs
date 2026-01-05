@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Units
@@ -12,16 +15,16 @@ namespace SAM.Units
             {
                 case UnitCategory.Temperature:
 
-                    if(unitStyles == null || unitStyles.Length == 0)
+                    if (unitStyles == null || unitStyles.Length == 0)
                     {
                         result.Add(Units.UnitType.Celsius);
                         result.Add(Units.UnitType.Fahrenheit);
                     }
-                    else if(unitStyles.Contains(UnitStyle.SI))
+                    else if (unitStyles.Contains(UnitStyle.SI))
                     {
                         result.Add(Units.UnitType.Celsius);
                     }
-                    else if(unitStyles.Contains(UnitStyle.Imperial))
+                    else if (unitStyles.Contains(UnitStyle.Imperial))
                     {
                         result.Add(Units.UnitType.Fahrenheit);
                     }

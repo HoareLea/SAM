@@ -1,4 +1,7 @@
-﻿using Microsoft.Win32;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Microsoft.Win32;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -24,7 +27,7 @@ namespace SAM.Core.Grasshopper
             else
             {
                 version_Temp = versions.Find(x => x.Trim().ToUpper() == version.Trim().ToUpper());
-                if(version_Temp == null)
+                if (version_Temp == null)
                     version_Temp = versions.Find(x => x.Trim().ToUpper().StartsWith(version.Trim().ToUpper()));
 
                 if (version_Temp == null)

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -6,7 +9,7 @@ namespace SAM.Analytical
     {
         public static Point3D OpeningLocation(this IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(closedPlanar3D == null)
+            if (closedPlanar3D == null)
             {
                 return null;
             }

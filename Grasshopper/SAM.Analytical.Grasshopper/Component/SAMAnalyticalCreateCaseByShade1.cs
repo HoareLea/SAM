@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -175,52 +178,32 @@ EXAMPLE
                 dataAccess.GetDataList(index, shades);
             }
 
-            // Only create a copy and add shades when any are provided
-            if (shades != null && shades.Count != 0)
+            int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            bool concatenate = true;
+            if (index_Concatenate != -1)
             {
-                AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
-
-                foreach (Panel shade in shades)
-                {
-                    adjacencyCluster.AddObject(shade);
-                }
-
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster); // copy with shades (original stays unchanged)
+                dataAccess.GetData(index_Concatenate, ref concatenate);
             }
+
+            if (!concatenate)
+            {
+                analyticalModel = new AnalyticalModel(analyticalModel);
+                analyticalModel.RemoveValue("CaseDescription");
+            }
+
+            analyticalModel = Create.AnalyticalModel_ByShade(analyticalModel, shades);
 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
-                bool concatenate = true;
-                if (index_Concatenate != -1)
-                {
-                    dataAccess.GetData(index_Concatenate, ref concatenate);
-                }
 
                 string caseDescription = string.Empty;
-                if (concatenate)
+                if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
                 {
-                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
-                    {
-                        caseDescription = string.Empty;
-                    }
+                    caseDescription = string.Empty;
                 }
 
-                if (string.IsNullOrWhiteSpace(caseDescription))
-                {
-                    caseDescription = "Case";
-                }
-                else
-                {
-                    caseDescription += "_";
-                }
-
-                string sufix = "ByShade1_";
-
-                string value = caseDescription + sufix;
-
-                dataAccess.SetData(index, value);
+                dataAccess.SetData(index, caseDescription);
             }
 
             // Output
@@ -229,6 +212,61 @@ EXAMPLE
             {
                 dataAccess.SetData(index, analyticalModel);
             }
+
+            //// Only create a copy and add shades when any are provided
+            //if (shades != null && shades.Count != 0)
+            //{
+            //    AdjacencyCluster adjacencyCluster = new (analyticalModel.AdjacencyCluster, true);
+
+            //    foreach (Panel shade in shades)
+            //    {
+            //        adjacencyCluster.AddObject(shade);
+            //    }
+
+            //    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster); // copy with shades (original stays unchanged)
+            //}
+
+            //index = Params.IndexOfOutputParam("CaseDescription");
+            //if (index != -1)
+            //{
+            //    int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            //    bool concatenate = true;
+            //    if (index_Concatenate != -1)
+            //    {
+            //        dataAccess.GetData(index_Concatenate, ref concatenate);
+            //    }
+
+            //    string caseDescription = string.Empty;
+            //    if (concatenate)
+            //    {
+            //        if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
+            //        {
+            //            caseDescription = string.Empty;
+            //        }
+            //    }
+
+            //    if (string.IsNullOrWhiteSpace(caseDescription))
+            //    {
+            //        caseDescription = "Case";
+            //    }
+            //    else
+            //    {
+            //        caseDescription += "_";
+            //    }
+
+            //    string sufix = "ByShade1_";
+
+            //    string value = caseDescription + sufix;
+
+            //    dataAccess.SetData(index, value);
+            //}
+
+            //// Output
+            //index = Params.IndexOfOutputParam("CaseAModel");
+            //if (index != -1)
+            //{
+            //    dataAccess.SetData(index, analyticalModel);
+            //}
         }
     }
 }

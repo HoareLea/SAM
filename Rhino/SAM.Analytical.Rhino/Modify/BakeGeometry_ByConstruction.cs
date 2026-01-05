@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -44,16 +47,16 @@ namespace SAM.Analytical.Rhino
                 PanelType panelType = panel is Panel ? ((Panel)panel).PanelType : PanelType.Air;
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-                
+
                 string layerName = null;
-                if(panel is Panel)
+                if (panel is Panel)
                 {
                     layerName = ((Panel)panel).Name;
                 }
-                else if(panel is ExternalPanel)
+                else if (panel is ExternalPanel)
                 {
                     ExternalPanel externalPanel = (ExternalPanel)panel;
-                    if(externalPanel.Construction == null)
+                    if (externalPanel.Construction == null)
                     {
                         layerName = panel.GetType().Name;
                     }
@@ -86,7 +89,7 @@ namespace SAM.Analytical.Rhino
                     guids.AddRange(guids_Panel);
                 }
 
-                if(panel is Panel)
+                if (panel is Panel)
                 {
                     List<Aperture> apertures = ((Panel)panel).Apertures;
 

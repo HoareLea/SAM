@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Reflection;
 
 namespace SAM.Core
@@ -12,29 +15,29 @@ namespace SAM.Core
                 return null;
             }
 
-            if(propertyInfo.GetMethod != null)
+            if (propertyInfo.GetMethod != null)
             {
                 return propertyInfo.GetMethod;
             }
 
             Type type = propertyInfo.ReflectedType?.BaseType;
-            if(type == null)
+            if (type == null)
             {
                 return null;
             }
 
             PropertyInfo[] propertyInfos = type.GetProperties();
-            if(propertyInfos == null || propertyInfos.Length == 0)
+            if (propertyInfos == null || propertyInfos.Length == 0)
             {
                 return null;
             }
-            
+
             foreach (PropertyInfo propertyInfo_Temp in propertyInfos)
             {
-                if(propertyInfo_Temp?.Name == propertyInfo.Name)
+                if (propertyInfo_Temp?.Name == propertyInfo.Name)
                 {
                     MethodInfo result = GetMethodInfo(propertyInfo_Temp);
-                    if(result != null)
+                    if (result != null)
                     {
                         return result;
                     }

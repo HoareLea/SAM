@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -19,7 +22,7 @@ namespace SAM.Analytical
             }
 
             MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
-            if(materialLibrary == null)
+            if (materialLibrary == null)
             {
                 materialLibrary = new MaterialLibrary("Default MaterialLibrary");
             }
@@ -27,14 +30,14 @@ namespace SAM.Analytical
             List<ApertureConstruction> apertureConstructions = null;
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels != null && panels.Count != 0)
+            if (panels != null && panels.Count != 0)
             {
                 for (int i = 0; i < panels.Count; i++)
                 {
                     Panel panel = panels[i];
 
                     List<Aperture> apertures = panel?.Apertures;
-                    if(apertures == null || apertures.Count == 0)
+                    if (apertures == null || apertures.Count == 0)
                     {
                         continue;
                     }
@@ -43,16 +46,16 @@ namespace SAM.Analytical
 
                     bool updated = false;
 
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
                         ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
-                        if(apertureConstruction == null)
+                        if (apertureConstruction == null)
                         {
                             continue;
                         }
 
                         apertureConstructions = constructionManager.ApertureConstructions?.FindAll(x => x.ApertureType == apertureConstruction.ApertureType && x.Guid == apertureConstruction.Guid);
-                        if(apertureConstructions == null || apertureConstructions.Count == 0)
+                        if (apertureConstructions == null || apertureConstructions.Count == 0)
                         {
                             apertureConstructions = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, apertureConstruction.Name);
                             if (apertureConstructions == null || apertureConstructions.Count == 0)
@@ -86,7 +89,7 @@ namespace SAM.Analytical
                             continue;
                         }
 
-                        if(!panel.RemoveAperture(aperture.Guid))
+                        if (!panel.RemoveAperture(aperture.Guid))
                         {
                             continue;
                         }

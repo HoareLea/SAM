@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 
@@ -61,20 +64,20 @@ namespace SAM.Core.Grasshopper
             dataAccess.SetData(1, false);
 
             Log log = null;
-            if(!dataAccess.GetData(0, ref log) || log == null)
+            if (!dataAccess.GetData(0, ref log) || log == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string path = null;
-            if(!dataAccess.GetData(1, ref path) || string.IsNullOrWhiteSpace(path))
+            if (!dataAccess.GetData(1, ref path) || string.IsNullOrWhiteSpace(path))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-            
-            if(log.Write(path))
+
+            if (log.Write(path))
             {
                 dataAccess.SetData(0, log);
                 dataAccess.SetData(1, true);

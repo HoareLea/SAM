@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
@@ -15,7 +18,7 @@ namespace SAM.Core
         /// <returns>Compressed string</returns>
         public static string Compress(this string @string)
         {
-            if(@string == null)
+            if (@string == null)
             {
                 return null;
             }
@@ -41,7 +44,7 @@ namespace SAM.Core
         public static string Compress(this IJSAMObject jSAMObject)
         {
             string @string = jSAMObject?.ToJObject()?.ToString();
-            if(string.IsNullOrEmpty(@string))
+            if (string.IsNullOrEmpty(@string))
             {
                 return @string;
             }
@@ -49,10 +52,10 @@ namespace SAM.Core
             return Compress(@string);
         }
 
-        public static string Compress<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject 
+        public static string Compress<T>(this IEnumerable<T> jSAMObjects) where T : IJSAMObject
         {
             string json = Convert.ToString(jSAMObjects);
-            if(string.IsNullOrEmpty(json))
+            if (string.IsNullOrEmpty(json))
             {
                 return json;
             }

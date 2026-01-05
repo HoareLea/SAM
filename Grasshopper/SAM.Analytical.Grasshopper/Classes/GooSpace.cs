@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.Commands;
@@ -74,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("bbb45545-17b3-49be-b177-db284b2087f3");
 
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         bool IGH_PreviewObject.Hidden { get; set; }
 
@@ -131,7 +134,7 @@ namespace SAM.Analytical.Grasshopper
                     if (!string.IsNullOrWhiteSpace(@string))
                     {
                         spaces = Core.Convert.ToSAM<Space>(@string);
-                        if(spaces != null)
+                        if (spaces != null)
                         {
                             Point3D point3D = Geometry.Rhino.Convert.ToSAM(point);
                             if (point3D != null)
@@ -156,7 +159,7 @@ namespace SAM.Analytical.Grasshopper
                     if (string.IsNullOrWhiteSpace(name))
                         name = "Cell";
 
-                    spaces = new List<Space>() { new Space(name, point3D)};
+                    spaces = new List<Space>() { new Space(name, point3D) };
                 }
 
                 if (spaces == null || spaces.Count == 0)

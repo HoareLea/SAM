@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -13,7 +16,7 @@ namespace SAM.Analytical
             }
 
             HostPartitionTypeLibrary hostPartitionTypeLibrary = DefaultHostPartitionTypeLibrary();
-            if(hostPartitionTypeLibrary == null)
+            if (hostPartitionTypeLibrary == null)
             {
                 return null;
             }
@@ -40,7 +43,7 @@ namespace SAM.Analytical
             return DefaultHostPartitionType(face3D?.GetPlane()?.Normal, tolerance);
         }
 
-        public static T DefaultHostPartitionType<T>(this PartitionAnalyticalType partitionAnalyticalType) where T: HostPartitionType
+        public static T DefaultHostPartitionType<T>(this PartitionAnalyticalType partitionAnalyticalType) where T : HostPartitionType
         {
             HostPartitionTypeLibrary hostPartitionTypeLibrary = DefaultHostPartitionTypeLibrary();
             if (hostPartitionTypeLibrary == null)

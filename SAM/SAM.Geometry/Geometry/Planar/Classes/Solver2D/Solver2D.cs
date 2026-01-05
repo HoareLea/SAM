@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -13,15 +16,15 @@ namespace SAM.Geometry.Planar
             this.area = area;
             this.obstacles2D = obstacles2D;
         }
-         
+
 
         public bool Add(Solver2DData solver2DData)
         {
-            if(solver2DData == null || solver2DData.Geometry2D<ISAMGeometry2D>() == null || solver2DData.Closed2D<IClosed2D>() == null)
+            if (solver2DData == null || solver2DData.Geometry2D<ISAMGeometry2D>() == null || solver2DData.Closed2D<IClosed2D>() == null)
             {
                 return false;
             }
-            if(solver2DDatas == null)
+            if (solver2DDatas == null)
             {
                 solver2DDatas = new List<Solver2DData>();
             }
@@ -31,7 +34,7 @@ namespace SAM.Geometry.Planar
         }
         public bool AddRange(List<Solver2DData> solver2DDatas)
         {
-            if(solver2DDatas == null)
+            if (solver2DDatas == null)
             {
                 return false;
             }
@@ -80,7 +83,7 @@ namespace SAM.Geometry.Planar
 
                             if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, result))
                             {
-                                if(solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
+                                if (solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
                                 {
                                     continue;
                                 }
@@ -212,7 +215,7 @@ namespace SAM.Geometry.Planar
 
             Rectangle2D result = new Rectangle2D(calculatedRectangle.Origin, -calculatedRectangle.Height, calculatedRectangle.Width, calculatedRectangle.WidthDirection);
             return result;
-        }   
+        }
         private bool intersect(Rectangle2D rectangle2D, List<Solver2DResult> solver2DResults)
         {
             return (obstacles2D.Find(x => x.InRange(rectangle2D) == true) != null) ||

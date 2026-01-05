@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -13,7 +16,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Tuple<Plane, Point3D, Face3D, Panel>> tuples = new List<Tuple<Plane, Point3D, Face3D, Panel>>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 Face3D face3D = panel.GetFace3D();
                 if (face3D == null)
@@ -31,7 +34,7 @@ namespace SAM.Analytical
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels_ToBeCutted)
+            foreach (Panel panel in panels_ToBeCutted)
             {
                 Face3D face3D = panel.GetFace3D();
                 if (face3D == null)
@@ -45,7 +48,7 @@ namespace SAM.Analytical
                 if (tuples_Temp == null || tuples_Temp.Count == 0)
                     continue;
 
-                List<Geometry.Planar.Face2D> face2Ds =  tuples_Temp.ConvertAll(x => plane.Convert(plane.Project(x.Item3)));
+                List<Geometry.Planar.Face2D> face2Ds = tuples_Temp.ConvertAll(x => plane.Convert(plane.Project(x.Item3)));
                 face2Ds?.RemoveAll(x => x == null || x.GetArea() < tolerance);
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
@@ -56,7 +59,7 @@ namespace SAM.Analytical
                 if (face2Ds == null || face2Ds.Count == 0)
                     continue;
 
-                foreach(Geometry.Planar.Face2D face2D_Shade in face2Ds)
+                foreach (Geometry.Planar.Face2D face2D_Shade in face2Ds)
                 {
                     if (face2D_Shade == null || face2D_Shade.GetArea() <= tolerance)
                         continue;

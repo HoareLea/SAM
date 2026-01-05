@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -27,7 +30,7 @@ namespace SAM.Analytical
             }
 
             internalConditions = new List<InternalCondition>();
-            foreach(string name_InternalCondition in names_InternalCondition)
+            foreach (string name_InternalCondition in names_InternalCondition)
             {
                 List<InternalCondition> internalConditions_Temp = internalConditionLibrary.GetInternalConditions(name_InternalCondition);
                 if (internalConditions_Temp == null || internalConditions_Temp.Count == 0)

@@ -1,10 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
@@ -54,7 +57,7 @@ namespace SAM.Geometry.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = null;
 
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset", Access = GH_ParamAccess.item};
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offset_", NickName = "offset_", Description = "Offset", Access = GH_ParamAccess.item };
                 number.SetPersistentData(0.1);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
@@ -128,10 +131,10 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<ISAMGeometry3D> sAMGeometries = new List<ISAMGeometry3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
-                if(boundingBox3D == null)
+                if (boundingBox3D == null)
                 {
                     continue;
                 }
@@ -139,7 +142,7 @@ namespace SAM.Geometry.Grasshopper
                 Plane plane = Spatial.Create.Plane(boundingBox3D.Min.Z + offset);
 
                 PlanarIntersectionResult planarIntersectionResult = Spatial.Create.PlanarIntersectionResult(plane, face3D, Core.Tolerance.Angle, tolerance);
-                if(planarIntersectionResult == null)
+                if (planarIntersectionResult == null)
                 {
                     continue;
                 }
@@ -159,10 +162,10 @@ namespace SAM.Geometry.Grasshopper
                 List<ISegmentable3D> segmentable3Ds = sAMGeometries.ConvertAll(x => x as ISegmentable3D);
                 segmentable3Ds.RemoveAll(x => x == null);
                 double length = segmentable3Ds.ConvertAll(x => x.GetLength()).Sum();
-                
+
                 dataAccess.SetData(index, length);
             }
-                
+
         }
     }
 }

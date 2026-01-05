@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -42,7 +45,7 @@ namespace SAM.Analytical.Grasshopper
             int index = -1;
 
             inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
-            
+
             index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
@@ -106,8 +109,8 @@ namespace SAM.Analytical.Grasshopper
                     AdjacencyCluster adjacencyCluster = (AdjacencyCluster)sAMObject;
                     ConstructionLibrary constructionLibrary_Temp = null;
                     ApertureConstructionLibrary apertureConstructionLibrary_Temp = null;
-                    List <Panel> panels_Temp = adjacencyCluster.GetPanels();
-                    if(panels_Temp != null)
+                    List<Panel> panels_Temp = adjacencyCluster.GetPanels();
+                    if (panels_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
                         constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels_Temp, constructionLibrary);
@@ -148,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(panels != null && panels.Count != 0)
+            if (panels != null && panels.Count != 0)
             {
                 ConstructionLibrary constructionLibrary_Temp = Analytical.Modify.UpdateConstructionsByName(panels, constructionLibrary);
                 ApertureConstructionLibrary apertureConstructionLibrary_Temp = Analytical.Modify.UpdateApertureConstructionsByName(panels, apertureConstructionLibrary);

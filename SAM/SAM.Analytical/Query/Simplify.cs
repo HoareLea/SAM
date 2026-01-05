@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -6,31 +9,31 @@ namespace SAM.Analytical
     {
         public static TMResult Simplify(this TMExtendedResult tMExtendedResult)
         {
-            if(tMExtendedResult == null)
+            if (tMExtendedResult == null)
             {
                 return null;
             }
 
-            if(tMExtendedResult is TM52ExtendedResult)
+            if (tMExtendedResult is TM52ExtendedResult)
             {
                 TM52ExtendedResult tM52ExtendedResult = (TM52ExtendedResult)tMExtendedResult;
 
                 List<int> occupiedHourIndicesExceedingAbsoluteLimit = tM52ExtendedResult.GetOccupiedHourIndicesExceedingAbsoluteLimit();
 
                 return new TM52Result(
-                    tM52ExtendedResult.Name, 
-                    tM52ExtendedResult.Source, 
-                    tM52ExtendedResult.Reference, 
+                    tM52ExtendedResult.Name,
+                    tM52ExtendedResult.Source,
+                    tM52ExtendedResult.Reference,
                     tM52ExtendedResult.TM52BuildingCategory,
-                    tM52ExtendedResult.OccupiedHours, 
-                    tM52ExtendedResult.MaxExceedableHours, 
-                    tM52ExtendedResult.GetOccupiedHoursExceedingComfortRange(), 
+                    tM52ExtendedResult.OccupiedHours,
+                    tM52ExtendedResult.MaxExceedableHours,
+                    tM52ExtendedResult.GetOccupiedHoursExceedingComfortRange(),
                     tM52ExtendedResult.GetOccupiedDailyWeightedExceedance(),
                     occupiedHourIndicesExceedingAbsoluteLimit == null ? 0 : occupiedHourIndicesExceedingAbsoluteLimit.Count,
-                    tM52ExtendedResult.Pass);;
+                    tM52ExtendedResult.Pass); ;
             }
 
-            if(tMExtendedResult is TM59CorridorExtendedResult)
+            if (tMExtendedResult is TM59CorridorExtendedResult)
             {
                 TM59CorridorExtendedResult tM59CorridorExtendedResult = (TM59CorridorExtendedResult)tMExtendedResult;
 

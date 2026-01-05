@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -26,7 +29,7 @@ namespace SAM.Analytical
             shell = new Shell(face3Ds);
 
             Dictionary<IPanel, Vector3D> result = new Dictionary<IPanel, Vector3D>();
-            for(int i=0; i < face3Ds.Count(); i++)
+            for (int i = 0; i < face3Ds.Count(); i++)
             {
                 result[panels[i]] = shell.Normal(face3Ds[i].InternalPoint3D(), external, silverSpacing, tolerance);
             }

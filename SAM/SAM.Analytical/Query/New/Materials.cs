@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -25,22 +28,22 @@ namespace SAM.Analytical
             List<IMaterial> paneMaterials = Architectural.Query.Materials(openingType.PaneMaterialLayers, materialLibrary);
             List<IMaterial> frameMaterials = Architectural.Query.Materials(openingType.FrameMaterialLayers, materialLibrary);
 
-            if(paneMaterials == null && frameMaterials == null)
+            if (paneMaterials == null && frameMaterials == null)
             {
                 return null;
             }
 
             List<IMaterial> result = new List<IMaterial>();
-            if(paneMaterials != null)
+            if (paneMaterials != null)
             {
                 result.AddRange(paneMaterials);
             }
 
-            if(frameMaterials != null)
+            if (frameMaterials != null)
             {
-                foreach(IMaterial material in frameMaterials)
+                foreach (IMaterial material in frameMaterials)
                 {
-                    if(result.Find(x => x.Name == material.Name) == null)
+                    if (result.Find(x => x.Name == material.Name) == null)
                     {
                         result.Add(material);
                     }
@@ -72,23 +75,23 @@ namespace SAM.Analytical
 
         public static List<IMaterial> Materials(this IEnumerable<IHostPartition> hostPartitions, MaterialLibrary materialLibrary)
         {
-            if(hostPartitions == null)
+            if (hostPartitions == null)
             {
                 return null;
             }
 
             List<IMaterial> result = new List<IMaterial>();
-            foreach(IHostPartition hostPartition in hostPartitions)
+            foreach (IHostPartition hostPartition in hostPartitions)
             {
                 List<IMaterial> materials = hostPartition?.Materials(materialLibrary);
-                if(materials == null || materials.Count == 0)
+                if (materials == null || materials.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(IMaterial material in materials)
+                foreach (IMaterial material in materials)
                 {
-                    if(material == null || result.Find(x => x.Name == material.Name) != null)
+                    if (material == null || result.Find(x => x.Name == material.Name) != null)
                     {
                         continue;
                     }

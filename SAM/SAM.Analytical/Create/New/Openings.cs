@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -14,7 +17,7 @@ namespace SAM.Analytical
             }
 
             List<IOpening> result = new List<IOpening>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 if (minArea != 0 && face3D.GetArea() < minArea)
                 {
@@ -22,7 +25,7 @@ namespace SAM.Analytical
                 }
 
                 IOpening opening = Opening(openingType, face3D);
-                if(opening == null)
+                if (opening == null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry;
 using SAM.Geometry.Planar;
@@ -44,7 +47,7 @@ namespace SAM.Analytical
             : base()
         {
             plane = closedPlanar3D?.GetPlane();
-            if(plane != null)
+            if (plane != null)
             {
                 plane = new Plane(plane, plane.Project(location));
 
@@ -73,7 +76,7 @@ namespace SAM.Analytical
         public PlanarBoundary3D(PlanarBoundary3D planarBoundary3D)
             : base(planarBoundary3D)
         {
-            if(planarBoundary3D != null)
+            if (planarBoundary3D != null)
             {
 
                 plane = planarBoundary3D.plane == null ? null : new Plane(planarBoundary3D.plane);
@@ -102,7 +105,7 @@ namespace SAM.Analytical
         {
             this.plane = plane == null ? null : new Plane(plane);
 
-            if(boundary2D != null)
+            if (boundary2D != null)
             {
                 externalEdge2DLoop = boundary2D.ExternalEdge2DLoop == null ? null : new BoundaryEdge2DLoop(boundary2D.ExternalEdge2DLoop);
 
@@ -157,7 +160,7 @@ namespace SAM.Analytical
             List<BoundaryEdge3DLoop> boundaryEdge3DLoops_Internal = GetInternalEdge3DLoops();
             if (boundaryEdge3DLoops_Internal != null && boundaryEdge3DLoops_Internal.Count > 0)
             {
-                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge3DLoops_Internal)
+                foreach (BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in boundaryEdge3DLoops_Internal)
                     boundaryEdge3DLoop_Internal.Transform(transform3D);
             }
 
@@ -271,7 +274,7 @@ namespace SAM.Analytical
 
             if (snapInternalEdges && internalEdge2DLoops != null)
             {
-                foreach(BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in GetInternalEdge3DLoops())
+                foreach (BoundaryEdge3DLoop boundaryEdge3DLoop_Internal in GetInternalEdge3DLoops())
                 {
                     boundaryEdge3DLoop_Internal.Snap(point3Ds, maxDistance);
                     internalEdge2DLoops_New.Add(new BoundaryEdge2DLoop(plane, boundaryEdge3DLoop_Internal));
@@ -288,13 +291,13 @@ namespace SAM.Analytical
 
             Plane plane_Min = null;
             double distance_Min = double.MaxValue;
-            foreach(Plane plane_Temp in planes)
+            foreach (Plane plane_Temp in planes)
             {
                 double distance_Temp = plane.Distance(plane_Temp, tolerance);
 
                 if (distance_Temp > maxDistance)
                     continue;
-                
+
                 if (plane_Temp.Distance(boundingBox3D) > maxDistance)
                     continue;
 
@@ -302,7 +305,7 @@ namespace SAM.Analytical
                     continue;
 
                 //This is true only when planes are coplanar
-                if(distance_Temp < distance_Min)
+                if (distance_Temp < distance_Min)
                 {
                     plane_Min = plane_Temp;
                     distance_Min = distance_Temp;
@@ -337,13 +340,13 @@ namespace SAM.Analytical
         public void Normalize(Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
         {
             Face3D face3D = GetFace3D();
-            if(face3D == null)
+            if (face3D == null)
             {
                 return;
             }
 
             face3D = Geometry.Spatial.Query.Normalize(face3D, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
-            if(face3D == null)
+            if (face3D == null)
             {
                 return;
             }

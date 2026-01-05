@@ -1,9 +1,12 @@
-﻿namespace SAM.Analytical
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Analytical
 {
     public static partial class Create
     {
         public static SpaceSimulationResult SpaceSimulationResult(
-            string name, 
+            string name,
             string source = null,
             string reference = null,
             double volume = double.NaN,
@@ -12,7 +15,7 @@
             double load = double.NaN,
             double loadIndex = -1,
             SizingMethod? sizingMethod = null,
-            double dryBulbTemperature = double.NaN, 
+            double dryBulbTemperature = double.NaN,
             double resultantTemperature = double.NaN,
             double solarGain = double.NaN,
             double lightingGain = double.NaN,

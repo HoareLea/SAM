@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -12,13 +15,13 @@ namespace SAM.Core
     /// Space->"InternalCondition"->"Name"
     /// Space->Zone::"Name"
     /// </summary>
-    public class PathReference: IComplexReference, IEnumerable<ObjectReference>
+    public class PathReference : IComplexReference, IEnumerable<ObjectReference>
     {
         private List<ObjectReference> objectReferences;
 
         public PathReference(IEnumerable<ObjectReference> objectReferences)
         {
-            if(objectReferences != null)
+            if (objectReferences != null)
             {
                 this.objectReferences = objectReferences == null ? null : new List<ObjectReference>(objectReferences);
             }
@@ -31,9 +34,9 @@ namespace SAM.Core
                 this.objectReferences = objectReferences == null ? null : new List<ObjectReference>(objectReferences);
             }
 
-            if(objectReference != null)
+            if (objectReference != null)
             {
-                if(this.objectReferences == null)
+                if (this.objectReferences == null)
                 {
                     this.objectReferences = new List<ObjectReference>();
                 }
@@ -50,7 +53,7 @@ namespace SAM.Core
         public override string ToString()
         {
             List<string> values = objectReferences?.ConvertAll(x => x?.ToString()).ConvertAll(x => x == null ? string.Empty : x);
-            if(values == null || values.Count == 0)
+            if (values == null || values.Count == 0)
             {
                 return string.Empty;
             }
@@ -83,13 +86,13 @@ namespace SAM.Core
             if (jObject.ContainsKey("ObjectReferences"))
             {
                 JArray jArray = jObject.Value<JArray>("ObjectReferences");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     objectReferences = new List<ObjectReference>();
-                    foreach(JObject jObject_ObjectReference in jArray)
+                    foreach (JObject jObject_ObjectReference in jArray)
                     {
                         ObjectReference objectReference = Query.IJSAMObject<ObjectReference>(jObject_ObjectReference);
-                        if(objectReference != null)
+                        if (objectReference != null)
                         {
                             objectReferences.Add(objectReference);
                         }
@@ -109,7 +112,7 @@ namespace SAM.Core
             {
                 JArray jArray = new JArray();
 
-                foreach(ObjectReference objectReference in objectReferences)
+                foreach (ObjectReference objectReference in objectReferences)
                 {
                     jArray.Add(objectReference.ToJObject());
                 }
@@ -122,7 +125,7 @@ namespace SAM.Core
 
         public override bool Equals(object obj)
         {
-            if(ReferenceEquals(obj, null))
+            if (ReferenceEquals(obj, null))
             {
                 return false;
             }
@@ -134,7 +137,7 @@ namespace SAM.Core
             }
 
             List<ObjectReference> objectReferences_Temp = pathReference.objectReferences;
-            if((objectReferences == null || objectReferences.Count == 0 ) && (objectReferences_Temp == null || objectReferences_Temp.Count == 0))
+            if ((objectReferences == null || objectReferences.Count == 0) && (objectReferences_Temp == null || objectReferences_Temp.Count == 0))
             {
                 return true;
             }
@@ -144,7 +147,7 @@ namespace SAM.Core
                 return false;
             }
 
-            if(objectReferences.Count != objectReferences_Temp.Count)
+            if (objectReferences.Count != objectReferences_Temp.Count)
             {
                 return false;
             }

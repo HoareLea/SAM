@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Spatial
     {
         private List<Point3D> points;
         private List<Tuple<int, int, int>> indexes;
-        
+
         public Mesh3D(JObject jObject)
         {
             FromJObject(jObject);
@@ -23,24 +26,24 @@ namespace SAM.Geometry.Spatial
 
         public Mesh3D(IEnumerable<Triangle3D> triangle3Ds)
         {
-            if(triangle3Ds != null)
+            if (triangle3Ds != null)
             {
                 points = new List<Point3D>();
                 indexes = new List<Tuple<int, int, int>>();
                 foreach (Triangle3D triangle3D in triangle3Ds)
                 {
-                    if(triangle3D == null)
+                    if (triangle3D == null)
                     {
                         continue;
                     }
 
                     int[] array = new int[3];
-                    for (int i=0; i < 3; i++)
+                    for (int i = 0; i < 3; i++)
                     {
                         Point3D point3D = triangle3D[i];
 
                         int index = points.FindIndex(x => x.Equals(point3D));
-                        if(index == -1)
+                        if (index == -1)
                         {
                             index = points.Count;
                             points.Add(point3D);
@@ -115,11 +118,11 @@ namespace SAM.Geometry.Spatial
                 indexes = new List<Tuple<int, int, int>>();
 
                 JArray jArray = jObject.Value<JArray>("Indexes");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     foreach (JArray jArray_Temp in jArray)
                     {
-                        if(jArray_Temp == null || jArray_Temp.Count < 3)
+                        if (jArray_Temp == null || jArray_Temp.Count < 3)
                         {
                             continue;
                         }
@@ -141,11 +144,11 @@ namespace SAM.Geometry.Spatial
             if (points != null)
                 jObject.Add("Points", Geometry.Create.JArray(points));
 
-            if(indexes != null)
+            if (indexes != null)
             {
                 JArray jArray = new JArray();
 
-                foreach(Tuple<int, int, int> tuple in indexes)
+                foreach (Tuple<int, int, int> tuple in indexes)
                 {
                     JArray jArray_Temp = new JArray();
                     jArray_Temp.Add(tuple.Item1);
@@ -194,25 +197,25 @@ namespace SAM.Geometry.Spatial
 
         public HashSet<int> ConnectedIndexes(int index)
         {
-            if(indexes == null || indexes.Count == 0)
+            if (indexes == null || indexes.Count == 0)
             {
                 return null;
             }
 
-            if(index < 0 || index >= points.Count)
+            if (index < 0 || index >= points.Count)
             {
                 return null;
             }
 
             HashSet<int> result = new HashSet<int>();
-            foreach(Tuple<int, int, int> tuple in indexes)
+            foreach (Tuple<int, int, int> tuple in indexes)
             {
-                if(index == tuple.Item1)
+                if (index == tuple.Item1)
                 {
                     result.Add(tuple.Item2);
                     result.Add(tuple.Item3);
                 }
-                else if(index == tuple.Item2)
+                else if (index == tuple.Item2)
                 {
                     result.Add(tuple.Item1);
                     result.Add(tuple.Item3);
@@ -230,7 +233,7 @@ namespace SAM.Geometry.Spatial
         public HashSet<int> ConnectedIndexes(Point3D point3D)
         {
             int index = IndexOf(point3D);
-            if(index == -1)
+            if (index == -1)
             {
                 return null;
             }
@@ -252,13 +255,13 @@ namespace SAM.Geometry.Spatial
         public HashSet<Point3D> ConnectedPoint3Ds(int index)
         {
             HashSet<int> indexes = ConnectedIndexes(index);
-            if(indexes == null)
+            if (indexes == null)
             {
                 return null;
             }
 
             HashSet<Point3D> result = new HashSet<Point3D>();
-            foreach(int index_Connected in indexes)
+            foreach (int index_Connected in indexes)
             {
                 result.Add(points[index_Connected]);
             }
@@ -291,7 +294,7 @@ namespace SAM.Geometry.Spatial
         public Triangle3D GetTriangle(int index)
         {
             Tuple<int, int, int> tuple = GetTriangleIndexes(index);
-            if(tuple == null)
+            if (tuple == null)
             {
                 return null;
             }
@@ -335,7 +338,7 @@ namespace SAM.Geometry.Spatial
         public Vector3D GetNormal(int index)
         {
             Tuple<int, int, int> triangleIndexes = GetTriangleIndexes(index);
-            if(triangleIndexes == null)
+            if (triangleIndexes == null)
             {
                 return null;
             }
@@ -345,7 +348,7 @@ namespace SAM.Geometry.Spatial
 
         public List<int> GetTriangleIndexes(int index_1, int index_2, int maxCount = int.MaxValue)
         {
-            if(points == null || points.Count < 3 || indexes == null || indexes.Count == 0)
+            if (points == null || points.Count < 3 || indexes == null || indexes.Count == 0)
             {
                 return null;
             }
@@ -361,15 +364,15 @@ namespace SAM.Geometry.Spatial
             }
 
             List<int> result = new List<int>();
-            for(int i=0; i < indexes.Count; i++)
+            for (int i = 0; i < indexes.Count; i++)
             {
                 Tuple<int, int, int> tuple = indexes[i];
-                if(tuple == null)
+                if (tuple == null)
                 {
                     continue;
                 }
 
-                if(tuple.Item1 != index_1 && tuple.Item2 != index_1 && tuple.Item3 != index_1)
+                if (tuple.Item1 != index_1 && tuple.Item2 != index_1 && tuple.Item3 != index_1)
                 {
                     continue;
                 }
@@ -381,7 +384,7 @@ namespace SAM.Geometry.Spatial
 
                 result.Add(i);
 
-                if(result.Count >= maxCount)
+                if (result.Count >= maxCount)
                 {
                     break;
                 }
@@ -392,7 +395,7 @@ namespace SAM.Geometry.Spatial
 
         public List<Triangle3D> GetTriangles()
         {
-            if(points == null || indexes == null)
+            if (points == null || indexes == null)
             {
                 return null;
             }
@@ -404,12 +407,12 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Triangle3D> result = new List<Triangle3D>();
-            if(count == 0)
+            if (count == 0)
             {
                 return result;
             }
-            
-            for (int i=0; i < TrianglesCount; i++)
+
+            for (int i = 0; i < TrianglesCount; i++)
             {
                 result.Add(GetTriangle(i));
             }
@@ -424,7 +427,7 @@ namespace SAM.Geometry.Spatial
 
         public List<Segment3D> GetSegments(bool includeSimiliar)
         {
-            if(points == null || indexes == null)
+            if (points == null || indexes == null)
             {
                 return null;
             }
@@ -434,15 +437,15 @@ namespace SAM.Geometry.Spatial
             if (includeSimiliar)
             {
                 List<Triangle3D> triangle3Ds = GetTriangles();
-                if(triangle3Ds == null)
+                if (triangle3Ds == null)
                 {
                     return null;
                 }
 
-                foreach(Triangle3D triangle3D in triangle3Ds)
+                foreach (Triangle3D triangle3D in triangle3Ds)
                 {
                     List<Segment3D> segment3Ds_Triangle3D = triangle3D?.GetSegments();
-                    if(segment3Ds_Triangle3D != null && segment3Ds_Triangle3D.Count != 0)
+                    if (segment3Ds_Triangle3D != null && segment3Ds_Triangle3D.Count != 0)
                     {
                         result.AddRange(segment3Ds_Triangle3D);
                     }
@@ -506,31 +509,31 @@ namespace SAM.Geometry.Spatial
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(points == null || indexes == null)
-            {
-                return false;
-            }
-            
-            if(!GetBoundingBox().InRange(point3D, tolerance))
+            if (points == null || indexes == null)
             {
                 return false;
             }
 
-            for(int i=0; i < indexes.Count; i++)
+            if (!GetBoundingBox().InRange(point3D, tolerance))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < indexes.Count; i++)
             {
                 Triangle3D triangle3D = GetTriangle(i);
-                if(triangle3D == null)
+                if (triangle3D == null)
                 {
                     continue;
                 }
 
-                if(!triangle3D.GetBoundingBox().InRange(point3D, tolerance))
+                if (!triangle3D.GetBoundingBox().InRange(point3D, tolerance))
                 {
                     continue;
                 }
 
                 double distance = new Face3D(triangle3D).Distance(point3D, tolerance);
-                if(distance < tolerance)
+                if (distance < tolerance)
                 {
                     return true;
                 }

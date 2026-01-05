@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -25,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -104,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,7 +117,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_systemTypeLibrary_");
             SystemTypeLibrary systemTypeLibrary = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref systemTypeLibrary);
             }
@@ -134,22 +137,22 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            foreach(object @object in objects)
+            foreach (object @object in objects)
             {
                 object object_Temp = @object;
-                if(@object is global::Grasshopper.Kernel.Types.IGH_Goo)
+                if (@object is global::Grasshopper.Kernel.Types.IGH_Goo)
                 {
                     object_Temp = ((dynamic)@object).Value;
                 }
-                
-                if(object_Temp is Zone)
+
+                if (object_Temp is Zone)
                 {
                     zones.Add((Zone)object_Temp);
                 }
-                else if(object_Temp is string)
+                else if (object_Temp is string)
                 {
                     Zone zone = adjacencyCluster.GetZones()?.Find(x => x.Name == (string)object_Temp);
-                    if(zone != null)
+                    if (zone != null)
                     {
                         zones.Add((Zone)object_Temp);
                     }
@@ -158,7 +161,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_supplyUnitNames_");
             List<string> supplyUnitNames = new List<string>();
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, supplyUnitNames);
             }
@@ -175,12 +178,12 @@ namespace SAM.Analytical.Grasshopper
 
             if (adjacencyCluster != null)
             {
-                for(int i =0; i < zones.Count; i++)
+                for (int i = 0; i < zones.Count; i++)
                 {
                     Zone zone = zones[i];
 
                     List<Space> spaces = adjacencyCluster.GetSpaces(zone);
-                    if(spaces == null || spaces.Count == 0)
+                    if (spaces == null || spaces.Count == 0)
                     {
                         continue;
                     }
@@ -188,7 +191,7 @@ namespace SAM.Analytical.Grasshopper
                     string supplyUnitName = null;
                     string exhaustUnitName = null;
 
-                    if(supplyUnitNames.Count > i)
+                    if (supplyUnitNames.Count > i)
                     {
                         supplyUnitName = supplyUnitNames[i];
                     }
@@ -200,10 +203,10 @@ namespace SAM.Analytical.Grasshopper
 
                     Check(adjacencyCluster, zone, supplyUnitName, exhaustUnitName);
 
-                    VentilationSystem  ventilationSystem = adjacencyCluster.AddVentilationSystem(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
+                    VentilationSystem ventilationSystem = adjacencyCluster.AddVentilationSystem(systemTypeLibrary, spaces, supplyUnitName, exhaustUnitName);
                     if (ventilationSystem != null)
                     {
-                        if(mechanicalSystems.Find(x => x.Guid == ventilationSystem.Guid) == null)
+                        if (mechanicalSystems.Find(x => x.Guid == ventilationSystem.Guid) == null)
                         {
                             mechanicalSystems.Add(ventilationSystem);
                         }
@@ -225,7 +228,7 @@ namespace SAM.Analytical.Grasshopper
                             }
                         }
 
-                        if(airHandlingUnits != null && airHandlingUnits.Count != 0)
+                        if (airHandlingUnits != null && airHandlingUnits.Count != 0)
                         {
                             GH_Path path = new GH_Path(i);
                             airHandlingUnits.ForEach(x => dataTree_AnalyticalEquipments.Add(x, path));
@@ -244,7 +247,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, analyticalObject);
             }
@@ -264,7 +267,7 @@ namespace SAM.Analytical.Grasshopper
 
         private void Check(AdjacencyCluster adjacencyCluster, Zone zone, string supplyUnitName, string exhaustUnitName)
         {
-            if(adjacencyCluster == null || zone == null)
+            if (adjacencyCluster == null || zone == null)
             {
                 return;
             }
@@ -277,7 +280,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             IEnumerable<string> ventilationSystemTypeNames = spaces.ConvertAll(x => x.InternalCondition?.GetValue<string>(InternalConditionParameter.VentilationSystemTypeName)).Distinct();
-            if(ventilationSystemTypeNames != null && ventilationSystemTypeNames.Count() > 0)
+            if (ventilationSystemTypeNames != null && ventilationSystemTypeNames.Count() > 0)
             {
                 if (ventilationSystemTypeNames.Count() != 1)
                 {
@@ -302,7 +305,7 @@ namespace SAM.Analytical.Grasshopper
                 string exhaustUnitName_Temp = string.IsNullOrWhiteSpace(exhaustUnitName) ? null : exhaustUnitName;
 
                 List<VentilationSystem> ventilationSystems = adjacencyCluster.GetMechanicalSystems<VentilationSystem>();
-                if(ventilationSystems != null)
+                if (ventilationSystems != null)
                 {
                     foreach (VentilationSystem ventilationSystem in ventilationSystems)
                     {

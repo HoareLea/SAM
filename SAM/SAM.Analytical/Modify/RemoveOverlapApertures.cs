@@ -1,5 +1,8 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -10,7 +13,7 @@ namespace SAM.Analytical
         public static bool RemoveOverlapApertures(this Panel panel, out List<Aperture> removedApertures, double tolerance = Core.Tolerance.Distance)
         {
             removedApertures = null;
-            
+
             List<Aperture> apertures = panel?.Apertures;
             if (apertures == null || apertures.Count < 2)
             {
@@ -18,16 +21,16 @@ namespace SAM.Analytical
             }
 
             Plane plane = panel.Plane;
-            if(plane == null)
+            if (plane == null)
             {
                 return false;
             }
 
             List<Tuple<BoundingBox2D, Face2D, Aperture>> tuples = new List<Tuple<BoundingBox2D, Face2D, Aperture>>();
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 Face2D face2D = plane.Convert(plane.Project(aperture?.GetFace3D()));
-                if(face2D == null)
+                if (face2D == null)
                 {
                     continue;
                 }
@@ -35,12 +38,12 @@ namespace SAM.Analytical
                 tuples.Add(new Tuple<BoundingBox2D, Face2D, Aperture>(face2D.GetBoundingBox(), face2D, aperture));
             }
 
-            if(tuples == null || tuples.Count == 0)
+            if (tuples == null || tuples.Count == 0)
             {
                 return false;
             }
 
-            for(int i=0; i < tuples.Count - 1; i++)
+            for (int i = 0; i < tuples.Count - 1; i++)
             {
                 Tuple<BoundingBox2D, Face2D, Aperture> tuple_1 = tuples[i];
 
@@ -99,24 +102,24 @@ namespace SAM.Analytical
             }
 
             bool result = false;
-            for(int i=0; i < panels.Count; i++)
+            for (int i = 0; i < panels.Count; i++)
             {
                 Panel panel = panels[i];
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
                 panel = new Panel(panel);
-                if(!RemoveOverlapApertures(panel, out List<Aperture> removedApertures_Temp, tolerance))
+                if (!RemoveOverlapApertures(panel, out List<Aperture> removedApertures_Temp, tolerance))
                 {
                     continue;
                 }
 
                 panels[i] = panel;
                 result = true;
-                
-                if(removedApertures_Temp == null || removedApertures_Temp.Count == 0)
+
+                if (removedApertures_Temp == null || removedApertures_Temp.Count == 0)
                 {
                     continue;
                 }
@@ -138,7 +141,7 @@ namespace SAM.Analytical
             removedApertures = null;
 
             List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return false;
             }
@@ -148,7 +151,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 adjacencyCluster.AddObject(panel);
             }

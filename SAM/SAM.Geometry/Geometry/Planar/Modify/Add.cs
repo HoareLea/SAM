@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -11,14 +14,14 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
-            foreach(Point2D point2D_Temp in point2Ds)
+            foreach (Point2D point2D_Temp in point2Ds)
             {
-                if(point2D_Temp == null)
+                if (point2D_Temp == null)
                 {
                     continue;
                 }
 
-                if(System.Math.Abs(point2D_Temp.X - point2D.X) > tolerance)
+                if (System.Math.Abs(point2D_Temp.X - point2D.X) > tolerance)
                 {
                     continue;
                 }
@@ -28,7 +31,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if(point2D_Temp.Distance(point2D) <= tolerance)
+                if (point2D_Temp.Distance(point2D) <= tolerance)
                 {
                     return false;
                 }

@@ -1,9 +1,12 @@
-﻿using System.Collections.Generic;
-using NetTopologySuite.Triangulate;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using NetTopologySuite.Geometries;
-using System.Linq;
-using System;
+using NetTopologySuite.Triangulate;
 using SAM.Core;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -66,7 +69,7 @@ namespace SAM.Geometry.Planar
         public static List<Triangle2D> Triangulate(this Polygon2D polygon2D, double tolerance = Tolerance.MicroDistance)
         {
             List<Point2D> point2Ds = polygon2D?.GetPoints();
-            if(point2Ds == null || point2Ds.Count < 3)
+            if (point2Ds == null || point2Ds.Count < 3)
             {
                 return null;
             }
@@ -79,7 +82,7 @@ namespace SAM.Geometry.Planar
                 return result;
             }
 
-            if(point2Ds.Count == 4)
+            if (point2Ds.Count == 4)
             {
                 result.Add(new Triangle2D(point2Ds[0], point2Ds[1], point2Ds[2]));
                 result.Add(new Triangle2D(point2Ds[2], point2Ds[3], point2Ds[0]));
@@ -100,7 +103,7 @@ namespace SAM.Geometry.Planar
                     Segment2D segment2D = new Segment2D(point2D_Previous, point2D_Next);
 
                     double length_Temp = segment2D.GetLength();
-                    if(length_Temp > length)
+                    if (length_Temp > length)
                     {
                         continue;
                     }
@@ -129,7 +132,7 @@ namespace SAM.Geometry.Planar
                     length = length_Temp;
                 }
 
-                if(index != -1)
+                if (index != -1)
                 {
                     point2Ds.RemoveAt(index);
                     result.Add(triangle2D);
@@ -181,11 +184,11 @@ namespace SAM.Geometry.Planar
 
             foreach (Face2D face2D_Temp in face2Ds)
             {
-                if(face2D_Temp == null)
+                if (face2D_Temp == null)
                 {
                     continue;
                 }
-                
+
                 Polygon polygon = face2D_Temp.ToNTS(tolerance);
                 if (polygon == null || polygon.IsEmpty)
                 {
@@ -219,10 +222,10 @@ namespace SAM.Geometry.Planar
                     if (!face2D_Temp.HasInternalEdge2Ds)
                     {
                         Polygon2D polygon2D = new Polygon2D((face2D_Temp.ExternalEdge2D as ISegmentable2D)?.GetPoints());
-                        if(polygon2D.IsValid())
+                        if (polygon2D.IsValid())
                         {
                             List<Polygon2D> polygon2Ds = polygon2D.SelfIntersectionPolygon2Ds(polygon2D.GetBoundingBox().DiagonalLength(), tolerance);
-                            if(polygon2Ds != null)
+                            if (polygon2Ds != null)
                             {
                                 triangle2Ds = new List<Triangle2D>();
 
@@ -261,7 +264,7 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    if(triangle2Ds != null)
+                    if (triangle2Ds != null)
                     {
                         result.AddRange(triangle2Ds);
                     }
@@ -329,7 +332,7 @@ namespace SAM.Geometry.Planar
 
         public static List<Triangle2D> Triangulate(this Circle2D circle2D, int density)
         {
-            if(circle2D == null)
+            if (circle2D == null)
             {
                 return null;
             }
@@ -342,7 +345,7 @@ namespace SAM.Geometry.Planar
                 double value = i * factor;
 
                 Point2D point2D = circle2D.GetPoint2D(value);
-                if(point2D == null)
+                if (point2D == null)
                 {
                     continue;
                 }
@@ -350,13 +353,13 @@ namespace SAM.Geometry.Planar
                 point2Ds.Add(point2D);
             }
 
-            if(point2Ds == null || point2Ds.Count < 2)
+            if (point2Ds == null || point2Ds.Count < 2)
             {
                 return null;
             }
 
             List<Triangle2D> result = new List<Triangle2D>();
-            for (int i=0; i < point2Ds.Count - 1; i++)
+            for (int i = 0; i < point2Ds.Count - 1; i++)
             {
                 result.Add(new Triangle2D(circle2D.Center, point2Ds[i], point2Ds[i + 1]));
             }
@@ -580,7 +583,7 @@ namespace SAM.Geometry.Planar
 
         private static List<Polygon> Triangulate(this Polygon polygon, double tolerance = Tolerance.MicroDistance)
         {
-            if(polygon == null)
+            if (polygon == null)
             {
                 return null;
             }
@@ -620,12 +623,12 @@ namespace SAM.Geometry.Planar
             else
             {
                 Coordinate[] coordinates = polygon.Coordinates;
-                if(coordinates == null || coordinates.Length < 3)
+                if (coordinates == null || coordinates.Length < 3)
                 {
                     return null;
                 }
 
-                if(coordinates.Length == 3)
+                if (coordinates.Length == 3)
                 {
                     return new List<Polygon>() { polygon };
                 }
@@ -636,7 +639,7 @@ namespace SAM.Geometry.Planar
                 geometryCollection = delaunayTriangulationBuilder.GetTriangles(geometryFactory);
             }
 
-            if(geometryCollection == null)
+            if (geometryCollection == null)
             {
                 return null;
             }
@@ -659,22 +662,22 @@ namespace SAM.Geometry.Planar
                 NetTopologySuite.Geometries.Geometry geometry_Intersection = polygon.Intersection(polygon_Temp);
 
                 List<Polygon> polygons_Intersection = new List<Polygon>();
-                if(geometry_Intersection is Polygon)
+                if (geometry_Intersection is Polygon)
                 {
                     polygons_Intersection.Add((Polygon)geometry_Intersection);
                 }
-                else if(geometry_Intersection is GeometryCollection)
+                else if (geometry_Intersection is GeometryCollection)
                 {
-                    foreach(NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry_Intersection)
+                    foreach (NetTopologySuite.Geometries.Geometry geometry_Temp in (GeometryCollection)geometry_Intersection)
                     {
-                        if(geometry_Temp is Polygon)
+                        if (geometry_Temp is Polygon)
                         {
                             polygons_Intersection.Add((Polygon)geometry_Temp);
                         }
                     }
                 }
 
-                foreach(Polygon polygon_Intersection in polygons_Intersection)
+                foreach (Polygon polygon_Intersection in polygons_Intersection)
                 {
                     if (Core.Query.AlmostEqual(polygon_Temp.Area, polygon_Intersection.Area, tolerance))
                     {

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -77,7 +80,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_values");
-            
+
             List<double> values = new List<double>();
             if (index == -1 || !dataAccess.GetDataList(index, values) || values == null)
             {
@@ -101,7 +104,7 @@ namespace SAM.Core.Grasshopper
                 return;
             }
 
-            if(!Core.Query.TryConvert(text, out NumberComparisonType numberComparisonType))
+            if (!Core.Query.TryConvert(text, out NumberComparisonType numberComparisonType))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -109,9 +112,9 @@ namespace SAM.Core.Grasshopper
 
             double valueTrue = double.NaN;
             index = Params.IndexOfInputParam("valueTrue_");
-            if(index != -1)
+            if (index != -1)
             {
-                if(!dataAccess.GetData(index, ref valueTrue))
+                if (!dataAccess.GetData(index, ref valueTrue))
                 {
                     valueTrue = double.NaN;
                 }

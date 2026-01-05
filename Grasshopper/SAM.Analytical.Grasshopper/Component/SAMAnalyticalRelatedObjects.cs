@@ -1,9 +1,12 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using System;
-using System.Collections.Generic;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -77,7 +80,7 @@ namespace SAM.Analytical.Grasshopper
 
             IAnalyticalObject analyticalObject = null;
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -89,7 +92,7 @@ namespace SAM.Analytical.Grasshopper
             else if (analyticalObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -107,7 +110,7 @@ namespace SAM.Analytical.Grasshopper
 
             Type type = null;
             index = Params.IndexOfInputParam("type_");
-            if(index != -1)
+            if (index != -1)
             {
                 string fullTypeName = null;
                 if (dataAccess.GetData(index, ref fullTypeName))
@@ -136,18 +139,18 @@ namespace SAM.Analytical.Grasshopper
                 else
                     result_Temp = adjacencyCluster.GetRelatedObjects(sAMObject, type);
 
-                if(result_Temp != null)
+                if (result_Temp != null)
                 {
-                    for(int i = result.Count - 1; i >= 0; i--)
+                    for (int i = result.Count - 1; i >= 0; i--)
                     {
                         ISAMObject sAMBaseObject = result[i] as ISAMObject;
-                        if(sAMBaseObject == null)
+                        if (sAMBaseObject == null)
                         {
                             continue;
                         }
 
                         object @object = result_Temp.Find(x => x is ISAMObject && ((ISAMObject)x).Guid == sAMBaseObject.Guid);
-                        if(@object == null)
+                        if (@object == null)
                         {
                             result.RemoveAt(i);
                         }

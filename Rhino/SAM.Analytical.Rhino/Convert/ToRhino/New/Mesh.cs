@@ -1,6 +1,9 @@
-﻿using SAM.Geometry.Spatial;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using Rhino.Geometry;
+using SAM.Geometry.Spatial;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Rhino
 {
@@ -9,14 +12,14 @@ namespace SAM.Analytical.Rhino
         public static Mesh ToRhino_Mesh(this IOpening opening)
         {
             Face3D face3D = opening?.Face3D;
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
-            
+
             Mesh mesh = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
-            if(mesh != null)
+            if (mesh != null)
             {
                 mesh.VertexColors.CreateMonotoneMesh(Query.Color(opening));
             }
@@ -27,7 +30,7 @@ namespace SAM.Analytical.Rhino
 
         public static Mesh ToRhino_Mesh(this IPartition partition, bool cutOpenings = true, bool includeOpenings = true, double tolerance = Core.Tolerance.Distance)
         {
-            if(partition == null)
+            if (partition == null)
             {
                 return null;
             }
@@ -51,12 +54,12 @@ namespace SAM.Analytical.Rhino
             if (includeOpenings && partition is IHostPartition)
             {
                 List<IOpening> openings = ((IHostPartition)partition).GetOpenings();
-                if(openings != null && openings.Count != 0)
+                if (openings != null && openings.Count != 0)
                 {
-                    foreach(IOpening opening in openings)
+                    foreach (IOpening opening in openings)
                     {
                         Mesh mesh_Aperture = opening.ToRhino_Mesh();
-                        if(mesh_Aperture != null)
+                        if (mesh_Aperture != null)
                         {
                             result.Append(mesh_Aperture);
                         }

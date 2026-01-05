@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +12,13 @@ namespace SAM.Geometry.Spatial
     {
         public static Mesh3D Mesh3D(this IEnumerable<Point3D> point3Ds, IEnumerable<int> indexes)
         {
-            if(point3Ds == null || indexes == null)
+            if (point3Ds == null || indexes == null)
             {
                 return null;
             }
 
             int count = point3Ds.Count();
-            if(count < 3)
+            if (count < 3)
             {
                 return null;
             }
@@ -23,10 +26,10 @@ namespace SAM.Geometry.Spatial
             List<Tuple<int, int, int>> tuples = new List<Tuple<int, int, int>>();
 
             List<int> indexes_Temp = indexes.ToList();
-            for(int i =0; i < indexes_Temp.Count; i = i + 3)
+            for (int i = 0; i < indexes_Temp.Count; i = i + 3)
             {
                 int index_1 = indexes_Temp[i];
-                if(index_1 < 0 || index_1 >= count)
+                if (index_1 < 0 || index_1 >= count)
                 {
                     return null;
                 }
@@ -51,7 +54,7 @@ namespace SAM.Geometry.Spatial
 
         public static Mesh3D Mesh3D(this IEnumerable<Triangle3D> triangle3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(triangle3Ds == null || triangle3Ds.Count() == 0)
+            if (triangle3Ds == null || triangle3Ds.Count() == 0)
             {
                 return null;
             }
@@ -62,7 +65,7 @@ namespace SAM.Geometry.Spatial
 
             foreach (Triangle3D triangle3D in triangle3Ds)
             {
-                if(triangle3D == null || !triangle3D.IsValid() ||triangle3D.GetArea() < tolerance)
+                if (triangle3D == null || !triangle3D.IsValid() || triangle3D.GetArea() < tolerance)
                 {
                     continue;
                 }
@@ -75,7 +78,7 @@ namespace SAM.Geometry.Spatial
 
                 int index_1 = -1;
                 index_1 = point3Ds.FindIndex(x => x.AlmostEquals(point3Ds_Triangle[0], tolerance));
-                if(index_1 == -1)
+                if (index_1 == -1)
                 {
                     index_1 = point3Ds.Count;
                     point3Ds.Add(point3Ds_Triangle[0]);
@@ -105,27 +108,27 @@ namespace SAM.Geometry.Spatial
 
         public static Mesh3D Mesh3D(this Mesh2D mesh2D, Plane plane)
         {
-            if(mesh2D == null || plane == null)
+            if (mesh2D == null || plane == null)
             {
                 return null;
             }
 
             List<Point2D> point2Ds = mesh2D.GetPoints();
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }
 
             List<Tuple<int, int, int>> tuples = new List<Tuple<int, int, int>>();
             List<Triangle2D> triangle2Ds = mesh2D.GetTriangles();
-            foreach(Triangle2D triangle2D in triangle2Ds)
+            foreach (Triangle2D triangle2D in triangle2Ds)
             {
                 List<Point2D> point2Ds_Triangle = triangle2D.GetPoints();
                 tuples.Add(new Tuple<int, int, int>(mesh2D.IndexOf(point2Ds_Triangle[0]), mesh2D.IndexOf(point2Ds_Triangle[1]), mesh2D.IndexOf(point2Ds_Triangle[2])));
             }
 
             List<Point3D> point3Ds = new List<Point3D>();
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
                 point3Ds.Add(plane.Convert(point2D));
             }
@@ -136,7 +139,7 @@ namespace SAM.Geometry.Spatial
         public static Mesh3D Mesh3D(this Extrusion extrusion, double tolerance = Core.Tolerance.Distance)
         {
             Shell shell = Shell(extrusion, tolerance);
-            if(shell == null)
+            if (shell == null)
             {
                 return null;
             }
@@ -147,25 +150,25 @@ namespace SAM.Geometry.Spatial
         public static Mesh3D Mesh3D(this Shell shell, double tolerance = Core.Tolerance.Distance)
         {
             List<Face3D> face3Ds = shell?.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
             List<Triangle3D> triangle3Ds = new List<Triangle3D>();
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 List<Triangle3D> triangle3Ds_Face3D = Query.Triangulate(face3D, tolerance);
-                if(triangle3Ds_Face3D == null || triangle3Ds_Face3D.Count == 0)
+                if (triangle3Ds_Face3D == null || triangle3Ds_Face3D.Count == 0)
                 {
                     continue;
                 }
 
                 Vector3D normal = face3D.GetPlane().Normal;
 
-                foreach(Triangle3D triangle3D in triangle3Ds_Face3D)
+                foreach (Triangle3D triangle3D in triangle3Ds_Face3D)
                 {
-                    if(!triangle3D.GetNormal().SameHalf(normal))
+                    if (!triangle3D.GetNormal().SameHalf(normal))
                     {
                         triangle3D.Reverse();
                     }
@@ -202,17 +205,17 @@ namespace SAM.Geometry.Spatial
         public static Mesh3D Mesh3D(this Sphere sphere, double factor, int minDensity = 2, int maxDensity = 10)
         {
             int denisty = System.Convert.ToInt32(System.Math.Ceiling(sphere.Radius / factor));
-            if(denisty < minDensity)
+            if (denisty < minDensity)
             {
                 denisty = minDensity;
             }
-            else if(denisty > maxDensity)
+            else if (denisty > maxDensity)
             {
                 denisty = maxDensity;
             }
 
             List<Triangle3D> trinagle3Ds = sphere.Triangulate(denisty);
-            if(trinagle3Ds == null)
+            if (trinagle3Ds == null)
             {
                 return null;
             }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -97,7 +100,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 List<IPartition> partitions_Temp = new List<IPartition>();
-                if(dataAccess.GetDataList(index, partitions_Temp) && partitions_Temp != null && partitions_Temp.Count != 0)
+                if (dataAccess.GetDataList(index, partitions_Temp) && partitions_Temp != null && partitions_Temp.Count != 0)
                 {
                     partitions = partitions_Temp;
                 }
@@ -176,9 +179,9 @@ namespace SAM.Analytical.Grasshopper
             buildingModel = new BuildingModel(buildingModel);
 
             partitions = buildingModel.UpdateHostPartitionType(
-                partitions, 
-                curtainWallType, 
-                internalWallType, 
+                partitions,
+                curtainWallType,
+                internalWallType,
                 externalWallType,
                 undergroundWallType,
                 internalFloorType,

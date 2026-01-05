@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -31,7 +34,7 @@ namespace SAM.Analytical
 
             name = name.ToLower();
 
-            foreach(GasMaterial gasMaterial in gasMaterials)
+            foreach (GasMaterial gasMaterial in gasMaterials)
             {
                 string name_Material = gasMaterial?.Name;
                 if (string.IsNullOrWhiteSpace(name_Material))

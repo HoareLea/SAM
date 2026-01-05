@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,12 +24,12 @@ namespace SAM.Core
 
         public IndexedObjects(IEnumerable<T> values)
         {
-            if(values != null)
+            if (values != null)
             {
                 sortedDictionary = new SortedDictionary<int, T>();
 
                 int index = 0;
-                foreach(T value in values)
+                foreach (T value in values)
                 {
                     sortedDictionary[index] = value;
                     index++;
@@ -51,10 +54,10 @@ namespace SAM.Core
 
         public IndexedObjects(SortedDictionary<int, T> dictionary)
         {
-            if(dictionary != null)
+            if (dictionary != null)
             {
                 this.sortedDictionary = new SortedDictionary<int, T>();
-                foreach(KeyValuePair<int, T> keyValuePair in dictionary)
+                foreach (KeyValuePair<int, T> keyValuePair in dictionary)
                 {
                     this.sortedDictionary[keyValuePair.Key] = keyValuePair.Value;
                 }
@@ -63,7 +66,7 @@ namespace SAM.Core
         }
 
         public IndexedObjects(IndexedObjects<T> indexedObjects)
-            :this(indexedObjects?.sortedDictionary)
+            : this(indexedObjects?.sortedDictionary)
         {
 
         }
@@ -83,12 +86,12 @@ namespace SAM.Core
         {
             get
             {
-                if(sortedDictionary == null)
+                if (sortedDictionary == null)
                 {
                     return default(T);
                 }
 
-                if(!sortedDictionary.TryGetValue(index, out T value))
+                if (!sortedDictionary.TryGetValue(index, out T value))
                 {
                     return default(T);
                 }
@@ -98,7 +101,7 @@ namespace SAM.Core
 
             set
             {
-                if(sortedDictionary == null)
+                if (sortedDictionary == null)
                 {
                     sortedDictionary = new SortedDictionary<int, T>();
                 }
@@ -109,7 +112,7 @@ namespace SAM.Core
 
         public bool TryGetValue(int index, out T result)
         {
-            if(sortedDictionary == null || !sortedDictionary.ContainsKey(index))
+            if (sortedDictionary == null || !sortedDictionary.ContainsKey(index))
             {
                 result = default(T);
                 return false;
@@ -126,13 +129,13 @@ namespace SAM.Core
 
         public List<T> GetValues(Range<int> range)
         {
-            if(range == null || sortedDictionary == null)
+            if (range == null || sortedDictionary == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            for(int i = range.Min; i <= range.Max; i++)
+            for (int i = range.Min; i <= range.Max; i++)
             {
                 if (!sortedDictionary.TryGetValue(i, out T value))
                 {
@@ -177,7 +180,7 @@ namespace SAM.Core
 
         public bool Add(int index, T value)
         {
-            if(sortedDictionary == null)
+            if (sortedDictionary == null)
             {
                 sortedDictionary = new SortedDictionary<int, T>();
             }
@@ -188,12 +191,12 @@ namespace SAM.Core
 
         public bool Add(Range<int> range, T value)
         {
-            if(sortedDictionary == null)
+            if (sortedDictionary == null)
             {
                 sortedDictionary = new SortedDictionary<int, T>();
             }
 
-            for(int i = range.Min; i <= range.Max; i++)
+            for (int i = range.Min; i <= range.Max; i++)
             {
                 sortedDictionary[i] = value;
             }
@@ -203,7 +206,7 @@ namespace SAM.Core
 
         public bool Remove(int index)
         {
-            if(sortedDictionary == null)
+            if (sortedDictionary == null)
             {
                 return false;
             }
@@ -213,14 +216,14 @@ namespace SAM.Core
 
         public bool ContainsIndex(int index)
         {
-            if(sortedDictionary == null || index == -1)
+            if (sortedDictionary == null || index == -1)
             {
                 return false;
             }
 
-            foreach(int index_Temp in sortedDictionary.Keys)
+            foreach (int index_Temp in sortedDictionary.Keys)
             {
-                if(index == index_Temp)
+                if (index == index_Temp)
                 {
                     return true;
                 }
@@ -255,31 +258,31 @@ namespace SAM.Core
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("Values"))
+            if (jObject.ContainsKey("Values"))
             {
                 JArray jArray = jObject.Value<JArray>("Values");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     sortedDictionary = new SortedDictionary<int, T>();
-                    foreach(JArray jArray_Temp in jArray)
+                    foreach (JArray jArray_Temp in jArray)
                     {
-                        if(jArray_Temp == null || jArray_Temp.Count < 1)
+                        if (jArray_Temp == null || jArray_Temp.Count < 1)
                         {
-                            continue; 
+                            continue;
                         }
 
-                        if(jArray_Temp.Count == 1)
+                        if (jArray_Temp.Count == 1)
                         {
                             sortedDictionary[(int)jArray_Temp[0]] = default(T);
                         }
                         else
                         {
-                           if(Query.TryConvert(jArray_Temp[1], out T result))
+                            if (Query.TryConvert(jArray_Temp[1], out T result))
                             {
                                 sortedDictionary[(int)jArray_Temp[0]] = result;
                             }
@@ -302,17 +305,17 @@ namespace SAM.Core
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
-            if(sortedDictionary != null)
+            if (sortedDictionary != null)
             {
                 JArray jArray = new JArray();
-                foreach(KeyValuePair<int, T> keyValuePair in sortedDictionary)
+                foreach (KeyValuePair<int, T> keyValuePair in sortedDictionary)
                 {
                     JArray jArray_Temp = new JArray();
                     jArray_Temp.Add(keyValuePair.Key);
 
-                    if(keyValuePair.Value != null)
+                    if (keyValuePair.Value != null)
                     {
-                        if(keyValuePair.Value is IJSAMObject)
+                        if (keyValuePair.Value is IJSAMObject)
                         {
                             jArray_Temp.Add(((IJSAMObject)keyValuePair.Value).ToJObject());
                         }

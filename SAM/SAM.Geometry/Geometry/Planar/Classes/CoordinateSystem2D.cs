@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Geometry.Planar
@@ -37,7 +40,7 @@ namespace SAM.Geometry.Planar
 
         public CoordinateSystem2D(CoordinateSystem2D coordinateSystem2D)
         {
-            if(coordinateSystem2D != null)
+            if (coordinateSystem2D != null)
             {
                 origin = coordinateSystem2D.origin;
                 axisX = coordinateSystem2D.axisX;
@@ -76,7 +79,7 @@ namespace SAM.Geometry.Planar
 
         public bool Move(Vector2D vector2D)
         {
-            if(origin == null || vector2D == null)
+            if (origin == null || vector2D == null)
             {
                 return false;
             }
@@ -93,12 +96,12 @@ namespace SAM.Geometry.Planar
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("AxisX"))
+            if (jObject.ContainsKey("AxisX"))
             {
                 axisX = new Vector2D(jObject.Value<JObject>("AxisX"));
             }
@@ -141,7 +144,7 @@ namespace SAM.Geometry.Planar
 
         public CoordinateSystem2D GetTransformed(ITransform2D transform2D)
         {
-            if(transform2D == null)
+            if (transform2D == null)
             {
                 return null;
             }

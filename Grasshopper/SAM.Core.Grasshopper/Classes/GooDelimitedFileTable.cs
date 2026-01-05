@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -8,7 +11,7 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooDelimitedFileTable: GH_Goo<DelimitedFileTable>
+    public class GooDelimitedFileTable : GH_Goo<DelimitedFileTable>
     {
         public GooDelimitedFileTable()
             : base()
@@ -75,12 +78,12 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastTo<Q>(ref Q target)
         {
-            if(typeof(Q).IsAssignableFrom(Value?.GetType()))
+            if (typeof(Q).IsAssignableFrom(Value?.GetType()))
             {
                 target = (Q)(object)Value;
                 return true;
             }
-            
+
             return base.CastTo(ref target);
         }
     }

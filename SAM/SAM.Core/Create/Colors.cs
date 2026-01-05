@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SAM.Core
@@ -7,7 +10,7 @@ namespace SAM.Core
     {
         public static List<Color> Colors(this Color color, int count, double minBrightness = 0, double maxBrightness = 1)
         {
-            if(color == System.Drawing.Color.Empty || count < 1)
+            if (color == System.Drawing.Color.Empty || count < 1)
             {
                 return null;
             }

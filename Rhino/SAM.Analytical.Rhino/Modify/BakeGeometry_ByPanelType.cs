@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -40,17 +43,17 @@ namespace SAM.Analytical.Rhino
                 {
                     continue;
                 }
-				
+
                 PanelType panelType = PanelType.Undefined;
 
                 if (panel is Panel)
                 {
                     panelType = ((Panel)panel).PanelType;
                 }
-                else if(panel is ExternalPanel)
+                else if (panel is ExternalPanel)
                 {
                     ExternalPanel externalPanel = (ExternalPanel)panel;
-                    if(externalPanel.Construction == null)
+                    if (externalPanel.Construction == null)
                     {
                         panelType = PanelType.Air;
                     }
@@ -72,7 +75,7 @@ namespace SAM.Analytical.Rhino
                     {
                         guids.AddRange(guids_Panel);
                     }
-                    
+
                     // 2024-07-03 Find a way to create transpaernt material
                     //if (panel is ExternalPanel)
                     //{
@@ -92,7 +95,7 @@ namespace SAM.Analytical.Rhino
                     guids.AddRange(guids_Panel);
                 }
 
-                if(panel is Panel)
+                if (panel is Panel)
                 {
                     List<Aperture> apertures = ((Panel)panel).Apertures;
                     if (apertures == null || apertures.Count == 0)

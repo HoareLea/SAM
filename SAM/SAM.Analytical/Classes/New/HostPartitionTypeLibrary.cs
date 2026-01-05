@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -127,7 +130,7 @@ namespace SAM.Analytical
         {
             if (partitionAnalyticalTypes == null || partitionAnalyticalTypes.Count() == 0)
                 return null;
-            
+
             List<HostPartitionType> hostPartitionTypes = GetHostPartitionTypes();
             if (hostPartitionTypes == null || hostPartitionTypes.Count == 0)
                 return null;
@@ -139,7 +142,7 @@ namespace SAM.Analytical
         {
             if (string.IsNullOrWhiteSpace(text))
                 return null;
-            
+
             List<HostPartitionType> hostPartitionTypes = GetHostPartitionTypes();
             if (hostPartitionTypes == null || hostPartitionTypes.Count == 0)
                 return null;

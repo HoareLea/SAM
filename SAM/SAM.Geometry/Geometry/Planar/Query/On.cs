@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -40,7 +43,7 @@ namespace SAM.Geometry.Planar
 
             return false;
         }
-    
+
         public static bool On(this Math.PolynomialEquation polynomialEquation, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
             if (polynomialEquation == null || point2D == null)

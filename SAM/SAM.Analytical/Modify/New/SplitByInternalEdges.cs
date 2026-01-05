@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -12,23 +15,23 @@ namespace SAM.Analytical
             List<IPartition> result = new List<IPartition>();
 
             List<IPartition> partitions = buildingModel.GetPartitions();
-            if(partitions != null && partitions.Count != 0)
+            if (partitions != null && partitions.Count != 0)
             {
-                foreach(IPartition partition in partitions)
+                foreach (IPartition partition in partitions)
                 {
                     List<IPartition> partitions_Split = partition.SplitByInternalEdges(tolerance);
                     if (partitions_Split == null || partitions_Split.Count < 2)
                     {
                         continue;
                     }
-                    List<Core.IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(partition); 
+                    List<Core.IJSAMObject> relatedObjects = buildingModel.GetRelatedObjects(partition);
 
-                    foreach(IPartition partition_Split in partitions_Split)
+                    foreach (IPartition partition_Split in partitions_Split)
                     {
                         buildingModel.Add(partition_Split);
                         result.Add(partition_Split);
 
-                        if(relatedObjects != null && relatedObjects.Count > 0)
+                        if (relatedObjects != null && relatedObjects.Count > 0)
                         {
                             foreach (Core.IJSAMObject relatedObject in relatedObjects)
                             {

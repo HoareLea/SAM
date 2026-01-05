@@ -1,13 +1,16 @@
-﻿using Grasshopper.Kernel;
-using SAM.Core.Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core.Grasshopper;
+using SAM.Geometry.Grasshopper;
+using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using SAM.Geometry.Grasshopper;
-using Grasshopper.Kernel.Types;
 using System.Linq;
-using SAM.Geometry.Object.Spatial;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -26,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -125,10 +128,10 @@ namespace SAM.Analytical.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            if(elevations == null || elevations.Count == 0)
+            if (elevations == null || elevations.Count == 0)
             {
                 List<Panel> panels_Horizontal = panels.FindAll(x => Geometry.Object.Spatial.Query.Horizontal(x, tolerance));
-                
+
                 Dictionary<double, List<Panel>> elevationDictionary = panels_Horizontal.ElevationDictionary(tolerance);
                 elevations = elevationDictionary.Keys.ToList();
             }
@@ -136,28 +139,28 @@ namespace SAM.Analytical.Grasshopper
             List<Shell> shells = Analytical.Query.Shells(panels, elevations, offset, 0.01, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.MacroDistance, Core.Tolerance.Angle, tolerance);
 
             index = Params.IndexOfInputParam("_points_");
-            if(index != -1)
+            if (index != -1)
             {
                 List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-                if(dataAccess.GetDataList(index, objectWrappers) && objectWrappers != null && objectWrappers.Count > 0)
+                if (dataAccess.GetDataList(index, objectWrappers) && objectWrappers != null && objectWrappers.Count > 0)
                 {
                     List<Point3D> point3Ds = new List<Point3D>();
                     foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
                         if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Point3D> point3Ds_Temp) && point3Ds_Temp != null)
                             point3Ds.AddRange(point3Ds_Temp);
 
-                    if(point3Ds != null && point3Ds.Count != 0)
+                    if (point3Ds != null && point3Ds.Count != 0)
                     {
                         bool duplicates = false;
                         List<Shell> shells_Temp = new List<Shell>();
-                        foreach(Point3D point3D in point3Ds)
+                        foreach (Point3D point3D in point3Ds)
                         {
                             List<Shell> shells_InRange = shells.FindAll(x => x.InRange(point3D, tolerance) || x.Inside(point3D, tolerance: tolerance));
                             if (shells_InRange == null || shells_InRange.Count == 0)
                                 continue;
 
-                            foreach(Shell shell in shells_InRange)
-                                if(!shells_Temp.Contains(shell))
+                            foreach (Shell shell in shells_InRange)
+                                if (!shells_Temp.Contains(shell))
                                 {
                                     shells.Remove(shell);
                                     shells_Temp.Add(shell);
@@ -170,7 +173,7 @@ namespace SAM.Analytical.Grasshopper
 
                         shells = shells_Temp;
 
-                        if(duplicates)
+                        if (duplicates)
                             AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "There are multiple points enclosed in one shell");
                     }
                 }

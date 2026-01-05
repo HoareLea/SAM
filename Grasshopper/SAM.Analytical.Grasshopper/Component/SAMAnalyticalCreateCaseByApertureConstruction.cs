@@ -1,8 +1,10 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
-using SAM.Weather;
 using System;
 using System.Collections.Generic;
 
@@ -13,7 +15,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new ("3f0618c7-7a51-4e61-88c9-60da22ccb245");
+        public override Guid ComponentGuid => new("3f0618c7-7a51-4e61-88c9-60da22ccb245");
 
         /// <summary>
         /// The latest version of this component
@@ -46,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new() { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 GooApertureParam gooApertureParam = new() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Apertures", Access = GH_ParamAccess.list, Optional = true };
@@ -79,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new() { Name = "CaseAModel", NickName = "CaseAModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
@@ -120,106 +122,33 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref apertureConstruction);
             }
 
-            if(apertures.Count == 0)
+            int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            bool concatenate = true;
+            if (index_Concatenate != -1)
             {
-                apertures = analyticalModel.GetApertures();
-            }
-            else
-            {
-                for(int i = apertures.Count - 1; i >= 0; i--)
-                {
-                    if (apertures[i] is null)
-                    {
-                        apertures.RemoveAt(i);
-                        continue;
-                    }
-
-                    Aperture aperture = analyticalModel.GetAperture(apertures[i].Guid, out Panel panel);
-                    if(aperture is null)
-                    {
-                        apertures.RemoveAt(i);
-                        continue;
-                    }
-
-                    apertures[i] = new Aperture(aperture);
-                }
+                dataAccess.GetData(index_Concatenate, ref concatenate);
             }
 
-            if (apertures != null && apertures.Count != 0 && apertureConstruction != null )
+            if (!concatenate)
             {
-                AdjacencyCluster adjacencyCluster = new(analyticalModel.AdjacencyCluster, true);
-
-                foreach (Aperture aperture in apertures)
-                {
-                    Aperture aperture_Temp = new(aperture, apertureConstruction);
-
-                    if (adjacencyCluster.GetAperture(aperture_Temp.Guid, out Panel panel_Temp) is null || panel_Temp is null)
-                    {
-                        continue;
-                    }
-
-                    panel_Temp = Create.Panel(panel_Temp);
-
-                    panel_Temp.RemoveAperture(aperture_Temp.Guid);
-                    panel_Temp.AddAperture(aperture_Temp);
-
-                    adjacencyCluster.AddObject(panel_Temp);
-                }
-
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                analyticalModel = new AnalyticalModel(analyticalModel);
+                analyticalModel.RemoveValue("CaseDescription");
             }
+
+            analyticalModel = Create.AnalyticalModel_ByApertureConstruction(analyticalModel, apertureConstruction);
 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)
             {
-                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
-                bool concatenate = true;
-                if (index_Concatenate != -1)
-                {
-                    dataAccess.GetData(index_Concatenate, ref concatenate);
-                }
 
                 string caseDescription = string.Empty;
-                if (concatenate)
+                if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
                 {
-                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
-                    {
-                        caseDescription = string.Empty;
-                    }
+                    caseDescription = string.Empty;
                 }
 
-                if (string.IsNullOrWhiteSpace(caseDescription))
-                {
-                    caseDescription = "Case";
-                }
-                else
-                {
-                    caseDescription += "_";
-                }
-
-                string sufix = "ByApertureConstruction_";
-                if (apertureConstruction is not null)
-                {
-                    sufix += apertureConstruction.Name ?? string.Empty;
-                }
-
-                string value = caseDescription + sufix;
-
-                dataAccess.SetData(index, value);
+                dataAccess.SetData(index, caseDescription);
             }
-
-            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
-            {
-                caseDataCollection = new CaseDataCollection();
-            }
-            else
-            {
-                caseDataCollection = new CaseDataCollection(caseDataCollection);
-            }
-
-            caseDataCollection.Add(new ApertureConstructionCaseData(apertureConstruction));
-
-            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
 
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)

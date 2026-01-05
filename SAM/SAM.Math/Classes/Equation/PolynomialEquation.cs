@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,10 +91,10 @@ namespace SAM.Math
 
 
             int count = coefficients.Length;
-            if(count < 5 || values.Count() < 1000)
+            if (count < 5 || values.Count() < 1000)
             {
                 result = new List<double>();
-                foreach(double value in values)
+                foreach (double value in values)
                 {
                     result.Add(Evaluate(value));
                 }
@@ -101,7 +104,7 @@ namespace SAM.Math
                 count = values.Count();
 
                 result = Enumerable.Repeat(double.NaN, count).ToList();
-                Parallel.For(0, count, (int i) => 
+                Parallel.For(0, count, (int i) =>
                 {
                     result[i] = Evaluate(values.ElementAt(i));
                 });
@@ -138,18 +141,18 @@ namespace SAM.Math
             if (jObject == null)
                 return false;
 
-            if(jObject.ContainsKey("Variables"))
+            if (jObject.ContainsKey("Variables"))
             {
                 JArray jArray = jObject.Value<JArray>("Variables");
                 coefficients = new double[jArray.Count];
-                for(int i=0; i < jArray.Count; i++)
+                for (int i = 0; i < jArray.Count; i++)
                 {
                     object @object = jArray[i];
-                    if(@object is double)
+                    if (@object is double)
                     {
                         coefficients[i] = (double)@object;
                         continue;
-                    }    
+                    }
 
                     if (!Core.Query.IsNumeric(@object))
                         return false;

@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -118,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
                 foreach (Panel panel in panels)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces(panel);
-                    if (spaces == null || spaces.Count  < 2)
+                    if (spaces == null || spaces.Count < 2)
                     {
                         continue;
                     }
@@ -127,10 +130,10 @@ namespace SAM.Analytical.Grasshopper
 
                     List<Panel> panels_Space = adjacencyCluster.GetPanels(space);
                     adjacencyCluster.RemoveObject<Space>(space.Guid);
-                    foreach(Panel panel_Space in panels_Space)
+                    foreach (Panel panel_Space in panels_Space)
                     {
                         List<Space> spaces_Panel_Space = adjacencyCluster.GetSpaces(panel_Space);
-                        for(int i = 1; i < spaces.Count; i++)
+                        for (int i = 1; i < spaces.Count; i++)
                         {
                             if (spaces_Panel_Space?.Find(x => x.Guid == spaces[i].Guid) == null || spaces_Panel_Space.Count == 0)
                             {

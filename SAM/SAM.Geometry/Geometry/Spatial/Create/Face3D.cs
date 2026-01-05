@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Spatial
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Spatial
 {
     public static partial class Create
     {
@@ -41,7 +44,7 @@
                 return null;
             }
 
-            if(closedPlanar3D is Face3D)
+            if (closedPlanar3D is Face3D)
             {
                 return new Face3D((Face3D)closedPlanar3D);
             }

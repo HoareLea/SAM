@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -37,5 +40,5 @@ namespace SAM.Analytical.Grasshopper
 
             Rhino.Modify.BakeGeometry_ByPanelType(rhinoDoc, panels, cutApertures, tolerance);
         }
-  }
+    }
 }

@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -29,11 +32,11 @@ namespace SAM.Analytical
             }
 
             List<ConstructionLayer> constructionLayers = apertureConstruction.PaneConstructionLayers;
-            if(constructionLayers == null || constructionLayers.Count == 0)
+            if (constructionLayers == null || constructionLayers.Count == 0)
             {
                 constructionLayers = apertureConstruction.FrameConstructionLayers;
             }
-            
+
             MaterialType materialType = MaterialType(constructionLayers, materialLibrary);
             return materialType == Core.MaterialType.Transparent;
         }
@@ -67,7 +70,7 @@ namespace SAM.Analytical
 
         public static bool Transparent(this IEnumerable<ConstructionLayer> constructionLayers, MaterialLibrary materialLibrary)
         {
-            if(constructionLayers == null || materialLibrary == null)
+            if (constructionLayers == null || materialLibrary == null)
             {
                 return false;
             }

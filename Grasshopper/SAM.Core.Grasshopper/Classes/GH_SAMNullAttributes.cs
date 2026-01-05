@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -11,8 +14,8 @@ namespace SAM.Core.Grasshopper
 {
     public class GH_SAMNullAttributes : IGH_Attributes
     {
-        public GH_SAMNullAttributes() 
-        { 
+        public GH_SAMNullAttributes()
+        {
         }
 
         public PointF Pivot { get => PointF.Empty; set => throw new NotImplementedException(); }

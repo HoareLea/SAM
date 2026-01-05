@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Math;
 using System.Collections.Generic;
@@ -208,7 +211,7 @@ namespace SAM.Geometry.Spatial
 
         public static Transform3D GetCoordinateSystem3DToOrigin(CoordinateSystem3D coordinateSystem3D)
         {
-            if(coordinateSystem3D == null)
+            if (coordinateSystem3D == null)
             {
                 return null;
             }
@@ -225,7 +228,7 @@ namespace SAM.Geometry.Spatial
 
         public static Transform3D GetPlaneToOrigin(Point3D origin, Vector3D axisX, Vector3D axisY, Vector3D axisZ)
         {
-            if(origin == null || axisX == null || axisY == null || axisZ == null)
+            if (origin == null || axisX == null || axisY == null || axisZ == null)
             {
                 return null;
             }

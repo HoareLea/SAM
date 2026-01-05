@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -52,7 +55,7 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_distance", NickName = "_distance", Description = "Distance", Access = GH_ParamAccess.item};
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_distance", NickName = "_distance", Description = "Distance", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean;
@@ -150,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
                 Panel panel = Create.Panel((Panel)sAMObject);
 
                 List<Aperture> apertures_Panel = panel.MergeApertures(distance, out List<Aperture> removedApertures_Temp, apertures?.ConvertAll(x => x.Guid), removeOverlap);
-                if(apertures_Panel != null)
+                if (apertures_Panel != null)
                 {
                     apertures_Result.AddRange(apertures_Panel.ConvertAll(x => new Aperture(x)));
                 }

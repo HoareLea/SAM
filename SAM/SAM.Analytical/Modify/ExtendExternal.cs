@@ -1,7 +1,10 @@
-﻿using System;
-using SAM.Geometry.Spatial;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -87,10 +90,10 @@ namespace SAM.Analytical
                         }
                         else
                         {
-                            foreach(Polygon2D polygon2D_Temp in polygon2Ds)
+                            foreach (Polygon2D polygon2D_Temp in polygon2Ds)
                             {
                                 Point2D point2D = polygon2D_Temp.Points.Find(x => boundingBox2D_Segment2D.InRange(x, snapTolerance) && segment2D.On(x, snapTolerance));
-                                if(point2D != null)
+                                if (point2D != null)
                                 {
                                     segment2Ds.Add(segment2D);
                                     break;
@@ -98,14 +101,14 @@ namespace SAM.Analytical
                             }
                         }
 
-                        if(!external)
+                        if (!external)
                         {
                             BoundingBox2D boundingBox2D = segment2D.GetBoundingBox();
-                            foreach(Segment2D segment2D_Polygon2D in segment2Ds_Polygon2Ds)
+                            foreach (Segment2D segment2D_Polygon2D in segment2Ds_Polygon2Ds)
                             {
-                                if(boundingBox2D.InRange(segment2D_Polygon2D.GetBoundingBox(), snapTolerance) && segment2D.Collinear(segment2D_Polygon2D, tolerance_Angle))
+                                if (boundingBox2D.InRange(segment2D_Polygon2D.GetBoundingBox(), snapTolerance) && segment2D.Collinear(segment2D_Polygon2D, tolerance_Angle))
                                 {
-                                    if(segment2D.On(segment2D_Polygon2D[0], snapTolerance) || segment2D.On(segment2D_Polygon2D[1], snapTolerance) || segment2D_Polygon2D.On(segment2D[0], snapTolerance) || segment2D_Polygon2D.On(segment2D[1], snapTolerance))
+                                    if (segment2D.On(segment2D_Polygon2D[0], snapTolerance) || segment2D.On(segment2D_Polygon2D[1], snapTolerance) || segment2D_Polygon2D.On(segment2D[0], snapTolerance) || segment2D_Polygon2D.On(segment2D[1], snapTolerance))
                                     {
                                         external = true;
                                     }
@@ -115,7 +118,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(external)
+                if (external)
                 {
                     externalPanels.Add(keyValuePair.Key);
                 }
@@ -241,7 +244,7 @@ namespace SAM.Analytical
                 Panel panel_New = new Panel(panel_Old.Guid, panel_Old, face3D);
 
                 int index = panels.IndexOf(panel_Old);
-                if(index != -1)
+                if (index != -1)
                 {
                     if (dictionary.ContainsKey(panel_Old))
                     {
@@ -252,7 +255,7 @@ namespace SAM.Analytical
                         panels[index] = panel_New;
 
                         index = externalPanels_Extended.IndexOf(panel_Old);
-                        if(index != -1)
+                        if (index != -1)
                         {
                             externalPanels_Extended[index] = panel_New;
                         }
@@ -260,14 +263,14 @@ namespace SAM.Analytical
                 }
             }
         }
-    
+
         public static void ExtendExternal(this List<Panel> panels, IEnumerable<double> elevations, double maxDistance, out List<Panel> externalPanels, out List<Panel> externalPanels_Extended, out List<Polygon3D> externalPolygon3Ds, double snapTolerance = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             externalPanels = null;
             externalPanels_Extended = null;
             externalPolygon3Ds = null;
 
-            if(panels == null || elevations == null)
+            if (panels == null || elevations == null)
             {
                 return;
             }
@@ -283,7 +286,7 @@ namespace SAM.Analytical
                 externalPanels_Temp?.ForEach(x => dictionary[x.Guid] = x);
                 externalPanels_Extended_Temp?.ForEach(x => dictionary_Extended[x.Guid] = x);
 
-                if(externalPolygon3Ds_Temp != null)
+                if (externalPolygon3Ds_Temp != null)
                 {
                     externalPolygon3Ds.AddRange(externalPolygon3Ds_Temp);
                 }

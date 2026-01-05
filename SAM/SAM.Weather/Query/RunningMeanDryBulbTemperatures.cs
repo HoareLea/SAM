@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -13,7 +16,7 @@ namespace SAM.Weather
 
         public static List<double> RunningMeanDryBulbTemperatures(this WeatherYear weatherYear, int startDayIndex, int endDayIndex)
         {
-            if(weatherYear == null)
+            if (weatherYear == null)
             {
                 return null;
             }
@@ -28,7 +31,7 @@ namespace SAM.Weather
                 return null;
             }
 
-            if(weatherDays.Count() == 0)
+            if (weatherDays.Count() == 0)
             {
                 return new List<double>();
             }
@@ -144,16 +147,16 @@ namespace SAM.Weather
             int startDayBoundedIndex = Core.Query.BoundedIndex(max, startDayIndex);
             int endDayBoundedIndex = Core.Query.BoundedIndex(max, endDayIndex);
 
-            if(startDayBoundedIndex > endDayBoundedIndex)
+            if (startDayBoundedIndex > endDayBoundedIndex)
             {
                 List<double> runningMeanDryBulbTemperatures = new List<double>();
 
-                for(int i = startDayBoundedIndex; i < result.Count; i++)
+                for (int i = startDayBoundedIndex; i < result.Count; i++)
                 {
                     runningMeanDryBulbTemperatures.Add(result[i]);
                 }
 
-                for(int i = 0; i < max; i++)
+                for (int i = 0; i < max; i++)
                 {
                     runningMeanDryBulbTemperatures.Add(result[i]);
                 }

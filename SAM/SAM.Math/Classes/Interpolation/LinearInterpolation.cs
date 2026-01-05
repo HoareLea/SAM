@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,12 +15,12 @@ namespace SAM.Math
     public class LinearInterpolation : IJSAMObject
     {
         private List<KeyValuePair<double, double>> values;
-        
+
         public LinearInterpolation(JObject jObject)
         {
             FromJObject(jObject);
         }
-        
+
         public LinearInterpolation(double x_1, double y_1, double x_2, double y_2)
         {
             Add(x_1, y_1);
@@ -30,7 +33,7 @@ namespace SAM.Math
 
         public LinearInterpolation(LinearInterpolation linearInterpolation)
         {
-            if(linearInterpolation.values != null)
+            if (linearInterpolation.values != null)
             {
                 foreach (KeyValuePair<double, double> keyValuePair in linearInterpolation.values)
                     Add(keyValuePair);
@@ -171,17 +174,17 @@ namespace SAM.Math
             if (jObject == null)
                 return false;
 
-            if(jObject.ContainsKey("Values"))
+            if (jObject.ContainsKey("Values"))
             {
                 JArray jArray_Values = jObject.Value<JArray>("Values");
                 values = new List<KeyValuePair<double, double>>();
-                for(int i=0; i < jArray_Values.Count; i++)
+                for (int i = 0; i < jArray_Values.Count; i++)
                 {
                     object @object = jArray_Values[i];
-                    if(@object is JArray)
+                    if (@object is JArray)
                     {
                         JArray jArray = (JArray)@object;
-                        if(jArray.Count >= 2)
+                        if (jArray.Count >= 2)
                         {
                             object object_Temp;
 

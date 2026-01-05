@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -10,31 +13,31 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             IClosedPlanar3D closedPlanar3D_Temp = closedPlanar3D;
-            if(closedPlanar3D_Temp is Face3D)
+            if (closedPlanar3D_Temp is Face3D)
             {
                 closedPlanar3D_Temp = ((Face3D)closedPlanar3D_Temp).GetExternalEdge3D();
             }
 
             Plane plane = closedPlanar3D_Temp?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             Planar.ISegmentable2D segmentable2D = plane.Convert(closedPlanar3D_Temp) as Planar.ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 return null;
             }
 
             List<Planar.Point2D> point2Ds = segmentable2D.GetPoints();
-            if(point2Ds == null || point2Ds.Count ==0)
+            if (point2Ds == null || point2Ds.Count == 0)
             {
                 return null;
             }
 
             Planar.Rectangle2D rectangle2D = Planar.Create.Rectangle2D(segmentable2D.GetPoints());
-            if(rectangle2D == null)
+            if (rectangle2D == null)
             {
                 return null;
             }
@@ -51,19 +54,19 @@ namespace SAM.Geometry.Spatial
             }
 
             double length_Segment3D = segment3D.GetLength();
-            if(length_Segment3D < tolerance)
+            if (length_Segment3D < tolerance)
             {
                 return null;
             }
 
             double length_Vector3D = vector3D.Length;
-            if(length_Vector3D < tolerance)
+            if (length_Vector3D < tolerance)
             {
                 return null;
             }
 
             Plane plane = Plane(segment3D[0], segment3D[1], (Point3D)segment3D[1].GetMoved(vector3D));
-            if(plane == null && !plane.IsValid())
+            if (plane == null && !plane.IsValid())
             {
                 return null;
             }

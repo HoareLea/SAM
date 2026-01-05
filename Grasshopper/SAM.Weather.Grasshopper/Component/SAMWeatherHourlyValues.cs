@@ -1,11 +1,14 @@
-﻿using Grasshopper.Kernel;
-using SAM.Weather.Grasshopper.Properties;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using SAM.Weather.Grasshopper;
+using SAM.Weather.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using SAM.Weather;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -94,13 +97,13 @@ namespace SAM.Analytical.Grasshopper
 
             List<int> indexes = new List<int>();
             index = Params.IndexOfInputParam("hoursOfYear_");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetDataList(index, indexes);
             }
 
             IndexedDoubles indexDoubles = null;
-            if(weatherObject is WeatherDay)
+            if (weatherObject is WeatherDay)
             {
                 indexDoubles = ((WeatherDay)weatherObject).GetIndexedDoubles(name);
             }
@@ -113,16 +116,16 @@ namespace SAM.Analytical.Grasshopper
                 indexDoubles = ((WeatherData)weatherObject).GetIndexedDoubles(name);
             }
 
-            if(indexDoubles == null)
+            if (indexDoubles == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if(indexes != null && indexes.Count >0)
+            if (indexes != null && indexes.Count > 0)
             {
                 IndexedDoubles indexedDoubles_Temp = new IndexedDoubles();
-                foreach(int index_Temp in indexes)
+                foreach (int index_Temp in indexes)
                 {
                     indexedDoubles_Temp.Add(index_Temp, indexDoubles[index_Temp]);
                 }

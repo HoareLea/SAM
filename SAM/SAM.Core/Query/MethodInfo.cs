@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Reflection;
 
@@ -10,7 +13,7 @@ namespace SAM.Core
         {
             if (methodInfos == null || string.IsNullOrWhiteSpace(name))
                 return null;
-            
+
             foreach (MethodInfo methodInfo in methodInfos)
             {
                 if (!methodInfo.Name.ToUpper().Equals(name))
@@ -25,7 +28,7 @@ namespace SAM.Core
                 if (inputTypes != null)
                 {
                     ParameterInfo[] parameterInfos = methodInfo.GetParameters();
-                    if(parameterInfos != null)
+                    if (parameterInfos != null)
                     {
                         if (parameterInfos.Length != inputTypes.Length)
                             continue;

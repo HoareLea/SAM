@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -13,16 +16,16 @@ namespace SAM.Analytical
             }
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return false;
             }
 
             bool result = false;
-            foreach (Panel panel in panels) 
+            foreach (Panel panel in panels)
             {
                 List<Aperture> apertures = panel?.Apertures;
-                if(apertures == null || apertures.Count == 0)
+                if (apertures == null || apertures.Count == 0)
                 {
                     continue;
                 }
@@ -31,14 +34,14 @@ namespace SAM.Analytical
                 foreach (Aperture aperture in apertures)
                 {
                     ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
-                    if(apertureConstruction.Guid != apertureConstruction_Existing.Guid)
+                    if (apertureConstruction.Guid != apertureConstruction_Existing.Guid)
                     {
                         continue;
                     }
 
                     Aperture aperture_New = new Aperture(aperture, apertureConstruction_New);
 
-                    if(panel_New == null)
+                    if (panel_New == null)
                     {
                         panel_New = new Panel(panel);
                     }
@@ -47,7 +50,7 @@ namespace SAM.Analytical
                     panel_New.AddAperture(aperture_New);
                 }
 
-                if(panel_New != null)
+                if (panel_New != null)
                 {
                     result = true;
                     adjacencyCluster.AddObject(panel_New);
@@ -74,7 +77,7 @@ namespace SAM.Analytical
             foreach (Panel panel in panels)
             {
                 Construction construction = panel?.Construction;
-                if(construction == null)
+                if (construction == null)
                 {
                     continue;
                 }
@@ -108,12 +111,12 @@ namespace SAM.Analytical
             bool result = false;
             foreach (Space space in spaces)
             {
-                if(space == null)
+                if (space == null)
                 {
                     continue;
                 }
 
-                if(space.Guid != space_Existing.Guid)
+                if (space.Guid != space_Existing.Guid)
                 {
                     continue;
                 }
@@ -135,7 +138,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if(!materialLibrary.Contains(material_Existing))
+            if (!materialLibrary.Contains(material_Existing))
             {
                 return false;
             }
@@ -164,16 +167,16 @@ namespace SAM.Analytical
                 Panel panel_New = null;
 
                 Construction construction = panel?.Construction;
-                if(construction != null)
+                if (construction != null)
                 {
                     List<ConstructionLayer> constructionLayers = construction.ConstructionLayers;
-                    if(constructionLayers != null)
+                    if (constructionLayers != null)
                     {
-                        for(int i = 0; i < constructionLayers.Count; i++)
+                        for (int i = 0; i < constructionLayers.Count; i++)
                         {
                             if (constructionLayers[i].Name == material_Existing.Name)
                             {
-                                if(panel_New == null)
+                                if (panel_New == null)
                                 {
                                     panel_New = new Panel(panel);
                                 }
@@ -183,7 +186,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(panel_New != null)
+                    if (panel_New != null)
                     {
                         adjacencyCluster.AddObject(panel_New);
                     }
@@ -200,7 +203,7 @@ namespace SAM.Analytical
                 foreach (Aperture aperture in apertures)
                 {
                     Aperture aperture_New = null;
-                    
+
                     ApertureConstruction apertureConstruction = aperture?.ApertureConstruction;
                     if (apertureConstruction != null)
                     {
@@ -295,22 +298,22 @@ namespace SAM.Analytical
             }
 
             List<Space> spaces = adjacencyCluster.GetSpaces();
-            if(spaces == null)
+            if (spaces == null)
             {
                 return false;
             }
 
             bool result = false;
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 InternalCondition internalCondition = space?.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                 {
                     continue;
                 }
 
                 string profileName = internalCondition.GetProfileName(profile_Existing.ProfileType);
-                if(profileName == profile_Existing.Name)
+                if (profileName == profile_Existing.Name)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino;
 using Rhino.DocObjects;
@@ -96,9 +99,9 @@ namespace SAM.Analytical.Grasshopper
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
             List<ISpace> spaces = Value?.GetObjects<ISpace>();
-            if(spaces != null)
+            if (spaces != null)
             {
-                foreach(ISpace space in spaces)
+                foreach (ISpace space in spaces)
                 {
                     Point3d? point3d = Geometry.Rhino.Convert.ToRhino(space?.Location);
                     if (point3d == null || !point3d.HasValue)
@@ -117,10 +120,10 @@ namespace SAM.Analytical.Grasshopper
             }
 
             BoundingBox3D boundingBox3D = null;
-            if(args.Viewport.IsValidFrustum)
+            if (args.Viewport.IsValidFrustum)
             {
                 BoundingBox boundingBox = args.Viewport.GetFrustumBoundingBox();
-                boundingBox3D = new BoundingBox3D(new Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max)});
+                boundingBox3D = new BoundingBox3D(new Point3D[] { Geometry.Rhino.Convert.ToSAM(boundingBox.Min), Geometry.Rhino.Convert.ToSAM(boundingBox.Max) });
             }
 
             foreach (IPanel panel in panels)
@@ -137,10 +140,10 @@ namespace SAM.Analytical.Grasshopper
                     continue;
                 }
 
-                if(boundingBox3D != null)
+                if (boundingBox3D != null)
                 {
                     BoundingBox3D boundingBox3D_Temp = face3D.GetBoundingBox();
-                    if(boundingBox3D_Temp != null)
+                    if (boundingBox3D_Temp != null)
                     {
                         if (!boundingBox3D.Inside(boundingBox3D_Temp) && !boundingBox3D.Intersect(boundingBox3D_Temp))
                         {
@@ -148,7 +151,7 @@ namespace SAM.Analytical.Grasshopper
                         }
                     }
                 }
-                
+
                 Dictionary<IClosedPlanar3D, System.Drawing.Color> dictionary = new Dictionary<IClosedPlanar3D, System.Drawing.Color>();
 
                 //Assign Color for Edges
@@ -185,7 +188,7 @@ namespace SAM.Analytical.Grasshopper
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
-        {         
+        {
             List<IPanel> panels = Value?.GetObjects<IPanel>();
             if (panels == null)
             {
@@ -205,10 +208,10 @@ namespace SAM.Analytical.Grasshopper
                 face3Ds.Add(null);
             }
 
-            Parallel.For(0, panels.Count, (int i) => 
+            Parallel.For(0, panels.Count, (int i) =>
             {
                 IPanel panel = panels[i];
-                
+
                 List<ISpace> spaces = Value.GetRelatedObjects<ISpace>(panel);
                 if (spaces != null && spaces.Count > 1)
                 {
@@ -236,13 +239,13 @@ namespace SAM.Analytical.Grasshopper
                 face3Ds[i] = face3D;
             });
 
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 if (face3D == null)
                 {
                     continue;
                 }
-                
+
                 Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
                 if (brep == null)
                 {
@@ -264,7 +267,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Brep> breps = new List<Brep>();
-            foreach(IPanel panel in panels)
+            foreach (IPanel panel in panels)
             {
                 List<Brep> breps_Panel = Rhino.Convert.ToRhino(panel);
                 if (breps_Panel == null)

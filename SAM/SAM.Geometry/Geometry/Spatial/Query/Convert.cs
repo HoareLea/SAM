@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 
@@ -135,13 +138,13 @@ namespace SAM.Geometry.Spatial
 
         public static SAMGeometry3DGroup Convert(this Plane plane, SAMGeometry2DGroup sAMGeometry2Ds)
         {
-            if(plane == null || sAMGeometry2Ds == null)
+            if (plane == null || sAMGeometry2Ds == null)
             {
                 return null;
             }
 
             List<ISAMGeometry3D> sAMGeometry3D = new List<ISAMGeometry3D>();
-            foreach(ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
+            foreach (ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
             {
                 ISAMGeometry3D sAMGeometry3D_Temp = Convert(plane, sAMGeometry2D);
                 sAMGeometry3D.Add(sAMGeometry3D_Temp);
@@ -273,7 +276,7 @@ namespace SAM.Geometry.Spatial
             }
 
             IClosed2D closed2D_external = Convert(plane, closedPlanar3D_External);
-            if(closed2D_external == null)
+            if (closed2D_external == null)
             {
                 return null;
             }
@@ -359,13 +362,13 @@ namespace SAM.Geometry.Spatial
 
         public static Point3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Point3D point3D)
         {
-            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || point3D == null)
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || point3D == null)
             {
                 return null;
             }
 
             Transform3D transform3D = Transform3D.GetCoordinateSystem3DToCoordinateSystem3D(coordinateSystem3D_From, coordinateSystem3D_To);
-            if(transform3D == null)
+            if (transform3D == null)
             {
                 return null;
             }
@@ -381,7 +384,7 @@ namespace SAM.Geometry.Spatial
             }
 
             List<Point3D> result = new List<Point3D>();
-            foreach(Point3D point3D in point3Ds)
+            foreach (Point3D point3D in point3Ds)
             {
                 result.Add(Convert(coordinateSystem3D_From, coordinateSystem3D_To, point3D));
             }
@@ -407,11 +410,11 @@ namespace SAM.Geometry.Spatial
 
         public static Plane Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Plane plane)
         {
-            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || plane == null)
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || plane == null)
             {
                 return null;
             }
-            
+
             Point3D origin = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.Origin);
             Vector3D axisX = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.AxisX);
             Vector3D axisY = Convert(coordinateSystem3D_From, coordinateSystem3D_To, plane.AxisY);
@@ -421,19 +424,19 @@ namespace SAM.Geometry.Spatial
 
         public static Polygon3D Convert(this CoordinateSystem3D coordinateSystem3D_From, CoordinateSystem3D coordinateSystem3D_To, Polygon3D polygon3D)
         {
-            if(coordinateSystem3D_From == null || coordinateSystem3D_To == null || polygon3D == null)
+            if (coordinateSystem3D_From == null || coordinateSystem3D_To == null || polygon3D == null)
             {
                 return null;
             }
 
             Plane plane = Convert(coordinateSystem3D_From, coordinateSystem3D_To, polygon3D.GetPlane());
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             List<Point3D> point3Ds = Convert(coordinateSystem3D_From, coordinateSystem3D_To, polygon3D.GetPoints());
-            if(point3Ds == null)
+            if (point3Ds == null)
             {
                 return null;
             }

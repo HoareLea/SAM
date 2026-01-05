@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -74,9 +77,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Core.SAMObject> sAMObjects = new List<Core.SAMObject>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(objectWrapper?.Value is Core.SAMObject)
+                if (objectWrapper?.Value is Core.SAMObject)
                 {
                     sAMObjects.Add((Core.SAMObject)objectWrapper.Value);
                 }
@@ -102,19 +105,19 @@ namespace SAM.Analytical.Grasshopper
             {
                 elevation = (double)@object;
             }
-            else if(@object is string)
+            else if (@object is string)
             {
                 if (double.TryParse((string)@object, out double elevation_Temp))
                     elevation = elevation_Temp;
             }
-            else if(@object is Architectural.Level)
+            else if (@object is Architectural.Level)
             {
                 elevation = ((Architectural.Level)@object).Elevation;
             }
-            else if(@object is Space)
+            else if (@object is Space)
             {
                 Space space = (Space)@object;
-                if(space.Location != null)
+                if (space.Location != null)
                 {
                     elevation = space.Location.Z;
                 }
@@ -140,11 +143,11 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = new List<Space>();
             foreach (Core.SAMObject sAMObject in sAMObjects)
             {
-                if(sAMObject is Panel)
+                if (sAMObject is Panel)
                 {
                     panels.Add((Panel)sAMObject);
                 }
-                else if(sAMObject is Space)
+                else if (sAMObject is Space)
                 {
                     spaces.Add((Space)sAMObject);
                 }

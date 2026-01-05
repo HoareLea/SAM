@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Rhino
@@ -7,7 +10,7 @@ namespace SAM.Geometry.Rhino
     {
         public static Mesh ToRhino(this Spatial.Mesh3D mesh3D)
         {
-            if(mesh3D == null)
+            if (mesh3D == null)
             {
                 return null;
             }
@@ -15,11 +18,11 @@ namespace SAM.Geometry.Rhino
             Mesh result = new Mesh();
 
             List<Spatial.Triangle3D> triangle3Ds = mesh3D.GetTriangles();
-            if(triangle3Ds != null)
+            if (triangle3Ds != null)
             {
-                foreach(Spatial.Triangle3D triangle in triangle3Ds)
+                foreach (Spatial.Triangle3D triangle in triangle3Ds)
                 {
-                    if(triangle == null)
+                    if (triangle == null)
                     {
                         continue;
                     }
@@ -27,7 +30,7 @@ namespace SAM.Geometry.Rhino
                     List<Curve> lines = triangle.GetSegments().ConvertAll(x => (Curve)x.ToRhino_LineCurve());
 
                     Mesh mesh = Mesh.CreateFromLines(lines.ToArray(), 3, Core.Tolerance.Distance);
-                    if(mesh == null)
+                    if (mesh == null)
                     {
                         continue;
                     }
@@ -38,17 +41,17 @@ namespace SAM.Geometry.Rhino
 
             return result;
         }
-        
+
         public static Mesh ToRhino_Mesh(this Spatial.Face3D face3D)
         {
             Brep brep = face3D?.ToRhino_Brep();
-            if(brep == null)
+            if (brep == null)
             {
                 return null;
             }
 
             Mesh[] meshes = Mesh.CreateFromBrep(brep, ActiveSetting.GetMeshingParameters());
-            if(meshes == null || meshes.Length == 0)
+            if (meshes == null || meshes.Length == 0)
             {
                 return null;
             }

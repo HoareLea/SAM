@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -8,7 +11,7 @@ using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
-    public class GooMaterial: GH_Goo<IMaterial>
+    public class GooMaterial : GH_Goo<IMaterial>
     {
         public GooMaterial()
             : base()
@@ -75,28 +78,28 @@ namespace SAM.Core.Grasshopper
 
         public override bool CastFrom(object source)
         {
-            if(source is IMaterial material_Temp)
+            if (source is IMaterial material_Temp)
             {
                 Value = material_Temp;
                 return true;
             }
 
-            if(source is IGH_Goo goo)
+            if (source is IGH_Goo goo)
             {
                 IMaterial material = (goo as dynamic).Value as IMaterial;
-                if(material != null)
+                if (material != null)
                 {
                     Value = material;
                     return true;
                 }
             }
-            
+
             return base.CastFrom(source);
         }
 
         public override bool CastTo<Q>(ref Q target)
         {
-            if(Value is Q)
+            if (Value is Q)
             {
                 target = (Q)Value;
                 return true;
@@ -116,7 +119,7 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("8810fd33-f1b7-402e-8c14-78e197a847a8");
 
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooMaterialParam()
             : base(typeof(Material).Name, typeof(Material).Name, typeof(Material).FullName.Replace(".", " "), "Params", "SAM")

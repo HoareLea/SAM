@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -66,16 +69,16 @@ namespace SAM.Analytical.Grasshopper
             if (sAMObject is AnalyticalModel)
             {
                 planarBoundary3Ds = ((AnalyticalModel)sAMObject).AdjacencyCluster?.GetPanels()?.ConvertAll(x => x.PlanarBoundary3D);
-            } 
-            else if(sAMObject is AdjacencyCluster)
+            }
+            else if (sAMObject is AdjacencyCluster)
             {
                 planarBoundary3Ds = ((AdjacencyCluster)sAMObject).GetPanels()?.ConvertAll(x => x.PlanarBoundary3D);
             }
-            else if(sAMObject is Panel)
+            else if (sAMObject is Panel)
             {
                 planarBoundary3Ds = new List<PlanarBoundary3D>() { ((Panel)sAMObject).PlanarBoundary3D };
             }
-            else if(sAMObject is Aperture)
+            else if (sAMObject is Aperture)
             {
                 planarBoundary3Ds = new List<PlanarBoundary3D>() { new PlanarBoundary3D(((Aperture)sAMObject).GetExternalEdge3D()) };
             }
@@ -86,13 +89,13 @@ namespace SAM.Analytical.Grasshopper
             List<global::Rhino.Geometry.Point3d> internalPoints = new List<global::Rhino.Geometry.Point3d>();
             List<global::Rhino.Geometry.Vector3d> normals = new List<global::Rhino.Geometry.Vector3d>();
 
-            foreach(PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
+            foreach (PlanarBoundary3D planarBoundary3D in planarBoundary3Ds)
             {
                 global::Rhino.Geometry.Point3d internalPoint = global::Rhino.Geometry.Point3d.Unset;
                 global::Rhino.Geometry.Vector3d normal = global::Rhino.Geometry.Vector3d.Unset;
 
                 Face3D face3D = planarBoundary3D.GetFace3D();
-                if(face3D != null)
+                if (face3D != null)
                 {
                     Point3D point3D = face3D.InternalPoint3D();
                     if (point3D != null)

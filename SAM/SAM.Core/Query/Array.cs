@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -31,13 +34,13 @@ namespace SAM.Core
                 for (int j = 0; j < jArray_Temp.Count; j++)
                 {
                     object @object = jArray_Temp[j].Value<object>();
-                    if(@object == null)
+                    if (@object == null)
                     {
                         values_Temp_Temp[j] = default;
                         continue;
                     }
-                    
-                    if(!TryConvert(@object, out T t))
+
+                    if (!TryConvert(@object, out T t))
                     {
                         values_Temp_Temp[j] = default;
                         continue;

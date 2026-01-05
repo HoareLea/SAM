@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Planar
     {
         public static Point2D Truncate(this Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(point2D == null)
+            if (point2D == null)
             {
                 return null;
             }
@@ -16,13 +19,13 @@ namespace SAM.Geometry.Planar
 
         public static List<Point2D> Truncate(this IEnumerable<Point2D> point2Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }
 
             List<Point2D> result = new List<Point2D>();
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
                 result.Add(Truncate(point2D, tolerance));
             }
@@ -33,7 +36,7 @@ namespace SAM.Geometry.Planar
         public static Polygon2D Truncate(this Polygon2D polygon2D, double tolerance = Core.Tolerance.Distance)
         {
             List<Point2D> point2Ds = polygon2D?.Points;
-            if(point2Ds == null)
+            if (point2Ds == null)
             {
                 return null;
             }
@@ -43,7 +46,7 @@ namespace SAM.Geometry.Planar
 
         public static Segment2D Truncate(this Segment2D segment2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(segment2D == null)
+            if (segment2D == null)
             {
                 return null;
             }

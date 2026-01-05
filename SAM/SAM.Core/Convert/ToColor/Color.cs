@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Drawing;
 
 namespace SAM.Core
 {
@@ -22,7 +25,7 @@ namespace SAM.Core
         }
 
         public static Color ToColor(string @string)
-        {   
+        {
             if (string.IsNullOrWhiteSpace(@string))
             {
                 return Color.Empty;
@@ -30,7 +33,7 @@ namespace SAM.Core
 
             string @string_Temp = @string;
 
-            if(@string.IsHex())
+            if (@string.IsHex())
             {
                 @string_Temp = "#" + @string;
             }
@@ -50,7 +53,7 @@ namespace SAM.Core
             {
                 return Color.Empty;
             }
-            
+
             if (!(@object is Color))
                 return Color.Empty;
 

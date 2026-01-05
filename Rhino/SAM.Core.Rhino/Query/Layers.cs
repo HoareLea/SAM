@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core.Rhino
 {
@@ -12,7 +15,7 @@ namespace SAM.Core.Rhino
             List<global::Rhino.DocObjects.Layer> result = new List<global::Rhino.DocObjects.Layer>();
 
             int count = layerTable.Count;
-            for(int i=0; i < count; i++)
+            for (int i = 0; i < count; i++)
             {
                 global::Rhino.DocObjects.Layer layer = layerTable[i];
                 if (layer == null)

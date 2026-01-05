@@ -1,7 +1,10 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Spatial
 {
@@ -33,7 +36,7 @@ namespace SAM.Geometry.Spatial
             for (int i = boundaries_1.Count - 1; i >= 0; i--)
             {
                 Face3D face3D = boundaries_1[i]?.Item2;
-                if(face3D == null)
+                if (face3D == null)
                 {
                     continue;
                 }
@@ -45,7 +48,7 @@ namespace SAM.Geometry.Spatial
                 if (boundaries_On != null && boundaries_On.Count != 0)
                 {
                     boundaries_On.ForEach(x => boundaries_2.Remove(x));
-                    if(normal == null)
+                    if (normal == null)
                     {
                         normal = shell_1_Temp.Normal(i, true, silverSpacing, tolerance_Distance);
                     }
@@ -53,7 +56,7 @@ namespace SAM.Geometry.Spatial
                     for (int j = boundaries_On.Count - 1; j >= 0; j--)
                     {
                         Vector3D normal_Temp = shell_2_Temp.Normal(boundaries_On[j].Item2.InternalPoint3D(tolerance_Distance), true, silverSpacing, tolerance_Distance);
-                        if(!normal.SameHalf(normal_Temp))
+                        if (!normal.SameHalf(normal_Temp))
                         {
                             boundaries_1.Remove(boundaries_1[i]);
                             break;
@@ -162,23 +165,23 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(result.Count != shells.Count())
+            if (result.Count != shells.Count())
             {
                 result = Union(result, silverSpacing, tolerance_Angle, tolerance_Distance);
             }
 
             return result;
         }
-    
+
         public static List<Face3D> Union(this IEnumerable<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
 
             List<Face3D> result = new List<Face3D>();
-            if(face3Ds.Count() == 0)
+            if (face3Ds.Count() == 0)
             {
                 return result;
             }
@@ -186,32 +189,32 @@ namespace SAM.Geometry.Spatial
             List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
             face3Ds_Temp.RemoveAll(x => x == null || !x.IsValid());
 
-            while(face3Ds_Temp.Count > 0)
+            while (face3Ds_Temp.Count > 0)
             {
                 Face3D face3D_Temp = face3Ds_Temp[0];
 
                 Plane plane = face3D_Temp.GetPlane();
-                if(plane == null)
+                if (plane == null)
                 {
                     face3Ds_Temp.RemoveAt(0);
                     continue;
                 }
 
                 List<Face3D> face3Ds_Coplanar = new List<Face3D>();
-                foreach(Face3D face3D_Temp_Temp in face3Ds_Temp)
+                foreach (Face3D face3D_Temp_Temp in face3Ds_Temp)
                 {
-                    if(!plane.Coplanar(face3D_Temp_Temp?.GetPlane(), tolerance))
+                    if (!plane.Coplanar(face3D_Temp_Temp?.GetPlane(), tolerance))
                     {
                         continue;
                     }
 
                     Point3D point3D = face3D_Temp_Temp.InternalPoint3D(tolerance);
-                    if(point3D == null || !point3D.IsValid())
+                    if (point3D == null || !point3D.IsValid())
                     {
                         continue;
                     }
 
-                    if(plane.Distance(point3D) > tolerance)
+                    if (plane.Distance(point3D) > tolerance)
                     {
                         continue;
                     }
@@ -221,7 +224,7 @@ namespace SAM.Geometry.Spatial
 
                 face3Ds_Coplanar.ForEach(x => face3Ds_Temp.Remove(x));
 
-                switch(face3Ds_Coplanar.Count)
+                switch (face3Ds_Coplanar.Count)
                 {
                     case 0:
                         return null;
@@ -233,15 +236,15 @@ namespace SAM.Geometry.Spatial
                     default:
 
                         List<Face2D> face2Ds = face3Ds_Coplanar.ConvertAll(x => plane.Convert(x)).Union(tolerance);
-                        if(face2Ds == null || face2Ds.Count == 0)
+                        if (face2Ds == null || face2Ds.Count == 0)
                         {
                             result.AddRange(face3Ds_Coplanar);
                         }
                         else
                         {
-                            foreach(Face2D face2D in face2Ds)
+                            foreach (Face2D face2D in face2Ds)
                             {
-                                if(face2D == null || !face2D.IsValid())
+                                if (face2D == null || !face2D.IsValid())
                                 {
                                     continue;
                                 }

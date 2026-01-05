@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -97,13 +100,13 @@ namespace SAM.Analytical.Grasshopper
             }
 
             WeatherData weatherData = null;
-            if(!dataAccess.GetData(2, ref weatherData))
+            if (!dataAccess.GetData(2, ref weatherData))
             {
                 weatherData = null;
             }
 
             Location location = weatherData?.Location;
-            if(location == null)
+            if (location == null)
             {
                 location = Core.Query.DefaultLocation();
             }
@@ -123,7 +126,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = new List<Panel>();
             dataAccess.GetDataList(5, panels);
-            if(panels != null && panels.Count > 0)
+            if (panels != null && panels.Count > 0)
             {
                 foreach (Panel panel in panels)
                     adjacencyCluster.AddObject(panel);

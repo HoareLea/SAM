@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -35,7 +38,7 @@ namespace SAM.Analytical
         public ProfileLibrary(string name, IEnumerable<Profile> profiles)
             : base(name)
         {
-            if(profiles != null)
+            if (profiles != null)
             {
                 foreach (Profile profile in profiles)
                     Add(profile);
@@ -114,9 +117,9 @@ namespace SAM.Analytical
                 return null;
 
             List<Profile> profiles = GetProfiles(profileType);
-            if(profiles != null)
+            if (profiles != null)
             {
-                foreach(Profile profile in profiles)
+                foreach (Profile profile in profiles)
                 {
                     if (name.Equals(profile.Name))
                         return profile;
@@ -130,7 +133,7 @@ namespace SAM.Analytical
             if (profiles == null || profiles.Count == 0)
                 return null;
 
-            foreach(Profile profile in profiles)
+            foreach (Profile profile in profiles)
             {
                 if (name.Equals(profile.Name))
                     return profile;
@@ -138,12 +141,12 @@ namespace SAM.Analytical
 
             return null;
         }
-        
+
         public List<Profile> GetProfiles(params ProfileType[] profileTypes)
         {
             if (profileTypes == null)
                 return null;
-            
+
             return GetObjects<Profile>()?.FindAll(x => profileTypes.Contains(x.ProfileType));
         }
 
@@ -166,14 +169,14 @@ namespace SAM.Analytical
         {
             if (string.IsNullOrWhiteSpace(text))
                 return null;
-            
+
             List<Profile> profiles = GetProfiles();
             if (profiles == null || profiles.Count == 0)
                 return null;
 
             return profiles.FindAll(x => Core.Query.Compare(x.Name, text, textComparisonType, caseSensitive));
         }
-    
+
         public static string UniqueId(Profile profile)
         {
             if (profile == null)

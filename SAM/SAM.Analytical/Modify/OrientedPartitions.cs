@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +22,7 @@ namespace SAM.Analytical
         public static List<IPartition> OrientedPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, out List<IPartition> flippedPartitions, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             flippedPartitions = null;
-            
+
             if (buildingModel == null || space == null)
             {
                 return null;
@@ -56,7 +59,7 @@ namespace SAM.Analytical
                 if (normal_External != null)
                 {
                     Vector3D normal_Partition = partition.Face3D?.GetPlane()?.Normal;
-                    if(normal_Partition == null)
+                    if (normal_Partition == null)
                     {
                         continue;
                     }
@@ -68,13 +71,13 @@ namespace SAM.Analytical
                         flippedPartition = partition.FlipNormal(false, false);
                     }
 
-                    if(includeOpenings && partition is IHostPartition)
+                    if (includeOpenings && partition is IHostPartition)
                     {
                         IHostPartition hostPartition = partition as IHostPartition;
                         List<IOpening> openings = hostPartition.GetOpenings();
-                        if(openings != null && openings.Count != 0)
+                        if (openings != null && openings.Count != 0)
                         {
-                            foreach(IOpening opening in openings)
+                            foreach (IOpening opening in openings)
                             {
                                 Vector3D normal_Opening = opening.Face3D?.GetPlane()?.Normal;
                                 if (normal_Opening == null)
@@ -87,7 +90,7 @@ namespace SAM.Analytical
                                     continue;
                                 }
 
-                                if(flippedPartition == null)
+                                if (flippedPartition == null)
                                 {
                                     flippedPartition = partition;
                                 }
@@ -100,7 +103,7 @@ namespace SAM.Analytical
 
                     }
 
-                    if(flippedPartition != null)
+                    if (flippedPartition != null)
                     {
                         flippedPartitions.Add(flippedPartition);
                     }
@@ -124,7 +127,7 @@ namespace SAM.Analytical
         /// <returns>A list of updated partitions.</returns>
         public static List<IPartition> OrientedPartitions(this BuildingModel buildingModel, Space space, bool includeOpenings, bool external = true, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            return OrientedPartitions(buildingModel, space, includeOpenings, out List <IPartition> flippedPartitions, external, silverSpacing, tolerance);
+            return OrientedPartitions(buildingModel, space, includeOpenings, out List<IPartition> flippedPartitions, external, silverSpacing, tolerance);
         }
 
     }

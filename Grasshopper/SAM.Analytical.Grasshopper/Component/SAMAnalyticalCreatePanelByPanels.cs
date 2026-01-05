@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -25,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -122,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
                 if (double.TryParse((string)@object, out value))
                     plane = Geometry.Spatial.Create.Plane(value);
             }
-            else if(@object is Architectural.Level)
+            else if (@object is Architectural.Level)
             {
                 plane = Geometry.Spatial.Create.Plane(((Architectural.Level)@object).Elevation);
             }
@@ -150,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels_Upper = new List<Panel>();
             List<Panel> panels_Lower = new List<Panel>();
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 if (panel == null)
                     continue;
@@ -162,7 +165,7 @@ namespace SAM.Analytical.Grasshopper
                 if (panels_Cut.Count == 0)
                     panels_Cut.Add(panel);
 
-                foreach(Panel panel_Cut in panels_Cut)
+                foreach (Panel panel_Cut in panels_Cut)
                 {
                     Point3D point3D = panel_Cut.GetInternalPoint3D();
 

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -36,7 +39,7 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
@@ -71,7 +74,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_delimitedFileTable");
-            
+
             DelimitedFileTable delimitedFileTable = null;
             if (index == -1 || !dataAccess.GetData(index, ref delimitedFileTable) || delimitedFileTable == null)
             {
@@ -81,7 +84,7 @@ namespace SAM.Core.Grasshopper
 
             List<string> columnNames_New = new List<string>();
             index = Params.IndexOfInputParam("_columnNames");
-            if(index == -1 || !dataAccess.GetDataList(index, columnNames_New))
+            if (index == -1 || !dataAccess.GetDataList(index, columnNames_New))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -98,7 +101,7 @@ namespace SAM.Core.Grasshopper
 
             delimitedFileTable = new DelimitedFileTable(delimitedFileTable);
 
-            for (int i=0; i < columnNames_New.Count; i++)
+            for (int i = 0; i < columnNames_New.Count; i++)
             {
                 string columnName_New = columnNames_New[i];
 

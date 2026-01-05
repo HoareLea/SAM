@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -17,7 +20,7 @@ namespace SAM.Core
                 {
                     continue;
                 }
-                
+
                 if (double.IsNaN(result) || result > value_Temp)
                 {
                     result = value_Temp;
@@ -33,9 +36,9 @@ namespace SAM.Core
             {
                 return default(T);
             }
-            
+
             int index_Temp = Next(values.Count(), index);
-            if(index_Temp == -1)
+            if (index_Temp == -1)
             {
                 return default(T);
             }

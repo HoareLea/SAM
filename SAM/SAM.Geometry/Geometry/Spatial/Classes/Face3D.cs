@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
@@ -40,11 +43,11 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
-            
+
             return new Plane(plane);
         }
 
@@ -86,11 +89,11 @@ namespace SAM.Geometry.Spatial
 
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            if(vector3D == null || plane == null || externalEdge2D == null)
+            if (vector3D == null || plane == null || externalEdge2D == null)
             {
                 return null;
             }
-            
+
             Face3D face3D = new Face3D((Plane)plane.GetMoved(vector3D), (IClosed2D)externalEdge2D.Clone());
             face3D.internalEdge2Ds = internalEdge2Ds?.ConvertAll(x => (IClosed2D)x.Clone());
             return face3D;
@@ -190,13 +193,13 @@ namespace SAM.Geometry.Spatial
             }
 
             IClosed2D closed2D_2 = plane.Convert(closed3D_2);
-            if(closed2D_2 == null)
+            if (closed2D_2 == null)
             {
                 return false;
             }
 
             ISegmentable2D segmentable2D = closed2D_2 as ISegmentable2D;
-            if(segmentable2D == null)
+            if (segmentable2D == null)
             {
                 throw new System.NotImplementedException();
             }
@@ -241,7 +244,7 @@ namespace SAM.Geometry.Spatial
 
         public bool On(Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(plane == null || point3D == null || !plane.On(point3D, tolerance))
+            if (plane == null || point3D == null || !plane.On(point3D, tolerance))
             {
                 return false;
             }
@@ -330,7 +333,7 @@ namespace SAM.Geometry.Spatial
         public void Normalize(Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             Face3D face3D = Query.Normalize(this, orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
-            if(face3D != null)
+            if (face3D != null)
             {
                 externalEdge2D = face3D.externalEdge2D;
                 internalEdge2Ds = face3D.internalEdge2Ds;

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Geometry
@@ -23,7 +26,7 @@ namespace SAM.Geometry
 
         public PointGraphEdge(PointGraphEdge<X, T> pointGraphEdge)
         {
-            if(pointGraphEdge != null)
+            if (pointGraphEdge != null)
             {
                 jSAMObject = pointGraphEdge.jSAMObject;
                 source = pointGraphEdge.source == null ? default : Core.Query.Clone(pointGraphEdge.source);
@@ -57,17 +60,17 @@ namespace SAM.Geometry
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("JSAMObject"))
+            if (jObject.ContainsKey("JSAMObject"))
             {
                 jSAMObject = Core.Query.IJSAMObject<T>(jObject.Value<JObject>("JSAMObject"));
             }
 
-            if(jObject.ContainsKey("Source"))
+            if (jObject.ContainsKey("Source"))
             {
                 source = Core.Query.IJSAMObject<X>(jObject.Value<JObject>("Source"));
             }

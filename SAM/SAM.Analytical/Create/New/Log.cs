@@ -1,4 +1,7 @@
-﻿using SAM.Architectural;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
@@ -10,7 +13,7 @@ namespace SAM.Analytical
     {
         public static Log Log(this BuildingModel buildingModel)
         {
-            if(buildingModel == null)
+            if (buildingModel == null)
             {
                 return null;
             }
@@ -235,10 +238,10 @@ namespace SAM.Analytical
             {
                 name = "Air Partition";
             }
-            else if(partition is IHostPartition)
+            else if (partition is IHostPartition)
             {
                 HostPartitionType hostPartitionType = ((IHostPartition)partition).Type();
-                if(hostPartitionType == null)
+                if (hostPartitionType == null)
                 {
                     result.Add(string.Format("{0} partition (Guid: {1}) has no type assigned", name, partition.Guid), LogRecordType.Error);
                 }
@@ -283,7 +286,7 @@ namespace SAM.Analytical
 
             return result;
         }
-        
+
         public static Log Log(this IOpening opening, BuildingModel buildingModel = null)
         {
             if (opening == null)
@@ -318,10 +321,10 @@ namespace SAM.Analytical
                 result.Add(string.Format("{0} opening (Guid: {1}) has no type assigned.", name, opening.Guid), LogRecordType.Error);
             }
 
-            if(buildingModel != null)
+            if (buildingModel != null)
             {
                 IHostPartition hostPartition = buildingModel.GetHostPartition(opening);
-                if(hostPartition == null)
+                if (hostPartition == null)
                 {
                     result.Add(string.Format("{0} opening (Guid: {1}) has no host.", name, opening.Guid), LogRecordType.Warning);
                 }
@@ -343,7 +346,7 @@ namespace SAM.Analytical
 
             Core.Modify.AddRange(result, Architectural.Create.Log(materialLayers, name, guid));
 
-            if(buildingModel != null)
+            if (buildingModel != null)
             {
                 MaterialType materialType = buildingModel.GetMaterialType(materialLayers);
 

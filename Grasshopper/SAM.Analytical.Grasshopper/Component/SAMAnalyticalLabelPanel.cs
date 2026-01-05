@@ -1,7 +1,11 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
-using Rhino.Display;
 using Rhino;
+using Rhino.Display;
+using Rhino.DocObjects;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -11,7 +15,6 @@ using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Rhino.DocObjects;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -30,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -154,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double value = double.NaN;
                 if (double.TryParse(text, out value))
-                    text =   value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+                    text = value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
                 Vector3D normal = panel.Face3D?.GetPlane()?.Normal;
                 normal.Round(Tolerance.Distance);
@@ -239,7 +242,7 @@ namespace SAM.Analytical.Grasshopper
                         continue;
 
                     Point3d point = text3d.TextPlane.Origin;
-                    if (point.DistanceTo(cameraLocation) > 16) 
+                    if (point.DistanceTo(cameraLocation) > 16)
                         continue;
 
                     args.Display.Draw3dText(text3d, System.Drawing.Color.Black);
@@ -262,7 +265,7 @@ namespace SAM.Analytical.Grasshopper
             if (text3ds == null || text3ds.Count == 0)
                 return;
 
-            foreach(Text3d text3d in text3ds)
+            foreach (Text3d text3d in text3ds)
             {
                 Guid guid = doc.Objects.AddText(text3d, att);
                 if (guid != Guid.Empty)

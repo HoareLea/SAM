@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -51,7 +54,7 @@ namespace SAM.Analytical.Grasshopper
                 gooAnalyticalObjectParam.DataMapping = GH_DataMapping.Flatten;
                 result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Brep() { Name = "_brep", NickName = "_brep", Description = "Brep", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Brep() { Name = "_brep", NickName = "_brep", Description = "Brep", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_insideOnly_", NickName = "_insideOnly_", Description = "Inside Only\nif True only fully inside element will be return", Access = GH_ParamAccess.item };
                 boolean.SetPersistentData(true);
@@ -60,8 +63,8 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
-                
-                
+
+
                 return result.ToArray();
             }
         }
@@ -128,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Geometry.Spatial.Shell shell = Geometry.Rhino.Convert.ToSAM_Shell(brep, true);
-            if(shell == null)
+            if (shell == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -138,24 +141,24 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = analyticalObjects.FindAll(x => x is Space).Cast<Space>().ToList();
 
             List<AdjacencyCluster> adjacencyClusters = new List<AdjacencyCluster>();
-            foreach(IAnalyticalObject analyticalObject in analyticalObjects)
+            foreach (IAnalyticalObject analyticalObject in analyticalObjects)
             {
                 List<Panel> panels_Temp = null;
-                if(analyticalObject is AdjacencyCluster)
+                if (analyticalObject is AdjacencyCluster)
                 {
                     panels_Temp = ((AdjacencyCluster)analyticalObject).GetPanels();
                 }
-                else if(analyticalObject is AnalyticalModel)
+                else if (analyticalObject is AnalyticalModel)
                 {
                     panels_Temp = ((AnalyticalModel)analyticalObject).GetPanels();
                 }
 
-                if(panels_Temp == null || panels_Temp.Count == 0)
+                if (panels_Temp == null || panels_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                if(panels == null)
+                if (panels == null)
                 {
                     panels = new List<Panel>();
                 }

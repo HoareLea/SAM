@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,14 +118,14 @@ namespace SAM.Weather
         public bool Add(int day, int hour, WeatherHour weatherHour)
         {
             IEnumerable<string> keys = weatherHour?.Keys;
-            if(keys == null || keys.Count() == 0)
+            if (keys == null || keys.Count() == 0)
             {
                 return false;
             }
 
 
             Dictionary<string, double> dictionary = new Dictionary<string, double>();
-            foreach(string key in keys)
+            foreach (string key in keys)
             {
                 dictionary[key] = weatherHour[key];
             }
@@ -132,7 +135,7 @@ namespace SAM.Weather
 
         public bool Add(int hour, WeatherHour weatherHour)
         {
-            if(weatherHour == null)
+            if (weatherHour == null)
             {
                 return false;
             }
@@ -183,10 +186,10 @@ namespace SAM.Weather
             }
 
             List<WeatherHour> result = new List<WeatherHour>();
-            foreach(WeatherDay weatherDay in weatherDays)
+            foreach (WeatherDay weatherDay in weatherDays)
             {
                 List<WeatherHour> weatherHours = weatherDay?.GetWeatherHours();
-                if(weatherHours == null)
+                if (weatherHours == null)
                 {
                     continue;
                 }
@@ -205,7 +208,7 @@ namespace SAM.Weather
             }
 
             List<WeatherHour> result = new List<WeatherHour>();
-            foreach(int hour in hours)
+            foreach (int hour in hours)
             {
                 result.Add(GetWeatherHour(hour));
             }
@@ -247,7 +250,7 @@ namespace SAM.Weather
         public IndexedDoubles GetIndexedDoubles(string name)
         {
             List<double> values = GetValues(name);
-            if(values == null)
+            if (values == null)
             {
                 return null;
             }

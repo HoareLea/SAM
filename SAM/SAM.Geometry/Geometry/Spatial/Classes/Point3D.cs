@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Geometry.Spatial
 {
@@ -124,7 +127,7 @@ namespace SAM.Geometry.Spatial
 
             double value = vector3D_1.DotProduct(vector3D_2) / (vector3D_1.Length * vector3D_2.Length);
 
-            double result =  System.Math.Acos(value);
+            double result = System.Math.Acos(value);
             if (!double.IsNaN(result))
                 return result;
 
@@ -234,7 +237,7 @@ namespace SAM.Geometry.Spatial
             return ((System.Math.Abs(coordinates[0] - point3D.coordinates[0]) < tolerance) && (System.Math.Abs(coordinates[1] - point3D.coordinates[1]) < tolerance) && (System.Math.Abs(coordinates[2] - point3D.coordinates[2]) < tolerance));
         }
 
-        public static Point3D Zero 
+        public static Point3D Zero
         {
             get
             {

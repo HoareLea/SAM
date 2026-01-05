@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 
 namespace SAM.Geometry.Spatial
 {
@@ -7,7 +10,7 @@ namespace SAM.Geometry.Spatial
         public static Polygon3D Simplify(this Circle3D circle3D, int density)
         {
             Plane plane = circle3D?.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }

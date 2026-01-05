@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -10,7 +13,7 @@ namespace SAM.Core
                 return null;
 
             List<int> result = new List<int>();
-            for(int i=0; i < values.Count; i++)
+            for (int i = 0; i < values.Count; i++)
                 if ((value == null && values[i] == null) || values[i].Equals(value))
                     result.Add(i);
 
@@ -36,11 +39,11 @@ namespace SAM.Core
                 {
                     result.Add(index);
                     index++;
-                    
+
                     if (index == count)
                         index = -1;
                 }
-                    
+
             }
             while (index != -1);
 

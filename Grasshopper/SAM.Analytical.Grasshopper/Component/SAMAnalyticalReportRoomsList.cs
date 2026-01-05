@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Parameters;
@@ -8,7 +11,6 @@ using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -48,8 +50,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "Source SAM AnalyticalModel", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "Source SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -69,7 +71,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_String() { Name = "LevelName", NickName = "LevelName", Description = "Space Level Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "ExternalPanelsArea", NickName = "ExternalPanelsArea", Description = "External Panels Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "ExternalWallArea", NickName = "ExternalWallArea", Description = "External Wall Area [m2]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                
+
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "WindowArea", NickName = "WindowArea", Description = "Window Area [m2]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "WindowToWallRatio", NickName = "WindowToWallRatio", Description = "Window To Wall Ratio [%]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "Window-gValue", NickName = "Window-gValue", Description = "Window gValue [0 - 1 max]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
@@ -80,7 +82,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveEfficiency", NickName = "OpeningEffectiveEfficiency", Description = "Opening Effective Efficiency [%]", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_Number() { Name = "OpeningEffectiveAreaToFloorAreaRatio", NickName = "OpeningEffectiveAreaToFloorAreaRatio", Description = "Opening Effective Area To Floor Area Ratio [%]", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new Param_String() { Name = "OpeningProfileName", NickName = "OpeningProfile", Description = "Opening Profile Name", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                
+
                 return [.. result];
             }
         }
@@ -95,7 +97,7 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            AnalyticalModel analyticalModel= null;
+            AnalyticalModel analyticalModel = null;
             index = Params.IndexOfInputParam("_analyticalModel");
             if (index == -1 || !dataAccess.GetData(index, ref analyticalModel))
             {
@@ -114,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, spaces);
             }
 
-            if(spaces is null || spaces.Count == 0)
+            if (spaces is null || spaces.Count == 0)
             {
                 spaces = adjacencyCluster.GetSpaces();
             }
@@ -129,7 +131,7 @@ namespace SAM.Analytical.Grasshopper
             List<double> windowsAreas = [];
             List<double> windowToWallRatios = [];
 
-            DataTree<GH_Number> windowsAreas_DataTree = new ();
+            DataTree<GH_Number> windowsAreas_DataTree = new();
 
 
             DataTree<GH_Number> windowTotalSolarEnergyTransmittances = new();
@@ -140,8 +142,8 @@ namespace SAM.Analytical.Grasshopper
             DataTree<GH_Number> openingsEffectiveEfficiency = new();
             List<double> openingsEffectiveAreaToFloorAreaRatios = [];
             DataTree<GH_String> openingsProfileNames = new();
-            
-            for (int i =0; i < spaces.Count; i++)
+
+            for (int i = 0; i < spaces.Count; i++)
             {
                 if (spaces[i] == null)
                 {
@@ -154,7 +156,7 @@ namespace SAM.Analytical.Grasshopper
 
                 double floorArea = space?.GetValue<double>(SpaceParameter.Area) ?? double.NaN;
 
-                if(double.IsNaN(floorArea))
+                if (double.IsNaN(floorArea))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Area of space {0} [{1}] has not been provided.", space.Name ?? "???", space.Guid));
                 }
@@ -172,16 +174,16 @@ namespace SAM.Analytical.Grasshopper
                 double openingsEffectiveArea = 0;
 
                 List<Panel> panels = adjacencyCluster.GetPanels(space);
-                if(panels != null)
+                if (panels != null)
                 {
-                    for(int j =0; j < panels.Count; j++)
+                    for (int j = 0; j < panels.Count; j++)
                     {
                         Panel panel = panels[j];
 
                         bool external = panel.IsExternal() && Analytical.Query.BoundaryType(adjacencyCluster, panel) == BoundaryType.Exposed;
                         if (external)
                         {
-                            double area = panel.GetArea(); 
+                            double area = panel.GetArea();
 
                             if (panel.PanelType.PanelGroup() == PanelGroup.Wall)
                             {
@@ -190,11 +192,11 @@ namespace SAM.Analytical.Grasshopper
 
                             externalPanelsArea += area;
 
-                            if(panel.Apertures is List<Aperture> apertures)
+                            if (panel.Apertures is List<Aperture> apertures)
                             {
                                 foreach (Aperture aperture in apertures)
                                 {
-                                    if(!Analytical.Query.Transparent(aperture, materialLibrary))
+                                    if (!Analytical.Query.Transparent(aperture, materialLibrary))
                                     {
                                         continue;
                                     }

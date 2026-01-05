@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -26,7 +29,7 @@ namespace SAM.Core
 
         public ObjectReference(Type type)
         {
-            typeName= Query.FullTypeName(type);
+            typeName = Query.FullTypeName(type);
         }
 
         public ObjectReference(Type type, Reference? reference = null)
@@ -47,7 +50,7 @@ namespace SAM.Core
             reference = objectReference?.reference;
         }
 
-        public ObjectReference (JObject jObject)
+        public ObjectReference(JObject jObject)
         {
             FromJObject(jObject);
         }
@@ -68,12 +71,12 @@ namespace SAM.Core
         public override string ToString()
         {
             List<string> values = new List<string>();
-            if(!string.IsNullOrWhiteSpace(typeName))
+            if (!string.IsNullOrWhiteSpace(typeName))
             {
                 values.Add(typeName);
             }
 
-            if(reference != null && reference.HasValue)
+            if (reference != null && reference.HasValue)
             {
                 values.Add(string.Format("[{0}]", reference.Value.ToString()));
             }
@@ -88,13 +91,13 @@ namespace SAM.Core
 
         public override bool Equals(object obj)
         {
-            if(ReferenceEquals(obj, null))
+            if (ReferenceEquals(obj, null))
             {
                 return false;
             }
 
             ObjectReference objectReference = obj as ObjectReference;
-            if(objectReference == null)
+            if (objectReference == null)
             {
                 return false;
             }
@@ -124,7 +127,7 @@ namespace SAM.Core
                 typeName = jObject.Value<string>("TypeName");
             }
 
-            if(jObject.ContainsKey("Reference"))
+            if (jObject.ContainsKey("Reference"))
             {
                 reference = new Reference(jObject.Value<JObject>("Reference"));
             }
@@ -142,7 +145,7 @@ namespace SAM.Core
                 result.Add("TypeName", typeName);
             }
 
-            if(reference != null && reference.HasValue)
+            if (reference != null && reference.HasValue)
             {
                 result.Add("Reference", reference.Value.ToJObject());
             }
@@ -162,16 +165,16 @@ namespace SAM.Core
         {
             get
             {
-                if(string.IsNullOrWhiteSpace(typeName))
+                if (string.IsNullOrWhiteSpace(typeName))
                 {
                     return null;
                 }
 
                 Type result = Query.Type(typeName);
-                if(result == null)
+                if (result == null)
                 {
                     result = Query.Type(string.Format(".{0}", typeName), TextComparisonType.EndsWith, false, (System.Reflection.Assembly x) => x.GetName().Name.StartsWith("SAM."));
-                    if(result == null)
+                    if (result == null)
                     {
                         result = Query.Type(typeName, TextComparisonType.EndsWith);
                     }
@@ -188,7 +191,7 @@ namespace SAM.Core
 
         public static bool operator ==(ObjectReference objectReference_1, ObjectReference objectReference_2)
         {
-            if(ReferenceEquals( objectReference_1, null) && ReferenceEquals( objectReference_2, null))
+            if (ReferenceEquals(objectReference_1, null) && ReferenceEquals(objectReference_2, null))
             {
                 return true;
             }

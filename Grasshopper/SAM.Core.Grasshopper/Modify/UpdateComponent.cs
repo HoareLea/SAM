@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using System;
 
 namespace SAM.Core.Grasshopper
@@ -24,7 +27,7 @@ namespace SAM.Core.Grasshopper
             }
 
             bool add = gH_Document.AddObject(result, false);
-            if(!add)
+            if (!add)
             {
                 log.Add(new LogRecord("Could not add component to document: {0}", LogRecordType.Error, gH_SAMComponent.Name));
                 return null;

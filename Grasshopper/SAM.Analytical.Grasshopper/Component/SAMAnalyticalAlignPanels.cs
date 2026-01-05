@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -91,15 +94,15 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if(index == -1 || !dataAccess.GetDataList(index, panels) || panels == null)
+            if (index == -1 || !dataAccess.GetDataList(index, panels) || panels == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
-            
+
             index = Params.IndexOfInputParam("_elevations");
-            List<double> elevations = new List<double>(); 
-            if(index == -1 || !dataAccess.GetDataList(index, elevations) || elevations == null || elevations.Count == 0)
+            List<double> elevations = new List<double>();
+            if (index == -1 || !dataAccess.GetDataList(index, elevations) || elevations == null || elevations.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
@@ -138,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
             List<Panel> panels_Upper = null;
 
             DataTree<GooPanel> dataTree_Panel = new DataTree<GooPanel>();
-            for(int i=0; i < elevations.Count; i++)
+            for (int i = 0; i < elevations.Count; i++)
             {
                 GH_Path path = new GH_Path(i);
 

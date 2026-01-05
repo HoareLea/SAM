@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
@@ -135,16 +138,16 @@ namespace SAM.Geometry.Grasshopper
                     plane = Spatial.Create.Plane(elevation_Temp);
                 }
             }
-            else if(@object is global::Rhino.Geometry.Plane)
+            else if (@object is global::Rhino.Geometry.Plane)
             {
                 plane = Rhino.Convert.ToSAM(((global::Rhino.Geometry.Plane)@object));
             }
-            else if(@object is Plane)
+            else if (@object is Plane)
             {
                 plane = ((Plane)@object);
             }
 
-            if(plane == null)
+            if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -162,10 +165,10 @@ namespace SAM.Geometry.Grasshopper
             shells = shells.ConvertAll(x => new Shell(x));
 
             List<Shell> shells_Result = new List<Shell>();
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
                 List<Shell> shells_Result_Temp = shell.Cut(plane);
-                if(shells_Result_Temp == null || shells_Result_Temp.Count == 0)
+                if (shells_Result_Temp == null || shells_Result_Temp.Count == 0)
                 {
                     continue;
                 }

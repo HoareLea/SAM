@@ -1,12 +1,21 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Analytical
 {
     public class ShadeCaseData : BuiltInCaseData
     {
-        private double overhangDepth;
-        private double leftFinDepth;
-        private double rightFinDepth;
+        private double overhangDepth = double.NaN;
+        private double leftFinDepth = double.NaN;
+        private double rightFinDepth = double.NaN;
+
+        public ShadeCaseData()
+            : base(nameof(ShadeCaseData))
+        {
+
+        }
 
         public ShadeCaseData(double overhangDepth, double leftFinDepth, double rightFinDepth)
             : base(nameof(ShadeCaseData))
@@ -25,7 +34,7 @@ namespace SAM.Analytical
         public ShadeCaseData(ShadeCaseData shadeCaseData)
             : base(shadeCaseData)
         {
-            if(shadeCaseData != null)
+            if (shadeCaseData != null)
             {
                 overhangDepth = shadeCaseData.overhangDepth;
                 leftFinDepth = shadeCaseData.leftFinDepth;
@@ -35,9 +44,9 @@ namespace SAM.Analytical
 
         public double OverhangDepth
         {
-            get 
-            { 
-                return overhangDepth; 
+            get
+            {
+                return overhangDepth;
             }
         }
 
@@ -60,12 +69,12 @@ namespace SAM.Analytical
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("OverhangDepth"))
+            if (jObject.ContainsKey("OverhangDepth"))
             {
                 overhangDepth = jObject.Value<double>("OverhangDepth");
             }
@@ -86,12 +95,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result is null)
+            if (result is null)
             {
                 return result;
             }
 
-            if(!double.IsNaN(overhangDepth))
+            if (!double.IsNaN(overhangDepth))
             {
                 result.Add("OverhangDepth", overhangDepth);
             }

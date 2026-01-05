@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -16,7 +19,7 @@ namespace SAM.Analytical
 
         public static GasMaterial GasMaterial(string name, string group, string displayName, string description, double thermalConductivity, double specificHeatCapacity, double density, double dynamicViscosity, double defaultThickness, double vapourDiffusionFactor, double heatTransferCoefficient, DefaultGasType defaultGasType)
         {
-            GasMaterial gasMaterial = GasMaterial(name, group, displayName, description, thermalConductivity,specificHeatCapacity, density,dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
+            GasMaterial gasMaterial = GasMaterial(name, group, displayName, description, thermalConductivity, specificHeatCapacity, density, dynamicViscosity, defaultThickness, vapourDiffusionFactor, heatTransferCoefficient);
             gasMaterial.SetValue(GasMaterialParameter.DefaultGasType, defaultGasType.Description());
 
             return gasMaterial;
@@ -26,12 +29,12 @@ namespace SAM.Analytical
         {
             if (gasMaterial == null)
                 return null;
-            
+
             GasMaterial result = new GasMaterial(name, System.Guid.NewGuid(), gasMaterial, displayName, description);
             result.SetValue(Core.MaterialParameter.DefaultThickness, defaultThickness);
             result.SetValue(GasMaterialParameter.HeatTransferCoefficient, heatTransferCoefficient);
 
-            if(gasMaterial.TryGetValue(GasMaterialParameter.DefaultGasType, out string defaultGasType) && !string.IsNullOrWhiteSpace(defaultGasType))
+            if (gasMaterial.TryGetValue(GasMaterialParameter.DefaultGasType, out string defaultGasType) && !string.IsNullOrWhiteSpace(defaultGasType))
             {
                 gasMaterial.SetValue(GasMaterialParameter.DefaultGasType, defaultGasType);
             }

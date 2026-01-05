@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -47,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooPanelParam { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooPanelParam { Name = "_cuttingPanels", NickName = "_cuttingPanels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item};
+                global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
                 number.SetPersistentData(Tolerance.Distance);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
@@ -96,9 +99,9 @@ namespace SAM.Analytical.Grasshopper
 
             double tolerance = Tolerance.MacroDistance;
             index = Params.IndexOfInputParam("_tolerance_");
-            if(index != -1)
+            if (index != -1)
             {
-                if(!dataAccess.GetData(index, ref tolerance))
+                if (!dataAccess.GetData(index, ref tolerance))
                 {
                     tolerance = Tolerance.MacroDistance;
                 }
@@ -106,10 +109,10 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels_Result = new List<Panel>();
 
-            for (int i=0; i < panels.Count; i++)
+            for (int i = 0; i < panels.Count; i++)
             {
                 List<Panel> panels_Difference = Analytical.Query.Difference(panels[i], cuttingPanels, tolerance_Distance: tolerance);
-                if(panels_Difference == null || panels_Difference.Count == 0)
+                if (panels_Difference == null || panels_Difference.Count == 0)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -31,7 +34,7 @@ namespace SAM.Analytical
             foreach (Panel panel in panels)
             {
                 PanelType panelType = panel.PanelType;
-                if(panelType == PanelType.Undefined)
+                if (panelType == PanelType.Undefined)
                 {
                     continue;
                 }
@@ -41,7 +44,7 @@ namespace SAM.Analytical
                 Construction construction = panel.Construction;
                 if (string.IsNullOrWhiteSpace(construction?.Name))
                 {
-                    if(panelType != PanelType.Air)
+                    if (panelType != PanelType.Air)
                     {
                         update = true;
                     }

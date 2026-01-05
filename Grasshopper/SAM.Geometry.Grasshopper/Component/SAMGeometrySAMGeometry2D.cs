@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
@@ -83,11 +86,11 @@ namespace SAM.Geometry.Grasshopper
 
             foreach (ISAMGeometry3D sAMGeometry3D in sAMGeometry3Ds)
             {
-                if(sAMGeometry3D == null)
+                if (sAMGeometry3D == null)
                 {
                     continue;
                 }
-                
+
                 if (sAMGeometry3D is Shell)
                 {
                     ((Shell)sAMGeometry3D).Face3Ds?.ForEach(x => planars.Add(x));
@@ -97,8 +100,8 @@ namespace SAM.Geometry.Grasshopper
                     ((Extrusion)sAMGeometry3D).Face3Ds()?.ForEach(x => planars.Add(x));
                 }
                 else if (sAMGeometry3D is IPlanar3D)
-                { 
-                    if(sAMGeometry3D is IBoundable3D)
+                {
+                    if (sAMGeometry3D is IBoundable3D)
                     {
                         planars.Add((IPlanar3D)sAMGeometry3D);
                     }
@@ -109,7 +112,7 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
-            if(planars.Count == 0 && notPlanars.Count == 0)
+            if (planars.Count == 0 && notPlanars.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -124,7 +127,7 @@ namespace SAM.Geometry.Grasshopper
 
             Plane plane = null;
 
-            if(!ownPlane)
+            if (!ownPlane)
             {
                 if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
                 {
@@ -142,32 +145,32 @@ namespace SAM.Geometry.Grasshopper
                 plane = Convert.ToSAM(gHPlane);
             }
 
-            if(plane == null)
+            if (plane == null)
             {
                 plane = Plane.WorldXY;
             }
 
             List<ISAMGeometry2D> sAMGeometry2Ds = new List<ISAMGeometry2D>();
-            foreach(ISAMGeometry3D notPlanar in notPlanars)
+            foreach (ISAMGeometry3D notPlanar in notPlanars)
             {
-                if(notPlanar is Point3D)
+                if (notPlanar is Point3D)
                 {
                     sAMGeometry2Ds.Add(plane.Convert((Point3D)notPlanar));
                 }
-                else if(notPlanar is Segment3D)
+                else if (notPlanar is Segment3D)
                 {
                     sAMGeometry2Ds.Add(plane.Convert((Segment3D)notPlanar));
                 }
-                else if(notPlanar != null)
+                else if (notPlanar != null)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Could not convert {0} geometry.", notPlanar.GetType().FullName));
                 }
             }
 
-            foreach(IBoundable3D boundable3D in planars)
+            foreach (IBoundable3D boundable3D in planars)
             {
                 Plane plane_Boundable3D = plane;
-                if(ownPlane && boundable3D is IPlanar3D)
+                if (ownPlane && boundable3D is IPlanar3D)
                 {
                     plane_Boundable3D = (boundable3D as IPlanar3D).GetPlane();
                 }

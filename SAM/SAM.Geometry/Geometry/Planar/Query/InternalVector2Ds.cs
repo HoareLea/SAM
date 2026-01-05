@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
                 return null;
 
             List<Vector2D> result = new List<Vector2D>();
-            foreach(Segment2D segment2D in polygon2D.GetSegments())
+            foreach (Segment2D segment2D in polygon2D.GetSegments())
             {
                 Vector2D vector2D = segment2D.Vector.GetPerpendicular(orientation);
                 result.Add(vector2D?.Unit);

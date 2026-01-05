@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -7,24 +10,24 @@ namespace SAM.Geometry.Planar
 
         public static VerticalPosition VerticalPosition(this ISegmentable2D segmentable2D, Point2D point2D, double tolerance = SAM.Core.Tolerance.Distance)
         {
-            if(segmentable2D == null || point2D == null)
+            if (segmentable2D == null || point2D == null)
             {
                 return Geometry.VerticalPosition.Undefined;
             }
 
             List<Segment2D> segment2Ds = segmentable2D.GetSegments();
-            if(segment2Ds == null || segment2Ds.Count == 0)
+            if (segment2Ds == null || segment2Ds.Count == 0)
             {
                 return Geometry.VerticalPosition.Undefined;
             }
 
             List<VerticalPosition> verticalPositions = new List<VerticalPosition>();
-            foreach(Segment2D segment2D in segmentable2D.GetSegments())
+            foreach (Segment2D segment2D in segmentable2D.GetSegments())
             {
                 verticalPositions.Add(VerticalPosition(segment2D, point2D, tolerance));
             }
 
-            if(verticalPositions.TrueForAll(x => x == Geometry.VerticalPosition.Undefined))
+            if (verticalPositions.TrueForAll(x => x == Geometry.VerticalPosition.Undefined))
             {
                 return Geometry.VerticalPosition.Undefined;
             }
@@ -46,20 +49,20 @@ namespace SAM.Geometry.Planar
 
         public static VerticalPosition VerticalPosition(this Segment2D segment2D, Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            if(segment2D == null || point2D == null)
+            if (segment2D == null || point2D == null)
             {
                 return Geometry.VerticalPosition.Undefined;
             }
 
             BoundingBox2D boundingBox = segment2D.GetBoundingBox();
 
-            if(point2D.X < boundingBox.Min.X - tolerance || point2D.X > boundingBox.Max.X + tolerance)
+            if (point2D.X < boundingBox.Min.X - tolerance || point2D.X > boundingBox.Max.X + tolerance)
             {
                 return Geometry.VerticalPosition.Undefined;
             }
 
             Vector2D vector2D = TraceFirst(point2D, new Vector2D(0, -1), segment2D);
-            if(vector2D == null)
+            if (vector2D == null)
             {
                 return Geometry.VerticalPosition.Below;
             }

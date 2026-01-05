@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 
 namespace SAM.Analytical
 {
@@ -9,14 +12,14 @@ namespace SAM.Analytical
             flowClassification = FlowClassification.Undefined;
             direction = Direction.Undefined;
 
-            if(string.IsNullOrWhiteSpace(id))
+            if (string.IsNullOrWhiteSpace(id))
             {
                 return false;
             }
 
-            foreach(FlowClassification flowClassification_Temp in System.Enum.GetValues(typeof(FlowClassification)))
+            foreach (FlowClassification flowClassification_Temp in System.Enum.GetValues(typeof(FlowClassification)))
             {
-                if(id.StartsWith(flowClassification_Temp.Description()))
+                if (id.StartsWith(flowClassification_Temp.Description()))
                 {
                     flowClassification = flowClassification_Temp;
                     break;

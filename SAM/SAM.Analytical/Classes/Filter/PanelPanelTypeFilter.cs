@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 
 namespace SAM.Analytical
@@ -7,7 +10,7 @@ namespace SAM.Analytical
     {
 
         public PanelPanelTypeFilter(PanelType panelType)
-            :base()
+            : base()
         {
             Value = panelType;
         }
@@ -29,7 +32,7 @@ namespace SAM.Analytical
             panelType = PanelType.Undefined;
 
             Panel panel = jSAMObject as Panel;
-            if(panel == null)
+            if (panel == null)
             {
                 return false;
             }

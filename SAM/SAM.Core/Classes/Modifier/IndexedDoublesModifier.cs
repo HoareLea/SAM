@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 namespace SAM.Core
 {
@@ -15,14 +18,14 @@ namespace SAM.Core
         public IndexedDoublesModifier(IndexedDoublesModifier indexedModifier)
             : base(indexedModifier)
         {
-            if(indexedModifier != null)
+            if (indexedModifier != null)
             {
                 IndexedDoubles = indexedModifier?.IndexedDoubles == null ? null : new IndexedDoubles(indexedModifier.IndexedDoubles);
             }
         }
 
         public IndexedDoublesModifier(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
@@ -30,12 +33,12 @@ namespace SAM.Core
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("IndexedDoubles"))
+            if (jObject.ContainsKey("IndexedDoubles"))
             {
                 IndexedDoubles = Query.IJSAMObject<IndexedDoubles>(jObject.Value<JObject>("IndexedDoubles"));
             }
@@ -46,12 +49,12 @@ namespace SAM.Core
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
-            if(IndexedDoubles != null)
+            if (IndexedDoubles != null)
             {
                 result.Add("IndexedDoubles", IndexedDoubles.ToJObject());
             }

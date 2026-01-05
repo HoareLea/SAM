@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -42,10 +45,10 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometries_", NickName = "_geometries_", Description = "Geometry incl Rhino geometries", Access = GH_ParamAccess.list , Optional = true, DataMapping = GH_DataMapping.Flatten};
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometries_", NickName = "_geometries_", Description = "Geometry incl Rhino geometries", Access = GH_ParamAccess.list, Optional = true, DataMapping = GH_DataMapping.Flatten };
                 result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "_apertureConstruction_", NickName = "_apertureConstruction_", Description = "SAM Analytical Aperture Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
@@ -76,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
             }
         }
 
-                /// <summary>
+        /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
         protected override GH_SAMParam[] Outputs
@@ -154,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 constructionManager = Analytical.Query.DefaultConstructionManager();
             }
@@ -199,7 +202,7 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Aperture> apertures = new List<Aperture>();
 
-                if(face3Ds != null)
+                if (face3Ds != null)
                 {
                     foreach (Face3D face3D in face3Ds)
                     {
@@ -230,33 +233,33 @@ namespace SAM.Analytical.Grasshopper
                 }
 
                 index = Params.IndexOfOutputParam("materials");
-                if (index != -1 && constructionManager != null) 
+                if (index != -1 && constructionManager != null)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
                         ApertureConstruction apertureConstruction_Temp = aperture?.ApertureConstruction;
-                        if(apertureConstruction_Temp == null)
+                        if (apertureConstruction_Temp == null)
                         {
                             continue;
                         }
 
-                        if(apertureConstructions.Find(x => x.Name == apertureConstruction_Temp.Name) != null)
+                        if (apertureConstructions.Find(x => x.Name == apertureConstruction_Temp.Name) != null)
                         {
                             continue;
                         }
 
                         apertureConstructions.Add(apertureConstruction_Temp);
                     }
-                    
+
                     materials = new List<IMaterial>();
-                    foreach(ApertureConstruction apertureConstruction_Temp in apertureConstructions)
+                    foreach (ApertureConstruction apertureConstruction_Temp in apertureConstructions)
                     {
                         IEnumerable<IMaterial> materials_Temp = Analytical.Query.Materials(apertureConstruction_Temp, constructionManager.MaterialLibrary);
-                        if(materials_Temp != null)
+                        if (materials_Temp != null)
                         {
-                            foreach(IMaterial material in materials_Temp)
+                            foreach (IMaterial material in materials_Temp)
                             {
-                                if(materials.Find(x => x.Name == material.Name) == null)
+                                if (materials.Find(x => x.Name == material.Name) == null)
                                 {
                                     materials.Add(material);
                                 }
@@ -276,7 +279,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
-            else if(analyticalObject is AnalyticalModel)
+            else if (analyticalObject is AnalyticalModel)
             {
                 analyticalModel = ((AnalyticalModel)analyticalObject);
                 adjacencyCluster = analyticalModel.AdjacencyCluster;
@@ -328,7 +331,7 @@ namespace SAM.Analytical.Grasshopper
                         if (panel_Temp == null)
                             panel_Temp = Create.Panel(panel);
 
-                        if(apertureConstructions.Find(x => x.Name == apertureConstruction_Temp?.Name) == null)
+                        if (apertureConstructions.Find(x => x.Name == apertureConstruction_Temp?.Name) == null)
                         {
                             apertureConstructions.Add(apertureConstruction_Temp);
                         }
@@ -364,14 +367,14 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analyticalObject");
-            if(index != -1)
+            if (index != -1)
             {
                 if (analyticalModel != null)
                 {
                     MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
-                    foreach(IMaterial material in materials)
+                    foreach (IMaterial material in materials)
                     {
-                        if(materialLibrary.GetMaterial(material.Name) == null)
+                        if (materialLibrary.GetMaterial(material.Name) == null)
                         {
                             materialLibrary.Add(material);
                         }

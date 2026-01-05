@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -9,9 +12,9 @@ namespace SAM.Core
             if (values == null)
                 return null;
 
-            List<T> values_Temp = new (values);
+            List<T> values_Temp = new(values);
 
-            Dictionary<Range<int>, T> result = new ();
+            Dictionary<Range<int>, T> result = new();
 
             Range<int> range = null;
             T value = default;

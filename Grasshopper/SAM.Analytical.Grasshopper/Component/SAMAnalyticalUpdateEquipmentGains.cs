@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -31,16 +34,16 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Space or Spaces. Default all spaces from Analytcial Model", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Space or Spaces. Default all spaces from Analytcial Model", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileSens_", NickName = "profileSens_", Description = "SAM Analytical Profile for Equipment Sensible Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profileLat_", NickName = "profileLat_", Description = "SAM Analytical Profile for Equipment Latent Gains", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add( new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGainPerArea_", NickName = "equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area, W/m2", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGainPerArea_", NickName = "equipmentSensGainPerArea_", Description = "Equipment Sensible Gain Per Area, W/m2", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGainPerArea_", NickName = "equipmentLatGainPerArea_", Description = "Equipment Latent Gain Per Area, W/m2", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentSensGain_", NickName = "equipmentSensGain_", Description = "Equipment Sensible Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "equipmentLatGain_", NickName = "equipmentLatGain_", Description = "Equipment Latent Gain, W", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 //set default values 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_multiplySenisbleGainPerPerson_", NickName = "_multiplySenisbleGainPerPerson_", Description = "Multiply Sensible Gain Per Person, Default = false", Access = GH_ParamAccess.item};
+                global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_multiplySenisbleGainPerPerson_", NickName = "_multiplySenisbleGainPerPerson_", Description = "Multiply Sensible Gain Per Person, Default = false", Access = GH_ParamAccess.item };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
 
@@ -53,7 +56,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() {Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooInternalConditionParam() { Name = "InternalConditions", NickName = "InternalConditions", Description = "SAM Analytical InternalConditions", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
@@ -74,7 +77,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analyticalModel");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -91,7 +94,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Space> spaces = null;
             index = Params.IndexOfInputParam("spaces_");
-            if(index != -1)
+            if (index != -1)
             {
                 spaces = new List<Space>();
                 dataAccess.GetDataList(index, spaces);
@@ -147,7 +150,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<InternalCondition> internalConditions = new List<InternalCondition>();
 
-            foreach(Space space in spaces)
+            foreach (Space space in spaces)
             {
                 if (space == null)
                     continue;
@@ -159,7 +162,7 @@ namespace SAM.Analytical.Grasshopper
                 space_Temp = new Space(space_Temp);
 
                 InternalCondition internalCondition = space_Temp.InternalCondition;
-                if(internalCondition == null)
+                if (internalCondition == null)
                     internalCondition = new InternalCondition(space_Temp.Name);
 
                 if (profile_Sensible != null)
@@ -180,7 +183,7 @@ namespace SAM.Analytical.Grasshopper
                     if (multiplySenisbleGainPerPerson)
                     {
                         double occupancy = space.CalculatedOccupancy();
-                        if(!double.IsNaN(occupancy))
+                        if (!double.IsNaN(occupancy))
                             equipmentSensGain_Temp = equipmentSensGain_Temp * occupancy;
                         else
                             equipmentSensGain_Temp = 0;
@@ -198,7 +201,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("AnalyticalModel");
-            if(index != -1)
+            if (index != -1)
             {
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster, analyticalModel.MaterialLibrary, profileLibrary);
                 dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));

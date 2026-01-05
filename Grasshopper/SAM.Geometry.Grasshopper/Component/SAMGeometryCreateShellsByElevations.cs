@@ -1,10 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
@@ -135,10 +138,10 @@ namespace SAM.Geometry.Grasshopper
                     tolerance = tolerance_Temp;
             }
 
-            if(elevations == null || elevations.Count == 0)
+            if (elevations == null || elevations.Count == 0)
             {
                 List<Face3D> face3Ds_Horizontal = face3Ds.FindAll(x => Spatial.Query.Horizontal(x, tolerance));
-                
+
                 Dictionary<double, List<Face3D>> elevationDictionary = face3Ds_Horizontal.ElevationDictionary(tolerance);
                 elevations = elevationDictionary.Keys.ToList();
             }

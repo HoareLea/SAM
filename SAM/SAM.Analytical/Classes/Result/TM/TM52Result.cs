@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -15,11 +18,11 @@ namespace SAM.Analytical
         private bool pass;
 
         public TM52Result(
-            string name, 
-            string source, 
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
-            int occupiedHours, 
+            int occupiedHours,
             int maxExceedableHours,
             int hoursExceedingComfortRange,
             double peakDailyWeightedExceedance,
@@ -36,9 +39,9 @@ namespace SAM.Analytical
         }
 
         public TM52Result(
-            Guid guid, 
-            string name, 
-            string source, 
+            Guid guid,
+            string name,
+            string source,
             string reference,
             TM52BuildingCategory tM52BuildingCategory,
             int occupiedHours,
@@ -112,7 +115,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            if(jObject.ContainsKey("OccupiedHours"))
+            if (jObject.ContainsKey("OccupiedHours"))
             {
                 occupiedHours = jObject.Value<int>("OccupiedHours");
             }
@@ -153,7 +156,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            if(occupiedHours != int.MinValue)
+            if (occupiedHours != int.MinValue)
             {
                 result.Add("OccupiedHours", occupiedHours);
             }

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
@@ -43,7 +46,7 @@ namespace SAM.Core.Grasshopper
         {
             get
             {
-               return GetValue("SAM_SAMVersion", null);
+                return GetValue("SAM_SAMVersion", null);
             }
         }
 

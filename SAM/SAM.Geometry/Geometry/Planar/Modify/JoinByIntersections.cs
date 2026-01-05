@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -35,14 +38,14 @@ namespace SAM.Geometry.Planar
                 Segment2D segment_Previous = result[result.Count - 1];
                 Segment2D segment = result[0];
 
-                Point2D point2D_Intersection = segment.Intersection(segment_Previous, false, tolerance); 
+                Point2D point2D_Intersection = segment.Intersection(segment_Previous, false, tolerance);
                 if (point2D_Intersection == null)
                 {
                     result.Add(new Segment2D(segment_Previous[1], segment[0]));
                 }
                 else
                 {
-                    result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection); 
+                    result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection);
                     result[0] = new Segment2D(point2D_Intersection, segment[1]);
                 }
             }
@@ -73,15 +76,15 @@ namespace SAM.Geometry.Planar
                 }
                 else
                 {
-                    if(!segment_Previous.On(point2D_Intersection, tolerance) && !segment.On(point2D_Intersection, tolerance) && !allowSelfIntersection)
+                    if (!segment_Previous.On(point2D_Intersection, tolerance) && !segment.On(point2D_Intersection, tolerance) && !allowSelfIntersection)
                     {
                         Segment2D segment2D;
                         List<Point2D> point2Ds;
 
                         segment2D = new Segment2D(segment_Previous[1], point2D_Intersection);
-                        point2Ds =  Query.Intersections(segment2D, segment2Ds);
+                        point2Ds = Query.Intersections(segment2D, segment2Ds);
                         point2Ds?.RemoveAll(x => x.AlmostEquals(segment2D[1], tolerance));
-                        if(point2Ds != null && point2Ds.Count != 0)
+                        if (point2Ds != null && point2Ds.Count != 0)
                         {
                             result.Add(new Segment2D(segment[0], segment[1]));
                             continue;
@@ -137,7 +140,7 @@ namespace SAM.Geometry.Planar
                         }
                     }
 
-                    if(join)
+                    if (join)
                     {
                         result[result.Count - 1] = new Segment2D(segment_Previous[0], point2D_Intersection);
                         result[0] = new Segment2D(point2D_Intersection, segment[1]);

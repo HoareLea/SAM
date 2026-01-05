@@ -1,11 +1,14 @@
-﻿using Grasshopper.Kernel;
-using SAM.Weather.Grasshopper.Properties;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core;
 using SAM.Core.Grasshopper;
+using SAM.Weather;
 using SAM.Weather.Grasshopper;
+using SAM.Weather.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
-using SAM.Weather;
 
 namespace SAM.Analytical.Grasshopper
 {
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -85,7 +88,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "weatherObject", NickName = "weatherObject", Description = "SAM Weather Object such as WeatherHour, WeatherDay etc.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "upper", NickName = "upper", Description = "Upper Dry Bulb Temperature", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "lower", NickName = "lower", Description = "Lower Dry Bulb Temperature", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "lower", NickName = "lower", Description = "Lower Dry Bulb Temperature", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -109,15 +112,15 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<Range<double>> ranges = null;
-            if(weatherObject is WeatherHour)
+            if (weatherObject is WeatherHour)
             {
                 Range<double> range = ((WeatherHour)weatherObject).DryBulbTemperatureRange();
-                if(range != null)
+                if (range != null)
                 {
                     ranges = new List<Range<double>>() { range };
                 }
             }
-            else if(weatherObject is WeatherDay)
+            else if (weatherObject is WeatherDay)
             {
                 ranges = ((WeatherDay)weatherObject).DryBulbTemperatureRanges();
             }

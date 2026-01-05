@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -72,7 +75,7 @@ namespace SAM.Core.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_sAMObject");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -116,7 +119,7 @@ namespace SAM.Core.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("SAMObject");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.SetData(index, sAMObject);
 
             index = Params.IndexOfOutputParam("Succeeded");

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -104,7 +107,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfInputParam("_elevations");
-            List<GH_ObjectWrapper> objectWrappers_Elevation = new List<GH_ObjectWrapper>() ;
+            List<GH_ObjectWrapper> objectWrappers_Elevation = new List<GH_ObjectWrapper>();
             if (index == -1 || !dataAccess.GetDataList(index, objectWrappers_Elevation) || objectWrappers_Elevation == null || objectWrappers_Elevation.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
@@ -113,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<double> elevations = new List<double>();
 
-            foreach(GH_ObjectWrapper objectWrapper_Elevation in objectWrappers_Elevation)
+            foreach (GH_ObjectWrapper objectWrapper_Elevation in objectWrappers_Elevation)
             {
                 object @object = objectWrapper_Elevation.Value;
                 if (@object is IGH_Goo)
@@ -137,7 +140,7 @@ namespace SAM.Analytical.Grasshopper
                     elevation = ((Architectural.Level)@object).Elevation;
                 }
 
-                if(double.IsNaN(elevation))
+                if (double.IsNaN(elevation))
                 {
                     continue;
                 }
@@ -176,12 +179,12 @@ namespace SAM.Analytical.Grasshopper
             {
                 Analytical.Modify.Join(panels, elevation + offset, distance, out List<Panel> panels_Extended_Temp, out List<Panel> panels_Trimmed_Temp, out List<Geometry.Spatial.Segment3D> segment3Ds_Temp, Tolerance.MacroDistance, Tolerance.Angle, tolerance);
 
-                if(panels_Extended_Temp != null)
+                if (panels_Extended_Temp != null)
                 {
-                    foreach(Panel panel_Extended in panels_Extended_Temp)
+                    foreach (Panel panel_Extended in panels_Extended_Temp)
                     {
                         int i = panels_Extended.FindIndex(x => x.Guid == panel_Extended.Guid);
-                        if(i == -1)
+                        if (i == -1)
                         {
                             panels_Extended.Add(panel_Extended);
                         }
@@ -208,7 +211,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                if(segment3Ds_Temp != null)
+                if (segment3Ds_Temp != null)
                 {
                     segment3Ds.AddRange(segment3Ds_Temp);
                 }

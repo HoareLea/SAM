@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 
@@ -76,7 +79,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("RadiantProportion"))
+            if (jObject.ContainsKey("RadiantProportion"))
                 radiantProportion = jObject.Value<double>("RadiantProportion");
 
             if (jObject.ContainsKey("ViewCoefficient"))
@@ -90,11 +93,11 @@ namespace SAM.Analytical
 
         public override JObject ToJObject()
         {
-           JObject jObject = base.ToJObject();
+            JObject jObject = base.ToJObject();
             if (jObject == null)
                 return null;
 
-            if(!double.IsNaN(radiantProportion))
+            if (!double.IsNaN(radiantProportion))
                 jObject.Add("RadiantProportion", radiantProportion);
 
             if (!double.IsNaN(viewCoefficient))

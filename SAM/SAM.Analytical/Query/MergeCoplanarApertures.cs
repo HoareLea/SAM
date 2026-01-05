@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -37,13 +40,13 @@ namespace SAM.Analytical
             }
 
             List<Panel> panels = adjacencyCluster.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return new AdjacencyCluster(adjacencyCluster);
             }
 
             panels = MergeCoplanarApertures(panels, out mergedApertures, out redundantApertures, validateApertureConstruction, tolerance);
-            if((mergedApertures != null && mergedApertures.Count > 0) || (redundantApertures != null && redundantApertures.Count > 0))
+            if ((mergedApertures != null && mergedApertures.Count > 0) || (redundantApertures != null && redundantApertures.Count > 0))
             {
                 AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
                 foreach (Panel panel in panels)
@@ -63,23 +66,23 @@ namespace SAM.Analytical
             mergedApertures = null;
             redundantApertures = null;
 
-            if(panels == null)
+            if (panels == null)
             {
                 return null;
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 List<Aperture> mergedApertures_Panel = null;
                 List<Aperture> redundantApertures_Panel = null;
 
-                Panel panel_Temp = panel?.MergeCoplanarApertures(out  mergedApertures_Panel, out redundantApertures_Panel, validateApertureConstruction, tolerance);
+                Panel panel_Temp = panel?.MergeCoplanarApertures(out mergedApertures_Panel, out redundantApertures_Panel, validateApertureConstruction, tolerance);
                 result.Add(panel_Temp);
 
-                if(mergedApertures_Panel != null)
+                if (mergedApertures_Panel != null)
                 {
-                    if(mergedApertures == null)
+                    if (mergedApertures == null)
                     {
                         mergedApertures = new List<Aperture>();
                     }
@@ -115,7 +118,7 @@ namespace SAM.Analytical
             Panel result = Create.Panel(panel);
 
             List<Aperture> apertures = panel.Apertures;
-            if(apertures == null || apertures.Count < 2)
+            if (apertures == null || apertures.Count < 2)
             {
                 return result;
             }
@@ -123,14 +126,14 @@ namespace SAM.Analytical
             apertures.RemoveAll(x => x == null);
 
             List<List<Aperture>> apertures_Group = new List<List<Aperture>>();
-            if(validateApertureConstruction)
+            if (validateApertureConstruction)
             {
                 List<Guid> guids = new List<Guid>();
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     Guid guid = aperture.TypeGuid;
                     int index = guids.IndexOf(guid);
-                    if(index == -1)
+                    if (index == -1)
                     {
                         guids.Add(guid);
                         apertures_Group.Add(new List<Aperture>() { aperture });
@@ -149,39 +152,39 @@ namespace SAM.Analytical
             Plane plane = panel.Plane;
 
             HashSet<Guid> guids_ToBeRemoved = new HashSet<Guid>();
-            foreach(List<Aperture> apertures_Temp in apertures_Group)
+            foreach (List<Aperture> apertures_Temp in apertures_Group)
             {
-                if(apertures_Temp.Count < 2)
+                if (apertures_Temp.Count < 2)
                 {
                     continue;
                 }
 
                 Dictionary<Aperture, Face2D> dictionary = new Dictionary<Aperture, Face2D>();
-                foreach(Aperture aperture_Temp in apertures_Temp)
+                foreach (Aperture aperture_Temp in apertures_Temp)
                 {
                     dictionary[aperture_Temp] = plane.Convert(plane.Project(aperture_Temp.GetFace3D()));
                 }
 
                 List<Face2D> face2Ds = Geometry.Planar.Query.Union(dictionary.Values, tolerance);
-                if(face2Ds == null || face2Ds.Count == 0)
+                if (face2Ds == null || face2Ds.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Face2D face2D in face2Ds)
+                foreach (Face2D face2D in face2Ds)
                 {
                     BoundingBox2D boundingBox2D = face2D.GetBoundingBox();
 
                     List<Aperture> apertures_Face2D = new List<Aperture>();
-                    foreach(KeyValuePair<Aperture, Face2D> keyValuePair in dictionary)
+                    foreach (KeyValuePair<Aperture, Face2D> keyValuePair in dictionary)
                     {
                         Point2D point2D = keyValuePair.Value.GetInternalPoint2D(tolerance);
-                        if(!boundingBox2D.InRange(point2D, tolerance))
+                        if (!boundingBox2D.InRange(point2D, tolerance))
                         {
                             continue;
                         }
 
-                        if(!face2D.Inside(point2D, tolerance))
+                        if (!face2D.Inside(point2D, tolerance))
                         {
                             continue;
                         }
@@ -189,14 +192,14 @@ namespace SAM.Analytical
                         apertures_Face2D.Add(keyValuePair.Key);
                     }
 
-                    if(apertures_Face2D.Count <= 1)
+                    if (apertures_Face2D.Count <= 1)
                     {
                         continue;
                     }
 
                     apertures_Face2D.ForEach(x => guids_ToBeRemoved.Add(x.Guid));
 
-                    if(mergedApertures == null)
+                    if (mergedApertures == null)
                     {
                         mergedApertures = new List<Aperture>();
                     }
@@ -213,19 +216,19 @@ namespace SAM.Analytical
                 }
             }
 
-            if(guids_ToBeRemoved != null && guids_ToBeRemoved.Count != 0)
+            if (guids_ToBeRemoved != null && guids_ToBeRemoved.Count != 0)
             {
-                foreach(Guid guid in guids_ToBeRemoved)
+                foreach (Guid guid in guids_ToBeRemoved)
                 {
                     result.RemoveAperture(guid);
                 }
             }
 
-            if(mergedApertures != null && mergedApertures.Count != 0)
+            if (mergedApertures != null && mergedApertures.Count != 0)
             {
                 for (int i = mergedApertures.Count - 1; i >= 0; i--)
                 {
-                    if(!result.AddAperture(mergedApertures[i]))
+                    if (!result.AddAperture(mergedApertures[i]))
                     {
                         mergedApertures.RemoveAt(i);
                     }

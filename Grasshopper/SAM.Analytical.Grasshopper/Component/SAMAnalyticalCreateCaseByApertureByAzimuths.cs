@@ -1,10 +1,13 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Parameters;
 using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
@@ -14,7 +17,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new ("579a3e1c-f514-420b-8849-9f96aef8518b");
+        public override Guid ComponentGuid => new("579a3e1c-f514-420b-8849-9f96aef8518b");
 
         /// <summary>
         /// The latest version of this component
@@ -47,7 +50,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new() { Name = "_baseAModel", NickName = "_baseAModel", Description = "Analytical Model", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 Param_Number number = null;
@@ -156,7 +159,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalModelParam analyticalModelParam = new () { Name = "CaseAModel", NickName = "CaseAModel", Description = "List of SAM AnalyticalModels for cases", Access = GH_ParamAccess.item };
+                GooAnalyticalModelParam analyticalModelParam = new() { Name = "CaseAModel", NickName = "CaseAModel", Description = "List of SAM AnalyticalModels for cases", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(analyticalModelParam, ParamVisibility.Binding));
 
                 Param_String param_String = new() { Name = "CaseDescription", NickName = "CaseDescription", Description = "Case Description", Access = GH_ParamAccess.item };
@@ -334,108 +337,41 @@ namespace SAM.Analytical.Grasshopper
             }
 
             // Build interval→ratio map (wrap-aware: e.g., 338→22 is split into 338→359 & 0→22)
-            Dictionary<Interval, Tuple<double, ApertureConstruction>> intervalRatioMap = BuildIntervalRatioMap(azimuths, ratios, apertureConstructions);
+            Dictionary<Range<double>, Tuple<double, ApertureConstruction>> intervalRatioMap = BuildIntervalRatioMap(azimuths, ratios, apertureConstructions);
 
-            // Cluster / Model path
-            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
-            if (adjacencyCluster == null)
+            int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
+            bool concatenate = true;
+            if (index_Concatenate != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Failed to resolve AdjacencyCluster.");
-                return;
+                dataAccess.GetData(index_Concatenate, ref concatenate);
             }
 
-            var panels = adjacencyCluster.GetPanels();
-            if (panels == null) return;
-
-            var tuples_Result = new List<Tuple<Panel, Aperture>>();
-
-            foreach (var panel in panels)
+            if (!concatenate)
             {
-                if (panel.PanelType != PanelType.WallExternal)
-                    continue;
+                analyticalModel = new AnalyticalModel(analyticalModel);
+                analyticalModel.RemoveValue("CaseDescription");
+            }
 
-                double az = NormalizeAngleDegrees(panel.Azimuth());
-                if (double.IsNaN(az))
-                    continue;
+            analyticalModel = Create.AnalyticalModel_ByApertureByAzimuths(analyticalModel, intervalRatioMap, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
 
-                if (!TryGetRatio(intervalRatioMap, az, out double ratio, out ApertureConstruction apertureConstruction_Temp))
+            index = Params.IndexOfOutputParam("CaseDescription");
+            if (index != -1)
+            {
+
+                string caseDescription = string.Empty;
+                if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
                 {
-                    continue;
+                    caseDescription = string.Empty;
                 }
 
-                var panel_New = Create.Panel(panel);
-
-                if (apertureConstruction_Temp is null)
-                {
-                    apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
-                }
-
-                var apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
-                if (apertures == null || apertures.Count == 0)
-                    continue;
-
-                apertures.ForEach(x => tuples_Result.Add(new Tuple<Panel, Aperture>(panel_New, x)));
-                adjacencyCluster.AddObject(panel_New);
+                dataAccess.SetData(index, caseDescription);
             }
 
             index = Params.IndexOfOutputParam("CaseAModel");
             if (index != -1)
             {
-                dataAccess.SetData(index, adjacencyCluster is null ? null : new AnalyticalModel(analyticalModel, adjacencyCluster));
+                dataAccess.SetData(index, analyticalModel);
             }
-
-
-            index = Params.IndexOfOutputParam("CaseDescription");
-            if (index != -1)
-            {
-                int index_Concatenate = Params.IndexOfInputParam("_concatenate_");
-                bool concatenate = true;
-                if (index_Concatenate != -1)
-                {
-                    dataAccess.GetData(index_Concatenate, ref concatenate);
-                }
-
-                string caseDescription = string.Empty;
-                if (concatenate)
-                {
-                    if (!Core.Query.TryGetValue(analyticalModel, "CaseDescription", out caseDescription))
-                    {
-                        caseDescription = string.Empty;
-                    }
-                }
-
-                if (string.IsNullOrWhiteSpace(caseDescription))
-                {
-                    caseDescription = "Case";
-                }
-                else
-                {
-                    caseDescription += "_";
-                }
-
-                string sufix = "ByApertureByAzimuths_";
-                if (ratios != null && ratios.Count != 0)
-                {
-                    sufix += "R_" + string.Join("_", ratios);
-                }
-
-                string value = caseDescription + sufix;
-
-                dataAccess.SetData(index, value);
-            }
-
-            if (!analyticalModel.TryGetValue(AnalyticalModelParameter.CaseDataCollection, out CaseDataCollection caseDataCollection))
-            {
-                caseDataCollection = [];
-            }
-            else
-            {
-                caseDataCollection = [.. caseDataCollection];
-            }
-
-            caseDataCollection.Add(new ApertureCaseData(ratios));
-
-            analyticalModel?.SetValue(AnalyticalModelParameter.CaseDataCollection, caseDataCollection);
         }
 
         // ========================= Helpers =========================
@@ -444,12 +380,12 @@ namespace SAM.Analytical.Grasshopper
         /// Build a dictionary from intervals to (ratio, construction), expanding wrap-around
         /// intervals (T0 > T1) into [T0→359] and [0→T1].
         /// </summary>
-        private static Dictionary<Interval, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(
+        private static Dictionary<Range<double>, Tuple<double, ApertureConstruction>> BuildIntervalRatioMap(
             IList<Interval> intervals,
             IList<double> ratios,
             IList<ApertureConstruction> apertureConstructions)
         {
-            Dictionary<Interval, Tuple<double, ApertureConstruction>> dictionary = [];
+            Dictionary<Range<double>, Tuple<double, ApertureConstruction>> dictionary = [];
             for (int i = 0; i < intervals.Count; i++)
             {
                 Interval interval = intervals[i];
@@ -466,51 +402,19 @@ namespace SAM.Analytical.Grasshopper
                 // Non-wrapped: a <= b
                 if (a <= b)
                 {
-                    var norm = new Interval(a, b);
+                    var norm = new Range<double>(a, b);
                     dictionary[norm] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
                 else
                 {
                     // Wrapped: split into two
-                    var iv1 = new Interval(a, 359.0);
-                    var iv2 = new Interval(0.0, b);
+                    var iv1 = new Range<double>(a, 359.0);
+                    var iv2 = new Range<double>(0.0, b);
                     dictionary[iv1] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                     dictionary[iv2] = new Tuple<double, ApertureConstruction>(ratio, apertureConstruction);
                 }
             }
             return dictionary;
-        }
-
-        /// <summary>Try to find the ratio whose interval contains the given azimuth.</summary>
-        private static bool TryGetRatio(
-            Dictionary<Interval, Tuple<double, ApertureConstruction>> map,
-            double azimuthDeg,
-            out double ratio,
-            out ApertureConstruction apertureConstruction)
-        {
-            double azimuthDeg_Round = System.Math.Round(azimuthDeg, MidpointRounding.ToEven);
-            apertureConstruction = null;
-            ratio = 0.0;
-
-            foreach (var kvp in map)
-            {
-                if (kvp.Key.IncludesParameter(azimuthDeg_Round))
-                {
-                    ratio = kvp.Value.Item1;
-                    apertureConstruction = kvp.Value.Item2;
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        /// <summary>Normalise angle to [0, 359].</summary>
-        private static double NormalizeAngleDegrees(double angleDeg)
-        {
-            if (double.IsNaN(angleDeg) || double.IsInfinity(angleDeg)) return double.NaN;
-            double a = angleDeg % 360.0;
-            if (a < 0) a += 360.0;
-            return (a >= 360.0) ? 359.0 : a;
         }
 
         /// <summary>Clamp arbitrary double to [0, 359] while preserving values in that range.</summary>

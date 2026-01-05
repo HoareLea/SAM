@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +15,7 @@ namespace SAM.Core
         public SAMObject(SAMObject sAMObject)
             : base(sAMObject)
         {
-            if(sAMObject != null)
+            if (sAMObject != null)
             {
                 guid = sAMObject.Guid;
                 name = sAMObject.Name;
@@ -41,14 +44,14 @@ namespace SAM.Core
         }
 
         public SAMObject(Guid guid, string name, IEnumerable<ParameterSet> parameterSets)
-            :base(parameterSets)
+            : base(parameterSets)
         {
             this.guid = guid;
             this.name = name;
         }
 
         public SAMObject(Guid guid, string name)
-            :base()
+            : base()
         {
             this.guid = guid;
             this.name = name;
@@ -61,18 +64,18 @@ namespace SAM.Core
         }
 
         public SAMObject(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
         }
 
         public SAMObject(Guid guid)
-            :base()
+            : base()
         {
             this.guid = guid;
         }
 
         public SAMObject(string name)
-            :base()
+            : base()
         {
             this.name = name;
             guid = Guid.NewGuid();
@@ -101,7 +104,7 @@ namespace SAM.Core
                 return false;
             }
 
-            if(!base.FromJObject(jObject))
+            if (!base.FromJObject(jObject))
             {
                 return false;
             }
@@ -114,7 +117,7 @@ namespace SAM.Core
         public override JObject ToJObject()
         {
             JObject jObject = base.ToJObject();
-            if(jObject == null)
+            if (jObject == null)
             {
                 return null;
             }

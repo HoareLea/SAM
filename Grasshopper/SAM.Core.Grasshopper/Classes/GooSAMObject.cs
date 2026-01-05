@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
@@ -48,7 +51,7 @@ namespace SAM.Core.Grasshopper
     {
         public override Guid ComponentGuid => new Guid("c2fae9f4-b98a-4cff-be89-e58795cef92d");
 
-                protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
+        protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public GooSAMObjectParam()
             : base(typeof(SAMObject).Name, typeof(SAMObject).Name, typeof(SAMObject).FullName.Replace(".", " "), "Params", "SAM")

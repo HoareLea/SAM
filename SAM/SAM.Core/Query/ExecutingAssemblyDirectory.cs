@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Reflection;
 
 namespace SAM.Core
@@ -12,7 +15,7 @@ namespace SAM.Core
                 return null;
 
             UriBuilder uriBuilder = new UriBuilder(codeBase);
-            
+
             string path = uriBuilder.Path;
             if (string.IsNullOrEmpty(path))
                 return null;

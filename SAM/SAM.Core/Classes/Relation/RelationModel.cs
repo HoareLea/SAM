@@ -1,8 +1,11 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
-{   
+{
     public abstract class RelationModel<T>
     {
         private Dictionary<Reference, T> dictionary;
@@ -16,14 +19,14 @@ namespace SAM.Core
 
         public RelationModel(IEnumerable<T> objects, IEnumerable<Relation> relations)
         {
-            if(objects != null)
+            if (objects != null)
             {
-                foreach(T @object in objects)
+                foreach (T @object in objects)
                 {
                     AddObject(@object);
                 }
 
-                if(relations != null)
+                if (relations != null)
                 {
                     relationCollection = new RelationCollection(relations);
                 }
@@ -32,9 +35,9 @@ namespace SAM.Core
 
         public RelationModel(RelationModel<T> relationModel)
         {
-            if(relationModel != null && relationModel.dictionary != null)
+            if (relationModel != null && relationModel.dictionary != null)
             {
-                if(relationModel.dictionary != null)
+                if (relationModel.dictionary != null)
                 {
                     dictionary = new Dictionary<Reference, T>();
                     foreach (KeyValuePair<Reference, T> keyValuePair in relationModel.dictionary)
@@ -44,19 +47,19 @@ namespace SAM.Core
                     }
                 }
 
-                if(relationModel.relationCollection != null)
+                if (relationModel.relationCollection != null)
                 {
                     relationCollection = new RelationCollection(relationModel.relationCollection);
 
                 }
             }
         }
-        
-        
+
+
         protected Reference? AddObject(T @object)
         {
             Reference? reference = GetReference(@object);
-            if(reference == null || !reference.HasValue || !reference.Value.IsValid())
+            if (reference == null || !reference.HasValue || !reference.Value.IsValid())
             {
                 return null;
             }
@@ -85,7 +88,7 @@ namespace SAM.Core
         protected Relation AddRelation(string id, T @object_1, T @object_2)
         {
             Reference? reference_1 = GetReference(@object_1);
-            if(reference_1 == null || !reference_1.HasValue || !reference_1.Value.IsValid())
+            if (reference_1 == null || !reference_1.HasValue || !reference_1.Value.IsValid())
             {
                 return null;
             }
@@ -96,7 +99,7 @@ namespace SAM.Core
                 return null;
             }
 
-            if(!dictionary.ContainsKey(reference_1.Value))
+            if (!dictionary.ContainsKey(reference_1.Value))
             {
                 dictionary[reference_1.Value] = @object_1;
             }
@@ -111,7 +114,7 @@ namespace SAM.Core
 
         protected Relation AddRelation(string id, Reference reference_1, Reference reference_2)
         {
-            if(!dictionary.ContainsKey(reference_1) || !dictionary.ContainsKey(reference_2))
+            if (!dictionary.ContainsKey(reference_1) || !dictionary.ContainsKey(reference_2))
             {
                 return null;
             }
@@ -131,18 +134,18 @@ namespace SAM.Core
 
         protected Relation AddRelation(Relation relation)
         {
-            if(relation == null)
+            if (relation == null)
             {
                 return null;
             }
 
             HashSet<Reference> references_1 = relation.References_1;
-            if(references_1 != null)
+            if (references_1 != null)
             {
                 HashSet<Reference> references_Temp = new HashSet<Reference>();
-                foreach(Reference reference in references_1)
+                foreach (Reference reference in references_1)
                 {
-                    if(dictionary.ContainsKey(reference))
+                    if (dictionary.ContainsKey(reference))
                     {
                         references_Temp.Add(reference);
                     }
@@ -164,7 +167,7 @@ namespace SAM.Core
                 references_2 = references_Temp;
             }
 
-            if(references_1 != null && references_1.Count != 0 && references_2 != null && references_2.Count != 0)
+            if (references_1 != null && references_1.Count != 0 && references_2 != null && references_2.Count != 0)
             {
                 Relation result = new Relation(relation.Id, references_1, references_2);
                 relationCollection.Add(result);
@@ -177,12 +180,12 @@ namespace SAM.Core
 
         protected T GetObject(Reference reference)
         {
-            if(!reference.IsValid())
+            if (!reference.IsValid())
             {
                 return default;
             }
 
-            if(!dictionary.ContainsKey(reference))
+            if (!dictionary.ContainsKey(reference))
             {
                 return default;
             }
@@ -192,15 +195,15 @@ namespace SAM.Core
 
         protected List<T> GetObjects(Func<T, bool> func = null)
         {
-            if(dictionary == null)
+            if (dictionary == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(T @object in dictionary.Values)
+            foreach (T @object in dictionary.Values)
             {
-                if(func != null && !func.Invoke(@object))
+                if (func != null && !func.Invoke(@object))
                 {
                     continue;
                 }
@@ -215,7 +218,7 @@ namespace SAM.Core
         protected bool RemoveObject(T @object)
         {
             Reference? reference = GetReference(@object);
-            if(reference == null || !reference.HasValue || !reference.Value.IsValid())
+            if (reference == null || !reference.HasValue || !reference.Value.IsValid())
             {
                 return false;
             }
@@ -225,13 +228,13 @@ namespace SAM.Core
 
         protected bool RemoveObject(Reference reference)
         {
-            if(!reference.IsValid())
+            if (!reference.IsValid())
             {
                 return false;
             }
 
             bool result = dictionary.Remove(reference);
-            if(result)
+            if (result)
             {
                 relationCollection.Remove(reference);
             }
@@ -245,7 +248,7 @@ namespace SAM.Core
             return relationCollection == null ? false : relationCollection.Remove(id);
         }
 
-        
+
         protected RelationCollection GetRelations(Func<Relation, bool> func = null)
         {
             return relationCollection?.FindAll(func);
@@ -253,7 +256,7 @@ namespace SAM.Core
 
         protected RelationCollection GetRelations(Reference reference)
         {
-            if(!reference.IsValid())
+            if (!reference.IsValid())
             {
                 return null;
             }
@@ -318,12 +321,12 @@ namespace SAM.Core
 
         protected HashSet<Reference> GetRelatedReferences(Reference reference, string relationId = null)
         {
-            if(!reference.IsValid())
+            if (!reference.IsValid())
             {
                 return null;
             }
 
-            if(!dictionary.ContainsKey(reference))
+            if (!dictionary.ContainsKey(reference))
             {
                 return null;
             }
@@ -366,15 +369,15 @@ namespace SAM.Core
             HashSet<Reference> result = new HashSet<Reference>();
             foreach (Relation relation in relationCollection)
             {
-                if(relation == null || relation.Id != relationId)
+                if (relation == null || relation.Id != relationId)
                 {
                     continue;
                 }
 
                 HashSet<Reference> references = relation.References;
-                if(references != null)
+                if (references != null)
                 {
-                    foreach(Reference reference in references)
+                    foreach (Reference reference in references)
                     {
                         result.Add(reference);
                     }
@@ -384,19 +387,19 @@ namespace SAM.Core
             return result;
         }
 
-        
+
         protected List<T> GetRelatedObjects(string relationId)
         {
             HashSet<Reference> references = GetRelatedReferences(relationId);
-            if(references == null)
+            if (references == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(Reference reference in references)
+            foreach (Reference reference in references)
             {
-                if(dictionary.TryGetValue(reference, out T @object))
+                if (dictionary.TryGetValue(reference, out T @object))
                 {
                     result.Add(@object);
                 }
@@ -408,15 +411,15 @@ namespace SAM.Core
         protected List<T> GetRelatedObjects(Reference reference, string relationId = null)
         {
             HashSet<Reference> references = GetRelatedReferences(reference, relationId);
-            if(references == null)
+            if (references == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(Reference reference_Temp in references)
+            foreach (Reference reference_Temp in references)
             {
-                if(dictionary.TryGetValue(reference_Temp, out T @object))
+                if (dictionary.TryGetValue(reference_Temp, out T @object))
                 {
                     result.Add(@object);
                 }
@@ -501,13 +504,13 @@ namespace SAM.Core
 
         protected bool Contains(T @object)
         {
-            if(dictionary == null || dictionary.Count == 0)
+            if (dictionary == null || dictionary.Count == 0)
             {
                 return false;
             }
 
             Reference? reference = GetReference(@object);
-            if(reference == null || !reference.HasValue)
+            if (reference == null || !reference.HasValue)
             {
                 return false;
             }
@@ -529,7 +532,7 @@ namespace SAM.Core
         protected bool Replace(T @object_ToBeReplaced, T @object)
         {
             Reference? reference = GetReference(@object);
-            if(reference == null || !reference.HasValue || !reference.Value.IsValid())
+            if (reference == null || !reference.HasValue || !reference.Value.IsValid())
             {
                 return false;
             }
@@ -540,7 +543,7 @@ namespace SAM.Core
                 return false;
             }
 
-            if(!dictionary.ContainsKey(reference_ToBeReplaced.Value))
+            if (!dictionary.ContainsKey(reference_ToBeReplaced.Value))
             {
                 return false;
             }

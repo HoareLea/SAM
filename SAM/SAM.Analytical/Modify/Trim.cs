@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -39,22 +42,22 @@ namespace SAM.Analytical
                 int index = panels.IndexOf(keyValuePair.Key);
 
                 bool updated = false;
-                foreach(Geometry.Planar.ISegmentable2D segmentable2D in keyValuePair.Value)
+                foreach (Geometry.Planar.ISegmentable2D segmentable2D in keyValuePair.Value)
                 {
-                    foreach(Geometry.Planar.Segment2D segment2D in segmentable2D.GetSegments())
+                    foreach (Geometry.Planar.Segment2D segment2D in segmentable2D.GetSegments())
                     {
                         List<Geometry.Planar.Segment2D> segment2Ds_Temp = segment2Ds.FindAll(x => segment2D.On(x.Mid(), snapTolerance));
-                        if(segment2Ds_Temp.Count == 0)
+                        if (segment2Ds_Temp.Count == 0)
                         {
                             panels_Trimmed.Add(panels[index]);
                             panels.RemoveAt(index);
                             updated = true;
                             break;
                         }
-                        else if(segment2Ds_Temp.Count != 0)
+                        else if (segment2Ds_Temp.Count != 0)
                         {
                             Geometry.Planar.Query.ExtremePoints(Geometry.Planar.Query.UniquePoint2Ds(segment2Ds_Temp, tolerance), out Geometry.Planar.Point2D point2D_1, out Geometry.Planar.Point2D point2D_2);
-                            if(point2D_1 != null && point2D_2 != null)
+                            if (point2D_1 != null && point2D_2 != null)
                             {
                                 double distance = point2D_1.Distance(point2D_2);
                                 if (distance < tolerance || System.Math.Abs(segment2D.GetLength() - distance) < tolerance)
@@ -81,7 +84,7 @@ namespace SAM.Analytical
                         }
                     }
 
-                    if(updated)
+                    if (updated)
                     {
                         break;
                     }

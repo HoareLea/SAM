@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -48,10 +51,10 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                for (int i=0; i < face3Ds.Count; i++)
+                for (int i = 0; i < face3Ds.Count; i++)
                 {
                     Guid guid = panel.Guid;
-                    if(i > 0)
+                    if (i > 0)
                     {
                         guid = Guid.NewGuid();
                     }
@@ -61,12 +64,12 @@ namespace SAM.Analytical
 
                     adjacencyCluster.AddObject(panel_New);
 
-                    if(i > 0)
+                    if (i > 0)
                     {
                         List<IJSAMObject> objects = adjacencyCluster.GetRelatedObjects(panel.Guid);
-                        if(objects != null)
+                        if (objects != null)
                         {
-                            foreach(IJSAMObject @object in objects)
+                            foreach (IJSAMObject @object in objects)
                             {
                                 adjacencyCluster.AddRelation(panel_New, @object);
                             }
@@ -134,12 +137,12 @@ namespace SAM.Analytical
                     Panel panel_Old = null;
 
                     Point3D point3D = face3Ds[i].GetInternalPoint3D(tolerance_Distance);
-                    if(point3D != null)
+                    if (point3D != null)
                     {
                         panel_Old = tuples.FindAll(x => x.Item3.InRange(point3D, tolerance_Distance)).Find(x => x.Item2.InRange(point3D, tolerance_Distance))?.Item1;
                     }
 
-                    if(panel_Old == null)
+                    if (panel_Old == null)
                     {
                         panel_Old = panel;
                     }

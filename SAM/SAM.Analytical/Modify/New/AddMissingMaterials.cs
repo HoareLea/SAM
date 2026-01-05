@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -13,8 +16,8 @@ namespace SAM.Analytical
         public static List<Core.IMaterial> AddMissingMaterials(this BuildingModel buildingModel, Core.MaterialLibrary materialLibrary, out List<string> missingMaterialNames)
         {
             missingMaterialNames = null;
-            
-            if(buildingModel == null || materialLibrary == null)
+
+            if (buildingModel == null || materialLibrary == null)
             {
                 return null;
             }
@@ -22,21 +25,21 @@ namespace SAM.Analytical
             List<Core.IMaterial> result = new List<Core.IMaterial>();
 
             List<string> materialNames = buildingModel.GetMissingMaterialNames();
-            if(materialNames == null || materialNames.Count == 0)
+            if (materialNames == null || materialNames.Count == 0)
             {
                 return result;
             }
 
             missingMaterialNames = new List<string>();
-            foreach(string materialName in materialNames)
+            foreach (string materialName in materialNames)
             {
-                if(string.IsNullOrWhiteSpace(materialName))
+                if (string.IsNullOrWhiteSpace(materialName))
                 {
                     continue;
                 }
 
                 Core.IMaterial material = materialLibrary.GetMaterial(materialName);
-                if(material == null)
+                if (material == null)
                 {
                     missingMaterialNames.Add(materialName);
                 }

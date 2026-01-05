@@ -1,4 +1,7 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -9,7 +12,7 @@
         /// <returns>Latent Heat of Vapourization [J/kg]</returns>
         public static double VapourizationLatentHeat(this double dryBulbTemperature)
         {
-            if(double.IsNaN(dryBulbTemperature) || dryBulbTemperature < -25 || dryBulbTemperature > 100)
+            if (double.IsNaN(dryBulbTemperature) || dryBulbTemperature < -25 || dryBulbTemperature > 100)
             {
                 return double.NaN;
             }

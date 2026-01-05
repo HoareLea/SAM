@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -48,7 +51,7 @@ namespace SAM.Core
 
                 value_Temp.Replace("\"", "\"\"");
 
-                if(value_Temp.Contains(separator))
+                if (value_Temp.Contains(separator))
                 {
                     value_Temp = string.Format("\"{0}\"", value_Temp);
                 }

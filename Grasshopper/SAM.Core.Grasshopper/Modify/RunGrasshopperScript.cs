@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -37,7 +40,7 @@ namespace SAM.Core.Grasshopper
 
                 ProcessStartInfo processStartInfo = new ProcessStartInfo(path_Temp);
                 processStartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                
+
                 Process process = Process.Start(processStartInfo);
                 process.WaitForExit();
             }

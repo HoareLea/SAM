@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -9,7 +12,7 @@ namespace SAM.Core
         {
             if (delimitedFileType == DelimitedFileType.Undefined || string.IsNullOrEmpty(path) || !System.IO.File.Exists(path))
                 return null;
-            
+
             DelimitedFileTable result = null;
             using (DelimitedFileReader delimitedFileReader = new DelimitedFileReader(delimitedFileType, path))
                 result = new DelimitedFileTable(delimitedFileReader);

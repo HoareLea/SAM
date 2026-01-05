@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Geometry.Object.Spatial
 {
@@ -6,12 +9,12 @@ namespace SAM.Geometry.Object.Spatial
     {
         public static ISAMGeometry3D ISAMGeometry3D(this ISAMGeometry3DObject sAMGeometry3DObject)
         {
-            if(sAMGeometry3DObject == null)
+            if (sAMGeometry3DObject == null)
             {
                 return null;
             }
 
-            if(sAMGeometry3DObject is IBoundingBox3DObject)
+            if (sAMGeometry3DObject is IBoundingBox3DObject)
             {
                 return ((IBoundingBox3DObject)sAMGeometry3DObject).BoundingBox3D;
             }

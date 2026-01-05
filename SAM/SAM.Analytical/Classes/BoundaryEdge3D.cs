@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
@@ -96,7 +99,7 @@ namespace SAM.Analytical
 
         public void Flip()
         {
-            if(curve3D is Segment3D)
+            if (curve3D is Segment3D)
             {
                 ((Segment3D)curve3D).Reverse();
                 return;

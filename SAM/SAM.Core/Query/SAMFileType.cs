@@ -1,4 +1,7 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
@@ -8,7 +11,7 @@
                 return Core.SAMFileType.Undefined;
 
             string extension = System.IO.Path.GetExtension(path);
-            if(extension == null)
+            if (extension == null)
                 return Core.SAMFileType.Undefined;
 
             if (extension.StartsWith("."))
@@ -16,7 +19,7 @@
 
             extension = extension.ToLower();
 
-            switch(extension)
+            switch (extension)
             {
                 case "sam":
                     return Core.SAMFileType.SAM;

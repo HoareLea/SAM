@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Spatial
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Spatial
 {
     public static partial class Query
     {
@@ -11,7 +14,7 @@
         /// <returns></returns>
         public static Vector3D Rotate(this Vector3D vector3D, Plane plane, double angle)
         {
-            if(vector3D is null || plane?.Normal is not Vector3D axis || double.IsNaN(angle))
+            if (vector3D is null || plane?.Normal is not Vector3D axis || double.IsNaN(angle))
             {
                 return null;
             }

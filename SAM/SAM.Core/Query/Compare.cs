@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -14,7 +17,7 @@ namespace SAM.Core
         /// <returns>Comparison Type Result</returns>
         public static bool Compare(this double value_1, double value_2, NumberComparisonType numberComparisonType)
         {
-            switch(numberComparisonType)
+            switch (numberComparisonType)
             {
                 case NumberComparisonType.Equals:
                     if (double.IsNaN(value_1) && double.IsNaN(value_2))
@@ -97,7 +100,7 @@ namespace SAM.Core
         {
             string value_1_Temp = value_1;
             string value_2_Temp = value_2;
-            if(!caseSensitive)
+            if (!caseSensitive)
             {
                 if (!string.IsNullOrEmpty(value_1_Temp))
                     value_1_Temp = value_1_Temp.ToLower();
@@ -169,7 +172,7 @@ namespace SAM.Core
 
             return result;
         }
-        
+
         public static bool Compare(this object @object, string name, double value, NumberComparisonType numberComparisonType)
         {
             if (string.IsNullOrEmpty(name) || @object == null)
@@ -182,17 +185,17 @@ namespace SAM.Core
             if (value_Existing is double)
                 return Compare((double)value_Existing, value, numberComparisonType);
 
-            if(IsNumeric(value_Existing))
+            if (IsNumeric(value_Existing))
                 return Compare(System.Convert.ToDouble(value_Existing), value, numberComparisonType);
 
-            if(value_Existing is string)
+            if (value_Existing is string)
             {
                 double value_Existing_Temp;
-                if(double.TryParse((string)value_Existing, out value_Existing_Temp))
+                if (double.TryParse((string)value_Existing, out value_Existing_Temp))
                     return Compare(value_Existing_Temp, value, numberComparisonType);
             }
 
-            if(value_Existing is bool)
+            if (value_Existing is bool)
             {
                 double value_Existing_Temp = 1;
                 if (!(bool)value_Existing)
@@ -213,12 +216,12 @@ namespace SAM.Core
             if (!TryGetValue(@object, name, out value_Existing))
                 return false;
 
-            if(value == null)
+            if (value == null)
             {
                 string value_Temp = null;
                 return Compare(value_Temp, value, textComparisonType, caseSensitive);
             }
-                
+
             if (value_Existing is string)
                 return Compare((string)value_Existing, value, textComparisonType, caseSensitive);
 

@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Core
 {
@@ -12,12 +15,12 @@ namespace SAM.Core
             }
 
             List<ParameterSet> result = object_Source.GetParameterSets();
-            if(result == null || result.Count == 0)
+            if (result == null || result.Count == 0)
             {
                 return result;
             }
 
-            for(int i=0; i < result.Count; i++)
+            for (int i = 0; i < result.Count; i++)
             {
                 result[i] = result[i]?.Clone();
 

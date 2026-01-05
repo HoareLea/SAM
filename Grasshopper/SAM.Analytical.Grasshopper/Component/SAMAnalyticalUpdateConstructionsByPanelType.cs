@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
@@ -111,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref constructionManager);
             }
 
-            if(constructionManager == null)
+            if (constructionManager == null)
             {
                 constructionManager = Analytical.Query.DefaultConstructionManager();
             }
@@ -121,14 +124,14 @@ namespace SAM.Analytical.Grasshopper
             List<IMaterial> materials = new List<IMaterial>();
 
             List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels != null && panels.Count != 0)
+            if (panels != null && panels.Count != 0)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
 
                 for (int i = 0; i < panels.Count; i++)
                 {
                     Panel panel = panels[i];
-                    if(panel == null)
+                    if (panel == null)
                     {
                         continue;
                     }
@@ -136,15 +139,15 @@ namespace SAM.Analytical.Grasshopper
                     panel = Create.Panel(panel);
 
                     Construction construction = constructionManager.GetConstructions(panel.PanelType)?.FirstOrDefault();
-                    if(construction != null)
+                    if (construction != null)
                     {
                         panel = Create.Panel(panel, construction);
                         List<IMaterial> materials_Temp = constructionManager.GetMaterials<IMaterial>(construction);
-                        if(materials_Temp != null)
+                        if (materials_Temp != null)
                         {
-                            foreach(IMaterial material in materials_Temp)
+                            foreach (IMaterial material in materials_Temp)
                             {
-                                if(materials.Find(x => x.Name == material.Name) == null)
+                                if (materials.Find(x => x.Name == material.Name) == null)
                                 {
                                     materials.Add(material);
                                 }
@@ -153,24 +156,24 @@ namespace SAM.Analytical.Grasshopper
                     }
 
                     List<Aperture> apertures = panel.Apertures;
-                    if(apertures != null && apertures.Count != 0)
+                    if (apertures != null && apertures.Count != 0)
                     {
                         for (int j = 0; j < apertures.Count; j++)
                         {
                             Aperture aperture = apertures[j];
-                            if(aperture == null)
+                            if (aperture == null)
                             {
                                 continue;
                             }
 
                             ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                            if(apertureConstruction == null)
+                            if (apertureConstruction == null)
                             {
                                 continue;
                             }
 
                             ApertureConstruction apertureConstruction_New = constructionManager.GetApertureConstructions(apertureConstruction.ApertureType, panel.PanelType)?.FirstOrDefault();
-                            if(apertureConstruction_New == null)
+                            if (apertureConstruction_New == null)
                             {
                                 continue;
                             }
@@ -199,9 +202,9 @@ namespace SAM.Analytical.Grasshopper
             }
 
             MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
-            if(materials != null && materials.Count != 0)
+            if (materials != null && materials.Count != 0)
             {
-                if(materialLibrary == null)
+                if (materialLibrary == null)
                 {
                     materialLibrary = new MaterialLibrary(analyticalModel.Name);
                 }

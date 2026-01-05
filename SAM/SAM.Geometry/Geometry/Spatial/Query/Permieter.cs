@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -9,7 +12,7 @@ namespace SAM.Geometry.Spatial
             if (closedPlanar3D == null)
                 return double.NaN;
 
-            if(closedPlanar3D is ISegmentable3D)
+            if (closedPlanar3D is ISegmentable3D)
             {
                 List<Segment3D> segment3Ds = ((ISegmentable3D)closedPlanar3D).GetSegments();
                 if (segment3Ds == null || segment3Ds.Count == 0)

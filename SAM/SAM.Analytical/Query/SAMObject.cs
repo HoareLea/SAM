@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
@@ -6,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static T SAMObject<T>(this AnalyticalModel analyticalModel, Guid guid) where T: IParameterizedSAMObject
+        public static T SAMObject<T>(this AnalyticalModel analyticalModel, Guid guid) where T : IParameterizedSAMObject
         {
             IParameterizedSAMObject jSAMObject = SAMObject(analyticalModel, typeof(T), guid);
             if (jSAMObject == null)
@@ -24,7 +27,7 @@ namespace SAM.Analytical
             return (T)jSAMObject;
         }
 
-        public static T SAMObject<T>(this ProfileLibrary profileLibrary, Guid guid)where T : IParameterizedSAMObject
+        public static T SAMObject<T>(this ProfileLibrary profileLibrary, Guid guid) where T : IParameterizedSAMObject
         {
             IParameterizedSAMObject jSAMObject = SAMObject(profileLibrary, guid);
             if (jSAMObject == null)
@@ -38,7 +41,7 @@ namespace SAM.Analytical
             if (analyticalModel == null || type == null)
                 return null;
 
-            if(typeof(Profile).IsAssignableFrom(type))
+            if (typeof(Profile).IsAssignableFrom(type))
                 return analyticalModel.ProfileLibrary.SAMObject(guid);
 
             if (typeof(IMaterial).IsAssignableFrom(type))
@@ -62,7 +65,7 @@ namespace SAM.Analytical
             if (typeof(InternalCondition).IsAssignableFrom(type))
                 return analyticalModel.AdjacencyCluster?.SAMObject(type, guid);
 
-            if(typeof(Location).IsAssignableFrom(type))
+            if (typeof(Location).IsAssignableFrom(type))
             {
                 Location location = analyticalModel.Location;
                 if (location != null)

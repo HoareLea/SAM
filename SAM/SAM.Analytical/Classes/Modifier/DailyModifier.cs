@@ -1,8 +1,9 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
-using SAM.Core.Attributes;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -15,7 +16,7 @@ namespace SAM.Analytical
         public DailyModifier(ArithmeticOperator arithmeticOperator, IEnumerable<KeyValuePair<string, double[]>> values)
         {
             ArithmeticOperator = arithmeticOperator;
-            if(values != null)
+            if (values != null)
             {
                 this.values = new Dictionary<string, double[]>();
                 dayNames = new List<string>();
@@ -38,7 +39,7 @@ namespace SAM.Analytical
         public DailyModifier(DailyModifier dailyModifier)
             : base(dailyModifier)
         {
-            if(dailyModifier != null)
+            if (dailyModifier != null)
             {
                 dayNames = dailyModifier.dayNames == null ? null : new List<string>(dailyModifier.dayNames);
                 if (dailyModifier.values != null)
@@ -62,7 +63,7 @@ namespace SAM.Analytical
         }
 
         public DailyModifier(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
 
         }
@@ -95,29 +96,29 @@ namespace SAM.Analytical
         public override bool FromJObject(JObject jObject)
         {
             bool result = base.FromJObject(jObject);
-            if(!result)
+            if (!result)
             {
                 return result;
             }
 
-            if(jObject.ContainsKey("DayNames"))
+            if (jObject.ContainsKey("DayNames"))
             {
                 dayNames = new List<string>();
-                foreach(string dayName in jObject.Value<JArray>("DayNames"))
+                foreach (string dayName in jObject.Value<JArray>("DayNames"))
                 {
                     dayNames.Add(dayName);
                 }
             }
 
-            if(jObject.ContainsKey("Values"))
+            if (jObject.ContainsKey("Values"))
             {
                 values = new Dictionary<string, double[]>();
-                foreach(JArray jArray in jObject.Value<JArray>("Values"))
+                foreach (JArray jArray in jObject.Value<JArray>("Values"))
                 {
                     string dayName = jArray[0]?.ToString();
 
                     List<double> values_Temp = new List<double>();
-                    foreach(double value in jArray[1])
+                    foreach (double value in jArray[1])
                     {
                         values_Temp.Add(value);
                     }
@@ -128,7 +129,7 @@ namespace SAM.Analytical
 
             return result;
         }
-        
+
         public override double GetCalculatedValue(int index, double value)
         {
             if (values == null)
@@ -161,12 +162,12 @@ namespace SAM.Analytical
 
         public double GetValue(string dayName, int index)
         {
-            if(dayName == null)
+            if (dayName == null)
             {
                 return double.NaN;
             }
 
-            if(values.TryGetValue(dayName, out double[] values_Day))
+            if (values.TryGetValue(dayName, out double[] values_Day))
             {
                 return values_Day[index];
             }
@@ -177,12 +178,12 @@ namespace SAM.Analytical
         public override JObject ToJObject()
         {
             JObject result = base.ToJObject();
-            if(result == null)
+            if (result == null)
             {
                 return null;
             }
 
-            if(dayNames != null)
+            if (dayNames != null)
             {
                 JArray jArray = new JArray();
                 dayNames.ForEach(x => jArray.Add(x));
@@ -190,16 +191,16 @@ namespace SAM.Analytical
                 result.Add("DayNames", jArray);
             }
 
-            if(values != null)
+            if (values != null)
             {
                 JArray jArray = new JArray();
-                foreach(KeyValuePair<string, double[]> keyValuePair in values)
+                foreach (KeyValuePair<string, double[]> keyValuePair in values)
                 {
                     JArray jArray_Temp = new JArray();
                     jArray_Temp.Add(keyValuePair.Key);
 
                     JArray jArray_Values = new JArray();
-                    foreach(double value in keyValuePair.Value)
+                    foreach (double value in keyValuePair.Value)
                     {
                         jArray_Values.Add(value);
                     }

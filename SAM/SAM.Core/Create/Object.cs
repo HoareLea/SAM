@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -24,7 +27,7 @@ namespace SAM.Core
             object result = null;
 
             ConstructorInfo constructorInfo = type.GetConstructor(objects.ToList().ConvertAll(x => x?.GetType()).ToArray());
-            if(constructorInfo != null)
+            if (constructorInfo != null)
             {
                 result = constructorInfo.Invoke(objects);
                 if (result is T)
@@ -34,7 +37,7 @@ namespace SAM.Core
             foreach (ConstructorInfo constructorInfo_Temp in constructorInfos)
             {
                 ParameterInfo[] parameterInfos = constructorInfo_Temp.GetParameters();
-                if((parameterInfos == null || parameterInfos.Length == 0) && count == 0)
+                if ((parameterInfos == null || parameterInfos.Length == 0) && count == 0)
                 {
                     result = constructorInfo_Temp.Invoke(new object[0]);
                     if (result is T)
@@ -44,7 +47,7 @@ namespace SAM.Core
                 if (parameterInfos.Length != count)
                     continue;
 
-                List<object> objects_Temp = new List<object>(objects); 
+                List<object> objects_Temp = new List<object>(objects);
                 List<object> parameteres = new List<object>();
                 foreach (ParameterInfo parameterInfo in parameterInfos)
                 {

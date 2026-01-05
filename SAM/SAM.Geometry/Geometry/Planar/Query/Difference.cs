@@ -1,4 +1,7 @@
-﻿//using ClipperLib;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+//using ClipperLib;
 using NetTopologySuite.Geometries;
 using NetTopologySuite.Geometries.Utilities;
 using NetTopologySuite.Precision;
@@ -77,12 +80,12 @@ namespace SAM.Geometry.Planar
                 result = Difference_NTS(face2D_1, face2D_2, tolerance);
                 sAM = false;
             }
-            catch(System.Exception)
+            catch (System.Exception)
             {
                 sAM = true;
             }
 
-            if(sAM)
+            if (sAM)
             {
                 result = Difference_SAM(face2D_1, face2D_2, tolerance);
             }
@@ -149,12 +152,12 @@ namespace SAM.Geometry.Planar
 
         public static List<Polygon2D> Difference(this IEnumerable<Polygon2D> polygon2Ds_1, IEnumerable<Polygon2D> polygon2Ds_2, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(polygon2Ds_1 == null || polygon2Ds_2 == null)
+            if (polygon2Ds_1 == null || polygon2Ds_2 == null)
             {
                 return null;
             }
 
-            if(polygon2Ds_2.Count() == 0)
+            if (polygon2Ds_2.Count() == 0)
             {
                 return polygon2Ds_1.ToList().ConvertAll(x => new Polygon2D(x));
             }
@@ -166,7 +169,7 @@ namespace SAM.Geometry.Planar
                 return new List<Polygon2D>();
             }
 
-            if(count == 1)
+            if (count == 1)
             {
                 return Difference(polygon2Ds_1.ElementAt(0), polygon2Ds_2, tolerance);
             }
@@ -175,10 +178,10 @@ namespace SAM.Geometry.Planar
 
             if (count < 10 && polygon2Ds_2.Count() < 10)
             {
-                foreach(Polygon2D polygon2D in polygon2Ds_1)
+                foreach (Polygon2D polygon2D in polygon2Ds_1)
                 {
                     List<Polygon2D> polygon2Ds = polygon2D?.Difference(polygon2Ds_2, tolerance);
-                    if(polygon2Ds != null)
+                    if (polygon2Ds != null)
                     {
                         result.AddRange(polygon2Ds);
                     }
@@ -188,14 +191,14 @@ namespace SAM.Geometry.Planar
             {
                 List<List<Polygon2D>> polygon2DsList = Enumerable.Repeat<List<Polygon2D>>(null, count).ToList();
 
-                Parallel.For(0, count, (int i) => 
+                Parallel.For(0, count, (int i) =>
                 {
                     polygon2DsList[i] = polygon2Ds_1.ElementAt(0)?.Difference(polygon2Ds_2, tolerance);
                 });
 
-                foreach(List<Polygon2D> polygon2Ds in polygon2DsList)
+                foreach (List<Polygon2D> polygon2Ds in polygon2DsList)
                 {
-                    if(polygon2Ds == null || polygon2Ds.Count == 0)
+                    if (polygon2Ds == null || polygon2Ds.Count == 0)
                     {
                         continue;
                     }
@@ -223,12 +226,12 @@ namespace SAM.Geometry.Planar
             {
                 return result;
             }
-            
-            foreach(Face2D face2D_Temp in face2Ds)
+
+            foreach (Face2D face2D_Temp in face2Ds)
             {
                 if (face2D_Temp.GetArea() <= tolerance)
                     continue;
-                
+
                 List<Face2D> face2Ds_Temp = new List<Face2D>();
                 foreach (Face2D face2D_Result in result)
                 {
@@ -252,7 +255,7 @@ namespace SAM.Geometry.Planar
             return result;
         }
 
-        
+
         private static List<Face2D> Difference_NTS(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (face2D_1 == null || face2D_2 == null)
@@ -317,7 +320,7 @@ namespace SAM.Geometry.Planar
                 return result;
 
             NetTopologySuite.Geometries.Geometry geometry_1 = polygon_1;
-            if(!geometry_1.IsValid)
+            if (!geometry_1.IsValid)
             {
                 geometry_1 = GeometryFixer.Fix(geometry_1);
             }
@@ -399,7 +402,7 @@ namespace SAM.Geometry.Planar
 
         private static List<Face2D> Difference_SAM(this Face2D face2D_1, Face2D face2D_2, double tolerance = Core.Tolerance.MicroDistance)
         {
-            if(face2D_1 == null || face2D_2 == null)
+            if (face2D_1 == null || face2D_2 == null)
             {
                 return null;
             }
@@ -409,12 +412,12 @@ namespace SAM.Geometry.Planar
             List<IClosed2D> edge2Ds_Temp = null;
 
             edge2Ds_Temp = face2D_1.Edge2Ds;
-            if(edge2Ds_Temp == null)
+            if (edge2Ds_Temp == null)
             {
                 return null;
             }
 
-            if(!edge2Ds_Temp.TrueForAll(x => x is ISegmentable2D))
+            if (!edge2Ds_Temp.TrueForAll(x => x is ISegmentable2D))
             {
                 throw new System.NotImplementedException();
             }
@@ -433,7 +436,7 @@ namespace SAM.Geometry.Planar
             }
 
             segmentable2Ds.AddRange(edge2Ds_Temp.ConvertAll(x => (ISegmentable2D)x));
-            if(segmentable2Ds == null || segmentable2Ds.Count == 0)
+            if (segmentable2Ds == null || segmentable2Ds.Count == 0)
             {
                 return null;
             }
@@ -442,16 +445,16 @@ namespace SAM.Geometry.Planar
             segment2Ds = Snap(segment2Ds, true, tolerance);
 
             List<Polygon2D> polygon2Ds_All = segment2Ds.Polygon2Ds(tolerance);
-            if(polygon2Ds_All == null || polygon2Ds_All.Count == 0)
+            if (polygon2Ds_All == null || polygon2Ds_All.Count == 0)
             {
                 return null;
             }
 
             List<Polygon2D> polygon2Ds = new List<Polygon2D>();
-            foreach(Polygon2D polygon2D in polygon2Ds_All)
+            foreach (Polygon2D polygon2D in polygon2Ds_All)
             {
                 Point2D point2D = polygon2D?.GetInternalPoint2D(tolerance);
-                if(point2D == null)
+                if (point2D == null)
                 {
                     continue;
                 }
@@ -461,7 +464,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                if(face2D_2.Inside(point2D, tolerance))
+                if (face2D_2.Inside(point2D, tolerance))
                 {
                     continue;
                 }
@@ -474,7 +477,7 @@ namespace SAM.Geometry.Planar
                 polygon2Ds.Add(polygon2D);
             }
 
-            if(polygon2Ds == null || polygon2Ds.Count == 0)
+            if (polygon2Ds == null || polygon2Ds.Count == 0)
             {
                 return new List<Face2D>();
             }

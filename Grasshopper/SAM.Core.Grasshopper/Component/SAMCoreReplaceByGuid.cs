@@ -1,11 +1,14 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreReplaceByGuid: GH_SAMVariableOutputParameterComponent
+    public class SAMCoreReplaceByGuid : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -36,14 +39,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObjects", NickName = "_sAMobjects", Description = "SAM Objects", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_sAMObjects", NickName = "_sAMobjects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_replacementSAMObjects", NickName = "_replacementSAMObjects", Description = "SAM Objects", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -88,12 +91,12 @@ namespace SAM.Core.Grasshopper
                 dataAccess.GetDataList(index, replacementSAMObjects);
             }
 
-            if(replacementSAMObjects != null && replacementSAMObjects.Count != 0)
+            if (replacementSAMObjects != null && replacementSAMObjects.Count != 0)
             {
                 foreach (SAMObject sAMObject in replacementSAMObjects)
                 {
                     int index_Temp = sAMObjects.FindIndex(x => x.Guid == sAMObject.Guid);
-                    if(index_Temp == -1)
+                    if (index_Temp == -1)
                     {
                         sAMObjects.Add(sAMObject);
                     }

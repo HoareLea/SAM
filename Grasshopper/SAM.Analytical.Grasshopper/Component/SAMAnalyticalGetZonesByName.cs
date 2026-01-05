@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -63,7 +66,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooGroupParam() { Name = "Zones", NickName = "Zones", Description = "SAM GuidCollections representing Zones", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Spaces", NickName = "Spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                
+
                 return result.ToArray();
             }
         }
@@ -80,7 +83,7 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -100,13 +103,13 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = null;
 
-            if(sAMObject is AnalyticalModel)
+            if (sAMObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)sAMObject)?.AdjacencyCluster;
-            else if(sAMObject is AdjacencyCluster)
+            else if (sAMObject is AdjacencyCluster)
                 adjacencyCluster = ((AdjacencyCluster)sAMObject);
 
             List<Zone> zones = adjacencyCluster?.GetObjects<Zone>();
-            if(zones != null)
+            if (zones != null)
             {
                 if (name != null)
                     zones.RemoveAll(x => x.Name != name);
@@ -136,7 +139,7 @@ namespace SAM.Analytical.Grasshopper
 
                 dataAccess.SetDataTree(index, dataTree_Spaces);
             }
-                
+
         }
     }
 }

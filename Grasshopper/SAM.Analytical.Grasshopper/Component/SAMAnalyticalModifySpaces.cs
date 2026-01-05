@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -84,7 +87,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
             if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
@@ -213,9 +216,9 @@ namespace SAM.Analytical.Grasshopper
                         heatingSystemTypeName = @string;
                     }
 
-                    for(int i =0; i < spaces.Count;i++)
+                    for (int i = 0; i < spaces.Count; i++)
                     {
-                        if(spaces[i] == null)
+                        if (spaces[i] == null)
                         {
                             continue;
                         }
@@ -309,7 +312,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.SetData(index, sAMObject);
         }
     }

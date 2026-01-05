@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,7 +22,7 @@ namespace SAM.Analytical
                 return;
             }
 
-            UpdateMaterialsByHeatTransferCoefficients(buildingModel, duplicateHostPartitionTypes, duplicateOpeningTypes, out List <HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes);
+            UpdateMaterialsByHeatTransferCoefficients(buildingModel, duplicateHostPartitionTypes, duplicateOpeningTypes, out List<HostPartitionType> hostPartitionTypes, out List<OpeningType> openingTypes);
         }
 
         private static void UpdateMaterialsByHeatTransferCoefficients_HostPartitionTypes(this BuildingModel buildingModel, bool duplicateHostPartitionTypes, out List<HostPartitionType> hostPartitionTypes)
@@ -225,7 +228,7 @@ namespace SAM.Analytical
                         if (paneUpdate || frameUpdate)
                         {
                             OpeningType openingType_New = null;
-                            if(openingType is WindowType)
+                            if (openingType is WindowType)
                             {
                                 openingType_New = new WindowType(openingType.Name, paneMaterialLayers, frameMaterialLayers);
                             }
@@ -234,7 +237,7 @@ namespace SAM.Analytical
                                 openingType_New = new DoorType(openingType.Name, paneMaterialLayers, frameMaterialLayers);
                             }
 
-                            foreach(IOpening opening in openings)
+                            foreach (IOpening opening in openings)
                             {
                                 opening.Type(openingType_New);
                                 buildingModel.Add(opening);

@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -45,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures", NickName = "apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "_apertureConstruction", NickName = "apertureConstruction", Description = "SAM Analytical ApertureConstruction \n*The layers should be ordered from inside to outside" }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooConstructionManagerParam() { Name = "constructionManager_", NickName = "constructionManager_", Description = "SAM Analytical ConstructionManager", Optional = true }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -119,7 +122,7 @@ namespace SAM.Analytical.Grasshopper
 
             apertures = adjacencyCluster.UpdateApertures(apertures);
 
-            if(apertures != null && apertures.Count != 0)
+            if (apertures != null && apertures.Count != 0)
             {
                 List<string> materialNames_Missing = new List<string>();
 
@@ -127,17 +130,17 @@ namespace SAM.Analytical.Grasshopper
 
                 MaterialLibrary materialLibrary = analyticalModel.MaterialLibrary;
                 List<string> materialNames = materialLibrary?.MissingMaterialsNames(apertureConstruction);
-                if(materialNames != null && materialNames.Count != 0)
+                if (materialNames != null && materialNames.Count != 0)
                 {
-                    foreach(string materialName in materialNames)
+                    foreach (string materialName in materialNames)
                     {
                         IMaterial material = constructionManager?.GetMaterial(materialName);
-                        if(material == null)
+                        if (material == null)
                         {
                             material = materialLibrary_Default?.GetMaterial(materialName);
                         }
 
-                        if(material == null)
+                        if (material == null)
                         {
                             materialNames_Missing.Add(materialName);
                             continue;

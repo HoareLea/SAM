@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -29,7 +32,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -62,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber.SetPersistentData(0);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item};
+                GooLocationParam locationParam = new GooLocationParam() { Name = "_location_", NickName = "_location_", Description = "SAM Core Location", Access = GH_ParamAccess.item };
                 locationParam.SetPersistentData(Core.Query.DefaultLocation());
                 result.Add(new GH_SAMParam(locationParam, ParamVisibility.Voluntary));
 
@@ -143,7 +146,7 @@ namespace SAM.Analytical.Grasshopper
 
             double tolerance = Core.Tolerance.Distance;
             index = Params.IndexOfInputParam("tolerance_");
-            if(index != -1)
+            if (index != -1)
             {
                 double tolerance_Temp = double.NaN;
                 if (dataAccess.GetData(index, ref tolerance_Temp))
@@ -287,7 +290,7 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 BuildingModel buildingModel = Create.BuildingModel(face3Ds, elevation_Ground, tolerance);
-                if(buildingModel != null)
+                if (buildingModel != null)
                 {
                     buildingModel.Address = address;
                     buildingModel.Location = location;

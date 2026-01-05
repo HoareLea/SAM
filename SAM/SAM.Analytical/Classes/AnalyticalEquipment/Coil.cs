@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Analytical
@@ -11,7 +14,7 @@ namespace SAM.Analytical
         private double fluidReturnTemperature = double.NaN;
         private double fluidSupplyTemperature = double.NaN;
         private double contactFactor = double.NaN;
-        
+
         private bool summer = true;
         private double summerOffTemperature = double.NaN;
 
@@ -47,7 +50,7 @@ namespace SAM.Analytical
         public Coil(Coil coil)
             : base(coil)
         {
-            if(coil != null)
+            if (coil != null)
             {
                 fluidReturnTemperature = coil.fluidReturnTemperature;
                 fluidSupplyTemperature = coil.fluidSupplyTemperature;
@@ -175,7 +178,7 @@ namespace SAM.Analytical
             if (!base.FromJObject(jObject))
                 return false;
 
-            if(jObject.ContainsKey("FluidReturnTemperature"))
+            if (jObject.ContainsKey("FluidReturnTemperature"))
             {
                 fluidReturnTemperature = jObject.Value<double>("FluidReturnTemperature");
             }
@@ -209,7 +212,7 @@ namespace SAM.Analytical
             if (jObject == null)
                 return null;
 
-            if(!double.IsNaN(fluidSupplyTemperature))
+            if (!double.IsNaN(fluidSupplyTemperature))
             {
                 jObject.Add("FluidSupplyTemperature", fluidSupplyTemperature);
             }

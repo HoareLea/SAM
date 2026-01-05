@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,13 +118,13 @@ namespace SAM.Geometry.Spatial
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             List<Segment3D> segment3Ds = segmentable3D.GetSegments();
-            if(segment3Ds == null)
+            if (segment3Ds == null)
             {
                 return null;
             }
@@ -135,13 +138,13 @@ namespace SAM.Geometry.Spatial
             foreach (Segment3D segment3D in segment3Ds)
             {
                 PlanarIntersectionResult planarIntersectionResult_Segment3D = PlanarIntersectionResult(face3D, segment3D, tolerance);
-                if(planarIntersectionResult_Segment3D == null || !planarIntersectionResult_Segment3D.Intersecting)
+                if (planarIntersectionResult_Segment3D == null || !planarIntersectionResult_Segment3D.Intersecting)
                 {
                     continue;
                 }
 
                 List<ISAMGeometry3D> geometry3Ds_Segment3D = planarIntersectionResult_Segment3D.Geometry3Ds;
-                if(geometry3Ds_Segment3D != null && geometry3Ds_Segment3D.Count != 0)
+                if (geometry3Ds_Segment3D != null && geometry3Ds_Segment3D.Count != 0)
                 {
                     geometry3Ds.AddRange(geometry3Ds_Segment3D);
                 }
@@ -259,10 +262,10 @@ namespace SAM.Geometry.Spatial
             List<Segment3D> segment3Ds_Segmentable3D = segmentable3D.GetSegments();
 
             List<Tuple<Segment3D, PlanarIntersectionResult>> tuples = new List<Tuple<Segment3D, PlanarIntersectionResult>>();
-            foreach(Segment3D segment3D_Temp in segment3Ds_Segmentable3D)
+            foreach (Segment3D segment3D_Temp in segment3Ds_Segmentable3D)
             {
                 PlanarIntersectionResult planarIntersectionResult_Temp = PlanarIntersectionResult(plane, segment3D_Temp, tolerance_Distance);
-                if(planarIntersectionResult_Temp == null || !planarIntersectionResult_Temp.Intersecting)
+                if (planarIntersectionResult_Temp == null || !planarIntersectionResult_Temp.Intersecting)
                 {
                     continue;
                 }
@@ -304,7 +307,7 @@ namespace SAM.Geometry.Spatial
             List<Point2D> point2Ds = point3Ds.ConvertAll(x => plane_ClosedPlanar3D.Convert(x));
             Planar.Query.ExtremePoints(point2Ds, out Point2D point2D_1, out Point2D point2D_2);
             point2Ds.SortByDistance(point2D_1);
-            
+
             IClosed2D closed2D = plane_ClosedPlanar3D.Convert(closedPlanar3D);
             ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
 
@@ -465,7 +468,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             BoundingBox3D boundingBox3D_1 = face3D_1.GetBoundingBox(tolerance_Distance);
-            if(boundingBox3D_1 == null)
+            if (boundingBox3D_1 == null)
             {
                 return null;
             }
@@ -530,16 +533,16 @@ namespace SAM.Geometry.Spatial
 
             return new PlanarIntersectionResult(plane_1, geometry3Ds);
         }
-    
+
         public static PlanarIntersectionResult PlanarIntersectionResult(IClosedPlanar3D closedPlanar3D_1, IClosedPlanar3D closedPlanar3D_2, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(closedPlanar3D_1 == null || closedPlanar3D_2 == null)
+            if (closedPlanar3D_1 == null || closedPlanar3D_2 == null)
             {
                 return null;
             }
-            
+
             Face3D face3D_1 = null;
-            if(closedPlanar3D_1 is Face3D)
+            if (closedPlanar3D_1 is Face3D)
             {
                 face3D_1 = (Face3D)closedPlanar3D_1;
             }
@@ -563,30 +566,30 @@ namespace SAM.Geometry.Spatial
 
         public static PlanarIntersectionResult PlanarIntersectionResult(Plane plane, Mesh3D mesh3D, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(plane == null || mesh3D == null)
+            if (plane == null || mesh3D == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = mesh3D.GetBoundingBox();
-            if(!plane.Intersect(boundingBox3D, tolerance_Distance))
+            if (!plane.Intersect(boundingBox3D, tolerance_Distance))
             {
                 return new PlanarIntersectionResult(plane);
             }
 
             List<ISAMGeometry3D> sAMGeometry3Ds = new List<ISAMGeometry3D>();
             List<Triangle3D> triangle3Ds = mesh3D.GetTriangles();
-            if(triangle3Ds != null && triangle3Ds.Count != 0)
+            if (triangle3Ds != null && triangle3Ds.Count != 0)
             {
-                foreach(Triangle3D triangle3D in triangle3Ds)
+                foreach (Triangle3D triangle3D in triangle3Ds)
                 {
-                    if(triangle3D == null)
+                    if (triangle3D == null)
                     {
                         continue;
                     }
 
                     PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(plane, new Face3D(triangle3D), tolerance_Angle, tolerance_Distance);
-                    if(planarIntersectionResult != null && planarIntersectionResult.Intersecting)
+                    if (planarIntersectionResult != null && planarIntersectionResult.Intersecting)
                     {
                         sAMGeometry3Ds.AddRange(planarIntersectionResult.GetGeometry3Ds<ISAMGeometry3D>());
                     }
@@ -598,36 +601,36 @@ namespace SAM.Geometry.Spatial
 
         public static PlanarIntersectionResult PlanarIntersectionResult(Face3D face3D, Shell shell, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null || shell == null)
+            if (face3D == null || shell == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D = face3D.GetBoundingBox();
-            if(boundingBox3D == null)
+            if (boundingBox3D == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox();
-            if(boundingBox3D_Shell == null)
+            if (boundingBox3D_Shell == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
-            if(!boundingBox3D.InRange(boundingBox3D_Shell, tolerance_Distance))
+            if (!boundingBox3D.InRange(boundingBox3D_Shell, tolerance_Distance))
             {
                 return new PlanarIntersectionResult(plane);
             }
 
             List<Face3D> face3Ds = shell.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return new PlanarIntersectionResult(plane);
             }
@@ -635,8 +638,8 @@ namespace SAM.Geometry.Spatial
             List<ISAMGeometry3D> geometry3Ds = new List<ISAMGeometry3D>();
             foreach (Face3D face3D_Shell in face3Ds)
             {
-                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(face3D, face3D_Shell,tolerance_Angle, tolerance_Distance);
-                if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(face3D, face3D_Shell, tolerance_Angle, tolerance_Distance);
+                if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
                 {
                     continue;
                 }
@@ -677,13 +680,13 @@ namespace SAM.Geometry.Spatial
 
         public static PlanarIntersectionResult PlanarIntersectionResult(Face3D face3D, IEnumerable<Face3D> face3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
@@ -706,7 +709,7 @@ namespace SAM.Geometry.Spatial
         public static PlanarIntersectionResult PlanarIntersectionResult(Face3D face3D, Plane plane, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
             PlanarIntersectionResult planarIntersectionResult = PlanarIntersectionResult(plane, face3D, tolerance_Angle, tolerance_Distance);
-            if(planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
             {
                 return planarIntersectionResult;
             }

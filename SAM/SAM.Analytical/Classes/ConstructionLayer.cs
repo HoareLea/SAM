@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Architectural;
 
 namespace SAM.Analytical
@@ -26,7 +29,7 @@ namespace SAM.Analytical
         {
             get
             {
-                if(string.IsNullOrWhiteSpace(Name))
+                if (string.IsNullOrWhiteSpace(Name))
                 {
                     return false;
                 }

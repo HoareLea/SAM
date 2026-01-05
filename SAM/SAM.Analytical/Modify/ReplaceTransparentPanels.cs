@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System;
 using System.Collections.Generic;
 
@@ -18,11 +21,11 @@ namespace SAM.Analytical
                 return result;
 
             Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 PanelType panelType = panel.PanelType;
 
-                if(panelType.PanelGroup() == PanelGroup.Wall)
+                if (panelType.PanelGroup() == PanelGroup.Wall)
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces(panel);
                     if (spaces == null || spaces.Count == 0)
@@ -46,8 +49,8 @@ namespace SAM.Analytical
                 if (construction_Panel == null)
                     construction_Panel = construction;
 
-                ApertureConstruction apertureConstruction = null; 
-                if(!dictionary.TryGetValue(construction_Panel.Guid, out apertureConstruction))
+                ApertureConstruction apertureConstruction = null;
+                if (!dictionary.TryGetValue(construction_Panel.Guid, out apertureConstruction))
                 {
                     apertureConstruction = new ApertureConstruction(Guid.NewGuid(), construction_Panel.Name, ApertureType.Window, construction_Panel.ConstructionLayers);
                     dictionary[construction_Panel.Guid] = apertureConstruction;

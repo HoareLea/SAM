@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Spatial;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -112,9 +115,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(!includeInternalEdges)
+            if (!includeInternalEdges)
             {
-                for (int i=0; i < geometry3Ds.Count; i++)
+                for (int i = 0; i < geometry3Ds.Count; i++)
                 {
                     Face3D face3D = geometry3Ds[i] as Face3D;
                     if (face3D == null)
@@ -123,7 +126,7 @@ namespace SAM.Analytical.Grasshopper
                     geometry3Ds[i] = new Face3D(face3D.GetExternalEdge3D());
                 }
             }
-            
+
             List<Panel> panels = Create.Panels(geometry3Ds, panel.PanelType, panel.Construction, minArea, tolerance);
             if (panels == null || panels.Count == 0)
             {

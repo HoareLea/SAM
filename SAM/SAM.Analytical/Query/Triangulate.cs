@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
 
@@ -20,7 +23,7 @@ namespace SAM.Analytical
                 return null;
 
             List<Panel> result = new List<Panel>();
-            for(int i=0; i < face3Ds.Count; i++)
+            for (int i = 0; i < face3Ds.Count; i++)
             {
                 Face3D face3D_Temp = face3Ds[i];
 
@@ -79,25 +82,25 @@ namespace SAM.Analytical
                 return null;
 
             AdjacencyCluster result = new AdjacencyCluster(adjacencyCluster);
-            if(!includePanels && !includeApertures)
+            if (!includePanels && !includeApertures)
             {
                 return result;
             }
-            
+
             List<Panel> panels = result.GetPanels();
-            if(panels != null && panels.Count > 0)
+            if (panels != null && panels.Count > 0)
             {
-                foreach(Panel panel in panels)
+                foreach (Panel panel in panels)
                 {
-                    if(panel == null)
+                    if (panel == null)
                     {
                         continue;
                     }
 
                     List<Panel> panels_Temp = null;
-                    if(includePanels)
+                    if (includePanels)
                     {
-                        if(internalEdgesOnly)
+                        if (internalEdgesOnly)
                         {
                             Face3D face3D = panel.GetFace3D();
                             if (face3D == null)
@@ -106,7 +109,7 @@ namespace SAM.Analytical
                             }
 
                             List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
-                            if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+                            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                             {
                                 continue;
                             }
@@ -119,33 +122,33 @@ namespace SAM.Analytical
                         panels_Temp = new List<Panel>() { new Panel(panel) };
                     }
 
-                    if(panels_Temp == null)
+                    if (panels_Temp == null)
                     {
                         continue;
                     }
 
-                    List<IJSAMObject> relatedObjects = result.GetRelatedObjects(panel); 
+                    List<IJSAMObject> relatedObjects = result.GetRelatedObjects(panel);
 
-                    foreach(Panel panel_Temp in panels_Temp)
+                    foreach (Panel panel_Temp in panels_Temp)
                     {
-                        if(panel_Temp == null)
+                        if (panel_Temp == null)
                         {
                             continue;
                         }
 
-                        if(includeApertures && panel_Temp.HasApertures)
+                        if (includeApertures && panel_Temp.HasApertures)
                         {
                             List<Aperture> apertures = panel_Temp.Apertures;
                             panel_Temp.RemoveApertures();
-                            foreach(Aperture aperture in apertures)
+                            foreach (Aperture aperture in apertures)
                             {
                                 aperture.Triangulate(tolerance)?.ForEach(x => panel_Temp.AddAperture(x));
                             }
                         }
-                        
+
                         result.AddObject(panel_Temp);
 
-                        if(relatedObjects != null && relatedObjects.Count > 0)
+                        if (relatedObjects != null && relatedObjects.Count > 0)
                         {
                             foreach (IJSAMObject relatedObject in relatedObjects)
                             {

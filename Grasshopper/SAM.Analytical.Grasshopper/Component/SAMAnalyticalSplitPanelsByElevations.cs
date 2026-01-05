@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -27,7 +30,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -67,21 +70,21 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             List<Panel> panels = new List<Panel>();
-            if(!dataAccess.GetDataList(0, panels))
+            if (!dataAccess.GetDataList(0, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if(!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
+            if (!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<Plane> planes = new List<Plane>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
                 object @object = objectWrapper.Value;
 
@@ -115,7 +118,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     plane = ((GH_Plane)@object).ToSAM();
                 }
-                else if(@object is global::Rhino.Geometry.Plane)
+                else if (@object is global::Rhino.Geometry.Plane)
                 {
                     plane = Geometry.Rhino.Convert.ToSAM(((global::Rhino.Geometry.Plane)@object));
                 }
@@ -135,21 +138,21 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double threshold = double.NaN;
-            if(!dataAccess.GetData(2, ref threshold))
+            if (!dataAccess.GetData(2, ref threshold))
             {
                 threshold = double.NaN;
             }
 
-            if(double.IsNaN(threshold))
+            if (double.IsNaN(threshold))
             {
                 threshold = 0;
             }
 
             List<Panel> result = new List<Panel>();
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 List<Panel> panels_Temp = Analytical.Query.Cut(panel, planes, threshold, Core.Tolerance.Distance);
-                if(panels_Temp != null)
+                if (panels_Temp != null)
                 {
                     result.AddRange(panels_Temp);
                 }
@@ -163,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
             foreach (Panel panel_Temp in result)
             {
                 BoundingBox3D boundingBox3D = panel_Temp?.GetBoundingBox();
-                if(boundingBox3D == null)
+                if (boundingBox3D == null)
                 {
                     continue;
                 }
@@ -176,14 +179,14 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Plane> planes_Temp = null;
 
-                planes_Temp =  planes.FindAll(x => x.Below(point3D_Max) || x.On(point3D_Max));
+                planes_Temp = planes.FindAll(x => x.Below(point3D_Max) || x.On(point3D_Max));
                 max = planes_Temp == null || planes_Temp.Count == 0 ? boundingBox3D_Max.Max.Z : planes_Temp.First().Origin.Z;
 
                 planes_Temp = planes.FindAll(x => x.Above(point3D_Min) || x.On(point3D_Min));
                 min = planes_Temp == null || planes_Temp.Count == 0 ? boundingBox3D_Max.Min.Z : planes_Temp.Last().Origin.Z;
 
-                Tuple<double, double, List<Panel>>  tuple = tuples.Find(x => x.Item1 == max && x.Item2 == min);
-                if(tuple == null)
+                Tuple<double, double, List<Panel>> tuple = tuples.Find(x => x.Item1 == max && x.Item2 == min);
+                if (tuple == null)
                 {
                     tuple = new Tuple<double, double, List<Panel>>(max, min, new List<Panel>());
                     tuples.Add(tuple);

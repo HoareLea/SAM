@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -17,7 +20,7 @@ namespace SAM.Analytical
 
             //Extracting Roof Panels data (Face2D is 2D Face representation on horizontal plane)
             List<Tuple<Face2D, Panel>> tuples_Roof = new List<Tuple<Face2D, Panel>>();
-            foreach(Panel roof in roofs)
+            foreach (Panel roof in roofs)
             {
                 Face3D face3D = roof.GetFace3D();
                 if (face3D == null)
@@ -46,19 +49,19 @@ namespace SAM.Analytical
 
             //Extracting Shell data (Face2D is Section of Shell on offset)
             List<Tuple<Face2D, Shell>> tuples_Shell = new List<Tuple<Face2D, Shell>>();
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
                 BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
                 if (boundingBox3D == null)
                     continue;
 
                 Plane plane_Temp = plane.GetMoved(new Vector3D(0, 0, boundingBox3D.Min.Z + offset)) as Plane;
-                
+
                 List<Face3D> face3Ds = shell?.Section(plane_Temp, true, tolerance_Angle, tolerance_Distance, tolerance_Snap);
                 if (face3Ds == null)
                     continue;
-                
-                foreach(Face3D face3D in face3Ds)
+
+                foreach (Face3D face3D in face3Ds)
                 {
                     Face2D face2D = plane.Convert(face3D);
                     if (face2D == null)
@@ -93,9 +96,9 @@ namespace SAM.Analytical
             }
 
             //Adding missing parts of roofs to Roof face2Ds
-            if(face2Ds_Difference_Shell != null && face2Ds_Difference_Shell.Count > 0)
+            if (face2Ds_Difference_Shell != null && face2Ds_Difference_Shell.Count > 0)
             {
-                for(int i=0; i < tuples_Roof.Count; i++)
+                for (int i = 0; i < tuples_Roof.Count; i++)
                 {
                     Face2D face2D = Geometry.Planar.Query.Join(tuples_Roof[i].Item1, face2Ds_Difference_Shell, tolerance_Distance);
                     if (face2D == null)
@@ -107,7 +110,7 @@ namespace SAM.Analytical
 
             //Creating new 3D geometry of Roofs (Face3Ds) including missing parts of roofs
             List<Tuple<Face3D, Panel>> tuples_Face3D = new List<Tuple<Face3D, Panel>>();
-            foreach(Tuple<Face2D, Panel> tuple_Roof in tuples_Roof)
+            foreach (Tuple<Face2D, Panel> tuple_Roof in tuples_Roof)
             {
                 Plane plane_Roof = tuple_Roof.Item2.Plane;
 
@@ -115,7 +118,7 @@ namespace SAM.Analytical
 
                 //Offseting Face2D to make sure it intersect with other roof panels
                 List<Face2D> face2Ds_Offset = face2D.Offset(1, true, false, tolerance_Distance);
-                foreach(Face2D face2D_Offset in face2Ds_Offset)
+                foreach (Face2D face2D_Offset in face2Ds_Offset)
                 {
                     //Adding missing parts of Face2D resulting from shells section (union of shells) and roof face difference
                     List<Face2D> face2Ds_Intersection = new List<Face2D>();
@@ -161,9 +164,9 @@ namespace SAM.Analytical
 
                     //Converting Segment3Ds (Roofs Face3Ds intersections) to Segment2Ds
                     List<Segment2D> segment2Ds = segment3Ds.ConvertAll(x => plane.Convert(plane.Project(x)));
-                    
+
                     List<Face3D> face3Ds = new List<Face3D>();
-                    
+
                     //Adding Roof Panel geometry to Segment2Ds and creating list of Face3Ds
                     foreach (Tuple<Face3D, Panel> tuple in tuples_Face3D)
                     {
@@ -259,7 +262,7 @@ namespace SAM.Analytical
 
             //Generate Panels from new Face3Ds
             List<Panel> result = new List<Panel>();
-            foreach(Tuple<Face3D, Panel> tuple in tuples_Face3D)
+            foreach (Tuple<Face3D, Panel> tuple in tuples_Face3D)
             {
                 Guid guid = tuple.Item2.Guid;
                 if (result.Find(x => x.Guid == guid) != null)

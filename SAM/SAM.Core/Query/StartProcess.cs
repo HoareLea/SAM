@@ -1,4 +1,7 @@
-﻿using System.Diagnostics;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Diagnostics;
 
 namespace SAM.Core
 {
@@ -6,7 +9,7 @@ namespace SAM.Core
     {
         public static Process StartProcess(this string path, string arguments = null)
         {
-            if(string.IsNullOrWhiteSpace(path))
+            if (string.IsNullOrWhiteSpace(path))
             {
                 return null;
             }

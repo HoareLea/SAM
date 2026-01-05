@@ -1,8 +1,10 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 
 namespace SAM.Analytical
 {
@@ -19,7 +21,7 @@ namespace SAM.Analytical
 
         public Function(Function function)
         {
-            if(function != null)
+            if (function != null)
             {
                 name = function.name;
                 values = function.values == null ? null : [.. function.values];
@@ -43,11 +45,11 @@ namespace SAM.Analytical
         {
             get
             {
-                if(values is null || index >= values.Count)
+                if (values is null || index >= values.Count)
                 {
                     return double.NaN;
                 }
-                
+
                 return values[index];
             }
 
@@ -91,15 +93,15 @@ namespace SAM.Analytical
 
         public FunctionType GetFunctionType()
         {
-            string name_Temp = name?.Trim().ToLower(); 
-            if(string.IsNullOrWhiteSpace(name_Temp))
+            string name_Temp = name?.Trim().ToLower();
+            if (string.IsNullOrWhiteSpace(name_Temp))
             {
                 return FunctionType.Undefined;
             }
 
-            foreach(FunctionType functionType in Enum.GetValues(typeof(FunctionType)))
+            foreach (FunctionType functionType in Enum.GetValues(typeof(FunctionType)))
             {
-                if(name_Temp.Equals(functionType.ToString()))
+                if (name_Temp.Equals(functionType.ToString()))
                 {
                     return functionType;
                 }
@@ -126,7 +128,7 @@ namespace SAM.Analytical
             if (values != null)
             {
                 JArray jArray = [];
-                foreach(double value in values)
+                foreach (double value in values)
                 {
                     jArray.Add(value);
                 }
@@ -139,11 +141,11 @@ namespace SAM.Analytical
 
         public override string ToString()
         {
-            List<string> strings = [ name ?? string.Empty];
-            
-            if(values != null)
+            List<string> strings = [name ?? string.Empty];
+
+            if (values != null)
             {
-                foreach(double value in values)
+                foreach (double value in values)
                 {
                     strings.Add(value.ToString());
                 }

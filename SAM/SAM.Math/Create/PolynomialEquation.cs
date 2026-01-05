@@ -1,4 +1,7 @@
-﻿using MathNet.Numerics;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using MathNet.Numerics;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -19,13 +22,13 @@ namespace SAM.Math
                 return null;
             }
 
-            if(x.Count() == 1)
+            if (x.Count() == 1)
             {
                 return null;
             }
 
             int order_Temp = order;
-            if(order_Temp == -1)
+            if (order_Temp == -1)
             {
                 order_Temp = count - 1;
             }

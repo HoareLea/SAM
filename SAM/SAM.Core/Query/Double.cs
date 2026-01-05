@@ -1,18 +1,21 @@
-﻿namespace SAM.Core
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Core
 {
     public static partial class Query
     {
         public static double Double(this UTC uTC)
         {
-            if(uTC == Core.UTC.Undefined)
+            if (uTC == Core.UTC.Undefined)
             {
                 return double.NaN;
             }
 
-            switch(uTC)
+            switch (uTC)
             {
                 case Core.UTC.Minus1200:
-                    return - 12.0;
+                    return -12.0;
 
                 case Core.UTC.Minus1100:
                     return -11.0;

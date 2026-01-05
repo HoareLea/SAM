@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Rhino.Geometry;
@@ -40,14 +43,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooTableModifierParam() { Name = "_tableModifier", NickName = "_tableModifier", Description = "SAM Core TableModifier", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooTableModifierParam() { Name = "_tableModifier", NickName = "_tableModifier", Description = "SAM Core TableModifier", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 return result.ToArray();
             }
@@ -90,7 +93,7 @@ namespace SAM.Core.Grasshopper
             }
 
             IEnumerable<string> names = tableModifier.Headers;
-            if(names == null)
+            if (names == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "TableModifier has no columns");
                 return;
@@ -101,7 +104,7 @@ namespace SAM.Core.Grasshopper
             double[,] values = tableModifier.GetValues(out List<string> columnHeader, out List<List<string>> rowHeaders);
 
             DataTree<string> dataTree_RowHeaders = new DataTree<string>();
-            for(int i =0; i < rowHeaders.Count; i++)
+            for (int i = 0; i < rowHeaders.Count; i++)
             {
                 dataTree_RowHeaders.AddRange(rowHeaders[i], new GH_Path(i));
             }

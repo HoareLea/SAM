@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
@@ -21,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -61,7 +64,7 @@ namespace SAM.Analytical.Grasshopper
             int index;
 
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1)
+            if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -78,20 +81,20 @@ namespace SAM.Analytical.Grasshopper
             List<Space> spaces = new List<Space>();
             dataAccess.GetDataList(index, spaces);
 
-            if(spaces != null && spaces.Count == 0)
+            if (spaces != null && spaces.Count == 0)
             {
                 spaces = null;
             }
 
-            if(analyticalObject is AnalyticalModel || analyticalObject is AdjacencyCluster)
+            if (analyticalObject is AnalyticalModel || analyticalObject is AdjacencyCluster)
             {
                 AdjacencyCluster adjacencyCluster = null;
-                if(analyticalObject is AnalyticalModel)
+                if (analyticalObject is AnalyticalModel)
                     adjacencyCluster = ((AnalyticalModel)analyticalObject).AdjacencyCluster;
-                else if(analyticalObject is AdjacencyCluster)
+                else if (analyticalObject is AdjacencyCluster)
                     adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
 
-                if(adjacencyCluster != null)
+                if (adjacencyCluster != null)
                 {
                     adjacencyCluster.UpdateDaylightFactors(spaces);
 
@@ -101,7 +104,7 @@ namespace SAM.Analytical.Grasshopper
                         analyticalObject = adjacencyCluster;
                 }
             }
-            else if(analyticalObject is Space)
+            else if (analyticalObject is Space)
             {
 
             }

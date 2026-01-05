@@ -1,4 +1,7 @@
-﻿using SAM.Architectural;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
 
 namespace SAM.Analytical
 {
@@ -6,26 +9,26 @@ namespace SAM.Analytical
     {
         public static BoundaryType? BoundaryType(this BuildingModel buildingModel, IPartition partition)
         {
-            if(partition == null)
+            if (partition == null)
             {
                 return null;
             }
 
-            if(partition is IHostPartition)
+            if (partition is IHostPartition)
             {
-                if(Adiabatic((IHostPartition)partition))
+                if (Adiabatic((IHostPartition)partition))
                 {
                     return Analytical.BoundaryType.Adiabatic;
                 }
             }
 
-            if(buildingModel.Shade(partition))
+            if (buildingModel.Shade(partition))
             {
                 return Analytical.BoundaryType.Shade;
             }
 
             ITerrain terrain = buildingModel.Terrain;
-            if(terrain != null)
+            if (terrain != null)
             {
                 if (terrain.Below(partition.Face3D) || terrain.On(partition.Face3D))
                 {
@@ -33,7 +36,7 @@ namespace SAM.Analytical
                 }
             }
 
-            if(buildingModel.External(partition))
+            if (buildingModel.External(partition))
             {
                 return Analytical.BoundaryType.Exposed;
             }

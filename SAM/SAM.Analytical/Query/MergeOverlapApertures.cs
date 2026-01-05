@@ -1,5 +1,8 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Geometry.Planar;
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +13,7 @@ namespace SAM.Analytical
     {
         public static List<Panel> MergeOverlapApertures(this IEnumerable<Panel> panels, bool validateConstruction = true, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(panels == null)
+            if (panels == null)
             {
                 return null;
             }
@@ -61,17 +64,17 @@ namespace SAM.Analytical
             }
 
             List<List<Aperture>> aperturesList = new List<List<Aperture>>();
-            if(validateConstruction)
+            if (validateConstruction)
             {
                 Dictionary<string, List<Aperture>> dictionary = new Dictionary<string, List<Aperture>>();
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                     string name = apertureConstruction?.Name;
                     if (name == null)
                         name = string.Empty;
 
-                    if(!dictionary.TryGetValue(name, out List<Aperture> apertures_Temp))
+                    if (!dictionary.TryGetValue(name, out List<Aperture> apertures_Temp))
                     {
                         apertures_Temp = new List<Aperture>();
                         dictionary[name] = apertures_Temp;
@@ -90,17 +93,17 @@ namespace SAM.Analytical
             }
 
 
-            foreach(List<Aperture> apertures_Temp in aperturesList)
+            foreach (List<Aperture> apertures_Temp in aperturesList)
             {
                 List<Aperture> apertures_Merged = MergeOverlapApertures(apertures_Temp, minArea, tolerance);
-                if(apertures_Merged == null || apertures_Merged.Count == 0)
+                if (apertures_Merged == null || apertures_Merged.Count == 0)
                 {
                     continue;
                 }
 
                 panel_New.RemoveApertures();
 
-                foreach(Aperture aperture_New in apertures_Merged)
+                foreach (Aperture aperture_New in apertures_Merged)
                 {
                     panel_New.AddAperture(aperture_New);
                 }
@@ -112,22 +115,22 @@ namespace SAM.Analytical
 
         public static List<Aperture> MergeOverlapApertures(this IEnumerable<Aperture> apertures, double minArea = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if(apertures == null)
+            if (apertures == null)
             {
                 return null;
             }
 
 
             List<Tuple<Aperture, Face3D, Point3D>> tuples = new List<Tuple<Aperture, Face3D, Point3D>>();
-            foreach(Aperture aperture in apertures)
+            foreach (Aperture aperture in apertures)
             {
                 Face3D face3D = aperture?.GetFace3D();
-                if(face3D == null || !face3D.IsValid())
+                if (face3D == null || !face3D.IsValid())
                 {
                     continue;
                 }
 
-                if(face3D.GetArea() < minArea)
+                if (face3D.GetArea() < minArea)
                 {
                     continue;
                 }
@@ -142,12 +145,12 @@ namespace SAM.Analytical
             }
 
             List<Aperture> result = new List<Aperture>();
-            while(tuples.Count != 0)
+            while (tuples.Count != 0)
             {
                 Plane plane = tuples[0].Item2.GetPlane();
 
                 List<Tuple<Aperture, Face3D, Point3D>> tuples_Coplanar = tuples.FindAll(x => x.Item2.GetPlane().Coplanar(plane, tolerance));
-                if(tuples_Coplanar == null || tuples_Coplanar.Count == 0)
+                if (tuples_Coplanar == null || tuples_Coplanar.Count == 0)
                 {
                     result.Add(tuples[0].Item1);
                     tuples.RemoveAt(0);
@@ -156,25 +159,25 @@ namespace SAM.Analytical
 
                 tuples_Coplanar.ForEach(x => tuples.Remove(x));
 
-                if(tuples_Coplanar.Count == 1)
+                if (tuples_Coplanar.Count == 1)
                 {
                     result.Add(tuples_Coplanar[0].Item1);
                     continue;
                 }
 
                 List<Face2D> face2Ds_Union = new List<Face2D>();
-                foreach(Tuple<Aperture, Face3D, Point3D> tuple in tuples_Coplanar)
+                foreach (Tuple<Aperture, Face3D, Point3D> tuple in tuples_Coplanar)
                 {
                     Face2D face2D = plane.Convert(tuple.Item2);
 
                     List<Face2D> face2Ds_Intersection = new List<Face2D>() { face2D };
-                    foreach(Face2D face2D_Union in face2Ds_Union)
+                    foreach (Face2D face2D_Union in face2Ds_Union)
                     {
                         List<Face2D> face2Ds_Intersection_Temp = new List<Face2D>();
                         foreach (Face2D face2D_Intersection in face2Ds_Intersection)
                         {
                             List<Face2D> face2Ds_Difference = face2D_Intersection.Difference(face2D_Union, tolerance);
-                            if(face2Ds_Difference != null && face2Ds_Difference.Count != 0)
+                            if (face2Ds_Difference != null && face2Ds_Difference.Count != 0)
                             {
                                 face2Ds_Intersection_Temp.AddRange(face2Ds_Difference);
                             }
@@ -193,7 +196,7 @@ namespace SAM.Analytical
                         }
 
                         Face3D face3D = plane.Convert(face2D_Intersection);
-                        if(!face3D.IsValid())
+                        if (!face3D.IsValid())
                         {
                             continue;
                         }

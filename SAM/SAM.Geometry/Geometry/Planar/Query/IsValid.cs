@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Planar
 {
@@ -42,7 +45,7 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this IClosed2D closed2D)
         {
-            if(closed2D == null)
+            if (closed2D == null)
             {
                 return false;
             }
@@ -52,20 +55,20 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this Polygon2D polygon2D)
         {
-            if(polygon2D == null)
+            if (polygon2D == null)
             {
                 return false;
             }
 
             List<Point2D> point2Ds = polygon2D.GetPoints();
-            if(point2Ds == null || point2Ds.Count < 3)
+            if (point2Ds == null || point2Ds.Count < 3)
             {
                 return false;
             }
 
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
-                if(!IsValid( point2D))
+                if (!IsValid(point2D))
                 {
                     return false;
                 }
@@ -76,17 +79,17 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this Rectangle2D rectangle2D)
         {
-            if(rectangle2D == null)
+            if (rectangle2D == null)
             {
                 return false;
             }
 
-            if(!IsValid(rectangle2D.Origin))
+            if (!IsValid(rectangle2D.Origin))
             {
                 return false;
             }
 
-            if(double.IsNaN(rectangle2D.Width))
+            if (double.IsNaN(rectangle2D.Width))
             {
                 return false;
             }
@@ -176,22 +179,22 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this Face2D face2D)
         {
-            if(face2D == null)
+            if (face2D == null)
             {
                 return false;
             }
 
-            if(!IsValid(face2D.ExternalEdge2D))
+            if (!IsValid(face2D.ExternalEdge2D))
             {
                 return false;
             }
 
             List<IClosed2D> closed2Ds = face2D.InternalEdge2Ds;
-            if(closed2Ds != null && closed2Ds.Count != 0)
+            if (closed2Ds != null && closed2Ds.Count != 0)
             {
-                foreach(IClosed2D closed2D in closed2Ds)
+                foreach (IClosed2D closed2D in closed2Ds)
                 {
-                    if(!IsValid(closed2D))
+                    if (!IsValid(closed2D))
                     {
                         return false;
                     }
@@ -203,17 +206,17 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this Line2D line2D)
         {
-            if(line2D  == null)
+            if (line2D == null)
             {
                 return false;
             }
 
-            if(!IsValid( line2D.Origin))
+            if (!IsValid(line2D.Origin))
             {
                 return false;
             }
 
-            if(!IsValid(line2D.Direction))
+            if (!IsValid(line2D.Direction))
             {
                 return false;
             }
@@ -223,7 +226,7 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this ICurve2D curve2D)
         {
-            if(curve2D == null)
+            if (curve2D == null)
             {
                 return false;
             }
@@ -233,20 +236,20 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this Polycurve2D polycurve2D)
         {
-            if(polycurve2D == null)
+            if (polycurve2D == null)
             {
                 return false;
             }
 
             List<ICurve2D> curve2Ds = polycurve2D.GetCurves();
-            if(curve2Ds == null || curve2Ds.Count == 0)
+            if (curve2Ds == null || curve2Ds.Count == 0)
             {
                 return false;
             }
 
-            foreach(ICurve2D curve2D in curve2Ds)
+            foreach (ICurve2D curve2D in curve2Ds)
             {
-                if(!IsValid(curve2D))
+                if (!IsValid(curve2D))
                 {
                     return false;
                 }
@@ -257,13 +260,13 @@ namespace SAM.Geometry.Planar
 
         public static bool IsValid(this PolycurveLoop2D polycurveLoop2D)
         {
-            if(polycurveLoop2D == null)
+            if (polycurveLoop2D == null)
             {
                 return false;
             }
 
             List<ICurve2D> curve2Ds = polycurveLoop2D.GetCurves();
-            if(curve2Ds == null || curve2Ds.Count == 0)
+            if (curve2Ds == null || curve2Ds.Count == 0)
             {
                 return false;
             }
@@ -290,7 +293,7 @@ namespace SAM.Geometry.Planar
         public static bool IsValid(this Triangle2D triangle2D)
         {
             List<Point2D> point2Ds = triangle2D?.GetPoints();
-            if(point2Ds == null || point2Ds.Count != 3)
+            if (point2Ds == null || point2Ds.Count != 3)
             {
                 return false;
             }

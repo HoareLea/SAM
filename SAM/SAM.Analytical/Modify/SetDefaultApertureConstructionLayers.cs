@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -9,17 +12,17 @@ namespace SAM.Analytical
         public static IEnumerable<Aperture> SetDefaultApertureConstructionLayers(this AdjacencyCluster adjacencyCluster, IEnumerable<Guid> guids = null)
         {
             List<Panel> panels = adjacencyCluster?.GetPanels();
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return null;
             }
 
             List<Tuple<ApertureConstruction, List<Tuple<Aperture, Guid, PanelType>>>> tuples = new List<Tuple<ApertureConstruction, List<Tuple<Aperture, Guid, PanelType>>>>();
 
-            foreach(Panel panel in panels)
+            foreach (Panel panel in panels)
             {
                 List<Aperture> apertures_Panel = panel?.Apertures;
-                if(apertures_Panel == null || apertures_Panel.Count == 0)
+                if (apertures_Panel == null || apertures_Panel.Count == 0)
                 {
                     continue;
                 }
@@ -27,9 +30,9 @@ namespace SAM.Analytical
                 PanelType panelType = panel.PanelType;
 
                 List<Aperture> apertures = new List<Aperture>();
-                foreach(Aperture aperture_Panel in apertures_Panel)
+                foreach (Aperture aperture_Panel in apertures_Panel)
                 {
-                    if(aperture_Panel == null)
+                    if (aperture_Panel == null)
                     {
                         continue;
                     }
@@ -40,12 +43,12 @@ namespace SAM.Analytical
                     }
 
                     ApertureConstruction apertureConstruction_Default = Query.DefaultApertureConstruction(panel, aperture_Panel.ApertureType);
-                    if(apertureConstruction_Default == null)
+                    if (apertureConstruction_Default == null)
                     {
                         continue;
                     }
 
-                    if(aperture_Panel.Name != null && apertureConstruction_Default.Name == aperture_Panel.Name)
+                    if (aperture_Panel.Name != null && apertureConstruction_Default.Name == aperture_Panel.Name)
                     {
                         continue;
                     }
@@ -53,20 +56,20 @@ namespace SAM.Analytical
                     apertures.Add(aperture_Panel);
                 }
 
-                if(apertures == null || apertures.Count == 0)
+                if (apertures == null || apertures.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(Aperture aperture in apertures)
+                foreach (Aperture aperture in apertures)
                 {
                     ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
                     int index = tuples.FindIndex(x => apertureConstruction == null ? x == null : apertureConstruction.Guid == x.Item1?.Guid);
 
                     Tuple<ApertureConstruction, List<Tuple<Aperture, Guid, PanelType>>> tuple = null;
 
-                    if (index != -1) 
-                    { 
+                    if (index != -1)
+                    {
                         tuple = tuples[index];
                     }
                     else
@@ -80,19 +83,19 @@ namespace SAM.Analytical
             }
 
             List<Aperture> result = new List<Aperture>();
-            foreach(Tuple<ApertureConstruction, List<Tuple<Aperture, Guid, PanelType>>> tuple in tuples)
+            foreach (Tuple<ApertureConstruction, List<Tuple<Aperture, Guid, PanelType>>> tuple in tuples)
             {
                 ApertureConstruction apertureConstruction = tuple.Item1;
 
-                foreach(ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
+                foreach (ApertureType apertureType in Enum.GetValues(typeof(ApertureType)))
                 {
                     List<Tuple<Aperture, Guid, PanelType>> tuples_ApertureType = tuple.Item2.FindAll(x => x.Item1.ApertureType == apertureType);
-                    if(tuples_ApertureType == null || tuples_ApertureType.Count == 0)
+                    if (tuples_ApertureType == null || tuples_ApertureType.Count == 0)
                     {
                         continue;
                     }
 
-                    foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+                    foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
                     {
                         List<Tuple<Aperture, Guid, PanelType>> tuples_PanelType = tuple.Item2.FindAll(x => x.Item3 == panelType);
                         if (tuples_PanelType == null || tuples_PanelType.Count == 0)

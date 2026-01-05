@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -34,14 +37,14 @@ namespace SAM.Core.Grasshopper
         {
         }
 
-        
+
 
         protected override GH_SAMParam[] Inputs
         {
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_number", NickName = "_number", Description = "Number", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number { Name = "_number", NickName = "_number", Description = "Number", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer { Name = "numberOfDecimals_", NickName = "numberOfDecimals_", Description = "Number Of Decimals", Access = GH_ParamAccess.item, Optional = true };
                 param_Integer.SetPersistentData(2);
                 result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));

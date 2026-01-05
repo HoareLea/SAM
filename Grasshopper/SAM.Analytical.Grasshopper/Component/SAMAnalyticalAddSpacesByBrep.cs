@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -46,7 +49,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = [];
 
-                GooAnalyticalObjectParam gooAnalyticalObjectParam = new () { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item };
+                GooAnalyticalObjectParam gooAnalyticalObjectParam = new() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooAnalyticalObjectParam, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new()
@@ -106,11 +109,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            if(analyticalObject is AdjacencyCluster adjacencyCluster)
+            if (analyticalObject is AdjacencyCluster adjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
             }
-            else if(analyticalObject is AnalyticalModel analyticalModel)
+            else if (analyticalObject is AnalyticalModel analyticalModel)
             {
                 adjacencyCluster = new AdjacencyCluster(analyticalModel.AdjacencyCluster);
             }
@@ -151,16 +154,16 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref tolerance);
             }
 
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
                 Analytical.Modify.Merge(adjacencyCluster, shell, silverSpacing: silverSpacing, tolerance_Distance: tolerance);
             }
 
-            if(analyticalObject is AdjacencyCluster)
+            if (analyticalObject is AdjacencyCluster)
             {
                 analyticalObject = adjacencyCluster;
             }
-            else if(analyticalObject is AnalyticalModel analyticalModel)
+            else if (analyticalObject is AnalyticalModel analyticalModel)
             {
                 analyticalObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }

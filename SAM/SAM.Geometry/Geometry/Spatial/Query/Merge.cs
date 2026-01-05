@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -7,7 +10,7 @@ namespace SAM.Geometry.Spatial
         public static Shell Merge(this Shell shell, double tolerance = Core.Tolerance.Distance)
         {
             List<Face3D> face3Ds = shell?.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }

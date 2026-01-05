@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 
@@ -23,13 +26,13 @@ namespace SAM.Geometry.Object
             if (sAMGeometryObjectCollection != null)
             {
                 List<ISAMGeometryObject> sAMGeometryObjects_Temp = sAMGeometryObjectCollection.sAMGeometryObjects;
-                if(sAMGeometryObjects_Temp != null)
+                if (sAMGeometryObjects_Temp != null)
                 {
                     sAMGeometryObjects = new List<ISAMGeometryObject>();
                     foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects_Temp)
                     {
                         ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
-                        if(sAMGeometryObject_Temp != null)
+                        if (sAMGeometryObject_Temp != null)
                         {
                             sAMGeometryObjects.Add(sAMGeometryObject_Temp);
                         }
@@ -43,10 +46,10 @@ namespace SAM.Geometry.Object
             if (sAMGeometryObjects != null)
             {
                 this.sAMGeometryObjects = new List<ISAMGeometryObject>();
-                foreach(ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects)
+                foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects)
                 {
                     ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
-                    if(sAMGeometryObject_Temp != null)
+                    if (sAMGeometryObject_Temp != null)
                     {
                         this.sAMGeometryObjects.Add(sAMGeometryObject_Temp);
                     }
@@ -57,7 +60,7 @@ namespace SAM.Geometry.Object
         public SAMGeometryObjectCollection(ISAMGeometryObject sAMGeometryObject)
         {
             ISAMGeometryObject sAMGeometryObject_Temp = Core.Query.Clone(sAMGeometryObject);
-            if(sAMGeometryObject_Temp != null)
+            if (sAMGeometryObject_Temp != null)
             {
                 sAMGeometryObjects = new List<ISAMGeometryObject>() { sAMGeometryObject_Temp };
             }
@@ -71,7 +74,7 @@ namespace SAM.Geometry.Object
                 return;
             }
 
-            if(sAMGeometryObjects == null)
+            if (sAMGeometryObjects == null)
             {
                 sAMGeometryObjects = new List<ISAMGeometryObject>();
             }
@@ -81,20 +84,20 @@ namespace SAM.Geometry.Object
 
         public bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("GeometryObjects"))
+            if (jObject.ContainsKey("GeometryObjects"))
             {
                 sAMGeometryObjects = new List<ISAMGeometryObject>();
 
                 JArray jArray = jObject.Value<JArray>("GeometryObjects");
-                foreach(JObject jObject_GeometryObject in jArray)
+                foreach (JObject jObject_GeometryObject in jArray)
                 {
                     ISAMGeometryObject sAMGeometryObject = Core.Query.IJSAMObject(jObject_GeometryObject) as ISAMGeometryObject;
-                    if(sAMGeometryObject != null)
+                    if (sAMGeometryObject != null)
                     {
                         sAMGeometryObjects.Add(sAMGeometryObject);
                     }
@@ -114,12 +117,12 @@ namespace SAM.Geometry.Object
             JObject jObject = new JObject();
             jObject.Add("_type", Core.Query.FullTypeName(this));
 
-            if(sAMGeometryObjects != null)
+            if (sAMGeometryObjects != null)
             {
                 JArray jArray = new JArray();
-                foreach(ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects)
+                foreach (ISAMGeometryObject sAMGeometryObject in sAMGeometryObjects)
                 {
-                    if(sAMGeometryObject == null)
+                    if (sAMGeometryObject == null)
                     {
                         continue;
                     }

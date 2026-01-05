@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 
@@ -8,25 +11,25 @@ namespace SAM.Core
     {
         public static List<int> FindIndexes<T>(this DataTable dataTable, string columnName, IEnumerable<T> values)
         {
-            if(dataTable == null || columnName == null)
+            if (dataTable == null || columnName == null)
             {
                 return null;
             }
 
             DataColumnCollection dataColumnCollection = dataTable.Columns;
-            if(dataColumnCollection == null || dataColumnCollection.Count == 0)
+            if (dataColumnCollection == null || dataColumnCollection.Count == 0)
             {
                 return null;
             }
 
             int index = dataTable.Columns.IndexOf(columnName);
-            if(index == -1)
+            if (index == -1)
             {
                 return null;
             }
 
             DataRowCollection dataRowCollection = dataTable.Rows;
-            if(dataRowCollection == null || dataRowCollection.Count == 0)
+            if (dataRowCollection == null || dataRowCollection.Count == 0)
             {
                 return null;
             }
@@ -34,14 +37,14 @@ namespace SAM.Core
             int count = values.Count();
 
             List<int> result = Enumerable.Repeat(-1, count).ToList();
-            for(int i =0; i < dataColumnCollection.Count; i++)
+            for (int i = 0; i < dataColumnCollection.Count; i++)
             {
                 if (!TryConvert(dataRowCollection[i][index], out T value))
                 {
                     continue;
                 }
 
-                for(int j = 0; j < count; j++)
+                for (int j = 0; j < count; j++)
                 {
                     T value_Temp = values.ElementAt(j);
 
@@ -54,7 +57,7 @@ namespace SAM.Core
                     }
                     else
                     {
-                        if(value.Equals(value_Temp))
+                        if (value.Equals(value_Temp))
                         {
                             result[j] = i;
                         }

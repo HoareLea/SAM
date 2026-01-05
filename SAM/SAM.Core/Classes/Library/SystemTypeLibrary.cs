@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 
@@ -63,7 +66,7 @@ namespace SAM.Core
             return true;
         }
 
-        public List<T> GetSystemTypes<T>() where T: ISystemType
+        public List<T> GetSystemTypes<T>() where T : ISystemType
         {
             return GetObjects<T>();
         }
@@ -72,7 +75,7 @@ namespace SAM.Core
         {
             if (string.IsNullOrWhiteSpace(text))
                 return null;
-            
+
             List<T> systemTypes = GetSystemTypes<T>();
             if (systemTypes == null || systemTypes.Count == 0)
                 return null;

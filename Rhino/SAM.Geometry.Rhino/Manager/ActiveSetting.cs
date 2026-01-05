@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using SAM.Core;
 using System.Reflection;
 
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Rhino
         private static Setting setting = Load();
 
         private static MeshingParameters meshingParameters;
-        
+
         private static Setting Load()
         {
             Setting setting = ActiveManager.GetSetting(Assembly.GetExecutingAssembly());

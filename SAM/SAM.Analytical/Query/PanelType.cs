@@ -1,4 +1,7 @@
-﻿using SAM.Architectural;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
 using System;
 
 namespace SAM.Analytical
@@ -9,7 +12,7 @@ namespace SAM.Analytical
         {
             if (@object == null)
                 return Analytical.PanelType.Undefined;
-            
+
             if (@object is PanelType)
                 return (PanelType)@object;
 
@@ -32,7 +35,7 @@ namespace SAM.Analytical
 
                 return Analytical.PanelType.Undefined;
             }
-                
+
 
             if (@object is ApertureConstruction)
             {
@@ -102,7 +105,7 @@ namespace SAM.Analytical
             {
                 string value = null;
 
-                if(includeDefaultConstructionNames)
+                if (includeDefaultConstructionNames)
                 {
                     value = DefaultConstruction(panelType)?.Name;
                     if (text.Equals(value))
@@ -137,7 +140,7 @@ namespace SAM.Analytical
             if (partition is IHostPartition)
             {
                 IHostPartition hostPartition = partition as IHostPartition;
-                if(hostPartition is Wall)
+                if (hostPartition is Wall)
                 {
                     Wall wall = (Wall)hostPartition;
 
@@ -168,14 +171,14 @@ namespace SAM.Analytical
                     return Analytical.PanelType.Wall;
                 }
 
-                if(hostPartition is Floor)
+                if (hostPartition is Floor)
                 {
                     Floor floor = (Floor)hostPartition;
 
                     ITerrain terrain = buildingModel.Terrain;
-                    if(terrain != null)
+                    if (terrain != null)
                     {
-                        if(terrain.On(floor))
+                        if (terrain.On(floor))
                         {
                             return Analytical.PanelType.SlabOnGrade;
                         }
@@ -199,7 +202,7 @@ namespace SAM.Analytical
                     return Analytical.PanelType.Floor;
                 }
 
-                if(hostPartition is Roof)
+                if (hostPartition is Roof)
                 {
                     Roof roof = (Roof)hostPartition;
 

@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -661,7 +664,7 @@ namespace SAM.Core
 
         public X GetObject(ObjectReference objectReference)
         {
-            if(objectReference == null)
+            if (objectReference == null)
             {
                 return default;
             }
@@ -1284,13 +1287,13 @@ namespace SAM.Core
 
         public bool RemoveObject(X @object)
         {
-            if(@object == null)
+            if (@object == null)
             {
                 return false;
             }
 
             Guid guid = GetGuid(@object);
-            if(guid == Guid.Empty)
+            if (guid == Guid.Empty)
             {
                 return false;
             }
@@ -1655,7 +1658,7 @@ namespace SAM.Core
             return default;
         }
 
-        public List<T> GetObjects<T>(ObjectReference objectReference) where T: X
+        public List<T> GetObjects<T>(ObjectReference objectReference) where T : X
         {
             if (objectReference == null)
             {
@@ -1663,15 +1666,15 @@ namespace SAM.Core
             }
 
             List<X> objects = GetObjects(objectReference, default);
-            if(objects == null)
+            if (objects == null)
             {
                 return null;
             }
 
             List<T> result = new List<T>();
-            foreach(X @object in objects)
+            foreach (X @object in objects)
             {
-                if(@object is T)
+                if (@object is T)
                 {
                     result.Add((T)@object);
                 }
@@ -1679,7 +1682,7 @@ namespace SAM.Core
 
             return result;
         }
-        
+
         private List<X> GetObjects(ObjectReference objectReference, X parent = default(X))
         {
             if (objectReference == null)
@@ -1874,23 +1877,23 @@ namespace SAM.Core
 
         protected List<X>? Merge(RelationCluster<X>? relationCluster)
         {
-            if(relationCluster is null)
+            if (relationCluster is null)
             {
                 return null;
             }
 
             List<X> result = [];
-            if(relationCluster.dictionary_Objects is not null)
+            if (relationCluster.dictionary_Objects is not null)
             {
                 foreach (KeyValuePair<string, Dictionary<Guid, X>> keyValuePair_Type in relationCluster.dictionary_Objects)
                 {
-                    if(!dictionary_Objects.TryGetValue(keyValuePair_Type.Key, out Dictionary<Guid, X> dictionary) || dictionary is null)
+                    if (!dictionary_Objects.TryGetValue(keyValuePair_Type.Key, out Dictionary<Guid, X> dictionary) || dictionary is null)
                     {
                         dictionary = [];
                         dictionary_Objects[keyValuePair_Type.Key] = dictionary;
                     }
 
-                    foreach(KeyValuePair<Guid, X> keyValuePair_Object in keyValuePair_Type.Value)
+                    foreach (KeyValuePair<Guid, X> keyValuePair_Object in keyValuePair_Type.Value)
                     {
                         dictionary[keyValuePair_Object.Key] = keyValuePair_Object.Value;
                         result.Add(keyValuePair_Object.Value);
@@ -1898,7 +1901,7 @@ namespace SAM.Core
                 }
             }
 
-            if(relationCluster.dictionary_Relations is not null)
+            if (relationCluster.dictionary_Relations is not null)
             {
                 foreach (KeyValuePair<string, Dictionary<Guid, HashSet<Guid>>> keyValuePair_Type in relationCluster.dictionary_Relations)
                 {
@@ -1908,9 +1911,9 @@ namespace SAM.Core
                         dictionary_Relations[keyValuePair_Type.Key] = dictionary;
                     }
 
-                    foreach (KeyValuePair< Guid, HashSet < Guid >> keyValuePair_Relation in keyValuePair_Type.Value)
-                    { 
-                        foreach(Guid guid in keyValuePair_Relation.Value)
+                    foreach (KeyValuePair<Guid, HashSet<Guid>> keyValuePair_Relation in keyValuePair_Type.Value)
+                    {
+                        foreach (Guid guid in keyValuePair_Relation.Value)
                         {
                             dictionary[keyValuePair_Relation.Key].Add(guid);
                         }

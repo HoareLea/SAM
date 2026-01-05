@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core
@@ -7,7 +10,7 @@ namespace SAM.Core
     {
         public static Period Period(int count)
         {
-            if(count < 2)
+            if (count < 2)
             {
                 return Core.Period.Undefined;
             }
@@ -20,7 +23,7 @@ namespace SAM.Core
             {
                 return Core.Period.Daily;
             }
-            else if(count > 12)
+            else if (count > 12)
             {
                 return Core.Period.Weekly;
             }
@@ -42,13 +45,13 @@ namespace SAM.Core
 
         public static Period Period(this IndexedDoubles indexedDoubles)
         {
-            if(indexedDoubles == null)
+            if (indexedDoubles == null)
             {
                 return Core.Period.Undefined;
             }
 
             IEnumerable<int> keys = indexedDoubles.Keys;
-            if(keys == null)
+            if (keys == null)
             {
                 return Core.Period.Undefined;
             }

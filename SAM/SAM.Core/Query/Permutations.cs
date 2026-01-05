@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +11,7 @@ namespace SAM.Core
     {
         public static List<List<T>> Permutations<T>(this IEnumerable<T> @in) where T : IComparable
         {
-            if(@in == null)
+            if (@in == null)
             {
                 return null;
             }
@@ -27,13 +30,13 @@ namespace SAM.Core
                 return result;
             }
 
-            if(result == null || result.Count < 2)
+            if (result == null || result.Count < 2)
             {
                 return result;
             }
 
             List<List<T>> result_New = new List<List<T>>();
-            while(result.Count > 0)
+            while (result.Count > 0)
             {
                 List<T> values = result[0];
 
@@ -52,7 +55,7 @@ namespace SAM.Core
 
         private static void Permutations<T>(this List<T> @in, int start, List<List<T>> @out) where T : IComparable
         {
-            if(start == @in.Count - 1)
+            if (start == @in.Count - 1)
             {
                 @out.Add(new List<T>(@in));
                 return;

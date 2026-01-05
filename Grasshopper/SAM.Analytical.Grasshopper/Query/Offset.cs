@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,12 +12,12 @@ namespace SAM.Analytical.Grasshopper
     {
         public static List<Face3D> Offset(this IEnumerable<Face3D> face3Ds, IEnumerable<double> values, bool percentage)
         {
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
 
-            if(face3Ds.Count() == 0 || values == null || values.Count() == 0)
+            if (face3Ds.Count() == 0 || values == null || values.Count() == 0)
             {
                 return new List<Face3D>(face3Ds);
             }

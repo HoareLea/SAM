@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using System.Collections.Generic;
 
 namespace SAM.Geometry.Rhino
@@ -16,12 +19,12 @@ namespace SAM.Geometry.Rhino
             if (curve is LineCurve)
                 return ((LineCurve)curve).ToSAM();
 
-            if(curve.IsCircle())
+            if (curve.IsCircle())
             {
-                if(curve.TryGetCircle(out Circle circle))
+                if (curve.TryGetCircle(out Circle circle))
                 {
                     Spatial.Circle3D circle3D = new Spatial.Circle3D(circle.Plane.ToSAM(), circle.Radius);
-                    if(!simplify)
+                    if (!simplify)
                     {
                         return circle3D;
                     }

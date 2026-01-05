@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -22,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -108,11 +111,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            if(sAMObject is AdjacencyCluster)
+            if (sAMObject is AdjacencyCluster)
             {
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
             }
-            else if(sAMObject is AnalyticalModel)
+            else if (sAMObject is AnalyticalModel)
             {
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
             }
@@ -136,18 +139,18 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, panels);
             }
 
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 panels = null;
             }
 
             List<PanelType> panelTypes = new List<PanelType>();
-            foreach(PanelType panelType in Enum.GetValues(typeof(PanelType)))
+            foreach (PanelType panelType in Enum.GetValues(typeof(PanelType)))
             {
                 panelTypes.Add(panelType);
             }
 
-            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(spaces?.FindAll(x =>  x != null).ConvertAll(x => x.Guid), out List<Panel> panels_Result, panelTypes, panels?.ConvertAll(x => x.Guid));
+            List<Space> spaces_Result = adjacencyCluster.MergeSpaces(spaces?.FindAll(x => x != null).ConvertAll(x => x.Guid), out List<Panel> panels_Result, panelTypes, panels?.ConvertAll(x => x.Guid));
 
             if (sAMObject is AdjacencyCluster)
             {

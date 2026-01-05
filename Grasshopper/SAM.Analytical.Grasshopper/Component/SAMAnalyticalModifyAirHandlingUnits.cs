@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -90,7 +93,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
             int index = -1;
-            
+
             IAnalyticalObject analyticalObject = null;
             index = Params.IndexOfInputParam("_analytical");
             if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
@@ -118,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
                 index = Params.IndexOfInputParam("_airHandlingUnits_");
-                
+
                 if (index != -1)
                 {
                     dataAccess.GetDataList(index, objectWrappers);
@@ -163,7 +166,7 @@ namespace SAM.Analytical.Grasshopper
                     airHandlingUnits = adjacencyCluster.GetObjects<AirHandlingUnit>();
                 }
 
-                if(airHandlingUnits == null || airHandlingUnits.Count == 0)
+                if (airHandlingUnits == null || airHandlingUnits.Count == 0)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
@@ -292,9 +295,9 @@ namespace SAM.Analytical.Grasshopper
                         summerHeatingCoil = @bool;
                     }
 
-                    for (int i =0; i < airHandlingUnits.Count;i++)
+                    for (int i = 0; i < airHandlingUnits.Count; i++)
                     {
-                        if(airHandlingUnits[i] == null)
+                        if (airHandlingUnits[i] == null)
                         {
                             continue;
                         }
@@ -311,19 +314,19 @@ namespace SAM.Analytical.Grasshopper
                         airHandlingUnit.WinterSupplyTemperature = !double.IsNaN(winterSupplyTemperature) ? winterSupplyTemperature : airHandlingUnit.WinterSupplyTemperature;
 
                         HeatingCoil frostCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
-                        if(frostCoil != null)
+                        if (frostCoil != null)
                         {
                             frostCoil.WinterOffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.WinterOffTemperature;
                             frostCoil.SummerOffTemperature = !double.IsNaN(frostCoilOffTemperature) ? frostCoilOffTemperature : frostCoil.SummerOffTemperature;
                         }
 
                         HeatRecoveryUnit heatRecoveryUnit = airHandlingUnit.GetSimpleEquipments<HeatRecoveryUnit>(FlowClassification.Supply)?.FirstOrDefault();
-                        if(heatRecoveryUnit != null)
+                        if (heatRecoveryUnit != null)
                         {
                             heatRecoveryUnit.WinterLatentEfficiency = !double.IsNaN(winterHeatRecoveryLatentEfficiency) ? winterHeatRecoveryLatentEfficiency : heatRecoveryUnit.WinterLatentEfficiency;
                             heatRecoveryUnit.WinterDryBulbTemperature = !double.IsNaN(winterHeatRecoveryDryBulbTemperature) ? winterHeatRecoveryDryBulbTemperature : heatRecoveryUnit.WinterDryBulbTemperature;
                             heatRecoveryUnit.WinterRelativeHumidity = !double.IsNaN(winterHeatRecoveryRelativeHumidity) ? winterHeatRecoveryRelativeHumidity : heatRecoveryUnit.WinterRelativeHumidity;
-                            
+
                             heatRecoveryUnit.SummerSensibleEfficiency = !double.IsNaN(summerHeatRecoverySensibleEfficiency) ? summerHeatRecoverySensibleEfficiency : heatRecoveryUnit.SummerSensibleEfficiency;
                             heatRecoveryUnit.SummerLatentEfficiency = !double.IsNaN(summerHeatRecoveryLatentEfficiency) ? summerHeatRecoveryLatentEfficiency : heatRecoveryUnit.SummerLatentEfficiency;
                             heatRecoveryUnit.SummerDryBulbTemperature = !double.IsNaN(summerHeatRecoveryDryBulbTemperature) ? summerHeatRecoveryDryBulbTemperature : heatRecoveryUnit.SummerDryBulbTemperature;
@@ -331,7 +334,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         CoolingCoil coolingCoil = airHandlingUnit.GetSimpleEquipments<CoolingCoil>(FlowClassification.Supply)?.FirstOrDefault();
-                        if(coolingCoil != null)
+                        if (coolingCoil != null)
                         {
                             coolingCoil.FluidSupplyTemperature = !double.IsNaN(coolingCoilFluidFlowTemperature) ? coolingCoilFluidFlowTemperature : coolingCoil.FluidSupplyTemperature;
                             coolingCoil.FluidReturnTemperature = !double.IsNaN(coolingCoilFluidReturnTemperature) ? coolingCoilFluidReturnTemperature : coolingCoil.FluidReturnTemperature;
@@ -339,7 +342,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         HeatingCoil heatingCoil = airHandlingUnit.GetSimpleEquipments<HeatingCoil>(FlowClassification.Supply)?.FirstOrDefault();
-                        if(heatingCoil != null)
+                        if (heatingCoil != null)
                         {
                             heatingCoil.FluidSupplyTemperature = !double.IsNaN(heatingCoilFluidFlowTemperature) ? heatingCoilFluidFlowTemperature : heatingCoil.FluidSupplyTemperature;
                             heatingCoil.FluidReturnTemperature = !double.IsNaN(heatingCoilFluidReturnTemperature) ? heatingCoilFluidReturnTemperature : heatingCoil.FluidReturnTemperature;
@@ -362,7 +365,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
                 dataAccess.SetData(index, analyticalObject);
         }
     }

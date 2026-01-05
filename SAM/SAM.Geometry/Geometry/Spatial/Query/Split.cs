@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,13 +12,13 @@ namespace SAM.Geometry.Spatial
     {
         public static List<Face3D> Split(this Face3D face3D, Shell shell, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null || shell == null)
+            if (face3D == null || shell == null)
             {
                 return null;
             }
 
             BoundingBox3D boundingBox3D_Face3D = face3D.GetBoundingBox();
-            if(boundingBox3D_Face3D == null)
+            if (boundingBox3D_Face3D == null)
             {
                 return null;
             }
@@ -26,13 +29,13 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            if(!boundingBox3D_Face3D.InRange(boundingBox3D_Shell))
+            if (!boundingBox3D_Face3D.InRange(boundingBox3D_Shell))
             {
                 return null;
             }
 
             List<Face3D> face3Ds = shell.Face3Ds;
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
@@ -41,29 +44,29 @@ namespace SAM.Geometry.Spatial
 
             return face3D.Split(face3Ds, tolerance_Snap, tolerance_Angle, tolerance_Distance);
         }
-    
+
         public static List<Face3D> Split(this Face3D face3D, IEnumerable<Shell> shells, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3D == null)
+            if (face3D == null)
             {
                 return null;
             }
 
-            List<Face3D> result = new List<Face3D>() { new Face3D(face3D)};
+            List<Face3D> result = new List<Face3D>() { new Face3D(face3D) };
 
-            if(shells == null || shells.Count() == 0)
+            if (shells == null || shells.Count() == 0)
             {
                 return result;
             }
 
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
                 List<Face3D> face3Ds_Shell = new List<Face3D>();
 
                 foreach (Face3D face3D_Temp in result)
                 {
                     List<Face3D> face3Ds_Temp = Split(face3D_Temp, shell, tolerance_Snap, tolerance_Angle, tolerance_Distance);
-                    if(face3Ds_Temp != null && face3Ds_Temp.Count != 0)
+                    if (face3Ds_Temp != null && face3Ds_Temp.Count != 0)
                     {
                         face3Ds_Shell.AddRange(face3Ds_Temp);
                     }
@@ -81,7 +84,7 @@ namespace SAM.Geometry.Spatial
 
         public static List<Shell> Split(this Shell shell, IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(shell == null || face3Ds == null)
+            if (shell == null || face3Ds == null)
             {
                 return null;
             }
@@ -92,7 +95,7 @@ namespace SAM.Geometry.Spatial
             shellSplitter.Tolerance_Distance = tolerance_Distance;
 
             shellSplitter.Add(shell);
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 shellSplitter.Add(face3D);
             }
@@ -128,20 +131,20 @@ namespace SAM.Geometry.Spatial
 
         public static List<Face3D> Split(this IEnumerable<Face3D> face3Ds, double tolerance_Snap = Core.Tolerance.MacroDistance, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance)
         {
-            if(face3Ds == null)
+            if (face3Ds == null)
             {
                 return null;
             }
 
             List<Face3D> result = new List<Face3D>();
 
-            foreach(Face3D face3D in face3Ds)
+            foreach (Face3D face3D in face3Ds)
             {
                 List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
                 face3Ds_Temp.Remove(face3D);
 
                 List<Face3D> face3Ds_Split = Split(face3D, face3Ds_Temp, tolerance_Snap, tolerance_Angle, tolerance_Distance);
-                if(face3Ds_Split == null || face3Ds_Split.Count == 0)
+                if (face3Ds_Split == null || face3Ds_Split.Count == 0)
                 {
                     result.Add(face3D);
                 }
@@ -179,23 +182,23 @@ namespace SAM.Geometry.Spatial
                 List<Face2D> face2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<Face2D>();
                 if (face2Ds_Temp != null && face2Ds_Temp.Count != 0)
                 {
-                    foreach(Face2D face2D_Temp in face2Ds_Temp)
+                    foreach (Face2D face2D_Temp in face2Ds_Temp)
                     {
                         List<IClosed2D> edge2Ds = face2D_Temp?.Edge2Ds;
-                        if(edge2Ds == null)
+                        if (edge2Ds == null)
                         {
                             continue;
                         }
 
                         foreach (IClosed2D edge2D in edge2Ds)
                         {
-                            if(edge2D == null)
+                            if (edge2D == null)
                             {
                                 continue;
                             }
 
                             ISegmentable2D segmentable2D = edge2D as ISegmentable2D;
-                            if(segmentable2D == null)
+                            if (segmentable2D == null)
                             {
                                 throw new NotImplementedException();
                             }
@@ -217,21 +220,21 @@ namespace SAM.Geometry.Spatial
 
             List<Face2D> face2Ds = Planar.Query.Split(face2D, segmentable2Ds, tolerance_Snap, tolerance_Distance);
             face2Ds?.RemoveAll(x => x == null || !x.IsValid() || x.GetArea() < tolerance_Snap);
-            if(face2Ds != null && face2Ds.Count > 0)
+            if (face2Ds != null && face2Ds.Count > 0)
             {
                 List<Face2D> face2Ds_Difference = Planar.Query.Difference(face2D, face2Ds, tolerance_Distance);
-                if(face2Ds_Difference != null)
+                if (face2Ds_Difference != null)
                 {
-                    foreach(Face2D face2D_Difference in face2Ds_Difference)
+                    foreach (Face2D face2D_Difference in face2Ds_Difference)
                     {
-                        if(face2D_Difference != null && Planar.Query.IsValid(face2D_Difference) && face2D_Difference.GetArea() > tolerance_Snap)
+                        if (face2D_Difference != null && Planar.Query.IsValid(face2D_Difference) && face2D_Difference.GetArea() > tolerance_Snap)
                         {
                             face2Ds.Add(face2D_Difference);
                         }
                     }
                 }
             }
-            
+
             return face2Ds?.ConvertAll(x => plane.Convert(x));
         }
 
@@ -261,9 +264,9 @@ namespace SAM.Geometry.Spatial
                 return result;
             }
 
-            foreach(Shell shell in shells)
+            foreach (Shell shell in shells)
             {
-                if(shell != null)
+                if (shell != null)
                 {
                     result.Add(shell);
                 }
@@ -272,7 +275,7 @@ namespace SAM.Geometry.Spatial
             for (int i = 0; i < count - 1; i++)
             {
                 BoundingBox3D boundingBox3D_1 = result[i].GetBoundingBox();
-                if(boundingBox3D_1 == null)
+                if (boundingBox3D_1 == null)
                 {
                     continue;
                 }
@@ -285,31 +288,31 @@ namespace SAM.Geometry.Spatial
                         continue;
                     }
 
-                    if(!boundingBox3D_1.InRange(boundingBox3D_2, tolerance_Distance))
+                    if (!boundingBox3D_1.InRange(boundingBox3D_2, tolerance_Distance))
                     {
                         continue;
                     }
 
                     List<Shell> shells_Intersection = result[i].Intersection(result[j], silverSpacing, tolerance_Angle, tolerance_Distance);
-                    if(shells_Intersection == null || shells_Intersection.Count == 0)
+                    if (shells_Intersection == null || shells_Intersection.Count == 0)
                     {
                         continue;
                     }
 
                     shells_Intersection.RemoveAll(x => x == null || x.Volume(silverSpacing, tolerance_Distance) < silverSpacing || !x.IsClosed(silverSpacing));
-                    if(shells_Intersection.Count == 0)
+                    if (shells_Intersection.Count == 0)
                     {
                         continue;
                     }
 
                     List<Shell> shells_Difference = new List<Shell>() { result[i], result[j] };
-                    foreach(Shell shell_Intersection in shells_Intersection)
+                    foreach (Shell shell_Intersection in shells_Intersection)
                     {
                         List<Shell> shells_Difference_Temp = new List<Shell>();
                         foreach (Shell shell_Difference in shells_Difference)
                         {
                             List<Shell> shells_Difference_Temp_Temp = shell_Difference.Difference(shell_Intersection, silverSpacing, tolerance_Angle, tolerance_Distance);
-                            if(shells_Difference_Temp_Temp == null || shells_Difference_Temp_Temp.Count == 0)
+                            if (shells_Difference_Temp_Temp == null || shells_Difference_Temp_Temp.Count == 0)
                             {
                                 continue;
                             }
@@ -478,13 +481,13 @@ namespace SAM.Geometry.Spatial
 
         public static Polyline3D Split(this Segment3D segment3D, double distance, AlignmentPoint alignmentPoint = AlignmentPoint.Start, double tolerance = Core.Tolerance.Distance)
         {
-            if(segment3D == null || double.IsNaN(distance) || alignmentPoint == AlignmentPoint.Undefined || distance <= tolerance)
+            if (segment3D == null || double.IsNaN(distance) || alignmentPoint == AlignmentPoint.Undefined || distance <= tolerance)
             {
                 return null;
             }
 
             double length = segment3D.GetLength();
-            if(length < distance)
+            if (length < distance)
             {
                 return new Polyline3D(segment3D.GetPoints(), false);
             }
@@ -494,16 +497,16 @@ namespace SAM.Geometry.Spatial
             Vector3D vector3D = segment3D.Direction;
             Vector3D vector3D_Temp = null;
 
-            List <Point3D> point3Ds = new List<Point3D>();
+            List<Point3D> point3Ds = new List<Point3D>();
 
             if (alignmentPoint == AlignmentPoint.End)
             {
                 vector3D.Negate();
             }
-            else if(alignmentPoint == AlignmentPoint.Mid)
+            else if (alignmentPoint == AlignmentPoint.Mid)
             {
                 double distance_Temp = length % distance;
-                if(!Core.Query.AlmostEqual(distance_Temp, 0, tolerance) && !Core.Query.AlmostEqual(distance_Temp, distance, tolerance))
+                if (!Core.Query.AlmostEqual(distance_Temp, 0, tolerance) && !Core.Query.AlmostEqual(distance_Temp, distance, tolerance))
                 {
                     vector3D_Temp = vector3D * (distance_Temp / 2);
                     if (vector3D_Temp.Length > tolerance)
@@ -525,7 +528,7 @@ namespace SAM.Geometry.Spatial
                 vector3D_Temp += vector3D;
             }
 
-            if(point3Ds.Count == 0)
+            if (point3Ds.Count == 0)
             {
                 return null;
             }
@@ -535,7 +538,7 @@ namespace SAM.Geometry.Spatial
                 point3Ds.Reverse();
             }
 
-            if (!AlmostSimilar( point3Ds.First(), segment3D.GetStart(), tolerance))
+            if (!AlmostSimilar(point3Ds.First(), segment3D.GetStart(), tolerance))
             {
                 point3Ds.Insert(0, segment3D.GetStart());
             }
@@ -550,9 +553,9 @@ namespace SAM.Geometry.Spatial
 
         }
 
-        public static List<Face3D> Split<T>(this Face3D face3D, IEnumerable<T> geometry3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T: ISAMGeometry3D
+        public static List<Face3D> Split<T>(this Face3D face3D, IEnumerable<T> geometry3Ds, double tolerance_Angle = Core.Tolerance.Angle, double tolerance_Distance = Core.Tolerance.Distance) where T : ISAMGeometry3D
         {
-            if(face3D == null || geometry3Ds == null)
+            if (face3D == null || geometry3Ds == null)
             {
                 return null;
             }
@@ -570,11 +573,11 @@ namespace SAM.Geometry.Spatial
                 {
                     planarIntersectionResult = Create.PlanarIntersectionResult(face3D, geometry3D as Face3D, tolerance_Angle, tolerance_Distance);
                 }
-                else if(geometry3D is ISegmentable3D)
+                else if (geometry3D is ISegmentable3D)
                 {
                     planarIntersectionResult = Create.PlanarIntersectionResult(plane, geometry3D as ISegmentable3D, tolerance_Angle, tolerance_Distance);
                 }
-                else if(geometry3D is Plane)
+                else if (geometry3D is Plane)
                 {
                     planarIntersectionResult = Create.PlanarIntersectionResult(face3D, geometry3D as Plane, tolerance_Angle, tolerance_Distance);
                 }
@@ -583,17 +586,17 @@ namespace SAM.Geometry.Spatial
                     continue;
 
                 List<Face2D> face2Ds_Temp = planarIntersectionResult.GetGeometry2Ds<Face2D>();
-                if(face2Ds_Temp != null && face2Ds_Temp.Count != 0)
+                if (face2Ds_Temp != null && face2Ds_Temp.Count != 0)
                 {
-                    foreach(Face2D face2D_Temp in face2Ds_Temp)
+                    foreach (Face2D face2D_Temp in face2Ds_Temp)
                     {
                         List<IClosed2D> closed2Ds = face2D_Temp.Edge2Ds;
-                        if(closed2Ds != null && closed2Ds.Count != 0)
+                        if (closed2Ds != null && closed2Ds.Count != 0)
                         {
-                            foreach(IClosed2D closed2D in closed2Ds)
+                            foreach (IClosed2D closed2D in closed2Ds)
                             {
                                 ISegmentable2D segmentable2D = closed2D as ISegmentable2D;
-                                if(segmentable2D == null)
+                                if (segmentable2D == null)
                                 {
                                     throw new NotImplementedException();
                                 }
@@ -611,7 +614,7 @@ namespace SAM.Geometry.Spatial
                 }
             }
 
-            if(segmentable2Ds == null || segmentable2Ds.Count == 0)
+            if (segmentable2Ds == null || segmentable2Ds.Count == 0)
             {
                 return new List<Face3D> { new Face3D(face3D) };
             }

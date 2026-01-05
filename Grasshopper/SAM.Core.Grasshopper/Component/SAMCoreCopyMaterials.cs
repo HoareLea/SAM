@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
@@ -82,7 +85,7 @@ namespace SAM.Core.Grasshopper
             }
 
             bool overwrite = true;
-            if(!dataAccess.GetData(2, ref overwrite))
+            if (!dataAccess.GetData(2, ref overwrite))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -97,7 +100,7 @@ namespace SAM.Core.Grasshopper
                 if (materials == null || materials.Count == 0)
                     continue;
 
-                foreach(IMaterial material in materials)
+                foreach (IMaterial material in materials)
                 {
                     IMaterial material_Existing = materialLibrary.GetObject<IMaterial>(material.Name);
                     if (material_Existing != null)

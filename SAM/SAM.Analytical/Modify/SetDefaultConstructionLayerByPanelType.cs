@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -33,7 +36,7 @@ namespace SAM.Analytical
             foreach (Panel panel in panels)
             {
                 PanelType panelType = panel.PanelType;
-                if(panelType == PanelType.Undefined)
+                if (panelType == PanelType.Undefined)
                 {
                     continue;
                 }
@@ -43,7 +46,7 @@ namespace SAM.Analytical
                 Construction construction = panel.Construction;
                 if (string.IsNullOrWhiteSpace(construction?.Name))
                 {
-                    if(panelType != PanelType.Air)
+                    if (panelType != PanelType.Air)
                     {
                         update = true;
                     }
@@ -161,7 +164,7 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                if(tuples.Find(x => x.Item1.Guid == panel.Guid) != null)
+                if (tuples.Find(x => x.Item1.Guid == panel.Guid) != null)
                 {
                     continue;
                 }
@@ -185,10 +188,10 @@ namespace SAM.Analytical
                 tuples_Construction.ForEach(x => tuples.Remove(x));
 
                 IEnumerable<PanelType> panelTypes = tuples_Construction.ConvertAll(x => x.Item2).Distinct();
-                foreach(PanelType panelType in panelTypes)
+                foreach (PanelType panelType in panelTypes)
                 {
                     List<Tuple<Panel, PanelType>> tuples_PanelType = tuples_Construction.FindAll(x => x.Item2 == panelType);
-                    foreach(Tuple<Panel, PanelType> tuple_PanelType in tuples_PanelType)
+                    foreach (Tuple<Panel, PanelType> tuple_PanelType in tuples_PanelType)
                     {
                         Construction construction_Default = Query.DefaultConstruction(panelType);
                         if (construction_Default == null)
@@ -202,7 +205,7 @@ namespace SAM.Analytical
                         adjacencyCluster.AddObject(panel_New);
                         dictionary[panel_New.Guid] = panel_New;
 
-                        if(panelTypes.Count() > 1)
+                        if (panelTypes.Count() > 1)
                         {
                             panelsWithIssues.Add(panel_New);
                         }

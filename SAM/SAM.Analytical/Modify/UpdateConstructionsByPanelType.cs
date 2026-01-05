@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Analytical
@@ -14,7 +17,7 @@ namespace SAM.Analytical
             for (int i = 0; i < panels.Count; i++)
             {
                 Panel panel = panels[i];
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
@@ -22,7 +25,7 @@ namespace SAM.Analytical
                 PanelType panelType = panel.PanelType;
 
                 Construction construction = result.GetConstructions(panelType)?.FirstOrDefault();
-                if(construction == null)
+                if (construction == null)
                 {
                     construction = constructionLibrary.GetConstructions(panelType)?.FirstOrDefault();
                     if (construction != null)

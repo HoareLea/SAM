@@ -1,4 +1,7 @@
-﻿namespace SAM.Geometry.Planar
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Geometry.Planar
 {
     public class Solver2DData
     {
@@ -59,7 +62,7 @@
         //    geometry2D = point2D;
         //}
 
-        public T Geometry2D<T>() where T: ISAMGeometry2D
+        public T Geometry2D<T>() where T : ISAMGeometry2D
         {
             return geometry2D is T ? (T)geometry2D : default;
         }

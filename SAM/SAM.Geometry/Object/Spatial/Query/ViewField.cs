@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -38,7 +41,7 @@ namespace SAM.Geometry.Object.Spatial
                 }
 
                 LinkedFace3D linkedFace3D = face3DObject is LinkedFace3D ? (LinkedFace3D)(object)face3DObject : Create.LinkedFace3D(face3DObject);
-                if(linkedFace3D == null)
+                if (linkedFace3D == null)
                 {
                     continue;
                 }

@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 
@@ -82,7 +85,7 @@ namespace SAM.Analytical
 
             panels_Extended = new List<Panel>();
 
-            foreach(Geometry.Planar.Segment2D segment2D in segment2Ds)
+            foreach (Geometry.Planar.Segment2D segment2D in segment2Ds)
             {
                 Geometry.Planar.Point2D point2D_1 = segment2D[0];
                 Geometry.Planar.Point2D point2D_2 = segment2D[1];

@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino.Geometry;
 using Rhino.Geometry.Collections;
 using SAM.Geometry.Spatial;
 using System.Collections.Generic;
@@ -69,7 +72,7 @@ namespace SAM.Geometry.Rhino
                 {
                     Face3D face3D = null;
 
-                    List <Point3D> point3Ds = new List<Point3D>();
+                    List<Point3D> point3Ds = new List<Point3D>();
                     point3Ds.Add(meshVertexList[meshFace.A].ToSAM());
                     point3Ds.Add(meshVertexList[meshFace.B].ToSAM());
                     point3Ds.Add(meshVertexList[meshFace.C].ToSAM());
@@ -90,7 +93,7 @@ namespace SAM.Geometry.Rhino
                         face3D = new Face3D(new Triangle3D(point3Ds[0], point3Ds[1], point3Ds[2]));
                     }
 
-                    if(face3D == null)
+                    if (face3D == null)
                     {
                         continue;
                     }
@@ -99,7 +102,7 @@ namespace SAM.Geometry.Rhino
                 }
             }
 
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }

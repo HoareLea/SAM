@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -50,7 +53,7 @@ namespace SAM.Geometry.Spatial
             if (point3Ds == null || point3Ds.Count == 0)
                 return false;
 
-            foreach(Point3D point3D in point3Ds)
+            foreach (Point3D point3D in point3Ds)
             {
                 if (point3D == null)
                     continue;
@@ -64,13 +67,13 @@ namespace SAM.Geometry.Spatial
 
         public static bool On(this Plane plane, IPlanar3D planar3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(plane == null || planar3D == null)
+            if (plane == null || planar3D == null)
             {
                 return false;
             }
 
             Plane plane_Planar3D = planar3D.GetPlane();
-            if(plane_Planar3D == null)
+            if (plane_Planar3D == null)
             {
                 return false;
             }

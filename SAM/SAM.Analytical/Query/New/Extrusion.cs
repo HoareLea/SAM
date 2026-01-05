@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Spatial;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Spatial;
 
 namespace SAM.Analytical
 {
@@ -42,7 +45,7 @@ namespace SAM.Analytical
 
             Vector3D normal = plane.Normal;
 
-            if(hostPartition is Floor)
+            if (hostPartition is Floor)
             {
                 if (normal.SameHalf(Vector3D.WorldZ))
                     normal.Negate();
@@ -50,7 +53,7 @@ namespace SAM.Analytical
                 vector3D_Extrusion = normal * thickness;
                 face3D_Extrusion = face3D;
             }
-            else if(hostPartition is Roof)
+            else if (hostPartition is Roof)
             {
                 if (!normal.SameHalf(Vector3D.WorldZ))
                     normal.Negate();

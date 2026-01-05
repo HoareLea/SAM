@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -70,7 +73,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool cutApertures = false;
-            if(!dataAccess.GetData(1, ref cutApertures))
+            if (!dataAccess.GetData(1, ref cutApertures))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -104,14 +107,14 @@ namespace SAM.Analytical.Grasshopper
             {
                 result.Add(((PlanarBoundary3D)sAMObject).ToGrasshopper());
             }
-            else if(sAMObject is Space)
+            else if (sAMObject is Space)
             {
                 result.Add(((Space)sAMObject).ToGrasshopper());
             }
             else if (sAMObject is AdjacencyCluster)
             {
                 List<GH_Brep> breps = ((AdjacencyCluster)sAMObject).ToGrasshopper(cutApertures, includeFrame, tolerance);
-                if(breps != null)
+                if (breps != null)
                     result.AddRange(breps);
 
             }

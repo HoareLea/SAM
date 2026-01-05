@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 
 using SAM.Core;
 using SAM.Geometry;
@@ -125,7 +128,7 @@ namespace SAM.Analytical
             //Added 18.06.2024 -> Requested by Michal
             ApertureConstruction apertureConstruction = Type;
             List<ConstructionLayer> constructionLayers = apertureConstruction.FrameConstructionLayers;
-            if(constructionLayers == null || constructionLayers.Count == 0)
+            if (constructionLayers == null || constructionLayers.Count == 0)
             {
                 switch (aperturePart)
                 {
@@ -138,15 +141,15 @@ namespace SAM.Analytical
             }
 
             List<Geometry.Planar.IClosed2D> internalEdge2Ds = face3D.InternalEdge2Ds;
-            if(internalEdge2Ds == null || internalEdge2Ds.Count == 0)
+            if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
             {
                 double frameWidth = 0;
 
 
-                if(apertureConstruction != null)
+                if (apertureConstruction != null)
                 {
                     double frameThickness = apertureConstruction.GetFrameThickness();
-                    if(!double.IsNaN(frameThickness) && frameThickness > 0)
+                    if (!double.IsNaN(frameThickness) && frameThickness > 0)
                     {
                         if (apertureConstruction.TryGetValue(ApertureConstructionParameter.DefaultFrameWidth, out double frameThickness_Temp))
                         {
@@ -160,7 +163,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                if(!double.IsNaN(frameWidth) && frameWidth != 0)
+                if (!double.IsNaN(frameWidth) && frameWidth != 0)
                 {
                     Plane plane = face3D.GetPlane();
                     Geometry.Planar.Face2D face2D = plane.Convert(face3D);
@@ -193,12 +196,12 @@ namespace SAM.Analytical
         public Face3D GetFrameFace3D()
         {
             List<Face3D> face3Ds = GetFace3Ds(AperturePart.Frame);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
-            if(face3Ds.Count > 0)
+            if (face3Ds.Count > 0)
             {
                 face3Ds.Sort((x, y) => y.GetArea().CompareTo(x.GetArea()));
             }
@@ -244,7 +247,7 @@ namespace SAM.Analytical
         public double GetArea(AperturePart aperturePart)
         {
             List<Face3D> face3Ds = GetFace3Ds(aperturePart);
-            if(face3Ds == null || face3Ds.Count ==0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return 0;
             }
@@ -259,13 +262,13 @@ namespace SAM.Analytical
         public double GetFrameFactor()
         {
             double area_Frame = GetArea(AperturePart.Frame);
-            if(double.IsNaN(area_Frame) || area_Frame == 0)
+            if (double.IsNaN(area_Frame) || area_Frame == 0)
             {
                 return 0;
             }
 
             double area_Pane = GetArea(AperturePart.Pane);
-            if(double.IsNaN(area_Pane) || area_Pane == 0)
+            if (double.IsNaN(area_Pane) || area_Pane == 0)
             {
                 return 1;
             }
@@ -275,13 +278,13 @@ namespace SAM.Analytical
 
         public double GetThickness(AperturePart aperturePart)
         {
-            if(aperturePart == AperturePart.Undefined)
+            if (aperturePart == AperturePart.Undefined)
             {
                 return double.NaN;
             }
 
             ApertureConstruction apertureConstruction = Type;
-            if(apertureConstruction == null)
+            if (apertureConstruction == null)
             {
                 return double.NaN;
             }
@@ -312,31 +315,31 @@ namespace SAM.Analytical
 
         public double GetWidth(AperturePart aperturePart)
         {
-            if(aperturePart == AperturePart.Undefined)
+            if (aperturePart == AperturePart.Undefined)
             {
                 return double.NaN;
             }
 
-            switch(aperturePart)
+            switch (aperturePart)
             {
                 case AperturePart.Frame:
                     return Query.Width(planarBoundary3D);
 
                 case AperturePart.Pane:
                     List<Face3D> face3Ds = GetFace3Ds(aperturePart);
-                    if(face3Ds == null || face3Ds.Count == 0)
+                    if (face3Ds == null || face3Ds.Count == 0)
                     {
                         return double.NaN;
                     }
 
                     double result = 0;
-                    foreach(Face3D face3D in face3Ds)
+                    foreach (Face3D face3D in face3Ds)
                     {
                         PlanarBoundary3D planarBoundary3D_Temp = new PlanarBoundary3D(face3D);
                         result += Query.Width(planarBoundary3D_Temp);
                     }
-                    
-                    if(result == 0)
+
+                    if (result == 0)
                     {
                         return double.NaN;
                     }
@@ -486,11 +489,11 @@ namespace SAM.Analytical
         {
             get
             {
-                if(planarBoundary3D == null)
+                if (planarBoundary3D == null)
                 {
                     return null;
                 }
-                
+
                 return new PlanarBoundary3D(planarBoundary3D);
             }
         }

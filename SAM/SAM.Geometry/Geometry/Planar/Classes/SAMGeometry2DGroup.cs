@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +20,7 @@ namespace SAM.Geometry.Planar
 
         public SAMGeometry2DGroup(SAMGeometry2DGroup sAMGeometry2DGroup)
         {
-            if(sAMGeometry2DGroup != null)
+            if (sAMGeometry2DGroup != null)
             {
                 coordinateSystem2D = sAMGeometry2DGroup.coordinateSystem2D == null ? null : new CoordinateSystem2D(sAMGeometry2DGroup.coordinateSystem2D);
                 sAMGeometry2Ds = sAMGeometry2DGroup.sAMGeometry2Ds?.ConvertAll(x => x?.Clone() as ISAMGeometry2D);
@@ -26,7 +29,7 @@ namespace SAM.Geometry.Planar
 
         public SAMGeometry2DGroup(CoordinateSystem2D coordinateSystem2D)
         {
-            this.coordinateSystem2D = coordinateSystem2D == null ? null : new CoordinateSystem2D(coordinateSystem2D); 
+            this.coordinateSystem2D = coordinateSystem2D == null ? null : new CoordinateSystem2D(coordinateSystem2D);
         }
 
         private SAMGeometry2DGroup(CoordinateSystem2D coordinateSystem2D, IEnumerable<ISAMGeometry2D> sAMGeometry2Ds)
@@ -38,7 +41,7 @@ namespace SAM.Geometry.Planar
         public SAMGeometry2DGroup(IEnumerable<ISAMGeometry2D> sAMGeometry2Ds)
         {
             coordinateSystem2D = CoordinateSystem2D.World;
-            this.sAMGeometry2Ds = sAMGeometry2Ds == null ? null : sAMGeometry2Ds.ToList().ConvertAll(x => x.Clone() as ISAMGeometry2D); 
+            this.sAMGeometry2Ds = sAMGeometry2Ds == null ? null : sAMGeometry2Ds.ToList().ConvertAll(x => x.Clone() as ISAMGeometry2D);
         }
 
         public SAMGeometry2DGroup(JObject jObject)
@@ -48,18 +51,18 @@ namespace SAM.Geometry.Planar
 
         public bool Add(ISAMGeometry2D sAMGeometry2D)
         {
-            if(sAMGeometry2D == null || coordinateSystem2D == null)
+            if (sAMGeometry2D == null || coordinateSystem2D == null)
             {
                 return false;
             }
 
             Transform2D transform2D = Transform2D.GetCoordinateSystem2DToCoordinateSystem2D(CoordinateSystem2D.World, coordinateSystem2D);
-            if(transform2D == null)
+            if (transform2D == null)
             {
                 return false;
             }
 
-            if(sAMGeometry2Ds == null)
+            if (sAMGeometry2Ds == null)
             {
                 sAMGeometry2Ds = new List<ISAMGeometry2D>();
             }
@@ -72,7 +75,7 @@ namespace SAM.Geometry.Planar
         {
             get
             {
-                if(sAMGeometry2Ds == null)
+                if (sAMGeometry2Ds == null)
                 {
                     return -1;
                 }
@@ -92,7 +95,7 @@ namespace SAM.Geometry.Planar
 
             set
             {
-                if(value == null)
+                if (value == null)
                 {
                     sAMGeometry2Ds[index] = null;
                     return;
@@ -110,23 +113,23 @@ namespace SAM.Geometry.Planar
 
         public virtual bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
-            if(jObject.ContainsKey("CoordinateSystem2D"))
+            if (jObject.ContainsKey("CoordinateSystem2D"))
             {
                 coordinateSystem2D = new CoordinateSystem2D(jObject.Value<JObject>("CoordinateSystem2D"));
             }
 
-            if(jObject.ContainsKey("SAMGeometry2Ds"))
+            if (jObject.ContainsKey("SAMGeometry2Ds"))
             {
                 JArray jArray = jObject.Value<JArray>("SAMGeometry2Ds");
-                if(jArray != null)
+                if (jArray != null)
                 {
                     sAMGeometry2Ds = new List<ISAMGeometry2D>();
-                    foreach(JObject jObject_Temp in jArray)
+                    foreach (JObject jObject_Temp in jArray)
                     {
                         sAMGeometry2Ds.Add(Core.Query.IJSAMObject<ISAMGeometry2D>(jObject_Temp));
                     }
@@ -139,7 +142,7 @@ namespace SAM.Geometry.Planar
         public IEnumerator<ISAMGeometry2D> GetEnumerator()
         {
             List<ISAMGeometry2D> sAMGeometry2Ds_Temp = new List<ISAMGeometry2D>();
-            if(sAMGeometry2Ds != null)
+            if (sAMGeometry2Ds != null)
             {
                 Transform2D transform2D = Transform2D.GetCoordinateSystem2DToCoordinateSystem2D(coordinateSystem2D, CoordinateSystem2D.World);
                 foreach (ISAMGeometry2D sAMGeometry2D in sAMGeometry2Ds)
@@ -153,7 +156,7 @@ namespace SAM.Geometry.Planar
 
         public ISAMGeometry2D GetMoved(Vector2D vector2D)
         {
-            if(vector2D == null)
+            if (vector2D == null)
             {
                 return null;
             }
@@ -165,7 +168,7 @@ namespace SAM.Geometry.Planar
 
         public ISAMGeometry2D GetTransformed(ITransform2D transform2D)
         {
-            if(transform2D == null)
+            if (transform2D == null)
             {
                 return null;
             }
@@ -183,7 +186,7 @@ namespace SAM.Geometry.Planar
             }
 
             coordinateSystem2D = coordinateSystem2D.Transform(transform2D);
-            return true; 
+            return true;
         }
 
         public virtual JObject ToJObject()
@@ -191,17 +194,17 @@ namespace SAM.Geometry.Planar
             JObject result = new JObject();
             result.Add("_type", Core.Query.FullTypeName(this));
 
-            if(coordinateSystem2D != null)
+            if (coordinateSystem2D != null)
             {
                 result.Add("CoordinateSystem2D", coordinateSystem2D.ToJObject());
             }
 
-            if(sAMGeometry2Ds != null)
+            if (sAMGeometry2Ds != null)
             {
                 JArray jArray = new JArray();
-                foreach(ISAMGeometry2D sAMGeometry3D in sAMGeometry2Ds)
+                foreach (ISAMGeometry2D sAMGeometry3D in sAMGeometry2Ds)
                 {
-                    if(sAMGeometry3D == null)
+                    if (sAMGeometry3D == null)
                     {
                         continue;
                     }

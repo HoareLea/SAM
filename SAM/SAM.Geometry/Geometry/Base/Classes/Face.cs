@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using SAM.Geometry.Planar;
 using System.Collections.Generic;
 
@@ -97,24 +100,24 @@ namespace SAM.Geometry
 
                 if (internalEdge2Ds != null)
                 {
-                    if(result == null)
+                    if (result == null)
                     {
                         result = new List<IClosed2D>();
                     }
 
-                    foreach(IClosed2D internalEdge2D in internalEdge2Ds)
+                    foreach (IClosed2D internalEdge2D in internalEdge2Ds)
                     {
                         result.Add((IClosed2D)internalEdge2D.Clone());
                     }
                 }
-                
+
                 return result;
             }
         }
 
         public double GetArea()
         {
-            if(externalEdge2D == null)
+            if (externalEdge2D == null)
             {
                 return double.NaN;
             }
@@ -226,7 +229,7 @@ namespace SAM.Geometry
         {
             if (point2D == null || !point2D.IsValid())
                 return false;
-            
+
             if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                 return externalEdge2D.Inside(point2D, tolerance) && !externalEdge2D.On(point2D, tolerance);
 
@@ -267,13 +270,13 @@ namespace SAM.Geometry
         public override int GetHashCode()
         {
             int hash = 13;
-            
+
             hash = (hash * 7) + externalEdge2D.GetHashCode();
-            
+
             if (internalEdge2Ds != null)
                 foreach (IClosed2D internalEdge2D in internalEdge2Ds)
                     hash = (hash * 7) + internalEdge2D.GetHashCode();
-            
+
             return hash;
         }
     }

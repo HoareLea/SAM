@@ -1,7 +1,8 @@
-﻿using Grasshopper.Kernel;
-using Rhino.UI;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -13,7 +14,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new ("19b85b9c-ec97-4a14-9c79-c9f9ce76d3df");
+        public override Guid ComponentGuid => new("19b85b9c-ec97-4a14-9c79-c9f9ce76d3df");
 
         /// <summary>
         /// The latest version of this component
@@ -46,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject_", NickName = "_analyticalObject_", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooFeatureShadeParam { Name = "_featureShades", NickName = "_featureShades", Description = "SAM Analytical FeatureShades", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooFeatureShadeParam { Name = "_featureShades", NickName = "_featureShades", Description = "SAM Analytical FeatureShades", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObjects_", NickName = "_analyticalObjects_", Description = "SAM Analytical Objects such as Panels or Apertures", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return result.ToArray();
@@ -62,7 +63,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "analyticalObject", NickName = "analyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analyticalObjects", NickName = "analyticalObjects", Description = "SAM Analytical Objects such as Panels or Apertures", Access = GH_ParamAccess.list}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analyticalObjects", NickName = "analyticalObjects", Description = "SAM Analytical Objects such as Panels or Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 return result.ToArray();
             }
         }
@@ -93,17 +94,17 @@ namespace SAM.Analytical.Grasshopper
             }
 
             AdjacencyCluster adjacencyCluster = null;
-            
-            if(analyticalObject is not null)
+
+            if (analyticalObject is not null)
             {
-                if(analyticalObject is AdjacencyCluster adjacencyCluster_Temp)
+                if (analyticalObject is AdjacencyCluster adjacencyCluster_Temp)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster_Temp, true);
                 }
-                else if(analyticalObject is AnalyticalModel analytcialModel)
+                else if (analyticalObject is AnalyticalModel analytcialModel)
                 {
                     adjacencyCluster = analytcialModel.AdjacencyCluster;
-                    if(adjacencyCluster is not null)
+                    if (adjacencyCluster is not null)
                     {
                         adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
                     }
@@ -117,9 +118,9 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetDataList(index, analyticalObjects);
             }
 
-            if(analyticalObjects is null || analyticalObjects.Count == 0)
+            if (analyticalObjects is null || analyticalObjects.Count == 0)
             {
-                if(adjacencyCluster is null)
+                if (adjacencyCluster is null)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
@@ -154,7 +155,7 @@ namespace SAM.Analytical.Grasshopper
                         }
 
                         panel.SetValue(PanelParameter.FeatureShade, new FeatureShade(featureShades[i]));
-    
+
                         if (adjacencyCluster is not null)
                         {
                             adjacencyCluster.AddObject(panel);
@@ -197,13 +198,13 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if(adjacencyCluster != null)
+            if (adjacencyCluster != null)
             {
-                if(analyticalObject is AnalyticalModel analyticalModel)
+                if (analyticalObject is AnalyticalModel analyticalModel)
                 {
                     analyticalObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
                 }
-                else if(analyticalObject is AdjacencyCluster)
+                else if (analyticalObject is AdjacencyCluster)
                 {
                     analyticalObject = adjacencyCluster;
                 }

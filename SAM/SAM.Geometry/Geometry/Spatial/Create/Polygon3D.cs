@@ -1,4 +1,7 @@
-﻿using SAM.Geometry.Planar;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Geometry.Planar;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -58,18 +61,18 @@ namespace SAM.Geometry.Spatial
 
         public static Polygon3D Polygon3D(this Segment3D segment3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(segment3D == null || !segment3D.IsValid() || vector3D == null || !vector3D.IsValid())
+            if (segment3D == null || !segment3D.IsValid() || vector3D == null || !vector3D.IsValid())
             {
                 return null;
             }
 
             double length = vector3D.Length;
-            if(double.IsNaN(length) || length < tolerance)
+            if (double.IsNaN(length) || length < tolerance)
             {
                 return null;
             }
 
-            if(segment3D.Direction.AlmostSimilar(vector3D.Unit, tolerance))
+            if (segment3D.Direction.AlmostSimilar(vector3D.Unit, tolerance))
             {
                 return null;
             }
@@ -79,7 +82,7 @@ namespace SAM.Geometry.Spatial
             Point3D point3D_3 = segment3D[1].GetMoved(vector3D) as Point3D;
 
             Plane plane = Plane(point3D_1, point3D_2, point3D_3);
-            if(plane == null || !plane.IsValid())
+            if (plane == null || !plane.IsValid())
             {
                 return null;
             }
@@ -92,13 +95,13 @@ namespace SAM.Geometry.Spatial
         public static Polygon3D Polygon3D(this Triangle3D triangle3D)
         {
             List<Point3D> point3Ds = triangle3D?.GetPoints();
-            if(point3Ds == null || point3Ds.Count < 3)
+            if (point3Ds == null || point3Ds.Count < 3)
             {
                 return null;
             }
 
             Plane plane = new Plane(point3Ds[0], point3Ds[1], point3Ds[2]);
-            if(plane == null || !plane.IsValid())
+            if (plane == null || !plane.IsValid())
             {
                 return null;
             }

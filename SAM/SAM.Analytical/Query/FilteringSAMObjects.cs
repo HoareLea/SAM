@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +11,7 @@ namespace SAM.Analytical
     {
         public static List<IJSAMObject> FilteringSAMObjects(this AdjacencyCluster adjacencyCluster)
         {
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 return null;
             }
@@ -16,7 +19,7 @@ namespace SAM.Analytical
             List<IJSAMObject> result = new List<IJSAMObject>();
 
             List<Panel> panels = adjacencyCluster.GetObjects<Panel>();
-            if(panels != null)
+            if (panels != null)
             {
                 result.AddRange(panels);
             }
@@ -30,14 +33,14 @@ namespace SAM.Analytical
             List<Aperture> apertures_Temp = adjacencyCluster.GetObjects<Aperture>();
             if (apertures_Temp != null)
             {
-                foreach(Aperture aperture in apertures_Temp)
+                foreach (Aperture aperture in apertures_Temp)
                 {
-                    if(aperture == null)
+                    if (aperture == null)
                     {
                         continue;
                     }
 
-                    if(apertures.Find(x => x.Guid == aperture.Guid) != null)
+                    if (apertures.Find(x => x.Guid == aperture.Guid) != null)
                     {
                         continue;
                     }

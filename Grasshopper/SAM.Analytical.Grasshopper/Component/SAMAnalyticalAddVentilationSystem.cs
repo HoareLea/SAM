@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
@@ -23,7 +26,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -45,10 +48,10 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "_aHU", NickName = "_aHU", Description = "SAM Analytical Air Handling Unit", Access = GH_ParamAccess.item}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAirHandlingUnitParam() { Name = "_aHU", NickName = "_aHU", Description = "SAM Analytical Air Handling Unit", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooSystemTypeParam() { Name = "_ventilationSystemType_", NickName = "_ventilationSystemType_", Description = "SAM VentilationSystemType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
-                
+
                 result.Add(new GH_SAMParam(new GooSystemTypeLibraryParam() { Name = "_systemTypeLibrary_", NickName = "_systemTypeLibrary_", Description = "SAM SystemTypeLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_removeAssignments_", NickName = "_removeAssignments_", Description = "All existing spaces' ventilation system type assignments will be removed, and new assignments will be adopted.", Access = GH_ParamAccess.item, Optional = true };
@@ -102,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
                 adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)analyticalObject);
             }
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 index = Params.IndexOfOutputParam("analytical");
                 if (index != -1)
@@ -123,12 +126,12 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_ventilationSystemType_");
             VentilationSystemType ventilationSystemType = null;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref ventilationSystemType);
             }
 
-            if(ventilationSystemType == null)
+            if (ventilationSystemType == null)
             {
                 index = Params.IndexOfInputParam("_systemTypeLibrary_");
                 SystemTypeLibrary systemTypeLibrary = null;
@@ -137,7 +140,7 @@ namespace SAM.Analytical.Grasshopper
                     dataAccess.GetData(index, ref systemTypeLibrary);
                 }
 
-                if(systemTypeLibrary == null)
+                if (systemTypeLibrary == null)
                 {
                     systemTypeLibrary = ActiveSetting.Setting.GetValue<SystemTypeLibrary>(AnalyticalSettingParameter.DefaultSystemTypeLibrary);
                 }
@@ -158,7 +161,7 @@ namespace SAM.Analytical.Grasshopper
                 spaces = null;
             }
 
-            if(spaces == null)
+            if (spaces == null)
             {
                 spaces = adjacencyCluster.GetSpaces();
             }
@@ -183,7 +186,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             index = Params.IndexOfOutputParam("analytical");
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.SetData(index, analyticalObject);
             }

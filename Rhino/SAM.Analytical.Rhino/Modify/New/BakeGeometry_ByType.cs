@@ -1,4 +1,7 @@
-﻿using Rhino;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Rhino;
 using Rhino.DocObjects;
 using System;
 using System.Collections.Generic;
@@ -42,7 +45,7 @@ namespace SAM.Analytical.Rhino
                     continue;
 
                 System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
-                
+
                 string layerName = partition.Name;
                 if (string.IsNullOrWhiteSpace(layerName))
                 {
@@ -55,7 +58,7 @@ namespace SAM.Analytical.Rhino
                 objectAttributes.LayerIndex = layer.Index;
 
                 List<IPartition> partitions_FixEdges = null;
-                if(partition is IHostPartition)
+                if (partition is IHostPartition)
                 {
                     partitions_FixEdges = ((IHostPartition)partition).FixEdges(cutOpenings)?.ConvertAll(x => x as IPartition);
                 }
@@ -64,12 +67,12 @@ namespace SAM.Analytical.Rhino
                     partitions_FixEdges = partition.FixEdges();
                 }
 
-                if(partitions_FixEdges == null)
+                if (partitions_FixEdges == null)
                 {
                     continue;
                 }
 
-                foreach(IPartition partition_FixEdges in partitions_FixEdges)
+                foreach (IPartition partition_FixEdges in partitions_FixEdges)
                 {
                     if (BakeGeometry(partition_FixEdges, rhinoDoc, objectAttributes, out Guid guid, cutOpenings, tolerance))
                         guids.Add(guid);

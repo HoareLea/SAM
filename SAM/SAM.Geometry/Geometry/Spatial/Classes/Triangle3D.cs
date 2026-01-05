@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -110,7 +113,7 @@ namespace SAM.Geometry.Spatial
 
         public double GetArea()
         {
-            if(points == null)
+            if (points == null)
             {
                 return double.NaN;
             }
@@ -147,13 +150,13 @@ namespace SAM.Geometry.Spatial
 
         public override bool FromJObject(JObject jObject)
         {
-            if(jObject == null)
+            if (jObject == null)
             {
                 return false;
             }
 
             points = Geometry.Create.ISAMGeometries<Point3D>(jObject.Value<JArray>("Points"))?.ToArray();
-            
+
             return true;
         }
 
@@ -163,7 +166,7 @@ namespace SAM.Geometry.Spatial
             if (jObject == null)
                 return null;
 
-            if(points != null && points.Length == 3)
+            if (points != null && points.Length == 3)
             {
                 jObject.Add("Points", Geometry.Create.JArray(points));
             }
@@ -189,7 +192,7 @@ namespace SAM.Geometry.Spatial
         public double GetLength()
         {
             List<Segment3D> segment3Ds = GetSegments();
-            if(segment3Ds == null)
+            if (segment3Ds == null)
             {
                 return double.NaN;
             }
@@ -201,7 +204,7 @@ namespace SAM.Geometry.Spatial
         public override bool Equals(object obj)
         {
             Triangle3D triangle3D = obj as Triangle3D;
-            if(triangle3D == null)
+            if (triangle3D == null)
             {
                 return false;
             }
@@ -211,7 +214,7 @@ namespace SAM.Geometry.Spatial
 
         public override int GetHashCode()
         {
-            if(points == null || points.Length != 3)
+            if (points == null || points.Length != 3)
             {
                 return -1;
             }

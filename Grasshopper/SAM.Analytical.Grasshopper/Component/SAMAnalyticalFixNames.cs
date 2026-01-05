@@ -1,4 +1,7 @@
-﻿using GH_IO.Serialization;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
@@ -24,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -98,7 +101,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                
+
                 return result.ToArray();
             }
         }
@@ -115,31 +118,31 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            if(string.IsNullOrEmpty(name))
+            if (string.IsNullOrEmpty(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Please select language to fix");
             }
             else
             {
-                if(sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
+                if (sAMObject is AnalyticalModel || sAMObject is AdjacencyCluster)
                 {
                     AdjacencyCluster adjacencyCluster = null;
                     if (sAMObject is AnalyticalModel)
                         adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
-                    else if(sAMObject is AdjacencyCluster)
+                    else if (sAMObject is AdjacencyCluster)
                         adjacencyCluster = (AdjacencyCluster)sAMObject;
 
                     if (adjacencyCluster != null)
                     {
                         adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                         List<Panel> panels = adjacencyCluster.GetPanels();
-                        if(panels != null)
+                        if (panels != null)
                         {
                             foreach (Panel panel in panels)
                             {
@@ -170,7 +173,7 @@ namespace SAM.Analytical.Grasshopper
                         {
                             foreach (Space space in spaces)
                             {
-                                if(space?.InternalCondition == null)
+                                if (space?.InternalCondition == null)
                                 {
                                     continue;
                                 }
@@ -193,13 +196,13 @@ namespace SAM.Analytical.Grasshopper
                         sAMObject = adjacencyCluster;
                     else if (sAMObject is AnalyticalModel)
                         sAMObject = new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster);
-                        
+
                 }
-                else if(sAMObject is Panel)
+                else if (sAMObject is Panel)
                 {
                     sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Panel)sAMObject, name);
                 }
-                else if(sAMObject is Space)
+                else if (sAMObject is Space)
                 {
                     sAMObject = Analytical.Query.ReplaceNameSpecialCharacters((Space)sAMObject, name);
                 }

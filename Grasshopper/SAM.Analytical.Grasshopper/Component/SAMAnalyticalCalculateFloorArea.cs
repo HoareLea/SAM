@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using SAM.Analytical.Grasshopper.Properties;
@@ -26,7 +29,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -49,7 +52,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AnalyticalModel or AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true}, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_maxTiltDifference_", NickName = "_maxTiltDifference_", Description = "Maximal Allowed Tilt Difference", Access = GH_ParamAccess.item };
                 number.SetPersistentData(20);
@@ -87,7 +90,7 @@ namespace SAM.Analytical.Grasshopper
 
             SAMObject sAMObject = null;
             index = Params.IndexOfInputParam("_analytical");
-            if(index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -99,7 +102,7 @@ namespace SAM.Analytical.Grasshopper
             else if (sAMObject is AnalyticalModel)
                 adjacencyCluster = ((AnalyticalModel)sAMObject).AdjacencyCluster;
 
-            if(adjacencyCluster == null)
+            if (adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -109,14 +112,14 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfInputParam("spaces_");
             if (index != -1)
             {
-                spaces = new List<Space>(); 
+                spaces = new List<Space>();
                 dataAccess.GetDataList(index, spaces);
             }
 
             if (spaces == null || spaces.Count == 0)
                 spaces = adjacencyCluster.GetSpaces();
 
-            if(spaces != null && spaces.Count != 0)
+            if (spaces != null && spaces.Count != 0)
             {
                 double maxTiltDifference = 20;
                 index = Params.IndexOfInputParam("_maxTiltDifference_");
@@ -130,9 +133,9 @@ namespace SAM.Analytical.Grasshopper
                 Dictionary<Space, double> dictionary_Area = [];
                 Dictionary<Space, List<Panel>> dictionary_Panel = [];
                 List<Space> spaces_Temp = [];
-                foreach(Space space in spaces)
+                foreach (Space space in spaces)
                 {
-                    if(space == null)
+                    if (space == null)
                     {
                         continue;
                     }
@@ -148,10 +151,11 @@ namespace SAM.Analytical.Grasshopper
                     dictionary_Panel[space_Temp] = [];
                 }
 
-                Parallel.For(0, spaces_Temp.Count, (int i) => {
+                Parallel.For(0, spaces_Temp.Count, (int i) =>
+                {
 
                     Space space_Temp = spaces_Temp[i];
-                    if(space_Temp == null)
+                    if (space_Temp == null)
                     {
                         return;
                     }
@@ -170,7 +174,7 @@ namespace SAM.Analytical.Grasshopper
                 if (dictionary_Panel != null && dictionary_Panel.Count > 0)
                 {
                     int count = 0;
-                    foreach(KeyValuePair<Space, List<Panel>> keyValuePair in dictionary_Panel)
+                    foreach (KeyValuePair<Space, List<Panel>> keyValuePair in dictionary_Panel)
                     {
                         GH_Path path = new GH_Path(count);
                         keyValuePair.Value.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
@@ -190,14 +194,14 @@ namespace SAM.Analytical.Grasshopper
                 if (index != -1)
                 {
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
-                    foreach(KeyValuePair<Space, double> keyValuePair in dictionary_Area)
+                    foreach (KeyValuePair<Space, double> keyValuePair in dictionary_Area)
                     {
                         Space space = new Space(keyValuePair.Key);
                         space.SetValue(SpaceParameter.Area, keyValuePair.Value);
                         adjacencyCluster.AddObject(space);
 
                         int index_Space = spaces_Temp.IndexOf(keyValuePair.Key);
-                        if(index_Space != -1)
+                        if (index_Space != -1)
                         {
                             spaces_Temp[index_Space] = space;
                         }

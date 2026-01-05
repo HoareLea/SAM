@@ -1,8 +1,10 @@
-﻿using System;
-using System.Windows.Forms;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
-using SAM.Core.Grasshopper.Properties;
+using System;
+using System.Windows.Forms;
 
 namespace SAM.Core.Grasshopper
 {
@@ -69,7 +71,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
         {
-            outputParamManager.AddParameter(new GooObjectParam() { Name = typeof(T).Name, NickName = typeof(T).Name, Description = typeof(T).Name, Access = GH_ParamAccess.item});
+            outputParamManager.AddParameter(new GooObjectParam() { Name = typeof(T).Name, NickName = typeof(T).Name, Description = typeof(T).Name, Access = GH_ParamAccess.item });
         }
 
         /// <summary>

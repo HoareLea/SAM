@@ -1,7 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Core;
 using SAM.Geometry.Spatial;
+using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical
 {
@@ -60,9 +63,9 @@ namespace SAM.Analytical
                         panels_Destination_Invalid.Add(panel_Destination);
                         continue;
                     }
-                        
 
-                    List<Tuple<BoundingBox3D, Panel>> tuples_Source =  tuples.FindAll(x => x.Item1.InRange(point3D, tolerance));
+
+                    List<Tuple<BoundingBox3D, Panel>> tuples_Source = tuples.FindAll(x => x.Item1.InRange(point3D, tolerance));
                     if (tuples_Source.Count == 0)
                     {
                         panels_Destination_Invalid.Add(panel_Destination);
@@ -89,9 +92,9 @@ namespace SAM.Analytical
                 if (spaces_Destination != null && spaces_Destination.Count != 0 && spaces_Source != null && spaces_Source.Count != 0)
                 {
                     Dictionary<Space, Shell> dictionary = adjacencyCluster_Destination.ShellDictionary();
-                    if(dictionary != null)
+                    if (dictionary != null)
                     {
-                        foreach(KeyValuePair<Space, Shell> keyValuePair in dictionary)
+                        foreach (KeyValuePair<Space, Shell> keyValuePair in dictionary)
                         {
                             List<Space> spaces_Source_Shell = spaces_Source.FindAll(x => keyValuePair.Value.InRange(x.Location, tolerance) || keyValuePair.Value.Inside(x.Location, tolerance));
                             if (spaces_Source_Shell == null || spaces_Source_Shell.Count == 0)

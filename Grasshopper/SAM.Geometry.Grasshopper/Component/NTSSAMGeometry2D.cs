@@ -1,4 +1,7 @@
-﻿using Grasshopper.Kernel;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper.Kernel;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Planar;
@@ -66,7 +69,7 @@ namespace SAM.Geometry.Grasshopper
             }
 
             List<ISAMGeometry2D> geometry2Ds = Planar.Convert.ToSAM<ISAMGeometry2D>(lines_NTS);
-            if(geometry2Ds == null)
+            if (geometry2Ds == null)
                 dataAccess.SetDataList(0, null);
             else
                 dataAccess.SetDataList(0, geometry2Ds.ConvertAll(x => new GooSAMGeometry(x)));

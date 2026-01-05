@@ -1,4 +1,7 @@
-﻿using Grasshopper;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Grasshopper;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -25,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-                protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
+        protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
@@ -76,7 +79,7 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevations", NickName = "elevations", Description = "Elevations", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "geometries", NickName = "geometries", Description = "geometries", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
-                
+
                 return result.ToArray();
             }
         }
@@ -87,28 +90,28 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("_analyticals");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if(index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
             List<Panel> panels = new List<Panel>();
-            foreach(GH_ObjectWrapper objectWrapper in objectWrappers)
+            foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if(objectWrapper.Value is Panel)
+                if (objectWrapper.Value is Panel)
                 {
                     panels.Add((Panel)objectWrapper.Value);
                 }
-                else if(objectWrapper.Value is AnalyticalModel)
+                else if (objectWrapper.Value is AnalyticalModel)
                 {
                     List<Panel> panels_Temp = ((AnalyticalModel)objectWrapper.Value).GetPanels();
-                    if(panels_Temp != null)
+                    if (panels_Temp != null)
                     {
                         panels.AddRange(panels_Temp);
                     }
                 }
-                else if(objectWrapper.Value is AdjacencyCluster)
+                else if (objectWrapper.Value is AdjacencyCluster)
                 {
                     List<Panel> panels_Temp = ((AdjacencyCluster)objectWrapper.Value).GetPanels();
                     if (panels_Temp != null)
@@ -128,26 +131,26 @@ namespace SAM.Analytical.Grasshopper
 
             index = Params.IndexOfInputParam("tolerance_");
             double tolerance = Tolerance.Distance;
-            if(index != -1)
+            if (index != -1)
             {
                 dataAccess.GetData(index, ref tolerance);
             }
 
             Dictionary<Panel, Dictionary<double, List<Geometry.Spatial.ISAMGeometry3D>>> dictionary = new Dictionary<Panel, Dictionary<double, List<Geometry.Spatial.ISAMGeometry3D>>>();
 
-            foreach(double elevation in elevations)
+            foreach (double elevation in elevations)
             {
                 Geometry.Spatial.Plane plane = Geometry.Spatial.Plane.WorldXY.GetMoved(new Geometry.Spatial.Vector3D(0, 0, elevation)) as Geometry.Spatial.Plane;
                 Dictionary<Panel, List<Geometry.Spatial.ISAMGeometry3D>> dictionary_Temp = Analytical.Query.SectionDictionary<Geometry.Spatial.ISAMGeometry3D>(panels, plane, tolerance);
-                if(dictionary_Temp == null || dictionary_Temp.Count == 0)
+                if (dictionary_Temp == null || dictionary_Temp.Count == 0)
                 {
                     continue;
                 }
 
-                foreach(KeyValuePair<Panel, List<Geometry.Spatial.ISAMGeometry3D>> keyValuePair in dictionary_Temp)
+                foreach (KeyValuePair<Panel, List<Geometry.Spatial.ISAMGeometry3D>> keyValuePair in dictionary_Temp)
                 {
                     Panel panel = keyValuePair.Key;
-                    
+
                     Dictionary<double, List<Geometry.Spatial.ISAMGeometry3D>> dictionary_Elevation = null;
 
                     if (!dictionary.TryGetValue(panel, out dictionary_Elevation))
@@ -181,7 +184,7 @@ namespace SAM.Analytical.Grasshopper
                 foreach (KeyValuePair<Panel, Dictionary<double, List<Geometry.Spatial.ISAMGeometry3D>>> keyValuePair in dictionary)
                 {
                     GH_Path path = new GH_Path(count);
-                    foreach(double elevation in keyValuePair.Value.Keys)
+                    foreach (double elevation in keyValuePair.Value.Keys)
                     {
                         dataTree_Elevation.Add(elevation, path);
                     }

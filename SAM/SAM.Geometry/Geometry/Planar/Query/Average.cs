@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
@@ -14,7 +17,7 @@ namespace SAM.Geometry.Planar
 
             double x = 0;
             double y = 0;
-            foreach(Point2D point2D in point2Ds)
+            foreach (Point2D point2D in point2Ds)
             {
                 count++;
                 x += point2D.X;

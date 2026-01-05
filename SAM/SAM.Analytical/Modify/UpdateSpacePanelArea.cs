@@ -1,4 +1,7 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Core;
 using System.Collections.Generic;
 
 namespace SAM.Analytical
@@ -7,20 +10,20 @@ namespace SAM.Analytical
     {
         public static Dictionary<string, double> UpdateSpacePanelArea(this AdjacencyCluster adjacencyCluster, Space space)
         {
-            if(adjacencyCluster == null || space == null)
+            if (adjacencyCluster == null || space == null)
             {
                 return null;
             }
 
 
             Space space_Temp = adjacencyCluster.GetObject<Space>(space.Guid);
-            if(space_Temp == null)
+            if (space_Temp == null)
             {
                 return null;
             }
 
             List<Panel> panels = adjacencyCluster.GetPanels(space_Temp);
-            if(panels == null || panels.Count == 0)
+            if (panels == null || panels.Count == 0)
             {
                 return null;
             }
@@ -55,13 +58,13 @@ namespace SAM.Analytical
 
             foreach (Panel panel in panels)
             {
-                if(panel == null)
+                if (panel == null)
                 {
                     continue;
                 }
 
                 double area = panel.GetAreaNet();
-                if(double.IsNaN(area) || area <= 0)
+                if (double.IsNaN(area) || area <= 0)
                 {
                     continue;
                 }
@@ -79,7 +82,7 @@ namespace SAM.Analytical
                         break;
 
                     case PanelType.CurtainWall:
-                        if(external)
+                        if (external)
                         {
                             result["SAM_CurtainWall_External"] += area;
                         }
@@ -147,22 +150,22 @@ namespace SAM.Analytical
                 }
 
                 List<Aperture> apertures = panel.Apertures;
-                if(apertures != null)
+                if (apertures != null)
                 {
-                    foreach(Aperture aperture in apertures)
+                    foreach (Aperture aperture in apertures)
                     {
-                        if(aperture == null)
+                        if (aperture == null)
                         {
                             continue;
                         }
 
-                        switch(aperture.ApertureType)
+                        switch (aperture.ApertureType)
                         {
                             case ApertureType.Door:
-                                 if(external)
+                                if (external)
                                 {
                                     area = aperture.GetPaneArea();
-                                    if(!double.IsNaN(area) && area > 0)
+                                    if (!double.IsNaN(area) && area > 0)
                                     {
                                         result["SAM_DoorPane_External"] += area;
                                     }
@@ -187,7 +190,7 @@ namespace SAM.Analytical
                                         result["SAM_DoorFrame_Internal"] += area;
                                     }
                                 }
-                                
+
                                 break;
 
                             case ApertureType.Window:
@@ -225,7 +228,7 @@ namespace SAM.Analytical
                 }
             }
 
-            foreach(KeyValuePair<string, double> keyValuePair in result)
+            foreach (KeyValuePair<string, double> keyValuePair in result)
             {
                 space_Temp.SetValue(keyValuePair.Key, keyValuePair.Value);
             }

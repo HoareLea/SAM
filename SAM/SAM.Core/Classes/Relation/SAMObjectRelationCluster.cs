@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
 namespace SAM.Core
@@ -43,16 +46,16 @@ namespace SAM.Core
         }
     }
 
-    public class SAMObjectRelationCluster<T> : RelationCluster<T>, IJSAMObject, ISAMObjectRelationCluster where T: IJSAMObject
+    public class SAMObjectRelationCluster<T> : RelationCluster<T>, IJSAMObject, ISAMObjectRelationCluster where T : IJSAMObject
     {
         public SAMObjectRelationCluster()
-            :base()
+            : base()
         {
 
         }
 
         public SAMObjectRelationCluster(JObject jObject)
-            :base(jObject)
+            : base(jObject)
         {
         }
 
@@ -65,7 +68,7 @@ namespace SAM.Core
         public SAMObjectRelationCluster(SAMObjectRelationCluster<T> sAMObjectRelationCluster, bool deepClone)
             : base(sAMObjectRelationCluster)
         {
-            if(deepClone)
+            if (deepClone)
             {
                 List<T> objects = GetObjects();
                 if (objects != null)

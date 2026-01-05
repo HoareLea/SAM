@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -10,7 +13,7 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D normal = plane.Normal;
-            
+
             return vector3D - vector3D.DotProduct(normal) * normal;
 
             //double factor = vector3D.DotProduct(normal) - K;
@@ -27,25 +30,25 @@ namespace SAM.Geometry.Spatial
 
         public static Point3D Project(this Face3D face3D, Point3D point3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(point3D == null || face3D == null)
+            if (point3D == null || face3D == null)
             {
                 return null;
             }
 
 
             Plane plane = face3D.GetPlane();
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
 
             Point3D point3D_Project = plane.Project(point3D);
-            if(point3D_Project == null)
+            if (point3D_Project == null)
             {
                 return null;
             }
 
-            return face3D.InRange(point3D, tolerance) ? point3D_Project: null;
+            return face3D.InRange(point3D, tolerance) ? point3D_Project : null;
         }
 
         public static Point3D Project(this Plane plane, Point3D point3D, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
@@ -237,7 +240,7 @@ namespace SAM.Geometry.Spatial
 
         public static IClosedPlanar3D Project(this Plane plane, IClosedPlanar3D closedPlanar3D)
         {
-            if (plane  == null || closedPlanar3D == null)
+            if (plane == null || closedPlanar3D == null)
                 return null;
 
             return Project(plane, closedPlanar3D as dynamic);
@@ -253,20 +256,20 @@ namespace SAM.Geometry.Spatial
 
         public static Face3D Project(this Plane plane, Shell shell, Vector3D vector3D, double tolerance = Core.Tolerance.Distance)
         {
-            if(plane == null || shell == null || vector3D == null)
+            if (plane == null || shell == null || vector3D == null)
             {
                 return null;
             }
 
             List<Face3D> face3Ds = shell.Face3Ds;
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
 
             face3Ds = face3Ds.ConvertAll(x => plane.Project(x, vector3D, tolerance));
             face3Ds.RemoveAll(x => x == null || !x.IsValid() || x.GetArea() < tolerance);
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return null;
             }
@@ -321,19 +324,19 @@ namespace SAM.Geometry.Spatial
 
         public static Point3D Project(this Sphere sphere, Point3D point3D)
         {
-            if(sphere == null || point3D == null)
+            if (sphere == null || point3D == null)
             {
                 return null;
             }
 
             Point3D origin = sphere.Origin;
-            if(origin == null || !origin.IsValid())
+            if (origin == null || !origin.IsValid())
             {
                 return null;
             }
 
             Vector3D vector3D = new Vector3D(origin, point3D);
-            if(!vector3D.IsValid())
+            if (!vector3D.IsValid())
             {
                 return null;
             }

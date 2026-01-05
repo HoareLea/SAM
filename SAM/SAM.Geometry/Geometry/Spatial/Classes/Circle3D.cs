@@ -1,4 +1,7 @@
-﻿using Newtonsoft.Json.Linq;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using Newtonsoft.Json.Linq;
 using System;
 
 namespace SAM.Geometry.Spatial
@@ -88,11 +91,11 @@ namespace SAM.Geometry.Spatial
 
         public Plane GetPlane()
         {
-            if(plane == null)
+            if (plane == null)
             {
                 return null;
             }
-            
+
             return new Plane(plane);
         }
 
@@ -103,14 +106,14 @@ namespace SAM.Geometry.Spatial
         /// <returns>Point on Circle</returns>
         public Point3D GetPoint3D(double angle)
         {
-            if(plane == null || double.IsNaN(radius))
+            if (plane == null || double.IsNaN(radius))
             {
                 return null;
             }
 
             Planar.Circle2D circle2D = new Planar.Circle2D(plane.Convert(plane.Origin), radius);
             Planar.Point2D point2D = circle2D.GetPoint2D(angle);
-            if(point2D == null)
+            if (point2D == null)
             {
                 return null;
             }
@@ -171,7 +174,7 @@ namespace SAM.Geometry.Spatial
         public override bool Equals(object obj)
         {
             Circle3D circle3D = obj as Circle3D;
-            if(circle3D == null)
+            if (circle3D == null)
             {
                 return false;
             }

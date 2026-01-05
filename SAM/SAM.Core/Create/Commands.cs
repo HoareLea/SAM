@@ -1,4 +1,7 @@
-﻿using System;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -8,7 +11,7 @@ namespace SAM.Core
     {
         public static List<Command> Commands(this string text)
         {
-            if(string.IsNullOrWhiteSpace(text))
+            if (string.IsNullOrWhiteSpace(text))
             {
                 return null;
             }
@@ -16,9 +19,9 @@ namespace SAM.Core
             string[] lines = text.Split('\n');
 
             List<Command> result = new List<Command>();
-            foreach(string line in lines)
+            foreach (string line in lines)
             {
-                if(string.IsNullOrWhiteSpace(line))
+                if (string.IsNullOrWhiteSpace(line))
                 {
                     continue;
                 }
@@ -43,7 +46,7 @@ namespace SAM.Core
             List<int> indexes = new List<int>();
             List<string> operators = new List<string>();
 
-            if(enums != null)
+            if (enums != null)
             {
                 foreach (Enum @enum in enums)
                 {

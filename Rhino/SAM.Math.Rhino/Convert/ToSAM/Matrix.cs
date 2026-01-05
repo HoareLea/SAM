@@ -1,4 +1,7 @@
-﻿namespace SAM.Math.Rhino
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+namespace SAM.Math.Rhino
 {
     public static partial class Convert
     {
@@ -12,7 +15,7 @@
                 for (int j = 0; j < matrix.ColumnCount; j++)
                     result[i, j] = matrix[i, j];
 
-            if(result.IsSquare())
+            if (result.IsSquare())
             {
                 if (matrix.RowCount == 2)
                     return Create.Matrix2D(result);

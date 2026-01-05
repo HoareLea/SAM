@@ -1,12 +1,14 @@
-﻿using SAM.Core;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using SAM.Architectural;
+using SAM.Core;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-
-using SAM.Architectural;
 
 namespace SAM.Analytical
 {
@@ -73,7 +75,7 @@ namespace SAM.Analytical
                     if (polygon3D_Min != null)
                     {
                         IHostPartition hostPartition = HostPartition(new Face3D(polygon3D_Min), null, tolerance_Angle);
-                        if(hostPartition != null)
+                        if (hostPartition != null)
                         {
                             dictionary[space].Add(hostPartition);
                         }
@@ -106,7 +108,7 @@ namespace SAM.Analytical
                     }
                 }
 
-                foreach(KeyValuePair<Space, List<IHostPartition>> keyValuePair in dictionary)
+                foreach (KeyValuePair<Space, List<IHostPartition>> keyValuePair in dictionary)
                 {
                     result.Add(keyValuePair.Key, keyValuePair.Value);
                 }
@@ -233,7 +235,7 @@ namespace SAM.Analytical
 
         public static BuildingModel BuildingModel(this IEnumerable<Shell> shells, IEnumerable<IPartition> partitions, double groundElevation = 0, bool addMissingPartitions = true, MaterialLibrary materialLibrary = null, double thinnessRatio = 0.01, double minArea = Tolerance.MacroDistance, double maxDistance = 0.1, double maxAngle = 0.0872664626, double silverSpacing = Tolerance.MacroDistance, double tolerance_Distance = Tolerance.Distance, double tolerance_Angle = Tolerance.Angle)
         {
-            if(shells == null && partitions == null)
+            if (shells == null && partitions == null)
             {
                 return null;
             }
@@ -241,7 +243,7 @@ namespace SAM.Analytical
             List<Tuple<Space, List<IPartition>>> tuples = new List<Tuple<Space, List<IPartition>>>();
 
             List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_Partition = new List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>>();
-            if(partitions != null)
+            if (partitions != null)
             {
                 foreach (IPartition partition in partitions)
                 {
@@ -299,13 +301,13 @@ namespace SAM.Analytical
                 }
 
                 Shell shell_FixEdges = shell_Merge.FixEdges(tolerance_Distance);
-                if(shell_FixEdges == null)
+                if (shell_FixEdges == null)
                 {
                     shell_FixEdges = new Shell(shell_Merge);
                 }
 
                 Shell shell_CutFace3D = shell_FixEdges.CutFace3Ds(plane_Ground);
-                if(shell_CutFace3D == null)
+                if (shell_CutFace3D == null)
                 {
                     shell_CutFace3D = new Shell(shell_FixEdges);
                 }
@@ -394,7 +396,7 @@ namespace SAM.Analytical
                 tuples.Add(tuple);
 
                 List<Tuple<Plane, Face3D, IPartition, BoundingBox3D, double>> tuples_hostPartition_Temp = tuples_Partition.FindAll(x => boundingBox3D_Shell.InRange(x.Item4, tolerance_Distance));
-                
+
                 foreach (Face3D face3D in face3Ds)
                 {
                     Plane plane = face3D?.GetPlane();
@@ -527,21 +529,21 @@ namespace SAM.Analytical
                                 }
 
                                 partition_New = Partition(partition_New_Temp, guid, face3D, tolerance_Distance);
-                                if(partition_New == null)
+                                if (partition_New == null)
                                 {
                                     continue;
                                 }
 
-                                if(partitions_New_Temp.Count > 1 && partition_New is IHostPartition)
+                                if (partitions_New_Temp.Count > 1 && partition_New is IHostPartition)
                                 {
                                     partitions_New_Temp.RemoveAt(0);
 
                                     IHostPartition hostPartition_New = (IHostPartition)partition_New;
 
-                                    foreach(IPartition partition in partitions_New_Temp)
+                                    foreach (IPartition partition in partitions_New_Temp)
                                     {
                                         List<IOpening> openings = (partition as IHostPartition)?.GetOpenings();
-                                        if(openings == null || openings.Count == 0)
+                                        if (openings == null || openings.Count == 0)
                                         {
                                             continue;
                                         }
@@ -561,7 +563,7 @@ namespace SAM.Analytical
                         partition_New = new AirPartition(face3D);
                     }
 
-                    if(partition_New != null)
+                    if (partition_New != null)
                     {
                         tuple.Item2.Add(partition_New);
                         tuples_Partition_New.Add(new Tuple<Point3D, IPartition, BoundingBox3D>(point3D_Internal, partition_New, partition_New.Face3D.GetBoundingBox(tolerance_Distance)));

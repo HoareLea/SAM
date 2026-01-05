@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Spatial
 {
@@ -6,7 +9,7 @@ namespace SAM.Geometry.Spatial
     {
         public static bool SplitEdges(this List<Face3D> face3Ds, double tolerance = Core.Tolerance.Distance)
         {
-            if(face3Ds == null || face3Ds.Count == 0)
+            if (face3Ds == null || face3Ds.Count == 0)
             {
                 return false;
             }
@@ -17,7 +20,7 @@ namespace SAM.Geometry.Spatial
                 List<Face3D> face3Ds_Temp = new List<Face3D>(face3Ds);
                 face3Ds_Temp.Remove(face3Ds[i]);
 
-                if(Query.TrySplitEdges(face3Ds[i], face3Ds_Temp, out Face3D face3D, tolerance) && face3D != null)
+                if (Query.TrySplitEdges(face3Ds[i], face3Ds_Temp, out Face3D face3D, tolerance) && face3D != null)
                 {
                     face3Ds[i] = face3D;
                     result = true;
