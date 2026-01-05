@@ -1,0 +1,45 @@
+name: SPDX + Copyright header check
+
+on:
+  pull_request:
+
+jobs:
+  spdx:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check header in changed .cs files
+        run: |
+          set -e
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="${{ github.event.pull_request.head.sha }}"
+
+          FILES=$(git diff --name-only "$BASE" "$HEAD" -- '*.cs' || true)
+
+          if [ -z "$FILES" ]; then
+            echo "No C# files changed."
+            exit 0
+          fi
+
+          MISSING=""
+          for f in $FILES; do
+            HEADBLOCK=$(head -n 6 "$f")
+
+            echo "$HEADBLOCK" | grep -q "// SPDX-License-Identifier: LGPL-3.0-or-later" || MISSING="$MISSING $f"
+            echo "$HEADBLOCK" | grep -q "// Copyright (c) 2020–2025 Michal Dengusiak & Jakub Ziolkowski and contributors" || MISSING="$MISSING $f"
+          done
+
+          if [ -n "$MISSING" ]; then
+            echo "❌ Missing required header in:"
+            for f in $MISSING; do echo " - $f"; done
+            echo ""
+            echo "Each changed .cs file must start with:"
+            echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
+            echo "// Copyright (c) 2020–2025 Michal Dengusiak & Jakub Ziolkowski and contributors"
+            exit 1
+          fi
+
+          echo "✅ SPDX + copyright headers OK."
