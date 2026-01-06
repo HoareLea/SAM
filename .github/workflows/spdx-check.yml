@@ -1,55 +1,96 @@
-- uses: actions/checkout@v4
-  with:
-    fetch-depth: 0
+name: SPDX + Copyright header check
 
-- name: Check SPDX + copyright header in changed .cs files
-  shell: bash
-  run: |
-    set -euo pipefail
+on:
+  pull_request:
 
-    BASE="${{ github.event.pull_request.base.sha }}"
-    HEAD="${{ github.event.pull_request.head.sha }}"
+jobs:
+  spdx:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    steps:
+      - name: Check SPDX + copyright header in changed .cs files
+        env:
+          GH_TOKEN: ${{ github.token }}
+          PR: ${{ github.event.pull_request.number }}
+          REPO: ${{ github.repository }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
 
-    FILES=$(git diff --name-only "$BASE" "$HEAD" -- '*.cs' || true)
+          echo "Repo: $REPO"
+          echo "PR: $PR"
+          echo "Head SHA: $HEAD_SHA"
+          echo ""
 
-    if [ -z "$FILES" ]; then
-      echo "No C# files changed."
-      exit 0
-    fi
+          mapfile -t files < <(
+            gh api "repos/$REPO/pulls/$PR/files" --paginate \
+              --jq '.[] | .filename | select(endswith(".cs"))'
+          )
 
-    missing=()
+          if [ "${#files[@]}" -eq 0 ]; then
+            echo "No C# files changed."
+            exit 0
+          fi
 
-    # Regexes:
-    # - SPDX: exact identifier, but allow spaces
-    spdx_re='SPDX-License-Identifier:[[:space:]]*LGPL-3\.0-or-later'
-    # - Copyright: tolerate dash types and spaces, (c) case-insensitive
-    cr_re='Copyright[[:space:]]*\(c\)[[:space:]]*2020[[:space:]]*[-–—][[:space:]]*2026[[:space:]]*Michal[[:space:]]+Dengusiak[[:space:]]*&[[:space:]]*Jakub[[:space:]]+Ziolkowski[[:space:]]+and[[:space:]]+contributors'
+          echo "C# files changed in PR:"
+          printf ' - %s\n' "${files[@]}"
+          echo ""
 
-    while IFS= read -r f; do
-      echo "Checking: $f"
+          spdx_re='SPDX-License-Identifier:[[:space:]]*LGPL-3\.0-or-later'
+          cr_re='Copyright[[:space:]]*\(c\)[[:space:]]*2020[[:space:]]*[-–—][[:space:]]*2026[[:space:]]*Michal[[:space:]]+Dengusiak[[:space:]]*&[[:space:]]*Jakub[[:space:]]+Ziolkowski[[:space:]]+and[[:space:]]+contributors'
 
-      # Read from PR HEAD commit, normalize CRLF, and look at first 80 lines
-      headblock=$(git show "$HEAD:$f" 2>/dev/null | head -n 80 | tr -d '\r' || true)
+          missing=()
 
-      if [ -z "$headblock" ]; then
-        echo "  Could not read file content from PR head."
-        missing+=("$f")
-        continue
-      fi
+          for f in "${files[@]}"; do
+            echo "Checking: $f"
 
-      echo "$headblock" | grep -Eiq "$spdx_re" || { echo "  Missing SPDX line."; missing+=("$f"); continue; }
-      echo "$headblock" | grep -Eiq "$cr_re"   || { echo "  Missing copyright line."; missing+=("$f"); continue; }
+            # Skip entire Properties folders (typically generated / designer-managed code)
+            case "$f" in
+              */Properties/*)
+                echo "  ⏭️ Skipping Properties/*"
+                continue
+                ;;
+            esac
 
-    done <<< "$FILES"
+            content_b64=$(gh api "repos/$REPO/contents/$f?ref=$HEAD_SHA" --jq '.content' 2>/dev/null || true)
+            if [ -z "$content_b64" ]; then
+              echo "  ❌ Could not fetch file content (deleted? submodule? path issue)"
+              missing+=("$f (unreadable)")
+              continue
+            fi
 
-    if [ ${#missing[@]} -ne 0 ]; then
-      echo "❌ Missing required header in:"
-      for f in "${missing[@]}"; do echo " - $f"; done
-      echo ""
-      echo "Expected somewhere in first 80 lines:"
-      echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
-      echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
-      exit 1
-    fi
+            # Decode fully first (avoids SIGPIPE/broken pipe with pipefail),
+            # normalize CRLF, then take first 80 lines.
+            decoded=$(printf '%s' "$content_b64" | base64 -d)
+            headblock=$(printf '%s' "$decoded" | tr -d '\r' | sed -n '1,80p')
 
-    echo "✅ Headers OK."
+            if ! printf '%s' "$headblock" | grep -Eiq "$spdx_re"; then
+              echo "  ❌ Missing SPDX line in first 80 lines"
+              missing+=("$f (SPDX)")
+              continue
+            fi
+
+            if ! printf '%s' "$headblock" | grep -Eiq "$cr_re"; then
+              echo "  ❌ Missing copyright line in first 80 lines"
+              missing+=("$f (Copyright)")
+              continue
+            fi
+
+            echo "  ✅ OK"
+          done
+
+          echo ""
+          if [ "${#missing[@]}" -ne 0 ]; then
+            echo "❌ Missing required header in:"
+            printf ' - %s\n' "${missing[@]}"
+            echo ""
+            echo "Expected somewhere in first 80 lines:"
+            echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
+            echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
+            exit 1
+          fi
+
+          echo "✅ SPDX + copyright headers OK."
