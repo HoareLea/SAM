@@ -1,7 +1,7 @@
 # SAM
 
 [![Build (Windows)](https://github.com/SAM-BIM/SAM/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SAM-BIM/SAM/actions/workflows/build.yml)
-
+[![Latest Release](https://img.shields.io/github/v/release/SAM-BIM/SAM?label=latest%20release)](https://github.com/SAM-BIM/SAM/releases/latest)
 
 <p align="center">
   <img src="https://github.com/HoareLea/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png" alt="SAM Logo" align="left" hspace="10" vspace="6">
