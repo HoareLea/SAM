@@ -9,6 +9,8 @@ on:
 
 jobs:
   build:
+    # Runs only on SAM-BIM repos (won't break upstream if merged elsewhere)
+    if: github.repository_owner == 'SAM-BIM'
     runs-on: windows-2022
 
     strategy:
@@ -21,7 +23,8 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          submodules: recursive
+          # Set to "recursive" only if THIS repo actually uses submodules
+          submodules: false
 
       - name: Setup .NET 8
         uses: actions/setup-dotnet@v4
@@ -31,36 +34,27 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
-      - name: Pick build target
+      - name: Pick build target (.sln or .csproj)
         id: pick
         shell: pwsh
         run: |
           $ErrorActionPreference = 'Stop'
 
-          if (Test-Path ".\BuildAll_Release_net.csproj") {
-            "target=BuildAll_Release_net.csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            "kind=csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            Write-Host "Selected: BuildAll_Release_net.csproj"
-            exit 0
-          }
-
           $sln = Get-ChildItem -Path . -Filter *.sln -File | Select-Object -First 1
           if ($sln) {
             "target=$($sln.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            "kind=sln" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            Write-Host "Selected: $($sln.Name)"
+            Write-Host "Selected solution: $($sln.Name)"
             exit 0
           }
 
           $csproj = Get-ChildItem -Path . -Filter *.csproj -File | Select-Object -First 1
           if ($csproj) {
             "target=$($csproj.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            "kind=csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
-            Write-Host "Selected: $($csproj.Name)"
+            Write-Host "Selected project: $($csproj.Name)"
             exit 0
           }
 
-          throw "No BuildAll_Release_net.csproj, .sln, or root .csproj found to build."
+          throw "No root .sln or root .csproj found to build."
 
       - name: Restore
         shell: pwsh
@@ -68,8 +62,7 @@ jobs:
           MSBUILDDISABLENODEREUSE: "1"
         run: |
           $ErrorActionPreference = 'Stop'
-          $t = '${{ steps.pick.outputs.target }}'
-          msbuild $t `
+          msbuild '${{ steps.pick.outputs.target }}' `
             /t:Restore `
             /m:1 /nr:false /v:m `
             /p:Configuration=${{ matrix.configuration }} `
@@ -81,8 +74,7 @@ jobs:
           MSBUILDDISABLENODEREUSE: "1"
         run: |
           $ErrorActionPreference = 'Stop'
-          $t = '${{ steps.pick.outputs.target }}'
-          msbuild $t `
+          msbuild '${{ steps.pick.outputs.target }}' `
             /t:Rebuild `
             /m:1 /nr:false /v:m `
             /p:Configuration=${{ matrix.configuration }} `
