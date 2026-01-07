@@ -9,9 +9,6 @@ on:
 
 jobs:
   build:
-    # Guard: run CI only in SAM-BIM org (prevents breaking upstream )
-    if: github.repository_owner == 'SAM-BIM'
-
     runs-on: windows-2022
 
     strategy:
@@ -34,18 +31,49 @@ jobs:
       - name: Setup MSBuild
         uses: microsoft/setup-msbuild@v2
 
+      - name: Pick build target
+        id: pick
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+
+          if (Test-Path ".\BuildAll_Release_net.csproj") {
+            "target=BuildAll_Release_net.csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "kind=csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            Write-Host "Selected: BuildAll_Release_net.csproj"
+            exit 0
+          }
+
+          $sln = Get-ChildItem -Path . -Filter *.sln -File | Select-Object -First 1
+          if ($sln) {
+            "target=$($sln.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "kind=sln" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            Write-Host "Selected: $($sln.Name)"
+            exit 0
+          }
+
+          $csproj = Get-ChildItem -Path . -Filter *.csproj -File | Select-Object -First 1
+          if ($csproj) {
+            "target=$($csproj.Name)" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            "kind=csproj" | Out-File -FilePath $env:GITHUB_OUTPUT -Append -Encoding utf8
+            Write-Host "Selected: $($csproj.Name)"
+            exit 0
+          }
+
+          throw "No BuildAll_Release_net.csproj, .sln, or root .csproj found to build."
+
       - name: Restore
         shell: pwsh
         env:
           MSBUILDDISABLENODEREUSE: "1"
         run: |
           $ErrorActionPreference = 'Stop'
-          msbuild `
-            '.\BuildAll_Release_net.csproj' `
-            '/t:Restore' `
-            '/m:1' '/nr:false' '/v:m' `
-            "/p:Configuration=${{ matrix.configuration }}" `
-            '/p:UseSharedCompilation=false'
+          $t = '${{ steps.pick.outputs.target }}'
+          msbuild $t `
+            /t:Restore `
+            /m:1 /nr:false /v:m `
+            /p:Configuration=${{ matrix.configuration }} `
+            /p:UseSharedCompilation=false
 
       - name: Build
         shell: pwsh
@@ -53,9 +81,9 @@ jobs:
           MSBUILDDISABLENODEREUSE: "1"
         run: |
           $ErrorActionPreference = 'Stop'
-          msbuild `
-            '.\BuildAll_Release_net.csproj' `
-            '/t:Rebuild' `
-            '/m:1' '/nr:false' '/v:m' `
-            "/p:Configuration=${{ matrix.configuration }}" `
-            '/p:UseSharedCompilation=false'
+          $t = '${{ steps.pick.outputs.target }}'
+          msbuild $t `
+            /t:Rebuild `
+            /m:1 /nr:false /v:m `
+            /p:Configuration=${{ matrix.configuration }} `
+            /p:UseSharedCompilation=false
