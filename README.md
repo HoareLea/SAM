@@ -1,6 +1,6 @@
 # SAM
 
-[![Build (Windows)](https://github.com/SAM-BIM/<REPO_NAME>/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SAM-BIM/<REPO_NAME>/actions/workflows/build.yml)
+[![Build (Windows)](https://github.com/SAM-BIM/SAM/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SAM-BIM/SAM/actions/workflows/build.yml)
 
 
 <p align="center">
