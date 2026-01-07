@@ -1,6 +1,7 @@
 # SAM
 
-[![Build Status](https://hldigitalinnovation.visualstudio.com/HLApps/_apis/build/status/SAM-Deploy-SAM?branchName=master)](https://hldigitalinnovation.visualstudio.com/HLApps/_build/latest?definitionId=18&branchName=master)
+[![Build (Windows)](https://github.com/SAM-BIM/<REPO_NAME>/actions/workflows/build.yml/badge.svg?branch=master)](https://github.com/SAM-BIM/<REPO_NAME>/actions/workflows/build.yml)
+
 
 <p align="center">
   <img src="https://github.com/HoareLea/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png" alt="SAM Logo" align="left" hspace="10" vspace="6">
