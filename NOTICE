@@ -1,0 +1,19 @@
+SAM-BIM — Sustainable Analytical Model (SAM)
+
+Copyright © 2020–2026
+Michal Dengusiak & Jakub Ziolkowski and contributors
+
+This repository is part of the SAM (Sustainable Analytical Model) toolkit.
+
+License
+This project is licensed under the GNU Lesser General Public License
+v3.0 or later (LGPL-3.0-or-later). See the LICENSE file for details.
+
+Attribution and third-party software
+Each contributor retains copyright to their respective contributions.
+The project history (Git) records authorship and provenance of all changes.
+
+This repository may include or depend on third-party open-source components.
+Where applicable, third-party notices and license information are provided in:
+- THIRD_PARTY.md (if present)
+- LICENSE (and any license files within third-party source folders)

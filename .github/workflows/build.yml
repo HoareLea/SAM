@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          # Set to "recursive" only if THIS repo actually uses submodules
+          # Set to "recursive" only if THIS repo actually uses submodules otherwise "false"
           submodules: false
 
       - name: Setup .NET 8
