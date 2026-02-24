@@ -232,60 +232,71 @@ namespace SAM.Analytical
 
         public List<ApertureConstruction> GetApertureConstructions()
         {
+            return GetApertureConstructions(true, true);
+        }
+
+        public List<ApertureConstruction> GetApertureConstructions(bool apertures = true, bool templates = true)
+        {
             List<ApertureConstruction> result = null;
 
-            List<Panel> panels = GetPanels();
-            if (panels != null)
+            if(apertures)
             {
-                Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
-                foreach (Panel panel in panels)
+                List<Panel> panels = GetPanels();
+                if (panels != null)
                 {
-                    if (panel == null)
-                        continue;
-
-                    List<Aperture> apertures = panel.Apertures;
-                    if (apertures == null || apertures.Count == 0)
-                        continue;
-
-                    foreach (Aperture aperture in apertures)
+                    Dictionary<Guid, ApertureConstruction> dictionary = new Dictionary<Guid, ApertureConstruction>();
+                    foreach (Panel panel in panels)
                     {
-                        if (aperture == null)
+                        if (panel == null)
                             continue;
 
-                        Guid guid = aperture.TypeGuid;
-                        if (guid == Guid.Empty)
+                        List<Aperture> apertures_Temp = panel.Apertures;
+                        if (apertures_Temp == null || apertures_Temp.Count == 0)
                             continue;
 
-                        if (dictionary.ContainsKey(guid))
-                            continue;
+                        foreach (Aperture aperture in apertures_Temp)
+                        {
+                            if (aperture == null)
+                                continue;
 
-                        ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
-                        if (apertureConstruction == null)
-                            continue;
+                            Guid guid = aperture.TypeGuid;
+                            if (guid == Guid.Empty)
+                                continue;
 
-                        dictionary[guid] = apertureConstruction;
+                            if (dictionary.ContainsKey(guid))
+                                continue;
+
+                            ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                            if (apertureConstruction == null)
+                                continue;
+
+                            dictionary[guid] = apertureConstruction;
+                        }
                     }
-                }
 
-                if (dictionary != null && dictionary.Count != 0)
-                {
-                    result = new List<ApertureConstruction>();
-                    if (dictionary.Values != null)
+                    if (dictionary != null && dictionary.Count != 0)
                     {
-                        result.AddRange(dictionary.Values);
+                        result = new List<ApertureConstruction>();
+                        if (dictionary.Values != null)
+                        {
+                            result.AddRange(dictionary.Values);
+                        }
                     }
                 }
             }
 
-            List<ApertureConstruction> apertureConstructions = GetObjects<ApertureConstruction>();
-            if (apertureConstructions != null)
+            if (templates)
             {
-                if (result == null)
+                List<ApertureConstruction> apertureConstructions = GetObjects<ApertureConstruction>();
+                if (apertureConstructions != null)
                 {
-                    result = new List<ApertureConstruction>();
-                }
+                    if (result == null)
+                    {
+                        result = new List<ApertureConstruction>();
+                    }
 
-                result.AddRange(apertureConstructions);
+                    result.AddRange(apertureConstructions);
+                }
             }
 
             return result;
