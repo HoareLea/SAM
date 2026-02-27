@@ -9,33 +9,6 @@ namespace SAM.Core
 {
     public static class ColorPaletteGenerator
     {
-        // ---- Fixed palettes (start points) ----
-        public static readonly Color[] CategoricalSoftSet12 =
-        {
-            Hex("#8DD3C7"), Hex("#FFFFB3"), Hex("#BEBADA"), Hex("#FB8072"),
-            Hex("#80B1D3"), Hex("#FDB462"), Hex("#B3DE69"), Hex("#FCCDE5"),
-            Hex("#D9D9D9"), Hex("#BC80BD"), Hex("#CCEBC5"), Hex("#FFED6F")
-        };
-
-        public static readonly Color[] Tableau10 =
-        {
-            Hex("#4E79A7"), Hex("#F28E2B"), Hex("#E15759"), Hex("#76B7B2"),
-            Hex("#59A14F"), Hex("#EDC948"), Hex("#B07AA1"), Hex("#FF9DA7"),
-            Hex("#9C755F"), Hex("#BAB0AC")
-        };
-
-        // Temperature stops (cool->warm). Use gradient generator for any N
-        public static readonly (double pos, Color color)[] TemperatureStops =
-        {
-            (0.0, Hex("#2C7BB6")),
-            (0.25, Hex("#00A6CA")),
-            (0.5, Hex("#F9D057")),
-            (0.75, Hex("#F29E2E")),
-            (1.0, Hex("#D7191C"))
-        };
-
-        // ---- Public API: get N colors ----
-
         /// <summary>
         /// Returns N colors from a categorical base palette. If N > base size, generates additional colours.
         /// </summary>
@@ -190,6 +163,149 @@ namespace SAM.Core
             return Color.FromArgb(255, Query.Clamp(r, 0, 255), Query.Clamp(g, 0, 255), Query.Clamp(b, 0, 255));
         }
 
+        public static List<Color> GetColors<T>(PaletteDefinition paletteDefinition, IEnumerable<T> values)
+        {
+            if(paletteDefinition == null || values == null)
+            {
+                return null;
+            }
+
+            List<Color> result = [];
+
+            int count = values.Count();
+
+            if(count == 0)
+            {
+                return result;
+            }
+
+            List<double> values_Number = values.Where(x => Query.IsNumeric(x)).ToList().ConvertAll(x => Query.ParseDouble(x.ToString()));
+            bool hasNumeric = values_Number.Count != 0;
+
+
+            double min = hasNumeric ? values_Number.Min() : double.NaN;
+            double max = hasNumeric ? values_Number.Max() : double.NaN;
+
+            switch (paletteDefinition.PaletteType)
+            {
+                case PaletteType.Categorical:
+
+                    IEnumerable<Color> colors = paletteDefinition.Colors;
+
+                    for (int i = 0; i < count; i++)
+                    {
+                        T value = values.ElementAt(i);
+
+                        int index = paletteDefinition.StableByName ? StableIndex(value.ToString() ?? "", colors.Count(), salt: paletteDefinition.Name) : i % colors.Count();
+
+                        result.Add(colors.ElementAt(index));
+                    }
+
+                    return result;
+
+                case PaletteType.Sequential:
+
+                    if (hasNumeric)
+                    {
+                        double span = Math.Max(Tolerance.MicroDistance, max - min);
+
+                        foreach (T value in values)
+                        {
+                            double t = Query.IsNumeric(value) ? (Query.ParseDouble(value.ToString()) - min) / span : 0.5;
+                            result.Add(SampleStops(paletteDefinition.Colors, t));
+                        }
+                    }
+                    else
+                    {
+                        result = GenerateEvenFromStops(paletteDefinition.Colors, count);
+                    }
+                    break;
+
+                case PaletteType.Diverging:
+
+                    // Expect palette.Colors to be 3 stops: low, mid, high (or more)
+                    // If items have Value: map around midpoint (by value or by palette.Midpoint)
+                    // If no Value: just distribute evenly over stops
+
+                    if (!hasNumeric)
+                    {
+                        result = GenerateEvenFromStops(paletteDefinition.Colors, count);
+
+                        return result;
+                    }
+
+                    double midValue = min + (max - min) * paletteDefinition.Midpoint;
+                    double spanLow = Math.Max(Tolerance.MicroDistance, midValue - min);
+                    double spanHigh = Math.Max(Tolerance.MicroDistance, max - midValue);
+
+                    foreach (T value in values)
+                    {
+                        if (value == null || !Query.IsNumeric(value))
+                        {
+                            result.Add(SampleStops(paletteDefinition.Colors, 0.5));
+                            continue;
+                        }
+
+                        double v = Query.ParseDouble(value.ToString());
+                        double t;
+                        if (v <= midValue)
+                        {
+                            // map min..mid => 0..0.5
+                            t = 0.5 * ((v - min) / spanLow);
+                        }
+                        else
+                        {
+                            // map mid..max => 0.5..1
+                            t = 0.5 + 0.5 * ((v - midValue) / spanHigh);
+                        }
+
+                        result.Add(SampleStops(paletteDefinition.Colors, t));
+                    }
+                    break;
+            }
+
+
+            return result;
+        }
+
+        private static List<Color> GenerateEvenFromStops(IReadOnlyList<Color> stops, int n)
+        {
+            if (n <= 0) throw new ArgumentOutOfRangeException(nameof(n));
+            if (n == 1) return new List<Color> { SampleStops(stops, 0.5) };
+
+            var list = new List<Color>(n);
+            for (int i = 0; i < n; i++)
+            {
+                double t = (double)i / (n - 1);
+                list.Add(SampleStops(stops, t));
+            }
+            return list;
+        }
+
+        private static Color SampleStops(IReadOnlyList<Color> stops, double t)
+        {
+            t = Query.Clamp(t, 0, 1);
+            if (stops.Count == 1) return stops[0];
+
+            // Treat list as evenly spaced stops
+            double scaled = t * (stops.Count - 1);
+            int i0 = (int)Math.Floor(scaled);
+            int i1 = Math.Min(i0 + 1, stops.Count - 1);
+            double u = scaled - i0;
+
+            return Lerp(stops[i0], stops[i1], u);
+        }
+
+        private static Color Lerp(Color a, Color b, double t)
+        {
+            t = Query.Clamp(t, 0, 1);
+            byte A = (byte)Math.Round(a.A + (b.A - a.A) * t);
+            byte R = (byte)Math.Round(a.R + (b.R - a.R) * t);
+            byte G = (byte)Math.Round(a.G + (b.G - a.G) * t);
+            byte B = (byte)Math.Round(a.B + (b.B - a.B) * t);
+            return Color.FromArgb(A, R, G, B);
+        }
+
         // ---- Utilities ----
 
         private static int StableIndex(string name, int modulo, string salt)
@@ -211,9 +327,5 @@ namespace SAM.Core
             int b = System.Convert.ToInt32(hex.Substring(4, 2), 16);
             return Color.FromArgb(255, r, g, b);
         }
-
-        //private static double Clamp01(double x) => x < 0 ? 0 : (x > 1 ? 1 : x);
-        
-        //private static int Clamp255(int x) => x < 0 ? 0 : (x > 255 ? 255 : x);
     }
 }
