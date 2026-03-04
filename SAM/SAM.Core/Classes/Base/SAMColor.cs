@@ -9,10 +9,9 @@ namespace SAM.Core
     public class SAMColor : IJSAMObject
     {
         private byte alpha;
-        private byte red;
-        private byte green;
         private byte blue;
-
+        private byte green;
+        private byte red;
         public SAMColor(Color color)
         {
             alpha = color.A;
@@ -42,6 +41,30 @@ namespace SAM.Core
             this.blue = blue;
         }
 
+        public byte Alpha
+        {
+            get
+            {
+                return alpha;
+            }
+        }
+
+        public byte Blue
+        {
+            get
+            {
+                return blue;
+            }
+        }
+
+        public byte Green
+        {
+            get
+            {
+                return green;
+            }
+        }
+
         public string Name
         {
             get
@@ -56,15 +79,6 @@ namespace SAM.Core
                 return color.Name;
             }
         }
-
-        public byte Alpha
-        {
-            get
-            {
-                return alpha;
-            }
-        }
-
         public byte Red
         {
             get
@@ -72,31 +86,10 @@ namespace SAM.Core
                 return red;
             }
         }
-
-        public byte Green
-        {
-            get
-            {
-                return green;
-            }
-        }
-
-        public byte Blue
-        {
-            get
-            {
-                return blue;
-            }
-        }
-
+        
         public SAMColor Clone()
         {
             return new SAMColor(this);
-        }
-
-        public Color ToColor()
-        {
-            return Color.FromArgb(alpha, red, green, blue);
         }
 
         public bool FromJObject(JObject jObject)
@@ -119,6 +112,11 @@ namespace SAM.Core
             return true;
         }
 
+        public Color ToColor()
+        {
+            return Color.FromArgb(alpha, red, green, blue);
+        }
+        
         public JObject ToJObject()
         {
             JObject jObject = new JObject();
