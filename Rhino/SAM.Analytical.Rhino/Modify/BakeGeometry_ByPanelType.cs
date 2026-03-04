@@ -69,7 +69,7 @@ namespace SAM.Analytical.Rhino
 
                 if (!(panel is Panel))
                 {
-                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Query.Color(panel as dynamic));
+                    layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panel.GetType().Name, Analytical.Query.Color(panel as dynamic));
                     objectAttributes.LayerIndex = layer.Index;
                     if (BakeGeometry(panel, rhinoDoc, objectAttributes, out guids_Panel, cutApertures, tolerance) && guids_Panel != null)
                     {
@@ -85,7 +85,7 @@ namespace SAM.Analytical.Rhino
                     continue;
                 }
 
-                layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Query.Color(panelType));
+                layer = Core.Rhino.Modify.GetLayer(layerTable, layer_PanelType.Id, panelType.ToString(), Analytical.Query.Color(panelType));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
@@ -110,7 +110,7 @@ namespace SAM.Analytical.Rhino
 
                         ApertureType apertureType = aperture.ApertureType;
 
-                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Query.Color(apertureType));
+                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_ApertureType.Id, apertureType.ToString(), Analytical.Query.Color(apertureType));
 
                         //layerTable.SetCurrentLayerIndex(layer.Index, true);
                         objectAttributes.LayerIndex = layer.Index;

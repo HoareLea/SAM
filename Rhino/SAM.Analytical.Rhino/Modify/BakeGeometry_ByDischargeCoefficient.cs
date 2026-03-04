@@ -64,7 +64,7 @@ namespace SAM.Analytical.Rhino
                 apertures_Temp.Add(aperture);
             }
 
-            Color color = Query.Color(ApertureType.Window, AperturePart.Pane, true);
+            Color color = Analytical.Query.Color(ApertureType.Window, AperturePart.Pane, true);
 
             List<Color> colors = Core.Create.Colors(color, dictionary.Count, -0.5, 0.5);
 
@@ -85,7 +85,7 @@ namespace SAM.Analytical.Rhino
             {
                 double dischargeCoefficient = keyValuePair.Key;
 
-                Color color_Temp = dictionary_Color.ContainsKey(dischargeCoefficient) ? dictionary_Color[dischargeCoefficient] : Query.Color(ApertureType.Window);
+                Color color_Temp = dictionary_Color.ContainsKey(dischargeCoefficient) ? dictionary_Color[dischargeCoefficient] : Analytical.Query.Color(ApertureType.Window);
 
                 Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_DischargeCoefficient.Id, dischargeCoefficient.ToString(), color_Temp);
 

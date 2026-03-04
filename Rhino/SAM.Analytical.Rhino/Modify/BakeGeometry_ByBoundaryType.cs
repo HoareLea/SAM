@@ -42,7 +42,7 @@ namespace SAM.Analytical.Rhino
 
                 if (panel is ExternalPanel)
                 {
-                    layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, panel.GetType().Name, Query.Color((ExternalPanel)panel));
+                    layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, panel.GetType().Name, Analytical.Query.Color((ExternalPanel)panel));
 
                     objectAttributes.LayerIndex = layer_Temp.Index;
 
@@ -61,7 +61,7 @@ namespace SAM.Analytical.Rhino
 
                 BoundaryType boundaryType = adjacencyCluster.BoundaryType(panel);
 
-                layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Query.Color(boundaryType));
+                layer_Temp = Core.Rhino.Modify.GetLayer(layerTable, layer.Id, boundaryType.ToString(), Analytical.Query.Color(boundaryType));
 
                 objectAttributes.LayerIndex = layer_Temp.Index;
 
