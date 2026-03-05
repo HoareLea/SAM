@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateSpace : GH_SAMComponent
+    public class SAMAnalyticalUpdateSpaces : GH_SAMComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -30,9 +30,9 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
         /// </summary>
-        public SAMAnalyticalUpdateSpace()
-          : base("SAMAnalytical.UpdateSpace", "SAMAnalytical.UpdateSpace",
-              "Update Space in SAM Adjacency Cluster or Analytical Model \n*If Space with new location is connected \n exisitng space will be replace by new one",
+        public SAMAnalyticalUpdateSpaces()
+          : base("SAMAnalytical.UpdateSpaces", "SAMAnalytical.UpdateSpaces",
+              "Update Spaces in SAM Adjacency Cluster or Analytical Model \n*If Space with new location is connected \n exisitng space will be replace by new one",
               "SAM", "Analytical04")
         {
         }
@@ -43,7 +43,7 @@ namespace SAM.Analytical.Grasshopper
         protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
         {
             inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.list);
+            inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
         }
 
         /// <summary>
