@@ -9,7 +9,6 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    [Obsolete("Obsolete since 2021.11.24")]
     public class SAMAddMissingProfiles : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
@@ -20,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,7 +47,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "_buildingModel", NickName = "_buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 GooProfileLibraryParam gooProfileLibraryParam = new GooProfileLibraryParam { Name = "_profileLibrary_", NickName = "_profileLibrary_", Description = "SAM Analytical Profile Library", Access = GH_ParamAccess.item };
                 gooProfileLibraryParam.PersistentData.Append(new GooProfileLibrary(Analytical.Query.DefaultProfileLibrary()));
@@ -66,7 +65,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooBuildingModelParam() { Name = "buildingModel", NickName = "buildingModel", Description = "SAM Architectural BuildingModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooProfileParam() { Name = "profiles", NickName = "profiles", Description = "SAM Analytical Profiles", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "missingProfileNames", NickName = "missingProfileNames", Description = "Missing Profile Names. This Profiles could not be found in ProfileLibrary and are still missing", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
@@ -83,9 +82,9 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            BuildingModel buildingModel = null;
-            index = Params.IndexOfInputParam("_buildingModel");
-            if (index == -1 || !dataAccess.GetData(index, ref buildingModel) || buildingModel == null)
+            AnalyticalModel analyticalModel = null;
+            index = Params.IndexOfInputParam("_analyticalModel");
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -99,31 +98,22 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            buildingModel = new BuildingModel(buildingModel);
+            analyticalModel = new AnalyticalModel(analyticalModel);
 
-            List<Profile> profiles = buildingModel.AddMissingProfiles(profileLibrary, out Dictionary<ProfileType, List<string>> missingProfileNames);
+            List<Profile> profiles = Analytical.Modify.AddMissingProfiles(analyticalModel, profileLibrary, out List<string> missingProfileNames);
 
-            index = Params.IndexOfOutputParam("buildingModel");
+            index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)
-                dataAccess.SetData(index, new GooBuildingModel(buildingModel));
+                dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
 
-            index = Params.IndexOfOutputParam("materials");
+            index = Params.IndexOfOutputParam("profiles");
             if (index != -1)
                 dataAccess.SetDataList(index, profiles?.ConvertAll(x => new GooProfile(x)));
 
-            index = Params.IndexOfOutputParam("missingMaterialNames");
+            index = Params.IndexOfOutputParam("missingProfileNames");
             if (index != -1)
             {
-                List<string> missingProfileNames_Temp = new List<string>();
-                if (missingProfileNames != null)
-                {
-                    foreach (KeyValuePair<ProfileType, List<string>> keyValuePair in missingProfileNames)
-                    {
-                        missingProfileNames_Temp.AddRange(keyValuePair.Value);
-                    }
-                }
-
-                dataAccess.SetDataList(index, missingProfileNames_Temp);
+                dataAccess.SetDataList(index, missingProfileNames);
             }
 
         }

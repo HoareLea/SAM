@@ -613,6 +613,59 @@ namespace SAM.Analytical
             return materialNames.ToList();
         }
 
+        public Dictionary<ProfileType, HashSet<string>> GetMissingProfileDatas()
+        {
+            List<Space> spaces = GetSpaces();
+            if (spaces == null || spaces.Count == 0)
+            {
+                return [];
+            }
+
+            Dictionary<ProfileType, HashSet<string>> result = new Dictionary<ProfileType, HashSet<string>>();
+            foreach (Space space in spaces)
+            {
+                InternalCondition internalCondition = space?.InternalCondition;
+                if (internalCondition == null)
+                {
+                    continue;
+                }
+
+                IEnumerable<ProfileType> profileTypes = internalCondition.GetProfileTypes();
+                if (profileTypes == null || profileTypes.Count() == 0)
+                {
+                    continue;
+                }
+
+                foreach (ProfileType profileType in profileTypes)
+                {
+                    Profile profile = GetProfile(internalCondition, profileType);
+                    if(profile is not null)
+                    {
+                        continue;
+                    }
+
+                    if (!result.TryGetValue(profileType, out HashSet<string> names))
+                    {
+                        names = new HashSet<string>();
+                        result[profileType] = names;
+                    }
+
+                    string name = internalCondition.GetProfileName(profileType);
+                    if (!names.Contains(name))
+                    {
+                        names.Add(name);
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        public Profile GetProfile(InternalCondition internalCondition, ProfileType profileType, bool includeProfileGroup = false)
+        {
+            return internalCondition?.GetProfile(profileType, profileLibrary, includeProfileGroup);
+        }
+
         public List<Panel> GetPanels()
         {
             return adjacencyCluster?.GetPanels()?.ConvertAll(x => new Panel(x));

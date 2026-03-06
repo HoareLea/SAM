@@ -152,6 +152,11 @@ namespace SAM.Analytical
                 if (panels_Space.Count < 4)
                     result.Add("Space {0} (Guid: {1}) has less than 4 panels.", LogRecordType.Message, space.Name, space.Guid);
 
+                if (panels_Space.TrueForAll(x => x.Adiabatic()))
+                {
+                    result.Add("Space {0} (Guid: {1}) all panels are adiabatic.", LogRecordType.Error, space.Name, space.Guid);
+                }
+
                 Panel panel_Floor = panels_Space.Find(x => Query.PanelGroup(x.PanelType) == PanelGroup.Floor);
                 if (panel_Floor == null)
                 {
