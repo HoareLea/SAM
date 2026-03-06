@@ -38,30 +38,37 @@ namespace SAM.Analytical.Grasshopper
                 List<Face3D> face3Ds_Offset = null;
                 if (percentage)
                 {
-                    double area = face3D.GetArea();
-                    Geometry.Planar.BoundingBox2D boundingBox2D = face3D.GetPlane().Convert(face3D).GetBoundingBox();
-                    double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
+                    Geometry.Planar.AreaReductionSolver2D areaReductionSolver2D = new Geometry.Planar.AreaReductionSolver2D();
 
-                    Func<double, double> func = new Func<double, double>((double offset) =>
+                    value = areaReductionSolver2D.Solve_Offset(face3D, value);
+
+                    if(double.IsNaN(value))
                     {
-                        if (face3D == null)
+                        double area = face3D.GetArea();
+                        Geometry.Planar.BoundingBox2D boundingBox2D = face3D.GetPlane().Convert(face3D).GetBoundingBox();
+                        double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
+
+                        Func<double, double> func = new Func<double, double>((double offset) =>
                         {
-                            return double.NaN;
-                        }
+                            if (face3D == null)
+                            {
+                                return double.NaN;
+                            }
 
-                        List<Face3D> face3Ds_Offset_Temp = face3D.Offset(-offset);
-                        if (face3Ds_Offset_Temp == null || face3Ds_Offset_Temp.Count == 0)
-                        {
-                            return double.NaN;
-                        }
+                            List<Face3D> face3Ds_Offset_Temp = face3D.Offset(-offset);
+                            if (face3Ds_Offset_Temp == null || face3Ds_Offset_Temp.Count == 0)
+                            {
+                                return double.NaN;
+                            }
 
-                        double area_Temp = face3Ds_Offset_Temp.ConvertAll(x => x.GetArea()).Sum();
+                            double area_Temp = face3Ds_Offset_Temp.ConvertAll(x => x.GetArea()).Sum();
 
-                        return (area - area_Temp) / area;
+                            return (area - area_Temp) / area;
 
-                    });
+                        });
 
-                    value = Core.Query.Calculate_ByDivision(func, value / 100, 0, max, 200, 200, 0.0001);
+                        value = Core.Query.Calculate_ByDivision(func, value / 100, 0, max, 200, 200, 0.0001);
+                    }
                 }
 
                 if (!double.IsNaN(value))
