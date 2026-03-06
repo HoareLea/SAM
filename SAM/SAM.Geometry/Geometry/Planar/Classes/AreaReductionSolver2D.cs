@@ -1,196 +1,204 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
     public class AreaReductionSolver2D
     {
-        public double tolerance_Angle { get; set; } = Core.Tolerance.Angle;
-        public double tolerance_ParallelCross { get; set; } = Core.Tolerance.MacroDistance;
-        public double tolerance { get; set; } = Core.Tolerance.MicroDistance;
+        /// <summary>
+        /// Angle tolerance in radians (used for rectangle detection).
+        /// </summary>
+        public double ToleranceAngleRad { get; set; } = Core.Tolerance.Angle;
+
+        /// <summary>
+        /// Distance tolerance (used for point closure, segment length checks, and offset convergence).
+        /// </summary>
+        public double ToleranceDistance { get; set; } = Core.Tolerance.MicroDistance;
+
         public bool IncludeExternalEdge { get; set; } = true;
         public bool IncludeInternalEdges { get; set; } = false;
 
+        // Safety constants
+        private const double EPS = 1e-12;
+
         /// <summary>
-        /// Solves Face2Ds by shrinking to given area and returns face2Ds
+        /// Solves Face2D by shrinking to a given area reduction percent and returns offset faces.
+        /// targetReductionPercent in [0..100].
         /// </summary>
-        /// <param name="face2D">Face2D</param>
-        /// <param name="target">Target percent of area [0-100]</param>
-        /// <returns>Face2Ds</returns>
-        public List<Face2D> Solve(Face2D face2D, double target)
+        public List<Face2D> Solve(Face2D face2D, double targetReductionPercent)
         {
-            if(face2D is null)
-            {
-                return null;
-            }
+            if (face2D is null) return null;
 
-            if(target == 0)
-            {
-                return []; 
-            }
+            // Consistent bounds handling
+            if (targetReductionPercent <= 0) return new List<Face2D>() { new Face2D(face2D.ToJObject()) };
+            if (targetReductionPercent >= 100) return null;
 
-            if(target == 100)
-            {
+            double offset = Solve_Offset(face2D, targetReductionPercent);
+            if (double.IsNaN(offset)) return null;
+
+            if (offset <= ToleranceDistance)
                 return new List<Face2D>() { new Face2D(face2D.ToJObject()) };
-            }
-
-            double offset = Solve_Offset(face2D, target);
-            if(double.IsNaN(offset))
-            {
-                return null;
-            }
-
-            if(offset == 0)
-            {
-                return new List<Face2D>() { new Face2D(face2D.ToJObject()) };
-            }
 
             return face2D.Offset(-offset, IncludeExternalEdge, IncludeInternalEdges);
         }
 
         /// <summary>
-        /// Solves Face2Ds by shrinking to given area and returns offset
+        /// Solves Face2D by shrinking to a given area reduction percent and returns offset distance (positive).
+        /// targetReductionPercent in (0..100).
         /// </summary>
-        /// <param name="face2D">Face2D</param>
-        /// <param name="target">Target percent of area [0-100]</param>
-        /// <returns>offset (positive!)</returns>
-        public double Solve_Offset(Face2D face2D, double target)
+        public double Solve_Offset(Face2D face2D, double targetReductionPercent)
         {
-            if (face2D == null)
-            {
-                return double.NaN;
-            }
+            if (face2D is null) return double.NaN;
 
-            if (target <= 0)
-            {
-                return 0.0;
-            }
-            if (target >= 100)
-            {
-                return double.NaN;
-            }
+            // Consistent bounds handling
+            if (targetReductionPercent <= 0) return 0.0;
+            if (targetReductionPercent >= 100) return double.NaN;
 
-            // 1) Try rectangle fast-path
+            // 1) Rectangle fast-path
             if (TryGetRectangleDimensions(face2D, out double width, out double height))
             {
-                double t = target / 100.0;
+                // Swap so width >= height (not required, but makes reasoning & clamps clearer)
+                if (width < height)
+                {
+                    double tmp = width; width = height; height = tmp;
+                }
 
-                // Quadratic closed-form:
+                double t = targetReductionPercent / 100.0; // reduction fraction
+
+                // Closed-form for rectangle:
+                // 4 d^2 - 2(W+H)d + tWH = 0
+                // d = ((W+H) - sqrt((W+H)^2 - 4 t W H))/4
                 double S = width + height;
-                double D = S * S - 4.0 * t * width * height;
-                if (D < 0) 
-                {
-                    D = 0; // guard for numeric noise
-                }
+                double D = (S * S) - (4.0 * t * width * height);
 
-                double d = (S - System.Math.Sqrt(D)) / 4.0;
+                // Clamp for numeric noise
+                if (D < 0 && D > -EPS) D = 0;
+                if (D < 0) return double.NaN;
 
-                // ensure feasible
+                double sqrtD = System.Math.Sqrt(D);
+                double d = (S - sqrtD) / 4.0;
+
+                // Feasibility
                 double dMax = 0.5 * System.Math.Min(width, height);
-                if (d < 0)
-                {
-                    return double.NaN;
-                }
-
-                if (d > dMax)
-                {
-                    return double.NaN;
-                }
+                if (d < -EPS) return double.NaN;
+                if (d < 0) d = 0; // tiny negative from floating point
+                if (d - dMax > ToleranceDistance) return double.NaN;
 
                 return d;
             }
 
-            // 2) Fallback to generic numeric solver (your existing approach)
-            return SolveOffsetForAreaReduction(face2D, target); // your iterative solver
+            // 2) Fallback to numeric solver
+            return SolveOffsetForAreaReduction(face2D, targetReductionPercent);
         }
 
-        private double SolveOffsetForAreaReduction(Face2D face2D, double target)
+        private double SolveOffsetForAreaReduction(Face2D face2D, double targetReductionPercent)
         {
-            if (face2D == null)
-            {
-                return double.NaN;
-            }
-
             double A0 = face2D.GetArea();
-            if (A0 <= 0)
-            {
-                return double.NaN;
-            }
+            if (A0 <= 0) return double.NaN;
 
-            double t = target / 100.0;
+            double t = targetReductionPercent / 100.0;
 
             double AreaAfter(double d)
             {
-                // inward shrink => negative offset
                 var faces = face2D.Offset(-d, IncludeExternalEdge, IncludeInternalEdges);
-                if (faces == null || faces.Count == 0)
-                {
-                    return double.NaN;
-                }
-
+                if (faces == null || faces.Count == 0) return double.NaN;
                 return faces.Sum(x => x.GetArea());
             }
 
+            // Root form: f(d)=0
             double f(double d)
             {
                 double At = AreaAfter(d);
-                if (double.IsNaN(At))
-                {
-                    return double.NaN;
-                }
-
+                if (double.IsNaN(At)) return double.NaN;
                 return (A0 - At) / A0 - t;
             }
 
-            // bracket
+            // Bracket
             double lo = 0.0;
-            double hi = 0.01; // start small (1cm) – or derive from bbox
+
+            // Start scale: use minDimension if available, but keep a safe floor (important for “tiny segments” cases).
+            // This avoids starting ridiculously small when geometry is over-segmented but overall size is not.
+            double hi = GetInitialHi(face2D, A0);
+
             double flo = f(lo); // should be -t
-            if (double.IsNaN(flo))
-            {
-                return double.NaN;
-            }
+            if (double.IsNaN(flo)) return double.NaN;
 
             double fhi = f(hi);
             int guard = 0;
+
+            // Expand hi until we bracket or collapse
             while (!double.IsNaN(fhi) && fhi < 0.0 && guard++ < 60)
             {
                 hi *= 2.0;
                 fhi = f(hi);
             }
 
-            // if we collapsed before reaching target: no solution at requested % (too aggressive)
             if (double.IsNaN(fhi))
             {
+                // collapsed before reaching target reduction
                 return double.NaN;
             }
 
-            // bisection
+            // Bisection with better stopping condition:
+            // 1) area-fraction residual small
+            // 2) or interval in distance is small
+            const double fracTol = 1e-4;
             for (int i = 0; i < 80; i++)
             {
                 double mid = 0.5 * (lo + hi);
+
+                // Distance convergence
+                if ((hi - lo) <= ToleranceDistance)
+                {
+                    return mid;
+                }
+
                 double fmid = f(mid);
-                if (double.IsNaN(fmid)) 
-                { 
-                    hi = mid; continue; 
-                }
-
-                if (System.Math.Abs(fmid) < 1e-4)
+                if (double.IsNaN(fmid))
                 {
-                    return mid;// tolerance on fraction
-                }
-
-                if (fmid < 0)
-                {
-                    lo = mid;
-                }
-                else
-                {
+                    // Mid collapsed; move upper bound down
                     hi = mid;
+                    continue;
                 }
+
+                if (System.Math.Abs(fmid) < fracTol)
+                {
+                    return mid;
+                }
+
+                if (fmid < 0) lo = mid;
+                else hi = mid;
             }
 
             return 0.5 * (lo + hi);
+        }
+
+        /// <summary>
+        /// Initial bracket size: prefer geometric scale if available, with a robust floor and fallback.
+        /// This avoids unsafe tiny hi when geometry is heavily segmented.
+        /// </summary>
+        private double GetInitialHi(Face2D face2D, double area)
+        {
+            // Option A: if you have a bounding box / extents in SAM, use it here:
+            // var bbox = face2D.GetBoundingBox(); // (pseudo)
+            // double minDim = Math.Min(bbox.Width, bbox.Height);
+
+            // Option B (robust without bbox): scale from area, then clamp with a floor.
+            // sqrt(area) is a characteristic length scale.
+            double scale = System.Math.Sqrt(System.Math.Max(area, 0.0));
+
+            // 1% of characteristic size, but never below a small floor and never below tolerance.
+            double hi = 0.01 * scale;
+
+            // Floor: ensures we don’t start extremely tiny.
+            // You can tune this; using 1e-3 is often “1mm” if your units are meters.
+            const double floor = 1e-3;
+
+            hi = System.Math.Max(hi, floor);
+            hi = System.Math.Max(hi, 10.0 * ToleranceDistance);
+
+            return hi;
         }
 
         private bool TryGetRectangleDimensions(Face2D face2D, out double width, out double height)
@@ -198,42 +206,25 @@ namespace SAM.Geometry.Planar
             width = double.NaN;
             height = double.NaN;
 
+            // Require no holes for fast-path (keeps it unambiguous)
             List<IClosed2D> internalEdges = face2D.InternalEdge2Ds;
-            if (internalEdges != null && internalEdges.Count != 0)
-            {
-                return false;
-            }
+            if (internalEdges != null && internalEdges.Count != 0) return false;
 
-            // If you want to ignore holes, just use ExternalEdge only.
             IClosed2D externalEdge = face2D.ExternalEdge2D;
-            if (externalEdge == null)
-            {
-                return false;
-            }
+            if (externalEdge == null) return false;
 
-            IList<Point2D> point2Ds = (externalEdge as ISegmentable2D)?.GetPoints();
-            if(point2Ds is null || point2Ds.Count == 0)
-            {
-                return false;
-            }
-
-            if (point2Ds == null)
-            {
-                return false;
-            }
+            IList<Point2D> pts = (externalEdge as ISegmentable2D)?.GetPoints();
+            if (pts is null || pts.Count == 0) return false;
 
             // remove duplicated last point if closed explicitly
-            if (point2Ds.Count >= 2 && point2Ds[0].Distance(point2Ds[point2Ds.Count - 1]) <= tolerance)
+            if (pts.Count >= 2 && pts[0].Distance(pts[pts.Count - 1]) <= ToleranceDistance)
             {
-                point2Ds = point2Ds.Take(point2Ds.Count - 1).ToList();
+                pts = pts.Take(pts.Count - 1).ToList();
             }
 
-            if (point2Ds.Count != 4)
-            {
-                return false;
-            }
+            if (pts.Count != 4) return false;
 
-            var p0 = point2Ds[0]; var p1 = point2Ds[1]; var p2 = point2Ds[2]; var p3 = point2Ds[3];
+            var p0 = pts[0]; var p1 = pts[1]; var p2 = pts[2]; var p3 = pts[3];
 
             var e0 = p1 - p0;
             var e1 = p2 - p1;
@@ -241,62 +232,40 @@ namespace SAM.Geometry.Planar
             var e3 = p0 - p3;
 
             double l0 = e0.Length; double l1 = e1.Length; double l2 = e2.Length; double l3 = e3.Length;
-            if (l0 <= tolerance || l1 <= tolerance || l2 <= tolerance || l3 <= tolerance) return false;
+            if (l0 <= ToleranceDistance || l1 <= ToleranceDistance || l2 <= ToleranceDistance || l3 <= ToleranceDistance)
+                return false;
 
             var n0 = e0 / l0; var n1 = e1 / l1; var n2 = e2 / l2; var n3 = e3 / l3;
 
-            // orthogonality: adjacent edges
-            if (System.Math.Abs(Dot(n0, n1)) > tolerance_Angle)
-            {
-                return false;
-            }
+            // Convert angular tolerance (radians) into dot/cross thresholds (dimensionless)
+            // Near 90°: |dot| <= sin(delta)
+            // Near 0°/180°: |cross| <= sin(delta)
+            double s = System.Math.Sin(System.Math.Max(ToleranceAngleRad, 0.0));
 
-            if (System.Math.Abs(Dot(n1, n2)) > tolerance_Angle)
-            {
-                return false;
-            }
+            // orthogonality: adjacent edges (dot near 0)
+            if (System.Math.Abs(Dot(n0, n1)) > s) return false;
+            if (System.Math.Abs(Dot(n1, n2)) > s) return false;
+            if (System.Math.Abs(Dot(n2, n3)) > s) return false;
+            if (System.Math.Abs(Dot(n3, n0)) > s) return false;
 
-            if (System.Math.Abs(Dot(n2, n3)) > tolerance_Angle)
-            {
-                return false;
-            }
+            // parallelism: opposite edges (cross near 0)
+            if (System.Math.Abs(Cross2D(n0, n2)) > s) return false;
+            if (System.Math.Abs(Cross2D(n1, n3)) > s) return false;
 
-            if (System.Math.Abs(Dot(n3, n0)) > tolerance_Angle)
-            {
-                return false;
-            }
-
-            // parallelism: opposite edges
-            if (System.Math.Abs(Cross2D(n0, n2)) > tolerance_ParallelCross)
-            {
-                return false;
-            }
-
-            if (System.Math.Abs(Cross2D(n1, n3)) > tolerance_ParallelCross)
-            {
-                return false;
-            }
-
-            // Dimensions: pick adjacent lengths; average opposite pairs for stability
+            // Dimensions: average opposite pairs for stability
             double w = 0.5 * (l0 + l2);
             double h = 0.5 * (l1 + l3);
 
-            // Optional: also verify area consistency
+            // Sanity: must have non-trivial area
             double area = externalEdge.GetArea();
-            if (area <= tolerance)
-            {
-                return false;
-            }
+            if (area <= ToleranceDistance) return false;
 
-            // set outputs
             width = w;
             height = h;
             return true;
         }
 
-        // Helpers (replace Point2D ops with SAM equivalents)
         private static double Dot(Vector2D a, Vector2D b) => a.X * b.X + a.Y * b.Y;
-        
         private static double Cross2D(Vector2D a, Vector2D b) => a.X * b.Y - a.Y * b.X;
     }
 }
