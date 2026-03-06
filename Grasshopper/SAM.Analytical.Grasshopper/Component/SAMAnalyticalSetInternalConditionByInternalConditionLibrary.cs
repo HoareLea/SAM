@@ -158,8 +158,6 @@ namespace SAM.Analytical.Grasshopper
             {
                 SAMObject sAMObject = sAMObjects[i];
 
-                InternalCondition internalCondition = internalConditions.Next(i);
-
                 if (sAMObject is Space)
                 {
                     spaces.Add((Space)sAMObject);
@@ -171,8 +169,13 @@ namespace SAM.Analytical.Grasshopper
                     if (spaces_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        foreach (Space space in spaces_Temp)
+                        
+                        for (int j = 0; j < spaces_Temp.Count; j++)
                         {
+                            Space space = spaces_Temp[j];
+
+                            InternalCondition internalCondition = internalConditions[Core.Query.Clamp(j, 0, internalConditions.Count - 1)];
+
                             if (space == null)
                                 continue;
 
@@ -196,8 +199,12 @@ namespace SAM.Analytical.Grasshopper
                     if (spaces_Temp != null)
                     {
                         adjacencyCluster = (AdjacencyCluster)adjacencyCluster.Clone();
-                        foreach (Space space in spaces_Temp)
+                        for (int j = 0; j < spaces_Temp.Count; j++)
                         {
+                            Space space = spaces_Temp[j];
+
+                            InternalCondition internalCondition = internalConditions[Core.Query.Clamp(j, 0, internalConditions.Count - 1)];
+                            
                             if (space == null)
                                 continue;
 
@@ -223,7 +230,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Space space = spaces[i];
 
-                    InternalCondition internalCondition = internalConditions.Next(i);
+                    InternalCondition internalCondition = internalConditions[Core.Query.Clamp(i, 0, internalConditions.Count - 1)];
 
                     result.Add(space);
 
