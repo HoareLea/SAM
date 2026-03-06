@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,8 +51,8 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Objects such as AdjacencyCluster or AnalyticalModel or Space", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_name_", NickName = "_ICname_", Description = "InternalCondition Name or SAM InternalCondition Object \n*use .GetDefaultLibrary and SelectByName \n to select requred IC ", Access = GH_ParamAccess.item };
-                genericObject.SetPersistentData("S39_OfficeOpen");
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_names_", NickName = "_ICnames_", Description = "InternalCondition Names or SAM InternalCondition Object \n*use .GetDefaultLibrary and SelectByName \n to select requred IC ", Access = GH_ParamAccess.list };
+                genericObject.SetPersistentData(new List<string>() { "S39_OfficeOpen" });
                 result.Add(new GH_SAMParam(genericObject, ParamVisibility.Binding));
 
                 result.Add(new GH_SAMParam(new GooSpaceParam { Name = "spaces_", NickName = "spaces_", Description = "SAM Analytical Spaces \n*if none all spaces from model will be included", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
@@ -100,21 +100,19 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_name_");
+            index = Params.IndexOfInputParam("_names_");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            object @object = null;
-            if (!dataAccess.GetData(index, ref @object))
+            List<object> objects = [];
+            if (!dataAccess.GetDataList(index, objects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
-
-
 
             List<Space> spaces_Input = new List<Space>();
             index = Params.IndexOfInputParam("spaces_");
@@ -129,23 +127,39 @@ namespace SAM.Analytical.Grasshopper
             if (internalConditionLibrary == null)
                 internalConditionLibrary = ActiveSetting.Setting.GetValue<InternalConditionLibrary>(AnalyticalSettingParameter.DefaultInternalConditionLibrary);
 
+            List<InternalCondition> internalConditions = [];
+            for(int i=0; i < objects.Count; i++)
+            {
+                object @object = objects[i];
+
+                if (@object is IGH_Goo)
+                    @object = ((dynamic)@object).Value;
+
+                InternalCondition internalCondition = null;
+
+                if (@object is string)
+                {
+                    internalCondition = internalConditionLibrary.GetInternalConditions((string)@object)?.FirstOrDefault();
+                }
+                else if (@object is InternalCondition)
+                {
+                    internalCondition = new InternalCondition((InternalCondition)@object);
+                }
+
+                internalConditions.Add(internalCondition);
+            }
+
             List<Space> spaces = new List<Space>();
 
             List<Space> spaces_Output = new List<Space>();
 
-            if (@object is IGH_Goo)
-                @object = ((dynamic)@object).Value;
-
-            InternalCondition internalCondition = null;
-
-            if (@object is string)
-                internalCondition = internalConditionLibrary.GetInternalConditions((string)@object)?.FirstOrDefault();
-            else if (@object is InternalCondition)
-                internalCondition = new InternalCondition((InternalCondition)@object);
-
             List<SAMObject> result = new List<SAMObject>();
-            foreach (SAMObject sAMObject in sAMObjects)
+            for(int i=0; i < sAMObjects.Count; i++)
             {
+                SAMObject sAMObject = sAMObjects[i];
+
+                InternalCondition internalCondition = internalConditions.Next(i);
+
                 if (sAMObject is Space)
                 {
                     spaces.Add((Space)sAMObject);
@@ -205,8 +219,12 @@ namespace SAM.Analytical.Grasshopper
 
             if (spaces != null && spaces.Count != 0)
             {
-                foreach (Space space in spaces)
+                for (int i = 0; i < spaces.Count; i++)
                 {
+                    Space space = spaces[i];
+
+                    InternalCondition internalCondition = internalConditions.Next(i);
+
                     result.Add(space);
 
                     if (spaces_Input != null && spaces_Input.Find(x => x.Guid == space.Guid) == null)
