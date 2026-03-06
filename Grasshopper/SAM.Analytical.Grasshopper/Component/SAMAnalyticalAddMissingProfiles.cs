@@ -7,26 +7,24 @@ using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
-namespace SAM.Analytical.Grasshopper
+namespace SAM.Analytical.Grasshopper.Component
 {
     public class SAMAddMissingProfiles : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("172d0812-90e3-4e1b-8dde-516b2cba5013");
+        public override Guid ComponentGuid => new Guid("f02cd952-ef12-4720-8228-a0a68ac53bf2");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.0";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
-
-        public override GH_Exposure Exposure => GH_Exposure.hidden;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -100,7 +98,7 @@ namespace SAM.Analytical.Grasshopper
 
             analyticalModel = new AnalyticalModel(analyticalModel);
 
-            List<Profile> profiles = Analytical.Modify.AddMissingProfiles(analyticalModel, profileLibrary, out List<string> missingProfileNames);
+            List<Profile> profiles = analyticalModel.AddMissingProfiles(profileLibrary, out List<string> missingProfileNames);
 
             index = Params.IndexOfOutputParam("analyticalModel");
             if (index != -1)
