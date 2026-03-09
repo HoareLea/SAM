@@ -3,8 +3,10 @@
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Rhino;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -85,7 +87,21 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<ISegmentable3D> segmentable3Ds = null;
-            if (!Geometry.Grasshopper.Query.TryGetSAMGeometries(@objectWrapper, out segmentable3Ds) || segmentable3Ds == null || segmentable3Ds.Count() == 0)
+
+            if(@objectWrapper is IGH_Goo gH_Goo && (gH_Goo as dynamic).Value is GH_Mesh gH_mesh)
+            {
+                segmentable3Ds = [];
+
+                Polyline[] polylines = gH_mesh.Value.GetNakedEdges();
+                foreach(Polyline polyline in polylines)
+                {
+                    if(polyline.ToSAM() is Polyline3D polyline3D)
+                    {
+                        segmentable3Ds.Add(polyline3D);
+                    }
+                }
+            }
+            else if (!Geometry.Grasshopper.Query.TryGetSAMGeometries(@objectWrapper, out segmentable3Ds) || segmentable3Ds == null || segmentable3Ds.Count() == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
