@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreatePanelByBottomAndHeight()
           : base("SAMAnalytical.CreatePanelByBottomAndHeight", "SAMAnalytical.CreatePanelByBottomAndHeight",
-              "Create SAM Analytical Panel by Bottom Edge And Height",
+              "Create a SAM Analytical Panel from a bottom edge and height (single value or vertical domain).",
               "SAM", "Analytical01")
         {
         }
@@ -57,7 +57,11 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooConstructionParam(), "construction_", "construction_", "SAM Analytical Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            inputParamManager.AddGenericParameter("_height", "_height", "Panel Height", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter(
+                "_height",
+                "_height",
+                "Panel height. Accepts a single numeric value (e.g. 2.0) or a domain (e.g. 2 to 4) defining the vertical range used to generate the panel.",
+                GH_ParamAccess.item);
 
             index = inputParamManager.AddNumberParameter("_minElevation", "_minElevation", "Min Elevation", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
