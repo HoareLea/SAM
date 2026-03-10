@@ -130,7 +130,7 @@ namespace SAM.Analytical.Grasshopper
                 number = new Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage", Access = GH_ParamAccess.item, Optional = true };
+                number = new Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage [0 - 100]", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 boolean = new Param_Boolean() { Name = "_keepSeparationDistance_", NickName = "_keepSeparationDistance_", Description = "Keep horizontal separation distance between apertures", Access = GH_ParamAccess.item, Optional = true };

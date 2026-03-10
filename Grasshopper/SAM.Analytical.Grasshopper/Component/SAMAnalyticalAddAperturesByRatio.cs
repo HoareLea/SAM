@@ -137,7 +137,7 @@ Notes
                 {
                     Name = "framePercentage_",
                     NickName = "framePercentage_",
-                    Description = "Frame Percentage.",
+                    Description = "Frame Percentage [0 - 100]",
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
