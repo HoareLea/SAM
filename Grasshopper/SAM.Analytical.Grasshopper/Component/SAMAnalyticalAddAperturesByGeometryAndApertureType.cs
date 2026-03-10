@@ -141,7 +141,7 @@ namespace SAM.Analytical.Grasshopper
 
             if (values != null && values.Count != 0)
             {
-                face3Ds = Query.Offset(face3Ds, values, framePercentage);
+                face3Ds = Geometry.Spatial.Query.Offset(face3Ds, values, framePercentage);
             }
 
             if (sAMObject is Panel)
