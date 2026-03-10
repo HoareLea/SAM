@@ -128,20 +128,28 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            bool framePercentage = true;
-            List<double> values = new List<double>();
-            if (dataAccess.GetDataList(6, values))
+            List<double> frameWidths = new List<double>();
+            if (dataAccess.GetDataList(6, frameWidths))
             {
-                framePercentage = false;
-            }
-            if (framePercentage)
-            {
-                dataAccess.GetDataList(7, values);
+
             }
 
-            if (values != null && values.Count != 0)
+            List<double> framePercentages = new List<double>();
+            if (dataAccess.GetDataList(7, framePercentages))
             {
-                face3Ds = Geometry.Spatial.Query.Offset(face3Ds, values, framePercentage);
+
+            }
+
+            if (framePercentages != null && framePercentages.Count > 0 && frameWidths != null && frameWidths.Count > 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Both framePercentage and frameWidth are connected. Please use only one. If both provided, frameWidth will take precedence");
+            }
+
+            if ((frameWidths != null && frameWidths.Count != 0) || (framePercentages != null && framePercentages.Count != 0))
+            {
+                bool framePercentage = frameWidths == null || frameWidths.Count == 0;
+
+                face3Ds = Geometry.Spatial.Query.Offset(face3Ds, framePercentage ? framePercentages : frameWidths, framePercentage);
             }
 
             if (sAMObject is Panel)

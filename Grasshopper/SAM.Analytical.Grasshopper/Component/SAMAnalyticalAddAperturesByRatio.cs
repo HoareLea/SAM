@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.5";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -121,6 +121,16 @@ Notes
                 GooApertureConstructionParam apertureConstructionParam = new GooApertureConstructionParam() { Name = "_apertureConstruction_", NickName = "_apertureConstruction_", Description = "SAM Analytical Aperture Construction", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(apertureConstructionParam, ParamVisibility.Binding));
 
+                // Frame Width
+                number = new global::Grasshopper.Kernel.Parameters.Param_Number
+                {
+                    Name = "frameWidth_",
+                    NickName = "frameWidth_",
+                    Description = "Frame Width.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 // Frame Percentage
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number
@@ -128,17 +138,6 @@ Notes
                     Name = "framePercentage_",
                     NickName = "framePercentage_",
                     Description = "Frame Percentage.",
-                    Access = GH_ParamAccess.item,
-                    Optional = true
-                };
-                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
-
-                // Frame Width
-                number = new global::Grasshopper.Kernel.Parameters.Param_Number
-                {
-                    Name = "frameWidth_",
-                    NickName = "frameWidth_",
-                    Description = "Frame Width.",
                     Access = GH_ParamAccess.item,
                     Optional = true
                 };
@@ -252,6 +251,12 @@ Notes
                 framePercentage = null;
             }
 
+            if (framePercentage != null && !double.IsNaN(framePercentage.Value) && frameWidth != null && !double.IsNaN(frameWidth.Value))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Both framePercentage and frameWidth are connected. Please use only one. If both provided, frameWidth will take precedence");
+            }
+
+
             bool keepSeparationDistance = false;
             index = Params.IndexOfInputParam("_keepSeparationDistance_");
             if (index == -1 || !dataAccess.GetData(index, ref keepSeparationDistance))
@@ -271,35 +276,38 @@ Notes
             {
                 Panel panel = Create.Panel((Panel)sAMObject);
 
-                List<Aperture> apertures = null;
-
-                if (!double.IsNaN(ratio))
+                if(!panel.Adiabatic())
                 {
-                    ApertureConstruction apertureConstruction_Temp = apertureConstruction;
-                    if (apertureConstruction_Temp == null)
-                        apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+                    List<Aperture> apertures = null;
 
-                    apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, framePercentage, frameWidth, offset, keepSeparationDistance);
+                    if (!double.IsNaN(ratio))
+                    {
+                        ApertureConstruction apertureConstruction_Temp = apertureConstruction;
+                        if (apertureConstruction_Temp == null)
+                            apertureConstruction_Temp = Analytical.Query.DefaultApertureConstruction(panel, ApertureType.Window);
+
+                        apertures = panel.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, framePercentage, frameWidth, offset, keepSeparationDistance);
+                    }
+
+                    index = Params.IndexOfOutputParam("analyticalObject");
+                    if (index != -1)
+                    {
+                        dataAccess.SetData(index, panel);
+                    }
+
+                    index = Params.IndexOfOutputParam("apertures");
+                    if (index != -1)
+                    {
+                        dataAccess.SetDataList(index, apertures?.ConvertAll(x => new GooAperture(x)));
+                    }
+
+                    if (index_Successful != -1)
+                    {
+                        dataAccess.SetData(index_Successful, apertures != null && apertures.Count != 0);
+                    }
+
+                    return;
                 }
-
-                index = Params.IndexOfOutputParam("analyticalObject");
-                if (index != -1)
-                {
-                    dataAccess.SetData(index, panel);
-                }
-
-                index = Params.IndexOfOutputParam("apertures");
-                if (index != -1)
-                {
-                    dataAccess.SetDataList(index, apertures?.ConvertAll(x => new GooAperture(x)));
-                }
-
-                if (index_Successful != -1)
-                {
-                    dataAccess.SetData(index_Successful, apertures != null && apertures.Count != 0);
-                }
-
-                return;
             }
 
             AdjacencyCluster adjacencyCluster = null;

@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -127,10 +127,10 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(3);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage", Access = GH_ParamAccess.item, Optional = true };
+                number = new Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
-                number = new Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width", Access = GH_ParamAccess.item, Optional = true };
+                number = new Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
                 boolean = new Param_Boolean() { Name = "_keepSeparationDistance_", NickName = "_keepSeparationDistance_", Description = "Keep horizontal separation distance between apertures", Access = GH_ParamAccess.item, Optional = true };
@@ -240,6 +240,11 @@ namespace SAM.Analytical.Grasshopper
             if (index == -1 || !dataAccess.GetData(index, ref frameWidth))
             {
                 frameWidth = null;
+            }
+
+            if (framePercentage != null && !double.IsNaN(framePercentage.Value) && frameWidth != null && !double.IsNaN(frameWidth.Value))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Both framePercentage and frameWidth are connected. Please use only one. If both provided, frameWidth will take precedence");
             }
 
             bool keepSeparationDistance = false;
