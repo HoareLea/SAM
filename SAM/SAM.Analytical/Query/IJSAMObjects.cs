@@ -33,6 +33,23 @@ namespace SAM.Analytical
 
         }
 
+        public static List<TJSAMObject> IJSAMObjects<TJSAMObject>(this FilterSelection filterSelection, AnalyticalModel analyticalModel) where TJSAMObject : IJSAMObject
+        {
+            if (filterSelection is null || analyticalModel is null)
+            {
+                return null;
+            }
+
+            List<TJSAMObject> result = [];
+
+            if (filterSelection.Filter is not IFilter filter)
+            {
+                return result;
+            }
+
+            return Filter<TJSAMObject>(analyticalModel, filter);
+        }
+
         public static List<TJSAMObject> IJSAMObjects<TJSAMObject>(this ObjectReferenceCaseSelection objectReferenceCaseSelection, AnalyticalModel analyticalModel) where TJSAMObject : IJSAMObject
         {
             if (objectReferenceCaseSelection is null || analyticalModel is null)
