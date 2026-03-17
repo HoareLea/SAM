@@ -340,7 +340,7 @@ namespace SAM.Analytical
             if (construction.TryGetValue(ConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
                 panelType = Query.PanelType(text, false);
 
-            if (panelType != PanelType.Air)
+            if (panelType != PanelType.Air && panelType != PanelType.Shade)
             {
                 List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
                 if (constructionLayers != null && constructionLayers.Count > 0)
