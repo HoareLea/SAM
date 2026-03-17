@@ -156,7 +156,8 @@ namespace SAM.Analytical.Grasshopper
             }
             else
             {
-                panels = [panel];
+                Panel panel_Temp = Create.Panel(panel, panelType != null && panelType.HasValue ? panelType.Value : panel.PanelType);
+                panels = [panel_Temp];
             }
 
             if(panels is not null && panels.Count != 0)
