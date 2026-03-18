@@ -32,9 +32,41 @@ namespace SAM.Core
             PaletteType = PaletteType.Categorical,
             StableByName = true,
             Colors = HexList(
-                "#7FC8C2", "#F6E58D", "#B8A9D9", "#F48C8C",
-                "#6FA8DC", "#F7B267", "#A3D977", "#F2C6DE",
-                "#CFCFCF", "#A67DB8", "#BCE5C8", "#FFE08A")
+                "#4E79A7", // blue
+                "#F28E2B", // orange
+                "#59A14F", // green
+                "#E15759", // red
+                "#B07AA1", // purple
+                "#76B7B2", // teal
+                "#EDC948", // yellow
+                "#9C755F", // brown
+                "#FF9DA7", // pink
+                "#BAB0AC", // grey
+                "#86BCB6", // sea green
+                "#D4A6C8"  // soft mauve
+            )
+        };
+
+        public static readonly PaletteDefinition SamSpacesUi = new()
+        {
+            Name = "SAM Spaces (UI)",
+            Description = "Higher-contrast categorical palette for UI lists, trees and selection states.",
+            PaletteType = PaletteType.Categorical,
+            StableByName = true,
+            Colors = HexList(
+                "#1F77B4",
+                "#FF7F0E",
+                "#2CA02C",
+                "#D62728",
+                "#9467BD",
+                "#17BECF",
+                "#BCBD22",
+                "#8C564B",
+                "#E377C2",
+                "#7F7F7F",
+                "#AEC7E8",
+                "#FFBB78"
+            )
         };
 
         // ------------------------------

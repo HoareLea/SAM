@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json.Linq;
+using System;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -190,15 +191,26 @@ namespace SAM.Core
             {
                 case PaletteType.Categorical:
 
-                    IEnumerable<Color> colors = paletteDefinition.Colors;
+                    var names = values.Select(v => v?.ToString() ?? "").ToList();
 
-                    for (int i = 0; i < count; i++)
+                    if (paletteDefinition.StableByName)
                     {
-                        T value = values.ElementAt(i);
+                        var map = AssignStableUnique(
+                            names,
+                            paletteDefinition.Colors.ToList(),
+                            paletteDefinition.Name);
 
-                        int index = paletteDefinition.StableByName ? StableIndex(value.ToString() ?? "", colors.Count(), salt: paletteDefinition.Name) : i % colors.Count();
+                        foreach (var name in names)
+                            result.Add(map[name]);
+                    }
+                    else
+                    {
+                        var palette = EnsureCategoricalPalette(
+                            paletteDefinition.Colors.ToList(),
+                            names.Count);
 
-                        result.Add(colors.ElementAt(index));
+                        for (int i = 0; i < names.Count; i++)
+                            result.Add(palette[i]);
                     }
 
                     return result;
@@ -266,6 +278,87 @@ namespace SAM.Core
 
 
             return result;
+        }
+
+        public static Dictionary<string, Color> AssignStableUnique(
+    IReadOnlyList<string> itemNames,
+    IReadOnlyList<Color> basePalette,
+    string salt = "SAM_UI")
+        {
+            if (itemNames == null) throw new ArgumentNullException(nameof(itemNames));
+            if (basePalette == null || basePalette.Count == 0) throw new ArgumentException("Palette must not be empty.");
+
+            var uniqueNames = itemNames
+                .Select(v => v?.ToString() ?? "")
+                .Distinct(StringComparer.OrdinalIgnoreCase)
+                .ToList();
+
+            var palette = EnsureCategoricalPalette(basePalette.ToList(), uniqueNames.Count);
+
+            // Stable order by hash, then assign unique colours sequentially
+            var ordered = uniqueNames
+                .Select(name => new
+                {
+                    Name = name,
+                    Hash = StableUInt(name, salt)
+                })
+                .OrderBy(x => x.Hash)
+                .ToList();
+
+            var map = new Dictionary<string, Color>(StringComparer.OrdinalIgnoreCase);
+            for (int i = 0; i < ordered.Count; i++)
+                map[ordered[i].Name] = palette[i];
+
+            return map;
+        }
+
+        private static List<Color> EnsureCategoricalPalette(IReadOnlyList<Color> basePalette, int requiredCount)
+        {
+            var result = basePalette.ToList();
+
+            if (requiredCount <= result.Count)
+                return result;
+
+            int extra = requiredCount - result.Count;
+
+            // Generate extras with stronger saturation and slightly lower value
+            var generated = GenerateDistinctHsv(extra * 3, saturation: 0.72, value: 0.88, hueOffset: 0.15);
+
+            foreach (var c in generated)
+            {
+                if (result.Count >= requiredCount)
+                    break;
+
+                if (result.All(existing => ColorDistance(existing, c) > 80))
+                    result.Add(c);
+            }
+
+            // fallback if filtering was too strict
+            int k = 0;
+            while (result.Count < requiredCount)
+            {
+                double h = (k * 137.50776405) % 360.0;
+                var c = FromHsv(h, 0.75, 0.85);
+                result.Add(c);
+                k++;
+            }
+
+            return result;
+        }
+
+        private static uint StableUInt(string name, string salt)
+        {
+            using var sha = SHA256.Create();
+            var bytes = sha.ComputeHash(Encoding.UTF8.GetBytes($"{salt}:{name}"));
+            return BitConverter.ToUInt32(bytes, 0);
+        }
+
+        private static double ColorDistance(Color a, Color b)
+        {
+            int dr = a.R - b.R;
+            int dg = a.G - b.G;
+            int db = a.B - b.B;
+            return Math.Sqrt(dr * dr + dg * dg + db * db);
         }
 
         private static List<Color> GenerateEvenFromStops(IReadOnlyList<Color> stops, int n)
