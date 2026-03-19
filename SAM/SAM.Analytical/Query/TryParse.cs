@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     public static partial class Query
     {
-        public static bool TryParse(string text, SystemTemplate systemTemplate)
+        public static bool TryParse(string text, out SystemTemplate systemTemplate)
         {
             systemTemplate = null;
 
