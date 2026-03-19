@@ -1,7 +1,7 @@
 [
   {
     "_type": "SAM.Analytical.InternalConditionLibrary,SAM.Analytical",
-    "Name": "Default SAM InternalCondition Library ver00",
+    "Name": "Default SAM InternalCondition Library ver01",
     "Guid": "1c2568c7-a46d-4021-8ce0-06b21bdb9374",
     "Objects": [
       {
@@ -2147,11 +2147,11 @@
               },
               {
                 "Name": "Ventilation System Type Name",
-                "Value": "VAV"
+                "Value": "NV"
               },
               {
                 "Name": "Cooling System Type Name",
-                "Value": "FCU"
+                "Value": "UC"
               },
               {
                 "Name": "Heating System Type Name",
@@ -2159,11 +2159,11 @@
               },
               {
                 "Name": "Supply Air Flow Per Person",
-                "Value": 0.012
+                "Value": 0
               },
               {
                 "Name": "Exhaust Air Flow Per Person",
-                "Value": 0.012
+                "Value": 0
               },
               {
                 "Name": "NCM Data",
@@ -2703,11 +2703,11 @@
               },
               {
                 "Name": "Ventilation System Type Name",
-                "Value": "VAV"
+                "Value": "NV"
               },
               {
                 "Name": "Cooling System Type Name",
-                "Value": "FCU"
+                "Value": "UC"
               },
               {
                 "Name": "Heating System Type Name",
@@ -2840,15 +2840,15 @@
               },
               {
                 "Name": "Ventilation System Type Name",
-                "Value": "VAV"
+                "Value": "UV"
               },
               {
                 "Name": "Cooling System Type Name",
-                "Value": "FCU"
+                "Value": "UC"
               },
               {
                 "Name": "Heating System Type Name",
-                "Value": "UFH"
+                "Value": "RAD"
               },
               {
                 "Name": "Supply Air Flow Per Person",
@@ -4750,7 +4750,7 @@
               },
               {
                 "Name": "Heating System Type Name",
-                "Value": "UFH"
+                "Value": "RAD"
               },
               {
                 "Name": "Supply Air Flow Per Person",

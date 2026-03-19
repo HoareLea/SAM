@@ -1,0 +1,207 @@
+[
+  {
+    "_type": "SAM.Core.TextMap,SAM.Core",
+    "Name": "Text map Domestic ver00",
+    "Guid": "8c64a886-b6c1-4f21-942e-60999d7739af",
+    "Map": [
+      [
+        "S00_Unconditioned",
+        "lift",
+        "riser",
+        "shaft",
+        "unconditioned",
+        "unoccupied",
+        "uu",
+        "void",
+        "space",
+        "escape"
+      ],
+      [
+        "S05_CarPark",
+        "car",
+        "car park"
+      ],
+      [
+        "S11_CommonRoom",
+        "staff",
+        "lounge",
+        "common"
+      ],
+      [
+        "S12_Comms",
+        "comms",
+        "it",
+        "lan",
+        "server",
+        "ups"
+      ],
+      [
+        "S13_Copier",
+        "printer",
+        "copier",
+        "print",
+        "repro",
+        "printing room"
+      ],
+      [
+        "S14_DataCentre",
+        "datacentre",
+        "data centre"
+      ],
+      [
+        "S15_DomBath",
+        "domestic bath",
+        "bath",
+        "bathroom"
+      ],
+      [
+        "S16_DomBed",
+        "study",
+        "bedroom",
+        "dbl",
+        "sgl",
+        "guestroom",
+        "sleeping room"
+      ],
+      [
+        "S17_DomCirculation",
+        "dom circulation",
+        "domestic circulation",
+        "circ",
+        "corridor",
+        "circulation",
+        "foyer",
+        "entrance",
+        "stairs",
+        "gallery"
+      ],
+      [
+        "S18_DomDining",
+        "dom dining",
+        "domestic dining"
+      ],
+      [
+        "S19_DomKitchen",
+        "dom kitchen",
+        "domestic kitchen"
+      ],
+      [
+        "S20_DomLiving",
+        "dom living",
+        "domestic living"
+      ],
+      [
+        "S21_DomStore",
+        "dom store",
+        "domestic store",
+        "closet",
+        "cleaner",
+        "cupboard",
+        "pantry",
+        "storage",
+        "store"
+      ],
+      [
+        "S22_DomToilet",
+        "dom toilet",
+        "domestic toilet",
+        "wc",
+        "toilet",
+        "disable",
+        "lavatories",
+        "lavatory",
+        "male",
+        "mens",
+        "restroom"
+      ],
+      [
+        "S25_ElecPlant",
+        "elec",
+        "substation",
+        "switchroom",
+        "transformer"
+      ],
+      [
+        "S28_FitGym",
+        "gym",
+        "fitness",
+        "athletic",
+        "exercise room"
+      ],
+      [
+        "S29_Foyer",
+        "atrium",
+        "entrance",
+        "foyer",
+        "lobby",
+        "vestibule"
+      ],
+      [
+        "S33_Lab",
+        "lab",
+        "laboratory",
+        "research room",
+        "chemical",
+        "drug"
+      ],
+      [
+        "S34_Laundry",
+        "laundry",
+        "washing",
+        "launderette",
+        "wash house",
+        "wash room"
+      ],
+      [
+        "S35_MechPlant",
+        "ahu",
+        "boiler",
+        "machine room",
+        "mech",
+        "mechanical",
+        "plant",
+        "plantroom",
+        "technical"
+      ],
+      [
+        "S36_Meeting",
+        "board",
+        "mtg",
+        "conference",
+        "interview",
+        "vc",
+        "meeting",
+        "meeting room"
+      ],
+      [
+        "S37_OfficeCell",
+        "cellular",
+        "office cellular"
+      ],
+      [
+        "S38_OfficeHighLoad",
+        "call",
+        "trading"
+      ],
+      [
+        "S47_StairsEscape",
+        "escape",
+        "staircase",
+        "staircases"
+      ],
+      [
+        "S49_Swim",
+        "swim",
+        "pool",
+        "hydro",
+        "swimming pool"
+      ],
+      [
+        "Sxx_External",
+        "buffer",
+        "excluded",
+        "external"
+      ]
+    ]
+  }
+]
