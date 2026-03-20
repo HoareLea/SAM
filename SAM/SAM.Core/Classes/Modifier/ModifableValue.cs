@@ -41,7 +41,7 @@ namespace SAM.Core
             return new ModifiableValue(value);
         }
 
-        public bool FromJObject(JObject jObject)
+        public virtual bool FromJObject(JObject jObject)
         {
             if (jObject == null)
             {
@@ -61,7 +61,7 @@ namespace SAM.Core
             return true;
         }
 
-        public JObject ToJObject()
+        public virtual JObject ToJObject()
         {
             JObject jObject = new JObject();
             jObject.Add("_type", Query.FullTypeName(this));
