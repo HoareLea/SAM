@@ -39,7 +39,7 @@ namespace SAM.Analytical
                     string prefix = trimmedValue.Substring(0, index).ToUpper().Trim();
                     if(prefix != "V" || prefix != "H" || prefix != "C" || prefix != "PR" || prefix != "CTL" || prefix != "VER")
                     {
-                        tuples.Add(new Tuple<string, string>(null, trimmedValue));
+                        tuples.Add(new Tuple<string, string>(null, trimmedValue.Substring(prefix.Length + 1)));
                     }
                     else
                     {
