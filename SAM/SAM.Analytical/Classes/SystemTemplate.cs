@@ -137,6 +137,21 @@ namespace SAM.Analytical
             }
         }
 
+        public bool IsUnheated()
+        {
+            return string.IsNullOrWhiteSpace(heating) || heating == "UH";
+        }
+
+        public bool IsUncooled()
+        {
+            return string.IsNullOrWhiteSpace(cooling) || heating == "UC";
+        }
+
+        public bool IsUnventilated()
+        {
+            return string.IsNullOrWhiteSpace(ventilation) || ventilation == "UV";
+        }
+
         public override bool Equals(object obj)
         {
 
