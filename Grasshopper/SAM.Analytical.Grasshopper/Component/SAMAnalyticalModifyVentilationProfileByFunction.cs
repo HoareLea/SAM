@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.5";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -193,6 +193,17 @@ namespace SAM.Analytical.Grasshopper
                     },
                     ParamVisibility.Binding));
 
+                result.Add(new GH_SAMParam(
+                    new Param_Number()
+                    {
+                        Name = "l/s_",
+                        NickName = "l/s_",
+                        Description = "Liters per second",
+                        Access = GH_ParamAccess.list,
+                        Optional = true
+                    },
+                    ParamVisibility.Binding));
+
                 Param_Number param_Number;
 
                 param_Number = new Param_Number() { Name = "_factors_", NickName = "_factors_", Description = "Factor", Access = GH_ParamAccess.list, Optional = true };
@@ -266,6 +277,13 @@ namespace SAM.Analytical.Grasshopper
             if (index != -1)
             {
                 dataAccess.GetDataList(index, m3hs);
+            }
+
+            List<double> ls = new List<double>();
+            index = Params.IndexOfInputParam("l/s_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, ls);
             }
 
             List<double> factors = new List<double>();
@@ -380,14 +398,24 @@ namespace SAM.Analytical.Grasshopper
 
                                 if (!double.IsNaN(achs[Core.Query.Clamp(i, 0, achs.Count - 1)]))
                                 {
-                                    function_Temp[vent_Index] = achs[Core.Query.Clamp(i, 0, achs.Count - 1)];
+                                    function_Temp[vent_Index] = Core.Query.Round(achs[Core.Query.Clamp(i, 0, achs.Count - 1)], 0.01);
                                 }
                                 else if (!double.IsNaN(m3hs[Core.Query.Clamp(i, 0, m3hs.Count - 1)]))
                                 {
                                     double volume = space.Volume(adjacencyCluster);
                                     if (!double.IsNaN(volume))
                                     {
-                                        function_Temp[vent_Index] = Core.Query.Round(m3hs[Core.Query.Clamp(i, 0, m3hs.Count - 1)] / volume, Tolerance.MacroDistance);
+                                        function_Temp[vent_Index] = Core.Query.Round(m3hs[Core.Query.Clamp(i, 0, m3hs.Count - 1)] / volume, 0.01);
+                                    }
+                                }
+                                else if (!double.IsNaN(ls[Core.Query.Clamp(i, 0, ls.Count - 1)]))
+                                {
+                                    double volume = space.Volume(adjacencyCluster);
+                                    if (!double.IsNaN(volume))
+                                    {
+                                        double value = ls[Core.Query.Clamp(i, 0, ls.Count - 1)] * 3.6;
+
+                                        function_Temp[vent_Index] = Core.Query.Round(value / volume, 0.01);
                                     }
                                 }
                             }
