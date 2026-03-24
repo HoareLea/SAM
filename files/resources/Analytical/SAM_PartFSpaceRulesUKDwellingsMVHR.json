@@ -1,0 +1,382 @@
+{
+  "_type": "SAM.Core.PartFSpaceRules,SAM.Core",
+  "Name": "PartFSpaceRules_UK_Dwellings_MVHR",
+  "Version": "2.0",
+  "Notes": [
+    "For domestic MVHR under Approved Document F, use the whole-dwelling ventilation rate as the greater of the bedroom-based rate and 0.3 l/s per m2 internal floor area.",
+    "Supply is assigned to habitable rooms.",
+    "Extract is assigned to wet rooms.",
+    "Transfer spaces normally have no terminal.",
+    "Void/open-to-below spaces should normally be excluded from the floor area check.",
+    "Living rooms should not automatically be treated as kitchens. Only classify as LivingKitchen where the room is clearly open-plan and contains the cooking function, or when a higher-level dwelling rule determines that the main living space includes the kitchen.",
+    "If the final whole-dwelling rate is greater than the sum of wet-room minimums, recalculate the final supply and extract terminal flow rates so that total supply and total extract both match the final system rate.",
+    "Wet-room minimum extract rates are minimum values only. Final calculated extract rates may be higher."
+  ],
+  "WholeDwellingRates_Lps": {
+    "Studio": 19,
+    "1": 19,
+    "2": 25,
+    "3": 31,
+    "4": 37,
+    "5": 43,
+    "IncrementAbove5": 6,
+    "AreaRate_LpsPerM2": 0.3
+  },
+  "DataFields": [
+    {
+      "Name": "Category",
+      "Type": "string"
+    },
+    {
+      "Name": "VentilationType",
+      "Type": "string"
+    },
+    {
+      "Name": "IsBedroom",
+      "Type": "boolean"
+    },
+    {
+      "Name": "MinFlowRate_Lps",
+      "Type": "number|null"
+    },
+    {
+      "Name": "IncludeInFloorAreaCheck",
+      "Type": "boolean"
+    },
+    {
+      "Name": "PartFCategory",
+      "Type": "string"
+    },
+    {
+      "Name": "IsTerminalSpace",
+      "Type": "boolean"
+    },
+    {
+      "Name": "ScaleSupplyWithVolume",
+      "Type": "boolean"
+    },
+    {
+      "Name": "ScaleExtractAboveMinimum",
+      "Type": "boolean"
+    },
+    {
+      "Name": "DefaultFlowWeightBasis",
+      "Type": "string"
+    },
+    {
+      "Name": "CalculatedFlowRate_Lps",
+      "Type": "number|null"
+    }
+  ],
+  "PostProcessingRules": [
+    {
+      "Name": "MissingCookingSpace",
+      "Condition": "No space classified as Cooking or LivingKitchen exists in the dwelling",
+      "Action": "RaiseWarning"
+    },
+    {
+      "Name": "PromoteLivingToLivingKitchen",
+      "Condition": "No Cooking space exists and dwelling is marked as Studio or OpenPlanKitchenLiving",
+      "Action": "ReclassifyMainLivingSpaceToLivingKitchen"
+    },
+    {
+      "Name": "PlantroomAsUtility",
+      "Condition": "Plantroom contains laundry or domestic utility function",
+      "Action": "ReclassifyToUtility"
+    }
+  ],
+  "Categories": [
+    {
+      "Category": "LivingKitchen",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 13,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "WetRoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "living kitchen",
+        "kitchen living",
+        "living/dining/kitchen",
+        "kitchen/living",
+        "kitchen diner",
+        "kitchen dining living",
+        "open plan living kitchen",
+        "open-plan living kitchen",
+        "kitchen living dining",
+        "living dining kitchen"
+      ]
+    },
+    {
+      "Category": "Living",
+      "VentilationType": "supply",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": null,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Habitable",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": true,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "RoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "living",
+        "living room",
+        "lounge",
+        "sitting",
+        "sitting room",
+        "lvg",
+        "lvng",
+        "liv",
+        "dining",
+        "dining room"
+      ]
+    },
+    {
+      "Category": "Sleeping",
+      "VentilationType": "supply",
+      "IsBedroom": true,
+      "MinFlowRate_Lps": null,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Habitable",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": true,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "RoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "bed",
+        "bedroom",
+        "sleeping",
+        "sleep",
+        "twin",
+        "double",
+        "dbl",
+        "master bedroom",
+        "guest bedroom",
+        "single bedroom"
+      ]
+    },
+    {
+      "Category": "Cooking",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 13,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "WetRoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "kitchen",
+        "k'chn",
+        "kit",
+        "kitchenette",
+        "ktch",
+        "cook"
+      ]
+    },
+    {
+      "Category": "Bathroom",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 8,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "WetRoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "bathroom",
+        "bath",
+        "shower",
+        "shower room",
+        "ensuite",
+        "en suite",
+        "family bathroom"
+      ]
+    },
+    {
+      "Category": "WC",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 6,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "WetRoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "wc",
+        "toilet",
+        "cloakroom",
+        "lavatory",
+        "ensuite wc"
+      ]
+    },
+    {
+      "Category": "Utility",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 8,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "WetRoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "utility",
+        "utility room",
+        "laundry",
+        "boot room",
+        "wash room"
+      ]
+    },
+    {
+      "Category": "Transfer",
+      "VentilationType": "transfer",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 0,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Transfer",
+      "IsTerminalSpace": false,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "None",
+      "CalculatedFlowRate_Lps": 0,
+      "Synonyms": [
+        "hall",
+        "entrance hall",
+        "corridor",
+        "passage",
+        "stairs",
+        "stair",
+        "landing",
+        "gallery",
+        "closet",
+        "store",
+        "storage",
+        "cupboard",
+        "plantroom"
+      ]
+    },
+    {
+      "Category": "Void",
+      "VentilationType": "transfer",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 0,
+      "IncludeInFloorAreaCheck": false,
+      "PartFCategory": "Void",
+      "IsTerminalSpace": false,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "None",
+      "CalculatedFlowRate_Lps": 0,
+      "Synonyms": [
+        "void",
+        "open to below",
+        "open-to-below",
+        "atrium void"
+      ]
+    }
+  ],
+  "BedroomCountRules": {
+    "CountCategoriesAsBedroom": [
+      "Sleeping"
+    ],
+    "StudioCountsAs": 1,
+    "DoNotCountCategories": [
+      "Living",
+      "LivingKitchen",
+      "Cooking",
+      "Bathroom",
+      "WC",
+      "Utility",
+      "Transfer",
+      "Void"
+    ]
+  },
+  "CalculationRules": {
+    "BedroomBasedRateFormula": "19 for Studio or 1 bedroom; 25 for 2; 31 for 3; 37 for 4; 43 for 5; add 6 for each bedroom above 5",
+    "AreaBasedRateFormula": "0.3 * sum(space area where IncludeInFloorAreaCheck = true)",
+    "WholeDwellingRateFormula": "max(BedroomBasedRate, AreaBasedRate)",
+    "ExtractMinimumTotalFormula": "sum(MinFlowRate_Lps for all spaces where VentilationType = extract)",
+    "FinalSystemRateFormula": "max(WholeDwellingRate, ExtractMinimumTotal)",
+    "BalancingRule": "TotalSupply = FinalSystemRate and TotalExtract = FinalSystemRate"
+  },
+  "FlowRecalculationRules": {
+    "WhenToRecalculate": [
+      "AreaBasedRate > BedroomBasedRate",
+      "ExtractMinimumTotal > WholeDwellingRate",
+      "User requests final terminal flow rates"
+    ],
+    "SupplyRecalculation": {
+      "ApplyToCategories": [
+        "Living",
+        "Sleeping"
+      ],
+      "RequiredTotalFormula": "sum(CalculatedFlowRate_Lps for supply spaces) = FinalSystemRate",
+      "WeightBasisPriority": [
+        "RoomVolume",
+        "RoomArea"
+      ],
+      "Formula": "CalculatedFlowRate_Lps = FinalSystemRate * (SpaceWeight / SumOfAllSupplySpaceWeights)",
+      "RoundFlowsTo": 0.01,
+      "PreserveMinimumFlow": false
+    },
+    "ExtractRecalculation": {
+      "ApplyToCategories": [
+        "LivingKitchen",
+        "Cooking",
+        "Bathroom",
+        "WC",
+        "Utility"
+      ],
+      "Step1": "Assign each extract space its MinFlowRate_Lps",
+      "Step2": "ExtraExtractNeeded = FinalSystemRate - ExtractMinimumTotal",
+      "Step3": "If ExtraExtractNeeded > 0, distribute extra extract across extract spaces by selected weight basis",
+      "RequiredTotalFormula": "sum(CalculatedFlowRate_Lps for extract spaces) = FinalSystemRate",
+      "WeightBasisPriority": [
+        "WetRoomVolume",
+        "RoomVolume",
+        "RoomArea"
+      ],
+      "Formula": "CalculatedFlowRate_Lps = MinFlowRate_Lps + ExtraExtractNeeded * (SpaceWeight / SumOfAllExtractSpaceWeights)",
+      "RoundFlowsTo": 0.01,
+      "NeverBelowMinimum": true
+    },
+    "TransferAndVoidRule": {
+      "ApplyToCategories": [
+        "Transfer",
+        "Void"
+      ],
+      "Formula": "CalculatedFlowRate_Lps = 0"
+    }
+  },
+  "DefaultDwellingAlgorithm": [
+    "Classify each space using Categories and Synonyms.",
+    "Apply PostProcessingRules.",
+    "BedroomCount = count of spaces where IsBedroom = true, except Studio dwelling counts as 1.",
+    "InternalFloorArea = sum(area of spaces where IncludeInFloorAreaCheck = true).",
+    "BedroomBasedRate = rate from WholeDwellingRates_Lps using BedroomCount.",
+    "AreaBasedRate = AreaRate_LpsPerM2 * InternalFloorArea.",
+    "WholeDwellingRate = max(BedroomBasedRate, AreaBasedRate).",
+    "ExtractMinimumTotal = sum(MinFlowRate_Lps for all extract spaces).",
+    "FinalSystemRate = max(WholeDwellingRate, ExtractMinimumTotal).",
+    "Recalculate supply room CalculatedFlowRate_Lps so total supply equals FinalSystemRate.",
+    "Recalculate extract room CalculatedFlowRate_Lps so total extract equals FinalSystemRate and no extract space is below MinFlowRate_Lps.",
+    "Set transfer and void spaces CalculatedFlowRate_Lps = 0."
+  ]
+}
