@@ -98,7 +98,7 @@ namespace SAM.Analytical
                             }
 
                             bool scaleExtractAboveMinimum = false;
-                            if (jObject_Category.Value<bool>("scaleExtractAboveMinimum") is bool scaleExtractAboveMinimum_Temp)
+                            if (jObject_Category.Value<bool>("ScaleExtractAboveMinimum") is bool scaleExtractAboveMinimum_Temp)
                             {
                                 scaleExtractAboveMinimum = scaleExtractAboveMinimum_Temp;
                             }

@@ -61,7 +61,7 @@ namespace SAM.Analytical
 
             result.SetValue(AnalyticalSettingParameter.DefaultMergeSettings, "SAM_MergeSettings.JSON");
 
-            result.SetValue(AnalyticalSettingParameter.DefaultPartFFileName, "PartFData.JSON");
+            result.SetValue(AnalyticalSettingParameter.DefaultPartFFileName, "SAM_PartFSpaceRulesUKDwellingsMVHR.JSON");
 
 
             string path = null;

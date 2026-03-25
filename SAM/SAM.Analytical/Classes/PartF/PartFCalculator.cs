@@ -91,7 +91,7 @@ namespace SAM.Analytical
                 foreach (Tuple<PartFCategory, Space> tuple in tuples_Temp)
                 {
                     double flowRate = extraExtractNeeded * (tuple.Item2.GetValue<double>(SpaceParameter.Volume) / totalExtractWeight);
-                    results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate));
+                    results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate + tuple.Item1.MinFlowRate_Lps ?? 0));
                 }
 
             }
