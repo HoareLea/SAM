@@ -92,13 +92,14 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            PartFData partFData = ActiveSetting.Setting.GetValue<PartFData>(AnalyticalSettingParameter.PartFData);
-
-            PartFCalculator partFCalculator = new(partFData)
+            PartFCalculator partFCalculator = Analytical.Query.DefaultPartFCalculator();
+            if(partFCalculator is null)
             {
-                AnalyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster),
-            };
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not load PartF Calculator");
+                return;
+            }
 
+            partFCalculator.AnalyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             partFCalculator.Calculate();
 
             analyticalModel = partFCalculator.AnalyticalModel;

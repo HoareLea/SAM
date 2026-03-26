@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
-using SAM.Core;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +33,8 @@ namespace SAM.Analytical
                 return false;
             }
 
+            adjacencyCluster = new AdjacencyCluster(adjacencyCluster, deepClone: true);
+
             List<Space> spaces = adjacencyCluster.GetSpaces();
             List<double> ls = [];
             if (spaces is not null && spaces.Count != 0)
@@ -45,6 +46,9 @@ namespace SAM.Analytical
                     {
                         continue;
                     }
+
+                    space.SetValue(SpaceParameter.PartFCategory, partFCategory);
+                    adjacencyCluster.AddObject(space);
 
                     tuples.Add(new Tuple<PartFCategory, Space>(partFCategory, space));
                 }
@@ -95,6 +99,8 @@ namespace SAM.Analytical
                 }
 
             }
+
+            AnalyticalModel = new AnalyticalModel(AnalyticalModel, adjacencyCluster);
 
             return true;
         }
