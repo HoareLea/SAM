@@ -121,7 +121,7 @@ namespace SAM.Analytical.Grasshopper
             index = Params.IndexOfOutputParam("l/s");
             if (index != -1)
             {
-                dataAccess.SetDataList(index, spaces?.ConvertAll(partFCalculator.GetFlowRate));
+                dataAccess.SetDataList(index, spaces?.ConvertAll(x => x?.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData)?.CalculatedFlowRate_Lps ?? 0));
             }
         }
     }

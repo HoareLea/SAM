@@ -12,7 +12,7 @@ namespace SAM.Analytical
     {
         private readonly PartFData partFData;
 
-        private List<Tuple<Guid, PartFCategory, double>> results = [];
+        //private List<Tuple<Guid, PartFCategory, double>> results = [];
         
         public PartFCalculator(PartFData partFData)
         {
@@ -80,7 +80,7 @@ namespace SAM.Analytical
                 foreach (Tuple<PartFCategory, Space> tuple in tuples_Temp)
                 {
                     double flowRate = finalSystemRate * (tuple.Item2.GetValue<double>(SpaceParameter.Volume) / totalSupplyWeight);
-                    results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate));
+                    //results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate));
 
                     Space space = tuple.Item2;
 
@@ -106,7 +106,8 @@ namespace SAM.Analytical
                 foreach (Tuple<PartFCategory, Space> tuple in tuples_Temp)
                 {
                     double flowRate = extraExtractNeeded * (tuple.Item2.GetValue<double>(SpaceParameter.Volume) / totalExtractWeight);
-                    results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate + tuple.Item1.MinFlowRate_Lps ?? 0));
+                    flowRate = flowRate + tuple.Item1.MinFlowRate_Lps ?? 0;
+                    //results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate + tuple.Item1.MinFlowRate_Lps ?? 0));
 
                     Space space = tuple.Item2;
 
@@ -126,21 +127,21 @@ namespace SAM.Analytical
             return true;
         }
 
-        public double GetFlowRate(Space space)
-        {
-            if(space is null)
-            {
-                return double.NaN;
-            }
+        //public double GetFlowRate(Space space)
+        //{
+        //    if(space is null)
+        //    {
+        //        return double.NaN;
+        //    }
 
-            Tuple<Guid, PartFCategory, double> tuple = results.Find(x => space.Guid == x.Item1);
+        //    //Tuple<Guid, PartFCategory, double> tuple = results.Find(x => space.Guid == x.Item1);
 
-            if (tuple is null)
-            {
-                return 0;
-            }
+        //    if (tuple is null)
+        //    {
+        //        return 0;
+        //    }
 
-            return tuple.Item3;
-        }
+        //    return tuple.Item3;
+        //}
     }
 }
