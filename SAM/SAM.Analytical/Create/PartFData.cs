@@ -109,8 +109,6 @@ namespace SAM.Analytical
                                 defaultFlowWeightBasis = defaultFlowWeightBasis_Temp;
                             }
 
-                            double? calculatedFlowRate_Lps = jObject_Category["CalculatedFlowRate_Lps"]?.Value<double?>();
-
                             List<string> synonyms = [];
                             if (jObject_Category.ContainsKey("Synonyms"))
                             {
@@ -123,7 +121,7 @@ namespace SAM.Analytical
                                 }
                             }
 
-                            PartFCategory partFCategory = new PartFCategory(
+                            PartFCategory partFCategory = new (
                                 name,
                                 partFType,
                                 partFVentilationType,
@@ -134,7 +132,6 @@ namespace SAM.Analytical
                                 scaleSupplyWithVolume,
                                 scaleExtractAboveMinimum,
                                 defaultFlowWeightBasis,
-                                calculatedFlowRate_Lps, 
                                 synonyms);
 
                             result.PartFCategories[partFCategory.Name] = partFCategory;

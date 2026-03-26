@@ -29,15 +29,13 @@ namespace SAM.Analytical
 
         public bool ScaleExtractAboveMinimum { get; private set; }
 
-        public string DefaultFlowWeightBasis { get; private set;  }
-
-        public double? CalculatedFlowRate_Lps { get; private set; }
+        public string DefaultFlowWeightBasis { get; private set; }
 
         public List<string> Synonyms { get; private set; }
 
         public PartFCategory(
-            string name, 
-            PartFType partFType, 
+            string name,
+            PartFType partFType,
             PartFVentilationType partFVentilationType,
             bool isBedroom,
             double? minFlowRate_Lps,
@@ -46,7 +44,6 @@ namespace SAM.Analytical
             bool scaleSupplyWithVolume,
             bool scaleExtractAboveMinimum,
             string defaultFlowWeightBasis,
-            double? calculatedFlowRate_Lps,
             List<string> synonyms)
         {
             Name = name;
@@ -59,8 +56,8 @@ namespace SAM.Analytical
             ScaleSupplyWithVolume = scaleSupplyWithVolume;
             ScaleExtractAboveMinimum = scaleExtractAboveMinimum;
             DefaultFlowWeightBasis = defaultFlowWeightBasis;
-            CalculatedFlowRate_Lps = CalculatedFlowRate_Lps;
             Synonyms = synonyms;
         }
     }
 }
+

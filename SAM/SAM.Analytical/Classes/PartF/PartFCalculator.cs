@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using static SAM.Analytical.Name;
 
 namespace SAM.Analytical
 {
@@ -47,7 +48,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
-                    space.SetValue(SpaceParameter.PartFCategory, partFCategory);
+                    space.SetValue(SpaceParameter.PartFSpaceData, new PartFSpaceData(partFCategory));
                     adjacencyCluster.AddObject(space);
 
                     tuples.Add(new Tuple<PartFCategory, Space>(partFCategory, space));
@@ -80,6 +81,16 @@ namespace SAM.Analytical
                 {
                     double flowRate = finalSystemRate * (tuple.Item2.GetValue<double>(SpaceParameter.Volume) / totalSupplyWeight);
                     results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate));
+
+                    Space space = tuple.Item2;
+
+                    PartFSpaceData partFSpaceData = new (tuple.Item1)
+                    {
+                        CalculatedFlowRate_Lps = flowRate
+                    };
+
+                    space.SetValue(SpaceParameter.PartFSpaceData, partFSpaceData);
+                    adjacencyCluster.AddObject(space);
                 }
 
 
@@ -96,6 +107,16 @@ namespace SAM.Analytical
                 {
                     double flowRate = extraExtractNeeded * (tuple.Item2.GetValue<double>(SpaceParameter.Volume) / totalExtractWeight);
                     results.Add(new Tuple<Guid, PartFCategory, double>(tuple.Item2.Guid, tuple.Item1, flowRate + tuple.Item1.MinFlowRate_Lps ?? 0));
+
+                    Space space = tuple.Item2;
+
+                    PartFSpaceData partFSpaceData = new(tuple.Item1)
+                    {
+                        CalculatedFlowRate_Lps = flowRate
+                    };
+
+                    space.SetValue(SpaceParameter.PartFSpaceData, partFSpaceData);
+                    adjacencyCluster.AddObject(space);
                 }
 
             }

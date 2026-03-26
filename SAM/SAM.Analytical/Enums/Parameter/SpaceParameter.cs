@@ -36,6 +36,6 @@ namespace SAM.Analytical
 
         [ParameterProperties("Daylight Factor", "Daylight Factor [-]"), DoubleParameterValue(0)] DaylightFactor,
 
-        [ParameterProperties("PartF Category", "PartF Category"), SAMObjectParameterValue(typeof(PartFCategory))] PartFCategory,
+        [ParameterProperties("PartF Space Data", "PartF Space Data"), SAMObjectParameterValue(typeof(PartFSpaceData))] PartFSpaceData,
     }
 }
