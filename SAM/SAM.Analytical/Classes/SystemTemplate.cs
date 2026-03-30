@@ -144,7 +144,7 @@ namespace SAM.Analytical
 
         public bool IsUncooled()
         {
-            return string.IsNullOrWhiteSpace(cooling) || heating == "UC";
+            return string.IsNullOrWhiteSpace(cooling) || cooling == "UC";
         }
 
         public bool IsUnventilated()

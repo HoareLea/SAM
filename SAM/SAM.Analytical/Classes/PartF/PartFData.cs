@@ -43,7 +43,7 @@ namespace SAM.Analytical
                 return result;
             }
 
-            result = (count - 5) * 6;
+            result = 19 + (count - 1) * 6;
 
             return result;
         }
