@@ -6,40 +6,75 @@ on:
 jobs:
   spdx:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
       - name: Check header in changed .cs files
+        shell: bash
         run: |
-          set -e
+          set -euo pipefail
+
           BASE="${{ github.event.pull_request.base.sha }}"
           HEAD="${{ github.event.pull_request.head.sha }}"
 
-          FILES=$(git diff --name-only --diff-filter=d "$BASE" "$HEAD" -- '*.cs' || true)
+          echo "Base SHA: $BASE"
+          echo "Head SHA: $HEAD"
+          echo
 
-          if [ -z "$FILES" ]; then
+          mapfile -t files < <(git diff --diff-filter=ACMR --name-only "$BASE" "$HEAD" -- '*.cs' || true)
+
+          if [ "${#files[@]}" -eq 0 ]; then
             echo "No C# files changed."
             exit 0
           fi
 
-          MISSING=""
-          for f in $FILES; do
-            HEADBLOCK=$(head -n 6 "$f")
+          echo "Changed C# files:"
+          printf ' - %s\n' "${files[@]}"
+          echo
 
-            echo "$HEADBLOCK" | grep -q "// SPDX-License-Identifier: LGPL-3.0-or-later" || MISSING="$MISSING $f"
-            echo "$HEADBLOCK" | grep -q "// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors" || MISSING="$MISSING $f"
+          missing=()
+
+          for f in "${files[@]}"; do
+            if [ ! -f "$f" ]; then
+              echo "Skipping missing file: $f"
+              continue
+            fi
+
+            headblock="$(head -n 20 "$f" | sed '1s/^\xEF\xBB\xBF//' | tr -d '\r')"
+
+            echo "Checking: $f"
+
+            if ! grep -q "SPDX-License-Identifier: LGPL-3.0-or-later" <<< "$headblock"; then
+              echo "  Missing SPDX line"
+              missing+=("$f")
+              continue
+            fi
+
+            if ! grep -qE "Copyright \(c\) 2020[-–]2026 Michal Dengusiak & Jakub Ziolkowski and contributors" <<< "$headblock"; then
+              echo "  Missing copyright line"
+              missing+=("$f")
+              continue
+            fi
+
+            echo "  OK"
           done
 
-          if [ -n "$MISSING" ]; then
-            echo "❌ Missing required header in:"
-            for f in $MISSING; do echo " - $f"; done
-            echo ""
-            echo "Each changed .cs file must start with:"
+          echo
+          if [ "${#missing[@]}" -gt 0 ]; then
+            echo "Missing required header in:"
+            printf ' - %s\n' "${missing[@]}"
+            echo
+            echo "Each changed .cs file must contain within the first 20 lines:"
             echo "// SPDX-License-Identifier: LGPL-3.0-or-later"
-            echo "// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
+            echo "// Copyright (c) 2020-2026 Michal Dengusiak & Jakub Ziolkowski and contributors"
             exit 1
           fi
 
-          echo "✅ SPDX + copyright headers OK."
+          echo "SPDX + copyright headers OK."
