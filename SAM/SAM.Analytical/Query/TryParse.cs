@@ -37,7 +37,7 @@ namespace SAM.Analytical
                 {
                     // index points to the dot. Substring(0, index) takes everything before it.
                     string prefix = trimmedValue.Substring(0, index).ToUpper().Trim();
-                    if(prefix != "V" || prefix != "H" || prefix != "C" || prefix != "PR" || prefix != "CTL" || prefix != "VER")
+                    if(prefix != "V" && prefix != "H" && prefix != "C" && prefix != "PR" && prefix != "CTL" && prefix != "VER")
                     {
                         tuples.Add(new Tuple<string, string>(null, trimmedValue.Substring(prefix.Length + 1)));
                     }
