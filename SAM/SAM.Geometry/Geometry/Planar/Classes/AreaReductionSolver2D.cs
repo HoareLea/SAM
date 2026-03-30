@@ -1,4 +1,6 @@
-﻿using System;
+﻿// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using System.Collections.Generic;
 using System.Linq;
 
@@ -17,6 +19,7 @@ namespace SAM.Geometry.Planar
         public double ToleranceDistance { get; set; } = Core.Tolerance.MicroDistance;
 
         public bool IncludeExternalEdge { get; set; } = true;
+        
         public bool IncludeInternalEdges { get; set; } = false;
 
         // Safety constants
@@ -266,6 +269,7 @@ namespace SAM.Geometry.Planar
         }
 
         private static double Dot(Vector2D a, Vector2D b) => a.X * b.X + a.Y * b.Y;
+        
         private static double Cross2D(Vector2D a, Vector2D b) => a.X * b.Y - a.Y * b.X;
     }
 }

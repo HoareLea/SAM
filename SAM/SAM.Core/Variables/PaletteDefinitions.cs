@@ -1,3 +1,6 @@
+// SPDX-License-Identifier: LGPL-3.0-or-later
+// Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
+
 using SAM.Core;
 using System.Collections.Generic;
 using System.Drawing;
@@ -6,8 +9,7 @@ using System.Linq;
 public static class PaletteDefinitions
 {
     public static readonly IReadOnlyList<PaletteDefinition> All =
-        new[]
-        {
+        [
             SamSpacesSoft,
             SamSystemsBold,
             SamThermal,
@@ -16,7 +18,7 @@ public static class PaletteDefinitions
             SamSpectrumAnalytical,
             SamSpectrumClassic,
             SamMonochrome
-        };
+        ];
 
     // ------------------------------
     // 1. Spaces
