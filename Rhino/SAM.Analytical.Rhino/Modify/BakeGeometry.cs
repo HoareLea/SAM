@@ -37,7 +37,7 @@ namespace SAM.Analytical.Rhino
 
             foreach (IPanel panel_FixEdges in panels_FixEdges)
             {
-                List<Brep> breps = panel_FixEdges.ToRhino(cutApertures, tolerance);
+                List<Brep> breps = panel_FixEdges.ToRhino_Breps(cutApertures, tolerance);
                 if (breps == null || breps.Count == 0)
                 {
                     result = Geometry.Rhino.Modify.BakeGeometry(panel_FixEdges.Face3D, rhinoDoc, objectAttributes, out Guid guid);

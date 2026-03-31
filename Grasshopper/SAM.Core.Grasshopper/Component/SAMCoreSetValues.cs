@@ -3,9 +3,11 @@
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Rhino.Commands;
 using SAM.Core.Grasshopper.Properties;
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 
 namespace SAM.Core.Grasshopper
 {
@@ -133,33 +135,66 @@ namespace SAM.Core.Grasshopper
                 }
 
                 bool succeed = false;
-
-                List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
-                if (enums != null && enums.Count > 0)
+                if (name == "Name")
                 {
-                    if (value == null)
+                    PropertyInfo[] propertyInfos = sAMObject.GetType().GetProperties();
+                    if (propertyInfos != null)
                     {
-                        foreach (Enum @enum in enums)
+                        foreach (PropertyInfo propertyInfo in propertyInfos)
                         {
-                            if (sAMObject.RemoveValue(@enum))
+                            if (!propertyInfo.CanWrite || propertyInfo.Name != name)
+                            {
+                                continue;
+                            }
+
+                            if (!Core.Query.TryConvert(value, out object @value_Temp, propertyInfo.PropertyType))
+                            {
+                                continue;
+                            }
+
+                            try
+                            {
+                                propertyInfo.SetValue(sAMObject, value_Temp);
                                 succeed = true;
-                        }
-                    }
-                    else
-                    {
-                        foreach (Enum @enum in enums)
-                        {
-                            if (sAMObject.SetValue(@enum, value))
-                                succeed = true;
+                            }
+                            catch
+                            {
+
+                            }
+
+                            break;
                         }
                     }
                 }
                 else
                 {
-                    if (value == null)
-                        succeed = sAMObject.RemoveValue(name);
+                    List<Enum> enums = ActiveManager.GetParameterEnums(sAMObject, name);
+                    if (enums != null && enums.Count > 0)
+                    {
+                        if (value == null)
+                        {
+                            foreach (Enum @enum in enums)
+                            {
+                                if (sAMObject.RemoveValue(@enum))
+                                    succeed = true;
+                            }
+                        }
+                        else
+                        {
+                            foreach (Enum @enum in enums)
+                            {
+                                if (sAMObject.SetValue(@enum, value))
+                                    succeed = true;
+                            }
+                        }
+                    }
                     else
-                        succeed = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                    {
+                        if (value == null)
+                            succeed = sAMObject.RemoveValue(name);
+                        else
+                            succeed = Core.Modify.SetValue(sAMObject, name, value as dynamic);
+                    }
                 }
 
                 if (succeed)

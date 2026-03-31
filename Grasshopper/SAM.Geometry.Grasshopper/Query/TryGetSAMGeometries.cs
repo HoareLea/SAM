@@ -89,6 +89,7 @@ namespace SAM.Geometry.Grasshopper
             if (objectWrapper.Value is IGH_GeometricGoo)
             {
                 @object = Convert.ToSAM(objectWrapper.Value as dynamic);
+
                 if (typeof(T) == typeof(Face3D))
                 {
                     if (@object is Shell)
@@ -200,6 +201,52 @@ namespace SAM.Geometry.Grasshopper
                                         sAMGeometries.Add((T)(object)((IFace3DObject)sAMGeometry).Face3D);
                                         return true;
                                     }
+                                }
+                            }
+                        }
+                        else if (typeof(T) == typeof(ISegmentable3D))
+                        {
+                            sAMGeometries = new List<T>();
+                            foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
+                            {
+                                if (sAMGeometry is T)
+                                {
+                                    sAMGeometries.Add((T)sAMGeometry);
+                                }
+                                else
+                                {
+                                    if (sAMGeometry is Shell)
+                                    {
+                                        //sAMGeometries.AddRange(((Shell)sAMGeometry).Face3Ds?.Cast<T>());
+                                    }
+                                    else if (sAMGeometry is Mesh3D)
+                                    {
+                                        //sAMGeometries.AddRange(((Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Face3D(x)).Cast<T>());
+                                    }
+                                    else if (sAMGeometry is Face3D face3D)
+                                    {
+                                        if(face3D.GetEdge3Ds() is List<IClosedPlanar3D> closedPlanar3Ds)
+                                        {
+                                            foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
+                                            {
+                                                sAMGeometries.Add((T)(object)closedPlanar3D);
+                                            }
+                                        }
+
+                                        return true;
+                                    }
+                                    else if (sAMGeometry is IClosedPlanar3D)
+                                    {
+                                        //sAMGeometries.Add((T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry));
+                                        //return true;
+                                    }
+                                    else if (sAMGeometry is IFace3DObject)
+                                    {
+                                        //sAMGeometries.Add((T)(object)((IFace3DObject)sAMGeometry).Face3D);
+                                        //return true;
+                                    }
+
+                                    return false;
                                 }
                             }
                         }

@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -60,33 +60,33 @@ namespace SAM.Analytical.Grasshopper
                 paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevations", NickName = "_elevations", Description = "Elevations for floors and roofs ie.0, 4", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets", Access = GH_ParamAccess.list, Optional = true };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "offsets_", NickName = "offsets_", Description = "Offsets - Level at which we cut levels", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
                 //paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "auxiliaryElevations_", NickName = "auxiliaryElevations_", Description = "AuxiliaryElevations for levels that should be ignored ie. 2", Access = GH_ParamAccess.list, Optional = true };
                 //result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item };
+                global::Grasshopper.Kernel.Parameters.Param_Boolean paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingSpaces_", NickName = "addMissingSpaces_", Description = "Add Missing Spaces", Access = GH_ParamAccess.item, Optional = true };
                 paramBoolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
-                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels", Access = GH_ParamAccess.item };
+                paramBoolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "addMissingPanels_", NickName = "addMissingPanels_", Description = "Add Missing Panels", Access = GH_ParamAccess.item, Optional = true };
                 paramBoolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(paramBoolean, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item, Optional = true };
                 paramNumber.SetPersistentData(0.01);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxAngle_", NickName = "maxAngle_", Description = "Max Angle", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxAngle_", NickName = "maxAngle_", Description = "Max Angle", Access = GH_ParamAccess.item, Optional = true };
                 paramNumber.SetPersistentData(0.0872664626);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "silverSpacing_", NickName = "silverSpacing_", Description = "Silver Spacing for computation of Spaces", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "silverSpacing_", NickName = "silverSpacing_", Description = "Silver Spacing for computation of Spaces", Access = GH_ParamAccess.item, Optional = true };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Panle Area", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Panle Area", Access = GH_ParamAccess.item, Optional = true };
                 paramNumber.SetPersistentData(Core.Tolerance.MacroDistance);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Voluntary));
 
@@ -193,6 +193,11 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref tolerance);
 
             AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(spaces, panels, elevations, offsets, addMissingSpaces, addMissingPanels, 0.01, minArea, maxDistance, maxAngle, Core.Tolerance.MacroDistance, silverSpacing, Core.Tolerance.Angle, tolerance);
+
+            if(adjacencyCluster != null && adjacencyCluster.GetPanels().Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Missing panels possibly due to addMissingSpaces=false");
+            }
 
             index = Params.IndexOfOutputParam("AdjacencyCluster");
             if (index != -1)

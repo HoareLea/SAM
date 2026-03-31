@@ -10,9 +10,8 @@ namespace SAM.Analytical
 {
     public class Space : SAMObject, ISpace
     {
-        private Point3D location;
         private InternalCondition internalCondition;
-
+        private Point3D location;
         public Space(Space space)
             : base(space)
         {
@@ -75,22 +74,6 @@ namespace SAM.Analytical
         {
         }
 
-        public Point3D Location
-        {
-            get
-            {
-                if (location == null)
-                    return null;
-
-                return new Point3D(location);
-            }
-        }
-
-        public bool IsPlaced()
-        {
-            return location != null && location.IsValid();
-        }
-
         public InternalCondition InternalCondition
         {
             get
@@ -110,6 +93,30 @@ namespace SAM.Analytical
             }
         }
 
+        public Point3D Location
+        {
+            get
+            {
+                if (location == null)
+                    return null;
+
+                return new Point3D(location);
+            }
+        }
+
+        public new string Name
+        {
+            get
+            {
+                return name;
+            }
+
+            set
+            {
+                name = value;
+            }
+        }
+
         public override bool FromJObject(JObject jObject)
         {
             if (!base.FromJObject(jObject))
@@ -122,6 +129,15 @@ namespace SAM.Analytical
                 internalCondition = new InternalCondition(jObject.Value<JObject>("InternalCondition"));
 
             return true;
+        }
+
+        public bool IsPlaced()
+        {
+            return location != null && location.IsValid();
+        }
+        public void Move(Vector3D vector3D)
+        {
+            location = location?.GetMoved(vector3D) as Point3D;
         }
 
         public override JObject ToJObject()
@@ -143,11 +159,6 @@ namespace SAM.Analytical
         {
             if (location != null)
                 location = Location.Transform(transform3D);
-        }
-
-        public void Move(Vector3D vector3D)
-        {
-            location = location?.GetMoved(vector3D) as Point3D;
         }
     }
 }

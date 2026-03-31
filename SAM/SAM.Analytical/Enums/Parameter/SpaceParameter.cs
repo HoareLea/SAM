@@ -35,5 +35,7 @@ namespace SAM.Analytical
         [ParameterProperties("Exhaust Air Flow", "Exhaust Air Flow [m3/s]"), DoubleParameterValue(0)] ExhaustAirFlow,
 
         [ParameterProperties("Daylight Factor", "Daylight Factor [-]"), DoubleParameterValue(0)] DaylightFactor,
+
+        [ParameterProperties("PartF Space Data", "PartF Space Data"), SAMObjectParameterValue(typeof(PartFSpaceData))] PartFSpaceData,
     }
 }

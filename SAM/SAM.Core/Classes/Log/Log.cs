@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Core
 {
@@ -28,8 +29,6 @@ namespace SAM.Core
         {
             logRecords = log?.logRecords?.ConvertAll(x => new LogRecord(x));
         }
-
-
 
         public Log(JObject jObject)
             : base(jObject)
@@ -154,6 +153,22 @@ namespace SAM.Core
             }
 
             return true;
+        }
+
+        public void Sort()
+        {
+            LogRecordType[] logRecordTypes = { LogRecordType.Error, LogRecordType.Warning, LogRecordType.Message };
+
+            List<LogRecord> logRecords_Sorted = new List<LogRecord>();
+
+            foreach (LogRecordType logRecordType in logRecordTypes)
+            {
+                List<LogRecord> logRecords_Temp =  logRecords.FindAll(x => x.LogRecordType == logRecordType);
+                logRecords_Temp.Sort((x, y) => x.Text.CompareTo(y.Text));
+                logRecords_Sorted.AddRange(logRecords_Temp);
+            }
+
+            logRecords = logRecords_Sorted;
         }
     }
 }

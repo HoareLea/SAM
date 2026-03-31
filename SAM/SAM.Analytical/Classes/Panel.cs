@@ -18,6 +18,11 @@ namespace SAM.Analytical
     public class Panel : SAMInstance<Construction>, IPanel
     {
         /// <summary>
+        /// Apertures being hosted on Panel (Doors, Winodows, Skylight etc.)
+        /// </summary>
+        private List<Aperture> apertures;
+
+        /// <summary>
         /// Type of the Panel such as Wall, Ceiling etc.
         /// </summary>
         private PanelType panelType;
@@ -26,12 +31,6 @@ namespace SAM.Analytical
         /// Planar Boundary 3D of Panel
         /// </summary>
         private PlanarBoundary3D planarBoundary3D;
-
-        /// <summary>
-        /// Apertures being hosted on Panel (Doors, Winodows, Skylight etc.)
-        /// </summary>
-        private List<Aperture> apertures;
-
         /// <summary>
         /// Creates new instance of panel based on another panel
         /// </summary>
@@ -163,6 +162,318 @@ namespace SAM.Analytical
         {
         }
 
+        public List<Aperture> Apertures
+        {
+            get
+            {
+                if (apertures == null)
+                    return null;
+                return apertures.ConvertAll(x => x.Clone());
+            }
+        }
+
+        public Construction Construction
+        {
+            get
+            {
+                return Type;
+            }
+        }
+
+        public Face3D Face3D
+        {
+            get
+            {
+                Face2D face2D = planarBoundary3D?.GetFace2D();
+                if (face2D == null)
+                {
+                    return null;
+                }
+
+                Plane plane = planarBoundary3D.Plane;
+                if (plane == null)
+                {
+                    return null;
+                }
+
+                return plane.Convert(face2D);
+            }
+        }
+
+        public bool HasApertures
+        {
+            get
+            {
+                return apertures != null && apertures.Count != 0;
+            }
+        }
+
+        public Vector3D Normal
+        {
+            get
+            {
+                return planarBoundary3D?.Plane?.Normal;
+            }
+        }
+
+        public Point3D Origin
+        {
+            get
+            {
+                return planarBoundary3D?.Plane?.Origin;
+            }
+        }
+
+        public PanelGroup PanelGroup
+        {
+            get
+            {
+                return panelType.PanelGroup();
+            }
+        }
+
+        public PanelType PanelType
+        {
+            get
+            {
+                return panelType;
+            }
+        }
+
+        public PlanarBoundary3D PlanarBoundary3D
+        {
+            get
+            {
+                return new PlanarBoundary3D(planarBoundary3D);
+            }
+        }
+
+        public Plane Plane
+        {
+            get
+            {
+                return planarBoundary3D?.Plane;
+            }
+        }
+
+        public bool AddAperture(Aperture aperture, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        {
+            if (aperture == null)
+                return false;
+
+            if (!Query.IsValid(this, aperture, tolerance_Angle, tolerance_Distance))
+                return false;
+
+            if (apertures == null)
+                apertures = new List<Aperture>();
+
+            apertures.Add(aperture);
+            return true;
+        }
+
+        public double Distance(Point3D point3D)
+        {
+            return GetFace3D().Distance(point3D);
+        }
+
+        public double DistanceToEdges(Point3D point3D)
+        {
+            return GetFace3D().DistanceToEdges(point3D);
+        }
+
+        public void FlipNormal(bool includeApertures, bool flipX = true)
+        {
+            Face3D face3D = planarBoundary3D?.GetFace3D();
+            if (face3D == null)
+                return;
+
+            face3D.FlipNormal(flipX);
+
+            planarBoundary3D = new PlanarBoundary3D(face3D);
+
+            if (apertures != null && includeApertures)
+            {
+                foreach (Aperture aperture in apertures)
+                    aperture.FlipNormal(flipX);
+            }
+        }
+
+        public override bool FromJObject(JObject jObject)
+        {
+            if (!base.FromJObject(jObject))
+                return false;
+
+            Enum.TryParse(jObject.Value<string>("PanelType"), out panelType);
+
+            if (jObject.ContainsKey("PlanarBoundary3D"))
+                planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
+
+            if (jObject.ContainsKey("Apertures"))
+                apertures = Core.Create.IJSAMObjects<Aperture>(jObject.Value<JArray>("Apertures"));
+
+            return true;
+        }
+
+        public Aperture GetAperture(Guid guid)
+        {
+            if (apertures == null || apertures.Count == 0)
+                return null;
+
+            for (int i = 0; i < apertures.Count; i++)
+            {
+                if (apertures[i].Guid.Equals(guid))
+                    return new Aperture(apertures[i]);
+            }
+
+            return null;
+        }
+
+        public List<Aperture> GetApertures(ApertureConstruction apertureConstruction)
+        {
+            if (apertures == null || apertureConstruction == null)
+                return null;
+
+            List<Aperture> result = new List<Aperture>();
+            foreach (Aperture aperture in apertures)
+                if (aperture != null && aperture.TypeGuid == apertureConstruction.Guid)
+                    result.Add(aperture.Clone());
+
+            return result;
+        }
+
+        public double GetArea()
+        {
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return double.NaN;
+
+            return face3D.GetArea();
+        }
+
+        /// <summary>
+        /// Area of Panel without Apertures
+        /// </summary>
+        /// <returns>Net Area</returns>
+        public double GetAreaNet()
+        {
+            if (apertures == null || apertures.Count == 0)
+            {
+                return GetArea();
+            }
+
+            List<Face3D> face3Ds = GetFace3Ds(true);
+            if (face3Ds == null)
+            {
+                return double.NaN;
+            }
+
+            face3Ds = face3Ds.FindAll(x => x != null);
+            if (face3Ds == null || face3Ds.Count == 0)
+            {
+                return double.NaN;
+            }
+
+            return face3Ds.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
+        }
+
+        public double GetAzimuth()
+        {
+            return Query.Azimuth(this);
+        }
+
+        public BoundingBox3D GetBoundingBox(double offset = 0)
+        {
+            return GetFace3D()?.GetBoundingBox(offset);
+        }
+
+        public IEnumerable<ICurve2D> GetEdge2Ds(double elevation)
+        {
+            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
+
+            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
+                return null;
+
+            return GetEdge2Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
+        }
+
+        public IEnumerable<ICurve2D> GetEdge2Ds(Plane plane)
+        {
+            if (plane == null)
+                return null;
+
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return null;
+
+            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            return planarIntersectionResult.GetGeometry2Ds<Segment2D>()?.Cast<ICurve2D>();
+        }
+
+        public IEnumerable<ICurve3D> GetEdge3Ds(double elevation)
+        {
+            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
+
+            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
+                return null;
+
+            return GetEdge3Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
+        }
+
+        public IEnumerable<ICurve3D> GetEdge3Ds(Plane plane)
+        {
+            if (plane == null)
+                return null;
+
+            Face3D face3D = GetFace3D();
+            if (face3D == null)
+                return null;
+
+            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
+            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
+                return null;
+
+            return planarIntersectionResult.GetGeometry3Ds<Segment3D>()?.Cast<ICurve3D>();
+        }
+
+        public Range<double> GetElevationRange()
+        {
+            Range<double> result = null;
+            IClosedPlanar3D closedPlanar3D = Face3D?.GetExternalEdge3D();
+            if (closedPlanar3D == null)
+            {
+                return null;
+            }
+
+            ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
+            if (segmentable3D == null)
+            {
+                throw new NotImplementedException();
+            }
+
+            List<Point3D> point3Ds = segmentable3D.GetPoints();
+            foreach (Point3D point3D in point3Ds)
+            {
+                if (point3D == null)
+                {
+                    continue;
+                }
+
+                if (result == null)
+                {
+                    result = new Range<double>(point3D.Z);
+                }
+                else
+                {
+                    result.Add(point3D.Z);
+                }
+            }
+
+            return result;
+        }
+
         public Face3D GetFace3D()
         {
             return planarBoundary3D?.GetFace3D();
@@ -254,42 +565,7 @@ namespace SAM.Analytical
         {
             return Geometry.Spatial.Query.InternalPoint3D(GetFace3D(), tolerance);
         }
-
-        public double GetArea()
-        {
-            Face3D face3D = GetFace3D();
-            if (face3D == null)
-                return double.NaN;
-
-            return face3D.GetArea();
-        }
-
-        /// <summary>
-        /// Area of Panel without Apertures
-        /// </summary>
-        /// <returns>Net Area</returns>
-        public double GetAreaNet()
-        {
-            if (apertures == null || apertures.Count == 0)
-            {
-                return GetArea();
-            }
-
-            List<Face3D> face3Ds = GetFace3Ds(true);
-            if (face3Ds == null)
-            {
-                return double.NaN;
-            }
-
-            face3Ds = face3Ds.FindAll(x => x != null);
-            if (face3Ds == null || face3Ds.Count == 0)
-            {
-                return double.NaN;
-            }
-
-            return face3Ds.ConvertAll(x => x.GetArea()).FindAll(x => !double.IsNaN(x)).Sum();
-        }
-
+        
         public double GetPerimeter()
         {
             if (planarBoundary3D == null)
@@ -297,29 +573,10 @@ namespace SAM.Analytical
 
             return planarBoundary3D.GetPerimeter();
         }
-
-        public Vector3D Normal
+        
+        public double GetThinnessRatio()
         {
-            get
-            {
-                return planarBoundary3D?.Plane?.Normal;
-            }
-        }
-
-        public Plane Plane
-        {
-            get
-            {
-                return planarBoundary3D?.Plane;
-            }
-        }
-
-        public Point3D Origin
-        {
-            get
-            {
-                return planarBoundary3D?.Plane?.Origin;
-            }
+            return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());
         }
 
         /// <summary>
@@ -330,119 +587,37 @@ namespace SAM.Analytical
         {
             return Query.Tilt(this);
         }
-
-        public double GetAzimuth()
+        
+        public bool HasAperture(Guid guid)
         {
-            return Query.Azimuth(this);
+            if (apertures == null || apertures.Count == 0)
+                return false;
+
+            for (int i = 0; i < apertures.Count; i++)
+                if (apertures[i].Guid.Equals(guid))
+                    return true;
+
+            return false;
         }
 
-        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
+        public bool IsExposedToSun()
         {
-            planarBoundary3D.Snap(point3Ds, maxDistance);
+            return Query.ExposedToSun(panelType);
         }
 
-        public void Snap(IEnumerable<Plane> planes, double maxDistance)
+        public bool IsExternal()
         {
-            planarBoundary3D.Snap(planes, maxDistance);
+            return Query.External(panelType);
         }
 
-        public BoundingBox3D GetBoundingBox(double offset = 0)
+        public bool IsGround()
         {
-            return GetFace3D()?.GetBoundingBox(offset);
+            return Query.Ground(panelType);
         }
 
-        public Construction Construction
+        public bool IsInternal()
         {
-            get
-            {
-                return Type;
-            }
-        }
-
-        public PanelType PanelType
-        {
-            get
-            {
-                return panelType;
-            }
-        }
-
-        public PanelGroup PanelGroup
-        {
-            get
-            {
-                return panelType.PanelGroup();
-            }
-        }
-
-        public double Distance(Point3D point3D)
-        {
-            return GetFace3D().Distance(point3D);
-        }
-
-        public double DistanceToEdges(Point3D point3D)
-        {
-            return GetFace3D().DistanceToEdges(point3D);
-        }
-
-        public PlanarBoundary3D PlanarBoundary3D
-        {
-            get
-            {
-                return new PlanarBoundary3D(planarBoundary3D);
-            }
-        }
-
-        public IEnumerable<ICurve2D> GetEdge2Ds(double elevation)
-        {
-            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
-
-            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
-                return null;
-
-            return GetEdge2Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
-        }
-
-        public IEnumerable<ICurve2D> GetEdge2Ds(Plane plane)
-        {
-            if (plane == null)
-                return null;
-
-            Face3D face3D = GetFace3D();
-            if (face3D == null)
-                return null;
-
-            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
-            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
-                return null;
-
-            return planarIntersectionResult.GetGeometry2Ds<Segment2D>()?.Cast<ICurve2D>();
-        }
-
-        public IEnumerable<ICurve3D> GetEdge3Ds(double elevation)
-        {
-            BoundingBox3D boundingBox3D = PlanarBoundary3D.GetBoundingBox();
-
-            if (elevation < boundingBox3D.Min.Z || elevation > boundingBox3D.Max.Z)
-                return null;
-
-            return GetEdge3Ds(new Plane(new Point3D(0, 0, elevation), Vector3D.WorldZ));
-        }
-
-        public IEnumerable<ICurve3D> GetEdge3Ds(Plane plane)
-        {
-            if (plane == null)
-                return null;
-
-            Face3D face3D = GetFace3D();
-            if (face3D == null)
-                return null;
-
-            PlanarIntersectionResult planarIntersectionResult = plane.PlanarIntersectionResult(face3D);
-            if (planarIntersectionResult == null || !planarIntersectionResult.Intersecting)
-                return null;
-
-            return planarIntersectionResult.GetGeometry3Ds<Segment3D>()?.Cast<ICurve3D>();
+            return Query.Internal(panelType);
         }
 
         public void Move(Vector3D vector3D)
@@ -454,6 +629,70 @@ namespace SAM.Analytical
 
             if (apertures != null)
                 apertures.ForEach(x => x.Move(vector3D));
+        }
+
+        public void Normalize(bool includeApertures = true, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
+        {
+            planarBoundary3D?.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
+
+            if (apertures != null && includeApertures)
+            {
+                foreach (Aperture aperture in apertures)
+                    aperture.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
+            }
+        }
+
+        public void OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
+        {
+            apertures = Query.OffsetAperturesOnEdge(this, distance, tolerance);
+        }
+
+        public bool RemoveAperture(Guid guid)
+        {
+            if (apertures == null || apertures.Count == 0)
+                return false;
+
+            for (int i = 0; i < apertures.Count; i++)
+            {
+                if (apertures[i].Guid.Equals(guid))
+                {
+                    apertures.RemoveAt(i);
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        public void RemoveApertures()
+        {
+            apertures = null;
+        }
+
+        public void Snap(IEnumerable<Point3D> point3Ds, double maxDistance = double.NaN)
+        {
+            planarBoundary3D.Snap(point3Ds, maxDistance);
+        }
+
+        public void Snap(IEnumerable<Plane> planes, double maxDistance)
+        {
+            planarBoundary3D.Snap(planes, maxDistance);
+        }
+        public override JObject ToJObject()
+        {
+            JObject jObject = base.ToJObject();
+            if (jObject == null)
+                return jObject;
+
+            jObject.Add("PanelType", panelType.ToString());
+
+            if (planarBoundary3D != null)
+                jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
+
+            if (apertures != null)
+                jObject.Add("Apertures", Core.Create.JArray(apertures));
+
+            return jObject;
         }
 
         /// <summary>
@@ -596,246 +835,21 @@ namespace SAM.Analytical
                 }
             }
         }
-
-        public override bool FromJObject(JObject jObject)
+        
+        public bool TrySetPanelType(string text)
         {
-            if (!base.FromJObject(jObject))
+            if(string.IsNullOrWhiteSpace(text))
+            {
                 return false;
+            }
 
-            Enum.TryParse(jObject.Value<string>("PanelType"), out panelType);
+            if(!Core.Query.TryGetEnum(text, out PanelType panelType))
+            {
+                return false;
+            }
 
-            if (jObject.ContainsKey("PlanarBoundary3D"))
-                planarBoundary3D = new PlanarBoundary3D(jObject.Value<JObject>("PlanarBoundary3D"));
-
-            if (jObject.ContainsKey("Apertures"))
-                apertures = Core.Create.IJSAMObjects<Aperture>(jObject.Value<JArray>("Apertures"));
-
+            this.panelType = panelType;
             return true;
-        }
-
-        public override JObject ToJObject()
-        {
-            JObject jObject = base.ToJObject();
-            if (jObject == null)
-                return jObject;
-
-            jObject.Add("PanelType", panelType.ToString());
-
-            if (planarBoundary3D != null)
-                jObject.Add("PlanarBoundary3D", planarBoundary3D.ToJObject());
-
-            if (apertures != null)
-                jObject.Add("Apertures", Core.Create.JArray(apertures));
-
-            return jObject;
-        }
-
-        public bool AddAperture(Aperture aperture, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
-        {
-            if (aperture == null)
-                return false;
-
-            if (!Query.IsValid(this, aperture, tolerance_Angle, tolerance_Distance))
-                return false;
-
-            if (apertures == null)
-                apertures = new List<Aperture>();
-
-            apertures.Add(aperture);
-            return true;
-        }
-
-        public bool RemoveAperture(Guid guid)
-        {
-            if (apertures == null || apertures.Count == 0)
-                return false;
-
-            for (int i = 0; i < apertures.Count; i++)
-            {
-                if (apertures[i].Guid.Equals(guid))
-                {
-                    apertures.RemoveAt(i);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        public void RemoveApertures()
-        {
-            apertures = null;
-        }
-
-        public Aperture GetAperture(Guid guid)
-        {
-            if (apertures == null || apertures.Count == 0)
-                return null;
-
-            for (int i = 0; i < apertures.Count; i++)
-            {
-                if (apertures[i].Guid.Equals(guid))
-                    return new Aperture(apertures[i]);
-            }
-
-            return null;
-        }
-
-        public bool HasAperture(Guid guid)
-        {
-            if (apertures == null || apertures.Count == 0)
-                return false;
-
-            for (int i = 0; i < apertures.Count; i++)
-                if (apertures[i].Guid.Equals(guid))
-                    return true;
-
-            return false;
-        }
-
-        public void OffsetAperturesOnEdge(double distance, double tolerance = Tolerance.Distance)
-        {
-            apertures = Query.OffsetAperturesOnEdge(this, distance, tolerance);
-        }
-
-        public List<Aperture> Apertures
-        {
-            get
-            {
-                if (apertures == null)
-                    return null;
-                return apertures.ConvertAll(x => x.Clone());
-            }
-        }
-
-        public List<Aperture> GetApertures(ApertureConstruction apertureConstruction)
-        {
-            if (apertures == null || apertureConstruction == null)
-                return null;
-
-            List<Aperture> result = new List<Aperture>();
-            foreach (Aperture aperture in apertures)
-                if (aperture != null && aperture.TypeGuid == apertureConstruction.Guid)
-                    result.Add(aperture.Clone());
-
-            return result;
-        }
-
-        public double GetThinnessRatio()
-        {
-            return Geometry.Planar.Query.ThinnessRatio(planarBoundary3D.ExternalEdge2DLoop.GetClosed2D());
-        }
-
-        public Range<double> GetElevationRange()
-        {
-            Range<double> result = null;
-            IClosedPlanar3D closedPlanar3D = Face3D?.GetExternalEdge3D();
-            if (closedPlanar3D == null)
-            {
-                return null;
-            }
-
-            ISegmentable3D segmentable3D = closedPlanar3D as ISegmentable3D;
-            if (segmentable3D == null)
-            {
-                throw new NotImplementedException();
-            }
-
-            List<Point3D> point3Ds = segmentable3D.GetPoints();
-            foreach (Point3D point3D in point3Ds)
-            {
-                if (point3D == null)
-                {
-                    continue;
-                }
-
-                if (result == null)
-                {
-                    result = new Range<double>(point3D.Z);
-                }
-                else
-                {
-                    result.Add(point3D.Z);
-                }
-            }
-
-            return result;
-        }
-
-        public void FlipNormal(bool includeApertures, bool flipX = true)
-        {
-            Face3D face3D = planarBoundary3D?.GetFace3D();
-            if (face3D == null)
-                return;
-
-            face3D.FlipNormal(flipX);
-
-            planarBoundary3D = new PlanarBoundary3D(face3D);
-
-            if (apertures != null && includeApertures)
-            {
-                foreach (Aperture aperture in apertures)
-                    aperture.FlipNormal(flipX);
-            }
-        }
-
-        public void Normalize(bool includeApertures = true, Orientation orientation = Orientation.CounterClockwise, EdgeOrientationMethod edgeOrientationMethod = EdgeOrientationMethod.Opposite, double tolerance_Angle = Tolerance.Angle, double tolerance_Distance = Tolerance.Distance)
-        {
-            planarBoundary3D?.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
-
-            if (apertures != null && includeApertures)
-            {
-                foreach (Aperture aperture in apertures)
-                    aperture.Normalize(orientation, edgeOrientationMethod, tolerance_Angle, tolerance_Distance);
-            }
-        }
-
-        public bool IsExternal()
-        {
-            return Query.External(panelType);
-        }
-
-        public bool IsExposedToSun()
-        {
-            return Query.ExposedToSun(panelType);
-        }
-
-        public bool IsInternal()
-        {
-            return Query.Internal(panelType);
-        }
-
-        public bool IsGround()
-        {
-            return Query.Ground(panelType);
-        }
-
-        public bool HasApertures
-        {
-            get
-            {
-                return apertures != null && apertures.Count != 0;
-            }
-        }
-
-        public Face3D Face3D
-        {
-            get
-            {
-                Face2D face2D = planarBoundary3D?.GetFace2D();
-                if (face2D == null)
-                {
-                    return null;
-                }
-
-                Plane plane = planarBoundary3D.Plane;
-                if (plane == null)
-                {
-                    return null;
-                }
-
-                return plane.Convert(face2D);
-            }
         }
     }
 }

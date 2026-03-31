@@ -36,7 +36,7 @@ namespace SAM.Core.Grasshopper
 
             Assembly assembly = gH_SAMComponent.GetType().Assembly;
 
-            string link = @"https://github.com/HoareLea";
+            string link = @"https://github.com/SAM-BIM";
 
             string name = assembly.GetName().Name;
             string[] names = name?.Split('.');

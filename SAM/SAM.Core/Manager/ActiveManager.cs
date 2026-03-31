@@ -13,7 +13,7 @@ namespace SAM.Core
     {
         private static Dictionary<Type, AssociatedTypes> associatedTypesDictionary;
         private static Dictionary<string, TextMap> specialCharacterMapDictionary;
-        private static Manager manager = Load();
+        private static Manager manager = null;
 
         private static Manager Load()
         {
@@ -28,81 +28,161 @@ namespace SAM.Core
 
         public static Setting GetSetting(Assembly assembly)
         {
+            if(manager == null)
+            {
+                manager = Load();
+            }
+
             return manager.GetSetting(assembly);
         }
 
         public static bool SetValue(Assembly assembly, string name, string value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(assembly, name, value);
         }
 
         public static bool SetValue(Assembly assembly, string name, double value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(assembly, name, value);
         }
 
         public static bool SetValue(Assembly assembly, string name, bool value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(assembly, name, value);
         }
 
         public static bool SetValue(Assembly assembly, string name, IJSAMObject value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(assembly, name, value);
         }
 
         public static bool SetValue(Assembly assembly, string name, DateTime value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(assembly, name, value);
         }
 
         public static bool SetValue(string name, string value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(name, value);
         }
 
         public static bool SetValue(string name, double value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(name, value);
         }
 
         public static bool SetValue(string name, bool value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(name, value);
         }
 
         public static bool SetValue(string name, IJSAMObject value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(name, value);
         }
 
         public static bool SetValue(string name, DateTime value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.SetValue(name, value);
         }
 
         public static bool TryGetValue<T>(Assembly assembly, string name, out T value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.TryGetValue(assembly, name, out value);
         }
 
         public static bool TryGetValue<T>(string name, out T value)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.TryGetValue(name, out value);
         }
 
         public static T GetValue<T>(Assembly assembly, string name)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.GetValue<T>(assembly, name);
         }
 
         public static T GetValue<T>(string name)
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.GetValue<T>(name);
         }
 
         public static bool Write()
         {
+            if (manager == null)
+            {
+                Load();
+            }
+
             return manager.Write();
         }
 

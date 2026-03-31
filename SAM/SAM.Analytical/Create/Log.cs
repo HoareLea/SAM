@@ -152,6 +152,11 @@ namespace SAM.Analytical
                 if (panels_Space.Count < 4)
                     result.Add("Space {0} (Guid: {1}) has less than 4 panels.", LogRecordType.Message, space.Name, space.Guid);
 
+                if (panels_Space.TrueForAll(x => x.Adiabatic()))
+                {
+                    result.Add("Space {0} (Guid: {1}) all panels are adiabatic.", LogRecordType.Error, space.Name, space.Guid);
+                }
+
                 Panel panel_Floor = panels_Space.Find(x => Query.PanelGroup(x.PanelType) == PanelGroup.Floor);
                 if (panel_Floor == null)
                 {
@@ -335,7 +340,7 @@ namespace SAM.Analytical
             if (construction.TryGetValue(ConstructionParameter.DefaultPanelType, out text) && !string.IsNullOrWhiteSpace(text))
                 panelType = Query.PanelType(text, false);
 
-            if (panelType != PanelType.Air)
+            if (panelType != PanelType.Air && panelType != PanelType.Shade)
             {
                 List<ConstructionLayer> constructionLayers = construction?.ConstructionLayers;
                 if (constructionLayers != null && constructionLayers.Count > 0)
@@ -382,7 +387,7 @@ namespace SAM.Analytical
                 {
                     if (System.Math.Abs(thickness - thickness_ConstructionLayers) > Tolerance.MacroDistance)
                     {
-                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, thickness, thickness_ConstructionLayers), LogRecordType.Message);
+                        result.Add(string.Format("Parameter {0} in {1} Construction (Guid: {2}) has different value ({3}) than thickness of its ConstructionLayers ({4})", ConstructionParameter.DefaultThickness.Name(), construction.Name, construction.Guid, Core.Query.Round(thickness, Tolerance.MacroDistance), Core.Query.Round(thickness_ConstructionLayers, Tolerance.MacroDistance)), LogRecordType.Message);
                     }
                 }
             }
@@ -501,8 +506,8 @@ namespace SAM.Analytical
                 if (double.IsNaN(gasMaterial.GetValue<double>(GasMaterialParameter.HeatTransferCoefficient)))
                     result.Add(string.Format("Heat Transfer Coefficient for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Warning);
 
-                if (double.IsNaN(gasMaterial.Density))
-                    result.Add(string.Format("Density for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
+                //if (double.IsNaN(gasMaterial.Density))
+                //    result.Add(string.Format("Density for {0} Material (Guid: {1}) has invalid value", name, material.Guid), LogRecordType.Error);
             }
             else if (material is TransparentMaterial)
             {
@@ -847,7 +852,7 @@ namespace SAM.Analytical
                                     double supplyAirFlow = Query.CalculatedSupplyAirFlow(space);
                                     if (supplyAirFlow > 0)
                                     {
-                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, supplyAirFlow);
+                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, Core.Query.Round(supplyAirFlow, Tolerance.MacroDistance));
                                     }
                                 }
 
@@ -857,7 +862,7 @@ namespace SAM.Analytical
                                     double exhaustAirFlow = Query.CalculatedExhaustAirFlow(space);
                                     if (supplyAirFlow > 0 || exhaustAirFlow > 0)
                                     {
-                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3} and exhaust air flow is {4}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, supplyAirFlow, exhaustAirFlow);
+                                        result.Add("{0} Space (Guid: {1}) Your Ventilation System is {2} but supply air flow is {3} and exhaust air flow is {4}", LogRecordType.Warning, space.Name, space.Guid, ventilationSystemTypeName, Core.Query.Round(supplyAirFlow, Tolerance.MacroDistance), Core.Query.Round(exhaustAirFlow, Tolerance.MacroDistance));
                                     }
                                 }
                             }

@@ -14,7 +14,7 @@ namespace SAM.Geometry.Rhino
 
         }
 
-        private static Setting setting = Load();
+        private static Setting setting = null;
 
         private static MeshingParameters meshingParameters;
 
@@ -31,6 +31,11 @@ namespace SAM.Geometry.Rhino
         {
             get
             {
+                if(setting == null)
+                {
+                    setting = Load();
+                }
+
                 return setting;
             }
         }

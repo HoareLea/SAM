@@ -16,13 +16,16 @@ namespace SAM.Analytical.Classes
         private double sillHeight;
         private bool subdivide;
 
+        private double? framePercentage = null;
+        private double? frameWidth = null;
+
         public ApertureCase()
             : base()
         {
 
         }
 
-        public ApertureCase(ApertureToPanelRatios apertureToPanelRatios, bool subdivide, double apertureHeight, double sillHeight, double horizontalSeparation, double offset, bool keepSeparationDistance, CaseSelection caseSelection)
+        public ApertureCase(ApertureToPanelRatios apertureToPanelRatios, bool subdivide, double apertureHeight, double sillHeight, double horizontalSeparation, double offset, bool keepSeparationDistance, CaseSelection caseSelection, double? framePercentage, double? frameWidth)
             : base()
         {
             this.apertureToPanelRatios = apertureToPanelRatios == null ? null : new ApertureToPanelRatios(apertureToPanelRatios);
@@ -33,6 +36,8 @@ namespace SAM.Analytical.Classes
             this.offset = offset;
             this.keepSeparationDistance = keepSeparationDistance;
             this.caseSelection = caseSelection;
+            this.framePercentage = framePercentage;
+            this.frameWidth = frameWidth;
         }
 
         public ApertureCase(JObject jObject)
@@ -54,6 +59,36 @@ namespace SAM.Analytical.Classes
                 offset = apertureCase.offset;
                 keepSeparationDistance = apertureCase.keepSeparationDistance;
                 caseSelection = apertureCase.caseSelection;
+                framePercentage = apertureCase.framePercentage;
+                frameWidth = apertureCase.frameWidth;
+            }
+        }
+
+        public double? FramePercentage
+        {
+            get
+            {
+                return framePercentage;
+            }
+
+            set
+            {
+                framePercentage = value;
+                OnPropertyChanged(nameof(FramePercentage));
+            }
+        }
+
+        public double? FrameWidth
+        {
+            get
+            {
+                return frameWidth;
+            }
+
+            set
+            {
+                frameWidth = value;
+                OnPropertyChanged(nameof(FrameWidth));
             }
         }
 
@@ -211,6 +246,16 @@ namespace SAM.Analytical.Classes
                 caseSelection = Core.Query.IJSAMObject<CaseSelection>(jObject.Value<JObject>("CaseSelection"));
             }
 
+            if (jObject.ContainsKey("FramePercentage"))
+            {
+                framePercentage = jObject.Value<double>("FramePercentage");
+            }
+
+            if (jObject.ContainsKey("FrameWidth"))
+            {
+                frameWidth = jObject.Value<double>("FrameWidth");
+            }
+
             return true;
         }
 
@@ -255,6 +300,16 @@ namespace SAM.Analytical.Classes
             {
                 result.Add("CaseSelection", caseSelection.ToJObject());
                 result.Add("CaseSelection", caseSelection.ToJObject());
+            }
+
+            if(framePercentage is not null && !double.IsNaN(framePercentage.Value))
+            {
+                result.Add("FramePercentage", framePercentage.Value);
+            }
+
+            if (frameWidth is not null && !double.IsNaN(frameWidth.Value))
+            {
+                result.Add("FrameWidth", frameWidth.Value);
             }
 
             return result;

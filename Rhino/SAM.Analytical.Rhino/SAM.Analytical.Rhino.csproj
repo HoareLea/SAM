@@ -6,11 +6,6 @@
 	<AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Remove="Query\**" />
-    <EmbeddedResource Remove="Query\**" />
-    <None Remove="Query\**" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\SAM\SAM.Analytical\SAM.Analytical.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Geometry\SAM.Geometry.csproj" />

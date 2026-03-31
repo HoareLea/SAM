@@ -3,8 +3,10 @@
 
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
+using SAM.Geometry.Rhino;
 using SAM.Geometry.Spatial;
 using System;
 using System.Collections.Generic;
@@ -22,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreatePanelByBottomAndHeight()
           : base("SAMAnalytical.CreatePanelByBottomAndHeight", "SAMAnalytical.CreatePanelByBottomAndHeight",
-              "Create SAM Analytical Panel by Bottom Edge And Height",
+              "Create a SAM Analytical Panel from a bottom edge and height (single value or vertical domain).",
               "SAM", "Analytical01")
         {
         }
@@ -55,7 +57,11 @@ namespace SAM.Analytical.Grasshopper
             index = inputParamManager.AddParameter(new GooConstructionParam(), "construction_", "construction_", "SAM Analytical Construction", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
 
-            inputParamManager.AddNumberParameter("_height", "_height", "Panel Height", GH_ParamAccess.item);
+            inputParamManager.AddGenericParameter(
+                "_height",
+                "_height",
+                "Panel height. Accepts a single numeric value (e.g. 2.0) or a domain (e.g. 2 to 4) defining the vertical range used to generate the panel.",
+                GH_ParamAccess.item);
 
             index = inputParamManager.AddNumberParameter("_minElevation", "_minElevation", "Min Elevation", GH_ParamAccess.item);
             inputParamManager[index].Optional = true;
@@ -85,14 +91,80 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<ISegmentable3D> segmentable3Ds = null;
-            if (!Geometry.Grasshopper.Query.TryGetSAMGeometries(@objectWrapper, out segmentable3Ds) || segmentable3Ds == null || segmentable3Ds.Count() == 0)
+
+            if(@objectWrapper is IGH_Goo gH_Goo && (gH_Goo as dynamic).Value is GH_Mesh gH_mesh)
+            {
+                segmentable3Ds = [];
+
+                Polyline[] polylines = gH_mesh.Value.GetNakedEdges();
+                foreach(Polyline polyline in polylines)
+                {
+                    if(polyline.ToSAM() is Polyline3D polyline3D)
+                    {
+                        segmentable3Ds.Add(polyline3D);
+                    }
+                }
+            }
+            else if (!Geometry.Grasshopper.Query.TryGetSAMGeometries(@objectWrapper, out segmentable3Ds) || segmentable3Ds == null || segmentable3Ds.Count() == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            GH_ObjectWrapper gH_ObjectWrapper = null;
+            if (!dataAccess.GetData(3, ref gH_ObjectWrapper))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            object @object = gH_ObjectWrapper.Value;
+
+            if (@object is IGH_Goo)
+            {
+                @object = (@object as dynamic).Value; 
+            }
+
             double height = double.NaN;
-            if (!dataAccess.GetData(3, ref height))
+
+            if (@object is double)
+            {
+                height = (double)@object;
+            }
+            else if (@object is Interval interval)
+            {
+                height = interval.Max;
+                Geometry.Spatial.Plane plane = Geometry.Spatial.Create.Plane(interval.Min);
+
+                segmentable3Ds = segmentable3Ds.ConvertAll(x => Geometry.Spatial.Query.Project(plane, x as dynamic) as ISegmentable3D);
+            }
+            else if (@object is string text)
+            {
+                if (text.ToUpper().IndexOf("TO") is int index && index > 0)
+                {
+                    if (!Core.Query.TryConvert(text.Substring(0, index).Trim(), out double min) || !Core.Query.TryConvert(text.Substring(index + 2).Trim(), out double max))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+
+                    interval = new Interval(min, max);
+
+                    height = interval.Max - interval.Min;
+                    Geometry.Spatial.Plane plane = Geometry.Spatial.Create.Plane(interval.Min);
+
+                    segmentable3Ds = segmentable3Ds.ConvertAll(x => Geometry.Spatial.Query.Project(plane, x as dynamic) as ISegmentable3D);
+                }
+                else
+                {
+                    if (!Core.Query.TryConvert(text, out height))
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                        return;
+                    }
+                }
+            }
+            else
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,6 +186,7 @@ namespace SAM.Analytical.Grasshopper
             dataAccess.GetData(2, ref construction);
 
             double minElevation = double.NaN;
+
             if (dataAccess.GetData(4, ref minElevation))
             {
                 for (int i = 0; i < segmentable3Ds.Count; i++)

@@ -190,6 +190,8 @@ namespace SAM.Analytical
             double apertureHeight,
             double sillHeight,
             double horizontalSeparation,
+            double? framePercentage,
+            double? frameWidth,
             double offset,
             bool keepSeparationDistance,
             IEnumerable<Panel> panels = null)
@@ -247,7 +249,7 @@ namespace SAM.Analytical
                     apertureConstruction_Temp = Query.DefaultApertureConstruction(panel_New, ApertureType.Window);
                 }
 
-                List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
+                List<Aperture> apertures = panel_New.AddApertures(apertureConstruction_Temp, ratio, subdivide, apertureHeight, sillHeight, horizontalSeparation, framePercentage, frameWidth, offset, keepSeparationDistance);
                 if (apertures == null || apertures.Count == 0)
                 {
                     continue;
@@ -329,6 +331,8 @@ namespace SAM.Analytical
                 apertureCase.ApertureHeight,
                 apertureCase.SillHeight,
                 apertureCase.HorizontalSeparation,
+                apertureCase.FramePercentage,
+                apertureCase.FrameWidth,
                 apertureCase.Offset,
                 apertureCase.KeepSeparationDistance,
                 panels);

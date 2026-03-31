@@ -170,26 +170,30 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            bool framePercentage = true;
-            List<double> values = new List<double>();
+            List<double> frameWidths = new List<double>();
             index = Params.IndexOfInputParam("frameWidth_");
-            if (index != -1 && dataAccess.GetDataList(index, values))
+            if (index != -1)
             {
-                framePercentage = false;
+                dataAccess.GetDataList(index, frameWidths);
             }
 
-            if (framePercentage)
+            List<double> framePercentages = new List<double>();
+            index = Params.IndexOfInputParam("framePercentage_");
+            if (index != -1)
             {
-                index = Params.IndexOfInputParam("framePercentage_");
-                if (index != -1)
-                {
-                    dataAccess.GetDataList(index, values);
-                }
+                dataAccess.GetDataList(index, framePercentages);
             }
 
-            if (values != null && values.Count != 0)
+            if (framePercentages != null && framePercentages.Count > 0 && frameWidths != null && frameWidths.Count > 0)
             {
-                face3Ds = Query.Offset(face3Ds, values, framePercentage);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Both framePercentage and frameWidth are connected. Please use only one. If both provided, frameWidth will take precedence");
+            }
+
+            if ((frameWidths != null && frameWidths.Count != 0) || (framePercentages != null && framePercentages.Count != 0))
+            {
+                bool framePercentage = frameWidths == null || frameWidths.Count == 0;
+
+                face3Ds = Geometry.Spatial.Query.Offset(face3Ds, framePercentage ? framePercentages : frameWidths, framePercentage);
             }
 
             List<IMaterial> materials = null;

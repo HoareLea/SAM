@@ -42,7 +42,7 @@ namespace SAM.Analytical.Rhino
                 if (partition == null)
                     continue;
 
-                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_Host.Id, partition.GetType().ToString(), Query.Color(partition));
+                Layer layer = Core.Rhino.Modify.GetLayer(layerTable, layer_Host.Id, partition.GetType().ToString(), Analytical.Query.Color(partition));
 
                 //layerTable.SetCurrentLayerIndex(layer.Index, true);
                 objectAttributes.LayerIndex = layer.Index;
@@ -62,7 +62,7 @@ namespace SAM.Analytical.Rhino
                         if (opening == null)
                             continue;
 
-                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_Opening.Id, opening.GetType().ToString(), Query.Color(opening));
+                        layer = Core.Rhino.Modify.GetLayer(layerTable, layer_Opening.Id, opening.GetType().ToString(), Analytical.Query.Color(opening));
 
                         //layerTable.SetCurrentLayerIndex(layer.Index, true);
                         objectAttributes.LayerIndex = layer.Index;

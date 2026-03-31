@@ -44,7 +44,9 @@ namespace SAM.Analytical.Rhino
                 if (string.IsNullOrWhiteSpace(internalConditionName))
                     internalConditionName = "???";
 
-                System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+                //System.Drawing.Color color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+                System.Drawing.Color color = Core.Create.Color(internalConditionName);
+
 
                 Layer layer_Level = Core.Rhino.Modify.GetLayer(layerTable, layer_Spaces.Id, internalConditionName, color);
 
@@ -52,7 +54,8 @@ namespace SAM.Analytical.Rhino
                 if (string.IsNullOrWhiteSpace(layerName))
                     layerName = "???";
 
-                color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+                //color = System.Drawing.Color.FromArgb(random.Next(0, 254), random.Next(0, 254), random.Next(0, 254));
+                color = Core.Create.Color(layerName);
 
                 Layer layer_Space = Core.Rhino.Modify.GetLayer(layerTable, layer_Level.Id, layerName, color);
 

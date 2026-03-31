@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
                 GooAnalyticalModelParam gooAnalyticalModelParam = new() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gooAnalyticalModelParam, ParamVisibility.Binding));
 
-                GooProfileParam gooProfileParam = new() { Name = "_profile", NickName = "_profile", Description = "SAM Analytical Profile", Access = GH_ParamAccess.item };
+                GooProfileParam gooProfileParam = new() { Name = "_profiles", NickName = "_profiles", Description = "SAM Analytical Profile", Access = GH_ParamAccess.list };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Binding));
 
                 GooSpaceParam gooSpaceParam = new() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list };
@@ -89,19 +89,19 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_profile");
-            Profile profile = null;
-            if (index == -1 || !dataAccess.GetData(index, ref profile) || profile == null)
+            index = Params.IndexOfInputParam("_profiles");
+            List<Profile> profiles = [];
+            if (index == -1 || !dataAccess.GetDataList(index, profiles) || profiles == null || profiles.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
-            if (profile.ProfileType == ProfileType.Undefined)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid ProfileType");
-                return;
-            }
+            //if (profile.ProfileType == ProfileType.Undefined)
+            //{
+            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid ProfileType");
+            //    return;
+            //}
 
             index = Params.IndexOfInputParam("_spaces");
             List<Space> spaces = [];
@@ -117,16 +117,26 @@ namespace SAM.Analytical.Grasshopper
                 profileLibrary = new ProfileLibrary(analyticalModel.Name);
             }
 
-            profileLibrary.Add(profile);
+            foreach(Profile profile in profiles)
+            {
+                if (profile is null || profile.ProfileType == ProfileType.Undefined)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Invalid ProfileType: {0}", profile?.Name ?? "???"));
+                    return;
+                }
+
+                profileLibrary.Add(profile);
+            }
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
             if (adjacencyCluster != null)
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
 
-                foreach (Space space in spaces)
+                //foreach (Space space in spaces)
+                for (int i = 0; i < spaces.Count; i++)
                 {
-                    Space space_Temp = adjacencyCluster.GetObject<Space>(space.Guid);
+                    Space space_Temp = adjacencyCluster.GetObject<Space>(spaces[i].Guid);
                     if (space_Temp == null)
                     {
                         continue;
@@ -139,6 +149,8 @@ namespace SAM.Analytical.Grasshopper
                     {
                         internalCondition = new InternalCondition(space_Temp.Name);
                     }
+
+                    Profile profile = profiles[Core.Query.Clamp(i, 0, profiles.Count - 1)];
 
                     ProfileType profileType = profile.ProfileType;
 

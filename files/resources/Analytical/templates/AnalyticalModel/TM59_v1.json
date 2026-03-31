@@ -1,11 +1,11 @@
 [
   {
     "_type": "SAM.Analytical.AnalyticalModel,SAM.Analytical",
-    "Name": "New Project",
-    "Guid": "a50b4909-a1fd-4e8e-9cd7-501a1a9270dd",
+    "Name": "Template TM59",
+    "Guid": "c4e071f0-08a8-4aab-9c2b-3b146111cb47",
     "AdjacencyCluster": {
       "_type": "SAM.Analytical.AdjacencyCluster,SAM.Analytical",
-      "Guid": "b1ef45a3-7883-46f7-9d49-b05e535af091",
+      "Guid": "aeee2d7d-48b3-4cb9-8d3c-94db0638f70e",
       "Objects": [
         {
           "Key": "SAM.Analytical.InternalCondition",
@@ -128,7 +128,7 @@
                     ]
                   }
                 ],
-                "Name": "1 Bed Apt. Living Room /Kitchen",
+                "Name": "1 Bed Apt. Living Room/Kitchen",
                 "Guid": "544bc2c9-d281-472a-ad38-83f0f01a3827"
               }
             },
@@ -750,7 +750,7 @@
     "ProfileLibrary": {
       "_type": "SAM.Analytical.ProfileLibrary,SAM.Analytical",
       "Name": "Default Profile Libarary",
-      "Guid": "9d816e09-6856-4bf9-877f-6d996d0a6d34",
+      "Guid": "66033792-991e-47c2-aa2a-8a2cf4fd4fbe",
       "Objects": [
         {
           "_type": "SAM.Analytical.Profile,SAM.Analytical",

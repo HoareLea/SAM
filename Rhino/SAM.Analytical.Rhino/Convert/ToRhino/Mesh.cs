@@ -21,7 +21,7 @@ namespace SAM.Analytical.Rhino
             Mesh mesh = Geometry.Rhino.Convert.ToRhino_Mesh(face3D);
             if (mesh != null)
             {
-                mesh.VertexColors.CreateMonotoneMesh(Query.Color(aperture.ApertureType));
+                mesh.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(aperture.ApertureType));
             }
 
             return mesh;
@@ -70,7 +70,7 @@ namespace SAM.Analytical.Rhino
 
             if (panel is ExternalPanel)
             {
-                result.VertexColors.CreateMonotoneMesh(Query.Color((ExternalPanel)panel));
+                result.VertexColors.CreateMonotoneMesh(Analytical.Query.Color((ExternalPanel)panel));
                 return result;
             }
 
@@ -80,7 +80,7 @@ namespace SAM.Analytical.Rhino
                 return null;
             }
 
-            result.VertexColors.CreateMonotoneMesh(Query.Color(panel_Temp.PanelType));
+            result.VertexColors.CreateMonotoneMesh(Analytical.Query.Color(panel_Temp.PanelType));
 
             if (includeApertures)
             {

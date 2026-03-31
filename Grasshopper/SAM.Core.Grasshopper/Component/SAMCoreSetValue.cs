@@ -140,6 +140,24 @@ namespace SAM.Core.Grasshopper
                     }
                 }
             }
+            else if(name == "PanelType")
+            {
+                MethodInfo[] methodInfos = parameterizedSAMObject.GetType().GetMethods();
+                if(methodInfos is not null || methodInfos.Length > 0)
+                {
+                    foreach(MethodInfo methodInfo in methodInfos)
+                    {
+                        if(methodInfo.Name != "TrySetPanelType")
+                        {
+                            continue;
+                        }
+
+                        methodInfo.Invoke(parameterizedSAMObject, [ value.ToString() ]);
+                        result = true;
+                        break;
+                    }
+                }
+            }
 
             if (!result)
             {

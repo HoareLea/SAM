@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.6";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -141,8 +141,8 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(
                     new Param_String()
                     {
-                        Name = "_function",
-                        NickName = "_function",
+                        Name = "_functions",
+                        NickName = "_functions",
                         Description =
                             "Ventilation function string.\n" +
                             "Defines the zone’s ventilation behavior (temperature-, pollutant-, or hybrid-controlled).\n" +
@@ -157,7 +157,7 @@ namespace SAM.Analytical.Grasshopper
                             "  tmmvn,0,19.00,20.00,0.200,0.000,-50.00\n" +
                             "  tcbvc,0,19.00,20.00,0.200,19.00,20.00,30.000,0,0,50.000,\n" +
                             "         604.799,755.999,16.000,12.000,755.999,1209.598",
-                        Access = GH_ParamAccess.item,
+                        Access = GH_ParamAccess.list,
                         Optional = false
                     },
                     ParamVisibility.Binding));
@@ -174,7 +174,7 @@ namespace SAM.Analytical.Grasshopper
                             "  Input:  tcmvc,0,19.00,20.00,0,0.000,-50.00\n" +
                             "  With ac/h_ = 0.3 → becomes:\n" +
                             "  tcmvc,0,19.00,20.00,0,0.300,-50.00",
-                        Access = GH_ParamAccess.item,
+                        Access = GH_ParamAccess.list,
                         Optional = true
                     },
                     ParamVisibility.Binding));
@@ -188,22 +188,33 @@ namespace SAM.Analytical.Grasshopper
                             "Override airflow [m³/h]. This will be converted to ACH per space as:\n" +
                             "  ACH = (m³/h) / Volume[m³]\n" +
                             "If both ac/h_ and m3/h_ are provided, ac/h_ takes precedence.",
-                        Access = GH_ParamAccess.item,
+                        Access = GH_ParamAccess.list,
+                        Optional = true
+                    },
+                    ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(
+                    new Param_Number()
+                    {
+                        Name = "l/s_",
+                        NickName = "l/s_",
+                        Description = "Liters per second",
+                        Access = GH_ParamAccess.list,
                         Optional = true
                     },
                     ParamVisibility.Binding));
 
                 Param_Number param_Number;
 
-                param_Number = new Param_Number() { Name = "_factor_", NickName = "_factor_", Description = "Factor", Access = GH_ParamAccess.item, Optional = true };
-                param_Number.SetPersistentData(1.0);
+                param_Number = new Param_Number() { Name = "_factors_", NickName = "_factors_", Description = "Factor", Access = GH_ParamAccess.list, Optional = true };
+                param_Number.SetPersistentData(new List<double>() { 1.0 });
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                param_Number = new Param_Number() { Name = "_setback_", NickName = "_setback_", Description = "Setback", Access = GH_ParamAccess.item, Optional = true };
-                param_Number.SetPersistentData(0.0);
+                param_Number = new Param_Number() { Name = "_setbacks_", NickName = "_setback_", Description = "Setback", Access = GH_ParamAccess.list, Optional = true };
+                param_Number.SetPersistentData(new List<double>() { 0.0 });
                 result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-                result.Add(new GH_SAMParam(new Param_String() { Name = "description_", NickName = "description_", Description = "Description", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new Param_String() { Name = "descriptions_", NickName = "descriptions_", Description = "Description", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -241,55 +252,72 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            string function = null;
-            index = Params.IndexOfInputParam("_function");
-            if (index == -1 || !dataAccess.GetData(index, ref function) || function == null)
+            List<string> functions = new List<string>();
+            index = Params.IndexOfInputParam("_functions");
+            if (index == -1 || !dataAccess.GetDataList(index, functions) || functions == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            double ach = double.NaN;
+            List<double> achs = new List<double>();
             index = Params.IndexOfInputParam("ac/h_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref ach);
+                dataAccess.GetDataList(index, achs);
             }
 
-            double m3h = double.NaN;
+            if(achs is null || achs.Count == 0)
+            {
+                achs = new List<double>() { double.NaN };
+            }
+
+            List<double> m3hs = new List<double>();
             index = Params.IndexOfInputParam("m3/h_");
             if (index != -1)
             {
-                dataAccess.GetData(index, ref m3h);
+                dataAccess.GetDataList(index, m3hs);
             }
 
-            double factor = double.NaN;
-            index = Params.IndexOfInputParam("_factor_");
+            List<double> ls = new List<double>();
+            index = Params.IndexOfInputParam("l/s_");
             if (index != -1)
             {
-                if (!dataAccess.GetData(index, ref factor))
+                dataAccess.GetDataList(index, ls);
+            }
+
+            List<double> factors = new List<double>();
+            index = Params.IndexOfInputParam("_factors_");
+            if (index != -1)
+            {
+                if (!dataAccess.GetDataList(index, factors))
                 {
-                    factor = 1.0;
+                    factors = new List<double>() { 1.0 };
                 }
             }
 
-            double setback = double.NaN;
+            List<double> setbacks = new List<double>();
             index = Params.IndexOfInputParam("_setback_");
             if (index != -1)
             {
-                if (!dataAccess.GetData(index, ref setback))
+                if (!dataAccess.GetDataList(index, setbacks))
                 {
-                    setback = 0.0;
+                    setbacks = new List<double>() { 0.0 };
                 }
             }
 
-            string description = null;
-            index = Params.IndexOfInputParam("description_");
+            if (setbacks is null || setbacks.Count == 0)
+            {
+                setbacks = new List<double>() { 0.0 };
+            }
+
+            List<string> descriptions = new List<string>();
+            index = Params.IndexOfInputParam("descriptions_");
             if (index != -1)
             {
-                if (!dataAccess.GetData(index, ref description))
+                if (!dataAccess.GetDataList(index, descriptions))
                 {
-                    description = null;
+                    descriptions = new List<string>() { null };
                 }
             }
 
@@ -344,20 +372,22 @@ namespace SAM.Analytical.Grasshopper
 
             if (adjacencyCluster != null && spaces != null && spaces.Count != 0)
             {
-                foreach (Space space in spaces)
+                for(int i=0; i < spaces.Count; i++)
                 {
+                    Space space = spaces[i];
+
                     if (space?.InternalCondition is not InternalCondition internalCondition)
                     {
                         continue;
                     }
 
-                    if (function is null)
+                    if (functions[Core.Query.Clamp(i, 0, functions.Count - 1)] is null)
                     {
                         internalCondition.RemoveValue(InternalConditionParameter.VentilationFunction);
                     }
                     else
                     {
-                        Function function_Temp = Analytical.Convert.ToSAM_Function(function);
+                        Function function_Temp = Analytical.Convert.ToSAM_Function(functions[Core.Query.Clamp(i, 0, functions.Count - 1)]);
                         if (function_Temp is not null)
                         {
                             FunctionType functionType = function_Temp.GetFunctionType();
@@ -366,49 +396,59 @@ namespace SAM.Analytical.Grasshopper
                             {
                                 int vent_Index = 3;
 
-                                if (!double.IsNaN(ach))
+                                if (!double.IsNaN(achs[Core.Query.Clamp(i, 0, achs.Count - 1)]))
                                 {
-                                    function_Temp[vent_Index] = ach;
+                                    function_Temp[vent_Index] = Core.Query.Round(achs[Core.Query.Clamp(i, 0, achs.Count - 1)], 0.01);
                                 }
-                                else if (!double.IsNaN(m3h))
+                                else if (!double.IsNaN(m3hs[Core.Query.Clamp(i, 0, m3hs.Count - 1)]))
                                 {
                                     double volume = space.Volume(adjacencyCluster);
                                     if (!double.IsNaN(volume))
                                     {
-                                        function_Temp[vent_Index] = Core.Query.Round(m3h / volume, Tolerance.MacroDistance);
+                                        function_Temp[vent_Index] = Core.Query.Round(m3hs[Core.Query.Clamp(i, 0, m3hs.Count - 1)] / volume, 0.01);
+                                    }
+                                }
+                                else if (!double.IsNaN(ls[Core.Query.Clamp(i, 0, ls.Count - 1)]))
+                                {
+                                    double volume = space.Volume(adjacencyCluster);
+                                    if (!double.IsNaN(volume))
+                                    {
+                                        double value = ls[Core.Query.Clamp(i, 0, ls.Count - 1)] * 3.6;
+
+                                        function_Temp[vent_Index] = Core.Query.Round(value / volume, 0.01);
                                     }
                                 }
                             }
                         }
 
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunction, function_Temp?.ToString() ?? function);
+                        internalCondition.SetValue(InternalConditionParameter.VentilationFunction, function_Temp?.ToString() ?? functions[Core.Query.Clamp(i, 0, functions.Count - 1)]);
                     }
 
-                    if (description is null)
+                    if (descriptions[Core.Query.Clamp(i, 0, descriptions.Count - 1)] is null)
                     {
                         internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionDescription);
                     }
                     else
                     {
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionDescription, description);
+                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionDescription, descriptions[Core.Query.Clamp(i, 0, descriptions.Count - 1)]);
                     }
 
-                    if (double.IsNaN(factor))
+                    if (double.IsNaN(factors[Core.Query.Clamp(i, 0, factors.Count - 1)]))
                     {
                         internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionFactor);
                     }
                     else
                     {
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionFactor, factor);
+                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionFactor, factors[Core.Query.Clamp(i, 0, factors.Count - 1)]);
                     }
 
-                    if (double.IsNaN(setback))
+                    if (double.IsNaN(setbacks[Core.Query.Clamp(i, 0, setbacks.Count - 1)]))
                     {
                         internalCondition.RemoveValue(InternalConditionParameter.VentilationFunctionSetback);
                     }
                     else
                     {
-                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionSetback, setback);
+                        internalCondition.SetValue(InternalConditionParameter.VentilationFunctionSetback, setbacks[Core.Query.Clamp(i, 0, setbacks.Count - 1)]);
                     }
 
                     space.InternalCondition = internalCondition;

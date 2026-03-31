@@ -34,7 +34,7 @@ namespace SAM.Analytical.Rhino
                     List<Brep> breps = new List<Brep>();
                     foreach (Panel panel in panels_Related)
                     {
-                        List<Brep> breps_Panel = panel.ToRhino(cutApertures, tolerance);
+                        List<Brep> breps_Panel = panel.ToRhino_Breps(cutApertures, tolerance);
                         if (breps_Panel == null)
                         {
                             continue;
@@ -47,7 +47,7 @@ namespace SAM.Analytical.Rhino
                         {
                             foreach (Aperture aperture in apertures)
                             {
-                                aperture.ToRhino(includeFrame)?.ForEach(x => result.Add(x));
+                                aperture.ToRhino_Breps(includeFrame)?.ForEach(x => result.Add(x));
                             }
                         }
                     }
@@ -66,7 +66,7 @@ namespace SAM.Analytical.Rhino
 
             foreach (Panel panel in panels)
             {
-                List<Brep> breps = panel.ToRhino(cutApertures, tolerance);
+                List<Brep> breps = panel.ToRhino_Breps(cutApertures, tolerance);
                 if (breps == null)
                 {
                     continue;
@@ -77,7 +77,7 @@ namespace SAM.Analytical.Rhino
                 {
                     foreach (Aperture aperture in apertures)
                     {
-                        aperture.ToRhino(includeFrame)?.ForEach(x => result.Add(x));
+                        aperture.ToRhino_Breps(includeFrame)?.ForEach(x => result.Add(x));
                     }
                 }
 
@@ -87,7 +87,7 @@ namespace SAM.Analytical.Rhino
             return result;
         }
 
-        public static List<Brep> ToRhino(this Aperture aperture, bool includeFrame = false)
+        public static List<Brep> ToRhino_Breps(this Aperture aperture, bool includeFrame = false)
         {
             if (aperture == null)
             {
@@ -113,7 +113,7 @@ namespace SAM.Analytical.Rhino
             return result;
         }
 
-        public static List<Brep> ToRhino(this IPanel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
+        public static List<Brep> ToRhino_Breps(this IPanel panel, bool cutApertures = false, double tolerance = Core.Tolerance.MicroDistance)
         {
             if (panel == null)
             {

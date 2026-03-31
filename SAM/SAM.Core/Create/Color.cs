@@ -46,5 +46,16 @@ namespace SAM.Core
 
             return result;
         }
+
+        public static Color Color(string text)
+        {
+            int hash = text.GetHashCode();
+
+            byte r = (byte)((hash & 0xFF0000) >> 16);
+            byte g = (byte)((hash & 0x00FF00) >> 8);
+            byte b = (byte)(hash & 0x0000FF);
+
+            return System.Drawing.Color.FromArgb(255, r, g, b);
+        }
     }
 }

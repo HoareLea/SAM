@@ -113,7 +113,7 @@ namespace SAM.Core
 
             if (Value != null)
             {
-                result.Add(Value.ToString());
+                result.Add("Enum", Value.ToString());
             }
 
             return result;

@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
+using SAM.Analytical.Classes;
 using SAM.Core;
 using SAM.Core.Attributes;
 using System.ComponentModel;
@@ -48,5 +49,8 @@ namespace SAM.Analytical
 
         [ParameterProperties("Default MergeSettings File Name", "Default MergeSettings File Name"), ParameterValue(ParameterType.String)] DefaultMergeSettingsFileName,
         [ParameterProperties("Default MergeSettings", "Default MergeSettings"), SAMObjectParameterValue(typeof(MergeSettings))] DefaultMergeSettings,
+
+        [ParameterProperties("Default PartF File Name", "Default PartF File Name"), ParameterValue(ParameterType.String)] DefaultPartFFileName,
+        [ParameterProperties("Default PartFData", "Default PartFData"), SAMObjectParameterValue(typeof(PartFData))] PartFData,
     }
 }

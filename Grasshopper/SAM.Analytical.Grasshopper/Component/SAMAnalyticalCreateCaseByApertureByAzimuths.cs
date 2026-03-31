@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -127,6 +127,12 @@ namespace SAM.Analytical.Grasshopper
                 number.SetPersistentData(3);
                 result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
 
+                number = new Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
+                number = new Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage [0 - 100]", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(number, ParamVisibility.Binding));
+
                 boolean = new Param_Boolean() { Name = "_keepSeparationDistance_", NickName = "_keepSeparationDistance_", Description = "Keep horizontal separation distance between apertures", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(false);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Voluntary));
@@ -222,11 +228,23 @@ namespace SAM.Analytical.Grasshopper
                 horizontalSeparation = 3;
             }
 
-            double offset = 0.1;
-            index = Params.IndexOfInputParam("_offset_");
-            if (index == -1 || !dataAccess.GetData(index, ref offset))
+            double? framePercentage = null;
+            index = Params.IndexOfInputParam("framePercentage_");
+            if (index == -1 || !dataAccess.GetData(index, ref framePercentage))
             {
-                offset = 0.1;
+                framePercentage = null;
+            }
+
+            double? frameWidth = null;
+            index = Params.IndexOfInputParam("frameWidth_");
+            if (index == -1 || !dataAccess.GetData(index, ref frameWidth))
+            {
+                frameWidth = null;
+            }
+
+            if (framePercentage != null && !double.IsNaN(framePercentage.Value) && frameWidth != null && !double.IsNaN(frameWidth.Value))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Both framePercentage and frameWidth are connected. Please use only one. If both provided, frameWidth will take precedence");
             }
 
             bool keepSeparationDistance = false;
@@ -234,6 +252,13 @@ namespace SAM.Analytical.Grasshopper
             if (index == -1 || !dataAccess.GetData(index, ref keepSeparationDistance))
             {
                 keepSeparationDistance = false;
+            }
+
+            double offset = 0.1;
+            index = Params.IndexOfInputParam("_offset_");
+            if (index == -1 || !dataAccess.GetData(index, ref offset))
+            {
+                offset = 0.1;
             }
 
             List<double> ratios = [];
@@ -352,7 +377,7 @@ namespace SAM.Analytical.Grasshopper
                 analyticalModel.RemoveValue("CaseDescription");
             }
 
-            analyticalModel = Create.AnalyticalModel_ByApertureByAzimuths(analyticalModel, intervalRatioMap, subdivide, apertureHeight, sillHeight, horizontalSeparation, offset, keepSeparationDistance);
+            analyticalModel = Create.AnalyticalModel_ByApertureByAzimuths(analyticalModel, intervalRatioMap, subdivide, apertureHeight, sillHeight, horizontalSeparation, framePercentage, frameWidth, offset, keepSeparationDistance);
 
             index = Params.IndexOfOutputParam("CaseDescription");
             if (index != -1)

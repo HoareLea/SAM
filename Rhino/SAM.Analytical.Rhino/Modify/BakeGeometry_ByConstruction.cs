@@ -71,7 +71,7 @@ namespace SAM.Analytical.Rhino
                     if (panelType == PanelType.Air)
                     {
                         layerName = "Air";
-                        color = Query.Color(PanelType.Air);
+                        color = Analytical.Query.Color(PanelType.Air);
                     }
                     else
                     {

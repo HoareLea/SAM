@@ -2,6 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using MathNet.Numerics;
+using Newtonsoft.Json.Linq;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -353,7 +354,7 @@ namespace SAM.Analytical
             //return null;
         }
 
-        public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, bool subdivide, double height, double sillHeight, double separation, double offset = 0.01, bool keepSeparationDistance = false, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        public static List<Aperture> AddApertures(this Panel panel, ApertureConstruction apertureConstruction, double ratio, bool subdivide, double height, double sillHeight, double separation, double? framePercentage = null, double? frameWidth = null, double offset = 0.01, bool keepSeparationDistance = false, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panel == null || apertureConstruction == null)
                 return null;
@@ -607,6 +608,28 @@ namespace SAM.Analytical
             if (face3Ds_Aperture == null || face3Ds_Aperture.Count == 0)
             {
                 return null;
+            }
+
+            int count = face3Ds_Aperture.Count;
+
+            if (frameWidth is not null || framePercentage is not null)
+            {
+                bool precentage = false;
+
+                double value = frameWidth is not null && !double.IsNaN(frameWidth.Value) ? frameWidth.Value : double.NaN;
+                if(double.IsNaN(value))
+                {
+                    if (framePercentage is not null && !double.IsNaN(framePercentage.Value))
+                    {
+                        precentage = true;
+                        value = framePercentage.Value;
+                    }
+                }
+
+                if(!double.IsNaN(value))
+                {
+                    face3Ds_Aperture = Geometry.Spatial.Query.Offset(face3Ds_Aperture, Enumerable.Repeat(value, face3Ds_Aperture.Count), precentage, tolerance);
+                }
             }
 
             List<Aperture> result = new List<Aperture>();
