@@ -7,8 +7,8 @@ namespace SAM.Core.Attributes
 {
     public class ParameterProperties : Attribute
     {
-        private string name = null;
-        private string description = null;
+        private string? name = null;
+        private string? description = null;
         private AccessType accessType = AccessType.ReadWrite;
 
         public ParameterProperties(string name)
@@ -29,7 +29,7 @@ namespace SAM.Core.Attributes
             this.accessType = accessType;
         }
 
-        public string Name
+        public string? Name
         {
             get
             {
@@ -37,7 +37,7 @@ namespace SAM.Core.Attributes
             }
         }
 
-        public string Description
+        public string? Description
         {
             get
             {

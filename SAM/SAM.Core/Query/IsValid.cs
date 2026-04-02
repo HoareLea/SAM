@@ -8,7 +8,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool IsValid(this Type type, Enum @enum)
+        public static bool IsValid(this Type? type, Enum? @enum)
         {
             if (type == null || @enum == null)
                 return false;
@@ -34,13 +34,13 @@ namespace SAM.Core
             if (uri == null)
                 return false;
 
-            HttpWebRequest httpWebRequest = WebRequest.Create(uri) as HttpWebRequest;
+            HttpWebRequest? httpWebRequest = WebRequest.Create(uri) as HttpWebRequest;
             if (httpWebRequest == null)
                 return false;
 
             httpWebRequest.AllowAutoRedirect = false;
 
-            HttpWebResponse httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
+            HttpWebResponse? httpWebResponse = httpWebRequest.GetResponse() as HttpWebResponse;
             if (httpWebResponse == null)
                 return false;
 

@@ -51,7 +51,7 @@ namespace SAM.Core
             return new LongId(System.Convert.ToInt64(id));
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject? jObject)
         {
             if (jObject == null)
             {
@@ -67,9 +67,9 @@ namespace SAM.Core
             return true;
         }
 
-        public override JObject ToJObject()
+        public override JObject? ToJObject()
         {
-            JObject result = base.ToJObject();
+            JObject? result = base.ToJObject();
             if (result == null)
             {
                 return result;

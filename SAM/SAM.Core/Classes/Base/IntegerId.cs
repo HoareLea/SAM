@@ -15,13 +15,16 @@ namespace SAM.Core
             this.id = id;
         }
 
-        public IntegerId(IntegerId integerId)
+        public IntegerId(IntegerId? integerId)
             : base(integerId)
         {
-            id = integerId.id;
+            if(integerId is not null)
+            {
+                id = integerId.id;
+            }
         }
 
-        public IntegerId(JObject jObject)
+        public IntegerId(JObject? jObject)
             : base(jObject)
         {
 
@@ -40,7 +43,7 @@ namespace SAM.Core
             return new IntegerId(id);
         }
 
-        public override bool FromJObject(JObject jObject)
+        public override bool FromJObject(JObject? jObject)
         {
             if (jObject == null)
             {
@@ -56,9 +59,9 @@ namespace SAM.Core
             return true;
         }
 
-        public override JObject ToJObject()
+        public override JObject? ToJObject()
         {
-            JObject result = base.ToJObject();
+            JObject? result = base.ToJObject();
             if (result == null)
             {
                 return result;

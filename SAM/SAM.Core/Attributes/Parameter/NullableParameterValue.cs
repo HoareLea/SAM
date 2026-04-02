@@ -27,7 +27,7 @@ namespace SAM.Core.Attributes
             }
         }
 
-        public override bool TryConvert(object object_In, out object object_Out)
+        public override bool TryConvert(object? object_In, out object? object_Out)
         {
             object_Out = default;
 

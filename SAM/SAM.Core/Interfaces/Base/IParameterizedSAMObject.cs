@@ -12,7 +12,7 @@ namespace SAM.Core
         bool HasValue(Enum @enum);
         bool RemoveValue(Enum @enum);
         bool SetValue(Enum @enum, object value);
-        bool TryGetValue<T>(Enum @enum, out T value, bool tryConvert = true);
-        bool TryGetValue(Enum @enum, out object value);
+        bool TryGetValue<T>(Enum @enum, out T? value, bool tryConvert = true);
+        bool TryGetValue(Enum @enum, out object? value);
     }
 }

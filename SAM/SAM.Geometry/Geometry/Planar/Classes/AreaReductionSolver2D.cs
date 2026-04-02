@@ -34,14 +34,14 @@ namespace SAM.Geometry.Planar
             if (face2D is null) return null;
 
             // Consistent bounds handling
-            if (targetReductionPercent <= 0) return new List<Face2D>() { new Face2D(face2D.ToJObject()) };
+            if (targetReductionPercent <= 0) return [new Face2D(face2D.ToJObject())];
             if (targetReductionPercent >= 100) return null;
 
             double offset = Solve_Offset(face2D, targetReductionPercent);
             if (double.IsNaN(offset)) return null;
 
             if (offset <= ToleranceDistance)
-                return new List<Face2D>() { new Face2D(face2D.ToJObject()) };
+                return [new Face2D(face2D.ToJObject())];
 
             return face2D.Offset(-offset, IncludeExternalEdge, IncludeInternalEdges);
         }
@@ -64,7 +64,7 @@ namespace SAM.Geometry.Planar
                 // Swap so width >= height (not required, but makes reasoning & clamps clearer)
                 if (width < height)
                 {
-                    double tmp = width; width = height; height = tmp;
+                    (height, width) = (width, height);
                 }
 
                 double t = targetReductionPercent / 100.0; // reduction fraction
@@ -122,7 +122,7 @@ namespace SAM.Geometry.Planar
 
             // Start scale: use minDimension if available, but keep a safe floor (important for “tiny segments” cases).
             // This avoids starting ridiculously small when geometry is over-segmented but overall size is not.
-            double hi = GetInitialHi(face2D, A0);
+            double hi = GetInitialHi(A0);
 
             double flo = f(lo); // should be -t
             if (double.IsNaN(flo)) return double.NaN;
@@ -181,7 +181,7 @@ namespace SAM.Geometry.Planar
         /// Initial bracket size: prefer geometric scale if available, with a robust floor and fallback.
         /// This avoids unsafe tiny hi when geometry is heavily segmented.
         /// </summary>
-        private double GetInitialHi(Face2D face2D, double area)
+        private double GetInitialHi(double area)
         {
             // Option A: if you have a bounding box / extents in SAM, use it here:
             // var bbox = face2D.GetBoundingBox(); // (pseudo)
@@ -222,7 +222,7 @@ namespace SAM.Geometry.Planar
             // remove duplicated last point if closed explicitly
             if (pts.Count >= 2 && pts[0].Distance(pts[pts.Count - 1]) <= ToleranceDistance)
             {
-                pts = pts.Take(pts.Count - 1).ToList();
+                pts = [.. pts.Take(pts.Count - 1)];
             }
 
             if (pts.Count != 4) return false;

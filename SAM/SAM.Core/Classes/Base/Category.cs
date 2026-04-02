@@ -8,21 +8,21 @@ namespace SAM.Core
 {
     public class Category : IJSAMObject
     {
-        private string name;
-        private Category subCategory;
+        private string? name;
+        private Category? subCategory;
 
         public Category(string name)
         {
             this.name = name;
         }
 
-        public Category(string name, Category subCategory)
+        public Category(string? name, Category? subCategory)
         {
             this.name = name;
             this.subCategory = subCategory;
         }
 
-        public Category(Category category)
+        public Category(Category? category)
         {
             if (category != null)
             {
@@ -31,12 +31,12 @@ namespace SAM.Core
             }
         }
 
-        public Category(JObject jObject)
+        public Category(JObject? jObject)
         {
             FromJObject(jObject);
         }
 
-        public string Name
+        public string? Name
         {
             get
             {
@@ -44,7 +44,7 @@ namespace SAM.Core
             }
         }
 
-        public Category SubCategory
+        public Category? SubCategory
         {
             get
             {
@@ -52,7 +52,7 @@ namespace SAM.Core
             }
         }
 
-        public override string ToString()
+        public override string? ToString()
         {
             return name;
         }
@@ -64,14 +64,14 @@ namespace SAM.Core
                 separator = string.Empty;
             }
 
-            List<string> values = new List<string>();
+            List<string> values = [];
 
             List<Category> categories = this.SubCategories();
             if (categories != null)
             {
                 foreach (Category category in categories)
                 {
-                    string name_Category = category?.Name;
+                    string? name_Category = category?.Name;
                     if (name_Category == null)
                     {
                         name_Category = string.Empty;
@@ -89,7 +89,7 @@ namespace SAM.Core
             return string.Join(separator, values);
         }
 
-        public bool FromJObject(JObject jObject)
+        public bool FromJObject(JObject? jObject)
         {
             if (jObject == null)
             {

@@ -8,9 +8,9 @@ namespace SAM.Core
 {
     public static partial class Modify
     {
-        public static bool RemoveValue(this ParameterizedSAMObject parameterizedSAMObject, string name, Assembly defaultAssembly, bool findAny = true)
+        public static bool RemoveValue(this ParameterizedSAMObject parameterizedSAMObject, string? name, Assembly defaultAssembly, bool findAny = true)
         {
-            if (parameterizedSAMObject == null)
+            if (parameterizedSAMObject == null || name == null)
                 return false;
 
             ParameterSet parameterSet = parameterizedSAMObject.GetParameterSet(defaultAssembly);

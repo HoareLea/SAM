@@ -7,8 +7,8 @@ namespace SAM.Core
 {
     public interface IJSAMObject
     {
-        bool FromJObject(JObject jObject);
+        bool FromJObject(JObject? jObject);
 
-        JObject ToJObject();
+        JObject? ToJObject();
     }
 }
