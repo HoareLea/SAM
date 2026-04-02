@@ -19,7 +19,7 @@ namespace SAM.Analytical
             this.partFData = partFData;
         }
 
-        public AnalyticalModel AnalyticalModel { get; set; }
+        public AdjacencyCluster AdjacencyCluster { get; set; }
         
         public bool Calculate(IEnumerable<Space> spaces = null)
         {
@@ -28,7 +28,7 @@ namespace SAM.Analytical
                 return false;
             }
 
-            AdjacencyCluster adjacencyCluster = AnalyticalModel?.AdjacencyCluster;
+            AdjacencyCluster adjacencyCluster = AdjacencyCluster;
             if(adjacencyCluster is null)
             {
                 return false;
@@ -122,7 +122,7 @@ namespace SAM.Analytical
 
             }
 
-            AnalyticalModel = new AnalyticalModel(AnalyticalModel, adjacencyCluster);
+            AdjacencyCluster = adjacencyCluster;
 
             return true;
         }
