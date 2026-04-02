@@ -107,11 +107,11 @@ namespace SAM.Core.Grasshopper
                     objects.Add(@object);
             }
 
-            if (@objects == null || @objects.Count == 0)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
+            //if (@objects == null || @objects.Count == 0)
+            //{
+            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+            //    return;
+            //}
 
             GH_ObjectWrapper objectWrapper = null;
             if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
