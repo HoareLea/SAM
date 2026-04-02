@@ -2,9 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using Grasshopper.Kernel;
-using SAM.Analytical.Classes;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -21,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,6 +45,8 @@ namespace SAM.Analytical.Grasshopper
             {
                 List<GH_SAMParam> result = new();
                 result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "zoneType_", NickName = "zoneType_", Description = "SAM ZoneType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "SAM Zone Category Name", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding));
                 return [.. result];
             }
         }
@@ -97,6 +97,20 @@ namespace SAM.Analytical.Grasshopper
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Could not load PartF Calculator");
                 return;
+            }
+
+            index = Params.IndexOfInputParam("zoneType_");
+            string zoneTypeName = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref zoneTypeName);
+            }
+
+            index = Params.IndexOfInputParam("zoneCategoryName_");
+            string zoneCategoryName = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref zoneCategoryName);
             }
 
             partFCalculator.AnalyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);

@@ -21,7 +21,7 @@ namespace SAM.Analytical
 
         public AnalyticalModel AnalyticalModel { get; set; }
         
-        public bool Calculate()
+        public bool Calculate(IEnumerable<Space> spaces = null)
         {
             if(partFData is null)
             {
@@ -36,12 +36,12 @@ namespace SAM.Analytical
 
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster, deepClone: true);
 
-            List<Space> spaces = adjacencyCluster.GetSpaces();
+            List<Space> spaces_Selected = spaces is null ? adjacencyCluster.GetSpaces() : [.. spaces];
             List<double> ls = [];
-            if (spaces is not null && spaces.Count != 0)
+            if (spaces_Selected is not null && spaces_Selected.Count != 0)
             {
                 List<Tuple<PartFCategory, Space>> tuples = [];
-                foreach(Space space in spaces)
+                foreach(Space space in spaces_Selected)
                 {
                     if(partFData.GetPartFCategory(space.Name) is not PartFCategory partFCategory)
                     {
