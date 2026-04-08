@@ -127,6 +127,8 @@ namespace SAM.Analytical.Grasshopper
                         adjacencyCluster = partFCalculator.AdjacencyCluster;
                     }
                 }
+
+                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
 
             List<Space> spaces = analyticalModel.GetSpaces();
