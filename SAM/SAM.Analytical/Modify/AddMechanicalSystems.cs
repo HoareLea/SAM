@@ -17,7 +17,7 @@ namespace SAM.Analytical
             List<Space> spaces_Temp = adjacencyCluster.GetSpaces();
             if (spaces != null)
             {
-                List<Space> spaces_Filtered = new List<Space>();
+                List<Space> spaces_Filtered = [];
                 foreach (Space space in spaces)
                 {
                     if (space == null)
@@ -33,18 +33,18 @@ namespace SAM.Analytical
                 spaces_Temp = spaces_Filtered;
             }
 
-            Dictionary<System.Guid, MechanicalSystemType> dictionary_MechanicalSystemType = new Dictionary<System.Guid, MechanicalSystemType>();
+            Dictionary<System.Guid, MechanicalSystemType> dictionary_MechanicalSystemType = [];
 
-            Dictionary<System.Guid, List<Space>> dictionary_Ventilation = new Dictionary<System.Guid, List<Space>>();
-            Dictionary<System.Guid, List<Space>> dictionary_Cooling = new Dictionary<System.Guid, List<Space>>();
-            Dictionary<System.Guid, List<Space>> dictionary_Heating = new Dictionary<System.Guid, List<Space>>();
+            Dictionary<System.Guid, List<Space>> dictionary_Ventilation = [];
+            Dictionary<System.Guid, List<Space>> dictionary_Cooling = [];
+            Dictionary<System.Guid, List<Space>> dictionary_Heating = [];
             foreach (Space space in spaces_Temp)
             {
                 InternalCondition internalCondition = space.InternalCondition;
                 if (internalCondition == null)
                     continue;
 
-                Space space_Temp = new Space(space);
+                Space space_Temp = new (space);
 
                 VentilationSystemType ventilationSystemType = internalCondition.GetSystemType<VentilationSystemType>(systemTypeLibrary);
                 if (ventilationSystemType != null)
@@ -52,7 +52,7 @@ namespace SAM.Analytical
                     List<Space> spaces_SystemType = null;
                     if (!dictionary_Ventilation.TryGetValue(ventilationSystemType.Guid, out spaces_SystemType))
                     {
-                        spaces_SystemType = new List<Space>();
+                        spaces_SystemType = [];
                         dictionary_Ventilation[ventilationSystemType.Guid] = spaces_SystemType;
                         dictionary_MechanicalSystemType[ventilationSystemType.Guid] = ventilationSystemType;
                     }
@@ -66,7 +66,7 @@ namespace SAM.Analytical
                     List<Space> spaces_SystemType = null;
                     if (!dictionary_Cooling.TryGetValue(coolingSystemType.Guid, out spaces_SystemType))
                     {
-                        spaces_SystemType = new List<Space>();
+                        spaces_SystemType = [];
                         dictionary_Cooling[coolingSystemType.Guid] = spaces_SystemType;
                         dictionary_MechanicalSystemType[coolingSystemType.Guid] = coolingSystemType;
                     }
@@ -80,7 +80,7 @@ namespace SAM.Analytical
                     List<Space> spaces_SystemType = null;
                     if (!dictionary_Heating.TryGetValue(heatingSystemType.Guid, out spaces_SystemType))
                     {
-                        spaces_SystemType = new List<Space>();
+                        spaces_SystemType = [];
                         dictionary_Heating[heatingSystemType.Guid] = spaces_SystemType;
                         dictionary_MechanicalSystemType[heatingSystemType.Guid] = heatingSystemType;
                     }
@@ -90,12 +90,13 @@ namespace SAM.Analytical
 
             }
 
-            List<MechanicalSystem> result = new List<MechanicalSystem>();
+            List<MechanicalSystem> result = [];
             foreach (KeyValuePair<System.Guid, List<Space>> keyValuePair in dictionary_Ventilation)
             {
-                VentilationSystemType ventilationSystemType = dictionary_MechanicalSystemType[keyValuePair.Key] as VentilationSystemType;
-                if (ventilationSystemType == null)
+                if (dictionary_MechanicalSystemType[keyValuePair.Key] is not VentilationSystemType ventilationSystemType)
+                {
                     continue;
+                }
 
                 string supplyUnitName_Temp = supplyUnitName;
                 string exhaustUnitName_Temp = exhaustUnitName;
