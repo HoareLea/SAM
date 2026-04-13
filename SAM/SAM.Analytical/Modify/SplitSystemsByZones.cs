@@ -24,7 +24,8 @@ namespace SAM.Analytical
 
             Dictionary<Guid, TMechanicalSystem> dictionary = [];
 
-            List<Tuple<MechanicalSystemType, List<Space>>> tuples = []; 
+            List<MechanicalSystem> result = [];
+
             foreach (Zone zone in zones)
             {
                 List<Space> spaces_All = adjacencyCluster.GetRelatedObjects<Space>(zone);
@@ -32,6 +33,8 @@ namespace SAM.Analytical
                 {
                     continue;
                 }
+
+                List<Tuple<MechanicalSystemType, List<Space>>> tuples = [];
 
                 while (spaces_All.Count > 0)
                 {
@@ -62,6 +65,10 @@ namespace SAM.Analytical
                                 {
                                     continue;
                                 }
+
+                                dictionary[mechanicalSystem.Guid] = mechanicalSystem;
+
+                                spaces_All.RemoveAt(index);
 
                                 Tuple<MechanicalSystemType, List<Space>> tuple = tuples.Find(x => x.Item1?.Name == mechanicalSystemType.Name);
                                 if (tuple is null)
@@ -96,53 +103,16 @@ namespace SAM.Analytical
                     }
                 }
 
-                
-                //TODO:
-                //Return list of MechanicalSystemType instead of one MechanicalSystemType.
-
-                //MechanicalSystemType mechanicalSystemType = null;
-                //foreach(Space space in spaces_All)
-                //{
-                //    List<TMechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<TMechanicalSystem>(space);
-                //    if(mechanicalSystems_Space is null || mechanicalSystems_Space.Count == 0)
-                //    {
-                //        continue;
-                //    }
-
-                //    mechanicalSystemType = mechanicalSystems_Space.Find(x => x.Type != null) as MechanicalSystemType;
-                //    if(mechanicalSystemType is not null)
-                //    {
-                //        foreach(TMechanicalSystem mechanicalSystem in mechanicalSystems_Space)
-                //        {
-                //            if (!dictionary.ContainsKey(mechanicalSystem.Guid))
-                //            {
-                //                dictionary[mechanicalSystem.Guid] = mechanicalSystem;
-                //            }
-                //        }
-
-
-                //        break;
-                //    }
-                //}
-
-                //if(mechanicalSystemType is null)
-                //{
-                //    continue;
-                //}
-
-                //tuples.Add(new Tuple<MechanicalSystemType, List<Space>>(mechanicalSystemType, spaces_All));
-            }
-
-            List<MechanicalSystem> result = [];
-            foreach (Tuple<MechanicalSystemType, List<Space>> tuple in tuples)
-            {
-                MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false);
-                if (mechanicalSystem is null)
+                foreach (Tuple<MechanicalSystemType, List<Space>> tuple in tuples)
                 {
-                    continue;
-                }
+                    MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false);
+                    if (mechanicalSystem is null)
+                    {
+                        continue;
+                    }
 
-                result.Add(mechanicalSystem);
+                    result.Add(mechanicalSystem);
+                }
             }
 
             if(removeEmptySystems)
