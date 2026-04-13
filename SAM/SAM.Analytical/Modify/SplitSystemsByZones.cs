@@ -4,7 +4,6 @@
 using SAM.Core;
 using System;
 using System.Collections.Generic;
-using static SAM.Analytical.Name;
 
 namespace SAM.Analytical
 {
@@ -28,43 +27,110 @@ namespace SAM.Analytical
             List<Tuple<MechanicalSystemType, List<Space>>> tuples = []; 
             foreach (Zone zone in zones)
             {
-                List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone);
-                if(spaces is null || spaces.Count == 0)
+                List<Space> spaces_All = adjacencyCluster.GetRelatedObjects<Space>(zone);
+                if(spaces_All is null || spaces_All.Count == 0)
                 {
                     continue;
                 }
 
-                MechanicalSystemType mechanicalSystemType = null;
-                foreach(Space space in spaces)
+                while (spaces_All.Count > 0)
                 {
-                    List<TMechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<TMechanicalSystem>(space);
-                    if(mechanicalSystems_Space is null || mechanicalSystems_Space.Count == 0)
-                    {
-                        continue;
-                    }
+                    Space space = spaces_All[0];
 
-                    mechanicalSystemType = mechanicalSystems_Space.Find(x => x.Type != null) as MechanicalSystemType;
-                    if(mechanicalSystemType is not null)
+                    bool added = false;
+
+                    List<TMechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<TMechanicalSystem>(space);
+                    if (mechanicalSystems_Space != null && mechanicalSystems_Space.Count > 0)
                     {
-                        foreach(TMechanicalSystem mechanicalSystem in mechanicalSystems_Space)
+                        foreach (TMechanicalSystem mechanicalSystem in mechanicalSystems_Space)
                         {
-                            if (!dictionary.ContainsKey(mechanicalSystem.Guid))
+                            MechanicalSystemType mechanicalSystemType = mechanicalSystem?.Type;
+                            if (mechanicalSystemType is null)
                             {
-                                dictionary[mechanicalSystem.Guid] = mechanicalSystem;
+                                continue;
+                            }
+
+                            List<Space> spaces_MechanicalSystem = adjacencyCluster.GetRelatedObjects<Space>(mechanicalSystem);
+                            if (spaces_MechanicalSystem is null || spaces_MechanicalSystem.Count == 0)
+                            {
+                                continue;
+                            }
+
+                            foreach (Space space_MechanicalSystem in spaces_MechanicalSystem)
+                            {
+                                if (spaces_All.FindIndex(x => x.Guid == space_MechanicalSystem.Guid) is int index && index == -1)
+                                {
+                                    continue;
+                                }
+
+                                Tuple<MechanicalSystemType, List<Space>> tuple = tuples.Find(x => x.Item1?.Name == mechanicalSystemType.Name);
+                                if (tuple is null)
+                                {
+                                    tuple = new Tuple<MechanicalSystemType, List<Space>>(mechanicalSystemType, []);
+                                    tuples.Add(tuple);
+
+                                }
+
+                                tuple.Item2.Add(space_MechanicalSystem);
+
+                                if (space_MechanicalSystem.Guid == space.Guid)
+                                {
+                                    added = true;
+                                }
                             }
                         }
+                    }
 
+                    if(!added)
+                    {
+                        Tuple<MechanicalSystemType, List<Space>> tuple = tuples.Find(x => x.Item1 == null);
+                        if (tuple is null)
+                        {
+                            tuple = new Tuple<MechanicalSystemType, List<Space>>(null, []);
+                            tuples.Add(tuple);
 
-                        break;
+                        }
+
+                        tuple.Item2.Add(space);
+                        spaces_All.RemoveAt(0);
                     }
                 }
 
-                if(mechanicalSystemType is null)
-                {
-                    continue;
-                }
+                
+                //TODO:
+                //Return list of MechanicalSystemType instead of one MechanicalSystemType.
 
-                tuples.Add(new Tuple<MechanicalSystemType, List<Space>>(mechanicalSystemType, spaces));
+                //MechanicalSystemType mechanicalSystemType = null;
+                //foreach(Space space in spaces_All)
+                //{
+                //    List<TMechanicalSystem> mechanicalSystems_Space = adjacencyCluster.GetRelatedObjects<TMechanicalSystem>(space);
+                //    if(mechanicalSystems_Space is null || mechanicalSystems_Space.Count == 0)
+                //    {
+                //        continue;
+                //    }
+
+                //    mechanicalSystemType = mechanicalSystems_Space.Find(x => x.Type != null) as MechanicalSystemType;
+                //    if(mechanicalSystemType is not null)
+                //    {
+                //        foreach(TMechanicalSystem mechanicalSystem in mechanicalSystems_Space)
+                //        {
+                //            if (!dictionary.ContainsKey(mechanicalSystem.Guid))
+                //            {
+                //                dictionary[mechanicalSystem.Guid] = mechanicalSystem;
+                //            }
+                //        }
+
+
+                //        break;
+                //    }
+                //}
+
+                //if(mechanicalSystemType is null)
+                //{
+                //    continue;
+                //}
+
+                //tuples.Add(new Tuple<MechanicalSystemType, List<Space>>(mechanicalSystemType, spaces_All));
             }
 
             List<MechanicalSystem> result = [];
