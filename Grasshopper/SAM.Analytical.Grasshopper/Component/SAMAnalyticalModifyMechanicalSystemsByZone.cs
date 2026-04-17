@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -52,8 +52,9 @@ namespace SAM.Analytical.Grasshopper
                 Param_String param_String = new () { Name = "_zoneCategoryName", NickName = "_zoneCategoryName", Description = "Zone Category Name", Access = GH_ParamAccess.item};
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-                param_String = new() { Name = "namePrefix_", NickName = "namePrefix_", Description = "Name prefix", Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+                Param_Boolean param_Boolean = new() { Name = "_zoneCategoryNamePrefix_", NickName = "_zoneCategoryNamePrefix_", Description = "Add zone category name prefix", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
                 return [.. result];
             }
@@ -99,11 +100,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("namePrefix_");
-            string namePrefix = null;
+            index = Params.IndexOfInputParam("_zoneCategoryNamePrefix_");
+            bool addPrefix = true;
             if (index != -1)
             {
-                dataAccess.GetData(index, ref namePrefix);
+                dataAccess.GetData(index, ref addPrefix);
             }
 
             List<MechanicalSystem> mechanicalSystems = null;
@@ -113,7 +114,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
 
-                mechanicalSystems = adjacencyCluster.SplitSystemsByZones<VentilationSystem>(zoneCategoryName, namePrefix);
+                mechanicalSystems = adjacencyCluster.SplitSystemsByZones<VentilationSystem>(zoneCategoryName, addPrefix);
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }
