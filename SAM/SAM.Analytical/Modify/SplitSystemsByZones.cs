@@ -9,7 +9,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static List<MechanicalSystem> SplitSystemsByZones<TMechanicalSystem>(this AdjacencyCluster adjacencyCluster, string zoneCategoryName, bool removeEmptySystems = true) where TMechanicalSystem : MechanicalSystem
+        public static List<MechanicalSystem> SplitSystemsByZones<TMechanicalSystem>(this AdjacencyCluster adjacencyCluster, string zoneCategoryName, string namePrefix = null, bool removeEmptySystems = true) where TMechanicalSystem : MechanicalSystem
         {
             if (adjacencyCluster == null || zoneCategoryName == null)
             {
@@ -105,7 +105,7 @@ namespace SAM.Analytical
 
                 foreach (Tuple<MechanicalSystemType, List<Space>> tuple in tuples)
                 {
-                    MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false);
+                    MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false, namePrefix);
                     if (mechanicalSystem is null)
                     {
                         continue;

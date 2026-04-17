@@ -42,6 +42,12 @@ namespace SAM.Core
             this.type = type;
         }
 
+        public SAMInstance(string? prefix, T type)
+            : base(prefix is null && type?.Name is null ? null : prefix ?? string.Empty + type?.Name ?? string.Empty)
+        {
+            this.type = type;
+        }
+
         public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
             : base(guid, type?.Name, parameterSets)
         {

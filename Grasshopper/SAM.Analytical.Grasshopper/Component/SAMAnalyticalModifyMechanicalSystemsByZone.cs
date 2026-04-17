@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -50,6 +50,9 @@ namespace SAM.Analytical.Grasshopper
                 result.Add(new GH_SAMParam(gooAnalyticalModelParam, ParamVisibility.Binding));
 
                 Param_String param_String = new () { Name = "_zoneCategoryName", NickName = "_zoneCategoryName", Description = "Zone Category Name", Access = GH_ParamAccess.item};
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new() { Name = "namePrefix_", NickName = "namePrefix_", Description = "Name prefix", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 return [.. result];
@@ -96,6 +99,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("namePrefix_");
+            string namePrefix = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref namePrefix);
+            }
+
             List<MechanicalSystem> mechanicalSystems = null;
 
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
@@ -103,7 +113,7 @@ namespace SAM.Analytical.Grasshopper
             {
                 adjacencyCluster = new AdjacencyCluster(adjacencyCluster, true);
 
-                mechanicalSystems = adjacencyCluster.SplitSystemsByZones<VentilationSystem>(zoneCategoryName);
+                mechanicalSystems = adjacencyCluster.SplitSystemsByZones<VentilationSystem>(zoneCategoryName, namePrefix);
 
                 analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
             }

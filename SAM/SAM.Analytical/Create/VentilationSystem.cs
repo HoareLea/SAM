@@ -8,7 +8,7 @@ namespace SAM.Analytical
         public static VentilationSystem VentilationSystem(VentilationSystemType ventilationSystemType, int index = -1, string supplyUnitName = null, string exhaustUnitName = null)
         {
 
-            VentilationSystem result = MechanicalSystem(ventilationSystemType, index) as VentilationSystem;
+            VentilationSystem result = MechanicalSystem(ventilationSystemType, null, index) as VentilationSystem;
             if (result == null)
                 return null;
 
