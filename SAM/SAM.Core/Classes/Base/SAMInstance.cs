@@ -43,7 +43,7 @@ namespace SAM.Core
         }
 
         public SAMInstance(string? prefix, T type)
-            : base(prefix is null && type?.Name is null ? null : prefix ?? string.Empty + type?.Name ?? string.Empty)
+            : base(prefix is null && type?.Name is null ? null : string.Join(" ", [prefix ?? string.Empty, type?.Name ?? string.Empty]))
         {
             this.type = type;
         }

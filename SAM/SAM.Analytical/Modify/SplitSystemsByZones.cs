@@ -105,7 +105,7 @@ namespace SAM.Analytical
 
                 foreach (Tuple<MechanicalSystemType, List<Space>> tuple in tuples)
                 {
-                    MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false, zone.Name);
+                    MechanicalSystem mechanicalSystem = adjacencyCluster.AddMechanicalSystem(tuple.Item1, tuple.Item2, false, addPrefix ? zone.Name : null);
                     if (mechanicalSystem is null)
                     {
                         continue;
