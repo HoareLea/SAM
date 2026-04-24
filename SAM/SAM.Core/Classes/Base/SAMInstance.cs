@@ -43,9 +43,39 @@ namespace SAM.Core
         }
 
         public SAMInstance(string? prefix, T type)
-            : base(prefix is null && type?.Name is null ? null : string.Join(" ", [prefix ?? string.Empty, type?.Name ?? string.Empty]))
+            : base(GetName(prefix, type?.Name))
         {
             this.type = type;
+        }
+
+        private static string? GetName(string prefix, string name)
+        {
+            if(prefix is null && name is null)
+            {
+                return null;
+            }
+
+            if(prefix is null)
+            {
+                return name;
+            }
+
+            if (string.IsNullOrWhiteSpace(prefix))
+            {
+                return name ?? prefix;
+            }
+
+            if (name is null)
+            {
+                return prefix;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return prefix ?? name;
+            }
+
+            return string.Join(" ", [prefix ?? string.Empty, name ?? string.Empty]);
         }
 
         public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
