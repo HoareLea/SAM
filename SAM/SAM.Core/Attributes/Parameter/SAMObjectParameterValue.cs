@@ -10,8 +10,8 @@ namespace SAM.Core.Attributes
 {
     public class SAMObjectParameterValue : NullableParameterValue
     {
-        private bool inheritance = true;
-        private Type[] types;
+        private readonly bool inheritance = true;
+        private Type[]? types;
 
         public SAMObjectParameterValue()
             : base(ParameterType.IJSAMObject)
@@ -50,11 +50,11 @@ namespace SAM.Core.Attributes
         {
             get
             {
-                return types?.ToList();
+                return types?.ToList() ?? [];
             }
         }
 
-        public override bool TryConvert(object object_In, out object object_Out)
+        public override bool TryConvert(object? object_In, out object? object_Out)
         {
             if (!base.TryConvert(object_In, out object_Out))
                 return false;
@@ -62,7 +62,7 @@ namespace SAM.Core.Attributes
             if (types == null || types.Length == 0)
                 return true;
 
-            Type type = object_Out?.GetType();
+            Type? type = object_Out?.GetType();
             if (type == null)
                 return true;
 
@@ -94,7 +94,7 @@ namespace SAM.Core.Attributes
 
                                 if (type_Parameter == type)
                                 {
-                                    object_Out = constructorInfo.Invoke(new object[] { object_In });
+                                    object_Out = constructorInfo.Invoke([object_In]);
                                     //return true;
                                 }
                                 else if (typeof(IEnumerable).IsAssignableFrom(type_Parameter))

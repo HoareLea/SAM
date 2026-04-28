@@ -13,7 +13,7 @@ namespace SAM.Analytical
                 return null;
             }
 
-            MechanicalSystem mechanicalSystem = Create.MechanicalSystem(mechanicalSystemType, index);
+            MechanicalSystem mechanicalSystem = Create.MechanicalSystem(mechanicalSystemType, null, index);
             if (mechanicalSystem == null)
             {
                 return null;

@@ -2,9 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using Grasshopper.Kernel;
-using SAM.Analytical.Classes;
 using SAM.Analytical.Grasshopper.Properties;
-using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
@@ -16,12 +14,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("644bf0f8-ea02-4ea3-aa03-5b7579d7ce38");
+        public override Guid ComponentGuid => new ("644bf0f8-ea02-4ea3-aa03-5b7579d7ce38");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,8 +43,11 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new();
-                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                List<GH_SAMParam> result =
+                [
+                    new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding),
+                    new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "SAM Zone Category Name", Access = GH_ParamAccess.item, Optional = true}, ParamVisibility.Binding),
+                ];
                 return [.. result];
             }
         }
@@ -99,10 +100,36 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            partFCalculator.AnalyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
-            partFCalculator.Calculate();
+            index = Params.IndexOfInputParam("zoneCategoryName_");
+            string zoneCategoryName = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref zoneCategoryName);
+            }
 
-            analyticalModel = partFCalculator.AnalyticalModel;
+            partFCalculator.AdjacencyCluster = adjacencyCluster;
+
+            if (string.IsNullOrWhiteSpace(zoneCategoryName))
+            {
+                partFCalculator.Calculate();
+                analyticalModel = new AnalyticalModel(analyticalModel, partFCalculator.AdjacencyCluster);
+            }
+            else
+            {
+                List<Zone> zones = adjacencyCluster?.GetZones()?.FindAll(x => x.GetValue<string>(ZoneParameter.ZoneCategory) == zoneCategoryName);
+                if(zones != null)
+                {
+                    foreach(Zone zone in zones)
+                    {
+                        List<Space> spaces_Zone = adjacencyCluster.GetRelatedObjects<Space>(zone);
+                        partFCalculator.Calculate(spaces_Zone);
+
+                        adjacencyCluster = partFCalculator.AdjacencyCluster;
+                    }
+                }
+
+                analyticalModel = new AnalyticalModel(analyticalModel, new AdjacencyCluster(adjacencyCluster, true));
+            }
 
             List<Space> spaces = analyticalModel.GetSpaces();
 

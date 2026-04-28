@@ -16,6 +16,12 @@ namespace SAM.Analytical
             this.id = id;
         }
 
+        public MechanicalSystem(string prefix, string id, MechanicalSystemType mechanicalSystemType)
+            : base(prefix, mechanicalSystemType)
+        {
+            this.id = id;
+        }
+
         public MechanicalSystem(System.Guid guid, string id, MechanicalSystem mechanicalSystem)
             : base(guid, mechanicalSystem)
         {

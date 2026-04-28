@@ -42,6 +42,53 @@ namespace SAM.Core
             this.type = type;
         }
 
+        public SAMInstance(string? prefix, T type)
+            : base(GetName(prefix, type?.Name))
+        {
+            this.type = type;
+        }
+
+        private static string? GetName(string prefix, string name)
+        {
+            if (prefix is null && name is null)
+            {
+                return null;
+            }
+
+            if (prefix is null)
+            {
+                return name;
+            }
+
+            if (string.IsNullOrWhiteSpace(prefix))
+            {
+                return name ?? prefix;
+            }
+
+            if (name is null)
+            {
+                return prefix;
+            }
+
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return prefix ?? name;
+            }
+
+            List<string> values = [];
+            if (!string.IsNullOrWhiteSpace(prefix))
+            {
+                values.Add(prefix);
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                values.Add(name);
+            }
+
+            return string.Join(" ", values);
+        }
+
         public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
             : base(guid, type?.Name, parameterSets)
         {

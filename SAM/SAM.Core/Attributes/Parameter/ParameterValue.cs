@@ -16,7 +16,7 @@ namespace SAM.Core.Attributes
             this.parameterType = parameterType;
         }
 
-        public virtual bool TryConvert(object object_In, out object object_Out)
+        public virtual bool TryConvert(object? object_In, out object? object_Out)
         {
             object_Out = default;
 
@@ -95,7 +95,7 @@ namespace SAM.Core.Attributes
                     return true;
 
                 case ParameterType.Color:
-                    SAMColor sAMColor = null;
+                    SAMColor? sAMColor = null;
                     if (!Query.TryConvert(object_In, out sAMColor))
                         return false;
 

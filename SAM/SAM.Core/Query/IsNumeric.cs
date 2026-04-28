@@ -7,7 +7,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool IsNumeric(this object @object)
+        public static bool IsNumeric(this object? @object)
         {
             if (@object == null)
                 return false;

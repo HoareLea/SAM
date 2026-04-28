@@ -10,7 +10,7 @@ namespace SAM.Core
 {
     public static partial class Query
     {
-        public static bool TryConvert(this object @object, out object result, Type type)
+        public static bool TryConvert(this object? @object, out object? result, Type type)
         {
             result = default;
 
@@ -20,7 +20,7 @@ namespace SAM.Core
                 return true;
             }
 
-            Type type_Object = @object?.GetType();
+            Type? type_Object = @object?.GetType();
             if (type_Object == type || type == null)
             {
                 result = @object;
@@ -44,10 +44,10 @@ namespace SAM.Core
 
                     if (@object is IEnumerable)
                     {
-                        JArray jArray = new();
+                        JArray jArray = [];
                         foreach (object @object_Temp in (IEnumerable)@object)
                         {
-                            if (TryConvert(@object_Temp, out string value) && value != null)
+                            if (TryConvert(@object_Temp, out string? value) && value != null)
                                 jArray.Add(value);
                             else
                                 jArray.Add(string.Empty);
@@ -55,13 +55,13 @@ namespace SAM.Core
 
                         result = jArray.ToString();
                     }
-                    else if (@object is IJSAMObject)
+                    else if (@object is IJSAMObject jSAMObject)
                     {
-                        result = ((IJSAMObject)@object).ToJObject()?.ToString();
+                        result = jSAMObject.ToJObject()?.ToString();
                     }
 
                     if (result == default)
-                        result = @object.ToString();
+                        result = @object?.ToString();
                 }
 
                 return true;
@@ -670,7 +670,7 @@ namespace SAM.Core
             return false;
         }
 
-        public static bool TryConvert<T>(this object @object, out T result)
+        public static bool TryConvert<T>(this object? @object, out T? result)
         {
             result = default;
 

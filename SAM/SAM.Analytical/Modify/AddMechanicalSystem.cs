@@ -6,7 +6,7 @@ namespace SAM.Analytical
 {
     public static partial class Modify
     {
-        public static MechanicalSystem AddMechanicalSystem(this AdjacencyCluster adjacencyCluster, MechanicalSystemType mechanicalSystemType, IEnumerable<Space> spaces = null, bool allowMultipleSystems = false)
+        public static MechanicalSystem AddMechanicalSystem(this AdjacencyCluster adjacencyCluster, MechanicalSystemType mechanicalSystemType, IEnumerable<Space> spaces = null, bool allowMultipleSystems = false, string? namePrefix = null)
         {
             if (adjacencyCluster == null || mechanicalSystemType == null)
             {
@@ -38,7 +38,7 @@ namespace SAM.Analytical
 
             string id = Query.NextId(adjacencyCluster, mechanicalSystemType);
 
-            MechanicalSystem mechanicalSystem = Create.MechanicalSystem(mechanicalSystemType, id);
+            MechanicalSystem mechanicalSystem = Create.MechanicalSystem(mechanicalSystemType, namePrefix, id);
             if (mechanicalSystem == null)
             {
                 return null;

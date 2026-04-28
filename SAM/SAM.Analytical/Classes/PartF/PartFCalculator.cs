@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using static SAM.Analytical.Name;
 
 namespace SAM.Analytical
@@ -19,16 +20,16 @@ namespace SAM.Analytical
             this.partFData = partFData;
         }
 
-        public AnalyticalModel AnalyticalModel { get; set; }
+        public AdjacencyCluster AdjacencyCluster { get; set; }
         
-        public bool Calculate()
+        public bool Calculate(IEnumerable<Space> spaces = null)
         {
             if(partFData is null)
             {
                 return false;
             }
 
-            AdjacencyCluster adjacencyCluster = AnalyticalModel?.AdjacencyCluster;
+            AdjacencyCluster adjacencyCluster = AdjacencyCluster;
             if(adjacencyCluster is null)
             {
                 return false;
@@ -36,12 +37,26 @@ namespace SAM.Analytical
 
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster, deepClone: true);
 
-            List<Space> spaces = adjacencyCluster.GetSpaces();
+            List<Space> spaces_Selected = spaces is null ? adjacencyCluster.GetSpaces() : [.. spaces];
+            if(spaces_Selected is null)
+            {
+                spaces_Selected = [];
+            }
+
+            spaces_Selected.RemoveAll(x => x is null);
+
+            for (int i =0; i < spaces_Selected.Count; i++)
+            {
+                spaces_Selected[i] = adjacencyCluster.GetObject<Space>(spaces_Selected[i].Guid);
+            }
+
+            spaces_Selected.RemoveAll(x => x is null);
+
             List<double> ls = [];
-            if (spaces is not null && spaces.Count != 0)
+            if (spaces_Selected is not null && spaces_Selected.Count != 0)
             {
                 List<Tuple<PartFCategory, Space>> tuples = [];
-                foreach(Space space in spaces)
+                foreach(Space space in spaces_Selected)
                 {
                     if(partFData.GetPartFCategory(space.Name) is not PartFCategory partFCategory)
                     {
@@ -122,7 +137,7 @@ namespace SAM.Analytical
 
             }
 
-            AnalyticalModel = new AnalyticalModel(AnalyticalModel, adjacencyCluster);
+            AdjacencyCluster = adjacencyCluster;
 
             return true;
         }

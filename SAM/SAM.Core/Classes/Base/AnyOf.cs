@@ -10,7 +10,7 @@ namespace SAM.Core
     {
         private object? value;
 
-        public AnyOf(object value, Type? type = null)
+        public AnyOf(object? value, Type? type = null)
         {
             if (type == null)
             {
@@ -106,7 +106,7 @@ namespace SAM.Core
             return value.GetType();
         }
 
-        public T GetValue<T>()
+        public T? GetValue<T>()
         {
             if (value is T)
             {
@@ -159,7 +159,7 @@ namespace SAM.Core
 
     public class AnyOf<T, K> : AnyOf
     {
-        public AnyOf(object value)
+        public AnyOf(object? value)
             : base(value)
         {
         }
@@ -170,6 +170,6 @@ namespace SAM.Core
 
         public static implicit operator AnyOf<T, K>(K value) => new(value);
 
-        public static implicit operator string(AnyOf<T, K> value) => value?.ToString();
+        public static implicit operator string?(AnyOf<T, K> value) => value?.ToString();
     }
 }

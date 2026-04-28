@@ -20,23 +20,23 @@ namespace SAM.Analytical.Grasshopper
         public override Guid ComponentGuid => new Guid("619aff3e-54e2-4a72-a809-62cb029e1e00");
 
         /// <summary>
-        /// The latest version of this component
+        /// The latest version of this component.
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
-        /// Provides an Icon for the component.
+        /// Provides an icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Core.Convert.ToBitmap(Resources.SAM_Small);
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
 
         /// <summary>
-        /// Initializes a new instance of the SAM_point3D class.
+        /// Initialises a new instance of the SAMAnalytical.CreateZonesByValues component.
         /// </summary>
         public SAMAnalyticalCreateZonesByValues()
           : base("SAMAnalytical.CreateZonesByValues", "SAMAnalytical.CreateZonesByValues",
-              "Create Zones By Values",
+              "Creates zones by grouping spaces using matching zone names.\n\nEach item in _zoneNames is matched by index to a space in _spaces. Spaces with the same zone name are grouped into one zone.\n\nThe component makes a copy of the input analytical object, so the original stays unchanged.",
               "SAM", "Analytical01")
         {
         }
@@ -49,20 +49,68 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooSpaceParam { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_values", NickName = "_values", Description = "Values", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(
+                    new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
+                    {
+                        Name = "_analytical",
+                        NickName = "_analytical",
+                        Description = "SAM Analytical object to update.\nAccepts an AdjacencyCluster or an AnalyticalModel.\nThe component makes a copy; the original stays unchanged.",
+                        Access = GH_ParamAccess.item
+                    },
+                    ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(
+                    new GooSpaceParam
+                    {
+                        Name = "_spaces",
+                        NickName = "_spaces",
+                        Description = "Spaces to group into zones.\nEach space is matched by index with one item in _zoneNames.",
+                        Access = GH_ParamAccess.list
+                    },
+                    ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(
+                    new global::Grasshopper.Kernel.Parameters.Param_GenericObject
+                    {
+                        Name = "_zoneNames",
+                        NickName = "_zoneNames",
+                        Description = "Zone names for the spaces.\nProvide one zone name for each space in _spaces, in the same order.\nSpaces with the same zone name are grouped into one zone.",
+                        Access = GH_ParamAccess.list
+                    },
+                    ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String param_String = null;
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_zoneType", NickName = "_zoneType", Description = "SAM Analytical ZoneType", Access = GH_ParamAccess.item, Optional = true };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String
+                {
+                    Name = "_zoneType",
+                    NickName = "_zoneType",
+                    Description = "Zone type to assign to the created zones.\nUsed only when zoneCategoryName_ is not supplied.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applied", Access = GH_ParamAccess.item, Optional = true };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String
+                {
+                    Name = "zoneCategoryName_",
+                    NickName = "zoneCategoryName_",
+                    Description = "Zone category name for the created zones.\nIf supplied, this overrides _zoneType.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean { Name = "cleanSpacesByZoneCategory_", NickName = "cleanSpacesByZoneCategory_", Description = "Clean Spaces By Zone Category", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
+                {
+                    Name = "cleanSpacesByZoneCategory_",
+                    NickName = "cleanSpacesByZoneCategory_",
+                    Description = "If true, removes an existing zone with the same name and zone category before creating the new one.\nDefault is false.",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
                 boolean.SetPersistentData(false);
 
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
@@ -79,8 +127,27 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "zones", NickName = "zones", Description = "SAM GuidCollection representing Zones", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+
+                result.Add(new GH_SAMParam(
+                    new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
+                    {
+                        Name = "analytical",
+                        NickName = "analytical",
+                        Description = "Updated SAM Analytical object with the created or updated zones.",
+                        Access = GH_ParamAccess.item
+                    },
+                    ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(
+                    new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
+                    {
+                        Name = "zones",
+                        NickName = "zones",
+                        Description = "Zones created or updated from the supplied zone names.",
+                        Access = GH_ParamAccess.list
+                    },
+                    ParamVisibility.Voluntary));
+
                 return result.ToArray();
             }
         }
@@ -111,19 +178,19 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("_values");
-            List<object> values = new List<object>();
-            if (index == -1 || !dataAccess.GetDataList(index, values) || values == null || values.Count == 0)
+            index = Params.IndexOfInputParam("_zoneNames");
+            List<object> zoneNames = new List<object>();
+            if (index == -1 || !dataAccess.GetDataList(index, zoneNames) || zoneNames == null || zoneNames.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            for (int i = 0; i < values.Count; i++)
+            for (int i = 0; i < zoneNames.Count; i++)
             {
-                if (values[i] is IGH_Goo)
+                if (zoneNames[i] is IGH_Goo)
                 {
-                    values[i] = (values[i] as dynamic).Value;
+                    zoneNames[i] = (zoneNames[i] as dynamic).Value;
                 }
             }
 
@@ -176,9 +243,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            List<string> values_String = values.ConvertAll(x => x?.ToString().Trim());
+            List<string> zoneNames_String = zoneNames.ConvertAll(x => x?.ToString().Trim());
 
-            List<string> names = values_String.Distinct().ToList();
+            List<string> names = zoneNames_String.Distinct().ToList();
             names.RemoveAll(x => string.IsNullOrWhiteSpace(x));
 
             if (zoneType != ZoneType.Undefined && string.IsNullOrWhiteSpace(zoneCategory))
@@ -198,7 +265,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                List<int> indexes = values_String.IndexesOf(name_Temp);
+                List<int> indexes = zoneNames_String.IndexesOf(name_Temp);
                 List<Space> spaces_Temp = indexes.ConvertAll(x => spaces[x]);
                 Zone zone = Analytical.Modify.UpdateZone(adjacencyCluster, name_Temp, zoneCategory, spaces_Temp.ToArray());
                 if (zone != null)

@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Core.Attributes
@@ -41,36 +42,46 @@ namespace SAM.Core.Attributes
         {
             get
             {
-                return types?.ToArray();
+                return types?.ToArray() ?? [];
             }
         }
 
         public static Type[] Get(Enum @enum)
         {
             if (@enum == null)
-                return null;
+            {
+                return [];
+            }
 
-            AssociatedTypes types_Temp = GetCustomAttribute(@enum.GetType(), typeof(AssociatedTypes)) as AssociatedTypes;
-            return types_Temp?.types;
+            AssociatedTypes? types_Temp = GetCustomAttribute(@enum.GetType(), typeof(AssociatedTypes)) as AssociatedTypes;
+            return types_Temp?.types ?? [];
         }
 
-        public static AssociatedTypes Get(Type type)
+        public static AssociatedTypes? Get(Type type)
         {
             if (type == null)
+            {
                 return null;
+            }
 
             if (!type.IsEnum)
+            {
                 return null;
+            }
 
             object[] objects = type.GetCustomAttributes(typeof(AssociatedTypes), true);
             if (objects == null || objects.Length == 0)
+            {
                 return null;
+            }
 
             foreach (object @object in objects)
             {
-                AssociatedTypes parameterTypes = @object as AssociatedTypes;
+                AssociatedTypes? parameterTypes = @object as AssociatedTypes;
                 if (parameterTypes != null)
+                {
                     return parameterTypes;
+                }
             }
 
             return null;
@@ -78,7 +89,7 @@ namespace SAM.Core.Attributes
 
         public IEnumerator GetEnumerator()
         {
-            return types?.GetEnumerator();
+            return types?.GetEnumerator() ?? new List<Type>().GetEnumerator();
         }
     }
 }
