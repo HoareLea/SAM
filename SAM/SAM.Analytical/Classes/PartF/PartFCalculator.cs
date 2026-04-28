@@ -4,6 +4,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.ExceptionServices;
 using static SAM.Analytical.Name;
 
 namespace SAM.Analytical
@@ -37,6 +38,20 @@ namespace SAM.Analytical
             adjacencyCluster = new AdjacencyCluster(adjacencyCluster, deepClone: true);
 
             List<Space> spaces_Selected = spaces is null ? adjacencyCluster.GetSpaces() : [.. spaces];
+            if(spaces_Selected is null)
+            {
+                spaces_Selected = [];
+            }
+
+            spaces_Selected.RemoveAll(x => x is null);
+
+            for (int i =0; i < spaces_Selected.Count; i++)
+            {
+                spaces_Selected[i] = adjacencyCluster.GetObject<Space>(spaces_Selected[i].Guid);
+            }
+
+            spaces_Selected.RemoveAll(x => x is null);
+
             List<double> ls = [];
             if (spaces_Selected is not null && spaces_Selected.Count != 0)
             {
