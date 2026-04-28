@@ -116,7 +116,7 @@ namespace SAM.Analytical.Grasshopper
             }
             else
             {
-                List<Zone> zones = adjacencyCluster.GetZones().FindAll(x => x.GetValue<string>(ZoneParameter.ZoneCategory) == zoneCategoryName);
+                List<Zone> zones = adjacencyCluster?.GetZones()?.FindAll(x => x.GetValue<string>(ZoneParameter.ZoneCategory) == zoneCategoryName);
                 if(zones != null)
                 {
                     foreach(Zone zone in zones)
