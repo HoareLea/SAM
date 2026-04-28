@@ -50,12 +50,12 @@ namespace SAM.Core
 
         private static string? GetName(string prefix, string name)
         {
-            if(prefix is null && name is null)
+            if (prefix is null && name is null)
             {
                 return null;
             }
 
-            if(prefix is null)
+            if (prefix is null)
             {
                 return name;
             }
@@ -75,7 +75,18 @@ namespace SAM.Core
                 return prefix ?? name;
             }
 
-            return string.Join(" ", [prefix ?? string.Empty, name ?? string.Empty]);
+            List<string> values = [];
+            if (!string.IsNullOrWhiteSpace(prefix))
+            {
+                values.Add(prefix);
+            }
+
+            if (!string.IsNullOrWhiteSpace(name))
+            {
+                values.Add(name);
+            }
+
+            return string.Join(" ", values);
         }
 
         public SAMInstance(Guid guid, IEnumerable<ParameterSet> parameterSets, T type)
