@@ -223,6 +223,88 @@ namespace SAM.Analytical
             //return result;
         }
 
+        public static List<Aperture> AddAperturesByApertures(this AdjacencyCluster adjacencyCluster, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (adjacencyCluster == null || apertures == null)
+                return null;
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            double max = System.Math.Max(maxDistance, tolerance);
+
+            List<Tuple<ApertureConstruction, Face3D, double[]>> tuples_Aperture = new List<Tuple<ApertureConstruction, Face3D, double[]>>();
+            foreach (Aperture aperture in apertures)
+            {
+                if (aperture == null)
+                    continue;
+
+                ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                Face3D face3D = aperture.GetFace3D();
+                if (apertureConstruction == null || face3D == null)
+                    continue;
+
+                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(max);
+                if (boundingBox3D == null)
+                    continue;
+
+                Point3D point3D_Min = boundingBox3D.Min;
+                Point3D point3D_Max = boundingBox3D.Max;
+                tuples_Aperture.Add(new Tuple<ApertureConstruction, Face3D, double[]>(apertureConstruction, face3D, new double[] { point3D_Min.X, point3D_Min.Y, point3D_Min.Z, point3D_Max.X, point3D_Max.Y, point3D_Max.Z }));
+            }
+
+            List<Aperture> result = new List<Aperture>();
+            if (tuples_Aperture.Count == 0)
+                return result;
+
+            foreach (Panel panel in panels)
+            {
+                if (panel == null || panel.PanelType == PanelType.Air)
+                    continue;
+
+                BoundingBox3D boundingBox3D_Panel = panel.GetBoundingBox(max);
+                if (boundingBox3D_Panel == null)
+                    continue;
+
+                Point3D point3D_Min = boundingBox3D_Panel.Min;
+                Point3D point3D_Max = boundingBox3D_Panel.Max;
+                double min_X = point3D_Min.X;
+                double min_Y = point3D_Min.Y;
+                double min_Z = point3D_Min.Z;
+                double max_X = point3D_Max.X;
+                double max_Y = point3D_Max.Y;
+                double max_Z = point3D_Max.Z;
+
+                Panel panel_New = null;
+                bool updated = false;
+                foreach (Tuple<ApertureConstruction, Face3D, double[]> tuple_Aperture in tuples_Aperture)
+                {
+                    double[] values = tuple_Aperture.Item3;
+
+                    if (values[3] + Core.Tolerance.Distance < min_X || values[0] - Core.Tolerance.Distance > max_X ||
+                        values[4] + Core.Tolerance.Distance < min_Y || values[1] - Core.Tolerance.Distance > max_Y ||
+                        values[5] + Core.Tolerance.Distance < min_Z || values[2] - Core.Tolerance.Distance > max_Z)
+                        continue;
+
+                    if (panel_New == null)
+                        panel_New = Create.Panel(panel);
+
+                    List<Aperture> apertures_New = AddApertures(panel_New, tuple_Aperture.Item1, tuple_Aperture.Item2, trimGeometry, minArea, maxDistance, tolerance);
+                    if (apertures_New != null && apertures_New.Count > 0)
+                    {
+                        updated = true;
+                        result.AddRange(apertures_New);
+                    }
+                }
+
+                if (updated)
+                    adjacencyCluster.AddObject(panel_New);
+            }
+
+            return result;
+        }
+
         public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || apertureConstruction == null)
