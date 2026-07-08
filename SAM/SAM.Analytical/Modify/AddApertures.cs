@@ -258,6 +258,8 @@ namespace SAM.Analytical
             if (tuples_Aperture.Count == 0)
                 return result;
 
+            //Phase 1 (sequential): cheap zero-alloc AABB pre-filter -> candidate panels + their surviving aperture indexes
+            List<Tuple<Panel, List<int>>> candidates = new List<Tuple<Panel, List<int>>>();
             foreach (Panel panel in panels)
             {
                 if (panel == null || panel.PanelType == PanelType.Air)
@@ -276,30 +278,79 @@ namespace SAM.Analytical
                 double max_Y = point3D_Max.Y;
                 double max_Z = point3D_Max.Z;
 
-                Panel panel_New = null;
-                bool updated = false;
-                foreach (Tuple<ApertureConstruction, Face3D, double[]> tuple_Aperture in tuples_Aperture)
+                List<int> indexes = null;
+                for (int i = 0; i < tuples_Aperture.Count; i++)
                 {
-                    double[] values = tuple_Aperture.Item3;
+                    double[] values = tuples_Aperture[i].Item3;
 
                     if (values[3] + Core.Tolerance.Distance < min_X || values[0] - Core.Tolerance.Distance > max_X ||
                         values[4] + Core.Tolerance.Distance < min_Y || values[1] - Core.Tolerance.Distance > max_Y ||
                         values[5] + Core.Tolerance.Distance < min_Z || values[2] - Core.Tolerance.Distance > max_Z)
                         continue;
 
-                    if (panel_New == null)
-                        panel_New = Create.Panel(panel);
+                    if (indexes == null)
+                        indexes = new List<int>();
+
+                    indexes.Add(i);
+                }
+
+                if (indexes != null)
+                    candidates.Add(new Tuple<Panel, List<int>>(panel, indexes));
+            }
+
+            if (candidates.Count == 0)
+                return result;
+
+            //Phase 2: process each candidate panel (its own clone, apertures tried in input order) -
+            //parallel across panels once the candidate count justifies it (repo convention: > 30, cf. NormalDictionary.cs),
+            //otherwise sequential. Each task only reads shared state (panel, precomputed aperture Face3D/ApertureConstruction)
+            //and writes into its own pre-sized slot - no shared mutation during the parallel region.
+            Panel[] panels_New = new Panel[candidates.Count];
+            List<Aperture>[] apertures_New_ByPanel = new List<Aperture>[candidates.Count];
+
+            void ProcessCandidate(int i)
+            {
+                Tuple<Panel, List<int>> candidate = candidates[i];
+                Panel panel_New = Create.Panel(candidate.Item1);
+
+                List<Aperture> apertures_New_Panel = null;
+                foreach (int j in candidate.Item2)
+                {
+                    Tuple<ApertureConstruction, Face3D, double[]> tuple_Aperture = tuples_Aperture[j];
 
                     List<Aperture> apertures_New = AddApertures(panel_New, tuple_Aperture.Item1, tuple_Aperture.Item2, trimGeometry, minArea, maxDistance, tolerance);
                     if (apertures_New != null && apertures_New.Count > 0)
                     {
-                        updated = true;
-                        result.AddRange(apertures_New);
+                        if (apertures_New_Panel == null)
+                            apertures_New_Panel = new List<Aperture>();
+
+                        apertures_New_Panel.AddRange(apertures_New);
                     }
                 }
 
-                if (updated)
-                    adjacencyCluster.AddObject(panel_New);
+                panels_New[i] = panel_New;
+                apertures_New_ByPanel[i] = apertures_New_Panel;
+            }
+
+            if (candidates.Count > 30)
+            {
+                System.Threading.Tasks.Parallel.For(0, candidates.Count, ProcessCandidate);
+            }
+            else
+            {
+                for (int i = 0; i < candidates.Count; i++)
+                    ProcessCandidate(i);
+            }
+
+            //Phase 3 (sequential): assemble in original panel order and mutate the cluster
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                List<Aperture> apertures_New_Panel = apertures_New_ByPanel[i];
+                if (apertures_New_Panel == null || apertures_New_Panel.Count == 0)
+                    continue;
+
+                result.AddRange(apertures_New_Panel);
+                adjacencyCluster.AddObject(panels_New[i]);
             }
 
             return result;
