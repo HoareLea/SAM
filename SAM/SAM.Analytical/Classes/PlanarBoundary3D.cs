@@ -232,9 +232,9 @@ namespace SAM.Analytical
             return Coplanar(planarBoundary3D.plane, tolerance);
         }
 
-        public bool Coplanar(Plane plane_Other, double tolerance = Tolerance.Angle)
+        public bool Coplanar(Plane plane, double tolerance = Tolerance.Angle)
         {
-            return plane.Coplanar(plane_Other, tolerance);
+            return this.plane.Coplanar(plane, tolerance);
         }
 
         public Face3D GetFace3D()
