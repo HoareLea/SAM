@@ -749,15 +749,20 @@ namespace SAM.Analytical
             if (apertureConstruction == null || closedPlanar3D == null || panel == null)
                 return null;
 
-            if (!Query.ApertureHost(panel, closedPlanar3D, minArea, maxDistance, tolerance))
-                return null;
-
             Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
 
             Plane plane = face3D.GetPlane();
             if (plane == null)
+                return null;
+
+            BoundingBox3D boundingBox3D_Panel = face3D.GetBoundingBox(System.Math.Max(maxDistance, tolerance));
+            if (boundingBox3D_Panel == null)
+                return null;
+
+            //NOTE: must be called with the UNFLIPPED plane (below) - ApertureHost expects the panel's own plane orientation
+            if (!Query.ApertureHost(panel, closedPlanar3D, plane, boundingBox3D_Panel, minArea, maxDistance, tolerance))
                 return null;
 
             Plane plane_Aperture = closedPlanar3D.GetPlane();
@@ -802,9 +807,9 @@ namespace SAM.Analytical
                 Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
 
                 Aperture aperture = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
-                if (!Query.IsValid(panel, aperture))
-                    continue;
 
+                //NOTE: Query.IsValid is not called here - panel.AddAperture performs the identical
+                //check (same default tolerances) and returns false on failure, so the result is unchanged.
                 if (panel.AddAperture(aperture))
                     result.Add(aperture);
             }
