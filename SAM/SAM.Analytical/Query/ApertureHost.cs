@@ -10,13 +10,34 @@ namespace SAM.Analytical
     {
         public static bool ApertureHost(this Panel panel, IClosedPlanar3D closedPlanar3D, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
-            if (closedPlanar3D == null)
+            if (panel == null || closedPlanar3D == null)
             {
                 return false;
             }
 
-            Plane plane = panel?.PlanarBoundary3D?.Plane;
+            Plane plane = panel.Plane;
             if (plane == null)
+            {
+                return false;
+            }
+
+            BoundingBox3D boundingBox3D_Panel = panel.GetBoundingBox(System.Math.Max(maxDistance, tolerance));
+            if (boundingBox3D_Panel == null)
+            {
+                return false;
+            }
+
+            return ApertureHost(panel, closedPlanar3D, plane, boundingBox3D_Panel, minArea, maxDistance, tolerance);
+        }
+
+        /// <summary>
+        /// ApertureHost overload accepting a precomputed, UNFLIPPED panel Plane and panel BoundingBox3D
+        /// (already inflated by Math.Max(maxDistance, tolerance)) to avoid recomputing them per aperture
+        /// when testing many apertures against the same panel.
+        /// </summary>
+        public static bool ApertureHost(this Panel panel, IClosedPlanar3D closedPlanar3D, Plane plane, BoundingBox3D boundingBox3D_Panel, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (panel == null || closedPlanar3D == null || plane == null || boundingBox3D_Panel == null)
             {
                 return false;
             }
@@ -46,12 +67,6 @@ namespace SAM.Analytical
             }
 
             double max = System.Math.Max(maxDistance, tolerance);
-
-            BoundingBox3D boundingBox3D_Panel = panel.GetBoundingBox(max);
-            if (boundingBox3D_Panel == null)
-            {
-                return false;
-            }
 
             BoundingBox3D boundingBox3D_ClosedPlanar3D = closedPlanar3D.GetBoundingBox(max);
             if (boundingBox3D_ClosedPlanar3D == null)
