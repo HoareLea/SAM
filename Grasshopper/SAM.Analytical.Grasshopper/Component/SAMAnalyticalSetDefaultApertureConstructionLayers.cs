@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("apertures_");
+            index = Params.IndexOfInputParam("_apertures_");
             List<Aperture> apertures = new List<Aperture>();
             if (index != -1)
                 dataAccess.GetDataList(index, apertures);

@@ -327,7 +327,7 @@ namespace SAM.Analytical.Grasshopper
                         if (double.IsNaN(emissivity))
                         {
                             AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid emissivity for layer");
-                            return;
+                            continue;
                         }
 
                         hi = 3.6 + (4.1 * emissivity / 0.837);

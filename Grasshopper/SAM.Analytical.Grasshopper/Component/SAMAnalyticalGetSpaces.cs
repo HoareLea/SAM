@@ -145,7 +145,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     if (spaces == null || spaces.Count == 0)
-                        return;
+                        continue;
 
                     foreach (Space space in spaces)
                     {
@@ -234,7 +234,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     if (spaces == null || spaces.Count == 0)
-                        return;
+                        continue;
 
                     ProfileLibrary profileLibrary = analyticalModel.ProfileLibrary;
 
@@ -281,7 +281,7 @@ namespace SAM.Analytical.Grasshopper
                     List<Space> spaces = adjacencyCluster.GetSpaces();
                     if (spaces == null || spaces.Count == 0)
                     {
-                        return;
+                        continue;
                     }
 
                     Space space = spaces.Find(x => x != null && x.Name == (string)@object);

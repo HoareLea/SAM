@@ -297,7 +297,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             List<double> setbacks = new List<double>();
-            index = Params.IndexOfInputParam("_setback_");
+            index = Params.IndexOfInputParam("_setbacks_");
             if (index != -1)
             {
                 if (!dataAccess.GetDataList(index, setbacks))

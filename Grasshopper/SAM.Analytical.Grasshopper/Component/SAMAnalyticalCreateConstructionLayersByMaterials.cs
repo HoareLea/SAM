@@ -106,14 +106,14 @@ namespace SAM.Analytical.Grasshopper
                     if (material == null)
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                        return;
+                        continue;
                     }
 
                     double thickness = material.GetValue<double>(Core.MaterialParameter.DefaultThickness);
                     if (double.IsNaN(thickness))
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                        return;
+                        continue;
                     }
 
                     thicknesses.Add(thickness);

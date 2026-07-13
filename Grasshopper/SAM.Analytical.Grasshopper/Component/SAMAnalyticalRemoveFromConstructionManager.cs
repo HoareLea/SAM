@@ -105,7 +105,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<Construction> constructions = null;
 
-            index = Params.IndexOfInputParam("_constructions");
+            index = Params.IndexOfInputParam("constructions_");
             analyticalObjects = new List<IAnalyticalObject>();
             if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
             {
@@ -129,7 +129,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<ApertureConstruction> apertureConstructions = null;
 
-            index = Params.IndexOfInputParam("_apertureConstructions");
+            index = Params.IndexOfInputParam("apertureConstructions_");
             analyticalObjects = new List<IAnalyticalObject>();
             if (index != -1 && dataAccess.GetDataList(index, analyticalObjects) && analyticalObjects != null)
             {
@@ -153,7 +153,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<IMaterial> materials = null;
 
-            index = Params.IndexOfInputParam("_materials");
+            index = Params.IndexOfInputParam("materials_");
             List<ISAMObject> sAMObjects = new List<ISAMObject>();
             if (index != -1 && dataAccess.GetDataList(index, sAMObjects) && sAMObjects != null)
             {

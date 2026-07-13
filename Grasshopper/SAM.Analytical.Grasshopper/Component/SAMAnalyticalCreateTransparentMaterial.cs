@@ -257,7 +257,7 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool isBlind = transparentMaterial.GetValue<bool>(TransparentMaterialParameter.IsBlind);
-            index = Params.IndexOfInputParam("ignoreThermalTransmittanceCalculations_");
+            index = Params.IndexOfInputParam("isBlind_");
             if (index != -1)
             {
                 bool value = true;

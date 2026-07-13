@@ -154,7 +154,7 @@ namespace SAM.Analytical.Grasshopper
                 dataAccess.GetData(index, ref airflow_LpS);
 
             List<Space> spaces = new List<Space>();
-            index = Params.IndexOfInputParam("_spaces");
+            index = Params.IndexOfInputParam("_spaces_");
             if (index != -1)
                 dataAccess.GetDataList(index, spaces);
 
