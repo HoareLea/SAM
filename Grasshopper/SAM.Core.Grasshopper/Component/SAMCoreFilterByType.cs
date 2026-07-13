@@ -24,6 +24,16 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public string LatestComponentVersion => "1.0.0";
 
+        public string MinCompatibleVersion => LatestComponentVersion;
+
+        public ObsoleteSeverity ObsoleteSeverity
+        {
+            get
+            {
+                return Core.Grasshopper.Query.GetObsoleteSeverity(this);
+            }
+        }
+
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
         /// <summary>

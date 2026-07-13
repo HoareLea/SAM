@@ -11,21 +11,10 @@ namespace SAM.Core.Grasshopper
 {
     public class SAMCoreUpdate : GH_SAMVariableOutputParameterComponent
     {
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid => new Guid("a89bfee3-3a3c-4d29-9c7a-64073724eddc");
 
-        /// <summary>
-        /// The latest version of this component
-        /// </summary>
         public override string LatestComponentVersion => "1.0.0";
 
-        List<GH_SAMComponent> gH_SAMComponents = null;
-
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Small;
 
         public override GH_Exposure Exposure => GH_Exposure.primary;
@@ -35,6 +24,15 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_Components;
+                param_Components = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_components", NickName = "_components", Description = "Component names, nicknames, or GUID strings (optional). If empty, scans entire document.", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(param_Components, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_DryRun;
+                param_DryRun = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_dryRun", NickName = "_dryRun", Description = "Preview mode — reports changes without applying them", Access = GH_ParamAccess.item, Optional = true };
+                param_DryRun.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_DryRun, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
                 param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run Update", Access = GH_ParamAccess.item, Optional = false };
@@ -56,15 +54,6 @@ namespace SAM.Core.Grasshopper
             }
         }
 
-        public override void CreateAttributes()
-        {
-            base.CreateAttributes();
-            //m_attributes = new CustomAttributes(this);
-        }
-
-        /// <summary>
-        /// Updates PanelTypes for AdjacencyCluster
-        /// </summary>
         public SAMCoreUpdate()
           : base("SAMCore.Update", "SAMCore.Update",
               "Updates Grasshopper components to the latest version",
@@ -86,30 +75,58 @@ namespace SAM.Core.Grasshopper
         {
             int index = -1;
 
-            bool run = false;
-            index = Params.IndexOfInputParam("_run");
-            if (index == -1 || !dataAccess.GetData(index, ref run))
+            bool dryRun = false;
+            index = Params.IndexOfInputParam("_dryRun");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref dryRun);
             }
 
-            if (!run)
+            bool run = false;
+            index = Params.IndexOfInputParam("_run");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref run);
+            }
+
+            if (!dryRun && !run)
             {
                 return;
             }
 
             GH_Document gH_Document = OnPingDocument();
+            if (gH_Document == null)
+            {
+                return;
+            }
 
-            //List<GH_SAMComponent> gH_SAMComponents = Modify.UpdateComponents(gH_Document, out Log log);
-            gH_SAMComponents = Modify.UpdateComponents(gH_Document, out Log log);
+            List<GH_SAMComponent> targetComponents = ResolveTargetComponents(dataAccess, gH_Document);
 
+            Log log;
+            List<GH_SAMComponent> result;
 
-            //gH_Document.SolutionEnd += GH_Document_SolutionEnd;
-
-            //OnPingDocument().Modified();
-
-            //ExpireSolution(true);
+            if (dryRun)
+            {
+                if (targetComponents != null && targetComponents.Count > 0)
+                {
+                    result = Modify.PreviewUpdateComponents(targetComponents, out log);
+                }
+                else
+                {
+                    result = Modify.PreviewUpdateComponents(gH_Document, out log);
+                }
+            }
+            else
+            {
+                if (targetComponents != null && targetComponents.Count > 0)
+                {
+                    result = Modify.UpdateComponents(targetComponents, out log);
+                }
+                else
+                {
+                    result = Modify.UpdateComponents(gH_Document, out log);
+                }
+            }
 
             index = Params.IndexOfOutputParam("log");
             if (index != -1)
@@ -120,21 +137,80 @@ namespace SAM.Core.Grasshopper
             index = Params.IndexOfOutputParam("succeeded");
             if (index != -1)
             {
-                dataAccess.SetData(index, gH_SAMComponents != null && gH_SAMComponents.Count != 0);
+                dataAccess.SetData(index, !dryRun && result != null && result.Count != 0);
             }
         }
 
-        //private void GH_Document_SolutionEnd(object sender, GH_SolutionEventArgs e)
-        //{
-        //    if (gH_SAMComponents != null)
-        //    {
-        //        foreach (GH_SAMComponent gH_SAMComponent in gH_SAMComponents)
-        //        {
-        //            gH_SAMComponent.ExpireSolution(true);
-        //        }
-        //    }
+        private List<GH_SAMComponent> ResolveTargetComponents(IGH_DataAccess dataAccess, GH_Document gH_Document)
+        {
+            int index = Params.IndexOfInputParam("_components");
+            if (index == -1)
+            {
+                return null;
+            }
 
-        //    gH_SAMComponents = null;
-        //}
+            List<string> names = new List<string>();
+            if (!dataAccess.GetDataList(index, names) || names.Count == 0)
+            {
+                return null;
+            }
+
+            if (gH_Document == null)
+            {
+                return null;
+            }
+
+            List<GH_SAMComponent> result = new List<GH_SAMComponent>();
+            IList<IGH_DocumentObject> allObjects = gH_Document.Objects;
+            if (allObjects == null)
+            {
+                return null;
+            }
+
+            foreach (string search in names)
+            {
+                if (string.IsNullOrWhiteSpace(search))
+                {
+                    continue;
+                }
+
+                string trimmed = search.Trim();
+
+                if (Guid.TryParse(trimmed, out Guid guid))
+                {
+                    foreach (IGH_DocumentObject obj in allObjects)
+                    {
+                        if (obj is GH_SAMComponent samComp && samComp.InstanceGuid == guid)
+                        {
+                            if (!result.Contains(samComp))
+                            {
+                                result.Add(samComp);
+                            }
+                            break;
+                        }
+                    }
+                    continue;
+                }
+
+                foreach (IGH_DocumentObject obj in allObjects)
+                {
+                    if (obj is GH_SAMComponent samComp)
+                    {
+                        if (string.Equals(samComp.Name, trimmed, StringComparison.OrdinalIgnoreCase) ||
+                            string.Equals(samComp.NickName, trimmed, StringComparison.OrdinalIgnoreCase) ||
+                            samComp.Name.StartsWith(trimmed, StringComparison.OrdinalIgnoreCase))
+                        {
+                            if (!result.Contains(samComp))
+                            {
+                                result.Add(samComp);
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+
+            return result.Count > 0 ? result : null;
+        }
     }
 }
