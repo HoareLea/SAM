@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSnapPoints : GH_SAMComponent
+    public class SAMAnalyticalSnapPoints : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// ` Provides an Icon for the component.
@@ -41,19 +41,39 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_Panel", "_Panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddPointParameter("_origin_", "_origin_", "Origin Point", GH_ParamAccess.item, new Point3d(0, 0, 0));
-            inputParamManager.AddNumberParameter("_offset_", "_offset_", "offset", GH_ParamAccess.item, 1);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_Panel", NickName = "_Panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Point param_Point;
+                param_Point = new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "_origin_", NickName = "_origin_", Description = "Origin Point", Access = GH_ParamAccess.item };
+                param_Point.SetPersistentData(new Point3d(0, 0, 0));
+                result.Add(new GH_SAMParam(param_Point, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "offset", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(1);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddPointParameter("_Points", "_Points", "Points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "_Points", NickName = "_Points", Description = "Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,22 +84,27 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_Panel");
             Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            if (index == -1 || !dataAccess.GetData(index, ref panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_origin_");
             Point3d origin = new Point3d(0, 0, 0);
-            if (!dataAccess.GetData(1, ref origin))
+            if (index == -1 || !dataAccess.GetData(index, ref origin))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_offset_");
             double offset = 1;
-            if (!dataAccess.GetData(2, ref offset))
+            if (index == -1 || !dataAccess.GetData(index, ref offset))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -132,7 +157,11 @@ namespace SAM.Analytical.Grasshopper
                 point2Ds.Add(point2D.GetMoved(new Geometry.Planar.Vector2D(-offset, offset)));
             }
 
-            dataAccess.SetDataList(0, point2Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(plane.Convert(x))));
+            index = Params.IndexOfOutputParam("_Points");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, point2Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(plane.Convert(x))));
+            }
         }
     }
 }

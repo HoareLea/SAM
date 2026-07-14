@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreGetNames : GH_SAMComponent
+    public class SAMCoreGetNames : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +39,27 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_object", "_object", "SAM Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_object", NickName = "_object", Description = "SAM Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("Names", "Names", "Property names", GH_ParamAccess.list);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Names", NickName = "Names", Description = "Property names", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,10 +70,15 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_object");
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
-                dataAccess.SetData(0, null);
+                index = Params.IndexOfOutputParam("Names");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, null);
+                }
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
@@ -84,12 +99,20 @@ namespace SAM.Core.Grasshopper
 
             if (@object == null)
             {
-                dataAccess.SetData(0, null);
+                index = Params.IndexOfOutputParam("Names");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, null);
+                }
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
 
-            dataAccess.SetDataList(0, Core.Query.Names(@object));
+            index = Params.IndexOfOutputParam("Names");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, Core.Query.Names(@object));
+            }
         }
     }
 }

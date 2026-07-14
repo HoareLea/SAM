@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateDegreeOfActivityByTemperature : GH_SAMComponent
+    public class SAMAnalyticalCreateDegreeOfActivityByTemperature : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,26 +39,42 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddTextParameter("_name_", "_name_", "Name ,default = Activity level", GH_ParamAccess.item, string.Empty);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Name ,default = Activity level", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData(string.Empty);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-            index = inputParamManager.AddIntegerParameter("_activityLevel_", "_activityLevel_", "Activity level [1 - 4], I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p ", GH_ParamAccess.item, 2);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer;
+                param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_activityLevel_", NickName = "_activityLevel_", Description = "Activity level [1 - 4], I=100 W/p, II=125 W/p, III=170 W/p, IV=210 W/p ", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.SetPersistentData(2);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_temperature_", "_temperature_", "Temperature [degC], will range between 16-28 default = 24 degC", GH_ParamAccess.item, 24);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperature_", NickName = "_temperature_", Description = "Temperature [degC], will range between 16-28 default = 24 degC", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(24);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooDegreeOfActivityParam(), "DegreeOfActivity", "DegreeOfActivity", "SAM Analytical DegreeOfActivity", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooDegreeOfActivityParam() { Name = "DegreeOfActivity", NickName = "DegreeOfActivity", Description = "SAM Analytical DegreeOfActivity", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -68,11 +85,21 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            string name = null;
-            dataAccess.GetData(0, ref name);
+            int index = -1;
 
+            index = Params.IndexOfInputParam("_name_");
+            string name = null;
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref name);
+            }
+
+            index = Params.IndexOfInputParam("_activityLevel_");
             int activityLevel = 0;
-            dataAccess.GetData(1, ref activityLevel);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref activityLevel);
+            }
 
             if (activityLevel < 1 || activityLevel > 4)
             {
@@ -80,8 +107,12 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("_temperature_");
             double temperature = 0;
-            dataAccess.GetData(2, ref temperature);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref temperature);
+            }
 
             if (string.IsNullOrEmpty(name))
             {
@@ -105,7 +136,11 @@ namespace SAM.Analytical.Grasshopper
                 name = string.Format("Activity Level {0} ({1}C)", id, System.Math.Round(temperature, 0));
             }
 
-            dataAccess.SetData(0, new GooDegreeOfActivity(Create.DegreeOfActivity((ActivityLevel)activityLevel, name, temperature)));
+            index = Params.IndexOfOutputParam("DegreeOfActivity");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooDegreeOfActivity(Create.DegreeOfActivity((ActivityLevel)activityLevel, name, temperature)));
+            }
         }
     }
 }

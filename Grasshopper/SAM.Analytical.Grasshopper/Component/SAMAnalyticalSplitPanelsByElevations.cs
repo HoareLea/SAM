@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSplitPanelsByElevations : GH_SAMComponent
+    public class SAMAnalyticalSplitPanelsByElevations : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,20 +45,37 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddGenericParameter("_elevations", "_elevations", "Elevations or Planes", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("threshold_", "threshold_", "Threshold", GH_ParamAccess.item, 0);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevations", NickName = "_elevations", Description = "Elevations or Planes", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "threshold_", NickName = "threshold_", Description = "Threshold", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(0.0);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddIntervalParameter("intervals", "intervals", "Elevations intervals", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "panels", "panels", "SAM Analytical Panels", GH_ParamAccess.tree);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Interval() { Name = "intervals", NickName = "intervals", Description = "Elevations intervals", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels", NickName = "panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -69,15 +86,19 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (index == -1 || !dataAccess.GetDataList(index, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
+            index = Params.IndexOfInputParam("_elevations");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -138,9 +159,13 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double threshold = double.NaN;
-            if (!dataAccess.GetData(2, ref threshold))
+            index = Params.IndexOfInputParam("threshold_");
+            if (index != -1)
             {
-                threshold = double.NaN;
+                if (!dataAccess.GetData(index, ref threshold))
+                {
+                    threshold = double.NaN;
+                }
             }
 
             if (double.IsNaN(threshold))
@@ -205,8 +230,17 @@ namespace SAM.Analytical.Grasshopper
                 tuples[i].Item3?.ForEach(x => dataTree_Panel.Add(new GooPanel(x), path));
             }
 
-            dataAccess.SetDataList(0, intervals.ConvertAll(x => new GH_Interval(x)));
-            dataAccess.SetDataTree(1, dataTree_Panel);
+            index = Params.IndexOfOutputParam("intervals");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, intervals.ConvertAll(x => new GH_Interval(x)));
+            }
+
+            index = Params.IndexOfOutputParam("panels");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree_Panel);
+            }
         }
     }
 }

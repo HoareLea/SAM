@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateObjects : GH_SAMComponent
+    public class SAMAnalyticalUpdateObjects : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,19 +40,35 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_objects", NickName = "_objects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successgully Added?", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Successgully Added?", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,16 +79,20 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             AdjacencyCluster adjacencyCluster = null;
 
-            if (!dataAccess.GetData(0, ref adjacencyCluster))
+            index = Params.IndexOfInputParam("_adjacencyCluster");
+            if (index == -1 || !dataAccess.GetData(index, ref adjacencyCluster))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
-            if (!dataAccess.GetDataList(1, analyticalObjects))
+            index = Params.IndexOfInputParam("_objects");
+            if (index == -1 || !dataAccess.GetDataList(index, analyticalObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -92,8 +112,17 @@ namespace SAM.Analytical.Grasshopper
                 successfuls.Add(adjacencyCluster_Result.AddObject(analyticalObject));
             }
 
-            dataAccess.SetData(0, adjacencyCluster_Result);
-            dataAccess.SetDataList(1, successfuls);
+            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, adjacencyCluster_Result);
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, successfuls);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryCreatePlane : GH_SAMComponent
+    public class GeometryCreatePlane : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,19 +40,35 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_points", "Points", "snapping Rhino or SAM Points", GH_ParamAccess.list);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_points", NickName = "Points", Description = "snapping Rhino or SAM Points", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "plane", "plane", "SAM Geometry Plane", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "normal", "normal", "normal", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "plane", NickName = "plane", Description = "SAM Geometry Plane", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "normal", NickName = "normal", Description = "normal", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,19 +79,22 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrappers) || objectWrappers == null)
+            index = Params.IndexOfInputParam("_points");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double tolerance = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(1, ref tolerance))
+            index = Params.IndexOfInputParam("tolerance_");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                dataAccess.GetData(index, ref tolerance);
             }
 
             if (!Query.TryGetSAMGeometries(objectWrappers, out List<Spatial.Point3D> point3Ds) || point3Ds == null || point3Ds.Count < 3)
@@ -86,8 +105,17 @@ namespace SAM.Geometry.Grasshopper
 
             Spatial.Plane plane = Spatial.Create.Plane(point3Ds, tolerance);
 
-            dataAccess.SetData(0, new GooSAMGeometry(plane));
-            dataAccess.SetData(1, new GooSAMGeometry(plane?.Normal));
+            index = Params.IndexOfOutputParam("plane");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooSAMGeometry(plane));
+            }
+
+            index = Params.IndexOfOutputParam("normal");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooSAMGeometry(plane?.Normal));
+            }
         }
     }
 }

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalRenameConstruction : GH_SAMComponent
+    public class SAMAnalyticalRenameConstruction : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,20 +39,35 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooConstructionParam(), "_construction", "_construction", "SAM Analytical Contruction", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "_construction", NickName = "_construction", Description = "SAM Analytical Contruction", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_csv", NickName = "_csv", Description = "csv", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_sourceColumn", NickName = "_sourceColumn", Description = "Source Column Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_destinationColumn", NickName = "_destinationColumn", Description = "Destination Column Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionParam(), "Construction", "Construction", "SAM Analytical Construction", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "Construction", NickName = "Construction", Description = "SAM Analytical Construction", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,29 +78,35 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_construction");
             List<Construction> constructions = new List<Construction>();
-            if (!dataAccess.GetDataList(0, constructions))
+            if (index == -1 || !dataAccess.GetDataList(index, constructions))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_csv");
             string csvOrPath = null;
-            if (!dataAccess.GetData(1, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
+            if (index == -1 || !dataAccess.GetData(index, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_sourceColumn");
             string sourceColumn = null;
-            if (!dataAccess.GetData(2, ref sourceColumn) || string.IsNullOrWhiteSpace(sourceColumn))
+            if (index == -1 || !dataAccess.GetData(index, ref sourceColumn) || string.IsNullOrWhiteSpace(sourceColumn))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_destinationColumn");
             string destinationColumn = null;
-            if (!dataAccess.GetData(3, ref destinationColumn) || string.IsNullOrWhiteSpace(destinationColumn))
+            if (index == -1 || !dataAccess.GetData(index, ref destinationColumn) || string.IsNullOrWhiteSpace(destinationColumn))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -128,7 +149,6 @@ namespace SAM.Analytical.Grasshopper
                 string name = construction.Name;
                 if (name == null)
                 {
-                    //result.Add(construction);
                     continue;
                 }
 
@@ -153,7 +173,6 @@ namespace SAM.Analytical.Grasshopper
 
                 if (name_destination == null)
                 {
-                    //result.Add(construction);
                     continue;
                 }
                 else
@@ -162,7 +181,11 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooConstruction(x)));
+            index = Params.IndexOfOutputParam("Construction");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooConstruction(x)));
+            }
         }
     }
 }

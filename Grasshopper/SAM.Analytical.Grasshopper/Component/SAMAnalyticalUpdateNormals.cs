@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateNormals : GH_SAMComponent
+    public class SAMAnalyticalUpdateNormals : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,23 +39,35 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            GooSpaceParam gooSpaceParam = new GooSpaceParam();
-            gooSpaceParam.Optional = true;
-            inputParamManager.AddParameter(gooSpaceParam, "space_", "space_", "SAM Analytical Space", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            inputParamManager.AddBooleanParameter("_includeApertures_", "_includeApertures_", "Include Apertures", GH_ParamAccess.item, false);
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "space_", NickName = "space_", Description = "SAM Analytical Space", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_includeApertures_", NickName = "_includeApertures_", Description = "Include Apertures", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -66,18 +78,26 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_adjacencyCluster");
             AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (index == -1 || !dataAccess.GetData(index, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("space_");
             Space space = null;
-            dataAccess.GetData(1, ref space);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref space);
+            }
 
+            index = Params.IndexOfInputParam("_includeApertures_");
             bool includeApertures = false;
-            if (!dataAccess.GetData(2, ref includeApertures))
+            if (index == -1 || !dataAccess.GetData(index, ref includeApertures))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,7 +116,11 @@ namespace SAM.Analytical.Grasshopper
                     panels.ForEach(x => adjacencyCluster_New.AddObject(x));
             }
 
-            dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster_New));
+            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster_New));
+            }
         }
     }
 }

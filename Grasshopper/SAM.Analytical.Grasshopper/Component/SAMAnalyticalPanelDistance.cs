@@ -6,10 +6,11 @@ using Rhino.Geometry;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPanelDistance : GH_SAMComponent
+    public class SAMAnalyticalPanelDistance : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,19 +40,32 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_SAMPanel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddPointParameter("_point", "_point", "Point", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panel", NickName = "_SAMPanel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "_point", NickName = "_point", Description = "Point", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddNumberParameter("Distance", "Distance", "Distance", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("DistanceToEdges", "DistanceToEdges", "DistanceToEdges", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Distance", NickName = "Distance", Description = "Distance", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "DistanceToEdges", NickName = "DistanceToEdges", Description = "DistanceToEdges", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,15 +76,19 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_panel");
             Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            if (index == -1 || !dataAccess.GetData(index, ref panel) || panel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             Point3d point3d = new Point3d();
-            if (!dataAccess.GetData(1, ref point3d))
+            index = Params.IndexOfInputParam("_point");
+            if (index == -1 || !dataAccess.GetData(index, ref point3d))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -78,8 +96,17 @@ namespace SAM.Analytical.Grasshopper
 
             Geometry.Spatial.Point3D point3D = Geometry.Rhino.Convert.ToSAM(point3d);
 
-            dataAccess.SetData(0, panel.Distance(point3D));
-            dataAccess.SetData(1, panel.DistanceToEdges(point3D));
+            index = Params.IndexOfOutputParam("Distance");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, panel.Distance(point3D));
+            }
+
+            index = Params.IndexOfOutputParam("DistanceToEdges");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, panel.DistanceToEdges(point3D));
+            }
         }
     }
 }

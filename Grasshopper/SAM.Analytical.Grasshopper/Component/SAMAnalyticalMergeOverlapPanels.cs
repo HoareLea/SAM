@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalMergeOverlapPanels : GH_SAMComponent
+    public class SAMAnalyticalMergeOverlapPanels : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,26 +41,48 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
-            inputParamManager.AddNumberParameter("_offset_", "_offset_", "Offset", GH_ParamAccess.item, Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_defaultConstruction_", "_defaultConstruction_", "Set default Construtcion for Panels", GH_ParamAccess.item, false);
-            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance_", "Tolerance", GH_ParamAccess.item, Tolerance.Distance);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_offset_", NickName = "_offset_", Description = "Offset", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_defaultConstruction_", NickName = "_defaultConstruction_", Description = "Set default Construtcion for Panels", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "RedundantPanels", "RedundantPanels", "RedundantPanels", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "RedundantPanels", NickName = "RedundantPanels", Description = "RedundantPanels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -71,8 +93,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_run");
             bool run = false;
-            if (!dataAccess.GetData(4, ref run))
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -80,32 +105,45 @@ namespace SAM.Analytical.Grasshopper
             if (!run)
                 return;
 
+            index = Params.IndexOfInputParam("_offset_");
             double offset = Tolerance.Distance;
-            if (!dataAccess.GetData(1, ref offset))
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                if (!dataAccess.GetData(index, ref offset))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
             }
 
+            index = Params.IndexOfInputParam("_tolerance_");
             double tolerance = Tolerance.Distance;
-            if (!dataAccess.GetData(3, ref tolerance))
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                if (!dataAccess.GetData(index, ref tolerance))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
             }
 
+            index = Params.IndexOfInputParam("_analyticalObject");
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(0, sAMObjects) || sAMObjects == null)
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_defaultConstruction_");
             bool setDefaultConstruction = false;
-            if (!dataAccess.GetData(2, ref setDefaultConstruction))
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                if (!dataAccess.GetData(index, ref setDefaultConstruction))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
             }
 
             List<Panel> redundantPanels = new List<Panel>();
@@ -146,8 +184,17 @@ namespace SAM.Analytical.Grasshopper
             if (analyticalModels != null)
                 result.AddRange(analyticalModels.Cast<SAMObject>());
 
-            dataAccess.SetDataList(0, result);
-            dataAccess.SetDataList(1, redundantPanels?.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("AnalyticalObject");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result);
+            }
+
+            index = Params.IndexOfOutputParam("RedundantPanels");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, redundantPanels?.ConvertAll(x => new GooPanel(x)));
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateSpaces : GH_SAMComponent
+    public class SAMAnalyticalUpdateSpaces : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,18 +40,33 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Model ot Adjacency Cluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "Analytical", "Analytical", "SAM Analytical Model or Adjacency Cluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Model or Adjacency Cluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,8 +77,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<Space> spaces = new List<Space>();
-            if (!dataAccess.GetDataList(1, spaces))
+            index = Params.IndexOfInputParam("_spaces");
+            if (index == -1 || !dataAccess.GetDataList(index, spaces))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -71,7 +89,8 @@ namespace SAM.Analytical.Grasshopper
 
 
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            index = Params.IndexOfInputParam("_analytical");
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -93,15 +112,19 @@ namespace SAM.Analytical.Grasshopper
             // a ~35 s loop to a few seconds.
             adjacencyCluster.UpdateSpaces(spaces);
 
-            if (sAMObject is AnalyticalModel)
+            index = Params.IndexOfOutputParam("Analytical");
+            if (index != -1)
             {
-                AnalyticalModel analyticalModel = ((AnalyticalModel)sAMObject);
-                analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                dataAccess.SetData(0, new GooJSAMObject<SAMObject>(analyticalModel));
-            }
-            else
-            {
-                dataAccess.SetData(0, new GooJSAMObject<SAMObject>(adjacencyCluster));
+                if (sAMObject is AnalyticalModel)
+                {
+                    AnalyticalModel analyticalModel = ((AnalyticalModel)sAMObject);
+                    analyticalModel = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    dataAccess.SetData(index, new GooJSAMObject<SAMObject>(analyticalModel));
+                }
+                else
+                {
+                    dataAccess.SetData(index, new GooJSAMObject<SAMObject>(adjacencyCluster));
+                }
             }
         }
     }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalRemove : GH_SAMComponent
+    public class SAMAnalyticalRemove : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,23 +40,32 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_objects", NickName = "_objects", Description = "SAM Objects", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analyticalObject", "analyticalObject", "SAM Analytical Object", GH_ParamAccess.item);
-            outputParamManager.AddTextParameter("guids", "guids", "Guids of Removed Elements", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analyticalObject", NickName = "analyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "guids", NickName = "guids", Description = "Guids of Removed Elements", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,15 +76,19 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analyticalObject");
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_objects");
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects) || sAMObjects == null)
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects) || sAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -94,8 +107,17 @@ namespace SAM.Analytical.Grasshopper
                             guids.Add(aperture.Guid);
                 }
 
-                dataAccess.SetData(0, result);
-                dataAccess.SetDataList(1, guids);
+                index = Params.IndexOfOutputParam("analyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, result);
+                }
+
+                index = Params.IndexOfOutputParam("guids");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, guids);
+                }
                 return;
             }
             else if (sAMObject is AnalyticalModel)
@@ -104,8 +126,17 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Guid> guids = analyticalModel.Remove(sAMObjects);
 
-                dataAccess.SetData(0, analyticalModel);
-                dataAccess.SetDataList(1, guids);
+                index = Params.IndexOfOutputParam("analyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, analyticalModel);
+                }
+
+                index = Params.IndexOfOutputParam("guids");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, guids);
+                }
                 return;
             }
             else if (sAMObject is AdjacencyCluster)
@@ -114,8 +145,17 @@ namespace SAM.Analytical.Grasshopper
 
                 List<Guid> guids = adjacencyCluster.Remove(sAMObjects);
 
-                dataAccess.SetData(0, adjacencyCluster);
-                dataAccess.SetDataList(1, guids);
+                index = Params.IndexOfOutputParam("analyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, adjacencyCluster);
+                }
+
+                index = Params.IndexOfOutputParam("guids");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, guids);
+                }
                 return;
             }
         }

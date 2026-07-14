@@ -5,11 +5,12 @@ using Grasshopper.Kernel;
 using SAM.Core.Grasshopper;
 using SAM.Weather.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Weather.Grasshopper
 {
-    public class SAMWeatherHourlyValue : GH_SAMComponent
+    public class SAMWeatherHourlyValue : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,19 +40,29 @@ namespace SAM.Weather.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooWeatherObjectParam(), "_weatherObject", "_weatherObject", "SAM WeatherObject", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_weatherDataType", "_weatherDataType", "Weather Data Type", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_hourOfYear", "_hourOfYear", "Hour of Year Index [0-8759]", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooWeatherObjectParam() { Name = "_weatherObject", NickName = "_weatherObject", Description = "SAM WeatherObject", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_weatherDataType", NickName = "_weatherDataType", Description = "Weather Data Type", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_hourOfYear", NickName = "_hourOfYear", Description = "Hour of Year Index [0-8759]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddNumberParameter("value", "value", "value", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "value", NickName = "value", Description = "value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,22 +73,27 @@ namespace SAM.Weather.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            IWeatherObject weatherObject = null;
-            if (!dataAccess.GetData(0, ref weatherObject) || weatherObject == null)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
-            WeatherDataType weatherDataType = WeatherDataType.Undefined;
-            if (!dataAccess.GetData(1, ref weatherDataType) || weatherDataType == WeatherDataType.Undefined)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
-            }
-
             int index = -1;
-            if (!dataAccess.GetData(2, ref index) || index == -1)
+
+            index = Params.IndexOfInputParam("_weatherObject");
+            IWeatherObject weatherObject = null;
+            if (index == -1 || !dataAccess.GetData(index, ref weatherObject) || weatherObject == null)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            index = Params.IndexOfInputParam("_weatherDataType");
+            WeatherDataType weatherDataType = WeatherDataType.Undefined;
+            if (index == -1 || !dataAccess.GetData(index, ref weatherDataType) || weatherDataType == WeatherDataType.Undefined)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            int hourIndex = -1;
+            index = Params.IndexOfInputParam("_hourOfYear");
+            if (index == -1 || !dataAccess.GetData(index, ref hourIndex) || hourIndex == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -87,14 +103,14 @@ namespace SAM.Weather.Grasshopper
 
             if (weatherObject is WeatherYear)
             {
-                if (!((WeatherYear)weatherObject).TryGetValue(weatherDataType, index, out result))
+                if (!((WeatherYear)weatherObject).TryGetValue(weatherDataType, hourIndex, out result))
                 {
                     result = double.NaN;
                 }
             }
             else if (weatherObject is WeatherDay)
             {
-                if (!((WeatherDay)weatherObject).TryGetValue(weatherDataType, index, out result))
+                if (!((WeatherDay)weatherObject).TryGetValue(weatherDataType, hourIndex, out result))
                 {
                     result = double.NaN;
                 }
@@ -107,13 +123,17 @@ namespace SAM.Weather.Grasshopper
             {
                 WeatherYear weatherYear = ((WeatherData)weatherObject).WeatherYears?.FirstOrDefault();
 
-                if (weatherYear == null || !weatherYear.TryGetValue(weatherDataType, index, out result))
+                if (weatherYear == null || !weatherYear.TryGetValue(weatherDataType, hourIndex, out result))
                 {
                     result = double.NaN;
                 }
             }
 
-            dataAccess.SetData(0, result);
+            index = Params.IndexOfOutputParam("value");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, result);
+            }
         }
     }
 }

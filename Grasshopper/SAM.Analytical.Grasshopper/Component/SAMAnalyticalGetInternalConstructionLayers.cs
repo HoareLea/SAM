@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetInternalConstructionLayers : GH_SAMComponent
+    public class SAMAnalyticalGetInternalConstructionLayers : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,25 +41,34 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAdjacencyClusterParam(), "_adjacencyCluster", "_adjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            GooSpaceParam gooSpaceParam = new GooSpaceParam();
-            gooSpaceParam.Optional = true;
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "_adjacencyCluster", NickName = "_adjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            inputParamManager.AddParameter(gooSpaceParam, "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSpaceParam(), "Spaces", "Spaces", "SAM Spaces", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooConstructionLayerParam(), "ConstructionLayers", "ConstructionLayers", "SAM Analytical ConstructionLayers", GH_ParamAccess.tree);
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "Panels", GH_ParamAccess.tree);
-            outputParamManager.AddNumberParameter("Areas", "Areas", "Areas", GH_ParamAccess.tree);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Spaces", NickName = "Spaces", Description = "SAM Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "ConstructionLayers", NickName = "ConstructionLayers", Description = "SAM Analytical ConstructionLayers", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "Panels", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Areas", NickName = "Areas", Description = "Areas", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -70,20 +79,46 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetDataList(0, null);
-            dataAccess.SetDataList(1, null);
-            dataAccess.SetDataList(2, null);
-            dataAccess.SetDataList(3, null);
+            int index = -1;
 
+            index = Params.IndexOfOutputParam("Spaces");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, null);
+            }
+
+            index = Params.IndexOfOutputParam("ConstructionLayers");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, null);
+            }
+
+            index = Params.IndexOfOutputParam("Panels");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, null);
+            }
+
+            index = Params.IndexOfOutputParam("Areas");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, null);
+            }
+
+            index = Params.IndexOfInputParam("_adjacencyCluster");
             AdjacencyCluster adjacencyCluster = null;
-            if (!dataAccess.GetData(0, ref adjacencyCluster) || adjacencyCluster == null)
+            if (index == -1 || !dataAccess.GetData(index, ref adjacencyCluster) || adjacencyCluster == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<Space> spaces = new List<Space>();
-            dataAccess.GetDataList(1, spaces);
+            index = Params.IndexOfInputParam("_spaces");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, spaces);
+            }
 
             if (spaces == null || spaces.Count == 0)
                 spaces = adjacencyCluster.GetSpaces();
@@ -116,10 +151,29 @@ namespace SAM.Analytical.Grasshopper
                     count++;
                 }
 
-                dataAccess.SetDataList(0, spaces.ConvertAll(x => new GooSpace(x)));
-                dataAccess.SetDataTree(1, dataTree_ConstructionLayers);
-                dataAccess.SetDataTree(2, dataTree_Panels);
-                dataAccess.SetDataTree(3, dataTree_Areas);
+                index = Params.IndexOfOutputParam("Spaces");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, spaces.ConvertAll(x => new GooSpace(x)));
+                }
+
+                index = Params.IndexOfOutputParam("ConstructionLayers");
+                if (index != -1)
+                {
+                    dataAccess.SetDataTree(index, dataTree_ConstructionLayers);
+                }
+
+                index = Params.IndexOfOutputParam("Panels");
+                if (index != -1)
+                {
+                    dataAccess.SetDataTree(index, dataTree_Panels);
+                }
+
+                index = Params.IndexOfOutputParam("Areas");
+                if (index != -1)
+                {
+                    dataAccess.SetDataTree(index, dataTree_Areas);
+                }
             }
         }
     }

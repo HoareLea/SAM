@@ -6,10 +6,11 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometry2DSAMGeometry : GH_SAMComponent
+    public class SAMGeometry2DSAMGeometry : GH_SAMVariableOutputParameterComponent
     {
 
         /// <summary>
@@ -20,7 +21,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -35,21 +36,33 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry2D", "SAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            GooSAMGeometryParam gooSAMGeometryParam = new GooSAMGeometryParam();
-            gooSAMGeometryParam.PersistentData.Append(new GooSAMGeometry(Plane.WorldXY));
-            inputParamManager.AddParameter(gooSAMGeometryParam, "Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "_SAMGeometry2D", NickName = "SAMgeo2D", Description = "SAM Geometry 2D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                GooSAMGeometryParam gooSAMGeometryParam = new GooSAMGeometryParam() { Name = "Plane", NickName = "Plane", Description = "SAM Plane", Access = GH_ParamAccess.item };
+                gooSAMGeometryParam.SetPersistentData(new GooSAMGeometry(Plane.WorldXY));
+                result.Add(new GH_SAMParam(gooSAMGeometryParam, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "SAMGeometry3D", "SAMgeo3D", "SAM Geometry 3D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "SAMGeometry3D", NickName = "SAMgeo3D", Description = "SAM Geometry 3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,9 +73,11 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            ISAMGeometry sAMGeometry = null;
+            int index;
 
-            if (!dataAccess.GetData(0, ref sAMGeometry) || sAMGeometry == null)
+            index = Params.IndexOfInputParam("_SAMGeometry2D");
+            ISAMGeometry sAMGeometry = null;
+            if (index == -1 || !dataAccess.GetData(index, ref sAMGeometry) || sAMGeometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,7 +91,8 @@ namespace SAM.Geometry.Grasshopper
             }
 
             sAMGeometry = null;
-            if (!dataAccess.GetData(1, ref sAMGeometry) || sAMGeometry == null)
+            index = Params.IndexOfInputParam("Plane");
+            if (index == -1 || !dataAccess.GetData(index, ref sAMGeometry) || sAMGeometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -96,7 +112,11 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, geometry3D);
+            index = Params.IndexOfOutputParam("SAMGeometry3D");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, geometry3D);
+            }
         }
 
         /// <summary>

@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSetConstructionByCsv : GH_SAMComponent
+    public class SAMAnalyticalSetConstructionByCsv : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,25 +39,37 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            index = inputParamManager.AddParameter(new GooConstructionParam(), "constructions_", "constructions_", "SAM Analytical Contructions", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            inputParamManager.AddTextParameter("_csv", "_csv", "csv", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_sourceColumn", "_sourceColumn", "Source Column Name", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_destinationColumn", "_destinationColumn", "Destination Column Name", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "constructions_", NickName = "constructions_", Description = "SAM Analytical Contructions", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_csv", NickName = "_csv", Description = "csv", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_sourceColumn", NickName = "_sourceColumn", Description = "Source Column Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_destinationColumn", NickName = "_destinationColumn", Description = "Destination Column Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panel", NickName = "Panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -68,34 +80,44 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (index == -1 || !dataAccess.GetDataList(index, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("constructions_");
             List<Construction> constructions = new List<Construction>();
-            dataAccess.GetDataList(1, constructions);
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, constructions);
+            }
             if (constructions == null)
                 constructions = new List<Construction>();
 
+            index = Params.IndexOfInputParam("_csv");
             string csvOrPath = null;
-            if (!dataAccess.GetData(2, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
+            if (index == -1 || !dataAccess.GetData(index, ref csvOrPath) || string.IsNullOrWhiteSpace(csvOrPath))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_sourceColumn");
             string sourceColumn = null;
-            if (!dataAccess.GetData(3, ref sourceColumn) || string.IsNullOrWhiteSpace(sourceColumn))
+            if (index == -1 || !dataAccess.GetData(index, ref sourceColumn) || string.IsNullOrWhiteSpace(sourceColumn))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_destinationColumn");
             string destinationColumn = null;
-            if (!dataAccess.GetData(4, ref destinationColumn) || string.IsNullOrWhiteSpace(destinationColumn))
+            if (index == -1 || !dataAccess.GetData(index, ref destinationColumn) || string.IsNullOrWhiteSpace(destinationColumn))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -142,7 +164,6 @@ namespace SAM.Analytical.Grasshopper
                 string name = construction.Name;
                 if (name == null)
                 {
-                    //result.Add(construction);
                     continue;
                 }
 
@@ -167,7 +188,6 @@ namespace SAM.Analytical.Grasshopper
 
                 if (string.IsNullOrWhiteSpace(name_destination))
                 {
-                    //result.Add(construction);
                     continue;
                 }
                 else
@@ -180,7 +200,11 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("Panel");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooPanel(x)));
+            }
         }
     }
 }

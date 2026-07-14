@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalFilterByElevation : GH_SAMComponent
+    public class SAMAnalyticalFilterByElevation : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,25 +40,38 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_analyticals", "_analyticals", "SAM Analytical Panels or Spaces", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Panels or Spaces", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
-            index = inputParamManager.AddNumberParameter("_tolerance", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "_elevation", Description = "Elevation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance", NickName = "_tolerance", Description = "Tolerance", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("Analyticals", "Analyticals", "SAM Analytical Panels or Spaces", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("UpperAnalyticals", "UpperAnalyticals", "Upper SAM Analytical Panels or Spaces", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("LowerAnalyticals", "LowerAnalyticals", "Lower SAM Analytical Panels or Spaces", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analyticals", NickName = "Analyticals", Description = "SAM Analytical Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "UpperAnalyticals", NickName = "UpperAnalyticals", Description = "Upper SAM Analytical Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "LowerAnalyticals", NickName = "LowerAnalyticals", Description = "Lower SAM Analytical Panels or Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -69,8 +82,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analyticals");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(0, objectWrappers))
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -85,8 +101,9 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
+            index = Params.IndexOfInputParam("_elevation");
             GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (!dataAccess.GetData(1, ref objectWrapper_Elevation))
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -128,8 +145,9 @@ namespace SAM.Analytical.Grasshopper
                 elevation = panel.MinElevation();
             }
 
+            index = Params.IndexOfInputParam("_tolerance");
             double tolerance = double.NaN;
-            if (!dataAccess.GetData(2, ref tolerance))
+            if (index == -1 || !dataAccess.GetData(index, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -168,9 +186,23 @@ namespace SAM.Analytical.Grasshopper
             spaces_Lower?.ForEach(x => result_Lower.Add(x));
             spaces_Upper?.ForEach(x => result_Upper.Add(x));
 
-            dataAccess.SetDataList(0, result);
-            dataAccess.SetDataList(1, result_Upper);
-            dataAccess.SetDataList(2, result_Lower);
+            index = Params.IndexOfOutputParam("Analyticals");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result);
+            }
+
+            index = Params.IndexOfOutputParam("UpperAnalyticals");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result_Upper);
+            }
+
+            index = Params.IndexOfOutputParam("LowerAnalyticals");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result_Lower);
+            }
         }
     }
 }

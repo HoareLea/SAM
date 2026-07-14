@@ -3,13 +3,14 @@
 
 using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
 using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateConstructionLibrary : GH_SAMComponent
+    public class SAMAnalyticalCreateConstructionLibrary : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.3";
+        public override string LatestComponentVersion => "1.0.4";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,22 +40,33 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Default Construction Library");
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            GooConstructionParam gooConstructionParam = new GooConstructionParam();
-            gooConstructionParam.Optional = true;
-            inputParamManager.AddParameter(gooConstructionParam, "_constructions_", "_constructions_", "SAM Analytical Constructions", GH_ParamAccess.list);
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Name", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("Default Construction Library");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "_constructions_", NickName = "_constructions_", Description = "SAM Analytical Constructions", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionLibraryParam(), "ConstructionLibrary", "ConstructionLibrary", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionLibraryParam() { Name = "ConstructionLibrary", NickName = "ConstructionLibrary", Description = "SAM Analytical ConstructionLibrary", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -65,20 +77,31 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || name == null)
+            index = Params.IndexOfInputParam("_name_");
+            if (index == -1 || !dataAccess.GetData(index, ref name) || name == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<Construction> constructions = new List<Construction>();
-            dataAccess.GetDataList(1, constructions);
+            index = Params.IndexOfInputParam("_constructions_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, constructions);
+            }
 
             ConstructionLibrary result = new ConstructionLibrary(name);
             constructions?.ForEach(x => result.Add(x));
 
-            dataAccess.SetData(0, new GooConstructionLibrary(result));
+            index = Params.IndexOfOutputParam("ConstructionLibrary");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooConstructionLibrary(result));
+            }
         }
     }
 }

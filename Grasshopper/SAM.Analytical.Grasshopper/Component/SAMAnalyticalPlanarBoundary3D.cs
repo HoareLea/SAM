@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPlanarBoundary3D : GH_SAMComponent
+    public class SAMAnalyticalPlanarBoundary3D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,17 +39,27 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<Core.SAMObject>() { Name = "_SAMAnalytical", NickName = "_SAMAnalytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPlanarBoundary3DParam(), "PlanarBoundary3D", "PlanarBoundary3D", "SAM Analytical PlanarBoundary3D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPlanarBoundary3DParam() { Name = "PlanarBoundary3D", NickName = "PlanarBoundary3D", Description = "SAM Analytical PlanarBoundary3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -59,14 +70,21 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_SAMAnalytical");
             Core.SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || !(sAMObject is Panel))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || !(sAMObject is Panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
+            index = Params.IndexOfOutputParam("PlanarBoundary3D");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooPlanarBoundary3D(((Panel)sAMObject).PlanarBoundary3D));
+            }
         }
     }
 }

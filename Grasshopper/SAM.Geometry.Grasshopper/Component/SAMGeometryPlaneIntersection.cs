@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryPlaneIntersection : GH_SAMComponent
+    public class SAMGeometryPlaneIntersection : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,19 +41,29 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_geometry3D", "_geometry3D", "SAM Geometry 3D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_plane", "_plane", "SAM Plane", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometry3D", NickName = "_geometry3D", Description = "SAM Geometry 3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_plane", NickName = "_plane", Description = "SAM Plane", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometries", "Geometries", "Intersection Geometries", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Geometries", NickName = "Geometries", Description = "Intersection Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,13 +74,21 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index_Successful = Params.IndexOfOutputParam("Successful");
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            int index = -1;
+
             GH_ObjectWrapper objectWrapper = null;
 
+            index = Params.IndexOfInputParam("_geometry3D");
             objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -78,7 +96,6 @@ namespace SAM.Geometry.Grasshopper
             if (obj == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -91,11 +108,11 @@ namespace SAM.Geometry.Grasshopper
             else if (obj is GooSAMGeometry)
                 geometry3Ds = new List<ISAMGeometry3D>() { ((GooSAMGeometry)obj).Value as ISAMGeometry3D };
 
+            index = Params.IndexOfInputParam("_plane");
             objectWrapper = null;
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper.Value == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -111,11 +128,10 @@ namespace SAM.Geometry.Grasshopper
             if (plane == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
-            List<ISAMGeometry3D> result = new List<ISAMGeometry3D>();
+            List<ISAMGeometry3D> result_Geometries = new List<ISAMGeometry3D>();
             foreach (ISAMGeometry3D geometry3D in geometry3Ds)
             {
                 PlanarIntersectionResult planarIntersectionResult = Spatial.Create.PlanarIntersectionResult(plane, geometry3D as dynamic);
@@ -124,11 +140,19 @@ namespace SAM.Geometry.Grasshopper
 
                 List<ISAMGeometry3D> geometry3Ds_Temp = planarIntersectionResult.Geometry3Ds;
                 if (geometry3Ds_Temp != null && geometry3Ds_Temp.Count > 0)
-                    result.AddRange(geometry3Ds_Temp);
+                    result_Geometries.AddRange(geometry3Ds_Temp);
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetData(1, true);
+            index = Params.IndexOfOutputParam("Geometries");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result_Geometries.ConvertAll(x => new GooSAMGeometry(x)));
+            }
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, true);
+            }
         }
     }
 }

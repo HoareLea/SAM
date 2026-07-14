@@ -8,14 +8,14 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreAddMaterials : GH_SAMComponent
+    public class SAMCoreAddMaterials : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
         public override Guid ComponentGuid => new Guid("9e82ec78-e5fb-4843-b334-f62fa2fd9b6f");
 
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -35,20 +35,32 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM Material Library", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooMaterialParam(), "_materials", "_materials", "SAM Materials", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "_materialLibrary", NickName = "_materialLibrary", Description = "SAM Material Library", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "_materials", NickName = "_materials", Description = "SAM Materials", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooMaterialLibraryParam(), "MaterialLibrary", "MaterialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.list);
-
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "MaterialLibrary", NickName = "MaterialLibrary", Description = "SAM MaterialLibrary", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -59,15 +71,19 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_materialLibrary");
             MaterialLibrary materialLibrary = null;
-            if (!dataAccess.GetData(0, ref materialLibrary) || materialLibrary == null)
+            if (index == -1 || !dataAccess.GetData(index, ref materialLibrary) || materialLibrary == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<IMaterial> materials = new List<IMaterial>();
-            if (!dataAccess.GetDataList(1, materials))
+            index = Params.IndexOfInputParam("_materials");
+            if (index == -1 || !dataAccess.GetDataList(index, materials))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -82,8 +98,17 @@ namespace SAM.Core.Grasshopper
                 successfuls.Add(successful);
             }
 
-            dataAccess.SetData(0, new GooMaterialLibrary(materialLibrary));
-            dataAccess.SetDataList(1, successfuls);
+            index = Params.IndexOfOutputParam("MaterialLibrary");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooMaterialLibrary(materialLibrary));
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, successfuls);
+            }
         }
     }
 }

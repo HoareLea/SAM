@@ -13,7 +13,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPlaneIntersection : GH_SAMComponent
+    public class SAMAnalyticalPlaneIntersection : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -43,19 +43,36 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<Core.SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, Face3d", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<Core.SAMObject>() { Name = "_SAMAnalytical", NickName = "_SAMAnalytical", Description = "SAM Analytical Object ie.Panel, Face3d", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_elevation", NickName = "_elevation", Description = "Elevation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Edge3Ds", "Edge3Ds", "SAM.Geometry Edge3Ds", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Edge3Ds", NickName = "Edge3Ds", Description = "SAM.Geometry Edge3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -66,8 +83,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_run");
             bool run = false;
-            if (!dataAccess.GetData(2, ref run))
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -75,15 +95,17 @@ namespace SAM.Analytical.Grasshopper
             if (!run)
                 return;
 
+            index = Params.IndexOfInputParam("_SAMAnalytical");
             Core.SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || !(sAMObject is Panel))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || !(sAMObject is Panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_elevation");
             GH_ObjectWrapper objectWrapper_Elevation = null;
-            if (!dataAccess.GetData(1, ref objectWrapper_Elevation))
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper_Elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -115,7 +137,13 @@ namespace SAM.Analytical.Grasshopper
 
             IEnumerable<ICurve3D> edge3Ds = panel.GetEdge3Ds(elevation);
             if (edge3Ds != null && edge3Ds.Count() > 0)
-                dataAccess.SetDataList(0, edge3Ds.ToList().ConvertAll(x => new GooSAMGeometry(x)));
+            {
+                index = Params.IndexOfOutputParam("Edge3Ds");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, edge3Ds.ToList().ConvertAll(x => new GooSAMGeometry(x)));
+                }
+            }
         }
     }
 }

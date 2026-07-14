@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalFlipPanel : GH_SAMComponent
+    public class SAMAnalyticalFlipPanel : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,21 +39,29 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddParameter(new GooPanelParam(), "panel_", "panel_", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panel_", NickName = "panel_", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panel", "Panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panel", NickName = "Panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,8 +72,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("panel_");
             Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            if (index == -1 || !dataAccess.GetData(index, ref panel) || panel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Connect valid SAM Panel");
                 return;
@@ -73,7 +85,11 @@ namespace SAM.Analytical.Grasshopper
             panel = Create.Panel(panel);
             panel.FlipNormal(true, false);
 
-            dataAccess.SetData(0, new GooPanel(panel));
+            index = Params.IndexOfOutputParam("Panel");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooPanel(panel));
+            }
         }
     }
 }

@@ -9,10 +9,11 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateSpaceByLocationAndName : GH_SAMComponent
+    public class SAMAnalyticalUpdateSpaceByLocationAndName : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,25 +43,39 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytcial Space", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytcial Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("_location_", "_location_", "Location", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject;
 
-            index = inputParamManager.AddGenericParameter("_name_", "_name_", "Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_location_", NickName = "_location_", Description = "Location", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
+
+                param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_name_", NickName = "_name_", Description = "Name", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSpaceParam(), "Space", "Space", "SAM Analytical Space", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "Space", NickName = "Space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -71,19 +86,27 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             Space space = null;
-            if (!dataAccess.GetData(0, ref space))
+            index = Params.IndexOfInputParam("_space");
+            if (index == -1 || !dataAccess.GetData(index, ref space))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string name = null;
-            dataAccess.GetData(2, ref name);
+            index = Params.IndexOfInputParam("_name_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref name);
+            }
 
             Point3D location = null;
             GH_ObjectWrapper objectWrapper = null;
-            if (dataAccess.GetData(1, ref objectWrapper))
+            index = Params.IndexOfInputParam("_location_");
+            if (index != -1 && dataAccess.GetData(index, ref objectWrapper))
             {
                 if (objectWrapper.Value is GH_Point)
                     location = Geometry.Rhino.Convert.ToSAM(((GH_Point)objectWrapper.Value).Value);
@@ -101,7 +124,11 @@ namespace SAM.Analytical.Grasshopper
 
             Space space_Result = new Space(space, name, location);
 
-            dataAccess.SetData(0, new GooSpace(space_Result));
+            index = Params.IndexOfOutputParam("Space");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooSpace(space_Result));
+            }
         }
     }
 }

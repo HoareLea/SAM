@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreToJson : GH_SAMComponent
+    public class SAMCoreToJson : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,28 +39,40 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            string path = null;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            int index = -1;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject;
+                param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_SAMObjects", NickName = "_SAMObjects", Description = "any SAM Objects", Access = GH_ParamAccess.list };
+                param_GenericObject.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "path_", NickName = "path_", Description = "JSON file path including extension .json", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddTextParameter("path_", "path_", "JSON file path including extension .json", GH_ParamAccess.item, path);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run, set to True to export JSON to given path", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("String", "String", "String", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "String", NickName = "String", Description = "String", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -71,25 +83,37 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index_Successful = Params.IndexOfOutputParam("Successful");
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            int index = -1;
+
             bool run = false;
-            if (!dataAccess.GetData(2, ref run))
+            index = Params.IndexOfInputParam("_run");
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
             if (!run)
                 return;
 
             string path = null;
-            dataAccess.GetData(1, ref path);
+            index = Params.IndexOfInputParam("path_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref path);
+            }
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            index = Params.IndexOfInputParam("_SAMObjects");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -115,8 +139,16 @@ namespace SAM.Core.Grasshopper
             if (!string.IsNullOrWhiteSpace(path))
                 System.IO.File.WriteAllText(path, @string);
 
-            dataAccess.SetData(0, @string);
-            dataAccess.SetData(1, true);
+            int index_String = Params.IndexOfOutputParam("String");
+            if (index_String != -1)
+            {
+                dataAccess.SetData(index_String, @string);
+            }
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, true);
+            }
         }
     }
 }

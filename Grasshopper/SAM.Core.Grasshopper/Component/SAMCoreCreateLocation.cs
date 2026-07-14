@@ -4,10 +4,11 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreCreateLocation : GH_SAMComponent
+    public class SAMCoreCreateLocation : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,23 +38,47 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            Location location = Core.Query.DefaultLocation();
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, location.Name);
-            inputParamManager.AddNumberParameter("_elevation", "_elevation", "Elevation", GH_ParamAccess.item, location.Elevation);
-            inputParamManager.AddNumberParameter("_latitude", "_latitude", "Latitude", GH_ParamAccess.item, location.Latitude);
-            inputParamManager.AddNumberParameter("_longitude", "_longitude", "Longitude", GH_ParamAccess.item, location.Longitude);
+                Location location = Core.Query.DefaultLocation();
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData(location.Name);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation", NickName = "_elevation", Description = "Elevation", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(location.Elevation);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_latitude", NickName = "_latitude", Description = "Latitude", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(location.Latitude);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_longitude", NickName = "_longitude", Description = "Longitude", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(location.Longitude);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooLocationParam(), "Location", "Location", "SAM Location", GH_ParamAccess.item);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLocationParam() { Name = "Location", NickName = "Location", Description = "SAM Location", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,35 +89,45 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_name");
             string name = string.Empty;
-            if (!dataAccess.GetData(0, ref name))
+            if (index == -1 || !dataAccess.GetData(index, ref name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_elevation");
             double elevation = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation))
+            if (index == -1 || !dataAccess.GetData(index, ref elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_latitude");
             double latitude = double.NaN;
-            if (!dataAccess.GetData(2, ref latitude))
+            if (index == -1 || !dataAccess.GetData(index, ref latitude))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_longitude");
             double longitude = double.NaN;
-            if (!dataAccess.GetData(3, ref longitude))
+            if (index == -1 || !dataAccess.GetData(index, ref longitude))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooLocation(new Location(name, longitude, latitude, elevation)));
+            index = Params.IndexOfOutputParam("Location");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooLocation(new Location(name, longitude, latitude, elevation)));
+            }
         }
     }
 }

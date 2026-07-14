@@ -15,7 +15,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelSpace : GH_SAMComponent, IGH_PreviewObject
+    public class SAMAnalyticalLabelSpace : GH_SAMVariableOutputParameterComponent, IGH_PreviewObject
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -25,7 +25,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -45,25 +45,40 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name_", "_name_", "Parameter Name", GH_ParamAccess.item, "Name");
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_height_", "_height_", "Text Height", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Parameter Name", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData("Name");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_height_", NickName = "_height_", Description = "Text Height", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("Text", "Text", "Text", GH_ParamAccess.item);
-            outputParamManager.AddPointParameter("Location", "Location", "Location", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Size", "Size", "Size", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Text", NickName = "Text", Description = "Text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "Location", NickName = "Location", Description = "Location", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Size", NickName = "Size", Description = "Size", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -74,22 +89,28 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             ISpace space = null;
-            if (!dataAccess.GetData(0, ref space))
+            index = Params.IndexOfInputParam("_space");
+            if (index == -1 || !dataAccess.GetData(index, ref space))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string parameterName = null;
-            dataAccess.GetData(1, ref parameterName);
+            index = Params.IndexOfInputParam("_name_");
+            if (index != -1)
+                dataAccess.GetData(index, ref parameterName);
             if (string.IsNullOrEmpty(parameterName))
             {
                 parameterName = "Name";
             }
 
             double height = double.NaN;
-            if (!dataAccess.GetData(2, ref height) || height == 0)
+            index = Params.IndexOfInputParam("_height_");
+            if (index == -1 || !dataAccess.GetData(index, ref height) || height == 0)
             {
                 height = double.NaN;
             }
@@ -101,9 +122,15 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, text3D.Text);
-            dataAccess.SetData(1, text3D.TextPlane.Origin);
-            dataAccess.SetData(2, text3D.Height);
+            index = Params.IndexOfOutputParam("Text");
+            if (index != -1)
+                dataAccess.SetData(index, text3D.Text);
+            index = Params.IndexOfOutputParam("Location");
+            if (index != -1)
+                dataAccess.SetData(index, text3D.TextPlane.Origin);
+            index = Params.IndexOfOutputParam("Size");
+            if (index != -1)
+                dataAccess.SetData(index, text3D.Height);
         }
 
         public override BoundingBox ClippingBox
@@ -131,19 +158,26 @@ namespace SAM.Analytical.Grasshopper
 
         private List<Text3d> GetText3ds()
         {
+            int index;
+
             string parameterName = null;
-            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
-            if (goo != null)
-                parameterName = (goo as dynamic).Value;
+            index = Params.IndexOfInputParam("_name_");
+            if (index != -1)
+            {
+                global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[index].VolatileData.AllData(true)?.First();
+                if (goo != null)
+                    parameterName = (goo as dynamic).Value;
+            }
 
             double height = double.NaN;
 
-            if (Params.Input.Count > 2)
+            index = Params.IndexOfInputParam("_height_");
+            if (index != -1)
             {
-                IGH_StructureEnumerator structureEnumerator = Params.Input[2].VolatileData.AllData(true);
+                IGH_StructureEnumerator structureEnumerator = Params.Input[index].VolatileData.AllData(true);
                 if (structureEnumerator != null && structureEnumerator.Count() > 0)
                 {
-                    goo = structureEnumerator.First();
+                    global::Grasshopper.Kernel.Types.IGH_Goo goo = structureEnumerator.First();
                     if (goo != null)
                     {
                         height = (goo as dynamic).Value;
@@ -153,18 +187,22 @@ namespace SAM.Analytical.Grasshopper
 
             List<Text3d> result = [];
 
-            foreach (GooSpace gooSpace in Params.Input[0].VolatileData.AllData(true))
+            index = Params.IndexOfInputParam("_space");
+            if (index != -1)
             {
-                ISpace space = gooSpace.Value;
-                if (space == null)
+                foreach (GooSpace gooSpace in Params.Input[index].VolatileData.AllData(true))
                 {
-                    continue;
-                }
+                    ISpace space = gooSpace.Value;
+                    if (space == null)
+                    {
+                        continue;
+                    }
 
-                Text3d text3d = GetText3d(space, parameterName, height);
-                if (text3d is not null)
-                {
-                    result.Add(text3d);
+                    Text3d text3d = GetText3d(space, parameterName, height);
+                    if (text3d is not null)
+                    {
+                        result.Add(text3d);
+                    }
                 }
             }
 

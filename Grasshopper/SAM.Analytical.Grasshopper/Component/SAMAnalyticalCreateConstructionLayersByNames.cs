@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateConstructionLayersByNames : GH_SAMComponent
+    public class SAMAnalyticalCreateConstructionLayersByNames : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,25 +41,33 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddTextParameter("_names", "_names", "Contruction Layer Name", GH_ParamAccess.list);
-            index = inputParamManager.AddNumberParameter("_thicknesses_", "_thicknesses_", "Contruction Layer Thicknesses [m]", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_names", NickName = "_names", Description = "Contruction Layer Name", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            GooMaterialLibraryParam gooMaterialLibraryParam = new GooMaterialLibraryParam();
-            gooMaterialLibraryParam.Optional = true;
-            inputParamManager.AddParameter(gooMaterialLibraryParam, "_materialLibrary_", "_materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_thicknesses_", NickName = "_thicknesses_", Description = "Contruction Layer Thicknesses [m]", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "_materialLibrary_", NickName = "_materialLibrary_", Description = "SAM Material Library", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionLayerParam(), "ConstructionLayers", "ConstructionLayers", "SAM Analytical Construction Layers", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionLayerParam() { Name = "ConstructionLayers", NickName = "ConstructionLayers", Description = "SAM Analytical Construction Layers", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -70,20 +78,31 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<string> names = new List<string>();
-            if (!dataAccess.GetDataList(0, names))
+            index = Params.IndexOfInputParam("_names");
+            if (index == -1 || !dataAccess.GetDataList(index, names))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<double> thicknesses = new List<double>();
-            dataAccess.GetDataList(1, thicknesses);
+            index = Params.IndexOfInputParam("_thicknesses_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, thicknesses);
+            }
 
             if (names.Count != thicknesses.Count)
             {
                 MaterialLibrary materialLibrary = null;
-                dataAccess.GetData(2, ref materialLibrary);
+                index = Params.IndexOfInputParam("_materialLibrary_");
+                if (index != -1)
+                {
+                    dataAccess.GetData(index, ref materialLibrary);
+                }
 
                 if (materialLibrary == null)
                     materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
@@ -128,7 +147,11 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
+            index = Params.IndexOfOutputParam("ConstructionLayers");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, constructionLayers?.ConvertAll(x => new GooConstructionLayer(x)));
+            }
         }
     }
 }

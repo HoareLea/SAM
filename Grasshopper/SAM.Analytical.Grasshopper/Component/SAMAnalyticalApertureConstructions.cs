@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalApertureConstructions : GH_SAMComponent
+    public class SAMAnalyticalApertureConstructions : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,26 +41,34 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_SAMAnalytical", "_SAMAnalytical", "SAM Analytical Object ie.Panel, AdjacencyCluster", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_SAMAnalytical", NickName = "_SAMAnalytical", Description = "SAM Analytical Object ie.Panel, AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "panelType_", NickName = "panelType_", Description = "PanelType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("apertureType_", "apertureType_", "ApertureType", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "apertureType_", NickName = "apertureType_", Description = "ApertureType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooApertureConstructionParam(), "ApertureConstructions", "ApertureConstructions", "SAM Analytical Aperture Constructions", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "ApertureConstructions", NickName = "ApertureConstructions", Description = "SAM Analytical Aperture Constructions", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -71,10 +79,17 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(1, false);
+            int index = -1;
 
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, false);
+            }
+
+            index = Params.IndexOfInputParam("_SAMAnalytical");
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -102,7 +117,11 @@ namespace SAM.Analytical.Grasshopper
             GH_ObjectWrapper objectWrapper; ;
 
             objectWrapper = null;
-            dataAccess.GetData(1, ref objectWrapper);
+            index = Params.IndexOfInputParam("panelType_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref objectWrapper);
+            }
 
             PanelType panelType = PanelType.Undefined;
 
@@ -115,7 +134,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             objectWrapper = null;
-            dataAccess.GetData(2, ref objectWrapper);
+            index = Params.IndexOfInputParam("apertureType_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref objectWrapper);
+            }
 
             ApertureType apertureType = ApertureType.Undefined;
 
@@ -130,8 +153,17 @@ namespace SAM.Analytical.Grasshopper
 
             List<ApertureConstruction> apertureConstructions = Analytical.Query.ApertureConstructions(panels, apertureType, panelType);
 
-            dataAccess.SetDataList(0, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
-            dataAccess.SetData(1, apertureConstructions != null);
+            index = Params.IndexOfOutputParam("ApertureConstructions");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, apertureConstructions?.ConvertAll(x => new GooApertureConstruction(x)));
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, apertureConstructions != null);
+            }
         }
     }
 }

@@ -3,12 +3,14 @@
 
 using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCopyApertureConstructionLayers : GH_SAMComponent
+    public class SAMAnalyticalCopyApertureConstructionLayers : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,25 +40,40 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooApertureConstructionParam(), "apertureConstructionSource", "apertureConstructionSource", "Source SAM Analytical ApertureConstruction", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooApertureConstructionParam(), "apertureConstructionDestination", "apertureConstructionDestination", "Destination SAM Analytical ApertureConstruction", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            int index = -1;
-            index = inputParamManager.AddBooleanParameter("_frame_", "_frame_", "Copy Frame ConstructionLayers", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "apertureConstructionSource", NickName = "apertureConstructionSource", Description = "Source SAM Analytical ApertureConstruction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddBooleanParameter("_pane_", "_pane_", "Copy Pane ConstructionLayers", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "apertureConstructionDestination", NickName = "apertureConstructionDestination", Description = "Destination SAM Analytical ApertureConstruction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_frame_", NickName = "_frame_", Description = "Copy Frame ConstructionLayers", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_pane_", NickName = "_pane_", Description = "Copy Pane ConstructionLayers", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooApertureConstructionParam(), "apertureConstruction", "apertureConstruction", "SAM Analytical Construction", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooApertureConstructionParam() { Name = "apertureConstruction", NickName = "apertureConstruction", Description = "SAM Analytical Construction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,27 +84,39 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             ApertureConstruction apertureConstruction_Source = null;
-            if (!dataAccess.GetData(0, ref apertureConstruction_Source))
+            index = Params.IndexOfInputParam("apertureConstructionSource");
+            if (index == -1 || !dataAccess.GetData(index, ref apertureConstruction_Source))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
             ApertureConstruction apertureConstruction_Destination = null;
-            if (!dataAccess.GetData(1, ref apertureConstruction_Destination))
+            index = Params.IndexOfInputParam("apertureConstructionDestination");
+            if (index == -1 || !dataAccess.GetData(index, ref apertureConstruction_Destination))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
             bool frame = true;
-            if (!dataAccess.GetData(2, ref frame))
-                frame = true;
+            index = Params.IndexOfInputParam("_frame_");
+            if (index != -1)
+            {
+                if (!dataAccess.GetData(index, ref frame))
+                    frame = true;
+            }
 
             bool pane = true;
-            if (!dataAccess.GetData(3, ref pane))
-                pane = true;
+            index = Params.IndexOfInputParam("_pane_");
+            if (index != -1)
+            {
+                if (!dataAccess.GetData(index, ref pane))
+                    pane = true;
+            }
 
             ApertureConstruction result = new ApertureConstruction(apertureConstruction_Destination);
 
@@ -97,7 +126,11 @@ namespace SAM.Analytical.Grasshopper
             if (pane)
                 result = new ApertureConstruction(result, apertureConstruction_Source.PaneConstructionLayers, result.FrameConstructionLayers);
 
-            dataAccess.SetData(0, new GooApertureConstruction(result));
+            index = Params.IndexOfOutputParam("apertureConstruction");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooApertureConstruction(result));
+            }
         }
     }
 }

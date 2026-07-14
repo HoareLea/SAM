@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByGeometryAndApertureType : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByGeometryAndApertureType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.4";
+        public override string LatestComponentVersion => "1.0.5";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,37 +42,54 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_geometries_", "_geometries_", "Geometry incl Rhino geometry \nwhen using Polyline frame come from layer thickenss so default 0.05m if surface connected from two closed curves, thickness is frame hole will be pane", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometries_", NickName = "_geometries_", Description = "Geometry incl Rhino geometry \nwhen using Polyline frame come from layer thickenss so default 0.05m if surface connected from two closed curves, thickness is frame hole will be pane", Access = GH_ParamAccess.list, Optional = true, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddTextParameter("_apertureType_", "_apertureType_", "SAM Analytical ApertureType", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_apertureType_", NickName = "_apertureType_", Description = "SAM Analytical ApertureType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            inputParamManager.AddNumberParameter("maxDistance_", "maxDistance_", "Maximal Distance", GH_ParamAccess.item, 0.1);
-            inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "Trim Aperture Geometry", GH_ParamAccess.item, true);
-            inputParamManager.AddNumberParameter("minArea_", "minArea_", "Minimal Acceptable area of Aperture", GH_ParamAccess.item, Tolerance.MacroDistance);
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
 
-            index = inputParamManager.AddNumberParameter("frameWidth_", "frameWidth_", "Frame Width [m] \n*Min value is sum of frame layer thicknesses Default 0.05m so unable to dopt below this value unless. \nIf you want zero remove frame layer in aperture construction ", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "maxDistance_", NickName = "maxDistance_", Description = "Maximal Distance", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0.1);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("framePercentage_", "framePercentage_", "Frame Percentage [0 - 100] \nsee frameWidth_ description \nuse only one input frameWidth_ or framePercentage_ ", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "trimGeometry_", NickName = "trimGeometry_", Description = "Trim Aperture Geometry", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minArea_", NickName = "minArea_", Description = "Minimal Acceptable area of Aperture", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(Tolerance.MacroDistance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "frameWidth_", NickName = "frameWidth_", Description = "Frame Width [m] \n*Min value is sum of frame layer thicknesses Default 0.05m so unable to dopt below this value unless. \nIf you want zero remove frame layer in aperture construction ", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "framePercentage_", NickName = "framePercentage_", Description = "Frame Percentage [0 - 100] \nsee frameWidth_ description \nuse only one input frameWidth_ or framePercentage_ ", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "Apertures", NickName = "Apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -83,8 +100,14 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_geometries_");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            dataAccess.GetDataList(0, objectWrappers);
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, objectWrappers);
+            }
 
             List<Face3D> face3Ds = new List<Face3D>();
 
@@ -96,10 +119,9 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            //List<IClosedPlanar3D> closedPlanar3Ds = Geometry.Spatial.Query.ClosedPlanar3Ds(geometry3Ds);
-
             bool trimGeometry = true;
-            if (!dataAccess.GetData(4, ref trimGeometry))
+            index = Params.IndexOfInputParam("trimGeometry_");
+            if (index == -1 || !dataAccess.GetData(index, ref trimGeometry))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -108,7 +130,12 @@ namespace SAM.Analytical.Grasshopper
             ApertureType apertureType = ApertureType.Window;
 
             string apertureTypeString = null;
-            dataAccess.GetData(2, ref apertureTypeString);
+            index = Params.IndexOfInputParam("_apertureType_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref apertureTypeString);
+            }
+
             if (!string.IsNullOrWhiteSpace(apertureTypeString))
             {
                 if (!Enum.TryParse(apertureTypeString, out apertureType))
@@ -116,28 +143,39 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double maxDistance = Tolerance.MacroDistance;
-            dataAccess.GetData(3, ref maxDistance);
+            index = Params.IndexOfInputParam("maxDistance_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref maxDistance);
+            }
 
             double minArea = Tolerance.MacroDistance;
-            dataAccess.GetData(5, ref minArea);
+            index = Params.IndexOfInputParam("minArea_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref minArea);
+            }
 
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(1, ref sAMObject))
+            index = Params.IndexOfInputParam("_analyticalObject");
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<double> frameWidths = new List<double>();
-            if (dataAccess.GetDataList(6, frameWidths))
+            index = Params.IndexOfInputParam("frameWidth_");
+            if (index != -1)
             {
-
+                dataAccess.GetDataList(index, frameWidths);
             }
 
             List<double> framePercentages = new List<double>();
-            if (dataAccess.GetDataList(7, framePercentages))
+            index = Params.IndexOfInputParam("framePercentage_");
+            if (index != -1)
             {
-
+                dataAccess.GetDataList(index, framePercentages);
             }
 
             if (framePercentages != null && framePercentages.Count > 0 && frameWidths != null && frameWidths.Count > 0)
@@ -170,8 +208,18 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                dataAccess.SetData(0, panel);
-                dataAccess.SetDataList(1, apertures.ConvertAll(x => new GooAperture(x)));
+                index = Params.IndexOfOutputParam("AnalyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, panel);
+                }
+
+                index = Params.IndexOfOutputParam("Apertures");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, apertures.ConvertAll(x => new GooAperture(x)));
+                }
+
                 return;
             }
 
@@ -243,17 +291,25 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            if (analyticalModel != null)
+            index = Params.IndexOfOutputParam("AnalyticalObject");
+            if (index != -1)
             {
-                AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                dataAccess.SetData(0, analyticalModel_Result);
-            }
-            else
-            {
-                dataAccess.SetData(0, adjacencyCluster);
+                if (analyticalModel != null)
+                {
+                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    dataAccess.SetData(index, analyticalModel_Result);
+                }
+                else
+                {
+                    dataAccess.SetData(index, adjacencyCluster);
+                }
             }
 
-            dataAccess.SetDataList(1, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
+            index = Params.IndexOfOutputParam("Apertures");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, tuples_Result?.ConvertAll(x => new GooAperture(x.Item2)));
+            }
         }
     }
 }

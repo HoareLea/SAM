@@ -10,7 +10,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetDefaultConstructions : GH_SAMComponent
+    public class SAMAnalyticalGetDefaultConstructions : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,18 +40,31 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = inputParamManager.AddTextParameter("_panelTypes_", "_panelTypes_", "SAM PanelTypes", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_panelTypes_", NickName = "_panelTypes_", Description = "SAM PanelTypes", Access = GH_ParamAccess.list, Optional = true };
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionParam(), "Constructions", "Construction", "SAM Geometry Spaces", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "Constructions", NickName = "Construction", Description = "SAM Geometry Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,8 +75,14 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<string> panelTypeStrings = new List<string>();
-            dataAccess.GetDataList(0, panelTypeStrings);
+            index = Params.IndexOfInputParam("_panelTypes_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, panelTypeStrings);
+            }
 
             List<PanelType> panelTypes = null;
             if (panelTypeStrings != null && panelTypeStrings.Count > 0)
@@ -90,7 +109,11 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetDataList(0, panelTypes.ConvertAll(x => new GooConstruction(Analytical.Query.DefaultConstruction(x))));
+            index = Params.IndexOfOutputParam("Constructions");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, panelTypes.ConvertAll(x => new GooConstruction(Analytical.Query.DefaultConstruction(x))));
+            }
         }
     }
 }

@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Architectural.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Architectural.Grasshopper
 {
-    public class SAMArchitecturalCreateLevel : GH_SAMComponent
+    public class SAMArchitecturalCreateLevel : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +39,28 @@ namespace SAM.Architectural.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddTextParameter("_name", "name", "Name", GH_ParamAccess.item);
-            inputParamManager.AddNumberParameter("_elevation", "elevation", "Elevation", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "name", Description = "Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_elevation", NickName = "elevation", Description = "Elevation", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooLevelParam(), "Level", "Level", "SAM Architectural Level", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLevelParam() { Name = "Level", NickName = "Level", Description = "SAM Architectural Level", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,21 +71,29 @@ namespace SAM.Architectural.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_name");
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || string.IsNullOrEmpty(name))
+            if (index == -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrEmpty(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_elevation");
             double elevation = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation) || double.IsNaN(elevation))
+            if (index == -1 || !dataAccess.GetData(index, ref elevation) || double.IsNaN(elevation))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooLevel(new Level(name, elevation)));
+            index = Params.IndexOfOutputParam("Level");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooLevel(new Level(name, elevation)));
+            }
         }
     }
 }

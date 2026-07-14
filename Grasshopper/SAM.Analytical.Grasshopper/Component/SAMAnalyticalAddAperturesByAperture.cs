@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAddAperturesByAperture : GH_SAMComponent
+    public class SAMAnalyticalAddAperturesByAperture : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.7";
+        public override string LatestComponentVersion => "1.0.8";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,27 +40,43 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
-            int index = inputParamManager.AddParameter(new GooApertureParam(), "_apertures_", "_apertures_", "SAM Analytical Apertures", GH_ParamAccess.list);
-            inputParamManager[index].Optional = true;
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddNumberParameter("_maxDistance_", "_maxDistance_", "Max Distance", GH_ParamAccess.item, 0.1);
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            inputParamManager.AddBooleanParameter("trimGeometry_", "trimGeometry_", "trimGeometry (bool, default = true)\r\n\r\nDetermines how apertures are handled when their geometry extends beyond the boundaries of panels in the AdjacencyCluster.\r\n\r\ntrue (default)\r\n\r\nIf an aperture overlaps multiple panels, the geometry will be split so that each portion is placed as a separate aperture on the corresponding panels.\r\n\r\nIf an aperture extends beyond a single panel and no other adjacent panel exists, the aperture will be trimmed to fit within that panel.\r\n\r\nfalse\r\n\r\nApertures will be added without splitting or trimming, even if they extend beyond panel boundaries. ", GH_ParamAccess.item, true);
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "_apertures_", NickName = "_apertures_", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list, Optional = true, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_maxDistance_", NickName = "_maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(0.1);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "trimGeometry_", NickName = "trimGeometry_", Description = "trimGeometry (bool, default = true)\r\n\r\nDetermines how apertures are handled when their geometry extends beyond the boundaries of panels in the AdjacencyCluster.\r\n\r\ntrue (default)\r\n\r\nIf an aperture overlaps multiple panels, the geometry will be split so that each portion is placed as a separate aperture on the corresponding panels.\r\n\r\nIf an aperture extends beyond a single panel and no other adjacent panel exists, the aperture will be trimmed to fit within that panel.\r\n\r\nfalse\r\n\r\nApertures will be added without splitting or trimming, even if they extend beyond panel boundaries. ", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "AnalyticalObject", "AnalyticalObject", "SAM Analytical Object", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooApertureParam(), "Apertures", "Apertures", "SAM Analytical Apertures", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "AnalyticalObject", NickName = "AnalyticalObject", Description = "SAM Analytical Object", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooApertureParam() { Name = "Apertures", NickName = "Apertures", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -71,26 +87,45 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(2, false);
+            int index_Successful = Params.IndexOfOutputParam("Successful");
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
 
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_analyticalObject");
             IAnalyticalObject analyticalObject = null;
-            if (!dataAccess.GetData(0, ref analyticalObject))
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<Aperture> apertures = new List<Aperture>();
-            dataAccess.GetDataList(1, apertures);
+            index = Params.IndexOfInputParam("_apertures_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, apertures);
+            }
 
             double maxDistance = 0.1;
-            if (!dataAccess.GetData(2, ref maxDistance) || double.IsNaN(maxDistance))
+            index = Params.IndexOfInputParam("_maxDistance_");
+            if (index != -1)
             {
-                maxDistance = 0.1;
+                if (!dataAccess.GetData(index, ref maxDistance) || double.IsNaN(maxDistance))
+                {
+                    maxDistance = 0.1;
+                }
             }
 
             bool trimApertures = true;
-            dataAccess.GetData(3, ref trimApertures);
+            index = Params.IndexOfInputParam("trimGeometry_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref trimApertures);
+            }
 
             if (analyticalObject is Panel)
             {
@@ -115,9 +150,23 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
 
-                dataAccess.SetData(0, panel);
-                dataAccess.SetDataList(1, apertures_Result?.ConvertAll(x => new GooAperture(x)));
-                dataAccess.SetData(2, apertures_Result != null && apertures_Result.Count != 0);
+                index = Params.IndexOfOutputParam("AnalyticalObject");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, panel);
+                }
+
+                index = Params.IndexOfOutputParam("Apertures");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, apertures_Result?.ConvertAll(x => new GooAperture(x)));
+                }
+
+                if (index_Successful != -1)
+                {
+                    dataAccess.SetData(index_Successful, apertures_Result != null && apertures_Result.Count != 0);
+                }
+
                 return;
             }
 
@@ -141,18 +190,30 @@ namespace SAM.Analytical.Grasshopper
 
             List<Aperture> apertures_Result_Cluster = Analytical.Modify.AddAperturesByApertures(adjacencyCluster, apertures, trimApertures, Tolerance.MacroDistance, maxDistance);
 
-            if (analyticalModel != null)
+            index = Params.IndexOfOutputParam("AnalyticalObject");
+            if (index != -1)
             {
-                AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
-                dataAccess.SetData(0, analyticalModel_Result);
-            }
-            else
-            {
-                dataAccess.SetData(0, adjacencyCluster);
+                if (analyticalModel != null)
+                {
+                    AnalyticalModel analyticalModel_Result = new AnalyticalModel(analyticalModel, adjacencyCluster);
+                    dataAccess.SetData(index, analyticalModel_Result);
+                }
+                else
+                {
+                    dataAccess.SetData(index, adjacencyCluster);
+                }
             }
 
-            dataAccess.SetDataList(1, apertures_Result_Cluster?.ConvertAll(x => new GooAperture(x)));
-            dataAccess.SetData(2, apertures_Result_Cluster != null && apertures_Result_Cluster.Count != 0);
+            index = Params.IndexOfOutputParam("Apertures");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, apertures_Result_Cluster?.ConvertAll(x => new GooAperture(x)));
+            }
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, apertures_Result_Cluster != null && apertures_Result_Cluster.Count != 0);
+            }
         }
     }
 }

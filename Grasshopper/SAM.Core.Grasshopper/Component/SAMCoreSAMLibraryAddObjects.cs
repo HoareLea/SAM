@@ -8,7 +8,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreSAMLibraryAddObjects : GH_SAMComponent
+    public class SAMCoreSAMLibraryAddObjects : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +38,31 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<ISAMLibrary>(), "_sAMLibrary", "_sAMLibrary", "SAM Core Library", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<ISAMLibrary>() { Name = "_sAMLibrary", NickName = "_sAMLibrary", Description = "SAM Core Library", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_objects", NickName = "_objects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<ISAMLibrary>(), "SAMLibrary", "SAMLibrary", "SAM Core Library", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<ISAMLibrary>() { Name = "SAMLibrary", NickName = "SAMLibrary", Description = "SAM Core Library", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,16 +73,19 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            ISAMLibrary sAMLibrary = null;
+            int index = -1;
 
-            if (!dataAccess.GetData(0, ref sAMLibrary))
+            ISAMLibrary sAMLibrary = null;
+            index = Params.IndexOfInputParam("_sAMLibrary");
+            if (index == -1 || !dataAccess.GetData(index, ref sAMLibrary))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects))
+            index = Params.IndexOfInputParam("_objects");
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -84,7 +100,11 @@ namespace SAM.Core.Grasshopper
 
 
 
-            dataAccess.SetData(0, sAMLibrary_Result);
+            index = Params.IndexOfOutputParam("SAMLibrary");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, sAMLibrary_Result);
+            }
         }
     }
 }

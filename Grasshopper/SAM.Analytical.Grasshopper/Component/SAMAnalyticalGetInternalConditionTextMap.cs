@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetInternalConditionTextMap : GH_SAMComponent
+    public class SAMAnalyticalGetInternalConditionTextMap : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,17 +39,27 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooTextMapParam(), "TextMap", "TextMap", "SAM Core TextMap", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooTextMapParam() { Name = "TextMap", NickName = "TextMap", Description = "SAM Core TextMap", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -59,7 +70,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, new GooTextMap(ActiveSetting.Setting.GetValue<Core.TextMap>(AnalyticalSettingParameter.InternalConditionTextMap)));
+            int index = Params.IndexOfOutputParam("TextMap");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooTextMap(ActiveSetting.Setting.GetValue<Core.TextMap>(AnalyticalSettingParameter.InternalConditionTextMap)));
+            }
         }
     }
 }

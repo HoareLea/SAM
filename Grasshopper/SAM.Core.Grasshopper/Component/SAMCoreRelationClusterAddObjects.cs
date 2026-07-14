@@ -9,7 +9,7 @@ using System.Collections.Generic;
 namespace SAM.Core.Grasshopper
 {
     [Obsolete("Obsolete since 2021-10-15")]
-    public class SAMCoreRelationClusterAddObjects : GH_SAMComponent
+    public class SAMCoreRelationClusterAddObjects : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary | GH_Exposure.hidden;
 
@@ -41,18 +41,28 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooRelationClusterParam(), "_relationCluster", "_relationCluster", "SAM RelationCluster", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_objects", "_objects", "SAM Objects", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooRelationClusterParam() { Name = "_relationCluster", NickName = "_relationCluster", Description = "SAM RelationCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_objects", NickName = "_objects", Description = "SAM Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooRelationClusterParam(), "RelationCluster", "RelationCluster", "SAM RelationCluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooRelationClusterParam() { Name = "RelationCluster", NickName = "RelationCluster", Description = "SAM RelationCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -65,14 +75,16 @@ namespace SAM.Core.Grasshopper
         {
             IRelationCluster relationCluster = null;
 
-            if (!dataAccess.GetData(0, ref relationCluster))
+            int index = Params.IndexOfInputParam("_relationCluster");
+            if (index == -1 || !dataAccess.GetData(index, ref relationCluster))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_objects");
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(1, sAMObjects))
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -85,8 +97,11 @@ namespace SAM.Core.Grasshopper
                 (relationCluster_Result as dynamic).AddObject(sAMObject);
             }
 
-
-            dataAccess.SetData(0, relationCluster_Result);
+            index = Params.IndexOfOutputParam("RelationCluster");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, relationCluster_Result);
+            }
         }
     }
 }

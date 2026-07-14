@@ -4,10 +4,11 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMVersion : GH_SAMComponent
+    public class SAMVersion : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "2.0.0";
+        public override string LatestComponentVersion => "2.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,18 +38,27 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
+            get
+            {
+                return new GH_SAMParam[0];
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("CurrentVersion", "CurrentVersion", "Current Version", GH_ParamAccess.item);
-            outputParamManager.AddTextParameter("LatestVersion", "LatesttVersion", "The Latest Version", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("IsUpdateAvaliable", "IsUpdateAvaliable", "Is new version avaliable?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "CurrentVersion", NickName = "CurrentVersion", Description = "Current Version", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "LatestVersion", NickName = "LatesttVersion", Description = "The Latest Version", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "IsUpdateAvaliable", NickName = "IsUpdateAvaliable", Description = "Is new version avaliable?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -59,23 +69,37 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, string.Empty);
-            dataAccess.SetData(1, string.Empty);
-            dataAccess.SetData(2, false);
+            int index;
+
+            index = Params.IndexOfOutputParam("CurrentVersion");
+            if (index != -1)
+                dataAccess.SetData(index, string.Empty);
+            index = Params.IndexOfOutputParam("LatestVersion");
+            if (index != -1)
+                dataAccess.SetData(index, string.Empty);
+            index = Params.IndexOfOutputParam("IsUpdateAvaliable");
+            if (index != -1)
+                dataAccess.SetData(index, false);
 
             string currentVersion = Core.Query.CurrentVersion();
             if (string.IsNullOrWhiteSpace(currentVersion))
                 return;
 
-            dataAccess.SetData(0, currentVersion);
+            index = Params.IndexOfOutputParam("CurrentVersion");
+            if (index != -1)
+                dataAccess.SetData(index, currentVersion);
 
             string latestVersion = Core.Query.LatestVersion();
             if (string.IsNullOrWhiteSpace(latestVersion))
                 return;
 
-            dataAccess.SetData(1, latestVersion);
+            index = Params.IndexOfOutputParam("LatestVersion");
+            if (index != -1)
+                dataAccess.SetData(index, latestVersion);
 
-            dataAccess.SetData(2, !currentVersion.Equals(latestVersion));
+            index = Params.IndexOfOutputParam("IsUpdateAvaliable");
+            if (index != -1)
+                dataAccess.SetData(index, !currentVersion.Equals(latestVersion));
         }
     }
 }

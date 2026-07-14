@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalFilterByMaxRectangle3D : GH_SAMComponent
+    public class SAMAnalyticalFilterByMaxRectangle3D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,24 +39,39 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddParameter(new GooPanelParam(), "_panels", "_panels", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panels", NickName = "_panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_panelMinDimension", "_panelMinDimension", "Minimal dimesion for Panel Rectangle3D", GH_ParamAccess.item, 0);
-            index = inputParamManager.AddNumberParameter("_apertureMinDimension", "_apertureMinDimension", "Minimal dimesion for Aperture Rectangle3D", GH_ParamAccess.item, 0);
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_panelMinDimension", NickName = "_panelMinDimension", Description = "Minimal dimesion for Panel Rectangle3D", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0.0);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_apertureMinDimension", NickName = "_apertureMinDimension", Description = "Minimal dimesion for Aperture Rectangle3D", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0.0);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "in", "in", "SAM Analytical Panels", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("out", "out", "out", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "in", NickName = "in", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "out", NickName = "out", Description = "out", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,22 +82,27 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_panels");
             List<Panel> panels = new List<Panel>();
-            if (!dataAccess.GetDataList(0, panels))
+            if (index == -1 || !dataAccess.GetDataList(index, panels))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_panelMinDimension");
             double panelMinDimension = 0;
-            if (!dataAccess.GetData(1, ref panelMinDimension))
+            if (index == -1 || !dataAccess.GetData(index, ref panelMinDimension))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_apertureMinDimension");
             double apertureMinDimension = 0;
-            if (!dataAccess.GetData(2, ref apertureMinDimension))
+            if (index == -1 || !dataAccess.GetData(index, ref apertureMinDimension))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -125,8 +145,18 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
             }
-            dataAccess.SetDataList(0, panels_In?.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(1, objects_Out);
+
+            index = Params.IndexOfOutputParam("in");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, panels_In?.ConvertAll(x => new GooPanel(x)));
+            }
+
+            index = Params.IndexOfOutputParam("out");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, objects_Out);
+            }
         }
     }
 }

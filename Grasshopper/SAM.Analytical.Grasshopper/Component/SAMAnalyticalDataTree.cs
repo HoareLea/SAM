@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalDataTree : GH_SAMComponent
+    public class SAMAnalyticalDataTree : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,19 +41,28 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analyticalObject", "_analyticalObject", "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", GH_ParamAccess.item);
-
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analyticalObject", NickName = "_analyticalObject", Description = "SAM Analytical Object such as AdjacencyCluster, Panel or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("tree", "tree", "SAM Analytical Apertures", GH_ParamAccess.tree);
-            outputParamManager.AddParameter(new GooSpaceParam(), "spaces", "spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "tree", NickName = "tree", Description = "SAM Analytical Apertures", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "spaces", NickName = "spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,8 +73,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_analyticalObject");
             IAnalyticalObject analyticalObject = null;
-            if (!dataAccess.GetData(0, ref analyticalObject))
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,8 +126,17 @@ namespace SAM.Analytical.Grasshopper
                 }
             }
 
-            dataAccess.SetDataTree(0, dataTree);
-            dataAccess.SetDataList(1, spaces?.ConvertAll(x => new GooSpace(x)));
+            index = Params.IndexOfOutputParam("tree");
+            if (index != -1)
+            {
+                dataAccess.SetDataTree(index, dataTree);
+            }
+
+            index = Params.IndexOfOutputParam("spaces");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, spaces?.ConvertAll(x => new GooSpace(x)));
+            }
         }
     }
 }

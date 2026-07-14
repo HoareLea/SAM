@@ -14,7 +14,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreatePanelByBottomAndHeight : GH_SAMComponent
+    public class SAMAnalyticalCreatePanelByBottomAndHeight : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -44,35 +44,37 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_bottom", "_bottom", "Bottom Edge Geometry", GH_ParamAccess.item);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_bottom", NickName = "_bottom", Description = "Bottom Edge Geometry", Access = GH_ParamAccess.item, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("panelType_", "panelType_", "PanelType", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "panelType_", NickName = "panelType_", Description = "PanelType", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooConstructionParam(), "construction_", "construction_", "SAM Analytical Construction", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction_", NickName = "construction_", Description = "SAM Analytical Construction", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            inputParamManager.AddGenericParameter(
-                "_height",
-                "_height",
-                "Panel height. Accepts a single numeric value (e.g. 2.0) or a domain (e.g. 2 to 4) defining the vertical range used to generate the panel.",
-                GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_height", NickName = "_height", Description = "Panel height. Accepts a single numeric value (e.g. 2.0) or a domain (e.g. 2 to 4) defining the vertical range used to generate the panel.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_minElevation", "_minElevation", "Min Elevation", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_minElevation", NickName = "_minElevation", Description = "Min Elevation", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooPanelParam(), "Panels", "Panels", "SAM Analytical Panels", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Panels", NickName = "Panels", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -83,8 +85,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_bottom");
             GH_ObjectWrapper @objectWrapper = null;
-            if (!dataAccess.GetData(0, ref @objectWrapper))
+            if (index == -1 || !dataAccess.GetData(index, ref @objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -111,8 +116,9 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("_height");
             GH_ObjectWrapper gH_ObjectWrapper = null;
-            if (!dataAccess.GetData(3, ref gH_ObjectWrapper))
+            if (index == -1 || !dataAccess.GetData(index, ref gH_ObjectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -140,9 +146,9 @@ namespace SAM.Analytical.Grasshopper
             }
             else if (@object is string text)
             {
-                if (text.ToUpper().IndexOf("TO") is int index && index > 0)
+                if (text.ToUpper().IndexOf("TO") is int index_To && index_To > 0)
                 {
-                    if (!Core.Query.TryConvert(text.Substring(0, index).Trim(), out double min) || !Core.Query.TryConvert(text.Substring(index + 2).Trim(), out double max))
+                    if (!Core.Query.TryConvert(text.Substring(0, index_To).Trim(), out double min) || !Core.Query.TryConvert(text.Substring(index_To + 2).Trim(), out double max))
                     {
                         AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                         return;
@@ -173,7 +179,11 @@ namespace SAM.Analytical.Grasshopper
             PanelType panelType = PanelType.Undefined;
 
             objectWrapper = null;
-            dataAccess.GetData(1, ref objectWrapper);
+            index = Params.IndexOfInputParam("panelType_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref objectWrapper);
+            }
             if (objectWrapper != null)
             {
                 if (objectWrapper.Value is GH_String)
@@ -183,11 +193,16 @@ namespace SAM.Analytical.Grasshopper
             }
 
             Construction construction = null;
-            dataAccess.GetData(2, ref construction);
+            index = Params.IndexOfInputParam("construction_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref construction);
+            }
 
             double minElevation = double.NaN;
 
-            if (dataAccess.GetData(4, ref minElevation))
+            index = Params.IndexOfInputParam("_minElevation");
+            if (index != -1 && dataAccess.GetData(index, ref minElevation))
             {
                 for (int i = 0; i < segmentable3Ds.Count; i++)
                 {
@@ -199,7 +214,11 @@ namespace SAM.Analytical.Grasshopper
 
             List<Panel> panels = Create.Panels(segmentable3Ds, height, panelType, construction);
 
-            dataAccess.SetDataList(0, panels?.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("Panels");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, panels?.ConvertAll(x => new GooPanel(x)));
+            }
         }
     }
 }

@@ -6,10 +6,11 @@ using Rhino.Geometry;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryMeshClose : GH_SAMComponent
+    public class GeometryMeshClose : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,19 +40,30 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddMeshParameter("_mesh", "_mesh", "Rhino Mesh", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "_mesh", NickName = "_mesh", Description = "Rhino Mesh", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddMeshParameter("Mesh", "Mesh", "Mesh", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Closed", "Closed", "Closed", GH_ParamAccess.item);
-            //outputParamManager.AddParameter( string, "Normal", "Normal", "Normal", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "Mesh", NickName = "Mesh", Description = "Mesh", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Closed", NickName = "Closed", Description = "Closed", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,8 +74,11 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             Mesh mesh = null;
-            if (!dataAccess.GetData(0, ref mesh))
+            index = Params.IndexOfInputParam("_mesh");
+            if (index == -1 || !dataAccess.GetData(index, ref mesh))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -72,8 +87,17 @@ namespace SAM.Geometry.Grasshopper
             Mesh mesh_Result = null;
             bool result = Query.TryClose(mesh, out mesh_Result);
 
-            dataAccess.SetData(0, mesh_Result);
-            dataAccess.SetData(1, result);
+            index = Params.IndexOfOutputParam("Mesh");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, mesh_Result);
+            }
+
+            index = Params.IndexOfOutputParam("Closed");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, result);
+            }
         }
     }
 }

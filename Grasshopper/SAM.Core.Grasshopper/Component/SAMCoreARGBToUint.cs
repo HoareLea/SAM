@@ -4,10 +4,11 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreARGBToUint : GH_SAMComponent
+    public class SAMCoreARGBToUint : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,20 +38,39 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddIntegerParameter("a_", "a_", "Alpha", GH_ParamAccess.item, 255);
-            inputParamManager.AddIntegerParameter("_r", "_r", "Red", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_g", "_g", "Green", GH_ParamAccess.item);
-            inputParamManager.AddIntegerParameter("_b", "_b", "Blue", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer;
+
+                param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "a_", NickName = "a_", Description = "Alpha", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.SetPersistentData(255);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_r", NickName = "_r", Description = "Red", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_g", NickName = "_g", Description = "Green", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_b", NickName = "_b", Description = "Blue", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddIntegerParameter("Uint", "Uint", "Uint", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "Uint", NickName = "Uint", Description = "Uint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -61,31 +81,35 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("a_");
             int a = 255;
-            if (!dataAccess.GetData(0, ref a))
+            if (index == -1 || !dataAccess.GetData(index, ref a))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_r");
             int r = int.MinValue;
-            if (!dataAccess.GetData(1, ref r))
+            if (index == -1 || !dataAccess.GetData(index, ref r))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-
+            index = Params.IndexOfInputParam("_g");
             int g = int.MinValue;
-            if (!dataAccess.GetData(2, ref g))
+            if (index == -1 || !dataAccess.GetData(index, ref g))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-
+            index = Params.IndexOfInputParam("_b");
             int b = int.MinValue;
-            if (!dataAccess.GetData(3, ref b))
+            if (index == -1 || !dataAccess.GetData(index, ref b))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -97,7 +121,11 @@ namespace SAM.Core.Grasshopper
             else
                 @uint = Core.Convert.ToUint(System.Convert.ToByte(a), System.Convert.ToByte(r), System.Convert.ToByte(g), System.Convert.ToByte(b));
 
-            dataAccess.SetData(0, System.Convert.ToInt32(@uint));
+            index = Params.IndexOfOutputParam("Uint");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, System.Convert.ToInt32(@uint));
+            }
         }
     }
 }

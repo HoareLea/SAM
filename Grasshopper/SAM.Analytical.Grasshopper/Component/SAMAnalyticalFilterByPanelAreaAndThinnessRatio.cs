@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalFilterByPanelAreaAndThinnessRatio : GH_SAMComponent
+    public class SAMAnalyticalFilterByPanelAreaAndThinnessRatio : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,23 +39,40 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_analytical", "_analytical", "SAM Analytical AdjacencyCluster or AnalyticalModel", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            int index = -1;
-            index = inputParamManager.AddNumberParameter("_minArea_", "_minArea_", "Minimal Area", GH_ParamAccess.item, 0.003);
-            index = inputParamManager.AddNumberParameter("_minThinnessRatio_", "_minThinnessRatio_", "Minimal Thinness Ratio", GH_ParamAccess.item, 0.003);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_minArea_", NickName = "_minArea_", Description = "Minimal Area", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0.003);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_minThinnessRatio_", NickName = "_minThinnessRatio_", Description = "Minimal Thinness Ratio", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0.003);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("Analytical", "Analytical", "SAM Analytical AdjacencyCluster or AnalyticalModel", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooPanelParam(), "In", "In", "SAM Analytical Panels left in SAMAnlayticalCluster", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooPanelParam(), "Out", "Out", "SAM Analytical Panels removed from SAMAnlayticalCluster", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "In", NickName = "In", Description = "SAM Analytical Panels left in SAMAnlayticalCluster", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "Out", NickName = "Out", Description = "SAM Analytical Panels removed from SAMAnlayticalCluster", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -66,19 +83,24 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analytical");
             Core.SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject) || sAMObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_minArea_");
             double minArea = 0.003;
-            if (!dataAccess.GetData(1, ref minArea))
+            if (index == -1 || !dataAccess.GetData(index, ref minArea))
                 minArea = 0.003;
 
+            index = Params.IndexOfInputParam("_minThinnessRatio_");
             double minThinnessRatio = 0.003;
-            if (!dataAccess.GetData(2, ref minThinnessRatio))
+            if (index == -1 || !dataAccess.GetData(index, ref minThinnessRatio))
                 minThinnessRatio = 0.003;
 
             AdjacencyCluster adjacencyCluster = null;
@@ -100,9 +122,24 @@ namespace SAM.Analytical.Grasshopper
 
             if (panels == null || panels.Count == 0)
             {
-                dataAccess.SetData(0, sAMObject);
-                dataAccess.SetDataList(1, null);
-                dataAccess.SetDataList(2, null);
+                index = Params.IndexOfOutputParam("Analytical");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, sAMObject);
+                }
+
+                index = Params.IndexOfOutputParam("In");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, null);
+                }
+
+                index = Params.IndexOfOutputParam("Out");
+                if (index != -1)
+                {
+                    dataAccess.SetDataList(index, null);
+                }
+
                 return;
             }
 
@@ -132,21 +169,34 @@ namespace SAM.Analytical.Grasshopper
                 panels_Out.Add(Create.Panel(panel));
             }
 
-            if (sAMObject is AdjacencyCluster)
+            index = Params.IndexOfOutputParam("Analytical");
+            if (index != -1)
             {
-                dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
-            }
-            else if (sAMObject is AnalyticalModel)
-            {
-                dataAccess.SetData(0, new GooAnalyticalModel(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster)));
-            }
-            else
-            {
-                dataAccess.SetData(0, sAMObject);
+                if (sAMObject is AdjacencyCluster)
+                {
+                    dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster));
+                }
+                else if (sAMObject is AnalyticalModel)
+                {
+                    dataAccess.SetData(index, new GooAnalyticalModel(new AnalyticalModel((AnalyticalModel)sAMObject, adjacencyCluster)));
+                }
+                else
+                {
+                    dataAccess.SetData(index, sAMObject);
+                }
             }
 
-            dataAccess.SetDataList(1, panels_In?.ConvertAll(x => new GooPanel(x)));
-            dataAccess.SetDataList(2, panels_Out?.ConvertAll(x => new GooPanel(x)));
+            index = Params.IndexOfOutputParam("In");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, panels_In?.ConvertAll(x => new GooPanel(x)));
+            }
+
+            index = Params.IndexOfOutputParam("Out");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, panels_Out?.ConvertAll(x => new GooPanel(x)));
+            }
         }
     }
 }

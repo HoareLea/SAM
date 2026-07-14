@@ -4,11 +4,12 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
     [Obsolete("Obsolete since 2020-09-24")]
-    public class SAMCoreSaveMaterialLibrary : GH_SAMComponent
+    public class SAMCoreSaveMaterialLibrary : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -40,20 +41,37 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary", "_materialLibrary", "SAM Material Library", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_path", "_path", "Path", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "_materialLibrary", NickName = "_materialLibrary", Description = "SAM Material Library", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_path", NickName = "_path", Description = "Path", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooMaterialLibraryParam(), "MaterialLibrary", "MaterialLibrary", "SAM MaterialLibrary", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "MaterialLibrary", NickName = "MaterialLibrary", Description = "SAM MaterialLibrary", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,10 +82,17 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(1, false);
+            int index_Successful = Params.IndexOfOutputParam("Successful");
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            int index = -1;
 
             bool run = false;
-            if (!dataAccess.GetData(2, ref run))
+            index = Params.IndexOfInputParam("_run");
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,14 +101,16 @@ namespace SAM.Core.Grasshopper
                 return;
 
             MaterialLibrary materialLibrary = null;
-            if (!dataAccess.GetData(0, ref materialLibrary) || materialLibrary == null)
+            index = Params.IndexOfInputParam("_materialLibrary");
+            if (index == -1 || !dataAccess.GetData(index, ref materialLibrary) || materialLibrary == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string path = null;
-            if (!dataAccess.GetData(1, ref path) || string.IsNullOrWhiteSpace(path))
+            index = Params.IndexOfInputParam("_path");
+            if (index == -1 || !dataAccess.GetData(index, ref path) || string.IsNullOrWhiteSpace(path))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -91,8 +118,16 @@ namespace SAM.Core.Grasshopper
 
             bool successful = materialLibrary.Write(path);
 
-            dataAccess.SetData(0, new GooMaterialLibrary(materialLibrary));
-            dataAccess.SetData(1, successful);
+            int index_MaterialLibrary = Params.IndexOfOutputParam("MaterialLibrary");
+            if (index_MaterialLibrary != -1)
+            {
+                dataAccess.SetData(index_MaterialLibrary, new GooMaterialLibrary(materialLibrary));
+            }
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, successful);
+            }
         }
     }
 }

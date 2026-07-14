@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalAirflow : GH_SAMComponent
+    public class SAMAnalyticalAirflow : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,26 +40,39 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooSpaceParam(), "_space", "_space", "SAM Analytical Space", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_space", NickName = "_space", Description = "SAM Analytical Space", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddNumberParameter("Supply", "Supply", "Supply Airflow [m3/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Exhaust", "Exhasut", "Exhaust Airflow [m3/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Supply_LpS", "Supply_LpS", "Supply Airflow [l/s]", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Exhaust_LpS", "Exhasut_LpS", "Exhaust Airflow [l/s]", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Supply", NickName = "Supply", Description = "Supply Airflow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Exhaust", NickName = "Exhasut", Description = "Exhaust Airflow [m3/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Supply_LpS", NickName = "Supply_LpS", Description = "Supply Airflow [l/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Exhaust_LpS", NickName = "Exhasut_LpS", Description = "Exhaust Airflow [l/s]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_space");
             Space space = null;
-            if (!dataAccess.GetData(0, ref space) || space == null)
+            if (index == -1 || !dataAccess.GetData(index, ref space) || space == null)
             {
 
             }
@@ -66,10 +80,29 @@ namespace SAM.Analytical.Grasshopper
             double exhaustAirflow = Analytical.Query.CalculatedExhaustAirFlow(space);
             double supplyAirflow = Analytical.Query.CalculatedSupplyAirFlow(space);
 
-            dataAccess.SetData(0, supplyAirflow);
-            dataAccess.SetData(1, exhaustAirflow);
-            dataAccess.SetData(2, supplyAirflow * 1000);
-            dataAccess.SetData(3, exhaustAirflow * 1000);
+            index = Params.IndexOfOutputParam("Supply");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, supplyAirflow);
+            }
+
+            index = Params.IndexOfOutputParam("Exhaust");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, exhaustAirflow);
+            }
+
+            index = Params.IndexOfOutputParam("Supply_LpS");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, supplyAirflow * 1000);
+            }
+
+            index = Params.IndexOfOutputParam("Exhaust_LpS");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, exhaustAirflow * 1000);
+            }
         }
     }
 }

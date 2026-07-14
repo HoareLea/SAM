@@ -6,10 +6,11 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalGetSortedKeys : GH_SAMComponent
+    public class SAMAnalyticalGetSortedKeys : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,21 +40,36 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooTextMapParam(), "_textMap", "_textMap", "SAM Core TextMap", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_text", "_text", "Serached Text", GH_ParamAccess.item);
-            int index = inputParamManager.AddBooleanParameter("_caseSensitive_", "_caseSensitive_", "case Sensitive", GH_ParamAccess.item, false);
-            inputParamManager[index].Optional = true;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
+                result.Add(new GH_SAMParam(new GooTextMapParam() { Name = "_textMap", NickName = "_textMap", Description = "SAM Core TextMap", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_text", NickName = "_text", Description = "Serached Text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_caseSensitive_", NickName = "_caseSensitive_", Description = "case Sensitive", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("Keys", "Keys", "Keys", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Keys", NickName = "Keys", Description = "Keys", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,25 +80,39 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_textMap");
             TextMap textMap = null;
-            if (!dataAccess.GetData(0, ref textMap) || textMap == null)
+            if (index == -1 || !dataAccess.GetData(index, ref textMap) || textMap == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_text");
             string text = null;
-            if (!dataAccess.GetData(1, ref text) || string.IsNullOrEmpty(text))
+            if (index == -1 || !dataAccess.GetData(index, ref text) || string.IsNullOrEmpty(text))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             bool caseSensitive = false;
-            if (!dataAccess.GetData(2, ref caseSensitive))
-                caseSensitive = false;
+            index = Params.IndexOfInputParam("_caseSensitive_");
+            if (index != -1)
+            {
+                if (!dataAccess.GetData(index, ref caseSensitive))
+                {
+                    caseSensitive = false;
+                }
+            }
 
-            dataAccess.SetDataList(0, textMap.GetSortedKeys(text, caseSensitive));
+            index = Params.IndexOfOutputParam("Keys");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, textMap.GetSortedKeys(text, caseSensitive));
+            }
         }
     }
 }

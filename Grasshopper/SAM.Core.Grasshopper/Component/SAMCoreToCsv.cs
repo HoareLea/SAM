@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreToCsv : GH_SAMComponent
+    public class SAMCoreToCsv : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,32 +39,46 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            string path = null;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            int index = -1;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject;
+                param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_SAMObjects", NickName = "_SAMObjects", Description = "any SAM Objects", Access = GH_ParamAccess.list };
+                param_GenericObject.DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("_SAMObjects", "_SAMObjects", "any SAM Objects", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_parameterNames", NickName = "_parameterNames", Description = "Csv file path", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            inputParamManager.AddTextParameter("_parameterNames", "_parameterNames", "Csv file path", GH_ParamAccess.list);
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_includeHeader_", NickName = "_includeHeader_", Description = "Include Header in csv", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
-            index = inputParamManager.AddBooleanParameter("_includeHeader_", "_includeHeader_", "Include Header in csv", GH_ParamAccess.item, true);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "path_", NickName = "path_", Description = "Csv file path", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddTextParameter("path_", "path_", "Csv file path", GH_ParamAccess.item, path);
-            inputParamManager[index].Optional = true;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run, set to True to export JSON to given path", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
 
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run, set to True to export JSON to given path", GH_ParamAccess.item, false);
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("Csv", "Csv", "Csv", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Csv", NickName = "Csv", Description = "Csv", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,41 +89,53 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index_Successful = Params.IndexOfOutputParam("Successful");
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            int index = -1;
+
             bool run = false;
-            if (!dataAccess.GetData(4, ref run))
+            index = Params.IndexOfInputParam("_run");
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
             if (!run)
                 return;
 
             string path = null;
-            dataAccess.GetData(3, ref path);
+            index = Params.IndexOfInputParam("path_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref path);
+            }
 
             bool includeHeader = true;
-            if (!dataAccess.GetData(2, ref includeHeader))
+            index = Params.IndexOfInputParam("_includeHeader_");
+            if (index == -1 || !dataAccess.GetData(index, ref includeHeader))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
             List<string> propertyNames = new List<string>();
-            if (!dataAccess.GetDataList(1, propertyNames))
+            index = Params.IndexOfInputParam("_parameterNames");
+            if (index == -1 || !dataAccess.GetDataList(index, propertyNames))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            index = Params.IndexOfInputParam("_SAMObjects");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
                 return;
             }
 
@@ -132,8 +158,16 @@ namespace SAM.Core.Grasshopper
             if (!string.IsNullOrWhiteSpace(path))
                 System.IO.File.WriteAllText(path, csv);
 
-            dataAccess.SetData(0, csv);
-            dataAccess.SetData(1, true);
+            int index_Csv = Params.IndexOfOutputParam("Csv");
+            if (index_Csv != -1)
+            {
+                dataAccess.SetData(index_Csv, csv);
+            }
+
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, true);
+            }
         }
     }
 }

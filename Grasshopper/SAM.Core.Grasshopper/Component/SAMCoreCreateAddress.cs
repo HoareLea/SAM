@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreCreateAddress : GH_SAMComponent
+    public class SAMCoreCreateAddress : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,23 +39,47 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            Address address = Core.Query.DefaultAddress();
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddTextParameter("_street_", "_street_", "Street", GH_ParamAccess.item, address.Street);
-            inputParamManager.AddTextParameter("_city_", "_city_", "City", GH_ParamAccess.item, address.City);
-            inputParamManager.AddTextParameter("_postalCode_", "_postalCode_", "Postal Code", GH_ParamAccess.item, address.PostalCode);
-            inputParamManager.AddTextParameter("_countryCode_", "_countryCode_", "Country Code", GH_ParamAccess.item, address.CountryCode.ToString());
+                Address address = Core.Query.DefaultAddress();
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_street_", NickName = "_street_", Description = "Street", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData(address.Street);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_city_", NickName = "_city_", Description = "City", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData(address.City);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_postalCode_", NickName = "_postalCode_", Description = "Postal Code", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData(address.PostalCode);
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_countryCode_", NickName = "_countryCode_", Description = "Country Code", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData(address.CountryCode.ToString());
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAddressParam(), "address", "address", "SAM Core Address", GH_ParamAccess.item);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAddressParam() { Name = "address", NickName = "address", Description = "SAM Core Address", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -65,22 +90,27 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_street_");
             string street = string.Empty;
-            if (!dataAccess.GetData(0, ref street))
+            if (index == -1 || !dataAccess.GetData(index, ref street))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_city_");
             string city = string.Empty;
-            if (!dataAccess.GetData(1, ref city))
+            if (index == -1 || !dataAccess.GetData(index, ref city))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_postalCode_");
             string postalCode = string.Empty;
-            if (!dataAccess.GetData(2, ref postalCode))
+            if (index == -1 || !dataAccess.GetData(index, ref postalCode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -88,8 +118,9 @@ namespace SAM.Core.Grasshopper
 
             CountryCode countryCode = CountryCode.Undefined;
 
+            index = Params.IndexOfInputParam("_countryCode_");
             GH_ObjectWrapper objectWrapper = null;
-            dataAccess.GetData(3, ref objectWrapper);
+            dataAccess.GetData(index, ref objectWrapper);
             if (objectWrapper != null)
             {
                 if (objectWrapper.Value is GH_String)
@@ -98,7 +129,11 @@ namespace SAM.Core.Grasshopper
                     countryCode = Core.Query.Enum<CountryCode>(objectWrapper.Value.ToString());
             }
 
-            dataAccess.SetData(0, new GooAddress(new Address(street, city, postalCode, countryCode)));
+            index = Params.IndexOfOutputParam("address");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAddress(new Address(street, city, postalCode, countryCode)));
+            }
         }
     }
 }

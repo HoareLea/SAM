@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreGetValue : GH_SAMComponent
+    public class SAMCoreGetValue : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,14 +20,12 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Get3;
-
-        private GH_OutputParamManager outputParamManager;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -42,21 +40,34 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_object", "_object", "SAM Object", GH_ParamAccess.item);
-            int index = inputParamManager.AddTextParameter("_name_", "_name_", "Name", GH_ParamAccess.item, "Name");
-            inputParamManager[index].DataMapping = GH_DataMapping.Graft;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_object", NickName = "_object", Description = "SAM Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Name", Access = GH_ParamAccess.item, DataMapping = GH_DataMapping.Graft };
+                param_String.SetPersistentData("Name");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            this.outputParamManager = outputParamManager;
-            outputParamManager.AddGenericParameter("Value", "Value", "Property Value", GH_ParamAccess.item);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Value", NickName = "Value", Description = "Property Value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,17 +78,23 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_name_");
             string name = null;
-            if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
+            if (index == -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_object");
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
-                dataAccess.SetData(0, null);
+                index = Params.IndexOfOutputParam("Value");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, null);
+                }
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
@@ -98,7 +115,11 @@ namespace SAM.Core.Grasshopper
 
             if (@object == null)
             {
-                dataAccess.SetData(0, null);
+                index = Params.IndexOfOutputParam("Value");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, null);
+                }
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Null object provided");
                 return;
             }
@@ -144,10 +165,14 @@ namespace SAM.Core.Grasshopper
                 value = new GooJSAMObject<SAMObject>((SAMObject)value);
             }
 
-            if (value is IEnumerable && !(value is string))
-                dataAccess.SetDataList(0, (IEnumerable)value);
-            else
-                dataAccess.SetData(0, value);
+            index = Params.IndexOfOutputParam("Value");
+            if (index != -1)
+            {
+                if (value is IEnumerable && !(value is string))
+                    dataAccess.SetDataList(index, (IEnumerable)value);
+                else
+                    dataAccess.SetData(index, value);
+            }
         }
     }
 }

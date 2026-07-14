@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryFlipNormal : GH_SAMComponent
+    public class SAMGeometryFlipNormal : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Provides an Icon for the component.
@@ -23,7 +24,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -38,17 +39,27 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_face3D", "_face3D", "SAM Geometry Face3D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "_face3D", NickName = "_face3D", Description = "SAM Geometry Face3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Face3D", "Face3D", "SAM Geometry Face3D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Face3D", NickName = "Face3D", Description = "SAM Geometry Face3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -59,8 +70,9 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_face3D");
             ISAMGeometry geometry = null;
-            if (!dataAccess.GetData(0, ref geometry) || geometry == null)
+            if (index == -1 || !dataAccess.GetData(index, ref geometry) || geometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,7 +88,11 @@ namespace SAM.Geometry.Grasshopper
             face3D = new Spatial.Face3D(face3D);
             face3D.FlipNormal();
 
-            dataAccess.SetData(0, face3D);
+            index = Params.IndexOfOutputParam("Face3D");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, face3D);
+            }
         }
     }
 }

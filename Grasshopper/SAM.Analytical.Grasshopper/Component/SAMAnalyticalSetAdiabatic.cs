@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSetAdiabatic : GH_SAMComponent
+    public class SAMAnalyticalSetAdiabatic : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,19 +40,36 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analytical", "_analytical", "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooPanelParam() { Optional = true }, "panels_", "panels_", "SAM Analytical Panels", GH_ParamAccess.list);
-            inputParamManager.AddBooleanParameter("_adiabatic_", "_adiabatic", "Is Adiabatic", GH_ParamAccess.item, true);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "panels_", NickName = "panels_", Description = "SAM Analytical Panels", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_adiabatic_", NickName = "_adiabatic", Description = "Is Adiabatic", Access = GH_ParamAccess.item };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analytical", "analytical", "SAM Analytical Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,8 +80,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -82,11 +102,16 @@ namespace SAM.Analytical.Grasshopper
 
 
             List<Panel> panels = new List<Panel>();
-            dataAccess.GetDataList(1, panels);
+            index = Params.IndexOfInputParam("panels_");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, panels);
+            }
             if (panels != null && panels.Count != 0)
             {
+                index = Params.IndexOfInputParam("_adiabatic_");
                 bool adiabatic = true;
-                if (!dataAccess.GetData(2, ref adiabatic))
+                if (index == -1 || !dataAccess.GetData(index, ref adiabatic))
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
@@ -121,7 +146,11 @@ namespace SAM.Analytical.Grasshopper
                 sAMObject = adjacencyCluster;
             }
 
-            dataAccess.SetData(0, sAMObject);
+            index = Params.IndexOfOutputParam("analytical");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, sAMObject);
+            }
         }
     }
 }

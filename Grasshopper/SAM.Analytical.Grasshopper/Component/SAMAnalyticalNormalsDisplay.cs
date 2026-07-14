@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalNormalsDisplay : GH_SAMComponent
+    public class SAMAnalyticalNormalsDisplay : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,27 +41,49 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddPointParameter("InternalPoint", "InternalPoint", "Internal Point", GH_ParamAccess.list);
-            outputParamManager.AddVectorParameter("Normal", "Normal", "Normal Vector", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "InternalPoint", NickName = "InternalPoint", Description = "Internal Point", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Vector() { Name = "Normal", NickName = "Normal", Description = "Normal Vector", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetDataList(0, null);
-            dataAccess.SetDataList(1, null);
+            int index_InternalPoint = Params.IndexOfOutputParam("InternalPoint");
+            int index_Normal = Params.IndexOfOutputParam("Normal");
 
+            if (index_InternalPoint != -1)
+            {
+                dataAccess.SetDataList(index_InternalPoint, null);
+            }
+            if (index_Normal != -1)
+            {
+                dataAccess.SetDataList(index_Normal, null);
+            }
+
+            int index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject) || sAMObject == null)
                 return;
 
             List<PlanarBoundary3D> planarBoundary3Ds = null;
@@ -110,9 +132,14 @@ namespace SAM.Analytical.Grasshopper
                 normals.Add(normal);
             }
 
-
-            dataAccess.SetDataList(0, internalPoints);
-            dataAccess.SetDataList(1, normals);
+            if (index_InternalPoint != -1)
+            {
+                dataAccess.SetDataList(index_InternalPoint, internalPoints);
+            }
+            if (index_Normal != -1)
+            {
+                dataAccess.SetDataList(index_Normal, normals);
+            }
         }
     }
 }

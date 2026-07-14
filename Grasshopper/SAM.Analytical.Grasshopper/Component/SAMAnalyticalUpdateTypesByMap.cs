@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateTypesByMap : GH_SAMComponent
+    public class SAMAnalyticalUpdateTypesByMap : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,31 +40,55 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Model ot Adjacency Cluster", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_csvOrPath", "_csvOrPath", "Map File Path or csv text", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_sourceColumnName_", "_sourceColumnName_", "Column Name for Source Names of Constructions", GH_ParamAccess.item, "Name");
-            inputParamManager.AddTextParameter("_templateColumnName_", "_templateColumnName_", "Column Name for Template Names of Constructions", GH_ParamAccess.item, "template Family");
-            inputParamManager.AddTextParameter("_destinationColumnName_", "_destinationColumnName_", "Column Name for Destination Names of Constructions", GH_ParamAccess.item, "New Name Family");
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Model ot Adjacency Cluster", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "constructionLibrary_", "constructionLibrary_", "SAM Analytical ConstructionLibrary", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_csvOrPath", NickName = "_csvOrPath", Description = "Map File Path or csv text", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "apertureConstructionLibrary_", "apertureConstructionLibrary_", "SAM Analytical ApertureConstructionLibrary", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_sourceColumnName_", NickName = "_sourceColumnName_", Description = "Column Name for Source Names of Constructions", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("Name");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_templateColumnName_", NickName = "_templateColumnName_", Description = "Column Name for Template Names of Constructions", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("template Family");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_destinationColumnName_", NickName = "_destinationColumnName_", Description = "Column Name for Destination Names of Constructions", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("New Name Family");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooConstructionLibraryParam() { Name = "constructionLibrary_", NickName = "constructionLibrary_", Description = "SAM Analytical ConstructionLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooApertureConstructionLibraryParam() { Name = "apertureConstructionLibrary_", NickName = "apertureConstructionLibrary_", Description = "SAM Analytical ApertureConstructionLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "Analyticals", "Analyticals", "SAM Analytical Model, Panels or Adjacency Cluster", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooConstructionLibraryParam(), "ConstructionLibrary", "ConstructionLibrary", "SAM Analytical ConstructionLibrary", GH_ParamAccess.list);
-            outputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "ApertureConstructionLibrary", "ApertureConstructionLibrary", "SAM Analytical ApertureConstructionLibrary", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "Analyticals", NickName = "Analyticals", Description = "SAM Analytical Model, Panels or Adjacency Cluster", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooConstructionLibraryParam() { Name = "ConstructionLibrary", NickName = "ConstructionLibrary", Description = "SAM Analytical ConstructionLibrary", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooApertureConstructionLibraryParam() { Name = "ApertureConstructionLibrary", NickName = "ApertureConstructionLibrary", Description = "SAM Analytical ApertureConstructionLibrary", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,48 +99,63 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<SAMObject> sAMObjects = new List<SAMObject>();
-            if (!dataAccess.GetDataList(0, sAMObjects))
+            index = Params.IndexOfInputParam("_analytical");
+            if (index == -1 || !dataAccess.GetDataList(index, sAMObjects))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string csvOrPath = null;
-            if (!dataAccess.GetData(1, ref csvOrPath) || csvOrPath == null)
+            index = Params.IndexOfInputParam("_csvOrPath");
+            if (index == -1 || !dataAccess.GetData(index, ref csvOrPath) || csvOrPath == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string sourceColumnName = null;
-            if (!dataAccess.GetData(2, ref sourceColumnName) || string.IsNullOrWhiteSpace(sourceColumnName))
+            index = Params.IndexOfInputParam("_sourceColumnName_");
+            if (index == -1 || !dataAccess.GetData(index, ref sourceColumnName) || string.IsNullOrWhiteSpace(sourceColumnName))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string templateColumnName = null;
-            if (!dataAccess.GetData(3, ref templateColumnName) || string.IsNullOrWhiteSpace(templateColumnName))
+            index = Params.IndexOfInputParam("_templateColumnName_");
+            if (index == -1 || !dataAccess.GetData(index, ref templateColumnName) || string.IsNullOrWhiteSpace(templateColumnName))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string destinationColumnName = null;
-            if (!dataAccess.GetData(4, ref destinationColumnName) || string.IsNullOrWhiteSpace(destinationColumnName))
+            index = Params.IndexOfInputParam("_destinationColumnName_");
+            if (index == -1 || !dataAccess.GetData(index, ref destinationColumnName) || string.IsNullOrWhiteSpace(destinationColumnName))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             ConstructionLibrary constructionLibrary = null;
-            dataAccess.GetData(5, ref constructionLibrary);
+            index = Params.IndexOfInputParam("constructionLibrary_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref constructionLibrary);
+            }
             if (constructionLibrary == null)
                 constructionLibrary = ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary);
 
             ApertureConstructionLibrary apertureConstructionLibrary = null;
-            dataAccess.GetData(6, ref apertureConstructionLibrary);
+            index = Params.IndexOfInputParam("apertureConstructionLibrary_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref apertureConstructionLibrary);
+            }
             if (apertureConstructionLibrary == null)
                 apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
@@ -227,9 +266,23 @@ namespace SAM.Analytical.Grasshopper
                 apertureConstructionLibraries.Add(apertureConstructionLibrary_Temp);
             }
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
-            dataAccess.SetDataList(1, constructionLibraries.ConvertAll(x => new GooConstructionLibrary(x)));
-            dataAccess.SetDataList(2, apertureConstructionLibraries.ConvertAll(x => new GooApertureConstructionLibrary(x)));
+            index = Params.IndexOfOutputParam("Analyticals");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooJSAMObject<SAMObject>(x)));
+            }
+
+            index = Params.IndexOfOutputParam("ConstructionLibrary");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, constructionLibraries.ConvertAll(x => new GooConstructionLibrary(x)));
+            }
+
+            index = Params.IndexOfOutputParam("ApertureConstructionLibrary");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, apertureConstructionLibraries.ConvertAll(x => new GooApertureConstructionLibrary(x)));
+            }
         }
     }
 }

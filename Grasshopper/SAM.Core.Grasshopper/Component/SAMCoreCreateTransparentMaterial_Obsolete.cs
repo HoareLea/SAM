@@ -4,11 +4,12 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper.Obsolete
 {
     [Obsolete("Obsolete since 2020-09-30")]
-    public class SAMCoreCreateTransparentMaterial : GH_SAMComponent
+    public class SAMCoreCreateTransparentMaterial : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper.Obsolete
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         public override GH_Exposure Exposure => GH_Exposure.hidden;
 
@@ -40,18 +41,27 @@ namespace SAM.Core.Grasshopper.Obsolete
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooMaterialParam(), "Material", "Material", "SAM Material", GH_ParamAccess.item);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooMaterialParam() { Name = "Material", NickName = "Material", Description = "SAM Material", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -62,14 +72,19 @@ namespace SAM.Core.Grasshopper.Obsolete
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_name");
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || string.IsNullOrWhiteSpace(name))
+            if (index == -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            dataAccess.SetData(0, new GooMaterial(new TransparentMaterial(name)));
+            index = Params.IndexOfOutputParam("Material");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooMaterial(new TransparentMaterial(name)));
+            }
         }
     }
 }
