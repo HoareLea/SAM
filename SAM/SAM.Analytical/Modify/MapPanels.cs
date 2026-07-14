@@ -41,9 +41,14 @@ namespace SAM.Analytical
                 if (face3D == null)
                     continue;
 
+                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(maxDistance);
+
                 List<Panel> panels_Panel = new List<Panel>();
                 foreach (Tuple<Point3D, Panel> tuple in tuples)
                 {
+                    if (!boundingBox3D.Inside(tuple.Item1, true, Core.Tolerance.Distance))
+                        continue;
+
                     double distance = face3D.Distance(tuple.Item1);
                     if (distance <= maxDistance)
                         panels_Panel.Add(tuple.Item2);
