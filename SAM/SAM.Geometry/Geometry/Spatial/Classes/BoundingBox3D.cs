@@ -13,6 +13,13 @@ namespace SAM.Geometry.Spatial
         private Point3D min;
         private Point3D max;
 
+        public double MinX => min?.X ?? double.NaN;
+        public double MinY => min?.Y ?? double.NaN;
+        public double MinZ => min?.Z ?? double.NaN;
+        public double MaxX => max?.X ?? double.NaN;
+        public double MaxY => max?.Y ?? double.NaN;
+        public double MaxZ => max?.Z ?? double.NaN;
+
         public BoundingBox3D(IEnumerable<Point3D> point3Ds)
         {
             double aX_Min = double.MaxValue;
@@ -59,7 +66,7 @@ namespace SAM.Geometry.Spatial
         public BoundingBox3D(Point3D point3D, double offset)
         {
             min = new Point3D(point3D.X - offset, point3D.Y - offset, point3D.Z - offset);
-            max = new Point3D(point3D.X + offset, point3D.Y + offset, point3D.Z - offset);
+            max = new Point3D(point3D.X + offset, point3D.Y + offset, point3D.Z + offset);
         }
 
         public BoundingBox3D(IEnumerable<Point3D> point3Ds, double offset)
@@ -107,14 +114,14 @@ namespace SAM.Geometry.Spatial
             foreach (BoundingBox3D boundingBox3D in boundingBox3Ds)
             {
                 if (min == null)
-                    min = new Point3D(boundingBox3D.Min);
+                    min = new Point3D(boundingBox3D.min);
                 else
-                    min = Query.Min(boundingBox3D.Min, min);
+                    min = Query.Min(boundingBox3D.min, min);
 
                 if (max == null)
-                    max = new Point3D(boundingBox3D.Max);
+                    max = new Point3D(boundingBox3D.max);
                 else
-                    max = Query.Max(boundingBox3D.Max, max);
+                    max = Query.Max(boundingBox3D.max, max);
             }
         }
         public BoundingBox3D(JsonObject jsonObject)
@@ -178,7 +185,6 @@ namespace SAM.Geometry.Spatial
                         }
                     }
                 }
-                return true;
             }
 
             return false;
@@ -337,7 +343,6 @@ namespace SAM.Geometry.Spatial
             result.Add(new Segment3D(new Point3D(min), new Point3D(min.X, min.Y, min.Z + z)));
             result.Add(new Segment3D(new Point3D(min.X + x, min.Y, min.Z), new Point3D(min.X + x, min.Y, min.Z + z)));
             result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z + z)));
-            result.Add(new Segment3D(new Point3D(min.X + x, min.Y + y, min.Z), new Point3D(min.X + x, min.Y + y, min.Z + z)));
             result.Add(new Segment3D(new Point3D(min.X, min.Y + y, min.Z), new Point3D(min.X, min.Y + y, min.Z + z)));
             return result;
         }
@@ -350,14 +355,14 @@ namespace SAM.Geometry.Spatial
 
             List<Point3D> point3Ds = new List<Point3D>();
             point3Ds.Add(new Point3D(min));
-            point3Ds.Add(new Point3D(min.X + x, min.Y, Min.Z));
-            point3Ds.Add(new Point3D(min.X + x, min.Y + y, Min.Z));
-            point3Ds.Add(new Point3D(min.X, min.Y + y, Min.Z));
+            point3Ds.Add(new Point3D(min.X + x, min.Y, min.Z));
+            point3Ds.Add(new Point3D(min.X + x, min.Y + y, min.Z));
+            point3Ds.Add(new Point3D(min.X, min.Y + y, min.Z));
 
+            point3Ds.Add(new Point3D(min.X, min.Y, max.Z));
+            point3Ds.Add(new Point3D(min.X + x, min.Y, max.Z));
             point3Ds.Add(new Point3D(max));
-            point3Ds.Add(new Point3D(max.X + x, max.Y, max.Z));
-            point3Ds.Add(new Point3D(max.X + x, max.Y + y, max.Z));
-            point3Ds.Add(new Point3D(max.X, max.Y + y, max.Z));
+            point3Ds.Add(new Point3D(min.X, min.Y + y, max.Z));
 
             return point3Ds;
         }
@@ -483,7 +488,13 @@ namespace SAM.Geometry.Spatial
 
         public override int GetHashCode()
         {
-            return new Tuple<Point3D, Point3D>(min, max).GetHashCode();
+            unchecked
+            {
+                int hash = 17;
+                hash = hash * 23 + (min?.GetHashCode() ?? 0);
+                hash = hash * 23 + (max?.GetHashCode() ?? 0);
+                return hash;
+            }
         }
 
         public static bool operator ==(BoundingBox3D boundingBox3D_1, BoundingBox3D boundingBox3D_2)

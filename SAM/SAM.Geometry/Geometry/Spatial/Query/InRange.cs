@@ -35,33 +35,33 @@ namespace SAM.Geometry.Spatial
             double max_2;
             double min_2;
 
-            max_1 = boundingBox3D_1.Max.X + tolerance;
-            min_1 = boundingBox3D_1.Min.X - tolerance;
+            max_1 = boundingBox3D_1.MaxX + tolerance;
+            min_1 = boundingBox3D_1.MinX - tolerance;
 
-            max_2 = boundingBox3D_2.Max.X;
-            min_2 = boundingBox3D_2.Min.X;
-
-            if (max_1 < min_2 || min_1 > max_2)
-            {
-                return false;
-            }
-
-            max_1 = boundingBox3D_1.Max.Y + tolerance;
-            min_1 = boundingBox3D_1.Min.Y - tolerance;
-
-            max_2 = boundingBox3D_2.Max.Y;
-            min_2 = boundingBox3D_2.Min.Y;
+            max_2 = boundingBox3D_2.MaxX;
+            min_2 = boundingBox3D_2.MinX;
 
             if (max_1 < min_2 || min_1 > max_2)
             {
                 return false;
             }
 
-            max_1 = boundingBox3D_1.Max.Z + tolerance;
-            min_1 = boundingBox3D_1.Min.Z - tolerance;
+            max_1 = boundingBox3D_1.MaxY + tolerance;
+            min_1 = boundingBox3D_1.MinY - tolerance;
 
-            max_2 = boundingBox3D_2.Max.Z;
-            min_2 = boundingBox3D_2.Min.Z;
+            max_2 = boundingBox3D_2.MaxY;
+            min_2 = boundingBox3D_2.MinY;
+
+            if (max_1 < min_2 || min_1 > max_2)
+            {
+                return false;
+            }
+
+            max_1 = boundingBox3D_1.MaxZ + tolerance;
+            min_1 = boundingBox3D_1.MinZ - tolerance;
+
+            max_2 = boundingBox3D_2.MaxZ;
+            min_2 = boundingBox3D_2.MinZ;
 
             if (max_1 < min_2 || min_1 > max_2)
             {

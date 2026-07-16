@@ -24,11 +24,21 @@ namespace SAM.Geometry.Spatial
 
         public static List<Point3D> Point3Ds(this BoundingBox3D boundingBox3D, double offset)
         {
+            if (boundingBox3D == null)
+                return null;
+
+            if (offset <= 0)
+                throw new System.ArgumentOutOfRangeException(nameof(offset), "Offset must be greater than zero.");
+
             List<Point3D> result = new List<Point3D>();
 
             double width = boundingBox3D.Width;
             double height = boundingBox3D.Height;
             double depth = boundingBox3D.Depth;
+
+            double minX = boundingBox3D.MinX;
+            double minY = boundingBox3D.MinY;
+            double minZ = boundingBox3D.MinZ;
 
             double distance_Width = 0;
             while (distance_Width <= width)
@@ -39,7 +49,7 @@ namespace SAM.Geometry.Spatial
                     double distance_Depth = 0;
                     while (distance_Depth <= depth)
                     {
-                        result.Add(new Point3D(boundingBox3D.Min.X + distance_Width, boundingBox3D.Min.Y + distance_Depth, boundingBox3D.Min.Z + distance_Height));
+                        result.Add(new Point3D(minX + distance_Width, minY + distance_Depth, minZ + distance_Height));
                         distance_Depth += offset;
                     }
                     distance_Height += offset;

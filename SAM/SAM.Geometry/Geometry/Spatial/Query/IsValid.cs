@@ -18,7 +18,7 @@ namespace SAM.Geometry.Spatial
             double y = vector3D.Y;
             double z = vector3D.Z;
 
-            if (double.IsNaN(x) || double.IsNaN(x) || double.IsNaN(x))
+            if (double.IsNaN(x) || double.IsNaN(y) || double.IsNaN(z))
             {
                 return false;
             }
@@ -40,7 +40,7 @@ namespace SAM.Geometry.Spatial
             double y = point3D.Y;
             double z = point3D.Z;
 
-            if (double.IsNaN(x) || double.IsNaN(x) || double.IsNaN(x))
+            if (double.IsNaN(x) || double.IsNaN(y) || double.IsNaN(z))
                 return false;
 
             return true;
@@ -108,17 +108,20 @@ namespace SAM.Geometry.Spatial
                 return false;
             }
 
-            if (!IsValid(boundingBox3D.Min))
+            double minX = boundingBox3D.MinX;
+            double minY = boundingBox3D.MinY;
+            double minZ = boundingBox3D.MinZ;
+            double maxX = boundingBox3D.MaxX;
+            double maxY = boundingBox3D.MaxY;
+            double maxZ = boundingBox3D.MaxZ;
+
+            if (double.IsNaN(minX) || double.IsNaN(minY) || double.IsNaN(minZ) ||
+                double.IsNaN(maxX) || double.IsNaN(maxY) || double.IsNaN(maxZ))
             {
                 return false;
             }
 
-            if (!IsValid(boundingBox3D.Max))
-            {
-                return false;
-            }
-
-            if (boundingBox3D.Min.Equals(boundingBox3D.Max))
+            if (minX == maxX && minY == maxY && minZ == maxZ)
             {
                 return false;
             }

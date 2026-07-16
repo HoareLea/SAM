@@ -14,7 +14,9 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Range<double>(boundingBox3D.Min[dimensionIndex], boundingBox3D.Max[dimensionIndex]);
+            double min = dimensionIndex == 0 ? boundingBox3D.MinX : (dimensionIndex == 1 ? boundingBox3D.MinY : boundingBox3D.MinZ);
+            double max = dimensionIndex == 0 ? boundingBox3D.MaxX : (dimensionIndex == 1 ? boundingBox3D.MaxY : boundingBox3D.MaxZ);
+            return new Range<double>(min, max);
         }
     }
 }

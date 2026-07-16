@@ -302,7 +302,9 @@ namespace SAM.Geometry.Spatial
             if (boundingBox3D == null || matrix4D == null)
                 return null;
 
-            return new BoundingBox3D(boundingBox3D.Min.Transform(matrix4D), boundingBox3D.Max.Transform(matrix4D));
+            List<Point3D> corners = boundingBox3D.GetPoints();
+            List<Point3D> transformedCorners = corners.ConvertAll(pt => pt.Transform(matrix4D));
+            return new BoundingBox3D(transformedCorners);
         }
 
         public static Point3D Transform(this Point3D point3D, Matrix4D matrix4D)
