@@ -110,5 +110,17 @@ namespace SAM.Analytical.Enums
 
         /// <summary>A post-materialisation invariant failed.</summary>
         [Description("Invariant")] Invariant,
+
+        /// <summary>
+        /// An air movement states an endpoint the model does not contain, so TAS would drop it or send the air
+        /// to outside instead of where the model says.
+        /// </summary>
+        [Description("Unresolved Air Movement")] UnresolvedAirMovement,
+
+        /// <summary>
+        /// An authored air movement reaches an MVHR dwelling (or the unit serving one), whose runtime air network
+        /// the materialisation rebuilds: it would be deleted, or the dwelling ventilated twice.
+        /// </summary>
+        [Description("Authored Air Movement Conflict")] AuthoredAirMovementConflict,
     }
 }

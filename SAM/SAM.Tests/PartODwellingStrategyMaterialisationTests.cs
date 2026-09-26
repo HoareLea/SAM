@@ -80,7 +80,6 @@ namespace SAM.Tests
 
             Assert.Null(materialisation.AnalyticalModel);
             Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.MaterialisedBaseline && x.Message.Contains("Part O MVHR system"));
-            Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.MaterialisedBaseline && x.Message.Contains("air movement"));
             Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.MaterialisedBaseline && x.Message.Contains("ApplyPartFVentilationRates"));
         }
 
@@ -153,6 +152,97 @@ namespace SAM.Tests
             adjacencyCluster.AddObject(new DesignDay(new DesignDay("London ANN CLG", 2018, 7, 1), LoadType.Cooling));
 
             AssertRefused(new AnalyticalModel(baseline, adjacencyCluster), PartOMaterialisationRefusalReason.RunOutputBaseline, "design-day record");
+        }
+
+        // =================================================================================================
+        // Authored air movements (an engineering rule, not a contamination detector)
+        // =================================================================================================
+
+        [Fact]
+        public void AuthoredTransferMovement_IntoANaturalDwelling_IsCarriedThroughUnchanged()
+        {
+            //An engineer-authored inter-zone air movement (SAMAnalytical.CreateIZAMBySpaces, space -> space): the
+            //corridor passes 5 l/s into Flat 2's bedroom. It is design data, so the baseline is still clean.
+            AnalyticalModel baseline = WithAuthoredMovement(Baseline(), Corridor, "Flat 2 Bedroom", 5.0, out Guid guid_Movement);
+            Assert.True(baseline.IsPartOCleanBaseline(out List<PartOMaterialisationRefusal> findings), string.Join("\n", findings));
+
+            PartOMaterialisation materialisation = Materialise(WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2), Mvhr(Flat3)));
+
+            SpaceAirMovement spaceAirMovement = materialisation.AnalyticalModel.AdjacencyCluster.GetObject<SpaceAirMovement>(guid_Movement);
+            Assert.NotNull(spaceAirMovement);
+            Assert.Equal(0.005, spaceAirMovement.AirFlow, 9);
+            Assert.Contains(materialisation.Warnings, x => x.Contains("carried through unchanged") && x.Contains("Flat 2"));
+
+            //Flat 2 is otherwise exactly its baseline.
+            Assert.Equal(Signature(baseline, Flat2), Signature(materialisation.AnalyticalModel, Flat2));
+        }
+
+        [Fact]
+        public void AuthoredMovement_IntoAnMvhrDwelling_IsRefused_BecauseTheRebuildWouldDeleteIt()
+        {
+            //The same kind of movement into Flat 1's living room. The MVHR realisation removes every movement related
+            //to the dwelling's rooms before rebuilding its network, so the authored one would be lost.
+            AnalyticalModel baseline = WithAuthoredMovement(Baseline(), Corridor, "Living Room", 5.0, out _);
+            Assert.True(baseline.IsPartOCleanBaseline(out _));
+
+            AssertRefused(WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.AuthoredAirMovementConflict, Flat1);
+
+            //With Flat 1 natural instead, the same baseline materialises and keeps the movement.
+            Assert.True(WithStrategies(baseline, Natural(Flat1), Natural(Flat2), Natural(Flat3)).MaterialisePartODwellingStrategies().IsMaterialised);
+        }
+
+        [Fact]
+        public void AuthoredExtractToOutside_FromANaturalDwelling_IsMechanicalDuty_AndRefused()
+        {
+            //A prescribed 8 l/s extract from Flat 2's bathroom to outside is continuous mechanical extract.
+            AnalyticalModel baseline = WithAuthoredMovement(Baseline(), "Flat 2 Bathroom", null, 8.0, out _);
+            Assert.True(baseline.IsPartOCleanBaseline(out _));
+
+            AssertRefused(WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.NaturalOverMechanicalDuty, Flat2);
+        }
+
+        [Fact]
+        public void AuthoredMovement_OnlyInAnUnassessedDwelling_IsCarriedThrough()
+        {
+            AnalyticalModel baseline = WithAuthoredMovement(Baseline(), "Flat 3 Bedroom", "Flat 3 Bathroom", 3.0, out Guid guid_Movement);
+
+            PartOMaterialisation materialisation = Materialise(WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2)), null, Flat1, Flat2);
+
+            Assert.NotNull(materialisation.AnalyticalModel.AdjacencyCluster.GetObject<SpaceAirMovement>(guid_Movement));
+        }
+
+        [Fact]
+        public void AuthoredUnitPlantZoneMovement_OnAUnitServingAnMvhrDwelling_IsRefused()
+        {
+            //A CreateIZAMBySetPoint-style plant-zone condition on Flat 1's authored unit: the materialisation rebuilds
+            //the unit's movement from the unit, so the authored conditions would be deleted.
+            AnalyticalModel baseline = WithAuthoredUnit(Baseline(), double.NaN, out string name_Unit);
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObjects<AirHandlingUnit>().Single(x => x.Name == name_Unit);
+            AirHandlingUnitAirMovement airHandlingUnitAirMovement = new(name_Unit, new Profile(name_Unit + " Heating", ProfileType.Heating, [16.0]), new Profile(name_Unit + " Cooling", ProfileType.Cooling, [24.0]), null, null, null);
+            adjacencyCluster.AddObject(airHandlingUnitAirMovement);
+            adjacencyCluster.AddRelation(airHandlingUnitAirMovement, airHandlingUnit);
+            baseline = new AnalyticalModel(baseline, adjacencyCluster);
+            Assert.True(baseline.IsPartOCleanBaseline(out _));
+
+            AssertRefused(WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.AuthoredAirMovementConflict, name_Unit);
+        }
+
+        [Fact]
+        public void AirMovement_WithAnEndpointTheModelDoesNotContain_IsRefusedAsBaseline()
+        {
+            //TAS resolves endpoints by object reference and would send this air to outside instead of to the room.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space living = adjacencyCluster.GetSpaces().Find(x => x.Name == "Living Room");
+            Space missing = new("Deleted Room");
+            SpaceAirMovement spaceAirMovement = new("Living to deleted", 0.004, new Core.ObjectReference(living).ToString(), new Core.ObjectReference(missing).ToString());
+            adjacencyCluster.AddObject(spaceAirMovement);
+            adjacencyCluster.AddRelation(spaceAirMovement, living);
+            baseline = new AnalyticalModel(baseline, adjacencyCluster);
+
+            Assert.False(baseline.IsPartOCleanBaseline(out List<PartOMaterialisationRefusal> findings));
+            Assert.Contains(findings, x => x.Reason == PartOMaterialisationRefusalReason.UnresolvedAirMovement && x.Message.Contains("Living to deleted"));
         }
 
         // =================================================================================================
@@ -395,6 +485,40 @@ namespace SAM.Tests
             Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.MechanicalDesign && x.Message.Contains("do not balance"));
         }
 
+        [Fact]
+        public void ManuallySelectedUndersizedProduct_IsAStructuredRefusal_NeverAMaterialisation()
+        {
+            //Owner decision (PR1 review): a manual product that cannot meet the dwelling's design duty refuses.
+            VentilationUnitCapacityDescriptor tiny = new(new VentilationUnitReference("Proof", "Tiny", null), 1, 1);
+
+            PartOMaterialisation materialisation = WithStrategies(Baseline(), Mvhr(Flat1, tiny.VentilationUnitReference), Natural(Flat2), Natural(Flat3)).MaterialisePartODwellingStrategies([tiny, Large]);
+
+            Assert.Null(materialisation.AnalyticalModel);
+            Assert.False(materialisation.IsMaterialised);
+            PartOMaterialisationRefusal refusal = Assert.Single(materialisation.Refusals);
+            Assert.Equal(PartOMaterialisationRefusalReason.VentilationUnitSelection, refusal.Reason);
+            Assert.Equal(Zone(Baseline(), Flat1).Name, Flat1);
+            Assert.Equal("MVHR Flat 1", refusal.Subject);
+
+            //An automatic neighbour is not offered as a silent substitute: the same set with Flat 1 automatic selects Large.
+            Assert.Equal("Large", UnitOf(Materialise(WithStrategies(Baseline(), Mvhr(Flat1), Natural(Flat2), Natural(Flat3)), [tiny, Large]).AnalyticalModel, Flat1).SelectedVentilationUnitReference()?.Model);
+        }
+
+        [Fact]
+        public void Materialisation_NeverIsolates_AndAnIsolatedModelIsNotABaseline()
+        {
+            //Final-materialisation invariant: the whole clean building, never an isolated derivative.
+            AnalyticalModel baseline = WithStrategies(Baseline(), Mvhr(Flat1), Natural(Flat2), Natural(Flat3));
+            AnalyticalModel model = Materialise(baseline, null, Flat1).AnalyticalModel;
+
+            Assert.False(model.HasValue(AnalyticalModelParameter.PartOIsolationContext));
+            Assert.Equal(baseline.AdjacencyCluster.GetSpaces().Count, model.AdjacencyCluster.GetSpaces().Count);
+
+            AnalyticalModel isolated = baseline.PreparePartOIteration(PartOIteration.BaseNaturalVentilation, Zones(baseline, Flat2), Words(baseline, "NV", Flat2), null, true).AnalyticalModel;
+            Assert.True(isolated.HasValue(AnalyticalModelParameter.PartOIsolationContext));
+            AssertRefused(isolated, PartOMaterialisationRefusalReason.MaterialisedBaseline, "isolation context");
+        }
+
         // =================================================================================================
         // Retained 2B design (D3/D4)
         // =================================================================================================
@@ -552,6 +676,46 @@ namespace SAM.Tests
         }
 
         [Fact]
+        public void CommonSpaceZone_MixingCorridorAndOtherSpaces_IsRefusedAsAmbiguous_ByAssignedConditionNotName()
+        {
+            //The corridor space is named like a lobby; the non-corridor store is named like a corridor. The refusal
+            //classifies by the assigned condition, and names each side.
+            AnalyticalModel baseline = Baseline(corridorSpaceName: "Level 1 Lobby");
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space store = new("Corridor Store") { InternalCondition = new InternalCondition("Store IC") };
+            adjacencyCluster.AddObject(store);
+            adjacencyCluster.AddRelation(adjacencyCluster.GetObjects<Zone>().Find(x => x.Name == Corridor), store);
+            baseline = WithStrategies(new AnalyticalModel(baseline, adjacencyCluster), Natural(Flat1), Natural(Flat2), Natural(Flat3));
+
+            PartOMaterialisation materialisation = baseline.MaterialisePartODwellingStrategies();
+            output.WriteLine(materialisation.Refusal);
+
+            Assert.Null(materialisation.AnalyticalModel);
+            PartOMaterialisationRefusal refusal = Assert.Single(materialisation.Refusals);
+            Assert.Equal(PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, refusal.Reason);
+            Assert.Equal(Zone(baseline, Corridor).Guid, refusal.ZoneGuid);
+            Assert.Contains("('Level 1 Lobby') with space(s) that are not ('Corridor Store')", refusal.Message);
+        }
+
+        [Fact]
+        public void CorridorAssignedSpace_OutsideAWholeCorridorCommonZone_IsNeverSilentlyOmitted()
+        {
+            //In a dwelling zone.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space landing = new("Flat 3 Landing") { InternalCondition = new InternalCondition(TM59InternalConditionResolver.CommunalCorridorInternalConditionName) };
+            adjacencyCluster.AddObject(landing);
+            adjacencyCluster.AddRelation(adjacencyCluster.GetObjects<Zone>().Find(x => x.Name == Flat3), landing);
+            AssertRefused(WithStrategies(new AnalyticalModel(baseline, adjacencyCluster), Natural(Flat1), Natural(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, "in dwelling zone 'Flat 3'");
+
+            //In no zone at all.
+            baseline = Baseline();
+            adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.AddObject(new Space("Stair Core") { InternalCondition = new InternalCondition(TM59InternalConditionResolver.CommunalCorridorInternalConditionName) });
+            AssertRefused(WithStrategies(new AnalyticalModel(baseline, adjacencyCluster), Natural(Flat1), Natural(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, "'Stair Core' (in no dwelling or common-space zone)");
+        }
+
+        [Fact]
         public void CommonSpaceZone_MixingCorridorAndOtherSpaces_IsRefused()
         {
             AnalyticalModel baseline = Baseline();
@@ -573,7 +737,14 @@ namespace SAM.Tests
             Assert.Empty(overheatingScenarios);
             Assert.Contains(refusals, x => x.Contains("common space only"));
 
-            //...and it prepares nothing.
+            //...and it prepares nothing: no route, no Part F operating condition, no opening assumption, no model.
+            Assert.Equal(PartOVentilationMode.Undefined, PartOIteration.DwellingIndependent.PartOIterationVentilationMode(out string refusal_Mode));
+            Assert.NotNull(refusal_Mode);
+            Assert.Null(PartOIteration.DwellingIndependent.PartOIterationOperatingMode(out string refusal_Operating));
+            Assert.Contains("prepares nothing", refusal_Operating);
+            Assert.Equal(0, PartOIteration.DwellingIndependent.PartOOperatingAssumptions(out _).Count);
+            Assert.Equal(PartOOpeningCompatibility.Compatible, baseline.PartOIterationOpeningCompatibility(PartOIteration.DwellingIndependent, out _, out _));
+
             PartOIterationPreparation preparation = baseline.PreparePartOIteration(PartOIteration.DwellingIndependent, Zones(baseline, Flat1), Words(baseline, "MVHR", Flat1));
             Assert.NotNull(preparation.Refusal);
             Assert.Null(preparation.AnalyticalModel);
@@ -946,6 +1117,29 @@ namespace SAM.Tests
             Assert.True(result.IsPartOCleanBaseline(out List<PartOMaterialisationRefusal> findings), string.Join("\n", findings));
 
             return result;
+        }
+
+        /// <summary>
+        /// An engineer-authored inter-zone air movement, as SAMAnalytical.CreateIZAMBySpaces builds it: from one space
+        /// to another (or to outside where <paramref name="name_To"/> is null), related to both.
+        /// </summary>
+        private static AnalyticalModel WithAuthoredMovement(AnalyticalModel baseline, string name_From, string name_To, double airFlow_Lps, out Guid guid)
+        {
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space from = adjacencyCluster.GetSpaces().Single(x => x.Name == name_From);
+            Space to = name_To is null ? null : adjacencyCluster.GetSpaces().Single(x => x.Name == name_To);
+
+            SpaceAirMovement spaceAirMovement = new(string.Format("{0} authored", name_From), airFlow_Lps / 1000.0, new Core.ObjectReference(from).ToString(), to is null ? null : new Core.ObjectReference(to).ToString());
+            adjacencyCluster.AddObject(spaceAirMovement);
+            adjacencyCluster.AddRelation(spaceAirMovement, from);
+            if (to is not null)
+            {
+                adjacencyCluster.AddRelation(spaceAirMovement, to);
+            }
+
+            guid = spaceAirMovement.Guid;
+
+            return new AnalyticalModel(baseline, adjacencyCluster);
         }
 
         /// <summary>An authored (not Part O typed) system and unit connected to Flat 1's baseline design terminals.</summary>

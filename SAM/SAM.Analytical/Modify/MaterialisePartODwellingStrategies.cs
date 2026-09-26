@@ -301,7 +301,16 @@ namespace SAM.Analytical
                 }
                 else if (count_Corridor != 0)
                 {
-                    Refuse(PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, string.Format("Common-space zone '{0}' holds {1} space(s) assigned '{2}' and {3} that are not, so one scenario cannot state a single TM59 criterion for it. Split the zone, or assign the corridor condition consistently.", zone.Name, count_Corridor, TM59InternalConditionResolver.CommunalCorridorInternalConditionName, spaces.Count - count_Corridor), zone);
+                    //An overheating scenario is zone-scoped: it states one criterion for every space of its zone, and
+                    //nothing in the scenario architecture states one per space. Assessing the zone as a corridor would
+                    //put a non-corridor room under the corridor criterion; leaving it out would drop an assessed
+                    //corridor. Neither is right, so the ambiguity is refused.
+                    List<string> names_Corridor = spaces.FindAll(Query.IsTM59CommunalCorridor).ConvertAll(x => string.Format("'{0}'", x.Name));
+                    List<string> names_Other = spaces.FindAll(x => !x.IsTM59CommunalCorridor()).ConvertAll(x => string.Format("'{0}'", x.Name));
+                    names_Corridor.Sort(StringComparer.Ordinal);
+                    names_Other.Sort(StringComparer.Ordinal);
+
+                    Refuse(PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, string.Format("Common-space zone '{0}' mixes space(s) assigned '{1}' ({2}) with space(s) that are not ({3}). A scenario states one TM59 criterion for a whole zone, so the corridor cannot be assessed without also assessing the others as corridors. Split the zone so the corridors are a zone of their own, or assign the corridor condition consistently.", zone.Name, TM59InternalConditionResolver.CommunalCorridorInternalConditionName, string.Join(", ", names_Corridor), string.Join(", ", names_Other)), zone);
                 }
                 else
                 {
@@ -311,9 +320,40 @@ namespace SAM.Analytical
 
             zones_CommonSpace.Sort(CompareZones);
 
+            //No assessed corridor is ever dropped silently. A space assigned the corridor condition that is not in a
+            //whole-corridor common zone - it sits in a dwelling zone, in a grouping zone, or in no zone - cannot be
+            //given the corridor scenario (scenarios are zone-scoped, one per zone), so it refuses by name.
+            List<string> names_Corridor_Orphan = [];
+            foreach (Space space in adjacencyCluster_Baseline.GetSpaces() ?? [])
+            {
+                if (space is null || !space.IsTM59CommunalCorridor())
+                {
+                    continue;
+                }
+
+                dictionary_ZoneOfSpace.TryGetValue(space.Guid, out Zone zone_Space);
+
+                //In an assessed corridor zone, or in a mixed common zone that is refused above by zone.
+                if (zone_Space is not null && guids_NotDwelling.Contains(zone_Space.Guid))
+                {
+                    continue;
+                }
+
+                names_Corridor_Orphan.Add(zone_Space is null ? string.Format("'{0}' (in no dwelling or common-space zone)", space.Name) : string.Format("'{0}' (in dwelling zone '{1}')", space.Name, zone_Space.Name));
+            }
+
+            if (names_Corridor_Orphan.Count != 0)
+            {
+                names_Corridor_Orphan.Sort(StringComparer.Ordinal);
+
+                Refuse(PartOMaterialisationRefusalReason.CommonSpaceUnclassifiable, string.Format("{0} space(s) are assigned '{1}' but are not in a common-space zone made up of communal corridors: {2}. An overheating scenario covers a whole zone, so these corridors could not be assessed against the corridor criterion and would be left out of the assessment. Put each corridor in a common-space zone ('Is Dwelling' = false) of corridors only, or assign it another condition.", names_Corridor_Orphan.Count, TM59InternalConditionResolver.CommunalCorridorInternalConditionName, string.Join(", ", names_Corridor_Orphan)));
+            }
+
             // ---- 6. Authored mechanical systems and units the strategies must not contradict ----------------
 
-            AuthoredMechanicalSystems(adjacencyCluster_Baseline, dictionary_ZoneOfSpace, guids_Assessed, dictionary_Strategy, result, Refuse);
+            AuthoredMechanicalSystems(adjacencyCluster_Baseline, dictionary_ZoneOfSpace, guids_Assessed, dictionary_Strategy, result, Refuse, out Dictionary<string, HashSet<Guid>> dictionary_ZonesOfUnit);
+
+            AuthoredAirMovements(adjacencyCluster_Baseline, dictionary_ZoneOfSpace, dictionary_Strategy, dictionary_ZonesOfUnit, result, Refuse);
 
             foreach (Zone zone in zones_Assessed)
             {
@@ -537,6 +577,25 @@ namespace SAM.Analytical
 
             // ---- 9. Natural ventilation stayed clean -----------------------------------------------------------
 
+            //Every authored movement the strategies accepted is carried through unchanged: the MVHR realisation
+            //removes only movements related to MVHR dwellings and their units, and those were refused above.
+            foreach (SpaceAirMovement spaceAirMovement_Baseline in adjacencyCluster_Baseline.GetObjects<SpaceAirMovement>() ?? [])
+            {
+                SpaceAirMovement spaceAirMovement = adjacencyCluster.GetObject<SpaceAirMovement>(spaceAirMovement_Baseline.Guid);
+                if (spaceAirMovement is null || spaceAirMovement.AirFlow != spaceAirMovement_Baseline.AirFlow || spaceAirMovement.From != spaceAirMovement_Baseline.From || spaceAirMovement.To != spaceAirMovement_Baseline.To)
+                {
+                    Refuse(PartOMaterialisationRefusalReason.Invariant, string.Format("Authored air movement '{0}' was not carried through the materialisation unchanged.", spaceAirMovement_Baseline.Name), null, spaceAirMovement_Baseline.Name);
+                }
+            }
+
+            foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement_Baseline in adjacencyCluster_Baseline.GetObjects<AirHandlingUnitAirMovement>() ?? [])
+            {
+                if (adjacencyCluster.GetObject<AirHandlingUnitAirMovement>(airHandlingUnitAirMovement_Baseline.Guid) is null)
+                {
+                    Refuse(PartOMaterialisationRefusalReason.Invariant, string.Format("Authored unit air movement '{0}' was not carried through the materialisation.", airHandlingUnitAirMovement_Baseline.Name), null, airHandlingUnitAirMovement_Baseline.Name);
+                }
+            }
+
             foreach (Zone zone in zones_Natural)
             {
                 string refusal_Clean = NaturalDwellingClean(adjacencyCluster_Baseline, adjacencyCluster, SpacesOf(zone));
@@ -680,13 +739,13 @@ namespace SAM.Analytical
         /// ventilated dwelling, and plant in an MVHR dwelling not connected to its design terminals. A system
         /// with neither a positive design terminal nor a unit is template metadata: noted, never refused.
         /// </summary>
-        private static void AuthoredMechanicalSystems(AdjacencyCluster adjacencyCluster, Dictionary<Guid, Zone> dictionary_ZoneOfSpace, HashSet<Guid> guids_Assessed, Dictionary<Guid, PartODwellingStrategy> dictionary_Strategy, PartOMaterialisation result, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse)
+        private static void AuthoredMechanicalSystems(AdjacencyCluster adjacencyCluster, Dictionary<Guid, Zone> dictionary_ZoneOfSpace, HashSet<Guid> guids_Assessed, Dictionary<Guid, PartODwellingStrategy> dictionary_Strategy, PartOMaterialisation result, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse, out Dictionary<string, HashSet<Guid>> dictionary_ZonesOfUnit)
         {
             List<AirHandlingUnit> airHandlingUnits = adjacencyCluster.GetObjects<AirHandlingUnit>() ?? [];
 
             //Unit name -> the zones every effective system naming it serves. A unit is bound to its systems by
             //name, so that is how a unit shared across dwellings is found.
-            Dictionary<string, HashSet<Guid>> dictionary_ZonesOfUnit = new(StringComparer.Ordinal);
+            dictionary_ZonesOfUnit = new(StringComparer.Ordinal);
             Dictionary<Guid, Zone> dictionary_Zone = [];
 
             List<VentilationSystem> ventilationSystems = adjacencyCluster.GetObjects<VentilationSystem>() ?? [];
@@ -809,6 +868,169 @@ namespace SAM.Analytical
                 {
                     refuse(PartOMaterialisationRefusalReason.SharedSystem, string.Format("Authored air handling unit '{0}' supplies systems serving more than one zone, so it cannot belong to one dwelling's selected design. It is never split or rewritten to fit the strategies.", keyValuePair.Key), null, keyValuePair.Key);
                 }
+            }
+        }
+
+        /// <summary>
+        /// Decides, against the selected strategies, whether each air movement the baseline authors can be carried
+        /// into the mixed model. The rule follows where the movement's air goes:
+        /// <list type="bullet">
+        /// <item>
+        /// <b>It reaches an MVHR dwelling</b> (an endpoint or related space in one, or the unit an effective system
+        /// serving one names): <b>refused</b> (<see cref="PartOMaterialisationRefusalReason.AuthoredAirMovementConflict"/>).
+        /// That dwelling's runtime air network belongs to the materialisation. <c>RealizeBaseMVHRDwelling</c> first
+        /// removes every movement related to the dwelling's spaces and its unit (<c>RemoveBaseMVHRAirMovementObjects</c>),
+        /// then rebuilds and balances the network from the design terminals. So the authored movement can only be
+        /// deleted (authored design data lost) or kept beside the new network (the dwelling ventilated twice).
+        /// </item>
+        /// <item>
+        /// <b>It exchanges air between a naturally ventilated dwelling and a unit, or outside</b>, meaning a prescribed
+        /// supply from plant or a prescribed extract to plant or outside: <b>refused</b>
+        /// (<see cref="PartOMaterialisationRefusalReason.NaturalOverMechanicalDuty"/>). That is continuous mechanical
+        /// supply or extract, and the natural-ventilation scenario key states the dwelling has none.
+        /// </item>
+        /// <item>
+        /// <b>It transfers air between spaces</b>, at least one in a naturally ventilated dwelling and none in an MVHR
+        /// one: <b>carried through unchanged</b> and reported. It states no mechanical route, and a homogeneous
+        /// Iteration 1b run carries it to TAS in exactly the same way.
+        /// </item>
+        /// <item>
+        /// <b>It touches no assessed dwelling</b> (unassessed dwellings, common spaces, other plant): carried through.
+        /// </item>
+        /// </list>
+        /// A unit's own plant-zone movement (<c>AirHandlingUnitAirMovement</c>, for example from <c>CreateIZAMBySetPoint</c>)
+        /// follows its unit. It is refused when the unit serves an MVHR dwelling, for the same deletion reason. A unit
+        /// serving a natural dwelling is already refused together with its system.
+        /// </summary>
+        private static void AuthoredAirMovements(AdjacencyCluster adjacencyCluster, Dictionary<Guid, Zone> dictionary_ZoneOfSpace, Dictionary<Guid, PartODwellingStrategy> dictionary_Strategy, Dictionary<string, HashSet<Guid>> dictionary_ZonesOfUnit, PartOMaterialisation result, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse)
+        {
+            PartOVentilationMode Mode(Guid guid_Zone) => dictionary_Strategy.TryGetValue(guid_Zone, out PartODwellingStrategy value) ? value.VentilationMode : PartOVentilationMode.Undefined;
+
+            Dictionary<Guid, Zone> dictionary_Zone = [];
+            foreach (Zone zone in dictionary_ZoneOfSpace.Values)
+            {
+                dictionary_Zone[zone.Guid] = zone;
+            }
+
+            //The MVHR dwelling a unit serves, if any.
+            Zone ZoneOfUnitMVHR(AirHandlingUnit airHandlingUnit)
+            {
+                if (airHandlingUnit?.Name is null || !dictionary_ZonesOfUnit.TryGetValue(airHandlingUnit.Name, out HashSet<Guid> guids_Zone))
+                {
+                    return null;
+                }
+
+                foreach (Guid guid in guids_Zone)
+                {
+                    if (Mode(guid) == PartOVentilationMode.MVHR && dictionary_Zone.TryGetValue(guid, out Zone zone))
+                    {
+                        return zone;
+                    }
+                }
+
+                return null;
+            }
+
+            List<string> names_Carried = [];
+
+            List<SpaceAirMovement> spaceAirMovements = adjacencyCluster.GetObjects<SpaceAirMovement>() ?? [];
+            spaceAirMovements.Sort((x, y) => string.CompareOrdinal(x?.Name, y?.Name));
+
+            foreach (SpaceAirMovement spaceAirMovement in spaceAirMovements)
+            {
+                if (spaceAirMovement is null)
+                {
+                    continue;
+                }
+
+                Core.SAMObject sAMObject_From = Query.AirMovementEndpoint(adjacencyCluster, spaceAirMovement.From, out bool resolved_From);
+                Core.SAMObject sAMObject_To = Query.AirMovementEndpoint(adjacencyCluster, spaceAirMovement.To, out bool resolved_To);
+
+                if (!resolved_From || !resolved_To || sAMObject_From is null)
+                {
+                    //Refused by the baseline findings.
+                    continue;
+                }
+
+                List<Space> spaces = [.. adjacencyCluster.GetRelatedObjects<Space>(spaceAirMovement) ?? []];
+                List<AirHandlingUnit> airHandlingUnits = [.. adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(spaceAirMovement) ?? []];
+
+                foreach (Core.SAMObject sAMObject in new[] { sAMObject_From, sAMObject_To })
+                {
+                    if (sAMObject is Space space_Endpoint)
+                    {
+                        spaces.Add(space_Endpoint);
+                    }
+                    else if (sAMObject is AirHandlingUnit airHandlingUnit_Endpoint)
+                    {
+                        airHandlingUnits.Add(airHandlingUnit_Endpoint);
+                    }
+                }
+
+                Zone zone_MVHR = null;
+                Zone zone_Natural = null;
+                foreach (Space space in spaces)
+                {
+                    if (space is null || !dictionary_ZoneOfSpace.TryGetValue(space.Guid, out Zone zone))
+                    {
+                        continue;
+                    }
+
+                    PartOVentilationMode partOVentilationMode = Mode(zone.Guid);
+                    if (partOVentilationMode == PartOVentilationMode.MVHR)
+                    {
+                        zone_MVHR ??= zone;
+                    }
+                    else if (partOVentilationMode == PartOVentilationMode.NaturalVentilation)
+                    {
+                        zone_Natural ??= zone;
+                    }
+                }
+
+                foreach (AirHandlingUnit airHandlingUnit in airHandlingUnits)
+                {
+                    zone_MVHR ??= ZoneOfUnitMVHR(airHandlingUnit);
+                }
+
+                if (zone_MVHR is not null)
+                {
+                    refuse(PartOMaterialisationRefusalReason.AuthoredAirMovementConflict, string.Format("Authored air movement '{0}' reaches MVHR dwelling '{1}'. The materialisation owns that dwelling's runtime air network: it removes every movement related to the dwelling's rooms and unit, then rebuilds a balanced one from the design terminals. So the authored movement would be deleted, or the dwelling ventilated twice. Remove it from the baseline, or select natural ventilation for the dwelling.", spaceAirMovement.Name, zone_MVHR.Name), zone_MVHR, spaceAirMovement.Name);
+
+                    continue;
+                }
+
+                if (zone_Natural is not null)
+                {
+                    if (airHandlingUnits.Count != 0 || sAMObject_To is null)
+                    {
+                        refuse(PartOMaterialisationRefusalReason.NaturalOverMechanicalDuty, string.Format(System.Globalization.CultureInfo.InvariantCulture, "Dwelling '{0}' is selected as naturally ventilated, but authored air movement '{1}' moves {2:0.###} l/s {3}. That is prescribed mechanical supply or extract, and the natural-ventilation scenario states the dwelling has none.", zone_Natural.Name, spaceAirMovement.Name, spaceAirMovement.AirFlow * 1000, airHandlingUnits.Count != 0 ? "to or from an air handling unit" : "to outside"), zone_Natural, spaceAirMovement.Name);
+
+                        continue;
+                    }
+
+                    names_Carried.Add(string.Format("'{0}' ({1})", spaceAirMovement.Name, zone_Natural.Name));
+                }
+            }
+
+            foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in adjacencyCluster.GetObjects<AirHandlingUnitAirMovement>() ?? [])
+            {
+                foreach (AirHandlingUnit airHandlingUnit in adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(airHandlingUnitAirMovement) ?? [])
+                {
+                    Zone zone_MVHR = ZoneOfUnitMVHR(airHandlingUnit);
+                    if (zone_MVHR is not null)
+                    {
+                        refuse(PartOMaterialisationRefusalReason.AuthoredAirMovementConflict, string.Format("Authored unit air movement '{0}' belongs to air handling unit '{1}', which serves MVHR dwelling '{2}'. The materialisation rebuilds that unit's plant-zone conditions from the unit itself, so the authored conditions would be deleted. Remove them from the baseline.", airHandlingUnitAirMovement.Name, airHandlingUnit.Name, zone_MVHR.Name), zone_MVHR, airHandlingUnitAirMovement.Name);
+
+                        break;
+                    }
+                }
+            }
+
+            if (names_Carried.Count != 0)
+            {
+                names_Carried.Sort(StringComparer.Ordinal);
+
+                result.Warnings.Add(string.Format("{0} authored inter-zone transfer movement(s) reach naturally ventilated dwellings and were carried through unchanged, just as a homogeneous Iteration 1b run carries them: {1}.", names_Carried.Count, string.Join(", ", names_Carried)));
             }
         }
 
@@ -938,11 +1160,21 @@ namespace SAM.Analytical
                 }
             }
 
+            //A movement the baseline already carried is authored data the strategies accepted (AuthoredAirMovements);
+            //only a movement the materialisation generated would be a mechanical design reaching this dwelling.
+            HashSet<Guid> guids_Movement_Baseline = [];
+            (adjacencyCluster_Baseline.GetObjects<SpaceAirMovement>() ?? []).ForEach(x => guids_Movement_Baseline.Add(x.Guid));
+
             foreach (SpaceAirMovement spaceAirMovement in adjacencyCluster.GetObjects<SpaceAirMovement>() ?? [])
             {
-                if ((spaceAirMovement?.From is not null && references.Contains(spaceAirMovement.From)) || (spaceAirMovement?.To is not null && references.Contains(spaceAirMovement.To)))
+                if (spaceAirMovement is null || guids_Movement_Baseline.Contains(spaceAirMovement.Guid))
                 {
-                    return string.Format("air movement '{0}' reaches it", spaceAirMovement.Name);
+                    continue;
+                }
+
+                if ((spaceAirMovement.From is not null && references.Contains(spaceAirMovement.From)) || (spaceAirMovement.To is not null && references.Contains(spaceAirMovement.To)))
+                {
+                    return string.Format("generated air movement '{0}' reaches it", spaceAirMovement.Name);
                 }
             }
 

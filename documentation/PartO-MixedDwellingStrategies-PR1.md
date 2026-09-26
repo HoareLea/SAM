@@ -50,10 +50,13 @@ unit gate); `AddPartOBaseMVHRSystem` has an internal overload taking the id and 
 `Query.PartOBaselineFindings` lists every reason a model is not a clean baseline; empty means clean. Nothing is cleaned,
 undone or adopted.
 
-- **Materialisation** (`MaterialisedBaseline`): a system of the Part O MVHR type guid; any `SpaceAirMovement` /
-  `AirHandlingUnitAirMovement`; a sized space whose internal condition is the `ApplyPartFVentilationRates` clone
-  (`<condition> - <space>` name **and** a supply/extract airflow); a `PartOMaterialisationRecord`; a
-  `PartOIsolationContext`.
+- **Materialisation** (`MaterialisedBaseline`): a system of the Part O MVHR type guid; a sized space whose internal
+  condition is the `ApplyPartFVentilationRates` clone (`<condition> - <space>` name **and** a supply/extract airflow); a
+  `PartOMaterialisationRecord`; a `PartOIsolationContext`.
+- **Unresolvable air movements** (`UnresolvedAirMovement`): a `SpaceAirMovement` with no source, or a stated source or
+  destination the model does not contain. SAM_Tas `Modify.UpdateIZAMs` resolves endpoints by `ObjectReference`; it drops a
+  movement whose source is missing and sends the air of one whose destination is missing **to outside**, so the model
+  would simulate an airflow it does not state. Air movements as such are **not** refused here — see §2a.
 - **Run output** (`RunOutputBaseline`): `OverheatingScenarios`; `SimulationResultProvenance`; any model-level parameter
   value that is an `IResult`; any cluster object whose stored type is assignable to `IResult` (base type, so a later
   result class is covered); `DesignDay` records **in the cluster**.
@@ -63,6 +66,30 @@ undone or adopted.
   are run output and refuse.
 - Design ventilation terminals, authored internal conditions, Part F requirements, project settings and the strategy set
   itself are baseline data.
+
+## 2a. Air movements — the engineering rule (PR1 review)
+
+**Evidence that authored baselines legitimately carry air movements.** SAM creates movements in three places:
+`Modify.AddAirMovementObjects` (from any ventilation system that names a unit; also behind the Grasshopper
+`SAMAnalytical.CreateIZAM`), `Modify.AddPartFTransferAirMovements` (Part O transfer air), and the unit exhaust. On top of
+that, engineers author them directly: `SAMAnalytical.CreateIZAMBySpaces` builds unit→space and **space→space** inter-zone
+air movements, and `SAMAnalytical.CreateIZAMBySetPoint` builds a unit's plant-zone `AirHandlingUnitAirMovement` with
+heating, cooling and humidity setpoints. SAM_Tas and SAM_UI create none. A homogeneous Iteration 1b preparation is a plain
+copy, so it carries such movements to TAS unchanged. A blanket refusal would therefore reject real design data. It is
+replaced by a rule based on where each movement's air goes, decided against the selected strategies
+(`AuthoredAirMovements`):
+
+| The movement… | Outcome | Why |
+|---|---|---|
+| reaches an **MVHR** dwelling (an endpoint or related space, or the unit an effective system serving it names) | refused, `AuthoredAirMovementConflict` | `RealizeBaseMVHRDwelling` → `RemoveBaseMVHRAirMovementObjects` deletes every movement related to the dwelling's rooms and unit, then rebuilds and balances the network from the design terminals. Keeping the authored movement is impossible without deleting authored data or ventilating the dwelling twice. |
+| exchanges air between a **Natural** dwelling and a unit or outside | refused, `NaturalOverMechanicalDuty` | prescribed continuous mechanical supply or extract, which the NV scenario key states the dwelling does not have |
+| transfers air **space→space** into or out of a Natural dwelling (no MVHR dwelling touched) | carried through unchanged, with a warning | it states no mechanical route; Iteration 1b carries it identically |
+| touches no assessed dwelling | carried through unchanged | outside the strategies' authority |
+| is a unit's `AirHandlingUnitAirMovement` whose unit serves an MVHR dwelling | refused, `AuthoredAirMovementConflict` | the rebuild regenerates the unit's plant-zone conditions and would delete the authored ones (for example authored cooling setpoints) |
+
+An invariant then proves that every baseline movement survived unchanged (flow and endpoints), and the Natural-dwelling
+cleanliness check ignores those baseline movements and looks only for generated ones. Part-O-generated movements never
+reach this rule: they come with the Part O MVHR system, which the baseline check refuses.
 
 ## 3. Persistence
 
@@ -88,9 +115,16 @@ One call, pure (the baseline is not modified), returning a model only when **not
    outside a stated scope is *unassessed* — untouched, no scenario.
 3. **Contradictions / gates:** `NaturalWithCooling`, `CoolingGated` (any `SupplyAirCooling`), `NaturalWithRetainedDesign`,
    `NaturalWithVentilationUnit`; `OverlappingZones`.
-4. **Common spaces:** a marked non-dwelling zone all of whose spaces are assigned the TM59 communal corridor condition is
-   an assessed corridor; a zone mixing corridor and other spaces refuses (`CommonSpaceUnclassifiable`); a zone with none
-   is noted and not scenarioed. Names are never read.
+4. **Common spaces** (always by the **assigned** internal condition, never names):
+   - a marked non-dwelling zone with **no** space assigned the TM59 communal corridor condition → no common-space TM59
+     scenario is needed (noted);
+   - a zone **all** of whose spaces are assigned it → automatic corridor assessment;
+   - a zone **mixing** corridor and other spaces → refused, `CommonSpaceUnclassifiable`, naming both sides. An
+     `OverheatingScenario` is zone-scoped (`ZoneGuid`; `OverheatingScenarioMap` applies it to every space of the zone) and
+     nothing states a criterion per space. So the zone can be neither assessed (a non-corridor room would fall under the
+     corridor criterion) nor dropped (an assessed corridor would disappear);
+   - a corridor-assigned space in a **dwelling zone**, or in **no** dwelling or common zone → refused,
+     `CommonSpaceUnclassifiable`. An assessed corridor is never silently omitted.
 5. **Authored plant** (baseline): a system is *effective* if it has a connected terminal with positive design flow or
    names a unit the model contains; otherwise it is template metadata (noted, untouched). Effective systems / units that
    touch an assessed dwelling and span more than one zone (or unzoned spaces) refuse `SharedSystem`; over a Natural
@@ -109,7 +143,8 @@ One call, pure (the baseline is not modified), returning a model only when **not
    reused unit stating a finite summer or winter supply temperature refuses `ConditionedReusedUnit` (never cleared).
 9. **Product:** explicit reference → must be in the offered catalogue (`VentilationUnitUnresolved`), permitted by the
    project's `PartOEquipmentSelection` (`VentilationUnitNotAllowed`) and able to serve the duty (selection over that one
-   product; `VentilationUnitSelection`). Null reference with a catalogue → the project's automatic candidate set
+   product; `VentilationUnitSelection`). **Owner decision (PR1 review): an undersized manual product is a structured
+   refusal, never a valid materialisation.** Pinned by `ManuallySelectedUndersizedProduct_…`. Null reference with a catalogue → the project's automatic candidate set
    (`CandidateDescriptors`, project test product included as in Iteration 2); manual project mode → generic unit + warning.
    No catalogue → generic units (Iteration 1a). Each dwelling selects against its own duty only.
 10. **Natural invariant:** after materialisation each Natural dwelling must still have its baseline internal conditions
@@ -120,8 +155,13 @@ One call, pure (the baseline is not modified), returning a model only when **not
     assumptions. SAM's per-space TM59 criterion is unchanged.
 12. **Record** stamped on the model (§6). The model also keeps the strategy set it was built from.
 
-The whole building is returned; nothing is isolated. Because materialisation always rebuilds from the baseline, a
-dwelling's strategy is edited and the model rebuilt — the previous mixed model is never mutated (PR0 D4).
+**Final-materialisation invariant: the whole clean building, never isolated (owner decision, PR1 review).** The mixed
+model is the building-level authority for one annual run, so it holds every space of the baseline. It stamps no
+`PartOIsolationContext`, and an already isolated model is refused as a baseline. This is intentional, not a missing
+feature. Isolation derives a smaller thermal model from a prepared one and so cannot be the authority it was derived
+from. If a later workflow needs an isolated run, it isolates the **materialised union once**, downstream of this call.
+Because materialisation always rebuilds from the baseline, a dwelling's strategy is edited and the model rebuilt; the
+previous mixed model is never mutated (PR0 D4).
 
 ## 5. Determinism
 
@@ -142,7 +182,7 @@ baseline/strategies/catalogue ≠ record → re-materialise; model ≠ provenanc
 
 ## 7. Tests
 
-`SAM/SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (38 tests) — the PR0 proof matrix promoted and inverted. The
+`SAM/SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (48 tests) — the PR0 proof matrix promoted and inverted. The
 disposable PR0 proof tests (`PartOMixedStrategyProofTests.cs`, P0–P12) are removed; they remain at `444d2db3`.
 
 | PR0 fact | PR1 pin |
@@ -157,41 +197,67 @@ disposable PR0 proof tests (`PartOMixedStrategyProofTests.cs`, P0–P12) are rem
 | P9 serialisation | `StrategySet_RoundTripsThroughTheModelJson_Canonically`, `StrategySet_OfAnUnknownSchema_…` |
 | P11 / result-bearing baseline | `LegacyPreparedModel_IsRefused_AsMaterialised`, `MaterialisedOutput_IsNotABaseline`, `ModelWith{Scenarios,Provenance,SimulationResults}_…`, `DesignDay_…` |
 | P12 conditioned reused unit | `ReusedConditionedUnit_IsRefused_RatherThanLeakingCooling` |
+| air movements (§2a, review) | `AuthoredTransferMovement_IntoANaturalDwelling_IsCarriedThroughUnchanged`, `AuthoredMovement_IntoAnMvhrDwelling_IsRefused_…`, `AuthoredExtractToOutside_FromANaturalDwelling_…`, `AuthoredMovement_OnlyInAnUnassessedDwelling_…`, `AuthoredUnitPlantZoneMovement_…`, `AirMovement_WithAnEndpointTheModelDoesNotContain_…` |
+| mixed / orphan corridors (§4.4, review) | `CommonSpaceZone_MixingCorridorAndOtherSpaces_IsRefusedAsAmbiguous_ByAssignedConditionNotName`, `CorridorAssignedSpace_OutsideAWholeCorridorCommonZone_IsNeverSilentlyOmitted` |
+| owner decisions (review) | `ManuallySelectedUndersizedProduct_IsAStructuredRefusal_NeverAMaterialisation`, `Materialisation_NeverIsolates_AndAnIsolatedModelIsNotABaseline` |
 | D5 cooling | `ActiveCooling_IsRecordedButRefused`, `Natural_WithRetainedDesign_WithCooling_OrWithAProduct_IsRefused` |
 | catalogue | `CatalogueFingerprint_CoversEverySelectionRelevantField_AndNotOrder`, `MaterialisationRecord_IsCurrent_…` |
 
-Results (2026-09-27, Release): new class 38/38; `FullyQualifiedName~PartO|FullyQualifiedName~PartF` 1263/1263 (PR0's
-1238 − 13 removed proofs + 38); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34;
-`OverheatingScenario|TM59|VentilationStrategyMap` 256/256; full `SAM.Tests` 2523/2523; `SAM.sln` Release 0 errors.
+Results (2026-09-27, Release, after the PR1 review pass): new class 48/48;
+`FullyQualifiedName~PartO|FullyQualifiedName~PartF` 1273/1273 (PR0's 1238 − 13 removed proofs + 48);
+`PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; `OverheatingScenario|TM59|VentilationStrategyMap`
+256/256; full `SAM.Tests` 2533/2533; `SAM.sln` Release 0 errors.
 
 One existing test changed: `OverheatingScenarioTests.PartOIteration_HasNoFoundationStageMember` pins the exact enum
 membership and now includes the appended `DwellingIndependent`.
 
 ## 8. PR0 assumptions refined or settled by implementation
 
-1. **Common-space identity (PR0 design gate H5):** a new appended enum member `PartOIteration.DwellingIndependent`
-   with an empty assumption set — not `Undefined`, because an unreadable persisted iteration loads as `Undefined`.
+1. **Common-space identity (PR0 design gate H5), reviewed.** The identity is `PartOAssessmentScope.CommonSpace` +
+   `PartOIteration.DwellingIndependent` + strategy `UV` + the empty assumption set. An orthogonal identity with no
+   pseudo-iteration was considered and rejected as larger and riskier:
+   - The key (`OverheatingScenario:v1`) already hashes the iteration **name** in a fixed position. Removing the iteration
+     from common-space keys, or adding a field, changes the derivation, which means a new identity schema and a
+     migration of every stored key (PR0 G).
+   - Using `Undefined` would collide with an unreadable persisted iteration, which also loads as `Undefined`.
+   - A new `PartOAssessmentScope` member cannot help: the scope already says `CommonSpace`, and what has to be stated is
+     the absence of a dwelling stage.
+
+   An appended member keeps every existing key byte-identical. **Evidence that it is not treated as a runnable
+   iteration** (search of SAM, SAM_Tas and SAM_UI for switches, `Enum.GetValues` and `.Iteration` reads):
+   - `PartOIterationVentilationMode` returns `Undefined` with a refusal, and `PartOIterationOperatingMode` refuses it;
+   - `PreparePartOIteration` therefore refuses it;
+   - `PartOOperatingAssumptions` is the empty set, so `PartOIterationOpeningCompatibility` asserts nothing;
+   - `Create.OverheatingScenarios` refuses it for a dwelling;
+   - no UI enumerates the enum. SAM_UI's `PartOIteration3MethodText` reads the iteration of a **run option** (1a/1b/2),
+     never of a scenario;
+   - the TM59 map ignores the iteration.
+
+   The one misleading surface is SAM_Tas `PartODiagnosticLog`, which labels a whole run with `scenarios[0].Iteration`.
+   That is the known single-iteration blocker **C9** (PR3 scope); it already mislabels any mixed run. Pinned by
+   `DwellingIndependent_IsACommonSpaceIdentityOnly`.
 2. **Missing strategies (D2.1):** implemented with an explicit assessed scope. Inside the scope every dwelling must have a
    strategy; outside it a dwelling is unassessed and untouched — never read as Natural.
-3. **Which common spaces are assessed:** only a non-dwelling zone whose spaces are *all* assigned the TM59 communal
-   corridor condition. Other common zones are noted and not scenarioed; a mixed zone refuses.
-4. **Baseline air movements:** PR0 named "Part O air movements"; PR1 refuses **any** air movement object, since they are
-   derived runtime state and a false positive only refuses.
+3. **Which common spaces are assessed:** see §4.4. Mixed zones and corridor spaces outside a whole-corridor common zone
+   refuse; no assessed corridor is silently omitted.
+4. **Baseline air movements:** PR0 named "Part O air movements". After review, the rule is §2a: movements are authored
+   design data, and only unresolvable movements (baseline) and strategy-incompatible movements (materialisation) refuse.
 5. **Result detection:** the cluster answers no interface query (`GetObjects<IResult>()` is null), so detection walks the
    stored types and tests each against `IResult` — the PR0 intent (base type, not a list) unchanged.
 6. **Explicit product sufficiency:** PR0 did not say. PR1 refuses an explicit product that cannot serve the dwelling's
-   duty (fail closed), whereas the legacy manual assignment flags it. PR2 should confirm this with the owner.
+   duty, where the legacy manual assignment only flags it. **Confirmed by the owner.**
 7. **Retained design:** the terminal count is taken on the baseline and the fingerprint compared after scoped
    realisation, so a requirement that gained no baseline terminal makes the design stale.
-8. **Isolation:** not performed by PR1; an isolated model is refused as a baseline.
+8. **Isolation:** never performed; an isolated model is refused as a baseline. **Confirmed by the owner** as a
+   final-materialisation invariant (§4).
 
 ## 9. Residual risks
 
 - `Fingerprint_Baseline` includes project-setting objects that are `SAMObject`s with instance guids
   (`PartOEquipmentSelection`, `PartOProjectTestVentilationUnit`); re-creating one with equal content makes the record
   stale — a false staleness, fail-closed.
-- A real baseline carrying hand-authored or template air movements, or run-written design days, is refused; the user must
-  reopen the pre-Part-O source (accepted migration cost, PR0 G).
+- A baseline carrying run-written design days is refused, and so is an authored air movement that conflicts with an MVHR
+  dwelling. The user must reopen the pre-Part-O source or edit the movement (accepted migration cost, PR0 G).
 - The per-space internal-condition copy of the Part F rate (PR0 P5) is still written on MVHR spaces; it is pre-existing,
   inert while ticV is refused, and not a new store.
 - No licensed TAS run of a mixed model yet, and no scale measurement (PR4).

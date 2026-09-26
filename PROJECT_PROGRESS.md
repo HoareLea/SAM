@@ -22,15 +22,18 @@ risks); linked from `PartO-ARCHITECTURE.md` §9.
 - **Authority:** `PartODwellingStrategy` (intent only: route, product-or-pool, `ActiveCooling`, `DesignAirFlowBasis` +
   fingerprint; no airflow) in `PartODwellingStrategySet` (`PartODwellingStrategies:v1`, canonical JSON) persisted as
   `AnalyticalModelParameter.PartODwellingStrategies`. Absent = legacy (refused `NoStrategies`, nothing inferred).
-- **Baseline gate:** `Query.PartOBaselineFindings` / `IsPartOCleanBaseline` refuse Part O MVHR type, any air movement,
-  Part-F-applied ICs, record, isolation context, scenarios, provenance, any `IResult` (by stored type), cluster
+- **Baseline gate:** `Query.PartOBaselineFindings` / `IsPartOCleanBaseline` refuse Part O MVHR type, unresolvable air
+  movements (not air movements as such - review pass, PR1 doc §2a), Part-F-applied ICs, record, isolation context, scenarios, provenance, any `IResult` (by stored type), cluster
   `DesignDay`s. Model-level Heating/Cooling Design Days are accepted (DesignDay gate pinned).
 - **Materialiser:** `Modify.MaterialisePartODwellingStrategies(baseline, descriptors, scope)`: one call, returns a model only
   when nothing refused. Part F rates/terminals scoped to MVHR dwellings (new `ApplyPartFVentilationRates(…, spaces, …)`
   overload; old signature bit-identical). Per-dwelling design = Iteration 1a's own loop body, extracted as internal
   `RealizeBaseMVHRDwelling`. Dwelling-derived names (`MVHR <zone>`), canonical order. Refuses cooling (gated), NV
   contradictions, NV over authored duty, shared/unconnected authored plant, reused conditioned unit (P12), stale/unbalanced
-  retained design, requirement-basis drift, unresolved/not-allowed/insufficient product.
+  retained design, requirement-basis drift, unresolved/not-allowed/insufficient product, authored air movements that
+  reach an MVHR dwelling or give an NV dwelling plant/outside air (space->space transfers into NV are carried through),
+  mixed corridor zones and corridor-assigned spaces outside a whole-corridor common zone. Never isolates (owner-confirmed
+  invariant).
 - **Scenarios:** NV `BaseNaturalVentilation`/`NV`, MVHR `BasePassive`/`MVHR` (existing keys); assessed corridor (all
   spaces assigned the TM59 communal corridor IC) → new `PartOIteration.DwellingIndependent`, `CommonSpace`, `UV`, no
   assumptions.
@@ -43,12 +46,15 @@ risks); linked from `PartO-ARCHITECTURE.md` §9.
   `Enums/PartOIteration.cs`, `Enums/Parameter/AnalyticalModelParameter.cs`, `Create/OverheatingScenarios.cs`,
   `Modify/{PreparePartOIteration,ApplyPartFVentilationRates,AddPartOBaseMVHRSystem}.cs`,
   `Query/{PartOOperatingAssumptions,PartOIterationOperatingMode}.cs`. Tests: new
-  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (38); removed disposable `PartOMixedStrategyProofTests.cs`
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (48); removed disposable `PartOMixedStrategyProofTests.cs`
   (PR0 said PR1 deletes/inverts them); `OverheatingScenarioTests` enum-membership pin updated. Docs: PR1 doc, ARCHITECTURE §9.
-- **Validation:** new class 38/38; `FullyQualifiedName~PartO|PartF` 1263/1263 (1238 - 13 PR0 proofs + 38); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2523/2523; `SAM.sln`
+- **Validation (after the review pass):** new class 48/48; `FullyQualifiedName~PartO|PartF` 1273/1273 (1238 - 13 PR0 proofs + 48); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2533/2533; `SAM.sln`
   Release 0 errors; `git diff --check` clean.
-- **Open for owner review (PR1 doc §8):** explicit product that cannot serve the duty is refused (legacy manual only flags);
-  baseline refuses *any* air movement; only whole-corridor common zones are assessed.
+- **Owner review pass (2026-09-27), done:** undersized manual product refuses (confirmed); no isolation (confirmed,
+  documented as invariant); blanket air-movement refusal replaced by the §2a engineering rule; mixed common zones refuse
+  as ambiguous (scenarios are zone-scoped) and orphan corridor-assigned spaces refuse; `DwellingIndependent` kept as the
+  smallest key-compatible identity, with search evidence in PR1 doc §8.1 (only SAM_Tas `PartODiagnosticLog` C9 mislabels,
+  PR3 scope).
 - **Next step:** review/merge the SAM PR1 into `sow/2026-Q3`. Then PR2 SAM_UI (strategy grid, materialise on a copy,
   accept-2B onto baseline terminals, sidecar v3) in a fresh session. PR3 cooling stays gated on licensed TAS proof.
 
