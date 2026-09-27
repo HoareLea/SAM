@@ -23,9 +23,10 @@ Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
   (dwelling scope) and `SetSpaceDesignFlowRate` per space/direction. No new airflow rule, nothing in the strategy, inputs
   unmodified, other dwellings untouched, non-clean baseline refused.
 - **Files:** new `SAM.Analytical/Classes/PartODwellingDesignAcceptance.cs`, `SAM.Analytical/Modify/AcceptPartODwellingDesign.cs`,
-  `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (9 tests); `PartODwellingStrategyMaterialisationTests`
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10 tests; local high review added the
+  designer-added-terminal refusal); `PartODwellingStrategyMaterialisationTests`
   made `partial` (one keyword); PR1 doc §11.
-- **Validation (this machine):** materialisation + acceptance tests 59/59; full `SAM.Tests` **2544/2544**; `SAM.sln` Release
+- **Validation (this machine):** materialisation + acceptance tests 59/59; full `SAM.Tests` **2545/2545**; `SAM.sln` Release
   0 errors. Real 2B data accepted (SAM_UI harness).
 - **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
 

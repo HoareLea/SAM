@@ -182,6 +182,26 @@ namespace SAM.Tests
             Assert.Null(acceptance.AnalyticalModel);
         }
 
+        [Fact]
+        public void Acceptance_OntoASpaceWithADesignerAddedTerminal_IsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = RaisedRunCopy(baseline, out _, out _);
+
+            //A terminal the designer added to the baseline, realising no requirement.
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            VentilationTerminal ventilationTerminal = new("Designer diffuser", FlowClassification.Supply, 5.0);
+            adjacencyCluster.AddObject(ventilationTerminal);
+            adjacencyCluster.AddRelation(ventilationTerminal, bedroom);
+            AnalyticalModel baseline_Designer = new(baseline, adjacencyCluster);
+
+            PartODwellingDesignAcceptance acceptance = baseline_Designer.AcceptPartODwellingDesign(Zone(baseline_Designer, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("realises no Approved Document F requirement", acceptance.Refusal);
+        }
+
         /// <summary>
         /// A run copy carrying a 2B-style design for Flat 1: the all-MVHR materialisation (terminals regenerated, so
         /// only lineage links them to the baseline), with Bedroom 1 supply and Kitchen extract each raised 2 l/s -

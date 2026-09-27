@@ -289,11 +289,12 @@ Existing operations only:
    Approved Document F floor; its refusal refuses).
 
 Refused: a baseline that is not clean (a simulated/materialised model is never patched), a non-dwelling zone, a source
-lacking the dwelling. Nothing is written to a `PartODwellingStrategy`; the caller records `RetainedDesign` + the returned
+lacking the dwelling, and a baseline space carrying a designer-added terminal that realises no requirement
+(`SetSpaceDesignFlowRate` would spread the accepted total onto it - review finding). Nothing is written to a `PartODwellingStrategy`; the caller records `RetainedDesign` + the returned
 fingerprint, and `MaterialisePartODwellingStrategies` reads the airflow from the terminals (one authority). Balance is the
 materialiser's (`MechanicalDesign`), not restated. Other dwellings, the corridor and the source are untouched (pinned).
 
-Tests: `PartODwellingStrategyMaterialisationTests.Acceptance.cs` (9) - written onto the baseline for that dwelling only;
+Tests: `PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10) - written onto the baseline for that dwelling only;
 materialised as retained beside NV + MVHR; idempotent; requirement design changes nothing; refusals for non-clean
 baseline, non-dwelling / foreign source, partial source, untraceable terminal, below-floor design. Real-data check (SAM_UI
 investigation harness): the 26 Sep live Iteration 2B round `-Opt10` accepted onto a clean derivative of the example model

@@ -109,6 +109,16 @@ namespace SAM.Analytical
                 List<PartFVentilationTerminalRequirement> requirements = (space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData)?.Terminals ?? [])
                     .FindAll(x => x is not null && x.ContinuousDesignFlowRate_Lps.HasValue && !double.IsNaN(x.ContinuousDesignFlowRate_Lps.Value));
 
+                //A designer-added terminal realises no requirement: SetSpaceDesignFlowRate would spread the accepted total
+                //over it too, so the requirement terminals would not carry the accepted design. Refused, never guessed.
+                foreach (VentilationTerminal ventilationTerminal in adjacencyCluster.VentilationTerminals(space) ?? [])
+                {
+                    if (ventilationTerminal is not null && ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference) is null)
+                    {
+                        result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which realises no Approved Document F requirement, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
+                    }
+                }
+
                 Space space_Source = adjacencyCluster_Source.GetObject<Space>(space.Guid);
                 List<VentilationTerminal> ventilationTerminals_Source = adjacencyCluster_Source.VentilationTerminals(space_Source) ?? [];
 
