@@ -1,7 +1,7 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `9c3b9d6e`, the merge of [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (PR2B, typed Space Design Load data). Below it: `d8c623fa`, the merge of [SAM#155](https://github.com/SAM-BIM/SAM/pull/155) (PR2A closeout docs); `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design); `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+`sow/2026-Q3` is at `6c255ad8`, the merge of [SAM#159](https://github.com/SAM-BIM/SAM/pull/159) (annual HOY + "Peak sensible load"). Below it: `33eb00f3` (SAM#157, Part O closeout docs); `bb170cb8`, the merge of [SAM#158](https://github.com/SAM-BIM/SAM/pull/158) (PR2C PDF); `9c3b9d6e`, the merge of [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (PR2B, typed Space Design Load data). Below that: `d8c623fa`, the merge of [SAM#155](https://github.com/SAM-BIM/SAM/pull/155) (PR2A closeout docs); `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design); `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
 PR1, SAM authority + materialisation); `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
@@ -12,7 +12,24 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: HOY on full-year peak times in the Space Design Load Summary (2026-09-27) - PR open
+## Current: reporting Phase 2 (Space Design Load Summary) COMPLETE (2026-09-27)
+
+```text
+SAM Documentation Framework — Phase 2
+Status: COMPLETE        SAM#153/#156/#158/#159, SAM_Tas#69, SAM_UI#127, SAM_Deploy#55 merged
+```
+
+- SAM#159 merged `6c255ad8`; SAM_UI#127 merged `cbe1c076`; PR2E = SAM_Deploy#55 merged `1506da5f` (pins SAM
+  `6c255ad8`, SAM_Tas `fedf34cd`, SAM_UI `cbe1c076`).
+- Installer run 218 (`2026.3.218.0+4325402`): reporting payload gate PASS; installed `%APPDATA%\SAM\SAM Analytical.exe`
+  acceptance PASS for Bathroom_2 (1,140 / 104 W, `23 Dec 09:00–10:00 (HOY 8554)`), Studio 1_0 (HOY 1 / HOY 4412),
+  Not simulated, Space Assumptions regression and the PR2D UI workflow. Design-day peaks carry no HOY. Details:
+  SAM_Deploy `PROJECT_PROGRESS.md`.
+- **Next step.** PR2F (owner-led): real-project PDF review and multi-Space / All-Spaces export scope. Known inputs:
+  thermostat sentinels (−50 / 150 °C), raw Tas design-day names, latent terms listed in the sensible zero-row note,
+  the footer "— not available" legend when nothing is missing. Separate: SAM#138, SAM#154.
+
+## Previous: HOY on full-year peak times in the Space Design Load Summary (2026-09-27) - MERGED as SAM#159 (`6c255ad8`)
 
 Branch `feature/pr2c-annual-peak-hoy-2026-09-27` from `sow/2026-Q3` `33eb00f3` (SAM#158 PR2C merged `bb170cb8`).
 SAM only; SAM_UI renders SAM's document and needs no change (SAM_UI#127, PR2D, is open with green CI).

@@ -486,9 +486,12 @@ renderer lead rule).
    - the 4-column tables;
    - the page-2 decision (optional generic keep-together in the renderer);
    - a gate re-run on real cooled data.
-5. **PR2D — SAM_UI command** (Edit › Reports › Space Design Load Summary). Optionally stamp
+5. **PR2D — SAM_UI command** (Edit › Reports › Space Design Load Summary). **DONE:** SAM_UI#127, merge `cbe1c076`;
+   HOY + "Peak sensible load" terminology SAM#159, merge `6c255ad8`. Optionally stamp
    `SimulationResultProvenance` in `RunWorkflow`, so that "model vs results" becomes known.
-6. **PR2E — SAM_Deploy** pointer + installed-product smoke test.
+6. **PR2E — SAM_Deploy** pointer + installed-product smoke test. **DONE:** SAM_Deploy#55, merge `1506da5f` (pins SAM
+   `6c255ad8`, SAM_Tas `fedf34cd`, SAM_UI `cbe1c076`); installer run 218, installed acceptance A/A2/B/C/D PASS
+   (SAM_Deploy `PROJECT_PROGRESS.md`). **Phase 2: COMPLETE.** Next: PR2F, real-project report review (not started).
 
 Separate follow-ups, not blocking: Phase-1 set-point sentinel display; the Print RDS design-day date; SAM#138.
 
