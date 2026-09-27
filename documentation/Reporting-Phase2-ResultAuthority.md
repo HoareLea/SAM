@@ -1,14 +1,15 @@
 # Reporting Phase 2 — Space Design Load Summary: result-authority audit and design gate
 
 Status: **investigation + design-definition (26 Sep 2026).** The audit itself changed no product code. Since then,
-B0 has been fixed by [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (merge `00db4b85`, see §3.1).
+B0 has been fixed by [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (merge `00db4b85`, see §3.1), and B1–B5 by
+PR2A (PR2A-1 in SAM, PR2A-2 in SAM_Tas, **open, not merged**; see §3.2).
 
 ```text
 Phase 2 result authority: BLOCKED
 B0: FIXED (SAM#147, 00db4b85)
-Current blockers: B1–B6 / SAM_Tas result contract
+B1–B5: FIXED in PR2A-1 (SAM) + PR2A-2 (SAM_Tas), open, not merged (§3.2)
+B6: VERIFIED read-only on an existing real Tas cooling result (pr3\final\bridge.tsd, §3.2); no licensed run needed
 PR2B reporting implementation: NOT STARTED
-Next PR: PR2A (SAM_Tas) — Convert.ToSAM_Results peak-load correctness
 ```
 
 Phase 2 must report *persisted* results. The audit found that the persisted per-space load results are
@@ -66,12 +67,12 @@ Freshness and provenance:
 | # | Where | Defect | Evidence | Blocks |
 |---|---|---|---|---|
 | **B0** — **FIXED** (SAM#147, `00db4b85`; §3.1) | SAM.Core parameter sets / `SpaceParameter.DesignHeating/CoolingLoad` | A Space can carry **several `SAM.Analytical` ParameterSets**, each with a `Design Heating Load`. One more is appended per run made with a different build. `TryGetValue` takes the set with the current assembly GUID (`e5c2659a…`), else the first set named `SAM.Analytical`, else the **first** set containing the name. A file with no current-GUID set therefore reads the **oldest** value. | `final1b/open_out.sam` Bathroom_2: sets `cc94e7a1` = 0.0 and `feae3a10` = 1139.87 W; the result's `DesignLoad` = 1139.87 W. The Phase-1 collector (production DLLs) reports **0 W**. Scan of `C:\TasOut`: **51 of 988** spaces-with-results in **17** files read stale. These are exactly the spaces with a non-zero load. | TBD design load, sizing comparison. **Also affected shipped Phase 1.** Root cause and fix: §3.1. |
-| **B1** | SAM_Tas `Convert/ToSAM/Results.cs`, heating block | When the annual heating peak beats the HDD peak, the code assigns `zoneData_Cooling`, `coolingLoad` and `coolingIndex` instead of the heating variables. The heating result is then labelled `Simulation` but carries the HDD load, state and index, with outdoor T/RH taken at the *annual* index. With no HDD at all, there is no heating result. | Code (present since `ea0b1e8f`). Not triggered in any local fixture, because HDD always won there. | Heating peak, time, conditions, components |
-| **B2** | same, plus `Create.SpaceSimulationResult(ZoneData, index, …)` | A zero peak returns index **0**. Tas hourly arrays are **1-based**, so `GetHourlyZoneResult(0, …)` returns the Tas **−1** "invalid" sentinel. `Load = −1`, every temperature = −1, every component = −1 and `LoadIndex = 0` are then persisted as real numbers. A genuine −1 W component cannot be told apart from the sentinel. | Every free-running space in every local fixture (e.g. Studio 1_0: `Load −1, LoadIndex 0, DB −1 …`). TSD probe: index 0 → all −1 (HDD) or garbage (annual: ext T 65 °C, RH 300 %). | Zero vs missing; every peak field |
-| **B3** | same | The max() discards the loser. The **annual simulated peak is not persisted** whenever the design day wins, and it won in every local fixture. `Load` is therefore *either* a design-day or an annual value. | Bathroom_2: persisted 1139.80 W (HDD) vs annual TSD peak **104.01 W @ 8554**, which is not persisted. | "TSD simulated peak" as its own concept; the TBD-vs-TSD comparison |
-| **B4** | SAM.Analytical `LoadIndex` | The base differs by engine. Tas writes a **1-based** hour of year (verified). OpenStudio writes a **0-based** interval index (`Core.Query.IntervalHourOfYear`). `MaxDryBulbTemperatureIndex` is 0-based in the *same* Tas object. For a design-day winner the index is Tas's internal calendar slot for the design day (the HDD in the fixture occupies hours 1585–1608, i.e. "8 Mar"), not a weather date. | TSD probe: HDD valid only at 1585–1608; annual valid at 1–8760, invalid at 0. OpenStudio `Convert/ToSAM/SimulationResults.cs` + `SAM.Core Query.IntervalHourOfYear`. | Peak time |
-| **B5** | same | The heating components omit solar, lighting, occupancy and equipment, and the heating result has no RH. For an annual-simulation heating peak those gains can be non-zero, so the stored subset may not close the balance. | Code. The balance does close for HDD, where the internal gains are zero. | Heating breakdown when `Simulation` wins |
-| **B6** | evidence gap | **No persisted cooling peak exists in any local fixture.** Cooling-load composition is therefore unverified: does it include latent, and do the stored terms close? | Fixture scan: `C:\TasOut`, `SAM_daily`, `Nextcloud`, SAM_Validation benchmark — every cooling `Load` is −1 or absent. | Cooling breakdown, cooling time |
+| **B1** — **FIXED** (PR2A-2; §3.2) | SAM_Tas `Convert/ToSAM/Results.cs`, heating block | When the annual heating peak beats the HDD peak, the code assigns `zoneData_Cooling`, `coolingLoad` and `coolingIndex` instead of the heating variables. The heating result is then labelled `Simulation` but carries the HDD load, state and index, with outdoor T/RH taken at the *annual* index. With no HDD at all, there is no heating result. | Code (present since `ea0b1e8f`). Not triggered in any local fixture, because HDD always won there. | Heating peak, time, conditions, components |
+| **B2** — **FIXED** (PR2A-1/2; §3.2) | same, plus `Create.SpaceSimulationResult(ZoneData, index, …)` | A zero peak returns index **0**. Tas hourly arrays are **1-based**, so `GetHourlyZoneResult(0, …)` returns the Tas **−1** "invalid" sentinel. `Load = −1`, every temperature = −1, every component = −1 and `LoadIndex = 0` are then persisted as real numbers. A genuine −1 W component cannot be told apart from the sentinel. | Every free-running space in every local fixture (e.g. Studio 1_0: `Load −1, LoadIndex 0, DB −1 …`). TSD probe: index 0 → all −1 (HDD) or garbage (annual: ext T 65 °C, RH 300 %). | Zero vs missing; every peak field |
+| **B3** — **FIXED** (PR2A-1/2; §3.2) | same | The max() discards the loser. The **annual simulated peak is not persisted** whenever the design day wins, and it won in every local fixture. `Load` is therefore *either* a design-day or an annual value. | Bathroom_2: persisted 1139.80 W (HDD) vs annual TSD peak **104.01 W @ 8554**, which is not persisted. | "TSD simulated peak" as its own concept; the TBD-vs-TSD comparison |
+| **B4** — **FIXED** (PR2A-1/2; §3.2) | SAM.Analytical `LoadIndex` | The base differs by engine. Tas writes a **1-based** hour of year (verified). OpenStudio writes a **0-based** interval index (`Core.Query.IntervalHourOfYear`). `MaxDryBulbTemperatureIndex` is 0-based in the *same* Tas object. For a design-day winner the index is Tas's internal calendar slot for the design day (the HDD in the fixture occupies hours 1585–1608, i.e. "8 Mar"), not a weather date. | TSD probe: HDD valid only at 1585–1608; annual valid at 1–8760, invalid at 0. OpenStudio `Convert/ToSAM/SimulationResults.cs` + `SAM.Core Query.IntervalHourOfYear`. | Peak time |
+| **B5** — **FIXED** (PR2A-2; §3.2) | same | The heating components omit solar, lighting, occupancy and equipment, and the heating result has no RH. For an annual-simulation heating peak those gains can be non-zero, so the stored subset may not close the balance. | Code. The balance does close for HDD, where the internal gains are zero. | Heating breakdown when `Simulation` wins |
+| **B6** — **VERIFIED** read-only on a real Tas cooling result (§3.2) | evidence gap | **No persisted cooling peak exists in any local fixture.** Cooling-load composition is therefore unverified: does it include latent, and do the stored terms close? | Fixture scan: `C:\TasOut`, `SAM_daily`, `Nextcloud`, SAM_Validation benchmark — every cooling `Load` is −1 or absent. | Cooling breakdown, cooling time |
 
 ### 3.1 B0 closeout (SAM#147, merge `00db4b85`, issue SAM#146)
 
@@ -90,6 +91,107 @@ Freshness and provenance:
   - The "later wins" rule matched the persisted `SpaceSimulationResult.DesignLoad` in all 229 scanned files.
   - Harness: `evidence/reporting-phase2-gate/harness/pr2a0_rescan.cs.txt`.
 - The Phase-1 fix reaches users through a SAM_Deploy SAM-pointer bump.
+
+### 3.2 PR2A closeout — B1–B6 (PR2A-1 SAM, PR2A-2 SAM_Tas; open, not merged)
+
+Two PRs, merged in this order: **PR2A-1** (SAM, `feature/pr2a1-space-load-peak-2026-09-27`) adds the typed result;
+**PR2A-2** (SAM_Tas, `fix/pr2a2-tas-peak-authority-2026-09-27`) fills it. SAM owns the type because the future
+reporting collector (SAM.Analytical.Reporting) cannot reference SAM_Tas, and OpenStudio results use the same class.
+
+**Contract (SAM.Analytical).** A `SpaceSimulationResult` (one per space and `LoadType`, as before) carries up to two
+`SpaceLoadPeak`s, under the new, appended parameters `SpaceSimulationResultParameter.DesignDayPeak` and `AnnualPeak`:
+
+| `SpaceLoadPeak` member | Meaning |
+|---|---|
+| `Basis` | `LoadPeakBasis.DesignDay` or `AnnualSimulation`. The two are never merged. |
+| `Load` | W, non-negative magnitude, heating and cooling alike. `0` = the simulation ran and there was no demand. |
+| `DesignDayName` | Design-day peaks only. |
+| `HourOfYear` | **0-based** (0 = 1 Jan 00:00–01:00). Annual peaks only; `null` for a design day and for a zero peak. |
+| `HourOfDay` | 0-based (0 = 00:00–01:00). `null` for a zero peak. |
+| `TryGetDateTime(year)` | Start of the peak hour. Refuses a design-day peak and a zero peak. |
+| `DryBulbTemperature`, `ResultantTemperature`, `RelativeHumidity`, `HumidityRatio` | Room state at the peak (°C, %, kg/kg). |
+| `OutdoorDryBulbTemperature`, `OutdoorRelativeHumidity` | From the **results** at the peak. Annual only: the TSD design-day data sets have no building (weather) results, so a design-day peak has none. Never from the model's weather. |
+| `Components` (`LoadPeakComponent` → W) | Solar, Lighting, OccupancySensible, EquipmentSensible, InfiltrationVentilation, AirMovement, BuildingHeatTransfer, ExternalConductionOpaque, ExternalConductionGlazing, AirHandlingUnit (sensible); OccupancyLatent, EquipmentLatent. Signed as Tas signs them: **+ gain to room air, − loss**. |
+
+**Availability — no sentinels in the typed result.**
+- No `DesignDayPeak` / `AnnualPeak` parameter: unavailable. The engine produced no such peak (e.g. no heating design day
+  ran), or the result predates PR2A. A pre-PR2A Tas result has neither; reporting shows it as "re-run".
+- `Load = 0` with no `HourOfDay`: a real zero. There is no time, state or component, because Tas reports no peak hour.
+- A `null` property or an absent component: not reported. A value of −1 at a real peak hour is kept as −1 (regression test).
+- Zero vs missing, concretely (Bathroom_2 / Studio 1_0, `open.tsd`): Studio 1_0 heating DD and annual are
+  `load=0, hourOfDay=null`, and the persisted JSON contains no −1. Legacy `Load=-1 LoadIndex=0` is unchanged (below).
+
+**Signs (verified on real Tas output).**
+- Heating: `Load = −Σ sensible components`.
+- Cooling: `Load = +Σ sensible components`.
+- Latent gains are recorded but are outside `Load`. Tas's cooling load is sensible only; Tas reports latent removal
+  separately (`latentRemovalLoad`, e.g. 300.9 W at Bedroom 2_3's annual cooling peak), and PR2A does not persist it.
+- `AirHandlingUnit` (`AHUGain`) is 0 in every fixture examined. Its role in closure when non-zero is unverified.
+- Aperture flows and IZAM channels are **not** in the contract: Tas returns −1 for them at valid peak hours.
+
+**Time.**
+- Tas: TSD hourly indices are 1-based (index 0 = no hour; Tas answers it with −1). They are converted once, in SAM_Tas
+  `Query.ZeroBasedHourOfYear` / `ZeroBasedHourOfDay`.
+- OpenStudio: `Core.Query.IntervalHourOfYear` (interval end → 0-based) already yields SAM's convention. The SAM test
+  `AnnualHour_IsZeroBased_AndMapsToTheSameDateForEitherEngine` pins Tas 8554 ≡ OpenStudio "23 Dec 10:00" ≡ SAM 8553.
+  The OpenStudio converter does **not** populate the new peaks yet (out of scope). Its results therefore read as
+  unavailable in the new contract, and its legacy `LoadIndex` stays 0-based.
+- A design-day peak is identified by `Basis` and `DesignDayName` and has only an hour of the day.
+
+**Compatibility.** `Load`, `LoadIndex`, `SizingMethod`, the room/gain parameters, `DesignDayName` and
+`DesignDayTemperature`/`RelativeHumidity` remain a projection of the **governing** peak:
+- which peak governs: the design day, unless the annual peak is strictly larger (as before);
+- `LoadIndex`: still the raw 1-based Tas index;
+- zero peak: still the −1 values Tas returns for index 0, with `LoadIndex 0`. The sentinel is confined to these legacy
+  values and never reaches the typed peaks;
+- `DesignDayTemperature`/`RelativeHumidity`: still the outdoor state at the annual peak, recorded only when it governs.
+
+They are unchanged except in two cases:
+- **B1**: an annual heating winner now carries the annual state instead of the design day's.
+- A load type with no design day now gets its annual result instead of no result.
+
+Print RDS, the benchmark and every other consumer of those fields (all searched) read what they did. The compatibility
+tests pass on the old and the new code alike.
+
+**Status.**
+
+| # | Status | Evidence |
+|---|---|---|
+| B1 | **FIXED, VERIFIED (synthetic)** | `B1_AnnualHeatingAboveTheDesignDay_GovernsTheHeatingResult`: pre-fix the "Simulation" heating result carried the 50 W design-day load; now 104.01 W at 8554. No real fixture has an annual heating winner. |
+| B2 | **FIXED, VERIFIED** | Typed zero vs absent vs genuine −1 tests (SAM + SAM_Tas). Real: Studio 1_0 / Bathroom_2 cooling in `open.tsd` persist `load=0, no hour`. |
+| B3 | **FIXED, VERIFIED on real data** | Bathroom_2: DD 1139.796 W and annual 104.010 W both survive TSD → `.sam` copy → reopen. |
+| B4 | **FIXED, VERIFIED** | Tas 1608 → DD hour 23, no date; Tas 8554 → hour of year 8553 = 23 Dec 09:00; OpenStudio mapping test. |
+| B5 | **FIXED, VERIFIED on real data** | Heating peaks now carry RH, humidity ratio and every term, internal gains included; they close to ≤ 0.002 W. |
+| B6 | **VERIFIED on real data (read-only)** | A TSD scan (103 unique TSDs, harness `pr2a/tsd_cooling_scan.*`) found real zone cooling peaks in the TPD "bridge" and Part O Iteration 3 bridge runs. `C:\TasOut\pr3\final\bridge.tsd` (Leeds TRY, PR3 resultant-temperature thermostat bridge) was converted by the production code onto a copy of its design model `pr3\a2\prepared.sam`, persisted and reopened. Every cooling peak closes as `+Σ` within 0.006 W (table below). Caveat: its set points are imposed by the bridge, not a designer's cooled model; the conversion semantics are what is verified. |
+
+**Real fixtures (production `Modify.AddResults` → `Core.Convert.ToFile` to a new `.sam` → reopen; sources unchanged, SHA-256 in `pr2a/source_hashes.txt`).**
+
+| Space / file | Peak | Load W | Time | Room DB / RH | Outdoor | Σ sensible terms | Residual |
+|---|---|---|---|---|---|---|---|
+| Bathroom_2, `open.tsd` | Heating DD | 1139.796 | design day hour 23, no date | 16.0 °C / 19.6 % | n/a (design day) | −1139.796 | 0.0002 |
+| Bathroom_2, `open.tsd` | Heating annual | 104.010 | hour 8553 = 23 Dec 09:00 | 16.0 °C / 35.0 % | −2.3 °C / 100 % | −104.010 | 0.0002 |
+| Bathroom_2, `open.tsd` | Cooling DD / annual | 0 / 0 | none | — | — | — | real zero |
+| Bedroom 2_3, `bridge.tsd` | Cooling DD | 2070.833 | design day hour 0 | 19.3 °C / 100 % | n/a | +2070.831 | 0.002 |
+| Bedroom 2_3, `bridge.tsd` | Cooling annual | 1369.404 | hour 5116 = 2 Aug 04:00 | 17.2 °C / 100 % | 15.2 °C / 94 % | +1369.407 | 0.002 |
+| Studio 1_0, `bridge.tsd` | Cooling DD | 1973.468 | design day hour 0 | 19.8 °C / 100 % | n/a | +1973.474 | 0.006 |
+| Studio 1_0, `bridge.tsd` | Cooling annual | 1972.137 | hour 4411 = 3 Jul 19:00 | 19.0 °C / 58.3 % | 17.5 °C / 59 % | +1972.134 | 0.003 |
+
+Bathroom_2's persisted DD components are inf/vent −111.737, BHT −1023.256 and opaque −4.803, with every other term 0.
+The annual components are −93.374, −3.158 and −7.478. Full dumps: `pr2a/open_pr2a.out.txt` and `pr2a/bridge_pr2a.out.txt`.
+The raw channels are in `pr2a/*_probe.out.txt`.
+
+**Provenance / freshness (unchanged, stated).**
+- `Result.DateTime` is still the conversion time.
+- The ordinary `RunWorkflow` path still stamps no `SimulationResultProvenance`, so the freshness of a non-Part-O result
+  stays **Unknown**. The peaks add no freshness claim.
+- A redesign (a TSD path/fingerprint per result, or `RunWorkflow` stamping provenance) is recorded for PR2D and is not
+  done here.
+
+**Not changed, recorded.**
+- The zone-group (`ZoneSimulationResult`) aggregation in `Modify.AddResults` builds transient per-space cooling results
+  at the zone-group peak. They are summed and not persisted.
+- Latent removal/addition load is not persisted. It is a candidate additive field if the report needs a latent line.
+- The annual heating peak can fall on TSD hour 1 (1 Jan 00:00). The bridge fixture shows it; it is reported as-is.
 
 Not a blocker, but recorded:
 - The legacy Print RDS formats the cooling `LoadIndex` with `Convert.ToDateTime(index, 2018)` even for a design-day
@@ -252,7 +354,9 @@ Findings:
    - Make the read/write deterministic: one set per assembly name on load, or read and write the same set.
    - Add a regression test on the 3-set shape.
    - Re-check Phase-1 golden/fixture output. **This corrects shipped Phase 1.**
-2. **PR2A — SAM_Tas `Convert.ToSAM_Results` / `Create.SpaceSimulationResult`.**
+2. **PR2A — SAM_Tas `Convert.ToSAM_Results` / `Create.SpaceSimulationResult`.** **DONE, open for review** as PR2A-1
+   (SAM, typed `SpaceLoadPeak`) + PR2A-2 (SAM_Tas); see §3.2. B6 was verified read-only on an existing TSD, so the
+   licensed run below was not needed. The original plan follows:
    - Fix the heating-branch variables (B1).
    - For a zero/absent peak, write `Load = 0` with no index, state or components, never −1 (B2).
    - Persist the design-day **and** annual peaks separately (B3), with an explicit, documented time base (B4). Add
