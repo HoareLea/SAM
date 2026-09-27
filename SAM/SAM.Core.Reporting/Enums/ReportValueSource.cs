@@ -15,5 +15,11 @@ namespace SAM.Core.Reporting
         [Description("TSD")] TSD,
         [Description("Derived")] Derived,
         [Description("User")] User,
+
+        /// <summary>
+        /// A simulation result stored on the model, whichever engine produced it. Unlike <see cref="TSD"/> it
+        /// names no engine: the result itself records that (Result.Source).
+        /// </summary>
+        [Description("Simulation Result")] SimulationResult,
     }
 }

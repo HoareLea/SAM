@@ -2,14 +2,15 @@
 
 Status: **investigation + design-definition (26 Sep 2026).** The audit itself changed no product code. Since then,
 B0 has been fixed by [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (merge `00db4b85`, see §3.1), and B1–B5 by
-PR2A (PR2A-1 in SAM, PR2A-2 in SAM_Tas, **open, not merged**; see §3.2).
+PR2A (PR2A-1 = SAM#153, merge `8a22c82b`; PR2A-2 = SAM_Tas#69, merge `46dacf22`; see §3.2). PR2B (typed report
+data + collector) is described in §7.1.
 
 ```text
-Phase 2 result authority: BLOCKED
+Phase 2 result authority: COMPLETE
 B0: FIXED (SAM#147, 00db4b85)
-B1–B5: FIXED in PR2A-1 (SAM) + PR2A-2 (SAM_Tas), open, not merged (§3.2)
+B1–B5: FIXED in PR2A-1 (SAM#153, 8a22c82b) + PR2A-2 (SAM_Tas#69, 46dacf22), merged (§3.2)
 B6: VERIFIED read-only on an existing real Tas cooling result (pr3\final\bridge.tsd, §3.2); no licensed run needed
-PR2B reporting implementation: NOT STARTED
+PR2B reporting data + collector: IMPLEMENTED (§7.1); PDF layout (PR2C): NOT STARTED
 ```
 
 Phase 2 must report *persisted* results. The audit found that the persisted per-space load results are
@@ -92,7 +93,7 @@ Freshness and provenance:
   - Harness: `evidence/reporting-phase2-gate/harness/pr2a0_rescan.cs.txt`.
 - The Phase-1 fix reaches users through a SAM_Deploy SAM-pointer bump.
 
-### 3.2 PR2A closeout — B1–B6 (PR2A-1 SAM, PR2A-2 SAM_Tas; open, not merged)
+### 3.2 PR2A closeout — B1–B6 (PR2A-1 SAM#153, PR2A-2 SAM_Tas#69; merged)
 
 Two PRs, merged in this order: **PR2A-1** (SAM, `feature/pr2a1-space-load-peak-2026-09-27`) adds the typed result;
 **PR2A-2** (SAM_Tas, `fix/pr2a2-tas-peak-authority-2026-09-27`) fills it. SAM owns the type because the future
@@ -309,6 +310,48 @@ Per-field rules:
 - TBD values: Source TBD, Freshness Unknown.
 - Net balance: Source Derived. Show it only when every term of the balance is available.
 - No pass/fail and no ratio: design load and peaks are shown side by side only.
+
+### 7.1 As implemented in PR2B (SAM only)
+
+The proposal above was implemented with these differences, made to keep the data layer solver-neutral and free of
+derived values:
+
+```text
+SpaceDesignLoadDocumentData            Create.SpaceDesignLoadDocumentData(context, space, resultSource = null)
+  Identity, DesignCriteria, Sizing     Phase-1 collector, unchanged (Sizing = TBD design loads, Freshness Unknown)
+  Heating, Cooling : SpaceLoadResultData   Create.SpaceLoadResultData(context, space, loadType, resultSource)
+  Provenance
+
+SpaceLoadResultData
+  LoadType; Status : LoadResultStatus { NotSimulated, PeaksNotRecorded, Available, Ambiguous }
+  ResultSource : ReportValue<string>   (Result.Source, e.g. "Tas" / "OpenStudio")
+  ConvertedAt  : ReportValue<DateTime> (Result.DateTime = conversion time, not simulation time)
+  DesignDay, Annual : SpaceLoadPeakData
+
+SpaceLoadPeakData
+  Basis : LoadPeakBasis; State : LoadPeakState { Unavailable, Zero, Value }
+  Load : ReportValue<Quantity> W
+  DesignDayName (NotApplicable on annual); HourOfDay (0-based); HourOfYear (0-based, NotApplicable on a design day)
+  Time : ReportValue<DateTime>  annual only, SpaceLoadPeak.TryGetDateTime(Create.ReferenceYear = 2018); show no year
+  RoomDryBulb/Resultant/RH/HumidityRatio, OutdoorDryBulb/RH : ReportValue<Quantity>
+  SensibleComponents, LatentComponents : SpaceLoadPeakComponentData { Component, Value (signed W) }
+```
+
+- **Only** `SpaceSimulationResultParameter.DesignDayPeak` / `AnnualPeak` are read. `Load`, `LoadIndex`,
+  `SizingMethod` and every legacy room/gain value are never read (test: conflicting legacy values are ignored).
+- `Unusable` became `PeaksNotRecorded` (results exist, no typed peak: re-run). `Ambiguous` (more than one result of
+  the load type carries peaks) picks nothing; the caller passes `resultSource`.
+- Per peak: missing → `Unavailable` (all values NotAvailable, no components); `Load 0` → `Zero` (Load an available
+  0 W; absent time/state NotApplicable, "no peak timestep"); otherwise `Value` (absent values NotAvailable, "not
+  reported"). A peak whose `Basis` does not match its slot, a negative/non-finite load, or an out-of-range hour is
+  NotAvailable "invalid value in results" with a warning.
+- Source: new additive `ReportValueSource.SimulationResult` (not `TSD`, which names an engine). Freshness: Unknown
+  for every result value; `SimulationResultProvenance` is Part-O-specific and not consulted (freshness redesign = PR2D).
+- Components: exactly the stored terms, sign untouched, latent listed apart. No net balance, no latent removal load,
+  no derived quantity. The Derived net-balance row of §7 is left to PR2C if it is wanted, under its own rule.
+- `PeakTime`, `PeakCondition`, `PeakLoadTerm` were not introduced: the fields sit on `SpaceLoadPeakData`, and the
+  existing `SAM.Analytical.LoadPeakComponent` enum is reused.
+- Tests: `SAM/SAM.Tests/SpaceDesignLoadDataTests.cs`.
 
 ## 8. Report content
 
