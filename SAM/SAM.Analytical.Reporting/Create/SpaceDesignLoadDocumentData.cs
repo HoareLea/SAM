@@ -219,9 +219,18 @@ namespace SAM.Analytical.Reporting
                 else
                 {
                     hourOfYear = Hour(spaceLoadPeak.HourOfYear, 8759, peak, "hour of the year", absent);
-                    time = hourOfYear.HasValue && spaceLoadPeak.TryGetDateTime(ReferenceYear, out DateTime dateTime)
-                        ? ReportValue<DateTime>.Available(dateTime, ReportValueSource.SimulationResult, Freshness.Unknown, note: "Start of the peak hour")
-                        : hourOfYear.Availability == Availability.NotApplicable ? ReportValue<DateTime>.NotApplicable(hourOfYear.Note) : ReportValue<DateTime>.NotAvailable(hourOfYear.Note);
+                    if (!hourOfYear.HasValue)
+                    {
+                        time = hourOfYear.Availability == Availability.NotApplicable ? ReportValue<DateTime>.NotApplicable(hourOfYear.Note) : ReportValue<DateTime>.NotAvailable(hourOfYear.Note);
+                    }
+                    else if (spaceLoadPeak.TryGetDateTime(ReferenceYear, out DateTime dateTime))
+                    {
+                        time = ReportValue<DateTime>.Available(dateTime, ReportValueSource.SimulationResult, Freshness.Unknown, note: "Start of the peak hour");
+                    }
+                    else
+                    {
+                        time = ReportValue<DateTime>.NotAvailable(InvalidValue);
+                    }
                 }
 
                 return new SpaceLoadPeakData()
