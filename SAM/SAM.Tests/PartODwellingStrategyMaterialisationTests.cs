@@ -585,7 +585,7 @@ namespace SAM.Tests
         // =================================================================================================
 
         [Fact]
-        public void ActiveCooling_IsRecordedButRefused()
+        public void ActiveCooling_Persists_AndWithoutAProductIsRefused_NeverGated()
         {
             PartODwellingStrategy cooled = new(Zone(Baseline(), Flat1).Guid, PartOVentilationMode.MVHR, null, PartOActiveCooling.SupplyAirCooling);
             Assert.True(cooled.IsValid);
@@ -595,8 +595,9 @@ namespace SAM.Tests
             //It persists...
             Assert.Equal(PartOActiveCooling.SupplyAirCooling, new AnalyticalModel(baseline.ToJsonObject()).GetValue<PartODwellingStrategySet>(AnalyticalModelParameter.PartODwellingStrategies).Strategy(Zone(baseline, Flat1).Guid).ActiveCooling);
 
-            //...and is refused.
-            AssertRefused(baseline, PartOMaterialisationRefusalReason.CoolingGated, "PR3");
+            //...and a generic unit has no cooling authority. The PR1 gate is gone (PR3B-1).
+            AssertRefused(baseline, PartOMaterialisationRefusalReason.CoolingWithoutProductGuidance, "has no selected product");
+            Assert.DoesNotContain(baseline.MaterialisePartODwellingStrategies().Refusals, x => x.Reason == PartOMaterialisationRefusalReason.CoolingGated);
         }
 
         [Fact]

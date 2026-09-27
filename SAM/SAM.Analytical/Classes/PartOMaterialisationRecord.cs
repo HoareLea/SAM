@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
+using SAM.Analytical.Enums;
 using SAM.Core;
 using System;
 using System.Collections.Generic;
@@ -29,7 +30,19 @@ namespace SAM.Analytical
     /// <see cref="Fingerprint_Catalogue"/> - every selection-relevant catalogue field
     /// (<see cref="Query.PartOCatalogueFingerprint"/>): identity, maximum supply, maximum extract and rank.
     /// </item>
+    /// <item>
+    /// Per cooled dwelling, <see cref="PartOCooledDwelling.Fingerprint_Guidance"/> - the product's whole manufacturer
+    /// operating strategy (<see cref="Query.PartOCoolingGuidanceFingerprint"/>).
+    /// </item>
     /// </list>
+    ///
+    /// <para><b>Two schemas, so uncooled records never move</b></para>
+    /// <para>
+    /// A record with no cooled dwelling is written exactly as before, <see cref="Schema"/>; the route is the IZAM
+    /// route. A record with a cooled dwelling is <see cref="Schema_Cooled"/>, carries the route (the Systems route,
+    /// for the whole model) and <see cref="CooledDwellings"/>. A v2 record without a cooled dwelling, or with an
+    /// unreadable one, is invalid.
+    /// </para>
     ///
     /// <para><b>Staleness fails closed at three levels</b></para>
     /// <list type="number">
@@ -50,6 +63,9 @@ namespace SAM.Analytical
         /// <summary>The persisted schema this build reads and writes.</summary>
         public const string Schema = "PartOMaterialisation:v1";
 
+        /// <summary>The schema of a record with at least one cooled dwelling.</summary>
+        public const string Schema_Cooled = "PartOMaterialisation:v2";
+
         public PartOMaterialisationRecord()
         {
         }
@@ -69,6 +85,9 @@ namespace SAM.Analytical
                 {
                     VentilationSystemGuids[keyValuePair.Key] = keyValuePair.Value;
                 }
+
+                partOMaterialisationRecord.CooledDwellings.ForEach(x => CooledDwellings.Add(new PartOCooledDwelling(x)));
+                route_Read = partOMaterialisationRecord.route_Read;
             }
         }
 
@@ -94,8 +113,40 @@ namespace SAM.Analytical
         /// <summary>Each MVHR dwelling zone → the ventilation system it was materialised with.</summary>
         public SortedDictionary<Guid, Guid> VentilationSystemGuids { get; } = [];
 
-        /// <summary>A known schema and every fingerprint present. A partial record is not a record.</summary>
-        public bool IsValid => SchemaRead == Schema && !string.IsNullOrEmpty(Fingerprint_Baseline) && !string.IsNullOrEmpty(Fingerprint_Strategies) && !string.IsNullOrEmpty(Fingerprint_Catalogue);
+        /// <summary>The cooled dwellings, in zone guid order. Empty for a model with none.</summary>
+        public List<PartOCooledDwelling> CooledDwellings { get; } = [];
+
+        //The route a v2 record states when read, kept to check it against its cooled dwellings. Undefined otherwise.
+        private PartOSimulationRoute route_Read = PartOSimulationRoute.Undefined;
+
+        /// <summary>
+        /// How the materialised model is simulated: the Systems route for the whole model as soon as one dwelling is
+        /// cooled, the IZAM route otherwise. Derived from <see cref="CooledDwellings"/>, never chosen.
+        /// </summary>
+        public PartOSimulationRoute Route => CooledDwellings.Count == 0 ? PartOSimulationRoute.Izam : PartOSimulationRoute.Systems;
+
+        /// <summary>
+        /// A known schema, every fingerprint present, and a schema that matches the record's cooling: v1 with no cooled
+        /// dwelling read from file, v2 with valid cooled dwellings and the Systems route. A partial record is not a record.
+        /// </summary>
+        public bool IsValid
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Fingerprint_Baseline) || string.IsNullOrEmpty(Fingerprint_Strategies) || string.IsNullOrEmpty(Fingerprint_Catalogue))
+                {
+                    return false;
+                }
+
+                if (SchemaRead == Schema_Cooled)
+                {
+                    return CooledDwellings.Count != 0 && CooledDwellings.TrueForAll(x => x is not null && x.IsValid) && route_Read == PartOSimulationRoute.Systems;
+                }
+
+                //A record built in this session starts at v1 and is written as v2 once it holds a cooled dwelling.
+                return SchemaRead == Schema && CooledDwellings.TrueForAll(x => x is not null && x.IsValid);
+            }
+        }
 
         /// <summary>
         /// Whether this record still describes what materialising <paramref name="analyticalModel_Baseline"/>
@@ -103,6 +154,17 @@ namespace SAM.Analytical
         /// record, a moved baseline, a changed strategy or a changed catalogue each refuse with their reason.
         /// </summary>
         public bool IsCurrent(AnalyticalModel analyticalModel_Baseline, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, out string reason)
+        {
+            return IsCurrent(analyticalModel_Baseline, ventilationUnitCapacityDescriptors, null, out reason);
+        }
+
+        /// <summary>
+        /// As <see cref="IsCurrent(AnalyticalModel, IEnumerable{VentilationUnitCapacityDescriptor}, out string)"/>, and for a
+        /// record with cooled dwellings also whether each cooled dwelling's product still carries the manufacturer
+        /// guidance it was materialised with, in <paramref name="ventilationUnitTemplates"/>. A cooled record checked
+        /// without the templates is not current: its cooling cannot be shown to be unchanged.
+        /// </summary>
+        public bool IsCurrent(AnalyticalModel analyticalModel_Baseline, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, IEnumerable<VentilationUnitTemplate> ventilationUnitTemplates, out string reason)
         {
             reason = null;
 
@@ -148,6 +210,18 @@ namespace SAM.Analytical
                 return false;
             }
 
+            foreach (PartOCooledDwelling partOCooledDwelling in CooledDwellings)
+            {
+                VentilationUnitTemplate ventilationUnitTemplate = Query.PartOCoolingTemplate(ventilationUnitTemplates, partOCooledDwelling.VentilationUnitReference);
+
+                if (ventilationUnitTemplate is null || ventilationUnitTemplate.PartOCoolingGuidanceFingerprint() != partOCooledDwelling.Fingerprint_Guidance)
+                {
+                    reason = string.Format("The manufacturer cooling guidance of '{0}' has changed since the model was materialised, or was not supplied, so the cooling it was simulated with cannot be shown to be current. Materialise again.", partOCooledDwelling.VentilationUnitReference);
+
+                    return false;
+                }
+            }
+
             if (SimulationResultProvenance.Fingerprint(analyticalModel_Baseline) != Fingerprint_Baseline)
             {
                 reason = "The baseline has changed since the model was materialised. Materialise again.";
@@ -163,6 +237,8 @@ namespace SAM.Analytical
             ZoneGuids_Assessed.Clear();
             ZoneGuids_CommonSpace.Clear();
             VentilationSystemGuids.Clear();
+            CooledDwellings.Clear();
+            route_Read = PartOSimulationRoute.Undefined;
 
             if (jsonObject is null)
             {
@@ -188,6 +264,16 @@ namespace SAM.Analytical
                 }
             }
 
+            if (SchemaRead == Schema_Cooled)
+            {
+                route_Read = Enum.TryParse(Text(jsonObject, "Route") ?? string.Empty, out PartOSimulationRoute route) && Enum.IsDefined(typeof(PartOSimulationRoute), route) ? route : PartOSimulationRoute.Undefined;
+
+                foreach (JsonNode jsonNode in jsonObject["CooledDwellings"] as JsonArray ?? [])
+                {
+                    CooledDwellings.Add(jsonNode is JsonObject jsonObject_Cooled ? new PartOCooledDwelling(jsonObject_Cooled) : new PartOCooledDwelling());
+                }
+            }
+
             return true;
         }
 
@@ -199,10 +285,15 @@ namespace SAM.Analytical
                 jsonObject_Systems[keyValuePair.Key.ToString("D", CultureInfo.InvariantCulture)] = keyValuePair.Value.ToString("D", CultureInfo.InvariantCulture);
             }
 
-            return new JsonObject
+            //A known schema is written as the record's cooling states it; an unknown one is written back as read, so
+            //re-saving a record from a later build cannot turn it into one this build understands.
+            bool known = SchemaRead == Schema || SchemaRead == Schema_Cooled;
+            string schema = !known ? SchemaRead ?? Schema : CooledDwellings.Count == 0 ? Schema : Schema_Cooled;
+
+            JsonObject result = new()
             {
                 ["_type"] = Core.Query.FullTypeName(this),
-                ["Schema"] = SchemaRead ?? Schema,
+                ["Schema"] = schema,
                 ["Fingerprint_Baseline"] = Fingerprint_Baseline,
                 ["Fingerprint_Strategies"] = Fingerprint_Strategies,
                 ["Fingerprint_Catalogue"] = Fingerprint_Catalogue,
@@ -210,6 +301,17 @@ namespace SAM.Analytical
                 ["ZoneGuids_CommonSpace"] = WriteGuids(ZoneGuids_CommonSpace),
                 ["VentilationSystemGuids"] = jsonObject_Systems,
             };
+
+            if (schema == Schema_Cooled)
+            {
+                JsonArray jsonArray_Cooled = [];
+                CooledDwellings.ForEach(x => jsonArray_Cooled.Add(x?.ToJsonObject()));
+
+                result["Route"] = Route.ToString();
+                result["CooledDwellings"] = jsonArray_Cooled;
+            }
+
+            return result;
         }
 
         private static void ReadGuids(JsonArray jsonArray, List<Guid> guids)

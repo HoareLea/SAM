@@ -58,7 +58,7 @@ namespace SAM.Analytical
         /// <param name="guid_Zone">The dwelling zone.</param>
         /// <param name="partOVentilationMode">The selected ventilation route.</param>
         /// <param name="ventilationUnitReference">The selected product, or null for "select from the project pool".</param>
-        /// <param name="partOActiveCooling">Active cooling. Gated - see <see cref="PartOActiveCooling"/>.</param>
+        /// <param name="partOActiveCooling">Active cooling - the selected product's supply-air cooling, see <see cref="PartOActiveCooling"/>.</param>
         /// <param name="partODesignAirFlowBasis">Which design airflow to materialise at.</param>
         /// <param name="designFingerprint">
         /// For <see cref="PartODesignAirFlowBasis.RetainedDesign"/>, the fingerprint of the accepted terminal set
@@ -119,7 +119,7 @@ namespace SAM.Analytical
             }
         }
 
-        /// <summary>Active cooling. Recorded, and refused by PR1 materialisation.</summary>
+        /// <summary>Active cooling: intent only. The product and its manufacturer guidance carry every cooling number.</summary>
         public PartOActiveCooling ActiveCooling { get; set; } = PartOActiveCooling.Undefined;
 
         /// <summary>Which design airflow the dwelling is materialised at.</summary>

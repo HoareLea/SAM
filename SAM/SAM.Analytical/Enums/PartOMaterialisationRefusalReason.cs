@@ -51,7 +51,10 @@ namespace SAM.Analytical.Enums
 
         // ---- contradictions and gates -----------------------------------------------------------------
 
-        /// <summary>Active cooling is selected. It is recorded but gated until PR3 (D5).</summary>
+        /// <summary>
+        /// Retired with PR3 - active cooling is materialised. Kept so persisted values keep their meaning; nothing
+        /// produces it.
+        /// </summary>
         [Description("Cooling Gated")] CoolingGated,
 
         /// <summary>Natural ventilation with active supply-air cooling: the only cooling path is the MVHR supply.</summary>
@@ -122,5 +125,18 @@ namespace SAM.Analytical.Enums
         /// the materialisation rebuilds: it would be deleted, or the dwelling ventilated twice.
         /// </summary>
         [Description("Authored Air Movement Conflict")] AuthoredAirMovementConflict,
+
+        /// <summary>
+        /// A cooled dwelling has no product whose catalogue entry states the manufacturer's cooling operating
+        /// strategy - a generic unit, the project test unit, or a product without guidance. Cooling is the product's
+        /// own; nothing else is its authority.
+        /// </summary>
+        [Description("Cooling Without Product Guidance")] CoolingWithoutProductGuidance,
+
+        /// <summary>
+        /// A cooled dwelling's cooling operating airflow falls outside the manufacturer's published cooling airflow
+        /// range or the selected unit's capacity.
+        /// </summary>
+        [Description("Cooling Airflow Outside Guidance")] CoolingAirFlowOutsideGuidance,
     }
 }

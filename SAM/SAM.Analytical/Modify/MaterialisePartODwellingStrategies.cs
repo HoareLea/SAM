@@ -36,17 +36,30 @@ namespace SAM.Analytical
         /// <item>no strategy collection (a legacy model), an unknown schema, a duplicated or unreadable strategy, a
         /// strategy for a zone that is not a dwelling, and an assessed dwelling with no strategy - absence is never
         /// read as natural ventilation;</item>
-        /// <item>active cooling (gated, D5); natural ventilation with cooling, with a retained mechanical design or
-        /// with a product;</item>
+        /// <item>natural ventilation with cooling, with a retained mechanical design or with a product;</item>
+        /// <item>active cooling without a product whose catalogue entry states its manufacturer's cooling guidance, or
+        /// whose cooling operating airflow falls outside that guidance's published range or the unit's capacity;</item>
         /// <item>a naturally ventilated dwelling served by authored mechanical duty or plant; an authored system or
         /// unit that straddles zones (shared plant is never split or mutated); authored plant in an MVHR dwelling
         /// that is not connected to its design terminals; a reused authored unit that states a supply
-        /// temperature (P12 - it would carry active cooling behind the gate);</item>
+        /// temperature (P12 - an authored setpoint is conditioning nobody selected, cooled dwelling or not);</item>
         /// <item>a retained design whose terminals no longer match its fingerprint, and a Part F requirement basis
         /// over terminals that differ from the requirement;</item>
         /// <item>a product that is not in the catalogue, not permitted by the project, or cannot serve the duty; and
         /// every refusal of the Iteration 1a design itself (ticV conflict, duty, movements, transfer air, balance).</item>
         /// </list>
+        ///
+        /// <para><b>Active cooling (PR3)</b></para>
+        /// <para>
+        /// A cooled dwelling is an MVHR dwelling built exactly as any other, whose selected product's manufacturer
+        /// guidance is its cooling. Nothing cooling-specific is written into the model: the cooling is materialised by
+        /// SAM_Systems on the TAS Systems route from <see cref="PartOMaterialisationRecord.CooledDwellings"/> - the unit,
+        /// the product, the guidance fingerprint and the cooling operating airflow
+        /// (<see cref="Query.PartOCoolingOperatingAirFlow"/>). One cooled dwelling puts the whole model on that route
+        /// (<see cref="PartOMaterialisationRecord.Route"/>). A cooled dwelling is assessed as
+        /// <see cref="PartOIteration.ActiveTrimCooling"/>, never as <see cref="PartOIteration.BasePassive"/>. Its unit
+        /// and air network must stay inside the dwelling, which is checked after materialisation.
+        /// </para>
         ///
         /// <para><b>Natural ventilation writes nothing and strips nothing</b></para>
         /// <para>
@@ -84,7 +97,11 @@ namespace SAM.Analytical
         /// The dwellings to materialise. Null means every dwelling zone of the model, each of which must then carry
         /// a strategy. A dwelling outside the scope is unassessed: untouched and unscenarioed.
         /// </param>
-        public static PartOMaterialisation MaterialisePartODwellingStrategies(this AnalyticalModel analyticalModel_Baseline, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, IEnumerable<Guid> guids_Zone_Assessed = null)
+        /// <param name="ventilationUnitTemplates">
+        /// The catalogue's product templates, read for their manufacturer operating strategy - the cooling guidance of
+        /// a cooled dwelling's selected product. Null offers no guidance, so every cooled dwelling refuses.
+        /// </param>
+        public static PartOMaterialisation MaterialisePartODwellingStrategies(this AnalyticalModel analyticalModel_Baseline, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, IEnumerable<Guid> guids_Zone_Assessed = null, IEnumerable<VentilationUnitTemplate> ventilationUnitTemplates = null)
         {
             PartOMaterialisation result = new();
 
@@ -223,10 +240,6 @@ namespace SAM.Analytical
                 if (natural && partODwellingStrategy.ActiveCooling != PartOActiveCooling.None)
                 {
                     Refuse(PartOMaterialisationRefusalReason.NaturalWithCooling, string.Format("Dwelling '{0}' is selected as naturally ventilated with active supply-air cooling. The only cooling path is on the MVHR supply, so the two statements contradict each other.", zone.Name), zone);
-                }
-                else if (partODwellingStrategy.ActiveCooling != PartOActiveCooling.None)
-                {
-                    Refuse(PartOMaterialisationRefusalReason.CoolingGated, string.Format("Dwelling '{0}' is selected with active supply-air cooling. Cooling is recorded but not materialised: any cooling today moves the whole mechanical building onto the TAS Systems route and strips every IZAM and ticV transfer, so it waits for the licensed proof (PR3).", zone.Name), zone);
                 }
 
                 if (natural && partODwellingStrategy.DesignAirFlowBasis == PartODesignAirFlowBasis.RetainedDesign)
@@ -492,14 +505,14 @@ namespace SAM.Analytical
 
                         conditioned = true;
 
-                        return string.Format("Dwelling '{0}' would reuse authored air handling unit '{1}', which states a summer supply temperature of {2} and a winter one of {3}. A supply temperature is a setpoint the supply air is conditioned to - active cooling (or heating) - and this dwelling's strategy states none, so materialising it would carry cooling behind the cooling gate. Remove the conditioning from the baseline's unit, or wait for the cooling authority (PR3).", zone.Name, airHandlingUnit.Name, Temperature(airHandlingUnit.SummerSupplyTemperature), Temperature(airHandlingUnit.WinterSupplyTemperature));
+                        return string.Format("Dwelling '{0}' would reuse authored air handling unit '{1}', which states a summer supply temperature of {2} and a winter one of {3}. A supply temperature is a setpoint the supply air is conditioned to - active cooling (or heating) - that no strategy selected: a dwelling's cooling is its selected product's manufacturer guidance, never an authored setpoint. Remove the conditioning from the baseline's unit.", zone.Name, airHandlingUnit.Name, Temperature(airHandlingUnit.SummerSupplyTemperature), Temperature(airHandlingUnit.WinterSupplyTemperature));
                     },
                     result.Notes,
                     result.Warnings,
                     out VentilationSystem ventilationSystem,
                     out AirHandlingUnit airHandlingUnit,
-                    out double _,
-                    out double _);
+                    out double supplyDuty_Lps,
+                    out double extractDuty_Lps);
 
                 if (refusal_Dwelling is not null)
                 {
@@ -565,10 +578,25 @@ namespace SAM.Analytical
                     result.Notes.Add(string.Format("No catalogue was offered, so dwelling '{0}''s unit '{1}' stays generic, exactly as Iteration 1a builds it.", zone.Name, airHandlingUnit.Name));
                 }
 
+                // ---- Active cooling: the selected product's manufacturer guidance ----
+
+                if (partODwellingStrategy.ActiveCooling == PartOActiveCooling.SupplyAirCooling)
+                {
+                    PartOCooledDwelling partOCooledDwelling = CooledDwelling(zone, airHandlingUnit, supplyDuty_Lps, extractDuty_Lps, ventilationUnitTemplates, Refuse);
+                    if (partOCooledDwelling is null)
+                    {
+                        continue;
+                    }
+
+                    partOMaterialisationRecord.CooledDwellings.Add(partOCooledDwelling);
+                }
+
                 result.VentilationSystems.Add(ventilationSystem);
                 result.AirHandlingUnits.Add(airHandlingUnit);
                 partOMaterialisationRecord.VentilationSystemGuids[zone.Guid] = ventilationSystem.Guid;
             }
+
+            partOMaterialisationRecord.CooledDwellings.Sort((x, y) => x.ZoneGuid.CompareTo(y.ZoneGuid));
 
             if (result.Refusals.Count != 0)
             {
@@ -605,6 +633,19 @@ namespace SAM.Analytical
                 }
             }
 
+            //A cooled dwelling's unit and air network stay inside the dwelling, so on the Systems route its cooled supply
+            //and its transfer air can reach no neighbour and no corridor.
+            foreach (PartOCooledDwelling partOCooledDwelling in partOMaterialisationRecord.CooledDwellings)
+            {
+                Zone zone = dictionary_Zone[partOCooledDwelling.ZoneGuid];
+
+                string refusal_Isolated = CooledDwellingIsolated(adjacencyCluster, SpacesOf(zone), partOCooledDwelling.AirHandlingUnitGuid);
+                if (refusal_Isolated is not null)
+                {
+                    Refuse(PartOMaterialisationRefusalReason.Invariant, string.Format("Cooled dwelling '{0}' is not isolated after materialisation: {1}", zone.Name, refusal_Isolated), zone);
+                }
+            }
+
             if (result.Refusals.Count != 0)
             {
                 return result;
@@ -616,12 +657,15 @@ namespace SAM.Analytical
             {
                 PartODwellingStrategy partODwellingStrategy = dictionary_Strategy[zone.Guid];
                 bool natural = partODwellingStrategy.VentilationMode == PartOVentilationMode.NaturalVentilation;
+                bool cooled = partODwellingStrategy.ActiveCooling == PartOActiveCooling.SupplyAirCooling;
 
                 Zone zone_Applied = adjacencyCluster.GetObject<Zone>(zone.Guid) ?? zone;
 
+                //A cooled dwelling is its own identity, never BasePassive; its criterion is the mechanical one ("MVHR"),
+                //as for any mechanically ventilated dwelling.
                 List<OverheatingScenario> overheatingScenarios = Create.OverheatingScenarios(
                     [zone_Applied],
-                    natural ? PartOIteration.BaseNaturalVentilation : PartOIteration.BasePassive,
+                    natural ? PartOIteration.BaseNaturalVentilation : cooled ? PartOIteration.ActiveTrimCooling : PartOIteration.BasePassive,
                     new Dictionary<Guid, string> { { zone.Guid, natural ? "NV" : "MVHR" } },
                     out List<string> refusals_Scenario);
 
@@ -667,11 +711,13 @@ namespace SAM.Analytical
             result.AnalyticalModel = analyticalModel_Materialised;
 
             result.Notes.Add(string.Format(
-                "Materialised {0} dwelling(s) - {1} MVHR, {2} naturally ventilated - and {3} assessed communal corridor(s) into one model from the clean baseline.",
+                "Materialised {0} dwelling(s) - {1} MVHR ({4} cooled), {2} naturally ventilated - and {3} assessed communal corridor(s) into one model from the clean baseline; simulated on the {5} route.",
                 zones_Assessed.Count,
                 zones_MVHR.Count,
                 zones_Natural.Count,
-                zones_CommonSpace.Count));
+                zones_CommonSpace.Count,
+                partOMaterialisationRecord.CooledDwellings.Count,
+                Core.Query.Description(partOMaterialisationRecord.Route)));
 
             return result;
         }
@@ -682,6 +728,108 @@ namespace SAM.Analytical
             int comparison = string.CompareOrdinal(zone_1?.Name, zone_2?.Name);
 
             return comparison != 0 ? comparison : (zone_1?.Guid ?? Guid.Empty).CompareTo(zone_2?.Guid ?? Guid.Empty);
+        }
+
+        /// <summary>
+        /// The cooled dwelling its selected product's manufacturer guidance makes it, or null (refused) where the unit has
+        /// no product, the product states no guidance, or the cooling operating airflow falls outside it.
+        /// </summary>
+        private static PartOCooledDwelling CooledDwelling(Zone zone, AirHandlingUnit airHandlingUnit, double supplyDuty_Lps, double extractDuty_Lps, IEnumerable<VentilationUnitTemplate> ventilationUnitTemplates, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse)
+        {
+            VentilationUnitReference ventilationUnitReference = airHandlingUnit?.SelectedVentilationUnitReference();
+            if (ventilationUnitReference is null || !ventilationUnitReference.IsValid)
+            {
+                refuse(PartOMaterialisationRefusalReason.CoolingWithoutProductGuidance, string.Format("Dwelling '{0}' is selected with active cooling, but its unit '{1}' has no selected product. A dwelling's cooling is its product's manufacturer guidance, so a generic unit cannot be cooled: offer the catalogue, or select a product.", zone.Name, airHandlingUnit?.Name), zone, airHandlingUnit?.Name);
+
+                return null;
+            }
+
+            VentilationUnitTemplate ventilationUnitTemplate = Query.PartOCoolingTemplate(ventilationUnitTemplates, ventilationUnitReference);
+            if (ventilationUnitTemplate?.OperatingStrategy is null)
+            {
+                refuse(PartOMaterialisationRefusalReason.CoolingWithoutProductGuidance, string.Format("Dwelling '{0}' is selected with active cooling, but its product '{1}' has no catalogue entry stating its manufacturer's cooling guidance{2}, so nothing states how it cools.", zone.Name, ventilationUnitReference, ventilationUnitTemplate is null ? " (none, or more than one, was offered)" : string.Empty), zone, ventilationUnitReference.ToString());
+
+                return null;
+            }
+
+            double coolingOperatingAirFlow_Lps = ventilationUnitTemplate.PartOCoolingOperatingAirFlow(supplyDuty_Lps, extractDuty_Lps, out string refusal);
+            if (refusal is not null)
+            {
+                refuse(PartOMaterialisationRefusalReason.CoolingAirFlowOutsideGuidance, string.Format("Dwelling '{0}' is selected with active cooling, but its product '{1}' {2}", zone.Name, ventilationUnitReference, refusal), zone, ventilationUnitReference.ToString());
+
+                return null;
+            }
+
+            return new PartOCooledDwelling(zone.Guid, airHandlingUnit.Guid, ventilationUnitReference, coolingOperatingAirFlow_Lps, ventilationUnitTemplate.PartOCoolingGuidanceFingerprint());
+        }
+
+        /// <summary>
+        /// Null where every air movement of a cooled dwelling's rooms and of its unit stays between those rooms, that
+        /// unit and outside, and every system naming the unit serves only those rooms.
+        /// </summary>
+        private static string CooledDwellingIsolated(AdjacencyCluster adjacencyCluster, List<Space> spaces_Dwelling, Guid guid_AirHandlingUnit)
+        {
+            AirHandlingUnit airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(guid_AirHandlingUnit);
+            if (airHandlingUnit is null)
+            {
+                return "its unit is missing";
+            }
+
+            HashSet<Guid> guids_Space = [];
+            HashSet<string> references = [new Core.ObjectReference(airHandlingUnit).ToString()];
+            foreach (Space space in spaces_Dwelling)
+            {
+                guids_Space.Add(space.Guid);
+                references.Add(new Core.ObjectReference(space).ToString());
+            }
+
+            List<SpaceAirMovement> spaceAirMovements = [.. adjacencyCluster.GetRelatedObjects<SpaceAirMovement>(airHandlingUnit) ?? []];
+            foreach (Space space in spaces_Dwelling)
+            {
+                spaceAirMovements.AddRange(adjacencyCluster.GetRelatedObjects<SpaceAirMovement>(space) ?? []);
+            }
+
+            foreach (SpaceAirMovement spaceAirMovement in spaceAirMovements)
+            {
+                if (spaceAirMovement is null)
+                {
+                    continue;
+                }
+
+                foreach (string endpoint in new[] { spaceAirMovement.From, spaceAirMovement.To })
+                {
+                    if (!string.IsNullOrWhiteSpace(endpoint) && !references.Contains(endpoint))
+                    {
+                        return string.Format("air movement '{0}' reaches '{1}', outside the dwelling and its unit", spaceAirMovement.Name, endpoint);
+                    }
+                }
+
+                foreach (Space space in adjacencyCluster.GetRelatedObjects<Space>(spaceAirMovement) ?? [])
+                {
+                    if (space is not null && !guids_Space.Contains(space.Guid))
+                    {
+                        return string.Format("air movement '{0}' is related to '{1}', outside the dwelling", spaceAirMovement.Name, space.Name);
+                    }
+                }
+            }
+
+            foreach (VentilationSystem ventilationSystem in adjacencyCluster.GetObjects<VentilationSystem>() ?? [])
+            {
+                if (ventilationSystem?.GetValue<string>(VentilationSystemParameter.SupplyUnitName) != airHandlingUnit.Name && ventilationSystem?.GetValue<string>(VentilationSystemParameter.ExhaustUnitName) != airHandlingUnit.Name)
+                {
+                    continue;
+                }
+
+                foreach (Space space in adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem) ?? [])
+                {
+                    if (space is not null && !guids_Space.Contains(space.Guid))
+                    {
+                        return string.Format("system '{0}' of its unit serves '{1}', outside the dwelling", ventilationSystem.FullName, space.Name);
+                    }
+                }
+            }
+
+            return null;
         }
 
         private static string Temperature(double value) => double.IsNaN(value) ? "none" : string.Format(System.Globalization.CultureInfo.InvariantCulture, "{0:0.###} degC", value);
