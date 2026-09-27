@@ -82,7 +82,8 @@ namespace SAM.Analytical
             AdjacencyCluster adjacencyCluster = analyticalModel_Baseline.AdjacencyCluster;
             AdjacencyCluster adjacencyCluster_Source = analyticalModel_Source.AdjacencyCluster;
 
-            Zone zone = Query.PartFDwellingZones(adjacencyCluster?.GetZones())?.Find(x => x.Guid == guid_Zone);
+            List<Zone> zones_Dwelling = Query.PartFDwellingZones(adjacencyCluster?.GetZones()) ?? [];
+            Zone zone = zones_Dwelling.Find(x => x.Guid == guid_Zone);
             if (zone is null)
             {
                 result.Refusals.Add(string.Format("Zone {0} is not a dwelling of the baseline, so there is no dwelling design to accept.", guid_Zone));
@@ -100,6 +101,29 @@ namespace SAM.Analytical
             spaces.Sort((x, y) => string.Compare(x?.Name, y?.Name, StringComparison.OrdinalIgnoreCase));
 
             HashSet<Guid> guids_Space = [.. spaces.Where(x => x is not null).Select(x => x.Guid)];
+
+            //A space of another dwelling too would be written for both - the materialisation refuses that state
+            //(OverlappingZones), so acceptance refuses it first.
+            foreach (Zone zone_Other in zones_Dwelling)
+            {
+                if (zone_Other.Guid == guid_Zone)
+                {
+                    continue;
+                }
+
+                foreach (Space space_Other in adjacencyCluster.GetRelatedObjects<Space>(zone_Other) ?? [])
+                {
+                    if (space_Other is not null && guids_Space.Contains(space_Other.Guid))
+                    {
+                        result.Refusals.Add(string.Format("Space '{0}' belongs to both '{1}' and '{2}', so it has no single dwelling design to accept.", space_Other.Name, zone.Name, zone_Other.Name));
+                    }
+                }
+            }
+
+            if (result.Refusals.Count != 0)
+            {
+                return result;
+            }
             HashSet<Guid> guids_Space_Source = [.. (adjacencyCluster_Source.GetRelatedObjects<Space>(zone_Source) ?? []).Where(x => x is not null).Select(x => x.Guid)];
             if (!guids_Space.SetEquals(guids_Space_Source))
             {
