@@ -290,6 +290,35 @@ namespace SAM.Tests
             Assert.Empty(acceptance.Notes);
         }
 
+        [Fact]
+        public void Acceptance_OntoABaselineWithAnUnusableTerminalDuty_IsRefused_EvenWhereTheTotalAlreadyMatches()
+        {
+            //Bedroom 1's requirement realised as two subdivided terminals, -5 and requirement + 5: the total equals the
+            //requirement, so a matching source would skip the write and the setter's validation.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.RealizePartFVentilationTerminals(Spaces(baseline, Flat1), out _, out List<string> refusals);
+            Assert.Empty(refusals);
+
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            VentilationTerminal ventilationTerminal = adjacencyCluster.VentilationTerminals(bedroom).First(x => x.FlowClassification == FlowClassification.Supply);
+            double requirement = ventilationTerminal.DesignFlowRate_Lps ?? 0;
+            adjacencyCluster.AddObject(Replaced(ventilationTerminal, FlowClassification.Supply, requirement + 5.0));
+
+            VentilationTerminal ventilationTerminal_Negative = new("Bedroom 1 - negative duty", FlowClassification.Supply, -5.0);
+            ventilationTerminal_Negative.SetValue(VentilationTerminalParameter.PartFTerminalReference, ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference));
+            adjacencyCluster.AddObject(ventilationTerminal_Negative);
+            adjacencyCluster.AddRelation(ventilationTerminal_Negative, bedroom);
+
+            AnalyticalModel baseline_Invalid = new(baseline, adjacencyCluster);
+            AnalyticalModel source = Materialise(WithStrategies(baseline, Mvhr(Flat1), Mvhr(Flat2), Mvhr(Flat3))).AnalyticalModel;
+
+            PartODwellingDesignAcceptance acceptance = baseline_Invalid.AcceptPartODwellingDesign(Zone(baseline_Invalid, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("states no usable design airflow", acceptance.Refusal);
+        }
+
         private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;

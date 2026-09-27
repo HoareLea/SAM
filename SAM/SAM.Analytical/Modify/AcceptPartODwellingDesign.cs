@@ -131,6 +131,15 @@ namespace SAM.Analytical
                     if (requirements_Baseline.Count != 1 || Direction(requirements_Baseline[0]) != ventilationTerminal.FlowClassification)
                     {
                         result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which does not realise exactly one continuous Approved Document F requirement in its own direction, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
+                        continue;
+                    }
+
+                    //Checked here, before any write: a space whose total already equals the accepted one is not written, so
+                    //SetSpaceDesignFlowRate's own validation would never see an unusable duty offset by another terminal.
+                    double? designFlowRate_Baseline = ventilationTerminal.DesignFlowRate_Lps;
+                    if (!designFlowRate_Baseline.HasValue || double.IsNaN(designFlowRate_Baseline.Value) || double.IsInfinity(designFlowRate_Baseline.Value) || designFlowRate_Baseline.Value < 0)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline states no usable design airflow ({2}), so the dwelling's design cannot be accepted onto it. Correct the terminal first.", ventilationTerminal.Name, space.Name, designFlowRate_Baseline?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "none"));
                     }
                 }
 
