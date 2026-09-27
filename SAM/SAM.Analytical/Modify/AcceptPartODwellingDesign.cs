@@ -306,7 +306,8 @@ namespace SAM.Analytical
                     //What was persisted, which is not always what was asked: SetSpaceDesignFlowRate raises a value a rounding
                     //bit below the Approved Document F floor to the floor exactly.
                     double total_After = (adjacencyCluster.VentilationTerminals(adjacencyCluster.GetObject<Space>(space.Guid)) ?? []).VentilationTerminals(flowClassification)?.Sum(x => x?.DesignFlowRate_Lps ?? 0) ?? total_Accepted;
-                    if (System.Math.Abs(total_After - total_Before) > tolerance_Lps)
+                    //Every persisted difference is reported (beyond floating-point noise), however small: the model changed.
+                    if (System.Math.Abs(total_After - total_Before) > 1e-9)
                     {
                         changes.Add(new PartODwellingDesignChange(space.Guid, space.Name, flowClassification, total_Before, total_After));
                     }

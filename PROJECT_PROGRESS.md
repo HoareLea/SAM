@@ -26,7 +26,7 @@ Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
   `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10 tests; local high review added the
   designer-added-terminal refusal); `PartODwellingStrategyMaterialisationTests`
   made `partial` (one keyword); PR1 doc §11.
-- **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2567/2567** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
+- **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2568/2568** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
   0 errors. Real 2B data accepted (SAM_UI harness).
 - **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
 

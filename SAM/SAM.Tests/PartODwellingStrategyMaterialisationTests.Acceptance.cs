@@ -420,6 +420,31 @@ namespace SAM.Tests
             Assert.Contains("related to more than one space", acceptance_Source.Refusal);
         }
 
+        [Fact]
+        public void AcceptedChange_WithinTheTolerance_IsStillReported()
+        {
+            //The source's Bedroom 1 supply differs from the requirement by less than the tolerance, but is written.
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = Materialise(WithStrategies(baseline, Mvhr(Flat1), Mvhr(Flat2), Mvhr(Flat3))).AnalyticalModel;
+            double requirement = SpaceDesignFlow(source.AdjacencyCluster, source.AdjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1"), FlowClassification.Supply);
+            source = WithTerminal(source, "Bedroom 1", FlowClassification.Supply, x => Replaced(x, x.FlowClassification, requirement + 0.0005));
+
+            PartODwellingDesignAcceptance acceptance = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+            Assert.True(acceptance.IsAccepted, acceptance.Refusal);
+
+            AdjacencyCluster adjacencyCluster = acceptance.AnalyticalModel.AdjacencyCluster;
+            double persisted = SpaceDesignFlow(adjacencyCluster, adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1"), FlowClassification.Supply);
+            if (System.Math.Abs(persisted - requirement) > 1e-9)
+            {
+                PartODwellingDesignChange change = Assert.Single(acceptance.Changes, x => x.SpaceName == "Bedroom 1" && x.FlowClassification == FlowClassification.Supply);
+                Assert.Equal(persisted, change.After_Lps, 9);
+            }
+            else
+            {
+                Assert.DoesNotContain(acceptance.Changes, x => x.SpaceName == "Bedroom 1");
+            }
+        }
+
         private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
