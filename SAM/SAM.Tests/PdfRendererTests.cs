@@ -32,7 +32,7 @@ namespace SAM.Tests
     /// pagination. Structure is checked on the PDF (pages, size) and on the MigraDoc model the renderer builds (text),
     /// never byte for byte: a PDF carries a creation time and a random file id.
     /// </summary>
-    public class PdfRendererTests
+    public partial class PdfRendererTests
     {
         private const double A4Width = 595.28;
         private const double A4Height = 841.89;
