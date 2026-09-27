@@ -12,7 +12,7 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current (Part O stream): Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - PR OPEN
+## Current (Part O stream): Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - MERGED as [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (`be84d7b8`)
 
 Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`, merged up with `sow/2026-Q3` `8a22c82b` (SAM#153, PR2A-1) - only this file conflicted. SAM only, additive. Needed by SAM_UI#126
 (PR2) **Accept optimised airflow…**: a clean baseline has no design terminals, so a retained (2B) design was unreachable.
@@ -28,7 +28,8 @@ Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
   made `partial` (one keyword); PR1 doc §11.
 - **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2569/2569** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
   0 errors. Real 2B data accepted (SAM_UI harness).
-- **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
+- **Merged:** 27 Sep 2026 as `be84d7b8` (head `204bfea9`) after 7 Codex rounds (all P2 input-validation edge cases, each with a regression) and a local high-effort review standing in when Codex hit its usage limit (owner-approved).
+- **Next step:** none in SAM for this; SAM_UI#126 (PR2) builds against it.
 
 ## Current (Reporting stream): PR2A-1 - typed per-simulation load peaks (`SpaceLoadPeak`) for the Phase-2 result authority (2026-09-27) - MERGED as [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (`8a22c82b`)
 
