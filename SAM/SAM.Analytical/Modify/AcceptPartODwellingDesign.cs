@@ -82,7 +82,8 @@ namespace SAM.Analytical
             AdjacencyCluster adjacencyCluster = analyticalModel_Baseline.AdjacencyCluster;
             AdjacencyCluster adjacencyCluster_Source = analyticalModel_Source.AdjacencyCluster;
 
-            List<Zone> zones_Dwelling = Query.PartFDwellingZones(adjacencyCluster?.GetZones()) ?? [];
+            List<Zone> zones_All = adjacencyCluster?.GetZones() ?? [];
+            List<Zone> zones_Dwelling = Query.PartFDwellingZones(zones_All) ?? [];
             Zone zone = zones_Dwelling.Find(x => x.Guid == guid_Zone);
             if (zone is null)
             {
@@ -102,9 +103,11 @@ namespace SAM.Analytical
 
             HashSet<Guid> guids_Space = [.. spaces.Where(x => x is not null).Select(x => x.Guid)];
 
-            //A space of another dwelling too would be written for both - the materialisation refuses that state
-            //(OverlappingZones), so acceptance refuses it first.
-            foreach (Zone zone_Other in zones_Dwelling)
+            //A space another owning zone also holds - another dwelling, or a classified common/non-dwelling zone such as a
+            //corridor - has no single dwelling design: the materialisation refuses that state (OverlappingZones, over the
+            //same ownership scope), so acceptance refuses it first.
+            zones_All.PartFClassifyDwellingZones(out List<Zone> _, out List<Zone> zones_NotDwelling, out List<Zone> _);
+            foreach (Zone zone_Other in zones_Dwelling.Concat(zones_NotDwelling ?? []))
             {
                 if (zone_Other.Guid == guid_Zone)
                 {
@@ -266,11 +269,8 @@ namespace SAM.Analytical
                     Space space_Cluster = adjacencyCluster.GetObject<Space>(space.Guid);
                     double total_Before = (adjacencyCluster.VentilationTerminals(space_Cluster) ?? []).VentilationTerminals(flowClassification)?.Sum(x => x?.DesignFlowRate_Lps ?? 0) ?? 0;
 
-                    if (System.Math.Abs(total_Before - total_Accepted) <= tolerance_Lps)
-                    {
-                        continue;
-                    }
-
+                    //Always through the setter, even where the totals already agree: it is the operation that holds the
+                    //Approved Document F floor and the terminal-duty rules, and a baseline can carry either state already.
                     adjacencyCluster.SetSpaceDesignFlowRate(space_Cluster, flowClassification, total_Accepted, out List<string> notes_Set, out List<string> refusals_Set, tolerance_Lps);
                     if (refusals_Set.Count != 0)
                     {
@@ -283,7 +283,10 @@ namespace SAM.Analytical
                     //What was persisted, which is not always what was asked: SetSpaceDesignFlowRate raises a value a rounding
                     //bit below the Approved Document F floor to the floor exactly.
                     double total_After = (adjacencyCluster.VentilationTerminals(adjacencyCluster.GetObject<Space>(space.Guid)) ?? []).VentilationTerminals(flowClassification)?.Sum(x => x?.DesignFlowRate_Lps ?? 0) ?? total_Accepted;
-                    changes.Add(new PartODwellingDesignChange(space.Guid, space.Name, flowClassification, total_Before, total_After));
+                    if (System.Math.Abs(total_After - total_Before) > tolerance_Lps)
+                    {
+                        changes.Add(new PartODwellingDesignChange(space.Guid, space.Name, flowClassification, total_Before, total_After));
+                    }
                 }
             }
 

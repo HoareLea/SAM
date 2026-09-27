@@ -335,6 +335,45 @@ namespace SAM.Tests
             Assert.Contains("belongs to both", acceptance.Refusal);
         }
 
+        [Fact]
+        public void Acceptance_ForADwellingSharingASpaceWithTheCorridor_IsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = RaisedRunCopy(baseline, out _, out _);
+
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.AddRelation(adjacencyCluster.GetZones().Find(x => x.Name == Corridor), adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1"));
+            AnalyticalModel baseline_Overlap = new(baseline, adjacencyCluster);
+
+            PartODwellingDesignAcceptance acceptance = baseline_Overlap.AcceptPartODwellingDesign(Zone(baseline_Overlap, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("belongs to both", acceptance.Refusal);
+        }
+
+        [Fact]
+        public void Acceptance_OntoABaselineTerminalBelowTheFloor_IsRefused_EvenWhereTheSourceStatesTheSameTotal()
+        {
+            //Bedroom 1 realised on the baseline, then set 3 l/s below its Part F requirement; the source states that total.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.RealizePartFVentilationTerminals(Spaces(baseline, Flat1), out _, out List<string> refusals);
+            Assert.Empty(refusals);
+
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            VentilationTerminal ventilationTerminal = adjacencyCluster.VentilationTerminals(bedroom).First(x => x.FlowClassification == FlowClassification.Supply);
+            double low = (ventilationTerminal.DesignFlowRate_Lps ?? 0) - 3.0;
+            adjacencyCluster.AddObject(Replaced(ventilationTerminal, FlowClassification.Supply, low));
+            AnalyticalModel baseline_Low = new(baseline, adjacencyCluster);
+
+            AnalyticalModel source = WithTerminal(Materialise(WithStrategies(baseline, Mvhr(Flat1), Mvhr(Flat2), Mvhr(Flat3))).AnalyticalModel, "Bedroom 1", FlowClassification.Supply, x => Replaced(x, x.FlowClassification, low));
+
+            PartODwellingDesignAcceptance acceptance = baseline_Low.AcceptPartODwellingDesign(Zone(baseline_Low, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Null(acceptance.AnalyticalModel);
+        }
+
         private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
