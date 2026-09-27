@@ -66,6 +66,13 @@ namespace SAM.Analytical
                 return result;
             }
 
+            //See Query.IsValidFlowRateTolerance: an infinite tolerance would call every airflow "the same" and accept nothing.
+            if (!Query.IsValidFlowRateTolerance(tolerance_Lps))
+            {
+                result.Refusals.Add(string.Format("The airflow tolerance {0} is not a usable finite, non-negative number, so the design cannot be compared.", tolerance_Lps));
+                return result;
+            }
+
             if (!analyticalModel_Baseline.IsPartOCleanBaseline(out List<PartOMaterialisationRefusal> findings))
             {
                 result.Refusals.Add(string.Format("The model accepting the design is not a clean Part O baseline, and a design is only ever accepted onto one: {0}", string.Join(" ", findings.ConvertAll(x => x.Message))));
@@ -109,13 +116,21 @@ namespace SAM.Analytical
                 List<PartFVentilationTerminalRequirement> requirements = (space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData)?.Terminals ?? [])
                     .FindAll(x => x is not null && x.ContinuousDesignFlowRate_Lps.HasValue && !double.IsNaN(x.ContinuousDesignFlowRate_Lps.Value));
 
-                //A designer-added terminal realises no requirement: SetSpaceDesignFlowRate would spread the accepted total
-                //over it too, so the requirement terminals would not carry the accepted design. Refused, never guessed.
+                //Every design terminal the baseline already carries must realise exactly one continuous requirement, in that
+                //requirement's direction: SetSpaceDesignFlowRate spreads a total over EVERY terminal of the direction, so a
+                //designer-added or intermittent device would take part of the accepted continuous design. Refused, never guessed.
                 foreach (VentilationTerminal ventilationTerminal in adjacencyCluster.VentilationTerminals(space) ?? [])
                 {
-                    if (ventilationTerminal is not null && ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference) is null)
+                    if (ventilationTerminal is null)
                     {
-                        result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which realises no Approved Document F requirement, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
+                        continue;
+                    }
+
+                    PartFTerminalReference partFTerminalReference_Baseline = ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference);
+                    List<PartFVentilationTerminalRequirement> requirements_Baseline = partFTerminalReference_Baseline is null ? [] : requirements.FindAll(partFTerminalReference_Baseline.Matches);
+                    if (requirements_Baseline.Count != 1 || Direction(requirements_Baseline[0]) != ventilationTerminal.FlowClassification)
+                    {
+                        result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which does not realise exactly one continuous Approved Document F requirement in its own direction, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
                     }
                 }
 
@@ -157,9 +172,15 @@ namespace SAM.Analytical
                     }
 
                     PartFVentilationTerminalRequirement requirement = requirements_Matched[0];
+                    if (Direction(requirement) != ventilationTerminal_Source.FlowClassification)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the model to accept from is classified {2}, but realises the {3} requirement, which is {4}. Its airflow is not accepted in either direction.", ventilationTerminal_Source.Name, space.Name, ventilationTerminal_Source.FlowClassification, Core.Query.Description(requirement.TerminalRole), Direction(requirement)));
+                        continue;
+                    }
+
                     guids_Realised.Add(requirement.Guid);
 
-                    (Guid, FlowClassification) key = (space.Guid, requirement.IsExtract ? FlowClassification.Extract : FlowClassification.Supply);
+                    (Guid, FlowClassification) key = (space.Guid, Direction(requirement));
                     totals[key] = (totals.TryGetValue(key, out double total) ? total : 0) + designFlowRate_Lps.Value;
                 }
 
@@ -185,8 +206,13 @@ namespace SAM.Analytical
 
             // ---- Terminals, scoped to the dwelling ----
 
+            //Staged, and published only once every write has succeeded: the cluster is private, so a refusal discards all of it
+            //and nothing may describe a change that was never kept.
+            List<string> notes = [];
+            List<PartODwellingDesignChange> changes = [];
+
             adjacencyCluster.RealizePartFVentilationTerminals(spaces, out List<string> notes_Realise, out List<string> refusals_Realise);
-            result.Notes.AddRange(notes_Realise);
+            notes.AddRange(notes_Realise);
             if (refusals_Realise.Count != 0)
             {
                 result.Refusals.AddRange(refusals_Realise);
@@ -219,8 +245,12 @@ namespace SAM.Analytical
                         return result;
                     }
 
-                    result.Notes.AddRange(notes_Set);
-                    result.Changes.Add(new PartODwellingDesignChange(space.Guid, space.Name, flowClassification, total_Before, total_Accepted));
+                    notes.AddRange(notes_Set);
+
+                    //What was persisted, which is not always what was asked: SetSpaceDesignFlowRate raises a value a rounding
+                    //bit below the Approved Document F floor to the floor exactly.
+                    double total_After = (adjacencyCluster.VentilationTerminals(adjacencyCluster.GetObject<Space>(space.Guid)) ?? []).VentilationTerminals(flowClassification)?.Sum(x => x?.DesignFlowRate_Lps ?? 0) ?? total_Accepted;
+                    changes.Add(new PartODwellingDesignChange(space.Guid, space.Name, flowClassification, total_Before, total_After));
                 }
             }
 
@@ -234,10 +264,14 @@ namespace SAM.Analytical
                 return result;
             }
 
+            result.Notes.AddRange(notes);
+            result.Changes.AddRange(changes);
             result.AnalyticalModel = analyticalModel;
             result.DesignFingerprint = adjacencyCluster.PartODwellingDesignFingerprint(adjacencyCluster.GetObject<Zone>(guid_Zone));
 
             return result;
         }
+
+        private static FlowClassification Direction(PartFVentilationTerminalRequirement partFVentilationTerminalRequirement) => partFVentilationTerminalRequirement.IsExtract ? FlowClassification.Extract : FlowClassification.Supply;
     }
 }

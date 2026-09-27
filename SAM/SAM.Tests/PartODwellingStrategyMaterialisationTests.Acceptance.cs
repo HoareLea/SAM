@@ -199,7 +199,113 @@ namespace SAM.Tests
             PartODwellingDesignAcceptance acceptance = baseline_Designer.AcceptPartODwellingDesign(Zone(baseline_Designer, Flat1).Guid, source);
 
             Assert.False(acceptance.IsAccepted);
-            Assert.Contains("realises no Approved Document F requirement", acceptance.Refusal);
+            Assert.Contains("does not realise exactly one continuous Approved Document F requirement", acceptance.Refusal);
+        }
+
+        [Theory]
+        [InlineData(double.PositiveInfinity)]
+        [InlineData(double.NaN)]
+        [InlineData(-1.0)]
+        public void Acceptance_WithAnUnusableTolerance_IsRefused(double tolerance_Lps)
+        {
+            AnalyticalModel baseline = Baseline();
+
+            PartODwellingDesignAcceptance acceptance = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, RaisedRunCopy(baseline, out _, out _), tolerance_Lps);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("tolerance", acceptance.Refusal);
+        }
+
+        [Fact]
+        public void AcceptedChange_ReportsTheAirflowPersisted_WhenSnappedToTheFloor()
+        {
+            //An elevated baseline (a raised design accepted), then a source a rounding bit below the Part F floor.
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel baseline_Elevated = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, RaisedRunCopy(baseline, out _, out _)).AnalyticalModel;
+
+            AnalyticalModel source = Materialise(WithStrategies(baseline, Mvhr(Flat1), Mvhr(Flat2), Mvhr(Flat3))).AnalyticalModel;
+            double floor = SpaceDesignFlow(source.AdjacencyCluster, source.AdjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1"), FlowClassification.Supply);
+            source = WithTerminal(source, "Bedroom 1", FlowClassification.Supply, x => Replaced(x, x.FlowClassification, floor - 0.0005));
+
+            PartODwellingDesignAcceptance acceptance = baseline_Elevated.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+            Assert.True(acceptance.IsAccepted, acceptance.Refusal);
+
+            PartODwellingDesignChange change = acceptance.Changes.Single(x => x.SpaceName == "Bedroom 1" && x.FlowClassification == FlowClassification.Supply);
+            AdjacencyCluster adjacencyCluster = acceptance.AnalyticalModel.AdjacencyCluster;
+            double persisted = SpaceDesignFlow(adjacencyCluster, adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1"), FlowClassification.Supply);
+
+            Assert.Equal(floor, persisted, 9);
+            Assert.Equal(persisted, change.After_Lps, 9);
+        }
+
+        [Fact]
+        public void Acceptance_OfASourceTerminalWhoseDirectionContradictsItsRequirement_IsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = WithTerminal(RaisedRunCopy(baseline, out _, out _), "Bedroom 1", FlowClassification.Supply, x => Replaced(x, FlowClassification.Extract, x.DesignFlowRate_Lps ?? 0));
+
+            PartODwellingDesignAcceptance acceptance = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("is classified", acceptance.Refusal);
+        }
+
+        [Fact]
+        public void Acceptance_OntoABaselineTerminalRealisingNoContinuousRequirement_OrTheWrongDirection_IsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = RaisedRunCopy(baseline, out _, out _);
+            AdjacencyCluster adjacencyCluster_Source = source.AdjacencyCluster;
+            PartFTerminalReference reference_Supply = adjacencyCluster_Source.VentilationTerminals(adjacencyCluster_Source.GetSpaces().Find(x => x.Name == "Bedroom 1")).First(x => x.FlowClassification == FlowClassification.Supply).GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference);
+
+            //A lineage-tagged device realising no continuous requirement (e.g. intermittent), and one in the wrong direction.
+            foreach ((PartFTerminalReference reference, FlowClassification flowClassification) in new[] { (new PartFTerminalReference(reference_Supply) { SourceReference = "intermittent device" }, FlowClassification.Supply), (new PartFTerminalReference(reference_Supply), FlowClassification.Extract) })
+            {
+                AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+                Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+                VentilationTerminal ventilationTerminal = new("Tagged device", flowClassification, 5.0);
+                ventilationTerminal.SetValue(VentilationTerminalParameter.PartFTerminalReference, reference);
+                adjacencyCluster.AddObject(ventilationTerminal);
+                adjacencyCluster.AddRelation(ventilationTerminal, bedroom);
+
+                PartODwellingDesignAcceptance acceptance = new AnalyticalModel(baseline, adjacencyCluster).AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+
+                Assert.False(acceptance.IsAccepted);
+                Assert.Contains("does not realise exactly one continuous Approved Document F requirement in its own direction", acceptance.Refusal);
+            }
+        }
+
+        [Fact]
+        public void Acceptance_RefusedAtALaterWrite_PublishesNoChangesOrNotes()
+        {
+            //Bedroom 1 raised (written first, by name), Kitchen below its floor (refused by SetSpaceDesignFlowRate).
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = WithTerminal(RaisedRunCopy(baseline, out _, out double extract_Raised), "Kitchen", FlowClassification.Extract, x => Replaced(x, x.FlowClassification, extract_Raised - 2.0 - 3.0));
+
+            PartODwellingDesignAcceptance acceptance = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Null(acceptance.AnalyticalModel);
+            Assert.Empty(acceptance.Changes);
+            Assert.Empty(acceptance.Notes);
+        }
+
+        private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
+        {
+            AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
+            Space space = adjacencyCluster.GetSpaces().Find(x => x.Name == name_Space);
+            VentilationTerminal ventilationTerminal = adjacencyCluster.VentilationTerminals(space).First(x => x.FlowClassification == flowClassification);
+            adjacencyCluster.AddObject(func(ventilationTerminal));
+
+            return new AnalyticalModel(analyticalModel, adjacencyCluster);
+        }
+
+        private static VentilationTerminal Replaced(VentilationTerminal ventilationTerminal, FlowClassification flowClassification, double designFlowRate_Lps)
+        {
+            VentilationTerminal result = new(ventilationTerminal.Guid, ventilationTerminal.Name, flowClassification, designFlowRate_Lps);
+            result.SetValue(VentilationTerminalParameter.PartFTerminalReference, ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference));
+
+            return result;
         }
 
         /// <summary>
