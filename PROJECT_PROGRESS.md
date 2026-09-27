@@ -68,7 +68,8 @@ Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
   made `partial` (one keyword); PR1 doc §11.
 - **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2569/2569** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
   0 errors. Real 2B data accepted (SAM_UI harness).
-- **Next step:** merged (SAM#152); SAM_UI#126 CI builds against the SAM tip. Part O stream continues in its own sessions.
+- **Merged:** 27 Sep 2026 as `be84d7b8` (head `204bfea9`) after 7 Codex rounds (all P2 input-validation edge cases, each with a regression) and a local high-effort review standing in when Codex hit its usage limit (owner-approved).
+- **Next step:** none in SAM for this; SAM_UI#126 (PR2) builds against it. Part O stream continues in its own sessions.
 
 ## Previous (Reporting Phase 2 stream): PR2B - typed Space Design Load reporting data + collector (2026-09-27) - MERGED as [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (`9c3b9d6e`)
 
