@@ -46,15 +46,16 @@ risks); linked from `PartO-ARCHITECTURE.md` §9.
   `Enums/PartOIteration.cs`, `Enums/Parameter/AnalyticalModelParameter.cs`, `Create/OverheatingScenarios.cs`,
   `Modify/{PreparePartOIteration,ApplyPartFVentilationRates,AddPartOBaseMVHRSystem}.cs`,
   `Query/{PartOOperatingAssumptions,PartOIterationOperatingMode}.cs`. Tests: new
-  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (48); removed disposable `PartOMixedStrategyProofTests.cs`
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (50); removed disposable `PartOMixedStrategyProofTests.cs`
   (PR0 said PR1 deletes/inverts them); `OverheatingScenarioTests` enum-membership pin updated. Docs: PR1 doc, ARCHITECTURE §9.
-- **Validation (after the review pass):** new class 48/48; `FullyQualifiedName~PartO|PartF` 1273/1273 (1238 - 13 PR0 proofs + 48); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2533/2533; `SAM.sln`
+- **Validation (after the review pass):** new class 50/50; `FullyQualifiedName~PartO|PartF` 1275/1275 (1238 - 13 PR0 proofs + 50); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2535/2535; `SAM.sln`
   Release 0 errors; `git diff --check` clean.
 - **Owner review pass (2026-09-27), done:** undersized manual product refuses (confirmed); no isolation (confirmed,
   documented as invariant); blanket air-movement refusal replaced by the §2a engineering rule; mixed common zones refuse
   as ambiguous (scenarios are zone-scoped) and orphan corridor-assigned spaces refuse; `DwellingIndependent` kept as the
   smallest key-compatible identity, with search evidence in PR1 doc §8.1 (only SAM_Tas `PartODiagnosticLog` C9 mislabels,
-  PR3 scope).
+  PR3 scope). Local code review then found a shared-unit gap (a unit shared with an unassessed dwelling or corridor was
+  not refused); fixed with a red-then-green test.
 - **Next step:** review/merge the SAM PR1 into `sow/2026-Q3`. Then PR2 SAM_UI (strategy grid, materialise on a copy,
   accept-2B onto baseline terminals, sidecar v3) in a fresh session. PR3 cooling stays gated on licensed TAS proof.
 

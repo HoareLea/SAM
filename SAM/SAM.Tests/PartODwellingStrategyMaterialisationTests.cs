@@ -782,6 +782,38 @@ namespace SAM.Tests
             AssertRefused(WithStrategies(new AnalyticalModel(baseline, adjacencyCluster), Mvhr(Flat1), Mvhr(Flat2), Natural(Flat3)), PartOMaterialisationRefusalReason.SharedSystem, "Legacy MV");
         }
 
+        [Theory]
+        [InlineData("unassessed dwelling")]
+        [InlineData("corridor")]
+        public void AuthoredUnit_SharedWithASystemOutsideTheAssessedDwellings_IsRefused(string other)
+        {
+            //Review finding: Flat 1's authored system and a second system both name the same unit. The second
+            //serves either Flat 3, left out of the assessed scope, or the communal corridor - neither is an assessed
+            //dwelling, so only the unit's full set of systems shows that it is shared.
+            AnalyticalModel baseline = WithAuthoredUnit(Baseline(), double.NaN, out string name_Unit);
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+
+            VentilationSystem ventilationSystem_Other = new("Neighbour authored MV", new VentilationSystemType("MV authored", "Authored mechanical ventilation"));
+            ventilationSystem_Other.SetValue(VentilationSystemParameter.SupplyUnitName, name_Unit);
+            ventilationSystem_Other.SetValue(VentilationSystemParameter.ExhaustUnitName, name_Unit);
+            adjacencyCluster.AddObject(ventilationSystem_Other);
+            adjacencyCluster.AddRelation(ventilationSystem_Other, adjacencyCluster.GetSpaces().Single(x => x.Name == (other == "corridor" ? Corridor : "Flat 3 Bedroom")));
+            baseline = new AnalyticalModel(baseline, adjacencyCluster);
+
+            AnalyticalModel baseline_Strategies = other == "corridor"
+                ? WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2), Natural(Flat3))
+                : WithStrategies(baseline, Mvhr(Flat1), Natural(Flat2));
+
+            PartOMaterialisation materialisation = baseline_Strategies.MaterialisePartODwellingStrategies(null, other == "corridor" ? null : [Zone(baseline, Flat1).Guid, Zone(baseline, Flat2).Guid]);
+            output.WriteLine(materialisation.Refusal ?? "(materialised)");
+
+            Assert.Null(materialisation.AnalyticalModel);
+            Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.SharedSystem && x.Subject == name_Unit && x.Message.Contains("'Flat 1'") && x.Message.Contains(other == "corridor" ? "'Corridor'" : "'Flat 3'"));
+
+            //Without the shared unit the same baseline materialises: the refusal is the unit, not the reuse.
+            Assert.True(WithStrategies(WithAuthoredUnit(Baseline(), double.NaN, out _), Mvhr(Flat1), Natural(Flat2), Natural(Flat3)).MaterialisePartODwellingStrategies().IsMaterialised);
+        }
+
         [Fact]
         public void AuthoredSystemWithoutDuty_IsTemplateMetadata_AndPassesUntouched()
         {

@@ -786,14 +786,6 @@ namespace SAM.Analytical
                     }
                 }
 
-                List<Guid> guids_Assessed_Touched = [.. guids_Zone];
-                guids_Assessed_Touched.RemoveAll(x => !guids_Assessed.Contains(x));
-
-                if (guids_Assessed_Touched.Count == 0)
-                {
-                    continue;
-                }
-
                 string name_Unit_Supply = ventilationSystem.GetValue<string>(VentilationSystemParameter.SupplyUnitName);
                 string name_Unit_Exhaust = ventilationSystem.GetValue<string>(VentilationSystemParameter.ExhaustUnitName);
 
@@ -806,6 +798,38 @@ namespace SAM.Analytical
                     }
                 }
 
+                //Recorded for EVERY system that serves spaces, assessed or not, before anything below is skipped. A
+                //unit is shared when its systems together reach an assessed dwelling and anything else - another
+                //dwelling (assessed or not), a common space, or rooms in no zone - and only the whole set of its
+                //systems can show that. Recording only the systems that touch an assessed dwelling would miss a unit
+                //shared with an unassessed neighbour, and the MVHR realisation would then rebuild that unit's
+                //movements for one dwelling and delete the other system's.
+                if (spaces.Count != 0)
+                {
+                    foreach (string name_Unit in names_Unit)
+                    {
+                        if (!dictionary_ZonesOfUnit.TryGetValue(name_Unit, out HashSet<Guid> guids_Zone_Unit))
+                        {
+                            guids_Zone_Unit = [];
+                            dictionary_ZonesOfUnit[name_Unit] = guids_Zone_Unit;
+                        }
+
+                        guids_Zone_Unit.UnionWith(guids_Zone);
+                        if (unzoned)
+                        {
+                            guids_Zone_Unit.Add(Guid.Empty);
+                        }
+                    }
+                }
+
+                List<Guid> guids_Assessed_Touched = [.. guids_Zone];
+                guids_Assessed_Touched.RemoveAll(x => !guids_Assessed.Contains(x));
+
+                if (guids_Assessed_Touched.Count == 0)
+                {
+                    continue;
+                }
+
                 bool duty = ventilationTerminals.Exists(x => x is not null && (x.DesignFlowRate_Lps ?? 0) > 0);
 
                 if (!duty && names_Unit.Count == 0)
@@ -813,21 +837,6 @@ namespace SAM.Analytical
                     result.Notes.Add(string.Format("Ventilation system '{0}' ({1}) is related to assessed spaces but carries no design duty and no unit, so it is template metadata: left exactly as authored.", ventilationSystem.FullName, ventilationSystem.Type?.Name ?? "-"));
 
                     continue;
-                }
-
-                foreach (string name_Unit in names_Unit)
-                {
-                    if (!dictionary_ZonesOfUnit.TryGetValue(name_Unit, out HashSet<Guid> guids_Zone_Unit))
-                    {
-                        guids_Zone_Unit = [];
-                        dictionary_ZonesOfUnit[name_Unit] = guids_Zone_Unit;
-                    }
-
-                    guids_Zone_Unit.UnionWith(guids_Zone);
-                    if (unzoned)
-                    {
-                        guids_Zone_Unit.Add(Guid.Empty);
-                    }
                 }
 
                 if (guids_Zone.Count > 1 || unzoned)
@@ -864,9 +873,25 @@ namespace SAM.Analytical
 
             foreach (KeyValuePair<string, HashSet<Guid>> keyValuePair in dictionary_ZonesOfUnit)
             {
-                if (keyValuePair.Value.Count > 1)
+                //Shared only matters where it reaches an assessed dwelling: a unit shared between two unassessed
+                //dwellings is not this materialisation's to judge, and it is left exactly as authored.
+                bool assessed = false;
+                foreach (Guid guid in keyValuePair.Value)
                 {
-                    refuse(PartOMaterialisationRefusalReason.SharedSystem, string.Format("Authored air handling unit '{0}' supplies systems serving more than one zone, so it cannot belong to one dwelling's selected design. It is never split or rewritten to fit the strategies.", keyValuePair.Key), null, keyValuePair.Key);
+                    assessed |= guids_Assessed.Contains(guid);
+                }
+
+                if (assessed && keyValuePair.Value.Count > 1)
+                {
+                    List<string> names_Zone = [];
+                    foreach (Guid guid in keyValuePair.Value)
+                    {
+                        names_Zone.Add(guid == Guid.Empty ? "spaces in no assessed zone" : dictionary_Zone.TryGetValue(guid, out Zone zone) ? string.Format("'{0}'", zone.Name) : guid.ToString());
+                    }
+
+                    names_Zone.Sort(StringComparer.Ordinal);
+
+                    refuse(PartOMaterialisationRefusalReason.SharedSystem, string.Format("Authored air handling unit '{0}' supplies systems serving {1}, so it cannot belong to one dwelling's selected design. It is never split or rewritten to fit the strategies: give each dwelling its own unit in the baseline.", keyValuePair.Key, string.Join(", ", names_Zone)), null, keyValuePair.Key);
                 }
             }
         }

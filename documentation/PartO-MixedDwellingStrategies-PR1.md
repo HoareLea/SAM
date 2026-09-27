@@ -129,7 +129,7 @@ One call, pure (the baseline is not modified), returning a model only when **not
    names a unit the model contains; otherwise it is template metadata (noted, untouched). Effective systems / units that
    touch an assessed dwelling and span more than one zone (or unzoned spaces) refuse `SharedSystem`; over a Natural
    dwelling refuse `NaturalOverMechanicalDuty`; in an MVHR dwelling but connected to none of its terminals refuse
-   `UnconnectedAuthoredPlant`. Shared plant is never split or mutated.
+   `UnconnectedAuthoredPlant`. A **unit** is shared when the systems naming it - every system that serves spaces, assessed or not - together reach an assessed dwelling and any other zone or unzoned rooms; it refuses `SharedSystem` (review finding: an assessed dwelling sharing a unit with an unassessed neighbour or a corridor). Shared plant is never split or mutated.
 6. **Part F, scoped:** `ApplyPartFVentilationRates(ContinuousDesign, spaces of MVHR dwellings)` and
    `RealizePartFVentilationTerminals(spaces of MVHR dwellings)`. Natural and unassessed dwellings receive nothing (P1/P11
    fixed at the seam).
@@ -182,7 +182,7 @@ baseline/strategies/catalogue ≠ record → re-materialise; model ≠ provenanc
 
 ## 7. Tests
 
-`SAM/SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (48 tests) — the PR0 proof matrix promoted and inverted. The
+`SAM/SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (50 tests) — the PR0 proof matrix promoted and inverted. The
 disposable PR0 proof tests (`PartOMixedStrategyProofTests.cs`, P0–P12) are removed; they remain at `444d2db3`.
 
 | PR0 fact | PR1 pin |
@@ -192,7 +192,7 @@ disposable PR0 proof tests (`PartOMixedStrategyProofTests.cs`, P0–P12) are rem
 | P3 automatic call re-selects a manual product | `DifferentProducts_StayPerDwelling_…` |
 | P4 MVHR→NV keeps the design | `NaturalDwelling_OnTheSameBaseline_CarriesNoMechanicalState` |
 | P5 retained design / unbalanced raise | `RetainedBalancedDesign_…`, `RetainedDesign_IsNotChangedByAnotherDwellingsStrategy`, `RetainedDesign_WhoseTerminalsMoved_IsStale_…`, `UnbalancedBaselineDesign_IsRefused_NotRescaled` |
-| P7 shared system | `AuthoredSystemWithDuty_StraddlingTwoDwellings_IsRefused_…`, `AuthoredSystemWithoutDuty_IsTemplateMetadata_…` |
+| P7 shared system | `AuthoredSystemWithDuty_StraddlingTwoDwellings_IsRefused_…`, `AuthoredUnit_SharedWithASystemOutsideTheAssessedDwellings_IsRefused`, `AuthoredSystemWithoutDuty_IsTemplateMetadata_…` |
 | P8 corridor has no strategy | `CommunalCorridor_IsIncludedAutomatically_WithAnIterationNeutralScenario`, `CorridorClassification_ReadsTheAssignedInternalCondition_NeverTheName`, `CommonSpaceZone_Mixing…`, `DwellingIndependent_IsACommonSpaceIdentityOnly` |
 | P9 serialisation | `StrategySet_RoundTripsThroughTheModelJson_Canonically`, `StrategySet_OfAnUnknownSchema_…` |
 | P11 / result-bearing baseline | `LegacyPreparedModel_IsRefused_AsMaterialised`, `MaterialisedOutput_IsNotABaseline`, `ModelWith{Scenarios,Provenance,SimulationResults}_…`, `DesignDay_…` |
@@ -203,10 +203,10 @@ disposable PR0 proof tests (`PartOMixedStrategyProofTests.cs`, P0–P12) are rem
 | D5 cooling | `ActiveCooling_IsRecordedButRefused`, `Natural_WithRetainedDesign_WithCooling_OrWithAProduct_IsRefused` |
 | catalogue | `CatalogueFingerprint_CoversEverySelectionRelevantField_AndNotOrder`, `MaterialisationRecord_IsCurrent_…` |
 
-Results (2026-09-27, Release, after the PR1 review pass): new class 48/48;
-`FullyQualifiedName~PartO|FullyQualifiedName~PartF` 1273/1273 (PR0's 1238 − 13 removed proofs + 48);
+Results (2026-09-27, Release, after the PR1 review pass): new class 50/50;
+`FullyQualifiedName~PartO|FullyQualifiedName~PartF` 1275/1275 (PR0's 1238 − 13 removed proofs + 50);
 `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; `OverheatingScenario|TM59|VentilationStrategyMap`
-256/256; full `SAM.Tests` 2533/2533; `SAM.sln` Release 0 errors.
+256/256; full `SAM.Tests` 2535/2535; `SAM.sln` Release 0 errors.
 
 One existing test changed: `OverheatingScenarioTests.PartOIteration_HasNoFoundationStageMember` pins the exact enum
 membership and now includes the appended `DwellingIndependent`.
