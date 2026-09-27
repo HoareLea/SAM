@@ -94,5 +94,19 @@ namespace SAM.Analytical.Reporting
 
             return Document(SpaceDocumentDefinitions.SpaceAssumptions, spaceDocumentData, documentContext);
         }
+
+        /// <summary>
+        /// Collects one space and builds its Space Design Load Summary document.
+        /// </summary>
+        /// <param name="resultSource">
+        /// Passed to <see cref="SpaceDesignLoadDocumentData(DocumentContext, Space, string)"/>: only results with this
+        /// source are read. Null reads every source, and more than one candidate result stays ambiguous in the document.
+        /// </param>
+        public static Document SpaceDesignLoadSummary(DocumentContext documentContext, Space space, string resultSource = null)
+        {
+            SpaceDesignLoadDocumentData spaceDesignLoadDocumentData = SpaceDesignLoadDocumentData(documentContext, space, resultSource);
+
+            return Document(SpaceDocumentDefinitions.SpaceDesignLoadSummary, spaceDesignLoadDocumentData, documentContext);
+        }
     }
 }

@@ -1,7 +1,7 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design). Below it: `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+`sow/2026-Q3` is at `9c3b9d6e`, the merge of [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (PR2B, typed Space Design Load data). Below it: `d8c623fa`, the merge of [SAM#155](https://github.com/SAM-BIM/SAM/pull/155) (PR2A closeout docs); `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design); `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
 PR1, SAM authority + materialisation); `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
@@ -12,12 +12,69 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: PR2B - typed Space Design Load reporting data + collector (2026-09-27) - PR open, not merged
+## Current: PR2C - Space Design Load Summary document + PDF (2026-09-27)
 
 ```text
 PR2A: COMPLETE
-PR2B implementation: COMPLETE (data/collector only; no PDF)
-PR2C (PDF/layout): NOT STARTED
+PR2B: COMPLETE (SAM#156)
+PR2C: IMPLEMENTED - see the PR status line below
+PR2D (SAM_UI command): NOT STARTED
+```
+
+Branch `feature/pr2c-space-design-load-pdf-2026-09-27` from `sow/2026-Q3` `9c3b9d6e`. SAM only (reporting); no
+SAM_Tas/SAM_UI change. Full record: `documentation/Reporting-Phase2-ResultAuthority.md` §9.1.
+
+- **Added (SAM.Analytical.Reporting):** `SpaceDocumentDefinitions.SpaceDesignLoadSummary` and
+  `Create.SpaceDesignLoadSummary(context, space, resultSource = null)` (the only public additions); internal
+  `SpaceLoadResultSectionBuilder` (heating / cooling), `SpaceLoadResultsSectionBuilder` (status, source, read-in time,
+  currency "not recorded", notes), `SpaceDesignLoadPhase1SectionBuilder` + `SpaceDesignLoadFooterBuilder` (run the
+  Phase-1 identity / design criteria / sizing / footer builders on the PR2B data, unchanged output),
+  `SectionFormat.Placeholder`/`Text`.
+- **Layout:** identity band; Design Criteria | Sizing; Heating; Cooling (each: design-day line, `Design day | Full year`
+  peak table, sensible and latent component tables); Results; Phase-1 footer.
+- **Rules:** builders read only `SpaceDesignLoadDocumentData`; NotSimulated / PeaksNotRecorded / Ambiguous are notices
+  (Ambiguous picks nothing; `resultSource` is the only pick); 0 W vs `—` vs `n/a` kept; design day = hour of day + name,
+  never a date; full year = `d MMM HH:mm–HH:mm`, no year; one power unit per load section; component signs as stored;
+  a term exactly 0 at both peaks is named in a note, not listed (Phase-1 zero-area rule); nothing derived; no
+  pass/fail.
+- **Renderer (SAM.Core.Reporting.Pdf, generic):** an untitled key/value block directly followed by a table is placed
+  with it as one unit (existing side-by-side frame, one part). Phase-1 has no such block pair; its tests pass unchanged.
+- **Tests:** `SAM.Tests/SpaceDesignLoadSummaryTests.cs` + 6 goldens `Golden/SpaceDesignLoad_*.json`;
+  `SAM.Tests/PdfRendererTests.SpaceDesignLoad.cs` (every gate case rendered, A4, values verbatim, nothing escapes, the
+  lead rule); fixture `SAM.Tests/Helpers/SpaceDesignLoadFixture.cs` (real Bathroom_2 / Studio 1_0 Tas peaks);
+  `PdfRendererTests` made `partial`. 56 new tests.
+- **Visual gate: PASS.** PDFs in `documentation/evidence/reporting-phase2-gate/pr2c/`. Bathroom_2 SI 1 page, IP 1
+  page (about 10 mm spare); Studio 1_0 (heating + cooling populated) 2 pages, cooling starting page 2 whole; stress
+  2 pages; NotSimulated / PeaksNotRecorded / Ambiguous 1 page.
+- **Validation (this machine):** `SAM.sln` Release 0 errors; full `SAM.Tests` **2643/2643**.
+- **Known, not fixed here:** IP humidity ratio shows g/kg (shared formatter has no IP unit); Phase-1 "Design load per
+  area" wraps in IP; SAM#154, SAM#138 and the free-running set-point sentinel stay separate.
+- **Next step:** PR2D - SAM_UI command (selected space → Space Design Load Summary PDF) reusing the Phase-1
+  selection/save/error workflow and `Create.SpaceDesignLoadSummary`; no engineering in SAM_UI.
+
+## Current (Part O stream): Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - MERGED as [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (`be84d7b8`)
+
+Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`, merged up with `sow/2026-Q3` `8a22c82b` (SAM#153, PR2A-1) - only this file conflicted. SAM only, additive. Needed by SAM_UI#126
+(PR2) **Accept optimised airflow…**: a clean baseline has no design terminals, so a retained (2B) design was unreachable.
+Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
+
+- **What:** `Modify.AcceptPartODwellingDesign(baseline, zone, source)` → `PartODwellingDesignAcceptance` (model, fingerprint,
+  changes, refusals). Lineage by `PartFTerminalReference.Matches` (whole dwelling), then `RealizePartFVentilationTerminals`
+  (dwelling scope) and `SetSpaceDesignFlowRate` per space/direction. No new airflow rule, nothing in the strategy, inputs
+  unmodified, other dwellings untouched, non-clean baseline refused.
+- **Files:** new `SAM.Analytical/Classes/PartODwellingDesignAcceptance.cs`, `SAM.Analytical/Modify/AcceptPartODwellingDesign.cs`,
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10 tests; local high review added the
+  designer-added-terminal refusal); `PartODwellingStrategyMaterialisationTests`
+  made `partial` (one keyword); PR1 doc §11.
+- **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2569/2569** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
+  0 errors. Real 2B data accepted (SAM_UI harness).
+- **Next step:** merged (SAM#152); SAM_UI#126 CI builds against the SAM tip. Part O stream continues in its own sessions.
+
+## Previous (Reporting Phase 2 stream): PR2B - typed Space Design Load reporting data + collector (2026-09-27) - MERGED as [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (`9c3b9d6e`)
+
+```text
+PR2A: COMPLETE
+PR2B: COMPLETE (data/collector only; no PDF)
 ```
 
 Branch `feature/pr2b-space-design-load-data-2026-09-27`, stacked on the PR2A closeout commit (`docs/pr2a-closeout-2026-09-27`,
@@ -47,26 +104,7 @@ Record and deviations from the §7 proposal: `documentation/Reporting-Phase2-Res
   it references changed.
 - **Not done (by design):** PDF (PR2C), SAM_UI command (PR2D), deployment (PR2E); OpenStudio population of the peaks;
   latent removal load; freshness redesign; SAM#138; the free-running thermostat sentinel display; SAM#154.
-- **Next step:** review/merge SAM#155 (closeout) and this PR, then PR2C: the Space Design Load Summary section
-  builders and PDF layout on `SpaceDesignLoadDocumentData`, in a fresh session.
-
-## Current (Part O stream): Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - PR OPEN
-
-Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`, merged up with `sow/2026-Q3` `8a22c82b` (SAM#153, PR2A-1) - only this file conflicted. SAM only, additive. Needed by SAM_UI#126
-(PR2) **Accept optimised airflow…**: a clean baseline has no design terminals, so a retained (2B) design was unreachable.
-Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
-
-- **What:** `Modify.AcceptPartODwellingDesign(baseline, zone, source)` → `PartODwellingDesignAcceptance` (model, fingerprint,
-  changes, refusals). Lineage by `PartFTerminalReference.Matches` (whole dwelling), then `RealizePartFVentilationTerminals`
-  (dwelling scope) and `SetSpaceDesignFlowRate` per space/direction. No new airflow rule, nothing in the strategy, inputs
-  unmodified, other dwellings untouched, non-clean baseline refused.
-- **Files:** new `SAM.Analytical/Classes/PartODwellingDesignAcceptance.cs`, `SAM.Analytical/Modify/AcceptPartODwellingDesign.cs`,
-  `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10 tests; local high review added the
-  designer-added-terminal refusal); `PartODwellingStrategyMaterialisationTests`
-  made `partial` (one keyword); PR1 doc §11.
-- **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2569/2569** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
-  0 errors. Real 2B data accepted (SAM_UI harness).
-- **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
+- **Next step:** superseded by PR2C (Current).
 
 ## Previous (Reporting Phase 2 stream): PR2A closeout - Phase 2 result authority COMPLETE (2026-09-27)
 
