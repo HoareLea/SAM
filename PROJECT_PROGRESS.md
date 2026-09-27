@@ -12,7 +12,26 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: reporting Phase 2 (Space Design Load Summary) COMPLETE (2026-09-27)
+## Current (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27)
+
+Branch `feature/parto-mixed-cooling-pr3b1-2026-09-27` from `sow/2026-Q3` `34fe037e`. Record:
+`documentation/PartO-MixedDwellingStrategies-PR3B.md` §1 (owner decisions after PR3A, SAM_UI#129 merged `b3b061b8`).
+
+- **What.** `MaterialisePartODwellingStrategies` accepts cooled MVHR dwellings (new optional `ventilationUnitTemplates`):
+  same engineering state as uncooled, `ActiveTrimCooling` scenario (mechanical criterion), record v2 with
+  `CooledDwellings` (unit, product, `Query.PartOCoolingGuidanceFingerprint`, `Query.PartOCoolingOperatingAirFlow` =
+  max(design, guidance) within the published range and capacity) and `Route = Systems`. Uncooled records unchanged
+  (v1). New refusals `CoolingWithoutProductGuidance`, `CoolingAirFlowOutsideGuidance`; `CoolingGated` retired.
+  `ActiveTrimCooling` assumptions verified against SAM_Tas `GroundGuidanceCooling` (Boost Available = false, not the
+  PR3A proposal). Cooled-dwelling isolation invariant.
+- **Tests.** `PartODwellingStrategyCoolingTests` (new) + 3 updated pins; 13 red with the PR1 gate restored
+  (`documentation/evidence/parto-mixed-pr3b/`); `SAM.Tests` **2665/2665**; `SAM.sln` Release 0 errors.
+- **Compatibility.** SAM_UI PR2 passes no templates → SAM refuses cooled dwellings (fail-closed until PR3C). SAM_UI
+  test `CoolingRequested_IsRefusedBySam_NotBypassed` accepts either refusal name (test-only SAM_UI PR).
+- **Next step.** PR3B-2 SAM_Systems (mixed MV/MVRE+DX units, partial guidance, DV false, SAM's cooling airflow), then
+  PR3B-3 SAM_Tas, then the licensed gate on the PR2 clean fixture.
+
+## Previous (reporting stream): reporting Phase 2 (Space Design Load Summary) COMPLETE (2026-09-27)
 
 ```text
 SAM Documentation Framework — Phase 2

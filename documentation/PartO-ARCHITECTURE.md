@@ -149,13 +149,16 @@ Engineering meaning is carried by **semantic names**, never by numbers:
 | `PartOIteration.AcousticRestricted` | Iteration 2 |
 | *(no enum member)* | Iteration 3 — see below |
 
-> **Iteration 3 is not an enum member.** `PartOIteration.ActiveTrimCooling` exists in the enum but drives
-> nothing: it has no operating mode (`Query.PartOIterationOperatingMode`), no ventilation mode
-> (`Query.PartOIterationVentilationMode`) and no operating assumptions (`Query.PartOOperatingAssumptions`) —
-> all three refuse it by name — and `SAM_UI` deliberately does not offer it
-> (`PartOVentilationStrategyOption`, pinned by `PartOPresentationTests`). Iteration 3 is orchestrated
-> entirely in `SAM_UI` (`PartOIteration3Pipeline` and the A/B action). The enum member is a reserved slot
-> whose name predates the design; reading it as "the API for Iteration 3" is wrong.
+> **Iteration 3 is not an enum member.** Legacy Iteration 3 is orchestrated entirely in `SAM_UI`
+> (`PartOIteration3Pipeline` and the A/B action) and states no iteration of its own. Since mixed strategies
+> PR3B-1 (27 Sep 2026), `PartOIteration.ActiveTrimCooling` is the **identity of a cooled dwelling in a mixed
+> model**: `Query.PartOOperatingAssumptions` states it (openings as authored, design-rate background
+> ventilation, no boost state, bypass available, `Active Cooling = Supply Air - Manufacturer Guidance`), and
+> `Modify.MaterialisePartODwellingStrategies` assigns it. It still has no operating mode
+> (`Query.PartOIterationOperatingMode`) or ventilation mode (`Query.PartOIterationVentilationMode`), so the legacy
+> `PreparePartOIteration` path refuses it, and `SAM_UI` still does not offer it there
+> (`PartOVentilationStrategyOption`, pinned by `PartOPresentationTests`). See
+> `PartO-MixedDwellingStrategies-PR3B.md`.
 
 "1a"/"1b" must never be the only place the engineering meaning is recorded. A number in a public API is a
 fact about a document's layout, not about a building.
