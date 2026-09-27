@@ -28,7 +28,7 @@ namespace SAM.Tests
     /// State is compared by a GUID-insensitive signature labelled by dwelling.
     /// </para>
     /// </summary>
-    public class PartODwellingStrategyMaterialisationTests
+    public partial class PartODwellingStrategyMaterialisationTests
     {
         private const string Flat1 = "Flat 1";
         private const string Flat2 = "Flat 2";

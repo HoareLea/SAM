@@ -12,7 +12,24 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
+## Current: Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - PR OPEN
+
+Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`. SAM only, additive. Needed by SAM_UI#126
+(PR2) **Accept optimised airflow…**: a clean baseline has no design terminals, so a retained (2B) design was unreachable.
+Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
+
+- **What:** `Modify.AcceptPartODwellingDesign(baseline, zone, source)` → `PartODwellingDesignAcceptance` (model, fingerprint,
+  changes, refusals). Lineage by `PartFTerminalReference.Matches` (whole dwelling), then `RealizePartFVentilationTerminals`
+  (dwelling scope) and `SetSpaceDesignFlowRate` per space/direction. No new airflow rule, nothing in the strategy, inputs
+  unmodified, other dwellings untouched, non-clean baseline refused.
+- **Files:** new `SAM.Analytical/Classes/PartODwellingDesignAcceptance.cs`, `SAM.Analytical/Modify/AcceptPartODwellingDesign.cs`,
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (9 tests); `PartODwellingStrategyMaterialisationTests`
+  made `partial` (one keyword); PR1 doc §11.
+- **Validation (this machine):** materialisation + acceptance tests 59/59; full `SAM.Tests` **2544/2544**; `SAM.sln` Release
+  0 errors. Real 2B data accepted (SAM_UI harness).
+- **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
+
+## Previous: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
 
 Implementation following the approved PR0 (§D-§F + owner decisions). Branch `feature/parto-mixed-strategies-pr1` from
 `sow/2026-Q3` `444d2db3`. SAM only; SAM_UI (`c96ac19a`), SAM_Tas (`aa00ff91`), SAM_Systems (`22133736`) unchanged.
