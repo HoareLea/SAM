@@ -205,7 +205,7 @@ namespace SAM.Tests
             TableBlock peak = Table(document, "cooling", "cooling-peak");
 
             Assert.Equal(new[] { "1,973", "1,972" }, Row(peak, "Peak load").Cells.Skip(1).Select(x => x.Text));
-            Assert.Equal(new[] { "00:00–01:00", "3 Jul 19:00–20:00" }, Row(peak, "Peak hour").Cells.Skip(1).Select(x => x.Text));
+            Assert.Equal(new[] { "00:00–01:00", "3 Jul 19:00–20:00 (HOY 4412)" }, Row(peak, "Peak hour").Cells.Skip(1).Select(x => x.Text));
             Assert.Equal(new[] { "19.8", "19.0" }, Row(peak, "Room dry bulb").Cells.Skip(1).Select(x => x.Text));
 
             // Solar is 0 at the design-day peak and 836 W at the full-year one: nothing is shared between them.
@@ -303,17 +303,89 @@ namespace SAM.Tests
 
             Assert.Equal("23:00–24:00", designDay.Text);
             Assert.Equal(Availability.Available, designDay.Availability);
-            foreach (string month in new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "2018" })
+            foreach (string month in new[] { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "2018", "HOY" })
             {
                 Assert.DoesNotContain(month, designDay.Text);
             }
         }
 
+        /// <summary>
+        /// Every design-day peak of the real fixtures, heating and cooling, is an hour of the day only: no HOY, even when
+        /// the stored peak carries a stray hour of the year.
+        /// </summary>
+        [Fact]
+        public void DesignDayTime_NeverShowsAnHourOfTheYear()
+        {
+            foreach (string name in new[] { Bathroom_SI, Studio_SI })
+            {
+                Document document = SpaceDesignLoadFixture.Document(name);
+                foreach (string section in new[] { "heating", "cooling" })
+                {
+                    TableBlock peak = document.Sections.Single(x => x.Id == section).Blocks.OfType<TableBlock>().SingleOrDefault(x => x.Id == section + "-peak");
+                    //An all-zero section (Bathroom_2 cooling) has no peak hour row at all.
+                    TableRow peakHour = peak?.Rows.SingleOrDefault(x => x.Cells[0].Text == "Peak hour");
+                    if (peakHour != null)
+                    {
+                        Assert.DoesNotContain("HOY", peakHour.Cells[1].Text);
+                        Assert.Contains("HOY", peakHour.Cells[2].Text);
+                    }
+                }
+            }
+
+            SpaceLoadPeak stray = new SpaceLoadPeak(LoadPeakBasis.DesignDay, 100) { DesignDayName = "DD", HourOfDay = 5, HourOfYear = 1607 };
+            Document strayDocument = SpaceDesignLoadFixture.Document(SpaceDesignLoadFixture.Model("Space", SpaceDesignLoadFixture.Result(LoadType.Heating, stray, null)), UnitStyle.SI);
+            Assert.Equal("05:00–06:00", Row(Table(strayDocument, "heating", "heating-peak"), "Peak hour").Cells[1].Text);
+        }
+
+        /// <summary>
+        /// Real Tas peaks (SAM_Tas#69 on final1b/open.tsd and pr3/final/bridge.tsd) with their user-facing HOY, the
+        /// stored 0-based hour of the year + 1: Bathroom_2 heating 8553 → HOY 8554, Studio 1_0 heating 0 → HOY 1 and
+        /// cooling 4411 → HOY 4412. The date and the HOY come from the same stored hour, so they cannot drift apart.
+        /// </summary>
+        [Fact]
+        public void AnnualTime_OfRealFixturePeaks_CarriesTheOneBasedHourOfTheYear()
+        {
+            Assert.Equal("23 Dec 09:00–10:00 (HOY 8554)", Row(Table(SpaceDesignLoadFixture.Document(Bathroom_SI), "heating", "heating-peak"), "Peak hour").Cells[2].Text);
+
+            Document studio = SpaceDesignLoadFixture.Document(Studio_SI);
+            Assert.Equal("1 Jan 00:00–01:00 (HOY 1)", Row(Table(studio, "heating", "heating-peak"), "Peak hour").Cells[2].Text);
+            Assert.Equal("3 Jul 19:00–20:00 (HOY 4412)", Row(Table(studio, "cooling", "cooling-peak"), "Peak hour").Cells[2].Text);
+        }
+
+        /// <summary>
+        /// The HOY convention at its ends and against the calendar: HOY = (day of year − 1) × 24 + hour + 1, for the first
+        /// hour of every month and both ends of the year. The stored hour is 0-based; the displayed one is 1–8760.
+        /// </summary>
+        [Fact]
+        public void AnnualTime_HourOfTheYear_Is1To8760_AndAgreesWithTheDate()
+        {
+            Assert.Equal("1 Jan 00:00–01:00 (HOY 1)", AnnualPeakHour(0));
+            Assert.Equal("31 Dec 23:00–24:00 (HOY 8760)", AnnualPeakHour(8759));
+
+            // One past the last hour is not a valid stored hour: no date and no HOY 8761.
+            Assert.Equal("—", AnnualPeakHour(8760));
+
+            System.DateTime start = new System.DateTime(Analytical.Reporting.Create.ReferenceYear, 1, 1);
+            for (int month = 1; month <= 12; month++)
+            {
+                System.DateTime dateTime = new System.DateTime(Analytical.Reporting.Create.ReferenceYear, month, 1, 0, 0, 0);
+                int hourOfYear = (int)(dateTime - start).TotalHours;
+                Assert.Equal(string.Format(System.Globalization.CultureInfo.InvariantCulture, "1 {0:MMM} 00:00–01:00 (HOY {1})", dateTime, (dateTime.DayOfYear - 1) * 24 + 1), AnnualPeakHour(hourOfYear));
+            }
+        }
+
+        private static string AnnualPeakHour(int hourOfYear)
+        {
+            SpaceLoadPeak annual = new SpaceLoadPeak(LoadPeakBasis.AnnualSimulation, 250) { HourOfYear = hourOfYear, HourOfDay = hourOfYear % 24 };
+            Document document = SpaceDesignLoadFixture.Document(SpaceDesignLoadFixture.Model("Space", SpaceDesignLoadFixture.Result(LoadType.Heating, null, annual)), UnitStyle.SI);
+            return Row(Table(document, "heating", "heating-peak"), "Peak hour").Cells[2].Text;
+        }
+
         [Theory]
-        [InlineData(8553, 9, "23 Dec 09:00–10:00")]
-        [InlineData(0, 0, "1 Jan 00:00–01:00")]
-        [InlineData(8759, 23, "31 Dec 23:00–24:00")]
-        [InlineData(1416, 0, "1 Mar 00:00–01:00")]
+        [InlineData(8553, 9, "23 Dec 09:00–10:00 (HOY 8554)")]
+        [InlineData(0, 0, "1 Jan 00:00–01:00 (HOY 1)")]
+        [InlineData(8759, 23, "31 Dec 23:00–24:00 (HOY 8760)")]
+        [InlineData(1416, 0, "1 Mar 00:00–01:00 (HOY 1417)")]
         public void AnnualTime_IsDayMonthAndHour_WithNoYear(int hourOfYear, int hourOfDay, string expected)
         {
             SpaceLoadPeak annual = new SpaceLoadPeak(LoadPeakBasis.AnnualSimulation, 250) { HourOfYear = hourOfYear, HourOfDay = hourOfDay };

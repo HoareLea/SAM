@@ -333,7 +333,7 @@
                 "source": "SimulationResult"
               },
               {
-                "text": "1 Jan 00:00–01:00",
+                "text": "1 Jan 00:00–01:00 (HOY 1)",
                 "availability": "Available",
                 "freshness": "Unknown",
                 "source": "SimulationResult",
@@ -731,7 +731,7 @@
                 "source": "SimulationResult"
               },
               {
-                "text": "3 Jul 19:00–20:00",
+                "text": "3 Jul 19:00–20:00 (HOY 4412)",
                 "availability": "Available",
                 "freshness": "Unknown",
                 "source": "SimulationResult",
@@ -1196,7 +1196,7 @@
           "type": "NoticeBlock",
           "id": "results-time-note",
           "level": "Note",
-          "text": "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year."
+          "text": "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year, and its hour of the year (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00)."
         },
         {
           "type": "NoticeBlock",

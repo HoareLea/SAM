@@ -12,6 +12,28 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current: HOY on full-year peak times in the Space Design Load Summary (2026-09-27) - PR open
+
+Branch `feature/pr2c-annual-peak-hoy-2026-09-27` from `sow/2026-Q3` `33eb00f3` (SAM#158 PR2C merged `bb170cb8`).
+SAM only; SAM_UI renders SAM's document and needs no change (SAM_UI#127, PR2D, is open with green CI).
+
+- **What.** A full-year peak hour now reads `23 Dec 09:00–10:00 (HOY 8554)`. HOY is user-facing 1–8760
+  (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00) = the typed 0-based `SpaceLoadPeakData.HourOfYear` + 1,
+  the same normalized value the date comes from (`SpaceDesignLoadSectionBuilder.AnnualHour` / `UserHourOfYear`).
+  Design-day peaks never get an HOY (even with a stray stored hour of the year). No HOY when the hour is unavailable.
+  The Results note states the convention. Contract: `documentation/Reporting-Phase2-ResultAuthority.md` §9.1 *Time*.
+- **Decision - 8554, not 8562.** The request's example said "23 Dec 09:00–10:00 (HOY 8562)". 23 Dec 09:00 is 0-based
+  hour 356×24+9 = 8553, so the 1-based HOY is 8554; 8562 would be 23 Dec 17:00–18:00. 8554 is also Tas's own 1-based
+  index for that hour (§3.2 *Time*). The value is derived, not hard-coded, so the example was treated as an arithmetic
+  slip; the owner should confirm.
+- **Tests.** `SpaceDesignLoadSummaryTests`: HOY 1 / 8760 boundaries, 8760 (0-based) invalid → `—` (no HOY 8761), first
+  hour of every month checked against the calendar, real fixtures Bathroom_2 heating HOY 8554, Studio 1_0 heating HOY 1
+  and cooling HOY 4412, design-day peaks never HOY. 6 goldens regenerated: only the three full-year peak texts and the
+  Results note changed. SAM tests **2646/2646**.
+- **Evidence.** Real PDFs from the SAM_UI app on current Tas conversions (`documentation/evidence/reporting-phase2-gate/hoy/`):
+  Bathroom_2 still 1 page, HOY on one line; Studio 1_0 2 pages as before.
+- **Next step.** Merge this PR, then PR2D (SAM_UI#127), then PR2E (SAM_Deploy) pinning the SAM merge that has HOY.
+
 ## Current: PR2C - Space Design Load Summary document + PDF (2026-09-27)
 
 ```text

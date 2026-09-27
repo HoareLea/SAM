@@ -414,8 +414,12 @@ footer                  Phase-1 footer, unchanged
   ("… Re-run the simulation …"); `Ambiguous` → a Warning, no table, nothing chosen: a pick happens only through
   `resultSource`. A peak `Zero` prints `0 W`; `Unavailable` prints `—`; a zero peak's absent hour/state prints `n/a`.
   When neither peak is above zero the section shows the design day, the Peak load row and one note, nothing else.
-- **Time.** Design day: `23:00–24:00` from `HourOfDay` (0-based), and the design-day name; never a date. Full year:
-  `23 Dec 09:00–10:00` from `Time`; no year (`Create.ReferenceYear` is never printed).
+- **Time.** Design day: `23:00–24:00` from `HourOfDay` (0-based), and the design-day name; never a date and never an
+  HOY. Full year: `23 Dec 09:00–10:00 (HOY 8554)` from `Time` and `HourOfYear`; no year (`Create.ReferenceYear` is
+  never printed). The HOY is user-facing, 1–8760 (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00): the
+  stored 0-based `HourOfYear` + 1, the same normalized value the date comes from, for either engine (it equals Tas's
+  own 1-based index, §3.2 *Time*). No hour of the year → no HOY, never estimated. The Results note states the
+  convention. (Added after PR2C, on branch `feature/pr2c-annual-peak-hoy-2026-09-27`.)
 - **Units.** Shared `QuantityFormatter`. One power unit per load section (both peak loads and every component), so
   W / kW / Btu/h / kBtu/h switch together. Pairs of temperatures/RH share one unit.
 - **Components.** Values exactly as stored, signs untouched, sensible and latent in separate tables. A term stored as

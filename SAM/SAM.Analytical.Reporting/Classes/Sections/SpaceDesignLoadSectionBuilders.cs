@@ -138,7 +138,7 @@ namespace SAM.Analytical.Reporting
             List<TableRow> tableRows = new List<TableRow>()
             {
                 Pair("Peak load", quantityFormatter, designDay.Load, annual.Load, displayUnit),
-                new TableRow(SectionFormat.Label("Peak hour"), DesignDayHour(quantityFormatter, designDay.HourOfDay), AnnualHour(quantityFormatter, annual.Time)),
+                new TableRow(SectionFormat.Label("Peak hour"), DesignDayHour(quantityFormatter, designDay.HourOfDay), AnnualHour(quantityFormatter, annual.Time, annual.HourOfYear)),
                 Pair("Room dry bulb", quantityFormatter, UnitCategory.Temperature, designDay.RoomDryBulbTemperature, annual.RoomDryBulbTemperature),
                 Pair("Room resultant", quantityFormatter, UnitCategory.Temperature, designDay.RoomResultantTemperature, annual.RoomResultantTemperature),
                 Pair("Room RH", quantityFormatter, UnitCategory.RelativeHumidity, designDay.RoomRelativeHumidity, annual.RoomRelativeHumidity),
@@ -290,10 +290,12 @@ namespace SAM.Analytical.Reporting
         }
 
         /// <summary>
-        /// A full-year peak hour as day, month and the hour it covers ("23 Dec 09:00–10:00"). Results carry no year, so
-        /// none is shown.
+        /// A full-year peak hour as day, month, the hour it covers and its user-facing hour of the year
+        /// ("23 Dec 09:00–10:00 (HOY 8554)"). Results carry no year, so none is shown. The HOY is
+        /// <see cref="UserHourOfYear"/> of the typed 0-based <paramref name="hourOfYear"/>, the same normalized value the
+        /// date comes from; with no hour of the year it is left out, never estimated.
         /// </summary>
-        internal static FormattedValue AnnualHour(IQuantityFormatter quantityFormatter, ReportValue<DateTime> time)
+        internal static FormattedValue AnnualHour(IQuantityFormatter quantityFormatter, ReportValue<DateTime> time, ReportValue<int> hourOfYear)
         {
             if (!time.TryGetValue(out DateTime dateTime))
             {
@@ -301,7 +303,22 @@ namespace SAM.Analytical.Reporting
             }
 
             string end = dateTime.Hour == 23 ? "24:00" : dateTime.AddHours(1).ToString("HH:mm", CultureInfo.InvariantCulture);
-            return SectionFormat.Text(string.Format("{0}–{1}", dateTime.ToString("d MMM HH:mm", CultureInfo.InvariantCulture), end), time);
+            string text = string.Format("{0}–{1}", dateTime.ToString("d MMM HH:mm", CultureInfo.InvariantCulture), end);
+            if (hourOfYear != null && hourOfYear.TryGetValue(out int hour))
+            {
+                text = string.Format(CultureInfo.InvariantCulture, "{0} (HOY {1})", text, UserHourOfYear(hour));
+            }
+
+            return SectionFormat.Text(text, time);
+        }
+
+        /// <summary>
+        /// The user-facing hour of the year, 1–8760 (HOY 1 = 1 January 00:00–01:00, HOY 8760 = 31 December
+        /// 23:00–24:00), of a 0-based <see cref="SpaceLoadPeak.HourOfYear"/>.
+        /// </summary>
+        internal static int UserHourOfYear(int hourOfYear)
+        {
+            return hourOfYear + 1;
         }
 
         internal static string ComponentLabel(LoadPeakComponent loadPeakComponent)
@@ -383,7 +400,7 @@ namespace SAM.Analytical.Reporting
             return new DocumentSection(Id, "Results", new DocumentBlock[]
             {
                 tableBlock,
-                new NoticeBlock("results-time-note", "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year.", NoticeLevel.Note),
+                new NoticeBlock("results-time-note", "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year, and its hour of the year (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00).", NoticeLevel.Note),
                 new NoticeBlock("results-comparison-note", "Design loads (sizing) and simulated peaks are shown side by side for information; no acceptance rule is applied.", NoticeLevel.Note),
             });
         }
