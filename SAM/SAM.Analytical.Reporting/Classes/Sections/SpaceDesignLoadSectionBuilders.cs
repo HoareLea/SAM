@@ -125,7 +125,7 @@ namespace SAM.Analytical.Reporting
             // With no peak above zero there is no peak hour, state or component to show: the loads, and why.
             if (designDay.State != LoadPeakState.Value && annual.State != LoadPeakState.Value)
             {
-                documentBlocks.Add(PeakTable(new List<TableRow>() { Pair("Peak load", quantityFormatter, designDay.Load, annual.Load, displayUnit) }));
+                documentBlocks.Add(PeakTable(new List<TableRow>() { Pair("Peak sensible load", quantityFormatter, designDay.Load, annual.Load, displayUnit) }));
                 if (designDay.State == LoadPeakState.Zero || annual.State == LoadPeakState.Zero)
                 {
                     string when = designDay.State != LoadPeakState.Zero ? "over the full year" : annual.State != LoadPeakState.Zero ? "on the design day" : "on the design day or over the full year";
@@ -137,7 +137,7 @@ namespace SAM.Analytical.Reporting
 
             List<TableRow> tableRows = new List<TableRow>()
             {
-                Pair("Peak load", quantityFormatter, designDay.Load, annual.Load, displayUnit),
+                Pair("Peak sensible load", quantityFormatter, designDay.Load, annual.Load, displayUnit),
                 new TableRow(SectionFormat.Label("Peak hour"), DesignDayHour(quantityFormatter, designDay.HourOfDay), AnnualHour(quantityFormatter, annual.Time, annual.HourOfYear)),
                 Pair("Room dry bulb", quantityFormatter, UnitCategory.Temperature, designDay.RoomDryBulbTemperature, annual.RoomDryBulbTemperature),
                 Pair("Room resultant", quantityFormatter, UnitCategory.Temperature, designDay.RoomResultantTemperature, annual.RoomResultantTemperature),
@@ -150,7 +150,7 @@ namespace SAM.Analytical.Reporting
             documentBlocks.Add(PeakTable(tableRows));
 
             List<string> zeros = new List<string>();
-            TableBlock tableBlock_Sensible = ComponentTable(Id + "-sensible", "Sensible components at peak", quantityFormatter, displayUnit, designDay, annual, false, zeros);
+            TableBlock tableBlock_Sensible = ComponentTable(Id + "-sensible", "Sensible load components at peak", quantityFormatter, displayUnit, designDay, annual, false, zeros);
             TableBlock tableBlock_Latent = ComponentTable(Id + "-latent", "Latent components at peak", quantityFormatter, displayUnit, designDay, annual, true, zeros);
             if (tableBlock_Sensible == null && tableBlock_Latent == null && zeros.Count == 0)
             {

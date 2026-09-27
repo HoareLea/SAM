@@ -399,9 +399,9 @@ and rendered by the unchanged `PdfRenderer`. The builders read only `SpaceDesign
 ```text
 identity (header band)  design-criteria | sizing      Phase-1 builders, run on the PR2B data by an adapter (same output)
 heating                 Design day: <name>             untitled key/value, kept with the table below
-                        [ | Design day | Full year ]   Peak load, Peak hour, Room DB / resultant / RH / humidity ratio,
+                        [ | Design day | Full year ]   Peak sensible load, Peak hour, Room DB / resultant / RH / humidity ratio,
                                                        Outdoor DB / RH
-                        Sensible components at peak    [Component | Design day (W) | Full year (W)], signed as stored
+                        Sensible load components at peak [Component | Design day (W) | Full year (W)], signed as stored
                         Latent components at peak      same, kept apart
                         notes                          terms 0 at both peaks named, not listed; sign convention
 cooling                 same
@@ -413,7 +413,7 @@ footer                  Phase-1 footer, unchanged
 - **States.** `NotSimulated` → an Information notice ("… This is not a zero load."); `PeaksNotRecorded` → a Warning
   ("… Re-run the simulation …"); `Ambiguous` → a Warning, no table, nothing chosen: a pick happens only through
   `resultSource`. A peak `Zero` prints `0 W`; `Unavailable` prints `—`; a zero peak's absent hour/state prints `n/a`.
-  When neither peak is above zero the section shows the design day, the Peak load row and one note, nothing else.
+  When neither peak is above zero the section shows the design day, the Peak sensible load row and one note, nothing else.
 - **Time.** Design day: `23:00–24:00` from `HourOfDay` (0-based), and the design-day name; never a date and never an
   HOY. Full year: `23 Dec 09:00–10:00 (HOY 8554)` from `Time` and `HourOfYear`; no year (`Create.ReferenceYear` is
   never printed). The HOY is user-facing, 1–8760 (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00): the

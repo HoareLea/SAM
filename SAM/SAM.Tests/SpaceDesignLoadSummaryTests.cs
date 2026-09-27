@@ -129,7 +129,7 @@ namespace SAM.Tests
             Assert.Equal(new[] { string.Empty, SpaceLoadResultSectionBuilder_Columns.DesignDay, SpaceLoadResultSectionBuilder_Columns.FullYear }, peak.Columns.Select(x => x.Header));
             Assert.Equal(SpaceDesignLoadFixture.HeatingDesignDayName, Value(document, "heating", "Design day"));
 
-            TableRow load = Row(peak, "Peak load");
+            TableRow load = Row(peak, "Peak sensible load");
             Assert.Equal(("1,140", "W"), (load.Cells[1].Text, load.Cells[1].Unit));
             Assert.Equal(("104", "W"), (load.Cells[2].Text, load.Cells[2].Unit));
 
@@ -152,7 +152,7 @@ namespace SAM.Tests
             Document document = SpaceDesignLoadFixture.Document(Bathroom_IP);
             TableBlock peak = Table(document, "heating", "heating-peak");
 
-            TableRow load = Row(peak, "Peak load");
+            TableRow load = Row(peak, "Peak sensible load");
             Assert.Equal(("3,889", "Btu/h"), (load.Cells[1].Text, load.Cells[1].Unit));
             Assert.Equal(("355", "Btu/h"), (load.Cells[2].Text, load.Cells[2].Unit));
             Assert.Equal(("60.8", "°F"), (Row(peak, "Room dry bulb").Cells[1].Text, Row(peak, "Room dry bulb").Cells[1].Unit));
@@ -162,7 +162,7 @@ namespace SAM.Tests
             TableBlock sensible = Table(document, "heating", "heating-sensible");
             Assert.All(sensible.Columns.Skip(1), x => Assert.Equal("Btu/h", x.Unit));
 
-            Assert.Equal(new[] { "0", "0" }, Row(Table(document, "cooling", "cooling-peak"), "Peak load").Cells.Skip(1).Select(x => x.Text));
+            Assert.Equal(new[] { "0", "0" }, Row(Table(document, "cooling", "cooling-peak"), "Peak sensible load").Cells.Skip(1).Select(x => x.Text));
 
             string json = document.ToJson();
             foreach (string symbol in new[] { "\"W\"", "\"kW\"", "°C", "W/m²" })
@@ -182,7 +182,7 @@ namespace SAM.Tests
             DocumentSection cooling = Section(document, "cooling");
             TableBlock peak = Table(document, "cooling", "cooling-peak");
 
-            Assert.Equal(new[] { "Peak load" }, peak.Rows.Select(x => x.Cells[0].Text));
+            Assert.Equal(new[] { "Peak sensible load" }, peak.Rows.Select(x => x.Cells[0].Text));
             Assert.All(peak.Rows[0].Cells.Skip(1), x =>
             {
                 Assert.Equal("0", x.Text);
@@ -204,7 +204,7 @@ namespace SAM.Tests
             Document document = SpaceDesignLoadFixture.Document(Studio_SI);
             TableBlock peak = Table(document, "cooling", "cooling-peak");
 
-            Assert.Equal(new[] { "1,973", "1,972" }, Row(peak, "Peak load").Cells.Skip(1).Select(x => x.Text));
+            Assert.Equal(new[] { "1,973", "1,972" }, Row(peak, "Peak sensible load").Cells.Skip(1).Select(x => x.Text));
             Assert.Equal(new[] { "00:00–01:00", "3 Jul 19:00–20:00 (HOY 4412)" }, Row(peak, "Peak hour").Cells.Skip(1).Select(x => x.Text));
             Assert.Equal(new[] { "19.8", "19.0" }, Row(peak, "Room dry bulb").Cells.Skip(1).Select(x => x.Text));
 
@@ -215,6 +215,31 @@ namespace SAM.Tests
 
             TableBlock latent = Table(document, "cooling", "cooling-latent");
             Assert.Equal(new[] { "77", "110" }, Row(latent, "Occupancy (latent)").Cells.Skip(1).Select(x => x.Text));
+        }
+
+        /// <summary>
+        /// The headline is the sensible load the solver reports (dry-bulb control); latent terms are listed apart and
+        /// never folded into it, and no sensible + latent total is shown.
+        /// </summary>
+        [Fact]
+        public void PeakLoad_IsLabelledSensible_LatentKeptApart_NoTotal()
+        {
+            Document document = SpaceDesignLoadFixture.Document(Studio_SI);
+
+            foreach (string what in new[] { "heating", "cooling" })
+            {
+                Assert.Equal("Peak sensible load", Table(document, what, what + "-peak").Rows[0].Cells[0].Text);
+                Assert.Equal("Sensible load components at peak", Table(document, what, what + "-sensible").Title);
+                Assert.Equal("Latent components at peak", Table(document, what, what + "-latent").Title);
+            }
+
+            // The relabel leaves the solver values untouched.
+            Assert.Equal(new[] { "2,268", "802" }, Row(Table(document, "heating", "heating-peak"), "Peak sensible load").Cells.Skip(1).Select(x => x.Text));
+            Assert.Equal(new[] { "1,973", "1,972" }, Row(Table(document, "cooling", "cooling-peak"), "Peak sensible load").Cells.Skip(1).Select(x => x.Text));
+
+            IEnumerable<TableBlock> tables = document.Sections.SelectMany(x => x.Blocks).OfType<TableBlock>();
+            Assert.DoesNotContain(tables.SelectMany(x => x.Rows), x => x.Cells[0].Text.IndexOf("total", System.StringComparison.OrdinalIgnoreCase) >= 0);
+            Assert.DoesNotContain(tables.SelectMany(x => x.Rows), x => x.Cells[0].Text == "Peak load");
         }
 
         /// <summary>
@@ -397,7 +422,7 @@ namespace SAM.Tests
 
             // The design-day peak is missing from this result: unavailable, not zero and not a date.
             Assert.Equal(("—", Availability.NotAvailable), (peakHour.Cells[1].Text, peakHour.Cells[1].Availability));
-            Assert.Equal("—", Row(Table(document, "heating", "heating-peak"), "Peak load").Cells[1].Text);
+            Assert.Equal("—", Row(Table(document, "heating", "heating-peak"), "Peak sensible load").Cells[1].Text);
         }
 
         private static readonly string Create_ReferenceYear = SAM.Analytical.Reporting.Create.ReferenceYear.ToString();
@@ -464,13 +489,13 @@ namespace SAM.Tests
             TableBlock results = Table(document, "results", "results");
             Assert.Equal(new[] { "Ambiguous: none chosen", "Available" }, Row(results, "Status").Cells.Skip(1).Select(x => x.Text));
             Assert.Equal(Availability.NotAvailable, Row(results, "Result source").Cells[1].Availability);
-            Assert.Equal("0", Row(Table(document, "cooling", "cooling-peak"), "Peak load").Cells[1].Text);
+            Assert.Equal("0", Row(Table(document, "cooling", "cooling-peak"), "Peak sensible load").Cells[1].Text);
 
             Document tas = SpaceDesignLoadFixture.Document("E_Ambiguous_SI", "Tas");
-            Assert.Equal("1,140", Row(Table(tas, "heating", "heating-peak"), "Peak load").Cells[1].Text);
+            Assert.Equal("1,140", Row(Table(tas, "heating", "heating-peak"), "Peak sensible load").Cells[1].Text);
 
             Document openStudio = SpaceDesignLoadFixture.Document("E_Ambiguous_SI", "OpenStudio");
-            Assert.Equal("1,500", Row(Table(openStudio, "heating", "heating-peak"), "Peak load").Cells[1].Text);
+            Assert.Equal("1,500", Row(Table(openStudio, "heating", "heating-peak"), "Peak sensible load").Cells[1].Text);
             Assert.Equal("OpenStudio", Row(Table(openStudio, "results", "results"), "Result source").Cells[1].Text);
         }
 

@@ -303,7 +303,7 @@
           "rows": [
             [
               {
-                "text": "Peak load",
+                "text": "Peak sensible load",
                 "availability": "Available"
               },
               {
@@ -461,7 +461,7 @@
         {
           "type": "TableBlock",
           "id": "heating-sensible",
-          "title": "Sensible components at peak",
+          "title": "Sensible load components at peak",
           "repeatHeader": true,
           "columns": [
             {
@@ -701,7 +701,7 @@
           "rows": [
             [
               {
-                "text": "Peak load",
+                "text": "Peak sensible load",
                 "availability": "Available"
               },
               {
@@ -859,7 +859,7 @@
         {
           "type": "TableBlock",
           "id": "cooling-sensible",
-          "title": "Sensible components at peak",
+          "title": "Sensible load components at peak",
           "repeatHeader": true,
           "columns": [
             {

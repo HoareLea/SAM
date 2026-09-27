@@ -316,7 +316,7 @@
           "rows": [
             [
               {
-                "text": "Peak load",
+                "text": "Peak sensible load",
                 "availability": "Available"
               },
               {

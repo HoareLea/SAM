@@ -32,6 +32,11 @@ SAM only; SAM_UI renders SAM's document and needs no change (SAM_UI#127, PR2D, i
   Results note changed. SAM tests **2646/2646**.
 - **Evidence.** Real PDFs from the SAM_UI app on current Tas conversions (`documentation/evidence/reporting-phase2-gate/hoy/`):
   Bathroom_2 still 1 page, HOY on one line; Studio 1_0 2 pages as before.
+- **Terminology (same PR, owner decision 2026-09-27).** The headline row is `Peak sensible load` (was `Peak load`) and
+  the sensible table is `Sensible load components at peak`; `Latent components at peak` stays separate. The Tas peak is
+  a sensible, dry-bulb-controlled load; latent is a separate result, never added to it, and no total is derived.
+  Labels only: every value is unchanged. Test `PeakLoad_IsLabelledSensible_LatentKeptApart_NoTotal`; 4 goldens
+  relabelled. SAM tests **2647/2647**; test PDFs checked (Bathroom_2 1 page, Studio 1_0 2 pages, no clipping).
 - **Next step.** Merge this PR, then PR2D (SAM_UI#127), then PR2E (SAM_Deploy) pinning the SAM merge that has HOY.
 
 ## Current: PR2C - Space Design Load Summary document + PDF (2026-09-27)
