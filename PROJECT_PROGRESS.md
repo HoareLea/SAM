@@ -1,8 +1,8 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
-PR1, SAM authority + materialisation). Below it: `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
+`sow/2026-Q3` is at `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`). Below it: `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+PR1, SAM authority + materialisation); `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
 SAM#144 (Phase-1 closeout docs, `a947c5a3`) and `22f9c743`, the merge of [SAM#143](https://github.com/SAM-BIM/SAM/pull/143) (airflow symbol `L/s`).
@@ -12,13 +12,25 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: PR2A-1 - typed per-simulation load peaks (`SpaceLoadPeak`) for the Phase-2 result authority (2026-09-27) - OPEN, not merged
+## Current: PR2A closeout - Phase 2 result authority COMPLETE (2026-09-27)
 
 ```text
-Phase 2 result authority: READY FOR PR2B once PR2A-1 (this) and PR2A-2 (SAM_Tas) are merged
-B0: FIXED (SAM#147)   B1–B5: FIXED + VERIFIED   B6: VERIFIED read-only on a real Tas cooling result
-PR2B reporting implementation: NOT STARTED
+Phase 2 result authority: COMPLETE
+PR2A: COMPLETE
+Ready for PR2B: YES
 ```
+
+- [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1) merged into `sow/2026-Q3` as `8a22c82b`.
+- SAM_Tas#69 (PR2A-2, `Convert.ToSAM_Results` fills the typed peaks) merged into SAM_Tas `sow/2026-Q3` as `46dacf22`.
+- Reconciled 2026-09-27: both local `sow/2026-Q3` fast-forwarded to those tips; both clean; no other merges after them.
+- Final validation: SAM Release build 0 errors; SAM.Tests 2544/2544; SAM_Tas build 0 errors; TM59 963/963;
+  Benchmark 16/16; SAM#153 CI green; SAM_Tas#69 CI green.
+- Follow-up filed, not fixed: [SAM#154](https://github.com/SAM-BIM/SAM/issues/154) (SAM_Tas `ToSAM_Results` skips a
+  space's heating surface results when its cooling result has no `LoadIndex`). Not a PR2B blocker.
+- **Next step:** PR2B - typed Space Design Load reporting data + collector in `SAM.Analytical.Reporting`, reading only
+  `SpaceSimulationResultParameter.DesignDayPeak`/`AnnualPeak` (audit doc §7). No PDF (PR2C).
+
+## Previous (Reporting Phase 2 stream): PR2A-1 - typed per-simulation load peaks (`SpaceLoadPeak`) (2026-09-27) - MERGED as SAM#153 (`8a22c82b`)
 
 Branch `feature/pr2a1-space-load-peak-2026-09-27` from `sow/2026-Q3` `872adb5f`, merged up with `sow/2026-Q3` `0f866ec6` (SAM#149-#151, Part O mixed strategies) on 2026-09-27; only PROJECT_PROGRESS conflicted. It pairs with SAM_Tas
 `fix/pr2a2-tas-peak-authority-2026-09-27` (PR2A-2), which builds against this `SAM\build`. **Merge this first.**
@@ -52,8 +64,7 @@ The full record is in `documentation/Reporting-Phase2-ResultAuthority.md` §3.2.
   - latent removal load is not persisted;
   - result freshness for non-Part-O runs stays Unknown (PR2D);
   - SAM_UI, SAM_Deploy and reporting are untouched.
-- **Next step:** review and merge PR2A-1, then PR2A-2. Rebuild SAM → SAM_Tas, then start PR2B
-  (SAM.Analytical.Reporting typed data + collector, audit doc §7), in a fresh session.
+- **Next step:** superseded by the closeout above (both PRs merged).
 
 ## Previous (Part O stream): Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
 
