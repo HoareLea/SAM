@@ -1,8 +1,8 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (mixed dwelling strategies
-PR0, investigation). Below it: `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
+`sow/2026-Q3` is at `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+PR1, SAM authority + materialisation). Below it: `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
 SAM#144 (Phase-1 closeout docs, `a947c5a3`) and `22f9c743`, the merge of [SAM#143](https://github.com/SAM-BIM/SAM/pull/143) (airflow symbol `L/s`).
@@ -12,7 +12,7 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - PR [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) OPEN, awaiting review
+## Current: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
 
 Implementation following the approved PR0 (§D-§F + owner decisions). Branch `feature/parto-mixed-strategies-pr1` from
 `sow/2026-Q3` `444d2db3`. SAM only; SAM_UI (`c96ac19a`), SAM_Tas (`aa00ff91`), SAM_Systems (`22133736`) unchanged.
@@ -56,7 +56,9 @@ risks); linked from `PartO-ARCHITECTURE.md` §9.
   smallest key-compatible identity, with search evidence in PR1 doc §8.1 (only SAM_Tas `PartODiagnosticLog` C9 mislabels,
   PR3 scope). Local code review then found a shared-unit gap (a unit shared with an unassessed dwelling or corridor was
   not refused); fixed with a red-then-green test.
-- **Next step:** review/merge the SAM PR1 into `sow/2026-Q3`. Then PR2 SAM_UI (strategy grid, materialise on a copy,
+- **Merged** 2026-09-27 on green CI (build, test, SPDX) at head `fcdcea93`. Codex review was unavailable (usage limit); a
+  local high-effort code review stood in and its one finding (shared unit) was fixed before merge.
+- **Next step:** PR2 SAM_UI (strategy grid, materialise on a copy,
   accept-2B onto baseline terminals, sidecar v3) in a fresh session. PR3 cooling stays gated on licensed TAS proof.
 
 ## Previous: Part O mixed dwelling strategies - PR0 architecture investigation (2026-09-26) - MERGED as SAM#149 (`444d2db3`), SAM_UI#125 (`c96ac19a`)
