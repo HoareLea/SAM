@@ -12,9 +12,9 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - PR OPEN
+## Current (Part O stream): Part O mixed dwelling strategies - accept a dwelling's design (`Modify.AcceptPartODwellingDesign`) (2026-09-27) - PR OPEN
 
-Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`. SAM only, additive. Needed by SAM_UI#126
+Branch `feature/parto-accept-dwelling-design` from `sow/2026-Q3` `0f866ec6`, merged up with `sow/2026-Q3` `8a22c82b` (SAM#153, PR2A-1) - only this file conflicted. SAM only, additive. Needed by SAM_UI#126
 (PR2) **Accept optimised airflow…**: a clean baseline has no design terminals, so a retained (2B) design was unreachable.
 Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
 
@@ -26,11 +26,54 @@ Record: `documentation/PartO-MixedDwellingStrategies-PR1.md` §11.
   `SAM.Tests/PartODwellingStrategyMaterialisationTests.Acceptance.cs` (10 tests; local high review added the
   designer-added-terminal refusal); `PartODwellingStrategyMaterialisationTests`
   made `partial` (one keyword); PR1 doc §11.
-- **Validation (this machine):** materialisation + acceptance tests 59/59; full `SAM.Tests` **2545/2545**; `SAM.sln` Release
+- **Validation (this machine):** materialisation + acceptance tests 68/68; full `SAM.Tests` **2562/2562** on the tree merged with `sow/2026-Q3` `8a22c82b` (Codex P2 x6 fixed, each with a regression red on the previous head); `SAM.sln` Release
   0 errors. Real 2B data accepted (SAM_UI harness).
 - **Next step:** review/merge into `sow/2026-Q3`; then SAM_UI#126 CI (builds against the SAM tip) goes green.
 
-## Previous: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
+## Current (Reporting stream): PR2A-1 - typed per-simulation load peaks (`SpaceLoadPeak`) for the Phase-2 result authority (2026-09-27) - MERGED as [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (`8a22c82b`)
+
+```text
+Phase 2 result authority: READY FOR PR2B once PR2A-1 (this) and PR2A-2 (SAM_Tas) are merged
+B0: FIXED (SAM#147)   B1–B5: FIXED + VERIFIED   B6: VERIFIED read-only on a real Tas cooling result
+PR2B reporting implementation: NOT STARTED
+```
+
+Branch `feature/pr2a1-space-load-peak-2026-09-27` from `sow/2026-Q3` `872adb5f`, merged up with `sow/2026-Q3` `0f866ec6` (SAM#149-#151, Part O mixed strategies) on 2026-09-27; only PROJECT_PROGRESS conflicted. It pairs with SAM_Tas
+`fix/pr2a2-tas-peak-authority-2026-09-27` (PR2A-2), which builds against this `SAM\build`. **Merge this first.**
+The full record is in `documentation/Reporting-Phase2-ResultAuthority.md` §3.2. Evidence is in
+`documentation/evidence/reporting-phase2-gate/pr2a/`.
+
+- **Why SAM owns it:**
+  - the reporting collector (SAM.Analytical.Reporting) must read the peaks without referencing SAM_Tas;
+  - OpenStudio results share the class.
+- **Added (additive only):**
+  - `SAM.Analytical.SpaceLoadPeak` (IJSAMObject; guid-less value record; JSON via `GetValue`/`TryGetValue`, safe
+    for JsonElement-backed values);
+  - the enums `LoadPeakBasis` and `LoadPeakComponent`;
+  - `SpaceSimulationResultParameter.DesignDayPeak` / `AnnualPeak`, appended to the end of the enum.
+  - No existing parameter changed meaning.
+- **Contract, in one line each:**
+  - the two peaks are never merged;
+  - no peak = unavailable; `Load 0` with no hour = a real zero; a `null`/absent value = not reported;
+  - `Load` is a magnitude; components keep the engine sign (+ gain to room air);
+  - time is 0-based; `HourOfYear` is annual-only; a design day has an hour of the day only;
+  - outdoor state comes from the results.
+- **Tests:** `SAM/SAM.Tests/SpaceLoadPeakTests.cs` (9). They cover the whole-model JSON save/reopen through a string,
+  sign/closure, zero vs missing, a genuine −1, non-finite refusal, and the Tas 1-based ↔ OpenStudio interval-end ↔
+  SAM 0-based hour mapping.
+- **Validation:**
+  - `SAM.sln` Release: 0 errors;
+  - full `SAM.Tests` 2494/2494 (Release, test project built explicitly; 2485 + 9);
+  - SAM_Tas against this build: TM59 963/963, Benchmark 16/16.
+- **Not done here:**
+  - OpenStudio does not populate the peaks yet (its results read as unavailable in the new contract);
+  - latent removal load is not persisted;
+  - result freshness for non-Part-O runs stays Unknown (PR2D);
+  - SAM_UI, SAM_Deploy and reporting are untouched.
+- **Next step:** review and merge PR2A-1, then PR2A-2. Rebuild SAM → SAM_Tas, then start PR2B
+  (SAM.Analytical.Reporting typed data + collector, audit doc §7), in a fresh session.
+
+## Previous (Part O stream): Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
 
 Implementation following the approved PR0 (§D-§F + owner decisions). Branch `feature/parto-mixed-strategies-pr1` from
 `sow/2026-Q3` `444d2db3`. SAM only; SAM_UI (`c96ac19a`), SAM_Tas (`aa00ff91`), SAM_Systems (`22133736`) unchanged.

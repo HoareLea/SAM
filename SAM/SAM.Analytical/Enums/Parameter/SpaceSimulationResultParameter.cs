@@ -48,5 +48,11 @@ namespace SAM.Analytical
         [ParameterProperties("Unmet Hours", "Unmet Hours"), IntegerParameterValue(0, 8760)] UnmetHours,
         [ParameterProperties("Unmet Hour First Index", "Unmet Hour First Index"), IntegerParameterValue(0, 8760)] UnmetHourFirstIndex,
         [ParameterProperties("Occupied Unmet Hours", "Occupied Unmet Hours"), IntegerParameterValue(0, 8760)] OccupiedUnmetHours,
+
+        //The authoritative peaks, one per simulation, never merged (see SpaceLoadPeak for availability, sign and
+        //time). Absent = the engine produced no such peak, or the result predates them. Load, LoadIndex,
+        //SizingMethod and the room/gain values above remain a legacy projection of whichever peak governs.
+        [ParameterProperties("Design Day Peak", "Design Day Peak"), SAMObjectParameterValue(typeof(SpaceLoadPeak))] DesignDayPeak,
+        [ParameterProperties("Annual Peak", "Annual Simulation Peak"), SAMObjectParameterValue(typeof(SpaceLoadPeak))] AnnualPeak,
     }
 }

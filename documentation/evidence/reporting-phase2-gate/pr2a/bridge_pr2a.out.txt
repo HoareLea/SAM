@@ -1,0 +1,37 @@
+﻿converted results: 116
+Bedroom 2_3 Cooling: legacy Load=2070.833252 LoadIndex=5089 SizingMethod=Cooling Design Day DateTime=2026-09-27T11:49:51.3223510+02:00
+  DesignDayPeak: basis=DesignDay load=2070.833252 W designDay='Leeds_TRY ANN CLG 0% CONDS DB=>GRad' hourOfYear=null hourOfDay=0 (no calendar date)
+    room DB=19.294514 res=20.820978 RH=100 x=0.014106; outdoor DB=n/a RH=n/a
+    components: Solar=0, Lighting=0, OccupancySensible=105, EquipmentSensible=10, InfiltrationVentilation=-2.025321, AirMovement=0, BuildingHeatTransfer=1393.599976, ExternalConductionOpaque=601.931396, ExternalConductionGlazing=-37.675072, AirHandlingUnit=0, OccupancyLatent=77, EquipmentLatent=0
+    sum(sensible)=2070.83098  load+sum=4141.664232  load-sum=0.002272
+  AnnualPeak: basis=AnnualSimulation load=1369.404419 W designDay='' hourOfYear=5116 hourOfDay=4 (02 Aug 04:00)
+    room DB=17.196497 res=18.310513 RH=99.999992 x=0.012331; outdoor DB=15.2 RH=94
+    components: Solar=11.129734, Lighting=0, OccupancySensible=105, EquipmentSensible=10, InfiltrationVentilation=-42.78714, AirMovement=0, BuildingHeatTransfer=1049.807251, ExternalConductionOpaque=295.914124, ExternalConductionGlazing=-59.657181, AirHandlingUnit=0, OccupancyLatent=77, EquipmentLatent=0
+    sum(sensible)=1369.406788  load+sum=2738.811207  load-sum=-0.002369
+Bedroom 2_3 Heating: legacy Load=1629.659668 LoadIndex=1599 SizingMethod=Heating Design Day DateTime=2026-09-27T11:49:51.3287641+02:00
+  DesignDayPeak: basis=DesignDay load=1629.659668 W designDay='Leeds_TRY ANN HTG 100% CONDS DB' hourOfYear=null hourOfDay=14 (no calendar date)
+    room DB=12.41103 res=11.274698 RH=24.779406 x=0.002208; outdoor DB=n/a RH=n/a
+    components: Solar=0, Lighting=0, OccupancySensible=0, EquipmentSensible=0, InfiltrationVentilation=-392.387634, AirMovement=0, BuildingHeatTransfer=-460.901093, ExternalConductionOpaque=-567.320007, ExternalConductionGlazing=-209.050659, AirHandlingUnit=0, OccupancyLatent=0, EquipmentLatent=0
+    sum(sensible)=-1629.659393  load+sum=0.000275  load-sum=3259.319061
+  AnnualPeak: basis=AnnualSimulation load=776.12915 W designDay='' hourOfYear=0 hourOfDay=0 (01 Jan 00:00)
+    room DB=12.310001 res=11.864229 RH=75.223228 x=0.006707; outdoor DB=3.3 RH=100
+    components: Solar=0, Lighting=0, OccupancySensible=105, EquipmentSensible=10, InfiltrationVentilation=-193.075623, AirMovement=0, BuildingHeatTransfer=-373.182953, ExternalConductionOpaque=-224.158173, ExternalConductionGlazing=-100.71064, AirHandlingUnit=0, OccupancyLatent=77, EquipmentLatent=0
+    sum(sensible)=-776.127388  load+sum=0.001762  load-sum=1552.256538
+Studio 1_0 Cooling: legacy Load=1973.467651 LoadIndex=5089 SizingMethod=Cooling Design Day DateTime=2026-09-27T11:49:50.6980970+02:00
+  DesignDayPeak: basis=DesignDay load=1973.467651 W designDay='Leeds_TRY ANN CLG 0% CONDS DB=>GRad' hourOfYear=null hourOfDay=0 (no calendar date)
+    room DB=19.758215 res=21.455769 RH=99.999992 x=0.014528; outdoor DB=n/a RH=n/a
+    components: Solar=0, Lighting=0, OccupancySensible=105, EquipmentSensible=85.004997, InfiltrationVentilation=-8.544277, AirMovement=0, BuildingHeatTransfer=971.441589, ExternalConductionOpaque=898.013489, ExternalConductionGlazing=-77.442261, AirHandlingUnit=0, OccupancyLatent=77, EquipmentLatent=0
+    sum(sensible)=1973.473537  load+sum=3946.941189  load-sum=-0.005886
+  AnnualPeak: basis=AnnualSimulation load=1972.137451 W designDay='' hourOfYear=4411 hourOfDay=19 (03 Jul 19:00)
+    room DB=18.957739 res=20.592365 RH=58.269211 x=0.007971; outdoor DB=17.5 RH=59
+    components: Solar=835.963074, Lighting=150, OccupancySensible=150, EquipmentSensible=450, InfiltrationVentilation=-52.705479, AirMovement=0, BuildingHeatTransfer=298.012939, ExternalConductionOpaque=219.199493, ExternalConductionGlazing=-78.335747, AirHandlingUnit=0, OccupancyLatent=110, EquipmentLatent=0
+    sum(sensible)=1972.134281  load+sum=3944.271732  load-sum=0.00317
+Studio 1_0 Heating: legacy Load=2267.908447 LoadIndex=1600 SizingMethod=Heating Design Day DateTime=2026-09-27T11:49:50.7347414+02:00
+  DesignDayPeak: basis=DesignDay load=2267.908447 W designDay='Leeds_TRY ANN HTG 100% CONDS DB' hourOfYear=null hourOfDay=15 (no calendar date)
+    room DB=15.079316 res=13.245728 RH=20.831598 x=0.002208; outdoor DB=n/a RH=n/a
+    components: Solar=0, Lighting=0, OccupancySensible=0, EquipmentSensible=0, InfiltrationVentilation=-321.118866, AirMovement=0, BuildingHeatTransfer=-664.186035, ExternalConductionOpaque=-894.853943, ExternalConductionGlazing=-387.750549, AirHandlingUnit=0, OccupancyLatent=0, EquipmentLatent=0
+    sum(sensible)=-2267.909393  load+sum=-0.000946  load-sum=4535.817841
+  AnnualPeak: basis=AnnualSimulation load=802.083435 W designDay='' hourOfYear=0 hourOfDay=0 (01 Jan 00:00)
+    room DB=13.369207 res=12.633975 RH=84.367348 x=0.008081; outdoor DB=3.3 RH=100
+    components: Solar=0, Lighting=0, OccupancySensible=105, EquipmentSensible=85.004997, InfiltrationVentilation=-154.12381, AirMovement=0, BuildingHeatTransfer=-326.554138, ExternalConductionOpaque=-327.757477, ExternalConductionGlazing=-183.65416, AirHandlingUnit=0, OccupancyLatent=77, EquipmentLatent=0
+    sum(sensible)=-802.084587  load+sum=-0.001152  load-sum=1604.168022

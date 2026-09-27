@@ -1,0 +1,54 @@
+// PR2A real-fixture check: production Convert/AddResults on a COPY of open.tsd, saved to a NEW .sam copy, reopened.
+using SAM.Analytical;
+using System;
+using System.Collections.Generic;
+using System.Globalization;
+using System.IO;
+using System.Linq;
+
+static class Program
+{
+    static string F(double? v) => v.HasValue ? v.Value.ToString("0.######", CultureInfo.InvariantCulture) : "n/a";
+
+    static void Dump(string tag, SpaceLoadPeak p)
+    {
+        if (p == null) { Console.WriteLine($"  {tag}: UNAVAILABLE"); return; }
+        string date = p.TryGetDateTime(2018, out DateTime d) ? d.ToString("dd MMM HH:mm", CultureInfo.InvariantCulture) : "no calendar date";
+        Console.WriteLine($"  {tag}: basis={p.Basis} load={F(p.Load)} W designDay='{p.DesignDayName}' hourOfYear={p.HourOfYear?.ToString() ?? "null"} hourOfDay={p.HourOfDay?.ToString() ?? "null"} ({date})");
+        Console.WriteLine($"    room DB={F(p.DryBulbTemperature)} res={F(p.ResultantTemperature)} RH={F(p.RelativeHumidity)} x={F(p.HumidityRatio)}; outdoor DB={F(p.OutdoorDryBulbTemperature)} RH={F(p.OutdoorRelativeHumidity)}");
+        if (p.Components.Count != 0)
+        {
+            Console.WriteLine("    components: " + string.Join(", ", p.Components.Select(x => $"{x.Key}={F(x.Value)}")));
+            double sensible = p.Components.Where(x => x.Key != LoadPeakComponent.OccupancyLatent && x.Key != LoadPeakComponent.EquipmentLatent).Sum(x => x.Value);
+            Console.WriteLine($"    sum(sensible)={F(sensible)}  load+sum={F(p.Load + sensible)}  load-sum={F(p.Load - sensible)}");
+        }
+    }
+
+    static void Main(string[] args)
+    {
+        string tsd = args[0], samIn = args[1], samOut = args[2];
+        AnalyticalModel model = SAM.Core.Convert.ToSAM<AnalyticalModel>(samIn).First();
+        AdjacencyCluster cluster = model.AdjacencyCluster;
+        List<SAM.Core.Result> results = SAM.Analytical.Tas.Modify.AddResults(tsd, cluster);
+        Console.WriteLine($"converted results: {results?.Count}");
+        model = new AnalyticalModel(model, cluster);
+        SAM.Core.Convert.ToFile(new List<SAM.Core.IJSAMObject> { model }, samOut);
+
+        AnalyticalModel reopened = SAM.Core.Convert.ToSAM<AnalyticalModel>(samOut).First();
+        foreach (string name in args.Skip(3))
+        {
+            Space space = reopened.AdjacencyCluster.GetSpaces().First(x => x.Name == name);
+            foreach (SpaceSimulationResult r in reopened.AdjacencyCluster.GetResults<SpaceSimulationResult>(space, SAM.Analytical.Tas.Query.Source()) ?? new List<SpaceSimulationResult>())
+            {
+                r.TryGetValue(SpaceSimulationResultParameter.Load, out double load);
+                r.TryGetValue(SpaceSimulationResultParameter.LoadIndex, out int loadIndex);
+                r.TryGetValue(SpaceSimulationResultParameter.SizingMethod, out string sizing);
+                Console.WriteLine($"{name} {r.LoadType()}: legacy Load={F(load)} LoadIndex={loadIndex} SizingMethod={sizing} DateTime={r.DateTime:O}");
+                r.TryGetValue(SpaceSimulationResultParameter.DesignDayPeak, out SpaceLoadPeak dd);
+                r.TryGetValue(SpaceSimulationResultParameter.AnnualPeak, out SpaceLoadPeak an);
+                Dump("DesignDayPeak", dd);
+                Dump("AnnualPeak", an);
+            }
+        }
+    }
+}
