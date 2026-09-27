@@ -58,5 +58,22 @@ namespace SAM.Analytical.Reporting
         {
             return FormattedValue.Label(text);
         }
+
+        /// <summary>
+        /// The formatter's placeholder ("—" / "n/a") for a value that is not available, keeping its reason.
+        /// </summary>
+        public static FormattedValue Placeholder(IQuantityFormatter quantityFormatter, IReportValue reportValue)
+        {
+            string text = reportValue.Availability == Availability.NotApplicable ? quantityFormatter.NotApplicableText : quantityFormatter.NotAvailableText;
+            return new FormattedValue(text, null, reportValue.Availability, note: reportValue.Note);
+        }
+
+        /// <summary>
+        /// Display text for an available value that is not a quantity (a peak hour), keeping its provenance.
+        /// </summary>
+        public static FormattedValue Text(string text, IReportValue reportValue)
+        {
+            return new FormattedValue(text, null, reportValue.Availability, reportValue.Freshness, reportValue.Source, reportValue.SourceTimestamp, reportValue.Note);
+        }
     }
 }

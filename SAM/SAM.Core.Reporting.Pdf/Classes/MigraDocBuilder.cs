@@ -21,6 +21,7 @@ namespace SAM.Core.Reporting.Pdf
     /// <item>the <see cref="PdfRenderer.HeaderSectionId"/> section is printed in the header band;</item>
     /// <item>consecutive <see cref="SectionWidth.Half"/> sections are set side by side;</item>
     /// <item>in a full-width section, consecutive titled key/value blocks are set side by side (up to three);</item>
+    /// <item>an untitled key/value block directly followed by a table is placed with it as one unit;</item>
     /// <item>side-by-side content too tall to place as one unit is stacked instead, so it breaks across pages.</item>
     /// </list>
     /// </summary>
@@ -373,6 +374,24 @@ namespace SAM.Core.Reporting.Pdf
                     }
 
                     AddKeyValue(elements, run[0], width, false);
+                    continue;
+                }
+
+                // An untitled key/value block that introduces a table (a line or two naming what the table shows) is
+                // placed with it as one unit, so a page break never leaves it behind on its own.
+                if (documentBlocks[i] is KeyValueBlock keyValueBlock_Lead && string.IsNullOrWhiteSpace(keyValueBlock_Lead.Title) && i + 1 < documentBlocks.Count && documentBlocks[i + 1] is TableBlock tableBlock_Next)
+                {
+                    AddSideBySide(elements, new List<Action<DocumentElements, double>>()
+                    {
+                        (e, w) =>
+                        {
+                            AddKeyValue(e, keyValueBlock_Lead, w, false);
+                            AddSpacer(e, 1.6);
+                            AddTable(e, tableBlock_Next, w);
+                        },
+                    }, new List<double>() { width });
+
+                    i++;
                     continue;
                 }
 

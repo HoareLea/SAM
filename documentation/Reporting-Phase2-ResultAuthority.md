@@ -2,14 +2,16 @@
 
 Status: **investigation + design-definition (26 Sep 2026).** The audit itself changed no product code. Since then,
 B0 has been fixed by [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (merge `00db4b85`, see §3.1), and B1–B5 by
-PR2A (PR2A-1 in SAM, PR2A-2 in SAM_Tas, **open, not merged**; see §3.2).
+PR2A (PR2A-1 = SAM#153, merge `8a22c82b`; PR2A-2 = SAM_Tas#69, merge `46dacf22`; see §3.2). PR2B (typed report
+data + collector, SAM#156, merge `9c3b9d6e`) is described in §7.1; PR2C (document + PDF) in §9.1.
 
 ```text
-Phase 2 result authority: BLOCKED
+Phase 2 result authority: COMPLETE
 B0: FIXED (SAM#147, 00db4b85)
-B1–B5: FIXED in PR2A-1 (SAM) + PR2A-2 (SAM_Tas), open, not merged (§3.2)
+B1–B5: FIXED in PR2A-1 (SAM#153, 8a22c82b) + PR2A-2 (SAM_Tas#69, 46dacf22), merged (§3.2)
 B6: VERIFIED read-only on an existing real Tas cooling result (pr3\final\bridge.tsd, §3.2); no licensed run needed
-PR2B reporting implementation: NOT STARTED
+PR2B reporting data + collector: MERGED (SAM#156, §7.1)
+PR2C Space Design Load Summary document + PDF: IMPLEMENTED (§9.1); SAM_UI command (PR2D): NOT STARTED
 ```
 
 Phase 2 must report *persisted* results. The audit found that the persisted per-space load results are
@@ -92,7 +94,7 @@ Freshness and provenance:
   - Harness: `evidence/reporting-phase2-gate/harness/pr2a0_rescan.cs.txt`.
 - The Phase-1 fix reaches users through a SAM_Deploy SAM-pointer bump.
 
-### 3.2 PR2A closeout — B1–B6 (PR2A-1 SAM, PR2A-2 SAM_Tas; open, not merged)
+### 3.2 PR2A closeout — B1–B6 (PR2A-1 SAM#153, PR2A-2 SAM_Tas#69; merged)
 
 Two PRs, merged in this order: **PR2A-1** (SAM, `feature/pr2a1-space-load-peak-2026-09-27`) adds the typed result;
 **PR2A-2** (SAM_Tas, `fix/pr2a2-tas-peak-authority-2026-09-27`) fills it. SAM owns the type because the future
@@ -310,6 +312,48 @@ Per-field rules:
 - Net balance: Source Derived. Show it only when every term of the balance is available.
 - No pass/fail and no ratio: design load and peaks are shown side by side only.
 
+### 7.1 As implemented in PR2B (SAM only)
+
+The proposal above was implemented with these differences, made to keep the data layer solver-neutral and free of
+derived values:
+
+```text
+SpaceDesignLoadDocumentData            Create.SpaceDesignLoadDocumentData(context, space, resultSource = null)
+  Identity, DesignCriteria, Sizing     Phase-1 collector, unchanged (Sizing = TBD design loads, Freshness Unknown)
+  Heating, Cooling : SpaceLoadResultData   Create.SpaceLoadResultData(context, space, loadType, resultSource)
+  Provenance
+
+SpaceLoadResultData
+  LoadType; Status : LoadResultStatus { NotSimulated, PeaksNotRecorded, Available, Ambiguous }
+  ResultSource : ReportValue<string>   (Result.Source, e.g. "Tas" / "OpenStudio")
+  ConvertedAt  : ReportValue<DateTime> (Result.DateTime = conversion time, not simulation time)
+  DesignDay, Annual : SpaceLoadPeakData
+
+SpaceLoadPeakData
+  Basis : LoadPeakBasis; State : LoadPeakState { Unavailable, Zero, Value }
+  Load : ReportValue<Quantity> W
+  DesignDayName (NotApplicable on annual); HourOfDay (0-based); HourOfYear (0-based, NotApplicable on a design day)
+  Time : ReportValue<DateTime>  annual only, SpaceLoadPeak.TryGetDateTime(Create.ReferenceYear = 2018); show no year
+  RoomDryBulb/Resultant/RH/HumidityRatio, OutdoorDryBulb/RH : ReportValue<Quantity>
+  SensibleComponents, LatentComponents : SpaceLoadPeakComponentData { Component, Value (signed W) }
+```
+
+- **Only** `SpaceSimulationResultParameter.DesignDayPeak` / `AnnualPeak` are read. `Load`, `LoadIndex`,
+  `SizingMethod` and every legacy room/gain value are never read (test: conflicting legacy values are ignored).
+- `Unusable` became `PeaksNotRecorded` (results exist, no typed peak: re-run). `Ambiguous` (more than one result of
+  the load type carries peaks) picks nothing; the caller passes `resultSource`.
+- Per peak: missing → `Unavailable` (all values NotAvailable, no components); `Load 0` → `Zero` (Load an available
+  0 W; absent time/state NotApplicable, "no peak timestep"); otherwise `Value` (absent values NotAvailable, "not
+  reported"). A peak whose `Basis` does not match its slot, a negative/non-finite load, or an out-of-range hour is
+  NotAvailable "invalid value in results" with a warning.
+- Source: new additive `ReportValueSource.SimulationResult` (not `TSD`, which names an engine). Freshness: Unknown
+  for every result value; `SimulationResultProvenance` is Part-O-specific and not consulted (freshness redesign = PR2D).
+- Components: exactly the stored terms, sign untouched, latent listed apart. No net balance, no latent removal load,
+  no derived quantity. The Derived net-balance row of §7 is left to PR2C if it is wanted, under its own rule.
+- `PeakTime`, `PeakCondition`, `PeakLoadTerm` were not introduced: the fields sit on `SpaceLoadPeakData`, and the
+  existing `SAM.Analytical.LoadPeakComponent` enum is reused.
+- Tests: `SAM/SAM.Tests/SpaceDesignLoadDataTests.cs`.
+
 ## 8. Report content
 
 | Included (v1, after PR2A-0 + PR2A) | Deferred | Unavailable today |
@@ -346,6 +390,73 @@ Findings:
    (a heat-balance page) or add a *generic* keep-together option to the renderer. It must not squeeze the typography.
 4. The gate itself exposed B0 (0 W design load) and the Phase-1 set-point sentinels.
 
+### 9.1 As implemented in PR2C (SAM only)
+
+The production document is `SpaceDocumentDefinitions.SpaceDesignLoadSummary`, built by
+`Create.SpaceDesignLoadSummary(context, space, resultSource = null)` from `Create.SpaceDesignLoadDocumentData` (PR2B)
+and rendered by the unchanged `PdfRenderer`. The builders read only `SpaceDesignLoadDocumentData`.
+
+```text
+identity (header band)  design-criteria | sizing      Phase-1 builders, run on the PR2B data by an adapter (same output)
+heating                 Design day: <name>             untitled key/value, kept with the table below
+                        [ | Design day | Full year ]   Peak load, Peak hour, Room DB / resultant / RH / humidity ratio,
+                                                       Outdoor DB / RH
+                        Sensible components at peak    [Component | Design day (W) | Full year (W)], signed as stored
+                        Latent components at peak      same, kept apart
+                        notes                          terms 0 at both peaks named, not listed; sign convention
+cooling                 same
+results                 [ | Heating | Cooling ]        Status, Result source, Read into model, Matches current model
+                        notes                          peak-hour convention; no acceptance rule
+footer                  Phase-1 footer, unchanged
+```
+
+- **States.** `NotSimulated` → an Information notice ("… This is not a zero load."); `PeaksNotRecorded` → a Warning
+  ("… Re-run the simulation …"); `Ambiguous` → a Warning, no table, nothing chosen: a pick happens only through
+  `resultSource`. A peak `Zero` prints `0 W`; `Unavailable` prints `—`; a zero peak's absent hour/state prints `n/a`.
+  When neither peak is above zero the section shows the design day, the Peak load row and one note, nothing else.
+- **Time.** Design day: `23:00–24:00` from `HourOfDay` (0-based), and the design-day name; never a date. Full year:
+  `23 Dec 09:00–10:00` from `Time`; no year (`Create.ReferenceYear` is never printed).
+- **Units.** Shared `QuantityFormatter`. One power unit per load section (both peak loads and every component), so
+  W / kW / Btu/h / kBtu/h switch together. Pairs of temperatures/RH share one unit.
+- **Components.** Values exactly as stored, signs untouched, sensible and latent in separate tables. A term stored as
+  exactly 0 at **both** peaks is named in one note ("Zero at both peaks (not listed): …") instead of a row, the Phase-1
+  zero-area fabric rule; a term missing at one peak stays listed (`—` not reported, `n/a` at a zero peak). No total, no
+  net balance, no latent removal load, nothing Derived.
+- **Provenance.** Source and read-in time from the typed data; "Matches current model" reads the freshness the data
+  carries: Unknown → "not recorded", never "yes".
+- **No acceptance rule.** Sizing design loads and simulated peaks are only adjacent; no pass/fail, ratio or verdict.
+- **Renderer (generic, SAM.Core.Reporting.Pdf):** an untitled key/value block directly followed by a table is placed
+  with it as one unit (the existing side-by-side frame with one part; it falls back to page flow when taller than half
+  the body). It stops the design-day line being left alone at a page foot. No Phase-1 section has that shape, so
+  Phase-1 output is unchanged (its PDF tests pass as before).
+- **Layout vs §9 finding 2:** heating and cooling are stacked, each with its own `Design day | Full year` columns,
+  rather than one 4-column table: the pairing the PR2C brief asked for. It also removes the single-column group
+  header that wrapped ("Coolin g").
+- **Public API added:** `SpaceDocumentDefinitions.SpaceDesignLoadSummary`, `Create.SpaceDesignLoadSummary`. The new
+  builders, the Phase-1 adapter and the format helpers are internal.
+
+Visual gate (production renderer; PDFs in `documentation/evidence/reporting-phase2-gate/pr2c/`, values from
+`SAM.Tests/Helpers/SpaceDesignLoadFixture.cs`: real Tas peaks of Bathroom_2 and Studio 1_0 as SAM_Tas#69 stores them):
+
+| Case | File | Pages |
+|---|---|---|
+| A Bathroom_2 SI: heating DD 1,140 W / FY 104 W, cooling real zero | `SpaceDesignLoad_A_Bathroom_2_SI.pdf` | **1** |
+| A Bathroom_2 IP (3,889 / 355 Btu/h) | `SpaceDesignLoad_A_Bathroom_2_IP.pdf` | **1** |
+| B Studio 1_0 SI/IP: heating and cooling both populated | `SpaceDesignLoad_B_Studio_1_0_{SI,IP}.pdf` | 2 (cooling starts page 2 whole) |
+| C Not simulated | `SpaceDesignLoad_C_NotSimulated_SI.pdf` | 1 |
+| D Peaks not recorded (legacy −1 results) | `SpaceDesignLoad_D_PeaksNotRecorded_SI.pdf` | 1 |
+| Ambiguous heating (Tas + OpenStudio) | `SpaceDesignLoad_E_Ambiguous_SI.pdf` | 1 |
+| G stress (invented, long names, kW, every term) SI/IP | `SpaceDesignLoad_G_Stress_{SI,IP}.pdf` | 2 |
+
+Findings: no overlap or clipping (checked by `SpaceDesignLoad_NothingEscapesItsColumn` too); Bathroom_2 fits one page
+with about 10 mm to spare, so a longer normal case may take a natural second page. Known, not PR2C: the shared
+formatter shows humidity ratio in g/kg in IP too (it has no IP humidity-ratio unit); the Phase-1 sizing label "Design
+load per area" wraps in IP.
+
+Tests: `SAM.Tests/SpaceDesignLoadSummaryTests.cs` (document, 6 goldens `Golden/SpaceDesignLoad_*.json`) and
+`SAM.Tests/PdfRendererTests.SpaceDesignLoad.cs` (every case rendered: pages, A4, values verbatim, nothing escapes; the
+renderer lead rule).
+
 ## 10. Recommended PR sequence
 
 1. **PR2A-0 — SAM (SAM.Core/SAM.Analytical): stale design-load read (B0).** **DONE:** SAM#147, merge `00db4b85` (§3.1).
@@ -364,9 +475,10 @@ Findings:
    - Store the full component set and RH for heating too (B5).
    - Tests: pure peak-selection functions, no COM. Evidence: one short licensed design-day run of a small **cooled** model,
      to create the missing cooling fixture (B6) and check cooling closure and latent.
-3. **PR2B — SAM.Analytical.Reporting:** the typed data above, the collector and builders, the legacy-sentinel "re-run"
-   state, SI/IP goldens.
-4. **PR2C — design/PDF integration:**
+3. **PR2B — SAM.Analytical.Reporting:** **DONE:** SAM#156, merge `9c3b9d6e` (§7.1: data + collector; the builders and
+   SI/IP goldens moved to PR2C). Planned: the typed data above, the collector and builders, the legacy-sentinel
+   "re-run" state, SI/IP goldens.
+4. **PR2C — design/PDF integration:** **DONE** (§9.1). The original plan follows:
    - the 4-column tables;
    - the page-2 decision (optional generic keep-together in the renderer);
    - a gate re-run on real cooled data.
