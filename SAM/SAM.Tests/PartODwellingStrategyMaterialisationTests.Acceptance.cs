@@ -374,6 +374,52 @@ namespace SAM.Tests
             Assert.Null(acceptance.AnalyticalModel);
         }
 
+        [Fact]
+        public void Acceptance_OntoATerminalSharedWithAnotherDwellingsSpace_IsRefused()
+        {
+            //Bedroom 1's realised terminal also related to a Flat 2 room: writing it would change Flat 2.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.RealizePartFVentilationTerminals(Spaces(baseline, Flat1), out _, out List<string> refusals);
+            Assert.Empty(refusals);
+
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            VentilationTerminal ventilationTerminal = adjacencyCluster.VentilationTerminals(bedroom).First(x => x.FlowClassification == FlowClassification.Supply);
+            adjacencyCluster.AddRelation(ventilationTerminal, Spaces(baseline, Flat2).First());
+            AnalyticalModel baseline_Shared = new(baseline, adjacencyCluster);
+
+            PartODwellingDesignAcceptance acceptance = baseline_Shared.AcceptPartODwellingDesign(Zone(baseline_Shared, Flat1).Guid, RaisedRunCopy(baseline, out _, out _));
+
+            Assert.False(acceptance.IsAccepted);
+            Assert.Contains("would change another dwelling", acceptance.Refusal);
+        }
+
+        [Fact]
+        public void Acceptance_WithATerminalRelatedToTwoRooms_InTheBaselineOrTheSource_IsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            AnalyticalModel source = RaisedRunCopy(baseline, out _, out _);
+            List<Space> spaces_Flat1 = Spaces(baseline, Flat1);
+            Space kitchen = spaces_Flat1.Find(x => x.Name == "Kitchen");
+
+            //Baseline: Bedroom 1's terminal also related to the Kitchen of the same flat.
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            adjacencyCluster.RealizePartFVentilationTerminals(spaces_Flat1, out _, out _);
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            adjacencyCluster.AddRelation(adjacencyCluster.VentilationTerminals(bedroom).First(x => x.FlowClassification == FlowClassification.Supply), adjacencyCluster.GetSpaces().Find(x => x.Guid == kitchen.Guid));
+            PartODwellingDesignAcceptance acceptance_Baseline = new AnalyticalModel(baseline, adjacencyCluster).AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, source);
+            Assert.False(acceptance_Baseline.IsAccepted);
+            Assert.Contains("related to more than one space", acceptance_Baseline.Refusal);
+
+            //Source: the same, on the model to accept from.
+            AdjacencyCluster adjacencyCluster_Source = source.AdjacencyCluster;
+            Space bedroom_Source = adjacencyCluster_Source.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            adjacencyCluster_Source.AddRelation(adjacencyCluster_Source.VentilationTerminals(bedroom_Source).First(x => x.FlowClassification == FlowClassification.Supply), adjacencyCluster_Source.GetSpaces().Find(x => x.Guid == kitchen.Guid));
+            PartODwellingDesignAcceptance acceptance_Source = baseline.AcceptPartODwellingDesign(Zone(baseline, Flat1).Guid, new AnalyticalModel(source, adjacencyCluster_Source));
+            Assert.False(acceptance_Source.IsAccepted);
+            Assert.Contains("related to more than one space", acceptance_Source.Refusal);
+        }
+
         private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;

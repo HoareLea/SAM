@@ -153,6 +153,22 @@ namespace SAM.Analytical
                         continue;
                     }
 
+                    //A terminal also related to a space outside this dwelling would be rewritten for that space too (terminals
+                    //are replaced by guid), so the other dwelling would change silently.
+                    List<Space> spaces_Terminal = adjacencyCluster.GetRelatedObjects<Space>(ventilationTerminal) ?? [];
+                    if (spaces_Terminal.Exists(x => x is not null && !guids_Space.Contains(x.Guid)))
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline is also related to space '{2}', outside dwelling '{3}', so accepting a design onto it would change another dwelling. Give each space its own terminal first.", ventilationTerminal.Name, space.Name, spaces_Terminal.Find(x => x is not null && !guids_Space.Contains(x.Guid))!.Name, zone.Name));
+                        continue;
+                    }
+
+                    //Related to two rooms of this dwelling, it would be written once per room.
+                    if (spaces_Terminal.Count(x => x is not null) > 1)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' of the baseline is related to more than one space of dwelling '{1}', so its design airflow belongs to no single room. Give each space its own terminal first.", ventilationTerminal.Name, zone.Name));
+                        continue;
+                    }
+
                     PartFTerminalReference partFTerminalReference_Baseline = ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference);
                     List<PartFVentilationTerminalRequirement> requirements_Baseline = partFTerminalReference_Baseline is null ? [] : requirements.FindAll(partFTerminalReference_Baseline.Matches);
                     if (requirements_Baseline.Count != 1 || Direction(requirements_Baseline[0]) != ventilationTerminal.FlowClassification)
@@ -179,6 +195,13 @@ namespace SAM.Analytical
                 {
                     if (ventilationTerminal_Source is null)
                     {
+                        continue;
+                    }
+
+                    //Related to more than one room of the source, it would be counted once per room.
+                    if ((adjacencyCluster_Source.GetRelatedObjects<Space>(ventilationTerminal_Source) ?? []).Count(x => x is not null) > 1)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the model to accept from is related to more than one space, so its airflow belongs to no single room.", ventilationTerminal_Source.Name, space.Name));
                         continue;
                     }
 
