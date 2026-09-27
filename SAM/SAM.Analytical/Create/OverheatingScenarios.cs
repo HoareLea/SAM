@@ -118,6 +118,15 @@ namespace SAM.Analytical
                     continue;
                 }
 
+                //The neutral common-space identity asserts nothing about dwelling ventilation, so stating it
+                //for a dwelling would file a dwelling result under a key that says nothing about how the
+                //dwelling was ventilated.
+                if (partOIteration == PartOIteration.DwellingIndependent && partOAssessmentScope != PartOAssessmentScope.CommonSpace)
+                {
+                    refusals.Add(string.Format("Zone '{0}' is a dwelling, and the DwellingIndependent iteration is the neutral identity of a common space only, so it produces no scenario. A dwelling is assessed at the base iteration of its own ventilation route.", zone.Name));
+                    continue;
+                }
+
                 string ventilationStrategy = null;
                 if (dictionary_VentilationStrategy == null || !dictionary_VentilationStrategy.TryGetValue(zone.Guid, out ventilationStrategy) || string.IsNullOrWhiteSpace(ventilationStrategy))
                 {

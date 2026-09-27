@@ -76,6 +76,23 @@ namespace SAM.Analytical
         /// <returns>The updated model, or null where nothing could be applied at all.</returns>
         public static AnalyticalModel ApplyPartFVentilationRates(this AnalyticalModel analyticalModel, PartFOperatingMode partFOperatingMode, out List<string> refusals, out List<string> notes)
         {
+            return ApplyPartFVentilationRates(analyticalModel, partFOperatingMode, null, out refusals, out notes);
+        }
+
+        /// <summary>
+        /// <see cref="ApplyPartFVentilationRates(AnalyticalModel, PartFOperatingMode, out List{string}, out List{string})"/>
+        /// <b>scoped to the given spaces</b> - the seam a mixed model needs.
+        /// <para>
+        /// The whole-model call writes System 4 rates onto every sized space, including a naturally ventilated
+        /// dwelling and an unassessed one beside the MVHR dwelling being prepared (PR0 P1, P11), and that rewrite
+        /// is irreversible. Scoped, a space outside <paramref name="spaces"/> is treated exactly as an unsized
+        /// space: its internal condition is not rewritten, not refused, and its name is reserved so a generated
+        /// name cannot collide with it. Null keeps the whole-model behaviour bit for bit.
+        /// </para>
+        /// </summary>
+        /// <param name="spaces">The spaces whose rates to apply, by identity. Null means every space.</param>
+        public static AnalyticalModel ApplyPartFVentilationRates(this AnalyticalModel analyticalModel, PartFOperatingMode partFOperatingMode, IEnumerable<Space> spaces, out List<string> refusals, out List<string> notes)
+        {
             refusals = [];
             notes = [];
 
@@ -93,10 +110,24 @@ namespace SAM.Analytical
                 return null;
             }
 
+            //The scope, by identity. Null keeps every space in scope - the whole-model behaviour.
+            HashSet<Guid> guids_Scope = null;
+            if (spaces != null)
+            {
+                guids_Scope = [];
+                foreach (Space space_Scope in spaces)
+                {
+                    if (space_Scope != null)
+                    {
+                        guids_Scope.Add(space_Scope.Guid);
+                    }
+                }
+            }
+
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;
 
-            List<Space> spaces = adjacencyCluster?.GetSpaces();
-            if (spaces == null || spaces.Count == 0)
+            List<Space> spaces_Cluster = adjacencyCluster?.GetSpaces();
+            if (spaces_Cluster == null || spaces_Cluster.Count == 0)
             {
                 refusals.Add("The model carries no spaces, so there are no Part F rates to apply.");
 
@@ -114,14 +145,16 @@ namespace SAM.Analytical
             //original condition name is unique - three flats each have a "Bedroom 2".
             HashSet<string> names = [];
 
-            foreach (Space space in spaces)
+            foreach (Space space in spaces_Cluster)
             {
                 if (space == null)
                 {
                     continue;
                 }
 
-                PartFSpaceData partFSpaceData = space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData);
+                //Out of scope is exactly "not sized here": the condition survives this call, so its name is
+                //reserved below like any other surviving name, and nothing is refused about it.
+                PartFSpaceData partFSpaceData = guids_Scope != null && !guids_Scope.Contains(space.Guid) ? null : space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData);
 
                 double? supply_Lps = partFSpaceData == null ? null : SupplyFlowRate_Lps(partFSpaceData, partFOperatingMode);
                 double? extract_Lps = partFSpaceData == null ? null : ExtractFlowRate_Lps(partFSpaceData, partFOperatingMode);

@@ -532,7 +532,8 @@ ventilation system; that dependency is what `PartOVentilationMode` removes.
 | Reconciling the model's own ventilation systems with the stated route | Not implemented — reported only, §5 |
 | Iteration 2 acoustic restriction / bypass / boost | Not implemented — §2 |
 | Iteration 3 active cooling / manufacturer performance | **Implemented** (PR5B) — orchestrated in `SAM_UI`; licensed real-project acceptance 2026-09-15, see `PartO-TAS-VALIDATION.md` |
-| Per-zone (mixed NV + mechanical) airflow application | Not implemented — refuses. Investigated (PR0, 2026-09-26): [`PartO-MixedDwellingStrategies-PR0.md`](PartO-MixedDwellingStrategies-PR0.md) |
+| Per-zone (mixed NV + mechanical) airflow application | `PreparePartOIteration` still refuses a mixed call (legacy, unchanged). Investigated (PR0, 2026-09-26): [`PartO-MixedDwellingStrategies-PR0.md`](PartO-MixedDwellingStrategies-PR0.md) |
+| Mixed dwelling strategies — persisted per-dwelling authority + one deterministic NV/MVHR materialisation | **Implemented in SAM (PR1)** — `PartODwellingStrategySet`, `Modify.MaterialisePartODwellingStrategies`, `Query.PartOBaselineFindings`; [`PartO-MixedDwellingStrategies-PR1.md`](PartO-MixedDwellingStrategies-PR1.md). Active cooling recorded and refused (PR3); SAM_UI grid not yet (PR2) |
 | System 1 background ventilator / purge sizing | Not implemented anywhere — §7 |
 | Intermittent wet-room extract runtime control | Not implemented — §6 |
 | `OverheatingScenario:v2` | Deferred — §8 |

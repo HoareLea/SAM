@@ -1,7 +1,8 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs). Below it:
+`sow/2026-Q3` is at `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (mixed dwelling strategies
+PR0, investigation). Below it: `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
 SAM#144 (Phase-1 closeout docs, `a947c5a3`) and `22f9c743`, the merge of [SAM#143](https://github.com/SAM-BIM/SAM/pull/143) (airflow symbol `L/s`).
@@ -11,7 +12,54 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: Part O mixed dwelling strategies - PR0 architecture investigation (2026-09-26) - APPROVED; PR [SAM#149](https://github.com/SAM-BIM/SAM/pull/149)
+## Current: Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - PR [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) OPEN, awaiting review
+
+Implementation following the approved PR0 (§D-§F + owner decisions). Branch `feature/parto-mixed-strategies-pr1` from
+`sow/2026-Q3` `444d2db3`. SAM only; SAM_UI (`c96ac19a`), SAM_Tas (`aa00ff91`), SAM_Systems (`22133736`) unchanged.
+**Full record:** `documentation/PartO-MixedDwellingStrategies-PR1.md` (types/APIs, rules, tests map, PR0 refinements,
+risks); linked from `PartO-ARCHITECTURE.md` §9.
+
+- **Authority:** `PartODwellingStrategy` (intent only: route, product-or-pool, `ActiveCooling`, `DesignAirFlowBasis` +
+  fingerprint; no airflow) in `PartODwellingStrategySet` (`PartODwellingStrategies:v1`, canonical JSON) persisted as
+  `AnalyticalModelParameter.PartODwellingStrategies`. Absent = legacy (refused `NoStrategies`, nothing inferred).
+- **Baseline gate:** `Query.PartOBaselineFindings` / `IsPartOCleanBaseline` refuse Part O MVHR type, unresolvable air
+  movements (not air movements as such - review pass, PR1 doc §2a), Part-F-applied ICs, record, isolation context, scenarios, provenance, any `IResult` (by stored type), cluster
+  `DesignDay`s. Model-level Heating/Cooling Design Days are accepted (DesignDay gate pinned).
+- **Materialiser:** `Modify.MaterialisePartODwellingStrategies(baseline, descriptors, scope)`: one call, returns a model only
+  when nothing refused. Part F rates/terminals scoped to MVHR dwellings (new `ApplyPartFVentilationRates(…, spaces, …)`
+  overload; old signature bit-identical). Per-dwelling design = Iteration 1a's own loop body, extracted as internal
+  `RealizeBaseMVHRDwelling`. Dwelling-derived names (`MVHR <zone>`), canonical order. Refuses cooling (gated), NV
+  contradictions, NV over authored duty, shared/unconnected authored plant, reused conditioned unit (P12), stale/unbalanced
+  retained design, requirement-basis drift, unresolved/not-allowed/insufficient product, authored air movements that
+  reach an MVHR dwelling or give an NV dwelling plant/outside air (space->space transfers into NV are carried through),
+  mixed corridor zones and corridor-assigned spaces outside a whole-corridor common zone. Never isolates (owner-confirmed
+  invariant).
+- **Scenarios:** NV `BaseNaturalVentilation`/`NV`, MVHR `BasePassive`/`MVHR` (existing keys); assessed corridor (all
+  spaces assigned the TM59 communal corridor IC) → new `PartOIteration.DwellingIndependent`, `CommonSpace`, `UV`, no
+  assumptions.
+- **Record:** `PartOMaterialisationRecord` (baseline = `SimulationResultProvenance.Fingerprint`, strategies, catalogue over
+  identity + max supply + max extract + rank; zone → system guids; `IsCurrent`).
+- **Files:** SAM.Analytical: new `Classes/PartODwellingStrategy.cs`, `PartODwellingStrategySet.cs`, `PartOMaterialisation.cs`,
+  `PartOMaterialisationRecord.cs`, `PartOMaterialisationRefusal.cs`; `Enums/PartOActiveCooling.cs`,
+  `PartODesignAirFlowBasis.cs`, `PartOMaterialisationRefusalReason.cs`; `Modify/MaterialisePartODwellingStrategies.cs`;
+  `Query/PartOBaselineFindings.cs`, `PartOFingerprints.cs`; `Create/PartOCommonSpaceOverheatingScenario.cs`. Changed:
+  `Enums/PartOIteration.cs`, `Enums/Parameter/AnalyticalModelParameter.cs`, `Create/OverheatingScenarios.cs`,
+  `Modify/{PreparePartOIteration,ApplyPartFVentilationRates,AddPartOBaseMVHRSystem}.cs`,
+  `Query/{PartOOperatingAssumptions,PartOIterationOperatingMode}.cs`. Tests: new
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (50); removed disposable `PartOMixedStrategyProofTests.cs`
+  (PR0 said PR1 deletes/inverts them); `OverheatingScenarioTests` enum-membership pin updated. Docs: PR1 doc, ARCHITECTURE §9.
+- **Validation (after the review pass):** new class 50/50; `FullyQualifiedName~PartO|PartF` 1275/1275 (1238 - 13 PR0 proofs + 50); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2535/2535; `SAM.sln`
+  Release 0 errors; `git diff --check` clean.
+- **Owner review pass (2026-09-27), done:** undersized manual product refuses (confirmed); no isolation (confirmed,
+  documented as invariant); blanket air-movement refusal replaced by the §2a engineering rule; mixed common zones refuse
+  as ambiguous (scenarios are zone-scoped) and orphan corridor-assigned spaces refuse; `DwellingIndependent` kept as the
+  smallest key-compatible identity, with search evidence in PR1 doc §8.1 (only SAM_Tas `PartODiagnosticLog` C9 mislabels,
+  PR3 scope). Local code review then found a shared-unit gap (a unit shared with an unassessed dwelling or corridor was
+  not refused); fixed with a red-then-green test.
+- **Next step:** review/merge the SAM PR1 into `sow/2026-Q3`. Then PR2 SAM_UI (strategy grid, materialise on a copy,
+  accept-2B onto baseline terminals, sidecar v3) in a fresh session. PR3 cooling stays gated on licensed TAS proof.
+
+## Previous: Part O mixed dwelling strategies - PR0 architecture investigation (2026-09-26) - MERGED as SAM#149 (`444d2db3`), SAM_UI#125 (`c96ac19a`)
 
 This is a new programme, separate from the closed Part O UX programme and from Phase 2 reporting. Goal: a
 different final Part O strategy per dwelling in ONE analytical model, with ONE annual TAS run and TM59 as the
@@ -20,8 +68,8 @@ final authority. **PR0 is investigation only: no production code changes.**
 - **Report (authoritative):** `documentation/PartO-MixedDwellingStrategies-PR0.md`, linked from
   `PartO-ARCHITECTURE.md` §9. It contains the mutation map, 21 verdicts, blockers C1-C11, the architecture and
   authority model, the PR sequence with gates, migration notes, and the **binding owner decisions** at the top.
-- **Evidence:** `SAM/SAM.Tests/PartOMixedStrategyProofTests.cs`, 13 DISPOSABLE tests (`Category=PR0Investigation`)
-  that pin today's behaviour. PR1 inverts or removes them.
+- **Evidence:** `SAM/SAM.Tests/PartOMixedStrategyProofTests.cs` (at `444d2db3`), 13 DISPOSABLE tests
+  (`Category=PR0Investigation`) that pinned the pre-PR1 behaviour; PR1 removed them and promoted the matrix.
 - **Validation:**
   - PR0 filter: 13/13 pass.
   - `FullyQualifiedName~PartO|FullyQualifiedName~PartF`: 1238/1238 pass.
@@ -39,8 +87,8 @@ final authority. **PR0 is investigation only: no production code changes.**
   - PR2 SAM_UI: dwelling assignment + mixed run.
   - PR3 SAM + SAM_Tas: cooling + licensed proof.
   - PR4: acceptance + deploy.
-- **Next step:** merge #149, then SAM_UI#125. PR1 starts in a fresh session from the merged `sow/2026-Q3`,
-  following report §D-§F and the owner decisions.
+- **Outcome:** merged; PR1 implemented it (section above). The PR0 proof tests were removed by PR1 as planned; they
+  remain in history at `444d2db3`.
 
 ## Previous (Reporting Phase 2 stream): PR2A-0 - duplicate `SAM.Analytical` ParameterSets / stale TBD design-load read (2026-09-26) - MERGED as SAM#147 (`00db4b85`); B0 closeout docs SAM#148 (`872adb5f`)
 

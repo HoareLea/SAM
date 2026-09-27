@@ -19,6 +19,12 @@ namespace SAM.Analytical
         /// </summary>
         private static readonly Guid guid_VentilationSystemType_MVHR = new("5a4b1f2c-9d3e-4c7a-8b16-2f0d6e5c8a41");
 
+        /// <summary>
+        /// The fixed type guid of the Part O Base MVHR ventilation system - the signal
+        /// <c>Query.PartOBaselineFindings</c> recognises a Part O materialisation by.
+        /// </summary>
+        internal static Guid Guid_VentilationSystemType_PartOMVHR => guid_VentilationSystemType_MVHR;
+
         private const string name_VentilationSystemType_MVHR = "MVHR";
 
         private const string name_AirHandlingUnit_Base = "MVHR-01";
@@ -66,6 +72,23 @@ namespace SAM.Analytical
         /// <param name="refusals">Why nothing could be built, one sentence each.</param>
         /// <returns>The ventilation system, or null where <paramref name="refusals"/> is non-empty.</returns>
         public static VentilationSystem AddPartOBaseMVHRSystem(this AdjacencyCluster adjacencyCluster, IEnumerable<Space> spaces, out AirHandlingUnit airHandlingUnit, out List<string> notes, out List<string> warnings, out List<string> refusals)
+        {
+            return AddPartOBaseMVHRSystem(adjacencyCluster, spaces, null, null, out airHandlingUnit, out notes, out warnings, out refusals);
+        }
+
+        /// <summary>
+        /// <see cref="AddPartOBaseMVHRSystem(AdjacencyCluster, IEnumerable{Space}, out AirHandlingUnit, out List{string}, out List{string}, out List{string})"/>
+        /// with the created system's id and unit's name <b>stated by the caller</b> rather than handed out in
+        /// call order.
+        /// <para>
+        /// The generic <c>MVHR-NN</c> unit name, and <c>Query.NextId</c>'s system id, follow the order dwellings
+        /// are prepared in (PR0 P2), and the unit name is identity-bearing: it is the system -> unit link and it
+        /// is inside the unit movement's profile names. A mixed materialisation derives both from the dwelling
+        /// instead, so the same baseline and strategies give the same names whatever the processing order.
+        /// Null for either keeps the legacy behaviour. Ignored on the reuse path, which keeps what it finds.
+        /// </para>
+        /// </summary>
+        internal static VentilationSystem AddPartOBaseMVHRSystem(this AdjacencyCluster adjacencyCluster, IEnumerable<Space> spaces, string id_VentilationSystem, string name_AirHandlingUnit, out AirHandlingUnit airHandlingUnit, out List<string> notes, out List<string> warnings, out List<string> refusals)
         {
             notes = [];
             warnings = [];
@@ -263,7 +286,7 @@ namespace SAM.Analytical
                     name_VentilationSystemType_MVHR,
                     "Continuous mechanical supply and extract with heat recovery - Approved Document F, Volume 1: Dwellings (2021 edition), System 4.");
 
-                result = Create.MechanicalSystem(ventilationSystemType, null, Query.NextId(adjacencyCluster, ventilationSystemType)) as VentilationSystem;
+                result = Create.MechanicalSystem(ventilationSystemType, null, id_VentilationSystem ?? Query.NextId(adjacencyCluster, ventilationSystemType)) as VentilationSystem;
                 if (result is null)
                 {
                     refusals.Add("The Base MVHR ventilation system could not be created.");
@@ -271,7 +294,7 @@ namespace SAM.Analytical
                     return null;
                 }
 
-                airHandlingUnit = Create.AirHandlingUnit(UniqueAirHandlingUnitName(adjacencyCluster, spaces_Cluster));
+                airHandlingUnit = Create.AirHandlingUnit(name_AirHandlingUnit ?? UniqueAirHandlingUnitName(adjacencyCluster, spaces_Cluster));
                 if (airHandlingUnit is null)
                 {
                     refusals.Add("The generic Base MVHR air handling unit could not be created.");
