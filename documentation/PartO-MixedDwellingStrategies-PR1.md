@@ -268,3 +268,35 @@ Review and merge this SAM PR into `sow/2026-Q3`. Then **PR2 (SAM_UI)**: the scal
 on a copy (the open model stays baseline + intent); one simulation; TM59; the explicit "accept 2B for a dwelling" design
 edit onto the baseline's terminals (lineage-matched, PR0 D3), recording `RetainedDesign` + `PartODwellingDesignFingerprint`;
 sidecar `PartORunResume:v3` carrying the record.
+
+## 11. Follow-up: accepting a dwelling's design (`Modify.AcceptPartODwellingDesign`, 27 Sep 2026)
+
+The PR0 D3 "accept 2B for a dwelling" edit, added for SAM_UI PR2's **Accept optimised airflow…** after the owner's
+live review showed a clean baseline could not reach a retained design (it carries no terminals).
+
+`PartODwellingDesignAcceptance AcceptPartODwellingDesign(this AnalyticalModel baseline, Guid zone, AnalyticalModel source, double tolerance_Lps = 0.001)`
+returns the baseline with ONE dwelling's design terminals at the source's design airflow (a new model; neither input is
+modified), the dwelling's `PartODwellingDesignFingerprint`, and the per-space/direction changes - or refusals and no model.
+Existing operations only:
+
+1. **Lineage** - each source terminal in the dwelling realises exactly one continuous requirement of the baseline space
+   (`PartFTerminalReference.Matches`: room, role, source paragraph - never a guid, the source's terminals are
+   regenerated), and every continuous requirement is realised in the source (whole-dwelling; a partial design refuses).
+   Untraceable, ambiguous or airflow-less terminals refuse. The zone must be a baseline dwelling and hold the same spaces
+   in the source.
+2. **Terminals** - `RealizePartFVentilationTerminals` scoped to the dwelling's spaces (terminals only, no ICs/systems).
+3. **Airflow** - per space and direction, the source total via `SetSpaceDesignFlowRate` (the control 2B varies, with the
+   Approved Document F floor; its refusal refuses).
+
+Refused: a baseline that is not clean (a simulated/materialised model is never patched), a non-dwelling zone, a source
+lacking the dwelling, and a baseline space carrying a designer-added terminal that realises no requirement
+(`SetSpaceDesignFlowRate` would spread the accepted total onto it) - generalised after Codex: every existing baseline terminal must realise exactly one continuous requirement in its own direction; also refused: a source terminal whose direction contradicts its requirement and an unusable tolerance. `Changes`/`Notes` are published only when every write succeeded, and `After_Lps` is the persisted value (Part F floor snapping). A baseline terminal with an unusable duty (negative, NaN, none) refuses before any write, so the equal-total fast path cannot bypass the setter's validation. A space shared with another owning zone (a dwelling or a classified non-dwelling zone such as a corridor) refuses - the materialiser's OverlappingZones scope; every space/direction goes through SetSpaceDesignFlowRate (no equal-total shortcut), so the floor and duty rules always apply. A terminal related to more than one space (baseline or source), or to a space outside the dwelling, refuses. Every persisted difference is reported in `Changes`, even within the tolerance. Baseline-terminal rules apply only where a write happens (a written space: every lineage-tagged terminal, and untagged ones in the written direction), so an untouched manual fan does not block acceptance. Nothing is written to a `PartODwellingStrategy`; the caller records `RetainedDesign` + the returned
+fingerprint, and `MaterialisePartODwellingStrategies` reads the airflow from the terminals (one authority). Balance is the
+materialiser's (`MechanicalDesign`), not restated. Other dwellings, the corridor and the source are untouched (pinned).
+
+Tests: `PartODwellingStrategyMaterialisationTests.Acceptance.cs` (25) - written onto the baseline for that dwelling only;
+materialised as retained beside NV + MVHR; idempotent; requirement design changes nothing; refusals for non-clean
+baseline, non-dwelling / foreign source, partial source, untraceable terminal, below-floor design. Real-data check (SAM_UI
+investigation harness): the 26 Sep live Iteration 2B round `-Opt10` accepted onto a clean derivative of the example model
+for each of the three flats (e.g. Flat 3: Bedroom 63→143, Kitchen 55→95, Ensuite 8→48 l/s), fingerprint equal to the
+hand-composed seam that ran through real TAS.
