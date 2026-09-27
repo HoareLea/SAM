@@ -1,7 +1,9 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `872adb5f` (SAM#148, docs: B0 fixed), above `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix). Below it: `af0356a4`
+`sow/2026-Q3` is at `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+PR1, SAM authority + materialisation). Below it: `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
+`00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
 SAM#144 (Phase-1 closeout docs, `a947c5a3`) and `22f9c743`, the merge of [SAM#143](https://github.com/SAM-BIM/SAM/pull/143) (airflow symbol `L/s`).
 Below it: [SAM#141](https://github.com/SAM-BIM/SAM/pull/141) PDF renderer (`ba343bfb`), [SAM#142](https://github.com/SAM-BIM/SAM/pull/142)
@@ -18,7 +20,7 @@ B0: FIXED (SAM#147)   B1–B5: FIXED + VERIFIED   B6: VERIFIED read-only on a re
 PR2B reporting implementation: NOT STARTED
 ```
 
-Branch `feature/pr2a1-space-load-peak-2026-09-27` from `sow/2026-Q3` `872adb5f`. It pairs with SAM_Tas
+Branch `feature/pr2a1-space-load-peak-2026-09-27` from `sow/2026-Q3` `872adb5f`, merged up with `sow/2026-Q3` `0f866ec6` (SAM#149-#151, Part O mixed strategies) on 2026-09-27; only PROJECT_PROGRESS conflicted. It pairs with SAM_Tas
 `fix/pr2a2-tas-peak-authority-2026-09-27` (PR2A-2), which builds against this `SAM\build`. **Merge this first.**
 The full record is in `documentation/Reporting-Phase2-ResultAuthority.md` §3.2. Evidence is in
 `documentation/evidence/reporting-phase2-gate/pr2a/`.
@@ -53,7 +55,87 @@ The full record is in `documentation/Reporting-Phase2-ResultAuthority.md` §3.2.
 - **Next step:** review and merge PR2A-1, then PR2A-2. Rebuild SAM → SAM_Tas, then start PR2B
   (SAM.Analytical.Reporting typed data + collector, audit doc §7), in a fresh session.
 
-## Previous: PR2A-0 - duplicate `SAM.Analytical` ParameterSets / stale TBD design-load read (2026-09-26) - MERGED as SAM#147 (`00db4b85`)
+## Previous (Part O stream): Part O mixed dwelling strategies - PR1 SAM authority + NV/MVHR materialisation (2026-09-27) - MERGED as [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (`3de02102`)
+
+Implementation following the approved PR0 (§D-§F + owner decisions). Branch `feature/parto-mixed-strategies-pr1` from
+`sow/2026-Q3` `444d2db3`. SAM only; SAM_UI (`c96ac19a`), SAM_Tas (`aa00ff91`), SAM_Systems (`22133736`) unchanged.
+**Full record:** `documentation/PartO-MixedDwellingStrategies-PR1.md` (types/APIs, rules, tests map, PR0 refinements,
+risks); linked from `PartO-ARCHITECTURE.md` §9.
+
+- **Authority:** `PartODwellingStrategy` (intent only: route, product-or-pool, `ActiveCooling`, `DesignAirFlowBasis` +
+  fingerprint; no airflow) in `PartODwellingStrategySet` (`PartODwellingStrategies:v1`, canonical JSON) persisted as
+  `AnalyticalModelParameter.PartODwellingStrategies`. Absent = legacy (refused `NoStrategies`, nothing inferred).
+- **Baseline gate:** `Query.PartOBaselineFindings` / `IsPartOCleanBaseline` refuse Part O MVHR type, unresolvable air
+  movements (not air movements as such - review pass, PR1 doc §2a), Part-F-applied ICs, record, isolation context, scenarios, provenance, any `IResult` (by stored type), cluster
+  `DesignDay`s. Model-level Heating/Cooling Design Days are accepted (DesignDay gate pinned).
+- **Materialiser:** `Modify.MaterialisePartODwellingStrategies(baseline, descriptors, scope)`: one call, returns a model only
+  when nothing refused. Part F rates/terminals scoped to MVHR dwellings (new `ApplyPartFVentilationRates(…, spaces, …)`
+  overload; old signature bit-identical). Per-dwelling design = Iteration 1a's own loop body, extracted as internal
+  `RealizeBaseMVHRDwelling`. Dwelling-derived names (`MVHR <zone>`), canonical order. Refuses cooling (gated), NV
+  contradictions, NV over authored duty, shared/unconnected authored plant, reused conditioned unit (P12), stale/unbalanced
+  retained design, requirement-basis drift, unresolved/not-allowed/insufficient product, authored air movements that
+  reach an MVHR dwelling or give an NV dwelling plant/outside air (space->space transfers into NV are carried through),
+  mixed corridor zones and corridor-assigned spaces outside a whole-corridor common zone. Never isolates (owner-confirmed
+  invariant).
+- **Scenarios:** NV `BaseNaturalVentilation`/`NV`, MVHR `BasePassive`/`MVHR` (existing keys); assessed corridor (all
+  spaces assigned the TM59 communal corridor IC) → new `PartOIteration.DwellingIndependent`, `CommonSpace`, `UV`, no
+  assumptions.
+- **Record:** `PartOMaterialisationRecord` (baseline = `SimulationResultProvenance.Fingerprint`, strategies, catalogue over
+  identity + max supply + max extract + rank; zone → system guids; `IsCurrent`).
+- **Files:** SAM.Analytical: new `Classes/PartODwellingStrategy.cs`, `PartODwellingStrategySet.cs`, `PartOMaterialisation.cs`,
+  `PartOMaterialisationRecord.cs`, `PartOMaterialisationRefusal.cs`; `Enums/PartOActiveCooling.cs`,
+  `PartODesignAirFlowBasis.cs`, `PartOMaterialisationRefusalReason.cs`; `Modify/MaterialisePartODwellingStrategies.cs`;
+  `Query/PartOBaselineFindings.cs`, `PartOFingerprints.cs`; `Create/PartOCommonSpaceOverheatingScenario.cs`. Changed:
+  `Enums/PartOIteration.cs`, `Enums/Parameter/AnalyticalModelParameter.cs`, `Create/OverheatingScenarios.cs`,
+  `Modify/{PreparePartOIteration,ApplyPartFVentilationRates,AddPartOBaseMVHRSystem}.cs`,
+  `Query/{PartOOperatingAssumptions,PartOIterationOperatingMode}.cs`. Tests: new
+  `SAM.Tests/PartODwellingStrategyMaterialisationTests.cs` (50); removed disposable `PartOMixedStrategyProofTests.cs`
+  (PR0 said PR1 deletes/inverts them); `OverheatingScenarioTests` enum-membership pin updated. Docs: PR1 doc, ARCHITECTURE §9.
+- **Validation (after the review pass):** new class 50/50; `FullyQualifiedName~PartO|PartF` 1275/1275 (1238 - 13 PR0 proofs + 50); `PartOIterationPreparationTests` 86/86; `PartOBaseMVHRTests` 34/34; scenario/TM59 256/256; full `SAM.Tests` 2535/2535; `SAM.sln`
+  Release 0 errors; `git diff --check` clean.
+- **Owner review pass (2026-09-27), done:** undersized manual product refuses (confirmed); no isolation (confirmed,
+  documented as invariant); blanket air-movement refusal replaced by the §2a engineering rule; mixed common zones refuse
+  as ambiguous (scenarios are zone-scoped) and orphan corridor-assigned spaces refuse; `DwellingIndependent` kept as the
+  smallest key-compatible identity, with search evidence in PR1 doc §8.1 (only SAM_Tas `PartODiagnosticLog` C9 mislabels,
+  PR3 scope). Local code review then found a shared-unit gap (a unit shared with an unassessed dwelling or corridor was
+  not refused); fixed with a red-then-green test.
+- **Merged** 2026-09-27 on green CI (build, test, SPDX) at head `fcdcea93`. Codex review was unavailable (usage limit); a
+  local high-effort code review stood in and its one finding (shared unit) was fixed before merge.
+- **Next step:** PR2 SAM_UI (strategy grid, materialise on a copy,
+  accept-2B onto baseline terminals, sidecar v3) in a fresh session. PR3 cooling stays gated on licensed TAS proof.
+
+## Previous: Part O mixed dwelling strategies - PR0 architecture investigation (2026-09-26) - MERGED as SAM#149 (`444d2db3`), SAM_UI#125 (`c96ac19a`)
+
+This is a new programme, separate from the closed Part O UX programme and from Phase 2 reporting. Goal: a
+different final Part O strategy per dwelling in ONE analytical model, with ONE annual TAS run and TM59 as the
+final authority. **PR0 is investigation only: no production code changes.**
+
+- **Report (authoritative):** `documentation/PartO-MixedDwellingStrategies-PR0.md`, linked from
+  `PartO-ARCHITECTURE.md` §9. It contains the mutation map, 21 verdicts, blockers C1-C11, the architecture and
+  authority model, the PR sequence with gates, migration notes, and the **binding owner decisions** at the top.
+- **Evidence:** `SAM/SAM.Tests/PartOMixedStrategyProofTests.cs` (at `444d2db3`), 13 DISPOSABLE tests
+  (`Category=PR0Investigation`) that pinned the pre-PR1 behaviour; PR1 removed them and promoted the matrix.
+- **Validation:**
+  - PR0 filter: 13/13 pass.
+  - `FullyQualifiedName~PartO|FullyQualifiedName~PartF`: 1238/1238 pass.
+  - CI on #149: build, test and spdx all green.
+- **Owner decisions, binding:**
+  1. A clean pre-Part-O baseline is mandatory. There is no undo or adopt path, and
+     `MaterialisePartODwellingStrategies` fails explicitly on a non-baseline model.
+  2. Assessed common/corridor spaces are included automatically. They are not strategy rows, and they are
+     classified from state, never from names.
+  3. Project-wide constraints (all-MVHR, product pools) are project settings.
+  4. The accepted 2B airflow lives only on `VentilationTerminal`; the strategy holds a reference or fingerprint.
+  5. Cooling is recorded and refused in PR1 until the PR3 licensed TPD proof.
+- **Order:**
+  - PR1 SAM: per-dwelling authority + deterministic NV/MVHR materialisation.
+  - PR2 SAM_UI: dwelling assignment + mixed run.
+  - PR3 SAM + SAM_Tas: cooling + licensed proof.
+  - PR4: acceptance + deploy.
+- **Outcome:** merged; PR1 implemented it (section above). The PR0 proof tests were removed by PR1 as planned; they
+  remain in history at `444d2db3`.
+
+## Previous (Reporting Phase 2 stream): PR2A-0 - duplicate `SAM.Analytical` ParameterSets / stale TBD design-load read (2026-09-26) - MERGED as SAM#147 (`00db4b85`); B0 closeout docs SAM#148 (`872adb5f`)
 
 ```text
 Phase 2 result authority: BLOCKED
@@ -115,8 +197,10 @@ the B0 closeout (branch `docs/reporting-phase2-b0-fixed-2026-09-26`). Issue [SAM
   - SAM#138;
   - restoring a stable `[assembly: Guid]` (optional and unneeded);
   - the SAM_Deploy pointer bump, which is how users get the fix.
-- **Next step:** merge the audit-doc B0 closeout and the SAM_Deploy SAM-pointer bump to `00db4b85`, which carries the
-  Phase-1 correction to users. Then PR2A in SAM_Tas (B1–B5).
+- **Next step (Reporting Phase 2 stream):**
+  - the audit-doc B0 closeout is merged as SAM#148 (`872adb5f`);
+  - merge the SAM_Deploy SAM-pointer bump to `00db4b85`, which carries the Phase-1 correction to users;
+  - then PR2A in SAM_Tas (B1–B5).
 
 ## Previous: Reporting Phase 2 (Space Design Load Summary) - result-authority audit + design gate (2026-09-26) - MERGED as SAM#145 (`af0356a4`)
 

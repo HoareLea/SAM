@@ -383,156 +383,17 @@ namespace SAM.Analytical
 
             foreach (List<Space> spaces_Dwelling_Assessed in spaceGroups_Dwelling)
             {
-                // ---- The generic system and unit for THIS dwelling -------------------------------------
+                //The system, the unit, the derived duty, the runtime movements, the transfer air and the
+                //balance of THIS dwelling - shared with Modify.MaterialisePartODwellingStrategies, which builds
+                //the same design per MVHR dwelling of a mixed model. See RealizeBaseMVHRDwelling.
+                string refusal_Dwelling = RealizeBaseMVHRDwelling(adjacencyCluster, analyticalModel.ProfileLibrary, spaces_Dwelling_Assessed, null, null, null, result.Notes, result.Warnings, out VentilationSystem ventilationSystem, out AirHandlingUnit airHandlingUnit, out double supplyDuty_Lps, out double extractDuty_Lps);
 
-                //spaces_Dwelling_Assessed - null only for the genuine no-zone-structure whole-model case,
-                //exactly the previous behaviour there; one dwelling zone's own spaces otherwise, so the
-                //unit built or reused here serves only that dwelling.
-                VentilationSystem ventilationSystem = adjacencyCluster.AddPartOBaseMVHRSystem(spaces_Dwelling_Assessed, out AirHandlingUnit airHandlingUnit, out List<string> notes_System, out List<string> warnings_System, out List<string> refusals_System);
-
-                result.Notes.AddRange(notes_System);
-                result.Notes.AddRange(warnings_System);
-                result.Warnings.AddRange(warnings_System);
-
-                if (ventilationSystem == null || airHandlingUnit == null)
+                if (refusal_Dwelling != null)
                 {
-                    result.Refusal = refusals_System.Count != 0
-                        ? string.Join(" ", refusals_System)
-                        : "The Base MVHR ventilation system could not be established, so there is nothing to move the design airflow.";
+                    result.Refusal = refusal_Dwelling;
 
                     return analyticalModel;
                 }
-
-                // ---- The legacy Ventilation profile / ticV conflict, refused rather than double-counted --
-
-                //Modify.UpdateInternalCondition (SAM_Tas) activates TBD's own mechanical ventilation (ticV)
-                //from exactly this same test - InternalCondition.GetProfile(ProfileType.Ventilation, ...)
-                //resolving to a non-null Profile - independent of the directional inter-zone air movements
-                //this method is about to build. A served space arriving here already carrying a Ventilation
-                //profile that resolves in this model's own library would therefore reach the simulation
-                //through BOTH runtime representations at once: the profiled ticV air change rate, and this
-                //design's supply/extract movements. Refusing here is the smallest safe correction - the
-                //VentilationProfileName is READ, never cleared or rewritten, so a model arriving with one is
-                //untouched and Preparation_PreservesEveryProfileNameOnEveryInternalCondition stays true. See
-                //VENTILATION_TICV_ROUND_TRIP.md for the gate this mirrors.
-                List<Space> spaces_Served = adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem) ?? [];
-
-                List<string> names_ConflictingProfile = [];
-                foreach (Space space_Served in spaces_Served)
-                {
-                    if (space_Served?.InternalCondition?.GetProfile(ProfileType.Ventilation, analyticalModel.ProfileLibrary) != null)
-                    {
-                        names_ConflictingProfile.Add(space_Served.Name);
-                    }
-                }
-
-                if (names_ConflictingProfile.Count != 0)
-                {
-                    names_ConflictingProfile.Sort(StringComparer.Ordinal);
-
-                    result.Refusal = string.Format(
-                        "Space(s) {0} already carry a Ventilation profile that resolves in this model's profile library, so SAM_Tas's Modify.UpdateInternalCondition would activate TBD's own mechanical ventilation (ticV) from it - independently of the directional inter-zone air movements ventilation system '{1}' is about to build for the same space(s). Simulating both would move the design airflow twice. Remove the Ventilation profile assignment from the affected space(s) (SAMAnalytical.UpdateVentilationProfile) before preparing this iteration, or decide which runtime representation should carry the requirement.",
-                        string.Join(", ", names_ConflictingProfile),
-                        ventilationSystem.FullName);
-
-                    return analyticalModel;
-                }
-
-                // ---- The derived duty, checked against the requirement ---------------------------------
-
-                bool reconciled = adjacencyCluster.ReconcileVentilationSystemDesignDuty(ventilationSystem, out List<string> notes_Duty, out List<string> warnings_Duty, out List<string> refusals_Duty);
-
-                result.Notes.AddRange(notes_Duty);
-                result.Warnings.AddRange(warnings_Duty);
-
-                if (!reconciled)
-                {
-                    result.Refusal = string.Join(" ", refusals_Duty);
-
-                    return analyticalModel;
-                }
-
-                adjacencyCluster.VentilationSystemDesignDuty(ventilationSystem, out double supplyDuty_Lps, out double extractDuty_Lps);
-
-                // ---- The runtime realization -------------------------------------------------------------
-
-                //The dwelling the transfer air is routed over, settled ONCE per dwelling and used by
-                //everything below for it.
-                //
-                //Wider than the system's served spaces on purpose. The ventilation system is related only
-                //to the rooms carrying a design terminal, which is correct - it moves no air into an
-                //internal hall - but that hall is the room the dwelling's transfer air crosses and divides
-                //at, and a network solved without it reports a supplied bedroom and an extracted bathroom
-                //as having no connection. Narrower than the model on purpose too: a communal corridor
-                //belongs to no dwelling and must never become a shortcut between two of them, and - now that
-                //each dwelling is its own system - nor may a DIFFERENT assessed dwelling's rooms. Since
-                //spaces_Served is now scoped to this one dwelling, Query.PartFTransferAirSpaces expands it
-                //only within that same dwelling's own zone.
-                List<Space> spaces_Dwelling = adjacencyCluster.PartFTransferAirSpaces(spaces_Served, out List<string> notes_Scope);
-
-                result.Notes.AddRange(notes_Scope ?? []);
-
-                //Stale movements first, whatever built them. Preparing the same model twice must produce the
-                //same model, not two sets of air movements that a TBD would write as two sets of inter-zone
-                //air movements - and a model arriving with its own system-template air movements on these
-                //rooms would otherwise add its supply to this design's.
-                RemoveBaseMVHRAirMovementObjects(adjacencyCluster, ventilationSystem, airHandlingUnit, spaces_Dwelling);
-
-                //SCOPED to the system THIS dwelling built. The model's own ventilation systems, and every
-                //other assessed dwelling's system, are left exactly as they are and are not realized here:
-                //walking them too would ventilate their rooms a second time.
-                List<IAirMovementObject> airMovementObjects = adjacencyCluster.AddAirMovementObjects(analyticalModel.ProfileLibrary, ventilationSystem);
-
-                if (airMovementObjects == null || airMovementObjects.Count == 0)
-                {
-                    result.Refusal = string.Format("Ventilation system '{0}' was built with a design duty of {1:0.###} l/s supply and {2:0.###} l/s extract, but no air movement could be realized from it, so nothing would reach the simulation.", ventilationSystem.FullName, supplyDuty_Lps, extractDuty_Lps);
-
-                    return analyticalModel;
-                }
-
-                result.Notes.Add(string.Format(
-                    "Realized {0} air movement object(s) for the Base MVHR design-rate operating state: supply into each space from '{1}' and extract from each space back to it, each direction sized from that space's own design terminals.",
-                    airMovementObjects.Count,
-                    airHandlingUnit.Name));
-
-                // ---- The internal transfer air that closes each room -----------------------------------
-
-                //A balanced heat recovery dwelling balances at the SYSTEM, so almost every room is
-                //individually out of balance - and TAS refuses to simulate a zone whose inter-zone air
-                //movements do not balance. The air that closes each room is transfer air, routed by the
-                //Approved Document F airflow network over the model's own internal adjacencies. Nothing is
-                //invented: where the network cannot route a room's net, this refuses rather than making a
-                //route up.
-                List<SpaceAirMovement> spaceAirMovements_Transfer = adjacencyCluster.AddPartFTransferAirMovements(analyticalModel.ProfileLibrary, spaces_Dwelling, out List<string> notes_Transfer, out List<string> refusals_Transfer);
-
-                result.Notes.AddRange(notes_Transfer);
-
-                if (spaceAirMovements_Transfer == null || refusals_Transfer.Count != 0)
-                {
-                    result.Refusal = refusals_Transfer.Count != 0
-                        ? string.Join(" ", refusals_Transfer)
-                        : "The dwelling's internal transfer air could not be established, so its rooms would not balance and TAS would refuse to simulate the model.";
-
-                    return analyticalModel;
-                }
-
-                // ---- Conservation, checked at every node -----------------------------------------------
-
-                //Checked over the DWELLING, not over the served spaces: a zero-terminal hall that passes air
-                //on is a TAS zone carrying inter-zone air movements like any other, and one that gained more
-                //than it passed on would be refused by TAS while every served room balanced perfectly.
-                string refusal_Balance = RefuseUnbalancedAirMovement(adjacencyCluster, spaces_Dwelling, airHandlingUnit);
-
-                if (refusal_Balance != null)
-                {
-                    result.Refusal = refusal_Balance;
-
-                    return analyticalModel;
-                }
-
-                result.Notes.Add(string.Format(
-                    "Every space and the air handling unit of '{0}' balance: each passes on exactly what it receives, which is what TAS requires of a zone carrying inter-zone air movements.",
-                    ventilationSystem.FullName));
 
                 // ---- The unit this dwelling is fitted with ---------------------------------------------
 
@@ -580,6 +441,179 @@ namespace SAM.Analytical
             result.DesignExtractDuty_Lps = extractDuty_Total;
 
             return new AnalyticalModel(analyticalModel, adjacencyCluster);
+        }
+
+        /// <summary>
+        /// Realises the Base MVHR design of ONE dwelling over a cluster whose Approved Document F rates and
+        /// design terminals are already in place: the dwelling's own system and unit (created or reused), the
+        /// ticV conflict gate, the derived duty checked against the requirement, the directional air movements,
+        /// the internal transfer air, and the per-node balance.
+        /// <para>
+        /// The body of <see cref="PrepareBaseMVHR"/>'s per-dwelling loop, lifted out unchanged so that
+        /// <c>Modify.MaterialisePartODwellingStrategies</c> builds each MVHR dwelling of a mixed model with
+        /// exactly the design Iteration 1a builds, rather than a second implementation of it. The only
+        /// additions are caller-stated and default to the legacy behaviour: the created system's id and unit's
+        /// name (null keeps <c>Query.NextId</c> and <c>MVHR-NN</c>), and a gate on the unit (null states none).
+        /// </para>
+        /// </summary>
+        /// <returns>Null where the dwelling was realised; the refusal otherwise.</returns>
+        internal static string RealizeBaseMVHRDwelling(AdjacencyCluster adjacencyCluster, ProfileLibrary profileLibrary, List<Space> spaces_Dwelling_Assessed, string id_VentilationSystem, string name_AirHandlingUnit, Func<AirHandlingUnit, string> refuseAirHandlingUnit, List<string> notes, List<string> warnings, out VentilationSystem ventilationSystem, out AirHandlingUnit airHandlingUnit, out double supplyDuty_Lps, out double extractDuty_Lps)
+        {
+            ventilationSystem = null;
+            airHandlingUnit = null;
+            supplyDuty_Lps = 0;
+            extractDuty_Lps = 0;
+
+            // ---- The generic system and unit for THIS dwelling -------------------------------------
+
+            //spaces_Dwelling_Assessed - null only for the genuine no-zone-structure whole-model case,
+            //exactly the previous behaviour there; one dwelling zone's own spaces otherwise, so the
+            //unit built or reused here serves only that dwelling.
+            ventilationSystem = adjacencyCluster.AddPartOBaseMVHRSystem(spaces_Dwelling_Assessed, id_VentilationSystem, name_AirHandlingUnit, out airHandlingUnit, out List<string> notes_System, out List<string> warnings_System, out List<string> refusals_System);
+
+            notes.AddRange(notes_System);
+            notes.AddRange(warnings_System);
+            warnings.AddRange(warnings_System);
+
+            if (ventilationSystem == null || airHandlingUnit == null)
+            {
+                return refusals_System.Count != 0
+                    ? string.Join(" ", refusals_System)
+                    : "The Base MVHR ventilation system could not be established, so there is nothing to move the design airflow.";
+            }
+
+            //A caller-stated gate on the unit this dwelling will be served by, asked BEFORE anything is
+            //realized from it. The legacy preparation states none. The mixed materialisation refuses a reused
+            //authored unit that states a supply temperature, which would otherwise carry active cooling
+            //behind the cooling gate (PR0 P12).
+            string refusal_Unit = refuseAirHandlingUnit?.Invoke(airHandlingUnit);
+            if (refusal_Unit != null)
+            {
+                return refusal_Unit;
+            }
+
+            // ---- The legacy Ventilation profile / ticV conflict, refused rather than double-counted --
+
+            //Modify.UpdateInternalCondition (SAM_Tas) activates TBD's own mechanical ventilation (ticV)
+            //from exactly this same test - InternalCondition.GetProfile(ProfileType.Ventilation, ...)
+            //resolving to a non-null Profile - independent of the directional inter-zone air movements
+            //this method is about to build. A served space arriving here already carrying a Ventilation
+            //profile that resolves in this model's own library would therefore reach the simulation
+            //through BOTH runtime representations at once: the profiled ticV air change rate, and this
+            //design's supply/extract movements. Refusing here is the smallest safe correction - the
+            //VentilationProfileName is READ, never cleared or rewritten, so a model arriving with one is
+            //untouched and Preparation_PreservesEveryProfileNameOnEveryInternalCondition stays true. See
+            //VENTILATION_TICV_ROUND_TRIP.md for the gate this mirrors.
+            List<Space> spaces_Served = adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem) ?? [];
+
+            List<string> names_ConflictingProfile = [];
+            foreach (Space space_Served in spaces_Served)
+            {
+                if (space_Served?.InternalCondition?.GetProfile(ProfileType.Ventilation, profileLibrary) != null)
+                {
+                    names_ConflictingProfile.Add(space_Served.Name);
+                }
+            }
+
+            if (names_ConflictingProfile.Count != 0)
+            {
+                names_ConflictingProfile.Sort(StringComparer.Ordinal);
+
+                return string.Format(
+                    "Space(s) {0} already carry a Ventilation profile that resolves in this model's profile library, so SAM_Tas's Modify.UpdateInternalCondition would activate TBD's own mechanical ventilation (ticV) from it - independently of the directional inter-zone air movements ventilation system '{1}' is about to build for the same space(s). Simulating both would move the design airflow twice. Remove the Ventilation profile assignment from the affected space(s) (SAMAnalytical.UpdateVentilationProfile) before preparing this iteration, or decide which runtime representation should carry the requirement.",
+                    string.Join(", ", names_ConflictingProfile),
+                    ventilationSystem.FullName);
+            }
+
+            // ---- The derived duty, checked against the requirement ---------------------------------
+
+            bool reconciled = adjacencyCluster.ReconcileVentilationSystemDesignDuty(ventilationSystem, out List<string> notes_Duty, out List<string> warnings_Duty, out List<string> refusals_Duty);
+
+            notes.AddRange(notes_Duty);
+            warnings.AddRange(warnings_Duty);
+
+            if (!reconciled)
+            {
+                return string.Join(" ", refusals_Duty);
+            }
+
+            adjacencyCluster.VentilationSystemDesignDuty(ventilationSystem, out supplyDuty_Lps, out extractDuty_Lps);
+
+            // ---- The runtime realization -------------------------------------------------------------
+
+            //The dwelling the transfer air is routed over, settled ONCE per dwelling and used by
+            //everything below for it.
+            //
+            //Wider than the system's served spaces on purpose. The ventilation system is related only
+            //to the rooms carrying a design terminal, which is correct - it moves no air into an
+            //internal hall - but that hall is the room the dwelling's transfer air crosses and divides
+            //at, and a network solved without it reports a supplied bedroom and an extracted bathroom
+            //as having no connection. Narrower than the model on purpose too: a communal corridor
+            //belongs to no dwelling and must never become a shortcut between two of them, and - now that
+            //each dwelling is its own system - nor may a DIFFERENT assessed dwelling's rooms. Since
+            //spaces_Served is now scoped to this one dwelling, Query.PartFTransferAirSpaces expands it
+            //only within that same dwelling's own zone.
+            List<Space> spaces_Dwelling = adjacencyCluster.PartFTransferAirSpaces(spaces_Served, out List<string> notes_Scope);
+
+            notes.AddRange(notes_Scope ?? []);
+
+            //Stale movements first, whatever built them. Preparing the same model twice must produce the
+            //same model, not two sets of air movements that a TBD would write as two sets of inter-zone
+            //air movements - and a model arriving with its own system-template air movements on these
+            //rooms would otherwise add its supply to this design's.
+            RemoveBaseMVHRAirMovementObjects(adjacencyCluster, ventilationSystem, airHandlingUnit, spaces_Dwelling);
+
+            //SCOPED to the system THIS dwelling built. The model's own ventilation systems, and every
+            //other assessed dwelling's system, are left exactly as they are and are not realized here:
+            //walking them too would ventilate their rooms a second time.
+            List<IAirMovementObject> airMovementObjects = adjacencyCluster.AddAirMovementObjects(profileLibrary, ventilationSystem);
+
+            if (airMovementObjects == null || airMovementObjects.Count == 0)
+            {
+                return string.Format("Ventilation system '{0}' was built with a design duty of {1:0.###} l/s supply and {2:0.###} l/s extract, but no air movement could be realized from it, so nothing would reach the simulation.", ventilationSystem.FullName, supplyDuty_Lps, extractDuty_Lps);
+            }
+
+            notes.Add(string.Format(
+                "Realized {0} air movement object(s) for the Base MVHR design-rate operating state: supply into each space from '{1}' and extract from each space back to it, each direction sized from that space's own design terminals.",
+                airMovementObjects.Count,
+                airHandlingUnit.Name));
+
+            // ---- The internal transfer air that closes each room -----------------------------------
+
+            //A balanced heat recovery dwelling balances at the SYSTEM, so almost every room is
+            //individually out of balance - and TAS refuses to simulate a zone whose inter-zone air
+            //movements do not balance. The air that closes each room is transfer air, routed by the
+            //Approved Document F airflow network over the model's own internal adjacencies. Nothing is
+            //invented: where the network cannot route a room's net, this refuses rather than making a
+            //route up.
+            List<SpaceAirMovement> spaceAirMovements_Transfer = adjacencyCluster.AddPartFTransferAirMovements(profileLibrary, spaces_Dwelling, out List<string> notes_Transfer, out List<string> refusals_Transfer);
+
+            notes.AddRange(notes_Transfer);
+
+            if (spaceAirMovements_Transfer == null || refusals_Transfer.Count != 0)
+            {
+                return refusals_Transfer.Count != 0
+                    ? string.Join(" ", refusals_Transfer)
+                    : "The dwelling's internal transfer air could not be established, so its rooms would not balance and TAS would refuse to simulate the model.";
+            }
+
+            // ---- Conservation, checked at every node -----------------------------------------------
+
+            //Checked over the DWELLING, not over the served spaces: a zero-terminal hall that passes air
+            //on is a TAS zone carrying inter-zone air movements like any other, and one that gained more
+            //than it passed on would be refused by TAS while every served room balanced perfectly.
+            string refusal_Balance = RefuseUnbalancedAirMovement(adjacencyCluster, spaces_Dwelling, airHandlingUnit);
+
+            if (refusal_Balance != null)
+            {
+                return refusal_Balance;
+            }
+
+            notes.Add(string.Format(
+                "Every space and the air handling unit of '{0}' balance: each passes on exactly what it receives, which is what TAS requires of a zone carrying inter-zone air movements.",
+                ventilationSystem.FullName));
+
+            return null;
         }
 
         /// <summary>

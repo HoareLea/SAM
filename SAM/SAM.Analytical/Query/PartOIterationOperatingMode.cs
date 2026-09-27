@@ -65,6 +65,10 @@ namespace SAM.Analytical
                     refusal = "The ActiveTrimCooling iteration is not characterised yet, so it has no operating condition. See Query.PartOOperatingAssumptions.";
                     return null;
 
+                case PartOIteration.DwellingIndependent:
+                    refusal = "The DwellingIndependent iteration is the neutral identity of an assessed common space. It states no dwelling ventilation at all, so it has no Approved Document F operating condition and prepares nothing.";
+                    return null;
+
                 default:
                     refusal = "No Part O iteration is stated, so there is no operating condition to simulate at. An assessment has to say which mitigation stage it is assessing.";
                     return null;

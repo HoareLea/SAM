@@ -752,7 +752,9 @@ namespace SAM.Tests
             //shows. Inserting it in reading order would renumber AcousticRestricted and ActiveTrimCooling,
             //which are persisted; the key derives from the NAME, so the ordinal carries no engineering
             //meaning and the two base configurations being far apart in this list means nothing about them.
-            Assert.Equal(["Undefined", "BasePassive", "AcousticRestricted", "ActiveTrimCooling", "BaseNaturalVentilation"], Enum.GetNames(typeof(PartOIteration)));
+            //DwellingIndependent (mixed dwelling strategies PR1) is appended for the same reason: it is the
+            //iteration-neutral identity of an assessed common space, not a mitigation stage.
+            Assert.Equal(["Undefined", "BasePassive", "AcousticRestricted", "ActiveTrimCooling", "BaseNaturalVentilation", "DwellingIndependent"], Enum.GetNames(typeof(PartOIteration)));
             Assert.Equal(["Undefined", "Dwelling", "CommonSpace"], Enum.GetNames(typeof(PartOAssessmentScope)));
 
             //Undefined is the default, so a scenario nobody filled in states no iteration rather than the

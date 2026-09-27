@@ -52,5 +52,20 @@ namespace SAM.Analytical
         /// </para>
         /// </summary>
         [ParameterProperties("Part O Project Test Ventilation Unit", "Part O Project Test Ventilation Unit"), SAMObjectParameterValue(typeof(PartOProjectTestVentilationUnit))] PartOProjectTestVentilationUnit,
+
+        /// <summary>
+        /// The selected Approved Document O strategy of each dwelling - persisted intent, on the clean
+        /// baseline, that <c>Modify.MaterialisePartODwellingStrategies</c> builds a mixed model from. Absent
+        /// means a legacy model, never an error and never "every dwelling natural".
+        /// <see cref="Analytical.PartODwellingStrategySet"/> sets that out in full.
+        /// </summary>
+        [ParameterProperties("Part O Dwelling Strategies", "Part O Dwelling Strategies"), SAMObjectParameterValue(typeof(PartODwellingStrategySet))] PartODwellingStrategies,
+
+        /// <summary>
+        /// What a materialised mixed model was built from - on the run artefact only, never on a baseline
+        /// (<c>Query.PartOBaselineFindings</c> refuses a model carrying it). See
+        /// <see cref="Analytical.PartOMaterialisationRecord"/>.
+        /// </summary>
+        [ParameterProperties("Part O Materialisation Record", "Part O Materialisation Record"), SAMObjectParameterValue(typeof(PartOMaterialisationRecord))] PartOMaterialisationRecord,
     }
 }

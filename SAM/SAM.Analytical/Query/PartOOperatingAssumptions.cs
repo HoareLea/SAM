@@ -79,6 +79,14 @@ namespace SAM.Analytical
                     //assess a building against a stage is entitled to say so.
                     return result;
 
+                case PartOIteration.DwellingIndependent:
+                    //The neutral identity of an assessed common space. Deliberately the empty set, and
+                    //deliberately a member of its own rather than Undefined (see the enum): a corridor in a
+                    //mixed model is ventilated by neither dwelling route, so it states no opening or
+                    //mechanical assumption that either route would put in the key. Only valid at the
+                    //CommonSpace scope - Create.OverheatingScenarios refuses it for a dwelling.
+                    return result;
+
                 case PartOIteration.BasePassive:
                     //"Openings operated without restriction, mechanical ventilation at its design continuous
                     //rate. Nothing has been added to mitigate overheating."

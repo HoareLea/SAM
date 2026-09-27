@@ -90,6 +90,34 @@ namespace SAM.Analytical.Enums
         /// see <c>documentation/PartO-ARCHITECTURE.md</c> section 2.
         /// </para>
         /// </summary>
-        BaseNaturalVentilation
+        BaseNaturalVentilation,
+
+        /// <summary>
+        /// <b>The iteration-neutral identity of an assessed common space</b> - a communal corridor in a
+        /// model whose dwellings do not share one ventilation strategy.
+        /// <para>
+        /// <b>Why a common space cannot take a dwelling iteration.</b> Until mixed dwelling strategies, a
+        /// corridor scenario inherited the iteration of the one call that stated it, and with it that
+        /// iteration's operating assumptions inside the permanent key - so a corridor in an MVHR block
+        /// asserted "mechanical ventilation at design rate". Harmless while every call had one iteration;
+        /// false in a model whose Flat 1 is naturally ventilated and whose Flat 2 is MVHR, because the
+        /// corridor is neither. SAM itself says common spaces are covered by neither base iteration
+        /// (<c>Query.PartOVentilationMode</c>).
+        /// </para>
+        /// <para>
+        /// <b>It asserts nothing about any dwelling.</b> Its operating assumptions are the empty set
+        /// (<c>Query.PartOOperatingAssumptions</c>), it states no ventilation route, it prepares nothing
+        /// (<c>PartOIterationVentilationMode</c> and <c>PartOIterationOperatingMode</c> refuse it), and it is
+        /// valid only at <c>PartOAssessmentScope.CommonSpace</c> - <c>Create.OverheatingScenarios</c> refuses
+        /// it for a dwelling. It is a <b>new key</b>, never a reinterpretation of an existing one: the
+        /// corridor scenarios of homogeneous runs keep their old keys exactly.
+        /// </para>
+        /// <para>
+        /// <b>Not <see cref="Undefined"/>.</b> A scenario whose persisted iteration is unreadable loads as
+        /// <see cref="Undefined"/>, so "neutral by design" and "unreadable" must not share a value. See
+        /// <c>documentation/PartO-MixedDwellingStrategies-PR1.md</c>.
+        /// </para>
+        /// </summary>
+        DwellingIndependent
     }
 }
