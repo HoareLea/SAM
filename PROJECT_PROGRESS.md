@@ -12,7 +12,45 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current: PR2A closeout - Phase 2 result authority COMPLETE (2026-09-27)
+## Current: PR2B - typed Space Design Load reporting data + collector (2026-09-27) - PR open, not merged
+
+```text
+PR2A: COMPLETE
+PR2B implementation: COMPLETE (data/collector only; no PDF)
+PR2C (PDF/layout): NOT STARTED
+```
+
+Branch `feature/pr2b-space-design-load-data-2026-09-27`, stacked on the PR2A closeout commit (`docs/pr2a-closeout-2026-09-27`,
+SAM#155). If SAM#155 merges first, that commit drops out of this PR's diff. SAM only; no SAM_Tas/SAM_UI change.
+Record and deviations from the §7 proposal: `documentation/Reporting-Phase2-ResultAuthority.md` §7.1.
+
+- **Added (SAM.Analytical.Reporting):**
+  - `Create.SpaceDesignLoadDocumentData(context, space, resultSource = null)`: reuses the Phase-1 collector for
+    Identity, DesignCriteria and Sizing, and adds Heating and Cooling;
+  - `Create.SpaceLoadResultData(context, space, loadType, resultSource)`;
+  - data `SpaceDesignLoadDocumentData`, `SpaceLoadResultData`, `SpaceLoadPeakData`, `SpaceLoadPeakComponentData`;
+  - enums `LoadResultStatus` {NotSimulated, PeaksNotRecorded, Available, Ambiguous} and `LoadPeakState`
+    {Unavailable, Zero, Value};
+  - `Create.ReferenceYear = 2018`: only to give an annual hour a calendar time. Show no year.
+- **Added (SAM.Core.Reporting):** `ReportValueSource.SimulationResult`, appended. It is a solver-neutral source label;
+  `TSD` names an engine.
+- **Rules:**
+  - reads ONLY `SpaceSimulationResultParameter.DesignDayPeak`/`AnnualPeak`; never Load/LoadIndex/SizingMethod or −1;
+  - design-day peak: no HourOfYear or Time (NotApplicable);
+  - component signs untouched, latent listed apart, nothing derived;
+  - Freshness Unknown for all result values. `SimulationResultProvenance` (Part O) is not consulted; that is PR2D.
+- **Tests:** `SAM/SAM.Tests/SpaceDesignLoadDataTests.cs`, 18. They cover every item of the PR2B brief (unavailable, zero,
+  design day, annual, independence of DD/annual and of heating/cooling, signs, an OpenStudio-shaped peak, the
+  whole-model string round trip, Bathroom_2 1139.796/104.010 W), plus legacy-only → PeaksNotRecorded, conflicting
+  legacy values ignored, wrong-slot basis, hour 0, the Ambiguous/`resultSource` pick, and Phase-1 reuse.
+- **Validation:** `SAM.sln` Release 0 errors; full `SAM.Tests` **2562/2562** (2544 + 18). No SAM_Tas rebuild: nothing
+  it references changed.
+- **Not done (by design):** PDF (PR2C), SAM_UI command (PR2D), deployment (PR2E); OpenStudio population of the peaks;
+  latent removal load; freshness redesign; SAM#138; the free-running thermostat sentinel display; SAM#154.
+- **Next step:** review/merge SAM#155 (closeout) and this PR, then PR2C: the Space Design Load Summary section
+  builders and PDF layout on `SpaceDesignLoadDocumentData`, in a fresh session.
+
+## Previous (Reporting Phase 2 stream): PR2A closeout - Phase 2 result authority COMPLETE (2026-09-27)
 
 ```text
 Phase 2 result authority: COMPLETE
@@ -27,8 +65,7 @@ Ready for PR2B: YES
   Benchmark 16/16; SAM#153 CI green; SAM_Tas#69 CI green.
 - Follow-up filed, not fixed: [SAM#154](https://github.com/SAM-BIM/SAM/issues/154) (SAM_Tas `ToSAM_Results` skips a
   space's heating surface results when its cooling result has no `LoadIndex`). Not a PR2B blocker.
-- **Next step:** PR2B - typed Space Design Load reporting data + collector in `SAM.Analytical.Reporting`, reading only
-  `SpaceSimulationResultParameter.DesignDayPeak`/`AnnualPeak` (audit doc §7). No PDF (PR2C).
+- **Next step:** PR2B (see Current).
 
 ## Previous (Reporting Phase 2 stream): PR2A-1 - typed per-simulation load peaks (`SpaceLoadPeak`) (2026-09-27) - MERGED as SAM#153 (`8a22c82b`)
 
