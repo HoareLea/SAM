@@ -445,6 +445,26 @@ namespace SAM.Tests
             }
         }
 
+        [Fact]
+        public void Acceptance_IgnoresADesignerTerminalInADirectionItDoesNotWrite()
+        {
+            //A designer-added extract fan in Bedroom 1, which the accepted design (bedroom supply) never writes.
+            AnalyticalModel baseline = Baseline();
+            AdjacencyCluster adjacencyCluster = baseline.AdjacencyCluster;
+            Space bedroom = adjacencyCluster.GetSpaces().Find(x => x.Name == "Bedroom 1");
+            VentilationTerminal ventilationTerminal = new("Designer extract fan", FlowClassification.Extract, 5.0);
+            adjacencyCluster.AddObject(ventilationTerminal);
+            adjacencyCluster.AddRelation(ventilationTerminal, bedroom);
+            AnalyticalModel baseline_Fan = new(baseline, adjacencyCluster);
+
+            PartODwellingDesignAcceptance acceptance = baseline_Fan.AcceptPartODwellingDesign(Zone(baseline_Fan, Flat1).Guid, RaisedRunCopy(baseline, out double supply_Raised, out _));
+
+            Assert.True(acceptance.IsAccepted, acceptance.Refusal);
+            AdjacencyCluster adjacencyCluster_Accepted = acceptance.AnalyticalModel.AdjacencyCluster;
+            Assert.Equal(5.0, adjacencyCluster_Accepted.GetObject<VentilationTerminal>(ventilationTerminal.Guid).DesignFlowRate_Lps ?? 0, 9);
+            Assert.Equal(supply_Raised, SpaceDesignFlow(adjacencyCluster_Accepted, adjacencyCluster_Accepted.GetSpaces().Find(x => x.Name == "Bedroom 1"), FlowClassification.Supply), 6);
+        }
+
         private static AnalyticalModel WithTerminal(AnalyticalModel analyticalModel, string name_Space, FlowClassification flowClassification, Func<VentilationTerminal, VentilationTerminal> func)
         {
             AdjacencyCluster adjacencyCluster = analyticalModel.AdjacencyCluster;

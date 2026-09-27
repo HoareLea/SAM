@@ -143,49 +143,6 @@ namespace SAM.Analytical
                 List<PartFVentilationTerminalRequirement> requirements = (space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData)?.Terminals ?? [])
                     .FindAll(x => x is not null && x.ContinuousDesignFlowRate_Lps.HasValue && !double.IsNaN(x.ContinuousDesignFlowRate_Lps.Value));
 
-                //Every design terminal the baseline already carries must realise exactly one continuous requirement, in that
-                //requirement's direction: SetSpaceDesignFlowRate spreads a total over EVERY terminal of the direction, so a
-                //designer-added or intermittent device would take part of the accepted continuous design. Refused, never guessed.
-                foreach (VentilationTerminal ventilationTerminal in adjacencyCluster.VentilationTerminals(space) ?? [])
-                {
-                    if (ventilationTerminal is null)
-                    {
-                        continue;
-                    }
-
-                    //A terminal also related to a space outside this dwelling would be rewritten for that space too (terminals
-                    //are replaced by guid), so the other dwelling would change silently.
-                    List<Space> spaces_Terminal = adjacencyCluster.GetRelatedObjects<Space>(ventilationTerminal) ?? [];
-                    if (spaces_Terminal.Exists(x => x is not null && !guids_Space.Contains(x.Guid)))
-                    {
-                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline is also related to space '{2}', outside dwelling '{3}', so accepting a design onto it would change another dwelling. Give each space its own terminal first.", ventilationTerminal.Name, space.Name, spaces_Terminal.Find(x => x is not null && !guids_Space.Contains(x.Guid))!.Name, zone.Name));
-                        continue;
-                    }
-
-                    //Related to two rooms of this dwelling, it would be written once per room.
-                    if (spaces_Terminal.Count(x => x is not null) > 1)
-                    {
-                        result.Refusals.Add(string.Format("Design terminal '{0}' of the baseline is related to more than one space of dwelling '{1}', so its design airflow belongs to no single room. Give each space its own terminal first.", ventilationTerminal.Name, zone.Name));
-                        continue;
-                    }
-
-                    PartFTerminalReference partFTerminalReference_Baseline = ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference);
-                    List<PartFVentilationTerminalRequirement> requirements_Baseline = partFTerminalReference_Baseline is null ? [] : requirements.FindAll(partFTerminalReference_Baseline.Matches);
-                    if (requirements_Baseline.Count != 1 || Direction(requirements_Baseline[0]) != ventilationTerminal.FlowClassification)
-                    {
-                        result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which does not realise exactly one continuous Approved Document F requirement in its own direction, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
-                        continue;
-                    }
-
-                    //Checked here, before any write: a space whose total already equals the accepted one is not written, so
-                    //SetSpaceDesignFlowRate's own validation would never see an unusable duty offset by another terminal.
-                    double? designFlowRate_Baseline = ventilationTerminal.DesignFlowRate_Lps;
-                    if (!designFlowRate_Baseline.HasValue || double.IsNaN(designFlowRate_Baseline.Value) || double.IsInfinity(designFlowRate_Baseline.Value) || designFlowRate_Baseline.Value < 0)
-                    {
-                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline states no usable design airflow ({2}), so the dwelling's design cannot be accepted onto it. Correct the terminal first.", ventilationTerminal.Name, space.Name, designFlowRate_Baseline?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "none"));
-                    }
-                }
-
                 Space space_Source = adjacencyCluster_Source.GetObject<Space>(space.Guid);
                 List<VentilationTerminal> ventilationTerminals_Source = adjacencyCluster_Source.VentilationTerminals(space_Source) ?? [];
 
@@ -250,6 +207,66 @@ namespace SAM.Analytical
                         result.Refusals.Add(string.Format("The model to accept from states no design terminal for the {0} requirement of space '{1}', so it holds no whole design for dwelling '{2}'. A partial design is not accepted.", Core.Query.Description(requirement.TerminalRole), space.Name, zone.Name));
                     }
                 }
+            }
+
+            // ---- The baseline terminals the writes will touch ----
+
+            foreach (Space space in spaces)
+            {
+                List<PartFVentilationTerminalRequirement> requirements = (space.GetValue<PartFSpaceData>(SpaceParameter.PartFSpaceData)?.Terminals ?? [])
+                    .FindAll(x => x is not null && x.ContinuousDesignFlowRate_Lps.HasValue && !double.IsNaN(x.ContinuousDesignFlowRate_Lps.Value));
+
+                //Every design terminal the baseline already carries must realise exactly one continuous requirement, in that
+                //requirement's direction: SetSpaceDesignFlowRate spreads a total over EVERY terminal of the direction, so a
+                //designer-added or intermittent device would take part of the accepted continuous design. Refused, never guessed.
+                foreach (VentilationTerminal ventilationTerminal in adjacencyCluster.VentilationTerminals(space) ?? [])
+                {
+                    //Only where a write happens: a space the design writes, and there any lineage-tagged terminal (its lineage
+                    //must be sound) or an untagged one in the direction written. An untagged terminal the writes never touch
+                    //(a manual cupboard fan, an extract fan in a room whose supply is written) does not stand in the way.
+                    if (ventilationTerminal is null || !totals.Keys.Any(x => x.Item1 == space.Guid))
+                    {
+                        continue;
+                    }
+
+                    if (ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference) is null && !totals.ContainsKey((space.Guid, ventilationTerminal.FlowClassification)))
+                    {
+                        continue;
+                    }
+
+                    //A terminal also related to a space outside this dwelling would be rewritten for that space too (terminals
+                    //are replaced by guid), so the other dwelling would change silently.
+                    List<Space> spaces_Terminal = adjacencyCluster.GetRelatedObjects<Space>(ventilationTerminal) ?? [];
+                    if (spaces_Terminal.Exists(x => x is not null && !guids_Space.Contains(x.Guid)))
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline is also related to space '{2}', outside dwelling '{3}', so accepting a design onto it would change another dwelling. Give each space its own terminal first.", ventilationTerminal.Name, space.Name, spaces_Terminal.Find(x => x is not null && !guids_Space.Contains(x.Guid))!.Name, zone.Name));
+                        continue;
+                    }
+
+                    //Related to two rooms of this dwelling, it would be written once per room.
+                    if (spaces_Terminal.Count(x => x is not null) > 1)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' of the baseline is related to more than one space of dwelling '{1}', so its design airflow belongs to no single room. Give each space its own terminal first.", ventilationTerminal.Name, zone.Name));
+                        continue;
+                    }
+
+                    PartFTerminalReference partFTerminalReference_Baseline = ventilationTerminal.GetValue<PartFTerminalReference>(VentilationTerminalParameter.PartFTerminalReference);
+                    List<PartFVentilationTerminalRequirement> requirements_Baseline = partFTerminalReference_Baseline is null ? [] : requirements.FindAll(partFTerminalReference_Baseline.Matches);
+                    if (requirements_Baseline.Count != 1 || Direction(requirements_Baseline[0]) != ventilationTerminal.FlowClassification)
+                    {
+                        result.Refusals.Add(string.Format("Space '{0}' of the baseline carries design terminal '{1}', which does not realise exactly one continuous Approved Document F requirement in its own direction, so an accepted airflow could not be placed on the requirement terminals alone. Remove it or link it to a requirement first.", space.Name, ventilationTerminal.Name));
+                        continue;
+                    }
+
+                    //Checked here, before any write, so an unusable duty offset by another terminal (-5 and 25 summing to 20)
+                    //is refused rather than redistributed.
+                    double? designFlowRate_Baseline = ventilationTerminal.DesignFlowRate_Lps;
+                    if (!designFlowRate_Baseline.HasValue || double.IsNaN(designFlowRate_Baseline.Value) || double.IsInfinity(designFlowRate_Baseline.Value) || designFlowRate_Baseline.Value < 0)
+                    {
+                        result.Refusals.Add(string.Format("Design terminal '{0}' in space '{1}' of the baseline states no usable design airflow ({2}), so the dwelling's design cannot be accepted onto it. Correct the terminal first.", ventilationTerminal.Name, space.Name, designFlowRate_Baseline?.ToString(System.Globalization.CultureInfo.InvariantCulture) ?? "none"));
+                    }
+                }
+
             }
 
             if (result.Refusals.Count != 0)
