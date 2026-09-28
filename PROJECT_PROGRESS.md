@@ -1,7 +1,7 @@
 # Project Progress
 
 ## Branch
-`sow/2026-Q3` is at `85a13ec3`, the merge of [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) (Part O mixed strategies PR3B-1, active cooling). Below it: `34fe037e`, the merge of [SAM#160](https://github.com/SAM-BIM/SAM/pull/160) (reporting Phase 2 complete docs); `6c255ad8`, the merge of [SAM#159](https://github.com/SAM-BIM/SAM/pull/159) (annual HOY + "Peak sensible load"). Below that: `33eb00f3` (SAM#157, Part O closeout docs); `bb170cb8`, the merge of [SAM#158](https://github.com/SAM-BIM/SAM/pull/158) (PR2C PDF); `9c3b9d6e`, the merge of [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (PR2B, typed Space Design Load data). Below that: `d8c623fa`, the merge of [SAM#155](https://github.com/SAM-BIM/SAM/pull/155) (PR2A closeout docs); `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design); `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
+`sow/2026-Q3` is at `afe90e94`, the merge of [SAM#163](https://github.com/SAM-BIM/SAM/pull/163) (reporting PR2F-1). Below it: `85a13ec3`, the merge of [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) (Part O mixed strategies PR3B-1, active cooling); `34fe037e`, the merge of [SAM#160](https://github.com/SAM-BIM/SAM/pull/160) (reporting Phase 2 complete docs); `6c255ad8`, the merge of [SAM#159](https://github.com/SAM-BIM/SAM/pull/159) (annual HOY + "Peak sensible load"). Below that: `33eb00f3` (SAM#157, Part O closeout docs); `bb170cb8`, the merge of [SAM#158](https://github.com/SAM-BIM/SAM/pull/158) (PR2C PDF); `9c3b9d6e`, the merge of [SAM#156](https://github.com/SAM-BIM/SAM/pull/156) (PR2B, typed Space Design Load data). Below that: `d8c623fa`, the merge of [SAM#155](https://github.com/SAM-BIM/SAM/pull/155) (PR2A closeout docs); `be84d7b8`, the merge of [SAM#152](https://github.com/SAM-BIM/SAM/pull/152) (Part O mixed dwelling strategies, accept a dwelling's design); `8a22c82b`, the merge of [SAM#153](https://github.com/SAM-BIM/SAM/pull/153) (PR2A-1, `SpaceLoadPeak`); `0f866ec6`, the merge of [SAM#151](https://github.com/SAM-BIM/SAM/pull/151) (mixed-strategies PR1 closeout docs); `3de02102`, the merge of [SAM#150](https://github.com/SAM-BIM/SAM/pull/150) (mixed dwelling strategies
 PR1, SAM authority + materialisation); `444d2db3`, the merge of [SAM#149](https://github.com/SAM-BIM/SAM/pull/149) (PR0, investigation); `872adb5f`, the merge of [SAM#148](https://github.com/SAM-BIM/SAM/pull/148) (Phase-2 B0 closeout docs);
 `00db4b85`, the merge of [SAM#147](https://github.com/SAM-BIM/SAM/pull/147) (PR2A-0, B0 fix); `af0356a4`
 (SAM#145, Phase-2 audit docs),
@@ -22,6 +22,49 @@ TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM
   B0/MG re-acceptance with DV = false NOT run: the saved 24 Sep run no longer restores; needs a fresh Iteration 1a run.
   Details: `documentation/PartO-MixedDwellingStrategies-PR3B.md` §4-§5.
 - **Next step:** owner review of the gate; legacy B0/MG re-acceptance; PR3C only on the owner's go-ahead.
+
+## Current (reporting stream): PR2F - real-project report review + PR2F-1 report content (2026-09-27/28) - REVIEWED, merging as SAM#163
+
+Branch `docs/pr2f-report-review-2026-09-27`, fast-forwarded on 28 Sep to `sow/2026-Q3` `85a13ec3` (SAM#161 merge;
+SAM_Tas `e7cc0ed4`, SAM_UI `11d9078a`, SAM_Deploy `bc76a31`). Commits: `2abf0f7e` review + evidence (docs only),
+then PR2F-1 product code. Full record: `documentation/Reporting-PR2F-Review.md` (§8 = implementation).
+
+- **PR2F-1 done.** A1 `Analytical.Query.NoHeatingSetPoint`/`NoCoolingSetPoint` (−50/150 °C, new `Query/ThermostatOff.cs`)
+  → off thermostats and humidity no-limit print "none" (note = reason, no legend marker); an off control keeps the
+  Design Criteria table (real-model regression: both off + no humidity + no design days had collapsed it to "No set
+  point profiles"). A2 latent table "Latent gains at the sensible peak hour" + internal-gains-only note. B1 sensible /
+  latent zero notes split (no latent table → "Latent gains: zero at both peaks (Occupancy, Equipment)." appended to the
+  sensible note to keep 1-page reports 1 page). C1 peak-hour/HOY note only when a Peak hour row prints. Batch API
+  `DocumentContext.WithNewDiagnostics()` (shared snapshot, fresh log).
+- **Validation.** `SAM.Tests` Debug 2681/2681 (+13); `SAM.sln` Release 0 errors. CI `test (Release)` on the PR head
+  ran 2681/2681, so the 2647 seen in a local Release run was a stale local Release build, not a code difference. 6 Space Design Load goldens updated as
+  intended. Real re-render of the 20 reports: page counts unchanged, no sentinel left, visual review clean
+  (`documentation/evidence/reporting-pr2f/after-pr2f1/`; harness `harness/Program.cs.txt` now uses the batch API).
+
+- **Reviewed.** All 9 Spaces of the real Part O dwelling in both variants (`C:\TasOut\pr2d\open_peaks.sam`
+  free-running, `bridge_peaks.sam` DX-cooled), IP, Not simulated; scale test at 999 / 4,995 Spaces. Evidence
+  in `documentation/evidence/reporting-pr2f/` (PDFs, PNGs, `_review.md`, unrounded `_balance.csv`, harness).
+- **Balance.** Tas closes exactly: heating load = −Σ sensible, cooling = +Σ sensible; max residual 0.013 W
+  (float32); displayed ±1 W = rounding. Decision: no balance row, no pass/fail.
+- **Owner decisions (28 Sep).** Thermostat off-all-year sentinels (−50 / 150 °C) and humidity no-limit → display
+  "none"; latent table → "Latent gains at the sensible peak hour"; split sensible / latent zero folding; Peak hour /
+  HOY note only when a peak hour is printed; smallest SAM context API for batch reporting; keep raw Tas design-day
+  names; no component-balance row; do not invent design-day outdoor conditions; footer legend unchanged.
+- **Future:** B2 no outdoor design condition for design days (TSD design-day sets have no weather, models
+  carry no DesignDay objects) - SAM_Tas investigation; D1 first-simulated-hour peaks in the bridge model.
+- **Batch:** a per-Space `DocumentContext` deep-clones the cluster (19 ms/Space at 5k Spaces); one shared context =
+  4.5 ms/Space (23 s for 4,995). Proposal: one "Export Space reports…" window (report types × selected/all,
+  folder once), a sequential background task with progress/cancel, collision suffix " [guid8]", continue on
+  failure, summary + log. Needs a small SAM context API with a per-document log.
+- **Review (28 Sep).** SAM#163 reviewed: base unchanged (`85a13ec3`), CI green, no review comments; sentinels match
+  the library "No Heating"/"No Cooling" profiles and SAM_Tas `Query.Sizing` (`<= -50`); reporting never mutates the
+  shared model, `DocumentProvenance` is model-level; a shared `DocumentContext` is for sequential use.
+- **Next step.** Merge SAM#163 into `sow/2026-Q3`, then PR2F-2 SAM_UI batch export
+  (review §6, use `WithNewDiagnostics()` per document), then PR2F-3 SAM_Deploy bump + installed acceptance.
+- **Machine note (28 Sep).** This laptop accidentally started PR3B work: SAM#161 was merged upstream as-is
+  (`2be58f1e`, local backup branch `backup/pr3b1-2be58f1e`); the SAM_Tas test edit is parked in a local stash
+  "PR3B-accidental: PartODiagnosticLogTests.cs ..." on the unpushed local branch `fix/parto-mixed-cooling-pr3b3-2026-09-27`
+  (PR3B-3 has since merged as SAM_Tas#71 from the other laptop). Neither is needed for PR2F.
 
 ## Previous (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27) - MERGED as SAM#161
 

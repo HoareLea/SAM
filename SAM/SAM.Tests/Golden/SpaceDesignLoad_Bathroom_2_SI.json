@@ -546,7 +546,7 @@
           "type": "NoticeBlock",
           "id": "heating-components-zero",
           "level": "Note",
-          "text": "Zero at both peaks (not listed): Solar, Lighting, Occupancy (sensible), Equipment (sensible), Air movement (inter-zone), External conduction — glazing, Air handling unit, Occupancy (latent), Equipment (latent)"
+          "text": "Zero at both peaks (not listed): Solar, Lighting, Occupancy (sensible), Equipment (sensible), Air movement (inter-zone), External conduction — glazing, Air handling unit. Latent gains: zero at both peaks (Occupancy, Equipment)."
         },
         {
           "type": "NoticeBlock",

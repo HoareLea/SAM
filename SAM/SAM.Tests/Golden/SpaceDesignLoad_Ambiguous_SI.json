@@ -437,12 +437,6 @@
         },
         {
           "type": "NoticeBlock",
-          "id": "results-time-note",
-          "level": "Note",
-          "text": "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year, and its hour of the year (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00)."
-        },
-        {
-          "type": "NoticeBlock",
           "id": "results-comparison-note",
           "level": "Note",
           "text": "Design loads (sizing) and simulated peaks are shown side by side for information; no acceptance rule is applied."
