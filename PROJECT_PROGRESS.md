@@ -12,6 +12,30 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (reporting stream): PR2F - real-project report review (2026-09-27/28) - REVIEW DONE, PR2F-1 in progress
+
+Branch `docs/pr2f-report-review-2026-09-27`, fast-forwarded on 28 Sep to `sow/2026-Q3` `85a13ec3` (SAM#161 merge;
+SAM_Tas `e7cc0ed4`, SAM_UI `11d9078a`, SAM_Deploy `bc76a31`). The review/evidence commit comes first; PR2F-1 product
+code follows on the same branch. Full record: `documentation/Reporting-PR2F-Review.md`.
+
+- **Reviewed.** All 9 Spaces of the real Part O dwelling in both variants (`C:\TasOut\pr2d\open_peaks.sam`
+  free-running, `bridge_peaks.sam` DX-cooled), IP, Not simulated; scale test at 999 / 4,995 Spaces. Evidence
+  in `documentation/evidence/reporting-pr2f/` (PDFs, PNGs, `_review.md`, unrounded `_balance.csv`, harness).
+- **Balance.** Tas closes exactly: heating load = −Σ sensible, cooling = +Σ sensible; max residual 0.013 W
+  (float32); displayed ±1 W = rounding. Decision: no balance row, no pass/fail.
+- **Owner decisions (28 Sep).** Thermostat off-all-year sentinels (−50 / 150 °C) and humidity no-limit → display
+  "none"; latent table → "Latent gains at the sensible peak hour"; split sensible / latent zero folding; Peak hour /
+  HOY note only when a peak hour is printed; smallest SAM context API for batch reporting; keep raw Tas design-day
+  names; no component-balance row; do not invent design-day outdoor conditions; footer legend unchanged.
+- **Future:** B2 no outdoor design condition for design days (TSD design-day sets have no weather, models
+  carry no DesignDay objects) - SAM_Tas investigation; D1 first-simulated-hour peaks in the bridge model.
+- **Batch:** a per-Space `DocumentContext` deep-clones the cluster (19 ms/Space at 5k Spaces); one shared context =
+  4.5 ms/Space (23 s for 4,995). Proposal: one "Export Space reports…" window (report types × selected/all,
+  folder once), a sequential background task with progress/cancel, collision suffix " [guid8]", continue on
+  failure, summary + log. Needs a small SAM context API with a per-document log.
+- **Next step.** Implement PR2F-1 on this branch (SAM: A1, A2, B1, C1, context API, goldens, before/after PDFs),
+  then PR2F-2 SAM_UI batch export (only after the SAM PR is stable), then the SAM_Deploy bump.
+
 ## Current (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27)
 
 Branch `feature/parto-mixed-cooling-pr3b1-2026-09-27` from `sow/2026-Q3` `34fe037e`. Record:

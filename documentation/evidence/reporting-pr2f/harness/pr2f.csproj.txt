@@ -1,0 +1,37 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <PlatformTarget>x64</PlatformTarget>
+    <NoWarn>$(NoWarn);CS0618;MSB3270;MSB3277</NoWarn>
+    <SamLibs>C:\Users\Virtual Machine\Documents\GitHub\SAM-BIM\SAM\build</SamLibs>
+    <TasLibs>C:\Users\Virtual Machine\Documents\GitHub\SAM-BIM\SAM_Tas\build</TasLibs>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="PDFsharp-MigraDoc" Version="6.2.0" />
+    <Reference Include="SAM.Core"><HintPath>$(SamLibs)\SAM.Core.dll</HintPath></Reference>
+    <Reference Include="SAM.Units"><HintPath>$(SamLibs)\SAM.Units.dll</HintPath></Reference>
+    <Reference Include="SAM.Math"><HintPath>$(SamLibs)\SAM.Math.dll</HintPath></Reference>
+    <Reference Include="SAM.Geometry"><HintPath>$(SamLibs)\SAM.Geometry.dll</HintPath></Reference>
+    <Reference Include="SAM.Architectural"><HintPath>$(SamLibs)\SAM.Architectural.dll</HintPath></Reference>
+    <Reference Include="SAM.Analytical"><HintPath>$(SamLibs)\SAM.Analytical.dll</HintPath></Reference>
+    <Reference Include="SAM.Weather"><HintPath>$(SamLibs)\SAM.Weather.dll</HintPath></Reference>
+    <Reference Include="SAM.Core.Reporting"><HintPath>$(SamLibs)\SAM.Core.Reporting.dll</HintPath></Reference>
+    <Reference Include="SAM.Core.Reporting.Pdf"><HintPath>$(SamLibs)\SAM.Core.Reporting.Pdf.dll</HintPath></Reference>
+    <Reference Include="SAM.Analytical.Reporting"><HintPath>$(SamLibs)\SAM.Analytical.Reporting.dll</HintPath></Reference>
+    <Reference Include="SAM.Core.Tas"><HintPath>$(TasLibs)\SAM.Core.Tas.dll</HintPath></Reference>
+    <Reference Include="SAM.Geometry.Tas"><HintPath>$(TasLibs)\SAM.Geometry.Tas.dll</HintPath></Reference>
+    <Reference Include="SAM.Weather.Tas"><HintPath>$(TasLibs)\SAM.Weather.Tas.dll</HintPath></Reference>
+    <Reference Include="SAM.Analytical.Tas"><HintPath>$(TasLibs)\SAM.Analytical.Tas.dll</HintPath></Reference>
+    <Reference Include="Interop.TBD"><HintPath>$(TasLibs)\Interop.TBD.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TAS3D"><HintPath>$(TasLibs)\Interop.TAS3D.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TSD"><HintPath>$(TasLibs)\Interop.TSD.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TCD"><HintPath>$(TasLibs)\Interop.TCD.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TCR"><HintPath>$(TasLibs)\Interop.TCR.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TIC"><HintPath>$(TasLibs)\Interop.TIC.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TPD"><HintPath>$(TasLibs)\Interop.TPD.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+    <Reference Include="Interop.TWD"><HintPath>$(TasLibs)\Interop.TWD.dll</HintPath><EmbedInteropTypes>false</EmbedInteropTypes></Reference>
+  </ItemGroup>
+</Project>
