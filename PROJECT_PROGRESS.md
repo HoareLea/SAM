@@ -12,7 +12,7 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current (reporting stream): PR2F - real-project report review + PR2F-1 report content (2026-09-27/28) - IMPLEMENTED, PR open
+## Current (reporting stream): PR2F - real-project report review + PR2F-1 report content (2026-09-27/28) - REVIEWED, merging as SAM#163
 
 Branch `docs/pr2f-report-review-2026-09-27`, fast-forwarded on 28 Sep to `sow/2026-Q3` `85a13ec3` (SAM#161 merge;
 SAM_Tas `e7cc0ed4`, SAM_UI `11d9078a`, SAM_Deploy `bc76a31`). Commits: `2abf0f7e` review + evidence (docs only),
@@ -25,8 +25,8 @@ then PR2F-1 product code. Full record: `documentation/Reporting-PR2F-Review.md` 
   latent zero notes split (no latent table → "Latent gains: zero at both peaks (Occupancy, Equipment)." appended to the
   sensible note to keep 1-page reports 1 page). C1 peak-hour/HOY note only when a Peak hour row prints. Batch API
   `DocumentContext.WithNewDiagnostics()` (shared snapshot, fresh log).
-- **Validation.** `SAM.Tests` Debug 2681/2681 (+13); `SAM.sln` Release 0 errors (Release test run discovers 2647 - a
-  Debug/Release discovery difference that predates this work, not failures). 6 Space Design Load goldens updated as
+- **Validation.** `SAM.Tests` Debug 2681/2681 (+13); `SAM.sln` Release 0 errors. CI `test (Release)` on the PR head
+  ran 2681/2681, so the 2647 seen in a local Release run was a stale local Release build, not a code difference. 6 Space Design Load goldens updated as
   intended. Real re-render of the 20 reports: page counts unchanged, no sentinel left, visual review clean
   (`documentation/evidence/reporting-pr2f/after-pr2f1/`; harness `harness/Program.cs.txt` now uses the batch API).
 
@@ -45,7 +45,10 @@ then PR2F-1 product code. Full record: `documentation/Reporting-PR2F-Review.md` 
   4.5 ms/Space (23 s for 4,995). Proposal: one "Export Space reports…" window (report types × selected/all,
   folder once), a sequential background task with progress/cancel, collision suffix " [guid8]", continue on
   failure, summary + log. Needs a small SAM context API with a per-document log.
-- **Next step.** Review / CI / merge the PR2F-1 SAM PR into `sow/2026-Q3`. Only then PR2F-2 SAM_UI batch export
+- **Review (28 Sep).** SAM#163 reviewed: base unchanged (`85a13ec3`), CI green, no review comments; sentinels match
+  the library "No Heating"/"No Cooling" profiles and SAM_Tas `Query.Sizing` (`<= -50`); reporting never mutates the
+  shared model, `DocumentProvenance` is model-level; a shared `DocumentContext` is for sequential use.
+- **Next step.** Merge SAM#163 into `sow/2026-Q3`, then PR2F-2 SAM_UI batch export
   (review §6, use `WithNewDiagnostics()` per document), then PR2F-3 SAM_Deploy bump + installed acceptance.
 - **Machine note (28 Sep).** This laptop accidentally started PR3B work: SAM#161 was merged upstream as-is
   (`2be58f1e`, local backup branch `backup/pr3b1-2be58f1e`); the SAM_Tas test edit is parked in a local stash
