@@ -1,6 +1,6 @@
 # PR2F — Space Design Load Summary: real-project review (2026-09-27)
 
-Status: **review complete, no product code changed.** Findings are ranked
+Status: **review complete; PR2F-1 (SAM report content) implemented on this branch, see §8.** Findings are ranked
 A (correctness / misleading meaning), B (high-value UX), C (cosmetic), D (future).
 Evidence: `documentation/evidence/reporting-pr2f/`.
 
@@ -199,3 +199,25 @@ path; each PDF is ≈ 50 kB and is written as it is produced, so memory stays fl
 
 B2 (design-day outdoor condition) and B3 (friendly design-day label) are separate future SAM_Tas / SAM
 investigations.
+
+## 8. PR2F-1 implementation (2026-09-28)
+
+Owner decisions (§5): off-all-year text **"none"** for thermostats and humidity; latent title **"Latent gains at
+the sensible peak hour"**; batch UX as §6 (SAM_UI, after this PR). Unchanged by decision: raw Tas design-day
+names, no balance row, no synthesised design-day outdoor condition, footer legend.
+
+| Item | Change |
+|---|---|
+| A1 | `SAM.Analytical.Query.NoHeatingSetPoint` (−50 °C) / `NoCoolingSetPoint` (150 °C) + `IsHeatingOff` / `IsCoolingOff` (new `Query/ThermostatOff.cs`). The collector passes them through the existing `notApplicable` hook (yearly max / min, so a schedule that ever controls still prints). Design Criteria shows every off control (heating, cooling, humidification, dehumidification) as **"none"** with the reason as the note; not the "n/a" marker, so no legend entry. |
+| A1 regression found on the real models | Every bridge room and the open corridor have both thermostats off, no humidity profile and no design days: the "all missing" rule then collapsed Design Criteria to "No set point profiles and no design days in model" (false). An off control is now a known state that keeps the table. Test `DesignCriteria_ControlsOff_NothingElseKnown_KeepsTheTable`. |
+| A2 | Latent table title "Latent gains at the sensible peak hour" + note: internal gains only; the room's latent load (also infiltration / ventilation moisture) is not in the results and not derived. |
+| B1 | Sensible and latent zeros folded separately. Sensible note under the sensible table (id `-components-zero`, sensible terms only); latent note under the latent table (`-latent-zero`). With no latent table, one sentence "Latent gains: zero at both peaks (Occupancy, Equipment)." appended to the sensible note's block (a separate block pushed the one-page heating-only Bathroom fixture to 2 pages). |
+| C1 | Results "Peak hour … HOY" note only when a section prints a Peak hour row (status Available and a peak above zero). |
+| Batch API | `DocumentContext.WithNewDiagnostics()`: shares the model snapshot, cluster, profile library, options, formatter and provenance; starts an empty log. Real bridge model: 9 documents, 18 diagnostics all in per-document logs, shared log 0; 16.9 vs 32.9 ms/Space (`after-pr2f1/batch-timing.txt`). |
+
+**Validation.** `SAM.Tests` Debug 2681/2681 (2668 baseline + 13 new); `SAM.sln` Release 0 errors. 7 goldens
+changed as intended (Space Design Load ×6; Space Assumptions goldens unchanged: their fixture has real set points).
+Real-project re-render (`evidence/reporting-pr2f/after-pr2f1/`, same 20 reports): page counts unchanged (open 9×1;
+bridge 1×1 + 8×2; IP 2; Not simulated 1); no −50 / 150 / −58 / 302 sentinel left (off thermostats print "none"; open rooms keep e.g. "16.0 °C | none");
+peak-hour note gone from Not simulated and all-zero Corridor_1; visual review of Bathroom_2, Studio 1_0 (SI, IP),
+Kitchen_4, Corridor_1, Not simulated: no clipping, no orphan headings.

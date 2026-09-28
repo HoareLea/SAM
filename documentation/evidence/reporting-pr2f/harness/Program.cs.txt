@@ -190,17 +190,21 @@ static class Program
         AR.DocumentContext shared = AR.Create.DocumentContext(model, new DocumentOptions());
         ctxMs = s0.ElapsedMilliseconds;
         long peak = 0;
+        long diagnostics = 0;
         foreach (Space space in spaces)
         {
             Stopwatch s = Stopwatch.StartNew();
-            Document d = AR.Create.SpaceDesignLoadSummary(shared, space);
+            // PR2F-1 API: one snapshot, a fresh diagnostics log per document.
+            AR.DocumentContext next = shared.WithNewDiagnostics();
+            Document d = AR.Create.SpaceDesignLoadSummary(next, space);
+            diagnostics += next.Diagnostics.Count();
             docMs += s.ElapsedMilliseconds; s.Restart();
             byte[] pdf = new PdfRenderer().Render(d);
             pdfMs += s.ElapsedMilliseconds;
             File.WriteAllBytes(Path.Combine(outDir, space.Guid + ".pdf"), pdf);
             peak = Math.Max(peak, GC.GetTotalMemory(false));
         }
-        Console.WriteLine($"B shared context x{spaces.Count}: total {sw.ElapsedMilliseconds} ms  ctx {ctxMs}  doc {docMs}  pdf {pdfMs}  => {sw.ElapsedMilliseconds / (double)spaces.Count:0.0} ms/space; managed peak {peak / 1048576} MB; diagnostics {shared.Diagnostics.Count()}");
+        Console.WriteLine($"B shared context x{spaces.Count}: total {sw.ElapsedMilliseconds} ms  ctx {ctxMs}  doc {docMs}  pdf {pdfMs}  => {sw.ElapsedMilliseconds / (double)spaces.Count:0.0} ms/space; managed peak {peak / 1048576} MB; per-document diagnostics total {diagnostics}, shared log {shared.Diagnostics.Count()}");
         return 0;
     }
 }

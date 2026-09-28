@@ -145,6 +145,12 @@ namespace SAM.Analytical.Reporting
     /// </summary>
     public sealed class SpaceDesignCriteriaSectionBuilder : ISectionBuilder<SpaceDocumentData>
     {
+        /// <summary>
+        /// Shown for a control that is off all year (heating, cooling, humidification or dehumidification): a known
+        /// state, not missing data, so it carries no legend marker.
+        /// </summary>
+        public const string ControlOffText = "none";
+
         public string Id => "design-criteria";
 
         public DocumentSection Build(SpaceDocumentData data, DocumentContext documentContext)
@@ -152,14 +158,18 @@ namespace SAM.Analytical.Reporting
             IQuantityFormatter quantityFormatter = documentContext.Formatter;
             SpaceDesignCriteriaData spaceDesignCriteriaData = data.DesignCriteria;
 
-            if (SectionFormat.AllMissing(spaceDesignCriteriaData.HeatingSetPoint, spaceDesignCriteriaData.CoolingSetPoint, spaceDesignCriteriaData.HumidificationSetPoint, spaceDesignCriteriaData.DehumidificationSetPoint, spaceDesignCriteriaData.OutdoorHeatingDryBulb, spaceDesignCriteriaData.OutdoorCoolingDryBulb))
+            // A control that is off all year (not applicable) is a known state read from a profile, not missing data, so
+            // it keeps the section: only when nothing at all is known does the section become one notice.
+            IReportValue[] reportValues = { spaceDesignCriteriaData.HeatingSetPoint, spaceDesignCriteriaData.CoolingSetPoint, spaceDesignCriteriaData.HumidificationSetPoint, spaceDesignCriteriaData.DehumidificationSetPoint, spaceDesignCriteriaData.OutdoorHeatingDryBulb, spaceDesignCriteriaData.OutdoorCoolingDryBulb };
+            if (SectionFormat.AllMissing(reportValues) && !reportValues.Any(x => x != null && x.Availability == Availability.NotApplicable))
             {
                 return new DocumentSection(Id, "Design Criteria", new DocumentBlock[] { new NoticeBlock("design-criteria-missing", "No set point profiles and no design days in model", NoticeLevel.Warning) }, SectionWidth.Half);
             }
 
+            FormattedValue[] setPoints = Controls(quantityFormatter, UnitCategory.Temperature, spaceDesignCriteriaData.HeatingSetPoint, spaceDesignCriteriaData.CoolingSetPoint);
             List<TableRow> tableRows = new List<TableRow>()
             {
-                Pair(quantityFormatter, "Room set point", UnitCategory.Temperature, spaceDesignCriteriaData.HeatingSetPoint, spaceDesignCriteriaData.CoolingSetPoint),
+                new TableRow(SectionFormat.Label("Room set point"), setPoints[0], setPoints[1]),
                 Pair(quantityFormatter, "Outdoor dry bulb", UnitCategory.Temperature, spaceDesignCriteriaData.OutdoorHeatingDryBulb, spaceDesignCriteriaData.OutdoorCoolingDryBulb),
                 Pair(quantityFormatter, "Outdoor RH (coincident)", UnitCategory.Ratio, spaceDesignCriteriaData.OutdoorHeatingRelativeHumidity, spaceDesignCriteriaData.OutdoorCoolingRelativeHumidity),
             };
@@ -174,7 +184,7 @@ namespace SAM.Analytical.Reporting
             // Humidity control is not tied to heating or cooling: Tas holds a lower RH limit (humidification) and an
             // upper RH limit (dehumidification), so they are listed by what they are, outside the heating/cooling table.
             // The limit is named in the sub-label so the primary label fits one line in a half-width column.
-            FormattedValue[] humidity = SectionFormat.Group(quantityFormatter, UnitCategory.Ratio, spaceDesignCriteriaData.HumidificationSetPoint, spaceDesignCriteriaData.DehumidificationSetPoint);
+            FormattedValue[] humidity = Controls(quantityFormatter, UnitCategory.Ratio, spaceDesignCriteriaData.HumidificationSetPoint, spaceDesignCriteriaData.DehumidificationSetPoint);
             KeyValueBlock keyValueBlock = new KeyValueBlock("room-humidity", "Room humidity", new[]
             {
                 SectionFormat.Row("Humidification set point", humidity[0], "lower RH limit"),
@@ -182,6 +192,24 @@ namespace SAM.Analytical.Reporting
             });
 
             return new DocumentSection(Id, "Design Criteria", new DocumentBlock[] { tableBlock, keyValueBlock }, SectionWidth.Half);
+        }
+
+        /// <summary>
+        /// Set points in one display unit, with a control that is off all year (the collector reports it not
+        /// applicable: no heating, no cooling, no (de)humidification) shown as "none", its reason kept as the note.
+        /// </summary>
+        private static FormattedValue[] Controls(IQuantityFormatter quantityFormatter, UnitCategory unitCategory, params ReportValue<Quantity>[] setPoints)
+        {
+            FormattedValue[] formattedValues = SectionFormat.Group(quantityFormatter, unitCategory, setPoints);
+            for (int i = 0; i < setPoints.Length; i++)
+            {
+                if (setPoints[i] != null && setPoints[i].Availability == Availability.NotApplicable)
+                {
+                    formattedValues[i] = new FormattedValue(ControlOffText, null, Availability.NotApplicable, note: setPoints[i].Note);
+                }
+            }
+
+            return formattedValues;
         }
 
         internal static TableRow Pair(IQuantityFormatter quantityFormatter, string label, UnitCategory unitCategory, ReportValue<Quantity> heating, ReportValue<Quantity> cooling)

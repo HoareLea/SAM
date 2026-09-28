@@ -79,6 +79,18 @@ namespace SAM.Analytical.Reporting
         /// </summary>
         public const string ZeroAtBothPeaksPrefix = "Zero at both peaks (not listed): ";
 
+        /// <summary>
+        /// Starts the one line shown instead of a latent table when every latent term is exactly 0 at both peaks.
+        /// </summary>
+        public const string LatentZeroAtBothPeaksPrefix = "Latent gains: zero at both peaks";
+
+        /// <summary>
+        /// The latent table lists the internal latent gains stored at the sensible peak hour, not the room's latent load.
+        /// </summary>
+        public const string LatentTableTitle = "Latent gains at the sensible peak hour";
+
+        public const string LatentGainsNote = "Latent gains: internal gains only (occupancy, equipment) at the hour of the sensible peak. The room's latent load, which also includes moisture from infiltration and ventilation, is not in the results and is not derived.";
+
         private readonly LoadType loadType;
 
         public SpaceLoadResultSectionBuilder(LoadType loadType)
@@ -149,20 +161,43 @@ namespace SAM.Analytical.Reporting
 
             documentBlocks.Add(PeakTable(tableRows));
 
-            List<string> zeros = new List<string>();
-            TableBlock tableBlock_Sensible = ComponentTable(Id + "-sensible", "Sensible load components at peak", quantityFormatter, displayUnit, designDay, annual, false, zeros);
-            TableBlock tableBlock_Latent = ComponentTable(Id + "-latent", "Latent components at peak", quantityFormatter, displayUnit, designDay, annual, true, zeros);
-            if (tableBlock_Sensible == null && tableBlock_Latent == null && zeros.Count == 0)
+            // Sensible and latent terms are folded separately, so each zero note sits under the table of its own kind.
+            List<LoadPeakComponent> zeros_Sensible = new List<LoadPeakComponent>();
+            List<LoadPeakComponent> zeros_Latent = new List<LoadPeakComponent>();
+            TableBlock tableBlock_Sensible = ComponentTable(Id + "-sensible", "Sensible load components at peak", quantityFormatter, displayUnit, designDay, annual, false, zeros_Sensible);
+            TableBlock tableBlock_Latent = ComponentTable(Id + "-latent", LatentTableTitle, quantityFormatter, displayUnit, designDay, annual, true, zeros_Latent);
+            if (tableBlock_Sensible == null && tableBlock_Latent == null && zeros_Sensible.Count == 0 && zeros_Latent.Count == 0)
             {
                 documentBlocks.Add(new NoticeBlock(Id + "-components-missing", "No component breakdown in the results", NoticeLevel.Note));
                 return new DocumentSection(Id, Title, documentBlocks);
             }
 
+            // With no latent table, all-zero latent gains are one sentence of their own, named by source, so they never
+            // read as part of the sensible list. It shares the sensible note's block so a one-page report stays one page.
+            string latentZeroSentence = tableBlock_Latent == null && zeros_Latent.Count != 0
+                ? string.Format("{0} ({1}).", LatentZeroAtBothPeaksPrefix, string.Join(", ", zeros_Latent.Select(LatentSourceLabel)))
+                : null;
+
             documentBlocks.Add(tableBlock_Sensible);
-            documentBlocks.Add(tableBlock_Latent);
-            if (zeros.Count != 0)
+            if (zeros_Sensible.Count != 0)
             {
-                documentBlocks.Add(new NoticeBlock(Id + "-components-zero", ZeroAtBothPeaksPrefix + string.Join(", ", zeros), NoticeLevel.Note));
+                string text = ZeroAtBothPeaksPrefix + string.Join(", ", zeros_Sensible.Select(ComponentLabel));
+                documentBlocks.Add(new NoticeBlock(Id + "-components-zero", latentZeroSentence == null ? text : text + ". " + latentZeroSentence, NoticeLevel.Note));
+            }
+            else if (latentZeroSentence != null)
+            {
+                documentBlocks.Add(new NoticeBlock(Id + "-latent-zero", latentZeroSentence, NoticeLevel.Note));
+            }
+
+            if (tableBlock_Latent != null)
+            {
+                documentBlocks.Add(tableBlock_Latent);
+                if (zeros_Latent.Count != 0)
+                {
+                    documentBlocks.Add(new NoticeBlock(Id + "-latent-zero", ZeroAtBothPeaksPrefix + string.Join(", ", zeros_Latent.Select(ComponentLabel)), NoticeLevel.Note));
+                }
+
+                documentBlocks.Add(new NoticeBlock(Id + "-latent-note", LatentGainsNote, NoticeLevel.Note));
             }
 
             documentBlocks.Add(new NoticeBlock(Id + "-components-note", "Components as the simulation reports them at each peak hour: + gain to the room air, − loss from it. No total is derived.", NoticeLevel.Note));
@@ -208,7 +243,7 @@ namespace SAM.Analytical.Reporting
         /// exactly 0 at both peaks is not listed but named in <paramref name="zeros"/>; a missing value is never taken
         /// as zero. Null when no term is left to list.
         /// </summary>
-        private TableBlock ComponentTable(string id, string title, IQuantityFormatter quantityFormatter, DisplayUnit displayUnit, SpaceLoadPeakData designDay, SpaceLoadPeakData annual, bool latent, List<string> zeros)
+        private TableBlock ComponentTable(string id, string title, IQuantityFormatter quantityFormatter, DisplayUnit displayUnit, SpaceLoadPeakData designDay, SpaceLoadPeakData annual, bool latent, List<LoadPeakComponent> zeros)
         {
             IReadOnlyList<SpaceLoadPeakComponentData> components_DesignDay = latent ? designDay.LatentComponents : designDay.SensibleComponents;
             IReadOnlyList<SpaceLoadPeakComponentData> components_Annual = latent ? annual.LatentComponents : annual.SensibleComponents;
@@ -220,7 +255,7 @@ namespace SAM.Analytical.Reporting
                 ReportValue<Quantity> annualValue = Component(annual, components_Annual, loadPeakComponent);
                 if (IsZero(designDayValue) && IsZero(annualValue))
                 {
-                    zeros.Add(ComponentLabel(loadPeakComponent));
+                    zeros.Add(loadPeakComponent);
                     continue;
                 }
 
@@ -364,6 +399,33 @@ namespace SAM.Analytical.Reporting
 
             return loadPeakComponent.ToString();
         }
+
+        /// <summary>
+        /// A latent term named by its source only ("Occupancy"), for the line that already says "Latent gains".
+        /// </summary>
+        internal static string LatentSourceLabel(LoadPeakComponent loadPeakComponent)
+        {
+            switch (loadPeakComponent)
+            {
+                case LoadPeakComponent.OccupancyLatent:
+                    return "Occupancy";
+
+                case LoadPeakComponent.EquipmentLatent:
+                    return "Equipment";
+            }
+
+            return ComponentLabel(loadPeakComponent);
+        }
+
+        /// <summary>
+        /// True when the section prints a "Peak hour" row: the results are available and at least one peak is above zero.
+        /// </summary>
+        internal static bool HasPeakHour(SpaceLoadResultData spaceLoadResultData)
+        {
+            return spaceLoadResultData != null
+                && spaceLoadResultData.Status == LoadResultStatus.Available
+                && (spaceLoadResultData.DesignDay?.State == LoadPeakState.Value || spaceLoadResultData.Annual?.State == LoadPeakState.Value);
+        }
     }
 
     /// <summary>
@@ -374,6 +436,8 @@ namespace SAM.Analytical.Reporting
     internal sealed class SpaceLoadResultsSectionBuilder : ISectionBuilder<SpaceDesignLoadDocumentData>
     {
         public const string CurrencyNotRecordedText = "not recorded";
+
+        public const string PeakHourNote = "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year, and its hour of the year (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00).";
 
         public string Id => "results";
 
@@ -397,12 +461,17 @@ namespace SAM.Analytical.Reporting
                 new TableRow(SectionFormat.Label("Matches current model"), Currency(quantityFormatter, heating.ConvertedAt), Currency(quantityFormatter, cooling.ConvertedAt)),
             });
 
-            return new DocumentSection(Id, "Results", new DocumentBlock[]
+            List<DocumentBlock> documentBlocks = new List<DocumentBlock>() { tableBlock };
+
+            // The peak-hour note explains a row that only a section with a peak above zero prints.
+            if (SpaceLoadResultSectionBuilder.HasPeakHour(heating) || SpaceLoadResultSectionBuilder.HasPeakHour(cooling))
             {
-                tableBlock,
-                new NoticeBlock("results-time-note", "Peak hour: a design-day peak has an hour of the day only, no date; a full-year peak shows day and hour, no year, and its hour of the year (HOY 1 = 1 Jan 00:00–01:00, HOY 8760 = 31 Dec 23:00–24:00).", NoticeLevel.Note),
-                new NoticeBlock("results-comparison-note", "Design loads (sizing) and simulated peaks are shown side by side for information; no acceptance rule is applied.", NoticeLevel.Note),
-            });
+                documentBlocks.Add(new NoticeBlock("results-time-note", PeakHourNote, NoticeLevel.Note));
+            }
+
+            documentBlocks.Add(new NoticeBlock("results-comparison-note", "Design loads (sizing) and simulated peaks are shown side by side for information; no acceptance rule is applied.", NoticeLevel.Note));
+
+            return new DocumentSection(Id, "Results", documentBlocks);
         }
 
         internal static string StatusText(LoadResultStatus loadResultStatus)

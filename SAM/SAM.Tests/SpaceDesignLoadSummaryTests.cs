@@ -230,7 +230,7 @@ namespace SAM.Tests
             {
                 Assert.Equal("Peak sensible load", Table(document, what, what + "-peak").Rows[0].Cells[0].Text);
                 Assert.Equal("Sensible load components at peak", Table(document, what, what + "-sensible").Title);
-                Assert.Equal("Latent components at peak", Table(document, what, what + "-latent").Title);
+                Assert.Equal("Latent gains at the sensible peak hour", Table(document, what, what + "-latent").Title);
             }
 
             // The relabel leaves the solver values untouched.
@@ -298,7 +298,9 @@ namespace SAM.Tests
             Assert.DoesNotContain(Section(document, "heating").Blocks, x => x.Id == "heating-latent");
 
             NoticeBlock zero = Section(document, "heating").Blocks.OfType<NoticeBlock>().Single(x => x.Id == "heating-components-zero");
-            Assert.Equal("Zero at both peaks (not listed): Solar, Lighting, Occupancy (sensible), Equipment (sensible), Air movement (inter-zone), External conduction — glazing, Air handling unit, Occupancy (latent), Equipment (latent)", zero.Text);
+            // Sensible and latent are folded separately: no latent table, so the latent terms are their own sentence.
+            Assert.Equal("Zero at both peaks (not listed): Solar, Lighting, Occupancy (sensible), Equipment (sensible), Air movement (inter-zone), External conduction — glazing, Air handling unit. Latent gains: zero at both peaks (Occupancy, Equipment).", zero.Text);
+            Assert.DoesNotContain(Section(document, "heating").Blocks, x => x.Id == "heating-latent-note");
 
             // Glazing stored at the design day only: 0 there, not reported over the year - listed, not folded.
             SpaceLoadPeak designDay = new SpaceLoadPeak(LoadPeakBasis.DesignDay, 100) { DesignDayName = "DD", HourOfDay = 5 };
@@ -313,6 +315,65 @@ namespace SAM.Tests
             Assert.Equal(Availability.NotAvailable, glazing.Cells[2].Availability);
             Assert.Equal("Not reported by the simulation", glazing.Cells[2].Note);
             Assert.DoesNotContain(Section(partial, "heating").Blocks, x => x.Id == "heating-components-zero");
+        }
+
+        /// <summary>
+        /// PR2F B1 / A2: with a latent table, each kind's zero note sits under its own table, the sensible note names no
+        /// latent term, and the latent table says it holds internal gains at the sensible peak hour, not the latent load.
+        /// </summary>
+        [Fact]
+        public void Components_ZeroNotes_AreSplitByKind_UnderTheirOwnTable()
+        {
+            Document document = SpaceDesignLoadFixture.Document(Studio_SI);
+            List<string> ids = Section(document, "heating").Blocks.Select(x => x.Id).ToList();
+
+            NoticeBlock sensible = Notice(document, "heating", "heating-components-zero");
+            NoticeBlock latent = Notice(document, "heating", "heating-latent-zero");
+            Assert.Equal("Zero at both peaks (not listed): Solar, Lighting, Air movement (inter-zone), Air handling unit", sensible.Text);
+            Assert.Equal("Zero at both peaks (not listed): Equipment (latent)", latent.Text);
+
+            Assert.True(ids.IndexOf("heating-sensible") < ids.IndexOf("heating-components-zero"));
+            Assert.True(ids.IndexOf("heating-components-zero") < ids.IndexOf("heating-latent"));
+            Assert.True(ids.IndexOf("heating-latent") < ids.IndexOf("heating-latent-zero"));
+            Assert.True(ids.IndexOf("heating-latent-zero") < ids.IndexOf("heating-latent-note"));
+
+            string latentNote = Notice(document, "heating", "heating-latent-note").Text;
+            Assert.StartsWith("Latent gains: internal gains only (occupancy, equipment) at the hour of the sensible peak.", latentNote);
+            Assert.Contains("latent load", latentNote);
+            Assert.Contains("is not in the results and is not derived", latentNote);
+        }
+
+        /// <summary>
+        /// PR2F C1: the peak-hour note explains the "Peak hour" row, so it is printed only when a section prints one.
+        /// </summary>
+        [Theory]
+        [InlineData(Bathroom_SI, true)]
+        [InlineData(Studio_SI, true)]
+        [InlineData("C_NotSimulated_SI", false)]
+        [InlineData("D_PeaksNotRecorded_SI", false)]
+        [InlineData("E_Ambiguous_SI", false)]
+        public void PeakHourNote_OnlyWhenAPeakHourIsPrinted(string name, bool expected)
+        {
+            Document document = SpaceDesignLoadFixture.Document(name);
+            bool peakHour = document.Sections.SelectMany(x => x.Blocks).OfType<TableBlock>().SelectMany(x => x.Rows).Any(x => x.Cells[0].Text == "Peak hour");
+
+            Assert.Equal(expected, peakHour);
+            Assert.Equal(expected, Section(document, "results").Blocks.Any(x => x.Id == "results-time-note"));
+        }
+
+        [Fact]
+        public void PeakHourNote_NotPrinted_WhenBothPeaksAreZero()
+        {
+            SpaceLoadPeak designDay = new SpaceLoadPeak(LoadPeakBasis.DesignDay, 0) { DesignDayName = "DD" };
+            SpaceLoadPeak annual = new SpaceLoadPeak(LoadPeakBasis.AnnualSimulation, 0);
+            Document document = SpaceDesignLoadFixture.Document(SpaceDesignLoadFixture.Model("Space", SpaceDesignLoadFixture.Result(LoadType.Heating, designDay, annual)), UnitStyle.SI);
+
+            Assert.DoesNotContain(Section(document, "results").Blocks, x => x.Id == "results-time-note");
+        }
+
+        private static NoticeBlock Notice(Document document, string section, string id)
+        {
+            return Section(document, section).Blocks.OfType<NoticeBlock>().Single(x => x.Id == id);
         }
 
         // ---------- time ----------

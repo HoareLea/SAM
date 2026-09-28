@@ -12,11 +12,23 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current (reporting stream): PR2F - real-project report review (2026-09-27/28) - REVIEW DONE, PR2F-1 in progress
+## Current (reporting stream): PR2F - real-project report review + PR2F-1 report content (2026-09-27/28) - IMPLEMENTED, PR open
 
 Branch `docs/pr2f-report-review-2026-09-27`, fast-forwarded on 28 Sep to `sow/2026-Q3` `85a13ec3` (SAM#161 merge;
-SAM_Tas `e7cc0ed4`, SAM_UI `11d9078a`, SAM_Deploy `bc76a31`). The review/evidence commit comes first; PR2F-1 product
-code follows on the same branch. Full record: `documentation/Reporting-PR2F-Review.md`.
+SAM_Tas `e7cc0ed4`, SAM_UI `11d9078a`, SAM_Deploy `bc76a31`). Commits: `2abf0f7e` review + evidence (docs only),
+then PR2F-1 product code. Full record: `documentation/Reporting-PR2F-Review.md` (§8 = implementation).
+
+- **PR2F-1 done.** A1 `Analytical.Query.NoHeatingSetPoint`/`NoCoolingSetPoint` (−50/150 °C, new `Query/ThermostatOff.cs`)
+  → off thermostats and humidity no-limit print "none" (note = reason, no legend marker); an off control keeps the
+  Design Criteria table (real-model regression: both off + no humidity + no design days had collapsed it to "No set
+  point profiles"). A2 latent table "Latent gains at the sensible peak hour" + internal-gains-only note. B1 sensible /
+  latent zero notes split (no latent table → "Latent gains: zero at both peaks (Occupancy, Equipment)." appended to the
+  sensible note to keep 1-page reports 1 page). C1 peak-hour/HOY note only when a Peak hour row prints. Batch API
+  `DocumentContext.WithNewDiagnostics()` (shared snapshot, fresh log).
+- **Validation.** `SAM.Tests` Debug 2681/2681 (+13); `SAM.sln` Release 0 errors (Release test run discovers 2647 - a
+  Debug/Release discovery difference that predates this work, not failures). 6 Space Design Load goldens updated as
+  intended. Real re-render of the 20 reports: page counts unchanged, no sentinel left, visual review clean
+  (`documentation/evidence/reporting-pr2f/after-pr2f1/`; harness `harness/Program.cs.txt` now uses the batch API).
 
 - **Reviewed.** All 9 Spaces of the real Part O dwelling in both variants (`C:\TasOut\pr2d\open_peaks.sam`
   free-running, `bridge_peaks.sam` DX-cooled), IP, Not simulated; scale test at 999 / 4,995 Spaces. Evidence
@@ -33,8 +45,12 @@ code follows on the same branch. Full record: `documentation/Reporting-PR2F-Revi
   4.5 ms/Space (23 s for 4,995). Proposal: one "Export Space reports…" window (report types × selected/all,
   folder once), a sequential background task with progress/cancel, collision suffix " [guid8]", continue on
   failure, summary + log. Needs a small SAM context API with a per-document log.
-- **Next step.** Implement PR2F-1 on this branch (SAM: A1, A2, B1, C1, context API, goldens, before/after PDFs),
-  then PR2F-2 SAM_UI batch export (only after the SAM PR is stable), then the SAM_Deploy bump.
+- **Next step.** Review / CI / merge the PR2F-1 SAM PR into `sow/2026-Q3`. Only then PR2F-2 SAM_UI batch export
+  (review §6, use `WithNewDiagnostics()` per document), then PR2F-3 SAM_Deploy bump + installed acceptance.
+- **Machine note (28 Sep).** This laptop accidentally started PR3B work: SAM#161 was merged upstream as-is
+  (`2be58f1e`, local backup branch `backup/pr3b1-2be58f1e`); the SAM_Tas test edit is parked in a local stash
+  "PR3B-accidental: PartODiagnosticLogTests.cs ..." on the unpushed local branch `fix/parto-mixed-cooling-pr3b3-2026-09-27`
+  (PR3B-3 has since merged as SAM_Tas#71 from the other laptop). Neither is needed for PR2F.
 
 ## Current (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27)
 
