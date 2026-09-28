@@ -12,7 +12,18 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27)
+## Current (Part O stream): mixed dwelling strategies PR3B - domain MERGED, licensed gate PASSED (2026-09-28)
+
+- Merged in order: SAM#161 PR3B-1 (`85a13ec3`, incl. Codex round `2be58f1e`) -> SAM_Systems#31 PR3B-2 (`005c4fe`) ->
+  SAM_Tas#71 PR3B-3 (`e7cc0ed`); SAM_UI#131 test-only (`11d9078`). Open: SAM_Tas_Grasshopper#7 (log file name), the SAM_UI
+  gate harness PR (test-only).
+- Licensed gate (Flat 1 Natural / Flat 2 MVHR / Flat 3 MVHR cooled / corridor): 38/38 checks pass - one model, one TPD,
+  DX only in Flat 3, `ActiveTrimCooling` for Flat 3, cooling removed leaves none, baseline unchanged. Legacy Iteration 3
+  B0/MG re-acceptance with DV = false NOT run: the saved 24 Sep run no longer restores; needs a fresh Iteration 1a run.
+  Details: `documentation/PartO-MixedDwellingStrategies-PR3B.md` §4-§5.
+- **Next step:** owner review of the gate; legacy B0/MG re-acceptance; PR3C only on the owner's go-ahead.
+
+## Previous (Part O stream): mixed dwelling strategies PR3B-1 - active cooling in the SAM authority (2026-09-27) - MERGED as SAM#161
 
 Branch `feature/parto-mixed-cooling-pr3b1-2026-09-27` from `sow/2026-Q3` `34fe037e`. Record:
 `documentation/PartO-MixedDwellingStrategies-PR3B.md` §1 (owner decisions after PR3A, SAM_UI#129 merged `b3b061b8`).

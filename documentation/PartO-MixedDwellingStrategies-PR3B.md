@@ -90,11 +90,10 @@ PR2's mixed run never passes templates, so SAM refuses any cooled dwelling there
 fail-closed until PR3C. One SAM_UI test pinned `CoolingGated`; a test-only SAM_UI PR accepts either reason name so SAM_UI
 CI is green against SAM before and after this merge.
 
-## 2. PR3B-2 — SAM_Systems ([SAM-BIM/SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31), open)
+## 2. PR3B-2 — SAM_Systems ([SAM-BIM/SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31), merged `005c4fe`)
 
-Branch `feature/parto-mixed-cooling-pr3b2-2026-09-27` (head `56fcb8a6`). **CI build fails until SAM#161 merges** -
-`'Query' does not contain a definition for 'PartOCoolingOperatingAirFlow'` (CI builds against the SAM integration tip);
-re-run CI after #161 merges.
+Branch `feature/parto-mixed-cooling-pr3b2-2026-09-27` (head `56fcb8a6`). CI was red only until SAM#161 merged (it builds
+against the SAM integration tip); re-run green after `85a13ec3`, Codex no findings, 268/268 locally against the merge.
 
 - `MechanicalVentilationSettings.GuidanceTemplate` (the MVRE topology). Stated → `GuidanceSettings` may be partial: a
   named unit = the product's arrangement (MVRE exchanger + supply DX coil) cloned from the MVRE prototype, which is
@@ -112,21 +111,25 @@ re-run CI after #161 merges.
   SAM rule 63→80, 100→100, 143 refused); 2 DV pins inverted. 8 red on the old behaviour
   (`SAM_Systems/docs/evidence/parto-mixed-pr3b/`). 268/268 locally against #161.
 
-## 3. PR3B-3 — SAM_Tas (not started)
+## 3. PR3B-3 — SAM_Tas ([SAM-BIM/SAM_Tas#71](https://github.com/SAM-BIM/SAM_Tas/pull/71), merged `e7cc0ed`)
 
-Branch `fix/parto-mixed-cooling-pr3b3-2026-09-27` created from `sow/2026-Q3` `fedf34cd`, **no changes yet**. Planned:
-1. `SAM.Analytical.Tas.TM59/Classes/PartODiagnosticLog.cs:167` - the run record's `partOIteration` takes
-   `scenarios[0]`. Keep the value for a single-iteration run, write `Mixed` when the scenarios state more than one, and
-   add a sorted `partOIterations` array. Per-space rows already carry their governing scenario's iteration (line 297).
-   Test in `SAM.Analytical.Tas.TM59.Tests/PartODiagnosticLogTests.cs` (NUnit; fixture helpers `Model_Design`,
-   `Spaces_Simulated`, `Scenarios`, `Input`, `RecordsOf`) - red first on the current code. The Grasshopper twin
-   (`SAM_Tas_Grasshopper .../TasLogPartODiagnostics.cs:236`) is a separate repo: small follow-up PR.
-2. Mixed TPD regression: from a SAM_Systems mixed materialisation (two dwellings, one guidance unit), the SAM_Tas
-   conversion context (`TPD/Create/SystemVentilationConversionContext.cs`) holds exactly one `GuidanceCooling`, bound to
-   the cooled unit's air system; the uncooled air system carries no exchanger/coil. COM-free if possible; grounding is
-   per record (`SystemVentilationRoute.cs:217-240`), so no route change is expected.
+**No production thermal/TPD change** - PR3A's conclusion held: the grounding is per air system, by identity.
 
-## 4. Gate - licensed TAS proof (after SAM#161, SAM_Systems#31, SAM_Tas PR3B-3 merge)
+- `SAM.Analytical.Tas.TM59/Classes/PartODiagnosticLog.cs`: the run record's `partOIteration` took `scenarios[0]`. New
+  public `RunPartOIteration(scenarios)` - the dwellings' one iteration (a common space's `DwellingIndependent` only when
+  there is no dwelling), `Mixed` when they differ, null for none; new run field `partOIterations` (every distinct
+  iteration). Space rows unchanged. The old line was also wrong for a single-iteration run whose corridor came first.
+- `MixedGuidanceCoolingTests` (COM-free): the real SAM_Systems mixed materialisation through the production
+  `SystemVentilationConversionContext` and `Modify.GroundGuidanceCooling` (by reflection - embedded interop parameter
+  types): one `GuidanceCooling`, on the cooled unit's air system; the uncooled air system has none, no exchanger/coil,
+  and the grounding leaves it untouched; ventilation intent identical to the uncooled document; 25 l/s design -> 80 l/s.
+- Red first (SAM_Tas `Documentation/evidence/parto-mixed-pr3b/pr3b3-red-first.txt`): 2 diagnostic tests fail on the old
+  line; the TPD tests pass on unchanged production and 2 of 4 fail under a building-wide mutation of `GuidanceCooling`.
+- TM59 970/970, benchmark 16/16; CI green after SAM_Systems#31; Codex no findings.
+- Grasshopper twin: [SAM-BIM/SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) - the log file
+  name uses `RunPartOIteration` instead of `overheatingScenarios[0]`.
+
+## 4. Gate - licensed TAS proof
 
 PR2 clean fixture `C:\TasOut\parto-mixed-pr2-2026-09-27\fixtures\SAM_zoningAM-CIBSEfutureZ1-MixedBaseline.sam` (local,
 3 flats + corridor; product Nuaire MRXBOXAB-ECO5-AECV with MR-ECO-COOL-V, capacity 150 l/s). Extend the env-gated harness
@@ -141,20 +144,53 @@ Optional: Optimised + cooled with a retained design within 60-120 l/s (never alt
 legacy Iteration 3 B0 and MG with DV = false (env-gated `PartOWorkflowEvidenceHarness` reopens a saved run from
 `C:\TasOut\parto-guidance-2026-09-24\` and calls `ReviewPartOIteration3`).
 
-## 5. Handover (end of session, 28 Sep 2026)
+### Gate result (28 Sep 2026) - mixed cooling PASSED; legacy B0/MG re-acceptance NOT RUN
 
-| PR | State | Merge order |
-|---|---|---|
-| [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) PR3B-1 | open, CI green (build/test/spdx) | 1st |
-| [SAM_UI#131](https://github.com/SAM-BIM/SAM_UI/pull/131) test-only | open, CI green | any time (passes before and after #161) |
-| [SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31) PR3B-2 | open, build red until #161 merges | 2nd - re-run CI after #161 |
-| SAM_Tas PR3B-3 | branch only, no changes | 3rd |
+Harness SAM_UI `WPF/SAM.Analytical.UI.WPF.Tests/PartOMixedCoolingGateTests.cs` (env-gated) against the merged tips
+(SAM `85a13ec3`, SAM_Systems `005c4fe`, SAM_Tas `e7cc0ed`); log in SAM_UI
+`documentation/evidence/parto-mixed-pr3b/gate.txt`, TAS files in `C:\TasOut\parto-pr3b-gate-2026-09-28` (local only).
+**38/38 checks pass:**
 
-- Merged this session: SAM_UI#129 (PR3A) `b3b061b8`.
-- Local builds: SAM (`SAM.sln`, dotnet), SAM_Systems (dotnet) OK; **SAM_Tas and SAM_UI need VS 18 Framework MSBuild**
-  (`C:\Program Files\Microsoft Visual Studio\18\Community\MSBuild\Current\Bin\MSBuild.exe`, COM references). SAM_UI CI
-  only builds (no tests) - run WPF tests locally (`EveryClassWithStaTests_IsInTheWpfCollection` caught a PR3A harness).
-- Not in PR3B: SAM_UI cooling toggle (PR3C, do not start without the owner); legacy SAM_UI
-  `PartOIteration3GuidanceResolution` still uses the product default airflow (could move to the new overload later);
-  PR2F reporting review was paused mid-investigation (nothing written).
-- **Next step:** implement PR3B-3 (§3), merge in order, then the gate (§4).
+- One analytical model; route `Systems`; exactly one cooled dwelling (Flat 3, Nuaire MRXBOXAB-ECO5-AECV + MR-ECO-COOL-V,
+  design 63/63 l/s -> cooling operating airflow **80 l/s**). Scenarios: Flat 1 `BaseNaturalVentilation`, Flat 2
+  `BasePassive`, Flat 3 `ActiveTrimCooling`, corridor `DwellingIndependent`.
+- One SAM_Systems graph, one plant room: one guidance unit (Flat 3's), DX coil only on Flat 3's air system (Flat 2: 0),
+  `DisplacementVentilation = false` on all 6 system zones. Flat 1 and the corridor are outside the Systems scope
+  (free-running, no system, no cooling).
+- One TPD document, complete; guidance read-back for 1 unit (Flat 3's air system): **1505 h** with DX load, peak sensible
+  802 W at 80 l/s. Bridge complete (6 rooms).
+- TM59 with the materialiser's scenarios: Flat 2 and Flat 3 rooms on the mechanical criterion, Flat 1 on the natural
+  criteria. Results: Flat 3 bedroom 199/262 h PASS (cooled) vs Flat 2 bedroom 316/262 FAIL (uncooled); both kitchens
+  fail (Flat 3 296/142, Flat 2 320/142); Flat 1 studio PASS (95/110, 20/32); corridor significant risk (899/262).
+- Cooling removed and rebuilt from the clean baseline: no cooled dwelling, route `Izam`, Flat 3 `BasePassive`, SAM_Systems
+  graph with no guidance record and no DX coil; engineering state equal to the cooled model's (guid- and order-free -
+  every materialisation mints fresh guids; the same comparison of two uncooled rebuilds is the control).
+- Optimised + cooled (fixture `...-Flat3Accepted2B.sam`, retained 143 l/s): refused `CoolingAirFlowOutsideGuidance`
+  (beyond the published 60-120 l/s); the accepted design and the fixture unchanged. No accepted Optimised design inside
+  the range exists in the fixtures, so a valid Optimised + cooled case was not exercised on TAS.
+- Baseline file SHA-256 unchanged (`89A8AC7B...9446`); baseline object unchanged by every materialisation.
+
+**Legacy Iteration 3 B0 / MG re-acceptance (DV = false): not run.** The saved 24 Sep run (`03-Resume`) no longer
+restores (`PartORun.Restore`: "the model has changed since the simulation results ... were produced"), so Iteration 3
+cannot be rerun from it. It needs a fresh Iteration 1a run of `SAM_zoningAM-CIBSEfutureZ1.sam` through the product
+workflow, then Iteration 3 B0 and MG (the harness's `Gate_LegacyIteration3_B0AndMG_DisplacementOff` reruns both from a
+copy of any restorable run folder, `SAM_PARTO_LEGACY_RUN`). Until then the legacy B0/MG results on record are DV = true.
+
+## 5. Handover (28 Sep 2026, after the gate)
+
+| PR | State |
+|---|---|
+| [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) PR3B-1 | merged `85a13ec3` (incl. the Codex round `2be58f1e`) |
+| [SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31) PR3B-2 | merged `005c4fe` |
+| [SAM_Tas#71](https://github.com/SAM-BIM/SAM_Tas/pull/71) PR3B-3 | merged `e7cc0ed` |
+| [SAM_UI#131](https://github.com/SAM-BIM/SAM_UI/pull/131) test-only | merged `11d9078` |
+| [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) | open - log file name |
+| SAM_UI gate harness + evidence | open, test-only |
+
+- Before PR3C: (1) re-accept legacy Iteration 3 B0 / MG with DV = false from a fresh Iteration 1a run; (2) the production
+  `PartOIteration3Pipeline.Materialise` has no `GuidanceTemplate` - PR3C must make the mixed SAM_Systems call (as the gate
+  harness does) and pass the catalogue descriptors **and** templates to `MaterialisePartODwellingStrategies` (a cooled
+  product must be selected against the catalogue in that call); (3) legacy SAM_UI `PartOIteration3GuidanceResolution`
+  still uses the product default airflow (could move to the design-duty overload).
+- Not in PR3B: SAM_UI cooling toggle (PR3C, do not start without the owner); PR2F reporting review paused (nothing written).
+- **Next step:** owner review of the gate result; legacy B0/MG re-acceptance; then PR3C only on the owner's go-ahead.
