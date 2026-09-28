@@ -12,16 +12,21 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
-## Current (Part O stream): mixed dwelling strategies PR3B - domain MERGED, licensed gate PASSED (2026-09-28)
+## Current (Part O stream): mixed dwelling strategies PR3B - CLOSED (2026-09-28)
 
-- Merged in order: SAM#161 PR3B-1 (`85a13ec3`, incl. Codex round `2be58f1e`) -> SAM_Systems#31 PR3B-2 (`005c4fe`) ->
-  SAM_Tas#71 PR3B-3 (`e7cc0ed`); SAM_UI#131 test-only (`11d9078`). Open: SAM_Tas_Grasshopper#7 (log file name), the SAM_UI
-  gate harness PR (test-only).
-- Licensed gate (Flat 1 Natural / Flat 2 MVHR / Flat 3 MVHR cooled / corridor): 38/38 checks pass - one model, one TPD,
-  DX only in Flat 3, `ActiveTrimCooling` for Flat 3, cooling removed leaves none, baseline unchanged. Legacy Iteration 3
-  B0/MG re-acceptance with DV = false NOT run: the saved 24 Sep run no longer restores; needs a fresh Iteration 1a run.
-  Details: `documentation/PartO-MixedDwellingStrategies-PR3B.md` §4-§5.
-- **Next step:** owner review of the gate; legacy B0/MG re-acceptance; PR3C only on the owner's go-ahead.
+- Merged: SAM#161 PR3B-1 (`85a13ec3`, incl. Codex round `2be58f1e`) -> SAM_Systems#31 PR3B-2 (`005c4fe`) -> SAM_Tas#71
+  PR3B-3 (`e7cc0ed`); SAM_UI#131 (`11d9078`); closeout: SAM_UI#132 (gate harness + evidence), SAM_Tas_Grasshopper#7 (log
+  file name), SAM#162 (this record + legacy evidence).
+- Licensed mixed-cooling gate 38/38 (42/42 after review): one model, one TPD, DX only in Flat 3, `ActiveTrimCooling`,
+  cooling removed leaves none, baseline unchanged.
+- Legacy Iteration 3 **B0 and MG re-accepted with DV = false** from fresh Iteration 1a runs through the real UI
+  (`C:\TasOut\parto-pr3b-closeout-2026-09-28`, text evidence `documentation/evidence/parto-mixed-pr3b/closeout-2026-09-28/`):
+  native DV 0/8 zones; topology/airflows unchanged; B0 bias +0.55 K, 0/8 TM59 outcomes differ (was 2 - the DV
+  wet-room artefact); MG law/exchanger exact, bypass follows its rule, DX +0.5-1 %, 0/8 differ. Old DV = true evidence
+  superseded, kept.
+- Limitation: no fixture with an accepted Optimised design inside 60-120 l/s, so valid Optimised + cooled not run on TAS.
+- Record: `documentation/PartO-MixedDwellingStrategies-PR3B.md` §4-§5. **Next step:** PR3C only on the owner's go-ahead
+  (the Iteration 3 pipeline needs the mixed SAM_Systems call and SAM templates - see §5).
 
 ## Current (reporting stream): PR2F - real-project report review + PR2F-1 report content (2026-09-27/28) - REVIEWED, merging as SAM#163
 

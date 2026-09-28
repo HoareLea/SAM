@@ -1,0 +1,52 @@
+09:11:58 [B0] exe C:\Users\michal.dengusiak\Documents\GitHub\SAM-BIM\SAM_UI\build\SAM Analytical.exe (exe 2026-09-28 07:46:14; WPF dll 2026-09-28 09:01:06), model C:\TasOut\parto-pr3b-closeout-2026-09-28\01-Iteration3-B0\SAM_zoningAM-CIBSEfutureZ1.sam
+09:11:58 [B0] model sha256 A7E09A25AE29C7DBB4C690D747A96FCD9F110CA27FB4DC2ABE816755368D7E4B
+09:12:00 [B0] application pid 26456
+09:12:08 [B0] main window 'SAM Analytical [000000_SAM_AnalyticalModel-It1a-futureZ1]'
+09:12:16 [B0]   press RibbonButton_PartOWorkflow
+09:12:32 [B0] scenario: selected 'Iteration 1a — MVHR design duty (no manufacturer unit)'
+09:12:41 [B0] simulation case: Simulation case  — Z1_DSY1_2050s_HIGH90_CIBSE_v1.1 · TAS solar | weather:  | output (before) 'C:\TasOut\parto-pr3b-closeout-2026-09-28\01-Iteration3-B0' -> 'C:\TasOut\parto-pr3b-closeout-2026-09-28\01-Iteration3-B0'
+09:12:41 [B0] scope: All 3 eligible dwellings · simulated inside the whole building | selection: <absent>
+09:12:42 [B0] run: 'Prepare & Run' enabled=True
+09:12:42 [B0]   press button_Run
+09:12:52 [B0] review: <absent>
+09:12:54 [B0]   press button_CopyAll
+09:13:14 [B0]   copied 0 chars to review.txt
+09:13:14 [B0]   press button_Accept
+09:14:24 [B0] Iteration 1a simulated and assessed in 1.2 min
+09:14:27 [B0] TM59: TM59 assessment — FAIL | 8 spaces assessed · 2 pass · 6 fail · 1 not assessed | <absent>
+09:14:29 [B0]   press button_CopyAll
+09:14:49 [B0]   copied 0 chars to tm59-window.txt
+09:14:49 [B0]   press button_Close
+09:14:56 [B0] hub outcome: 'Iteration 1a completed — TM59 FAIL' 'TAS simulation 1m 01s · 8 spaces assessed · 2 pass · 6 fail · 1 not assessed'
+09:15:00 [B0]   method radio: 'Selected product — manufacturer operating guidance / Not run yet'
+09:15:00 [B0]   method radio: 'Selected product — certified efficiency and SFP / Not run yet'
+09:15:00 [B0]   method radio: 'Route check — design airflows, no product / Not run yet'
+09:15:00 [B0]   method radio: 'Selected product — published cooling table / Not run yet'
+09:15:07 [B0] selected 'Route check': IsSelected=True
+09:15:07 [B0]   textBlock_It3Reference: Reference case: Iteration 1a — baseline · results 000000_SAM_AnalyticalModel-It1a-futureZ1.tsd
+09:15:07 [B0]   textBlock_It3Explanation: Validation option. The reference case's own design airflows as an explicit system, with no product and no fan heat. Shows how closely the explicit system model reproduces the reference case.
+09:15:07 [B0]   textBlock_It3UnitsHeading: Ventilation units (3) in the system case, at the reference case's design airflows:
+09:15:07 [B0]   textBlock_It3Refusal: 
+09:15:07 [B0]   textBlock_It3Hint: Runs TAS several times over the full year, so it takes several minutes. Progress is shown in its own window.
+09:15:07 [B0]   units: 3 × Design airflows, no product
+09:15:07 [B0]   button_Iteration3 'Run system case' enabled=True tip='Build the system case and run it in TAS: a full-year building simulation, a TAS Systems simulation and a full-year resultant-temperature run, then the TM59 comparison. This takes several minutes.'
+09:15:07 [B0]   press button_Iteration3
+09:17:16 [B0] Iteration 3 finished in 2.1 min
+09:17:20 [B0]   textBlock_Heading: Iteration 3 comparison — Route check — design airflows, no product
+09:17:20 [B0]   textBlock_Cases: Reference case: Iteration 1a — baseline (000000_SAM_AnalyticalModel-It1a-futureZ1)   ·   System case: explicit TAS system (000000_SAM_AnalyticalModel-It1a-futureZ1-It3B)   ·   produced in this session
+09:17:20 [B0]   textBlock_Stages: ✓ Reference case · 1s     ✓ System case design · 0s     ✓ TAS building simulation · 48s     ✓ TAS Systems simulation · 12s     ✓ TAS resultant temperature · 60s     ✓ TM59 comparison and reports · 1s
+09:17:20 [B0]   textBlock_TileReference: FAIL
+09:17:20 [B0]   textBlock_TileSystem: FAIL
+09:17:20 [B0]   textBlock_TileBias: +0.55 K
+09:17:20 [B0]   textBlock_TileRmse: 0.86 K
+09:17:20 [B0]   textBlock_TileMax: 3.76 K
+09:17:20 [B0]   textBlock_TileChanged: 0 of 8
+09:18:06 [B0]   system: Route check (validation) | Applied | The reference case's own design airflows as an explicit system - no product and no fan heat. | Use | Shows how closely the explicit system model reproduces the reference case. | 
+09:18:06 [B0]   textBlock_Outcome: Iteration 3 run COMPLETE. Reference A Fail; Candidate B Fail.
+09:18:06 [B0]   textBlock_Summary: Produced in this session. Reference A '000000_SAM_AnalyticalModel-It1a-futureZ1' against Candidate B '000000_SAM_AnalyticalModel-It1a-futureZ1-It3B'. Case: weather=Z1_DSY1_2050s_HIGH90_CIBSE_v1.1 | solar=TAS | days 1-365 | unmetHours=False | sizing=False | useWidths=False | updateConstructionLayersByPanelType=True. Ventilation equipment behaviour: Parity (foundation control). 3 physical air system(s), 8 bound room(s), 14 directed leg(s) (3 supply, 6 extract, 5 transfer). Resultant temperature obtained by: TAS Systems ZoneTemperature -> thermostat bridge on a copy of the no-IZAM TBD -> TSD ResultantTemperature.
+09:18:09 [B0]   press button_CopyAll
+09:18:29 [B0]   copied 0 chars to iteration3-window.txt
+09:18:29 [B0]   press button_Close
+09:18:35 [B0] hub outcome: '✓ Iteration 3 complete · Route check — design airflows, no product · 2m 02s · reference FAIL / system FAIL' '<absent>'
+09:18:35 [B0]   press button_Close
+09:18:41 [B0] DONE

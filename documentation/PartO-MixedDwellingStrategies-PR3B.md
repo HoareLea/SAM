@@ -144,12 +144,13 @@ Optional: Optimised + cooled with a retained design within 60-120 l/s (never alt
 legacy Iteration 3 B0 and MG with DV = false (env-gated `PartOWorkflowEvidenceHarness` reopens a saved run from
 `C:\TasOut\parto-guidance-2026-09-24\` and calls `ReviewPartOIteration3`).
 
-### Gate result (28 Sep 2026) - mixed cooling PASSED; legacy B0/MG re-acceptance NOT RUN
+### Gate result (28 Sep 2026) - mixed cooling PASSED; legacy B0/MG RE-ACCEPTED with DV = false
 
 Harness SAM_UI `WPF/SAM.Analytical.UI.WPF.Tests/PartOMixedCoolingGateTests.cs` (env-gated) against the merged tips
 (SAM `85a13ec3`, SAM_Systems `005c4fe`, SAM_Tas `e7cc0ed`); log in SAM_UI
 `documentation/evidence/parto-mixed-pr3b/gate.txt`, TAS files in `C:\TasOut\parto-pr3b-gate-2026-09-28` (local only).
-**38/38 checks pass:**
+**38/38 checks pass** (42/42 after the SAM_UI#132 review added 4 TM59 completeness checks - nothing unassessed,
+every flat has its own rows - rerun on licensed TAS):
 
 - One analytical model; route `Systems`; exactly one cooled dwelling (Flat 3, Nuaire MRXBOXAB-ECO5-AECV + MR-ECO-COOL-V,
   design 63/63 l/s -> cooling operating airflow **80 l/s**). Scenarios: Flat 1 `BaseNaturalVentilation`, Flat 2
@@ -170,13 +171,50 @@ Harness SAM_UI `WPF/SAM.Analytical.UI.WPF.Tests/PartOMixedCoolingGateTests.cs` (
   the range exists in the fixtures, so a valid Optimised + cooled case was not exercised on TAS.
 - Baseline file SHA-256 unchanged (`89A8AC7B...9446`); baseline object unchanged by every materialisation.
 
-**Legacy Iteration 3 B0 / MG re-acceptance (DV = false): not run.** The saved 24 Sep run (`03-Resume`) no longer
-restores (`PartORun.Restore`: "the model has changed since the simulation results ... were produced"), so Iteration 3
-cannot be rerun from it. It needs a fresh Iteration 1a run of `SAM_zoningAM-CIBSEfutureZ1.sam` through the product
-workflow, then Iteration 3 B0 and MG (the harness's `Gate_LegacyIteration3_B0AndMG_DisplacementOff` reruns both from a
-copy of any restorable run folder, `SAM_PARTO_LEGACY_RUN`). Until then the legacy B0/MG results on record are DV = true.
+### Legacy Iteration 3 B0 / MG re-acceptance with DV = false (28 Sep 2026) - RE-ACCEPTED
 
-## 5. Handover (28 Sep 2026, after the gate)
+The saved 24 Sep run (`03-Resume`) no longer restores under the current SAM ("the model has changed since the simulation
+results ... were produced") and was not bypassed. Fresh evidence was produced through the **real product UI**
+(`SAM Analytical.exe` driven by UI Automation - driver `closeout-2026-09-28/driver-closeout.ps1.txt`, adapted from the
+24 Sep `stage.ps1`): the same source model `SAM_zoningAM-CIBSEfutureZ1.sam` (SHA-256 `A7E09A25...`), Part O Hub ->
+Iteration 1a -> Prepare & Run -> Accept -> TAS (Z1 DSY1 2050s, TAS solar, full year) -> TM59 -> Iteration 3 method ->
+Run system case. App DLLs byte-identical to the merged-tip builds (SAM `85a13ec3`, SAM_Systems `005c4fe`, SAM_Tas
+`e7cc0ed`, SAM_UI `11d9078`); installed catalogue = SAM_Systems resource (SHA-256 `D3878908...`). Evidence:
+`documentation/evidence/parto-mixed-pr3b/closeout-2026-09-28/`; TAS files in `C:\TasOut\parto-pr3b-closeout-2026-09-28\`
+(local only; `01-Iteration3-B0`, `02-Iteration3-MG`, one fresh Iteration 1a run each).
+
+- **Fresh Iteration 1a provenance.** Both runs: TAS 1.2 min, TM59 FAIL, 8 spaces assessed (2 pass, 6 fail), 1 not
+  assessed - as on 24 Sep. Both `PartORun`s restore under the merged stack, their results are their own folder's, both
+  are eligible for Iteration 3, folders unchanged by the check (`fresh-run-restore.txt`, SAM_UI
+  `Gate_LegacyIteration3_FreshRunRestores`, read-only - a run's provenance records absolute paths, so no Iteration 3 is
+  ever run from a copied folder).
+- **DV state, read back from the native TPD.** Displacement ventilation on **0 of 8** native zones (24 Sep: 8 of 8), both
+  methods. Topology, bound rooms and every design supply/extract airflow identical to 24 Sep (3 air systems, 8 rooms,
+  3 supply / 6 extract / 5 transfer legs).
+- **B0 (Route check / Parity)**: COMPLETE, A Fail / B Fail, Iteration 3 in 2.1 min. Bias B-A +0.55 K (DV true +0.05),
+  RMSE 0.86 K (0.736), max 3.76 K (3.85); **0 of 8** TM59 outcomes differ from the reference (DV true: 2). The two
+  DV-true differences were Ensuite_5 536 -> 247 h and Ensuite_8 677 -> 246 h flipped to Pass by stratification (the
+  non-physical wet-room signature of PR3A §6/SAM#129); with mixing ventilation they are 588 / 723 h, Fail like the
+  reference. Habitable rooms move +0.07-0.2 K (bedrooms 231/228 -> 239/233 h, Pass).
+- **MG (Selected product - manufacturer operating guidance)**: COMPLETE, A Fail / B Fail, 6.6 min, Nuaire
+  MRXBOXAB-ECO5-AECV + MR-ECO-COOL-V on all three units at 80 l/s elevated. Compared with the like-for-like DV = true run
+  (same Nuaire-reply recipe, SAM_Tas#65 close-out `C:\TasOut\nuaire-reply-2026-09-24\03-Iteration3-MG-closeout`; the
+  24 Sep `02-Iteration3-MG` used the superseded intake-offset recipe and is not comparable): fully elevated
+  1033/970/964 -> 1034/970/965 h; modulating 485/100/97 -> 494/102/97 h; DX 1610/1293/1282 -> 1636/1306/1304 h (+0.5-1 %
+  energy); exchanger state and supply law max(13, entering - 8.245) exact in every full-flow hour (both); heat-recovery
+  **bypass 4674/4568/4563 -> 4468/4223/4258 h** following the rule (intake >= 12, < extract, extract >= 19) - 5-9 % fewer
+  eligible hours because a mixed room's extract is cooler than a stratified one's; peak extract ~37 C (no hot-extract
+  artefact); airflow 80 l/s elevated, design 30/63/63 l/s. TM59: bias +0.92 K (0.53), RMSE 1.40 K (1.413), **0 of 8**
+  outcomes differ (0 before); bedrooms 156/153 -> 157/156 h, kitchens 240/238 -> 251/255 h; the bias rise is the wet
+  rooms (Bathroom/Ensuites 353/274/286 -> 648/550/683 h) losing the stratification cooling, as in B0.
+- **Verdict.** Every change is the intended move from displacement to mixing ventilation: no topology, airflow,
+  control, bypass, cooling-law or TM59-generation regression. **B0 and MG are re-accepted with DV = false.** The
+  24 Sep DV = true evidence (`C:\TasOut\parto-guidance-2026-09-24\`) and the SAM_Tas#65 MG close-out are **superseded**,
+  kept, not deleted.
+- Minor, cosmetic (not fixed here): the SAM_Tas conversion note still says displacement ventilation is "inherited from the
+  template prototype, not decided by this route"; since PR3B-2 SAM_Systems states it explicitly (`false`).
+
+## 5. Handover (28 Sep 2026) - PR3B CLOSED
 
 | PR | State |
 |---|---|
@@ -184,13 +222,18 @@ copy of any restorable run folder, `SAM_PARTO_LEGACY_RUN`). Until then the legac
 | [SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31) PR3B-2 | merged `005c4fe` |
 | [SAM_Tas#71](https://github.com/SAM-BIM/SAM_Tas/pull/71) PR3B-3 | merged `e7cc0ed` |
 | [SAM_UI#131](https://github.com/SAM-BIM/SAM_UI/pull/131) test-only | merged `11d9078` |
-| [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) | open - log file name |
-| SAM_UI gate harness + evidence | open, test-only |
+| [SAM_UI#132](https://github.com/SAM-BIM/SAM_UI/pull/132) gate harness + evidence | merged in this closeout (Codex P1/P2 fixed: legacy check read-only, TM59 completeness, path containment) |
+| [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) log file name | merged in this closeout |
+| SAM#162 (this record) | closeout docs + legacy re-acceptance evidence |
 
-- Before PR3C: (1) re-accept legacy Iteration 3 B0 / MG with DV = false from a fresh Iteration 1a run; (2) the production
-  `PartOIteration3Pipeline.Materialise` has no `GuidanceTemplate` - PR3C must make the mixed SAM_Systems call (as the gate
-  harness does) and pass the catalogue descriptors **and** templates to `MaterialisePartODwellingStrategies` (a cooled
-  product must be selected against the catalogue in that call); (3) legacy SAM_UI `PartOIteration3GuidanceResolution`
-  still uses the product default airflow (could move to the design-duty overload).
-- Not in PR3B: SAM_UI cooling toggle (PR3C, do not start without the owner); PR2F reporting review paused (nothing written).
-- **Next step:** owner review of the gate result; legacy B0/MG re-acceptance; then PR3C only on the owner's go-ahead.
+- Licensed mixed-cooling gate 38/38 (42/42 after review); legacy Iteration 3 B0 and MG re-accepted with DV = false from
+  fresh Iteration 1a runs through the real UI; no SAM_Tas production physics change.
+- **Remaining limitation.** No fixture carries an accepted Optimised design inside the published 60-120 l/s cooling
+  range, so a valid Optimised + cooled case has not been run on TAS (the 143 l/s case is correctly refused).
+- **Before / in PR3C** (do not start without the owner): the production `PartOIteration3Pipeline.Materialise` has no
+  `GuidanceTemplate` - PR3C must make the mixed SAM_Systems call (as the gate harness does) and pass the catalogue
+  descriptors **and** templates to `MaterialisePartODwellingStrategies` (a cooled product must be selected against the
+  catalogue in that call). Optional: legacy SAM_UI `PartOIteration3GuidanceResolution` still uses the product default
+  airflow; SAM_Tas displacement-ventilation note wording.
+- Other stream: reporting PR2F-1 merged as SAM#163 (`afe90e94`) by the other session - not part of PR3B.
+- **Next step:** PR3C (per-dwelling cooling On/Off in SAM_UI) only on the owner's go-ahead.

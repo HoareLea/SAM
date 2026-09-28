@@ -1,0 +1,101 @@
+CIBSE TM59:2017 OVERHEATING ASSESSMENT
+======================================
+Source: C:\TasOut\parto-pr3b-closeout-2026-09-28\01-Iteration3-B0\000000_SAM_AnalyticalModel-It1a-futureZ1.tsd
+Thermal model scope: WHOLE BUILDING
+TM52 building category: Category II
+Part O modelling assumptions: NOT VERIFIED BY THIS RESULT REPORT
+
+TM59 OCCUPIED-SPACE ASSESSMENT: FAIL
+TM59 COMMUNAL-CORRIDOR RISK: -
+
+ASSESSMENT BASIS
+----------------
+Method:                         CIBSE TM59:2017
+Simulation period:              1 Jan - 31 Dec
+Natural ventilation study:      1 May - 30 Sep
+Bedroom night-time window:      22:00 - 07:00, full year
+Mechanical ventilation check:   Full year; annual occupied hours are space-specific
+Communal corridor check:        Full year
+
+NATURAL VENTILATION
+-------------------
+No space was assessed against this criterion.
+
+ASSESSMENT HOURS
+----------------
+No space was assessed against this criterion.
+
+MECHANICAL VENTILATION
+----------------------
+Space        Internal Condition              TM59 Application           Annual Occupied Hours  Actual  Limit  Margin  Status
+Studio 1_0   Studio - Studio 1_0             Sleeping, Living, Cooking                   8760     388    262    -126  FAIL
+Bathroom_2   Studio - Bathroom_2             Sleeping, Living, Cooking                   8760     731    262    -469  FAIL
+Bedroom 2_3  Double Bedroom - Bedroom 2_3    Sleeping                                    8760     223    262     +39  PASS
+Kitchen_4    1 Bed Apt. Kitchen - Kitchen_4  Cooking                                     4745     272    142    -130  FAIL
+Ensuite_5    Studio - Ensuite_5              Sleeping, Living, Cooking                   8760     536    262    -274  FAIL
+Bedroom 2_6  Double Bedroom - Bedroom 2_6    Sleeping                                    8760     216    262     +46  PASS
+Kitchen_7    1 Bed Apt. Kitchen - Kitchen_7  Cooking                                     4745     274    142    -132  FAIL
+Ensuite_8    Studio - Ensuite_8              Sleeping, Living, Cooking                   8760     677    262    -415  FAIL
+
+COMMUNAL CORRIDOR RISK
+----------------------
+No space was assessed against this criterion.
+
+SUPPLEMENTARY >28 C CHECKS - INFORMATION ONLY
+---------------------------------------------
+No space was assessed against this criterion.
+
+SPACES NOT ASSESSED
+-------------------
+Space 'Corridor_1' produced no TM59 result - either no criterion was settled for it, or its hourly series could not be read.
+No overheating scenario covers space 'Corridor_1', so nothing states how it is ventilated and it cannot be assessed against a TM59 criterion.
+
+SUMMARY
+-------
+Natural ventilation:             N/A
+Mechanical ventilation:           FAIL
+TM59 occupied-space assessment:   FAIL
+TM59 communal-corridor risk:      -
+
+This report assesses simulated temperatures against CIBSE TM59:2017. It does not by itself
+verify that every Approved Document O modelling assumption was applied to the simulation.
+
+LEGEND
+------
+Actual  Hours exceeding the stated temperature/comfort threshold.
+Limit   Maximum permitted hours for the criterion.
+Margin  Limit - Actual. Positive = allowance remaining, negative = threshold exceeded.
+        Status is taken from the assessment's own verdict, never re-derived from Margin:
+        Criterion 1, >26 C and >28 C are strict, so a zero margin is a failure, while
+        Criterion 2 is inclusive, so a zero margin passes.
+
+Criterion 1     Adaptive thermal comfort criterion for applicable naturally ventilated
+                occupied rooms, against Occupied Summer Hours (see Assessment Basis and
+                Assessment Hours).
+Criterion 2     Bedroom night-time overheating criterion. Applies to bedrooms only.
+                Assessed during 22:00-07:00 throughout the year against Annual Night
+                Occupied Hours.
+>26 C hours     Fixed-temperature criterion for applicable mechanically ventilated occupied
+                rooms, against Annual Occupied Hours.
+>28 C hours     Annual hours above 28 C.
+                For TM59 communal corridors this is the TM59 overheating-risk check.
+                For other spaces shown under Supplementary >28 C Checks it is advisory
+                engineering information only.
+
+TM59 Application
+    Sleeping  Space assessed as a bedroom/sleeping space.
+    Living    Space assessed as a living space.
+    Cooking   Space assessed as a kitchen/cooking space.
+
+    Multiple applications may apply to one space, for example:
+    Living, Cooking
+
+ComplianceStatus
+    PASS  the applicable criterion was satisfied.
+    FAIL  the applicable criterion was exceeded.
+    N/A   the criterion is not required of that space.
+RiskStatus
+    ACCEPTABLE       the >28 C reference threshold was not exceeded.
+    SIGNIFICANT RISK the threshold was exceeded. Highlight for design review. This is NOT
+                     an occupied-space compliance failure and never changes the TM59
+                     occupied-space assessment above.

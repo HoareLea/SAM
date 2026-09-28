@@ -1,0 +1,185 @@
+param(
+    [ValidateSet('B0', 'MG')][string]$Stage,
+    [string]$Dir,
+    [int]$TasMinutes = 30,
+    [int]$It3Minutes = 90
+)
+# Mixed Part O PR3B closeout (28 Sep 2026): legacy Iteration 3 re-acceptance with DisplacementVentilation = false.
+# Drives the REAL SAM Analytical.exe through UI Automation - no harness, no production shortcut - on a fresh copy
+# of the 24 Sep source model (SAM_zoningAM-CIBSEfutureZ1.sam, SHA-256 A7E09A25...):
+#   Part O Hub -> Iteration 1a -> Prepare & Run -> Review iteration (Accept) -> TAS -> TM59 -> Hub
+#   -> Iteration 3 method (by its visible label) -> Run system case -> Iteration 3 comparison.
+# Adapted from C:\TasOut\parto-guidance-2026-09-24\scripts\stage.ps1 to the current Hub (#111/#113/pass 6).
+# Only a single-button information box is ever dismissed; any other dialog stops the driver unanswered.
+$sp = $PSScriptRoot
+. (Join-Path $sp 'uia.ps1'); . (Join-Path $sp 'win32.ps1')
+Add-Type -AssemblyName System.Windows.Forms, System.Drawing
+
+$label = if ($Stage -eq 'B0') { 'Route check' } else { 'manufacturer operating guidance' }
+$log = Join-Path $Dir 'ui-driver.log'
+$shots = Join-Path $Dir 'shots'; New-Item -ItemType Directory -Force $shots | Out-Null
+function Say($m) { $l = "{0:HH:mm:ss} [{1}] {2}" -f (Get-Date), $Stage, $m; $l; [System.IO.File]::AppendAllText($log, $l + [Environment]::NewLine) }
+function Detached([string]$Arguments) { [void](Invoke-CimMethod -ClassName Win32_Process -MethodName Create -Arguments @{ CommandLine = "powershell.exe -NoProfile -ExecutionPolicy Bypass -WindowStyle Hidden $Arguments" }) }
+function Press([object]$Top, [string]$Id) { Say "  press $Id"; Detached ("-File `"$sp\invoke.ps1`" -ProcessId $ProcessId -Handle {0} -Id {1}" -f $Top.Handle.ToInt64(), $Id) }
+function Top([string]$Like, [int]$Seconds) {
+    $dl = (Get-Date).AddSeconds($Seconds)
+    do { $t = Get-TopWindows $ProcessId | Where-Object { $_.Title -like $Like } | Select-Object -First 1; if ($t) { return $t }; Start-Sleep -Seconds 2 } while ((Get-Date) -lt $dl)
+    return $null
+}
+function BoxText($b) { (Get-Children $b.Handle | ForEach-Object { $t = New-Object System.Text.StringBuilder 4096; [void][W.N]::GetWindowText($_.Handle, $t, 4096); $t.ToString() } | Where-Object { $_ }) -join ' | ' }
+function BoxButtons($b) { @(Get-Children $b.Handle | Where-Object { $_.Class -eq 'Button' }) }
+function Shot([string]$Name) {
+    $b = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+    $bmp = New-Object System.Drawing.Bitmap $b.Width, $b.Height
+    $g = [System.Drawing.Graphics]::FromImage($bmp); $g.CopyFromScreen($b.Location, [System.Drawing.Point]::Empty, $b.Size)
+    $p = Join-Path $shots ("{0:HHmmss}-{1}.png" -f (Get-Date), $Name); $bmp.Save($p, [System.Drawing.Imaging.ImageFormat]::Png); $g.Dispose(); $bmp.Dispose()
+}
+function Txt($root, $Id) { $e = Find-ById $root $Id; if ($e) { $e.Current.Name -replace "`r?`n", ' / ' } else { '<absent>' } }
+function Texts($root, $Id) { $e = Find-ById $root $Id; if (-not $e) { return '<absent>' }; (@($e.FindAll($TS::Descendants, (New-Object System.Windows.Automation.PropertyCondition($AE::ControlTypeProperty, $CT::Text))) | ForEach-Object { $_.Current.Name } | Where-Object { $_ }) -join ' | ') -replace "`r?`n", ' / ' }
+function Value($root, $id) { $e = Find-ById $root $id; $v = $null; if ($e -and $e.TryGetCurrentPattern([System.Windows.Automation.ValuePattern]::Pattern, [ref]$v)) { return $v.Current.Value }; return $null }
+function Expand($root, $id) { $e = Find-ById $root $id; $p = $null; if ($e -and $e.TryGetCurrentPattern([System.Windows.Automation.ExpandCollapsePattern]::Pattern, [ref]$p)) { $p.Expand(); Start-Sleep -Milliseconds 800; return $true }; return $false }
+function DumpNamed($root, [string]$File) {
+    $lines = foreach ($e in $root.FindAll($TS::Descendants, [System.Windows.Automation.Condition]::TrueCondition)) {
+        try { $c = $e.Current; if ($c.AutomationId -or ($c.Name -and $c.Name -notlike 'SAM.*')) { "{0} id={1} en={2} | {3}" -f $c.ControlType.ProgrammaticName.Replace('ControlType.', ''), $c.AutomationId, $c.IsEnabled, ($c.Name -replace "`r?`n", ' / ') } } catch {}
+    }
+    $lines | Set-Content -Path (Join-Path $Dir $File) -Encoding UTF8
+}
+function CopyAll([object]$Top, [string]$File) {
+    Set-Clipboard -Value ' '
+    Press $Top 'button_CopyAll'
+    $dl = (Get-Date).AddSeconds(20); $text = $null
+    do { Start-Sleep -Milliseconds 700; $text = Get-Clipboard -Raw } while (((-not $text) -or $text.Trim().Length -eq 0) -and (Get-Date) -lt $dl)
+    Set-Content -Path (Join-Path $Dir $File) -Value $text -Encoding UTF8
+    Say ("  copied {0} chars to {1}" -f $text.Length, $File)
+}
+function Fail([string]$m) { Say "FAIL $m"; Shot 'fail'; Set-Content -Path $stop -Value 'stop'; Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue; exit 1 }
+# Waits for a window; logs the Part O progress window's text as it changes; dismisses ONLY a one-button info box.
+function WaitFor([string]$Like, [int]$Minutes, [string]$What) {
+    $dl = (Get-Date).AddMinutes($Minutes); $lastProgress = ''
+    while ((Get-Date) -lt $dl) {
+        $tops = Get-TopWindows $ProcessId
+        $t = $tops | Where-Object { $_.Title -like $Like } | Select-Object -First 1
+        if ($t) { return $t }
+        $mb = $tops | Where-Object { $_.Class -eq '#32770' } | Select-Object -First 1
+        if ($mb) {
+            $buttons = BoxButtons $mb; Shot 'messagebox'
+            Say ("  MESSAGE BOX while waiting for {0} ({1} button(s)): {2}" -f $What, $buttons.Count, (BoxText $mb))
+            if ($buttons.Count -ne 1) { Fail 'a confirmation dialog appeared - not answered by the driver' }
+            [void][W.N]::PostMessage($buttons[0].Handle, 0x00F5, [System.IntPtr]::Zero, [System.IntPtr]::Zero); Start-Sleep -Seconds 3
+        }
+        $pw = $tops | Where-Object { $_.Title -eq 'Part O' -and $_.Class -ne '#32770' } | Select-Object -First 1
+        if ($pw) { try { $txt = (@($AE::FromHandle($pw.Handle).FindAll($TS::Descendants, (New-Object System.Windows.Automation.PropertyCondition($AE::ControlTypeProperty, $CT::Text))) | ForEach-Object { $_.Current.Name } | Where-Object { $_ }) -join ' | ') -replace "`r?`n", ' / '; if ($txt -and $txt -ne $lastProgress) { Say "  progress: $txt"; $lastProgress = $txt } } catch {} }
+        if (-not (Get-Process -Id $ProcessId -ErrorAction SilentlyContinue)) { Say 'FAIL the application exited'; exit 3 }
+        Start-Sleep -Seconds 3
+    }
+    return $null
+}
+
+# ---------------------------------------------------------------------------------------------- launch
+$exe = 'C:\Users\michal.dengusiak\Documents\GitHub\SAM-BIM\SAM_UI\build\SAM Analytical.exe'
+$model = Join-Path $Dir 'SAM_zoningAM-CIBSEfutureZ1.sam'
+Say ("exe {0} (exe {1:yyyy-MM-dd HH:mm:ss}; WPF dll {2:yyyy-MM-dd HH:mm:ss}), model {3}" -f $exe, (Get-Item $exe).LastWriteTime, (Get-Item 'C:\Users\michal.dengusiak\Documents\GitHub\SAM-BIM\SAM_UI\build\SAM.Analytical.UI.WPF.dll').LastWriteTime, $model)
+Say ("model sha256 {0}" -f (Get-FileHash $model -Algorithm SHA256).Hash)
+$stop = Join-Path $Dir 'tasmon.stop'; Remove-Item $stop -ErrorAction SilentlyContinue
+Detached ("-File `"$sp\tasmon.ps1`" -Out `"$Dir\tas-processes.log`" -Stop `"$stop`"")
+$proc = Start-Process -FilePath $exe -ArgumentList "/Path=$model" -PassThru
+$ProcessId = $proc.Id
+Say "application pid $ProcessId"
+$main = $null; $dl = (Get-Date).AddSeconds(180)
+do { Start-Sleep -Seconds 2; $main = Get-TopWindows $ProcessId | Where-Object { $_.Title -like 'SAM Analytical*' } | Select-Object -First 1 } while (-not $main -and (Get-Date) -lt $dl)
+if (-not $main) { Fail 'main window did not open' }
+Say ("main window '{0}'" -f $main.Title)
+$mainEl = $AE::FromHandle($main.Handle)
+$tab = $null; $dl = (Get-Date).AddSeconds(120); do { Start-Sleep -Seconds 2; $tab = Find-ById $mainEl 'RibbonTab_Simulate' } while (-not $tab -and (Get-Date) -lt $dl)
+Start-Sleep -Seconds 3
+[void](Invoke-El $tab); Start-Sleep -Seconds 1
+Press $main 'RibbonButton_PartOWorkflow'
+
+# ---------------------------------------------------------------------------------------------- hub: Iteration 1a
+$hub = WaitFor 'Part O*Prepare &*' 2 'the hub'; if (-not $hub) { Fail 'hub did not open' }
+Start-Sleep -Seconds 3
+$hubEl = $AE::FromHandle($hub.Handle)
+Say ("scenario: " + (Select-ComboItem (Find-ById $hubEl 'comboBox_Scenario') 'Iteration 1a*')); Start-Sleep -Seconds 3
+[void](Expand $hubEl 'expander_SimulationCase')
+$outBefore = Value $hubEl 'textBox_OutputDirectory'
+[void](Set-Text (Find-ById $hubEl 'textBox_OutputDirectory') $Dir); Start-Sleep -Seconds 1
+$out = Value $hubEl 'textBox_OutputDirectory'
+Say ("simulation case: {0} | weather: {1} | output (before) '{2}' -> '{3}'" -f (Txt $hubEl 'textBlock_SimulationCaseHeader'), (Texts $hubEl 'selectSAMObjectComboBoxControl_Weather'), $outBefore, $out)
+if ($out -ne $Dir) { Fail 'output directory not set to the stage folder' }
+Say ("scope: {0} | selection: {1}" -f (Txt $hubEl 'textBlock_Scope'), (Txt $hubEl 'textBlock_Selection'))
+Say ("run: '{0}' enabled={1}" -f (Find-ById $hubEl 'button_Run').Current.Name, (Find-ById $hubEl 'button_Run').Current.IsEnabled)
+DumpNamed $hubEl 'hub-before-run.txt'
+Shot 'hub-before-run'
+Press $hub 'button_Run'
+
+# ---------------------------------------------------------------------------------------------- review iteration
+$rv = WaitFor 'Part O*Review iteration*' 5 'the review'; if (-not $rv) { Fail 'review did not open' }
+Start-Sleep -Seconds 3
+$rvEl = $AE::FromHandle($rv.Handle)
+DumpNamed $rvEl 'review-elements.txt'
+Say ("review: " + (Txt $rvEl 'textBlock_Summary'))
+Shot 'review'
+if (Find-ById $rvEl 'button_CopyAll') { CopyAll $rv 'review.txt' }
+$t0 = Get-Date
+Press $rv 'button_Accept'
+
+# ---------------------------------------------------------------------------------------------- TAS -> TM59
+$tm = WaitFor 'Part O*Overheating*' $TasMinutes 'the TM59 window'; if (-not $tm) { Fail 'TM59 window did not open' }
+Say ("Iteration 1a simulated and assessed in {0:N1} min" -f ((Get-Date) - $t0).TotalMinutes)
+Start-Sleep -Seconds 3
+$tmEl = $AE::FromHandle($tm.Handle)
+Say ("TM59: {0} | {1} | {2}" -f (Txt $tmEl 'textBlock_Verdict'), (Txt $tmEl 'textBlock_Counts'), (Txt $tmEl 'textBlock_Reason'))
+Shot 'tm59'
+CopyAll $tm 'tm59-window.txt'
+Press $tm 'button_Close'
+
+# ---------------------------------------------------------------------------------------------- hub: Iteration 3 method
+$hub2 = WaitFor 'Part O*Prepare &*' 3 'the hub'; if (-not $hub2) { Fail 'hub did not reopen' }
+Start-Sleep -Seconds 4
+$h2 = $AE::FromHandle($hub2.Handle)
+Say ("hub outcome: '{0}' '{1}'" -f (Txt $h2 'textBlock_LastOutcome'), (Txt $h2 'textBlock_LastOutcomeDetail'))
+DumpNamed $h2 'hub-after-run.txt'
+[void](Expand $h2 'expander_It3Advanced')
+$radios = @($h2.FindAll($TS::Descendants, (New-Object System.Windows.Automation.PropertyCondition($AE::ControlTypeProperty, $CT::RadioButton))))
+$chosen = $null
+foreach ($r in $radios) {
+    $text = (@($r.FindAll($TS::Descendants, (New-Object System.Windows.Automation.PropertyCondition($AE::ControlTypeProperty, $CT::Text))) | ForEach-Object { $_.Current.Name }) -join ' / ')
+    if (-not $text) { $text = $r.Current.Name }
+    Say ("  method radio: '{0}'" -f $text)
+    if ($text -like "*$label*") { $chosen = $r }
+}
+if (-not $chosen) { Fail "no Iteration 3 method labelled '*$label*'" }
+$si = $null; [void]$chosen.TryGetCurrentPattern([System.Windows.Automation.SelectionItemPattern]::Pattern, [ref]$si); $si.Select(); Start-Sleep -Seconds 5
+Say ("selected '{0}': IsSelected={1}" -f $label, $si.Current.IsSelected)
+foreach ($id in 'textBlock_It3Reference', 'textBlock_It3Explanation', 'textBlock_It3UnitsHeading', 'textBlock_It3Refusal', 'textBlock_It3Hint') { Say ("  {0}: {1}" -f $id, (Txt $h2 $id)) }
+Say ("  units: " + (Texts $h2 'itemsControl_It3Summary'))
+$b3 = Find-ById $h2 'button_Iteration3'
+Say ("  button_Iteration3 '{0}' enabled={1} tip='{2}'" -f $b3.Current.Name, $b3.Current.IsEnabled, ($b3.Current.HelpText -replace "`r?`n", ' / '))
+DumpNamed $h2 ("hub-before-iteration3.txt")
+Shot ("hub-method-" + $Stage)
+if (-not $b3.Current.IsEnabled) { Fail 'Run system case is not enabled' }
+if ($b3.Current.Name -ne 'Run system case') { Fail ("the button reads '{0}' - a record already exists, not a fresh run" -f $b3.Current.Name) }
+$t1 = Get-Date
+Press $hub2 'button_Iteration3'
+
+# ---------------------------------------------------------------------------------------------- Iteration 3 comparison
+$rw = WaitFor 'Part O*Iteration 3 comparison*' $It3Minutes 'the Iteration 3 comparison'; if (-not $rw) { Fail 'no Iteration 3 comparison window' }
+Say ("Iteration 3 finished in {0:N1} min" -f ((Get-Date) - $t1).TotalMinutes)
+Start-Sleep -Seconds 4
+$rwEl = $AE::FromHandle($rw.Handle)
+foreach ($id in 'textBlock_Heading', 'textBlock_Cases', 'textBlock_Stages', 'textBlock_TileReference', 'textBlock_TileSystem', 'textBlock_TileBias', 'textBlock_TileRmse', 'textBlock_TileMax', 'textBlock_TileChanged', 'textBlock_RefusalHeading', 'textBlock_Refusal') { $v = Txt $rwEl $id; if ($v -and $v -ne '<absent>') { Say ("  {0}: {1}" -f $id, $v) } }
+[void](Expand $rwEl 'expander_System'); [void](Expand $rwEl 'expander_SystemUnits'); [void](Expand $rwEl 'expander_Technical'); Start-Sleep -Seconds 2
+Say ("  system: {0} | {1} | {2}" -f (Txt $rwEl 'textBlock_SystemHeader'), (Texts $rwEl 'itemsControl_SystemFacts'), (Txt $rwEl 'textBlock_SystemSource'))
+foreach ($id in 'textBlock_Outcome', 'textBlock_Summary') { Say ("  {0}: {1}" -f $id, (Txt $rwEl $id)) }
+DumpNamed $rwEl 'iteration3-elements.txt'
+Shot ("iteration3-" + $Stage)
+CopyAll $rw 'iteration3-window.txt'
+Press $rw 'button_Close'
+$hub3 = WaitFor 'Part O*Prepare &*' 3 'the hub'
+if ($hub3) { Start-Sleep -Seconds 3; $h3 = $AE::FromHandle($hub3.Handle); Say ("hub outcome: '{0}' '{1}'" -f (Txt $h3 'textBlock_LastOutcome'), (Txt $h3 'textBlock_LastOutcomeDetail')); DumpNamed $h3 'hub-after-iteration3.txt'; Shot 'hub-after-iteration3'; Press $hub3 'button_Close'; Start-Sleep -Seconds 3 }
+
+# ---------------------------------------------------------------------------------------------- close
+Set-Content -Path $stop -Value 'stop'
+Start-Sleep -Seconds 3
+Stop-Process -Id $ProcessId -Force -ErrorAction SilentlyContinue
+Say 'DONE'
