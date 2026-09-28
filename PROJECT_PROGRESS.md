@@ -15,9 +15,9 @@ TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM
 ## Current (Part O stream): mixed dwelling strategies PR3B - CLOSED (2026-09-28)
 
 - Merged: SAM#161 PR3B-1 (`85a13ec3`, incl. Codex round `2be58f1e`) -> SAM_Systems#31 PR3B-2 (`005c4fe`) -> SAM_Tas#71
-  PR3B-3 (`e7cc0ed`); SAM_UI#131 (`11d9078`); closeout: SAM_UI#132 (gate harness + evidence), SAM_Tas_Grasshopper#7 (log
-  file name), SAM#162 (this record + legacy evidence).
-- Licensed mixed-cooling gate 38/38 (43/43 after review): one model, one TPD, DX only in Flat 3, `ActiveTrimCooling`,
+  PR3B-3 (`e7cc0ed`); SAM_UI#131 (`11d9078`); closeout: SAM_UI#132 (`07077b7`, gate harness + evidence), SAM_Tas_Grasshopper#7
+  (`9ddf8ff`, log file name), SAM#162 (`3a998007`, record + legacy evidence), SAM#164 (`3e8670da`) and a final-SHA record.
+- Licensed mixed-cooling gate 38/38 (51/51 after review): one model, one TPD, DX only in Flat 3, `ActiveTrimCooling`,
   cooling removed leaves none, baseline unchanged.
 - Legacy Iteration 3 **B0 and MG re-accepted with DV = false** from fresh Iteration 1a runs through the real UI
   (`C:\TasOut\parto-pr3b-closeout-2026-09-28`, text evidence `documentation/evidence/parto-mixed-pr3b/closeout-2026-09-28/`):

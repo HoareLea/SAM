@@ -149,9 +149,10 @@ legacy Iteration 3 B0 and MG with DV = false (env-gated `PartOWorkflowEvidenceHa
 Harness SAM_UI `WPF/SAM.Analytical.UI.WPF.Tests/PartOMixedCoolingGateTests.cs` (env-gated) against the merged tips
 (SAM `85a13ec3`, SAM_Systems `005c4fe`, SAM_Tas `e7cc0ed`); log in SAM_UI
 `documentation/evidence/parto-mixed-pr3b/gate.txt`, TAS files in `C:\TasOut\parto-pr3b-gate-2026-09-28` (local only).
-**38/38 checks pass** (43/43 after the SAM_UI#132 review added 4 TM59 completeness checks - nothing unassessed,
-every flat has its own rows - plus an accepted-model-unchanged check, with the Optimised + cooled range read from the
-product; rerun on licensed TAS):
+**38/38 checks pass** (51/51 after the SAM_UI#132 review rounds, rerun on licensed TAS: TM59 completeness - nothing
+unassessed, every occupied room of every flat has its rows; the accepted model object unchanged; the Optimised + cooled
+range read from the selected product; and a relationship-preserving topology signature beside the guid-masked content
+comparison - SAM_UI `documentation/evidence/parto-mixed-pr3b/topology.txt`):
 
 - One analytical model; route `Systems`; exactly one cooled dwelling (Flat 3, Nuaire MRXBOXAB-ECO5-AECV + MR-ECO-COOL-V,
   design 63/63 l/s -> cooling operating airflow **80 l/s**). Scenarios: Flat 1 `BaseNaturalVentilation`, Flat 2
@@ -223,11 +224,11 @@ Run system case. App DLLs byte-identical to the merged-tip builds (SAM `85a13ec3
 | [SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31) PR3B-2 | merged `005c4fe` |
 | [SAM_Tas#71](https://github.com/SAM-BIM/SAM_Tas/pull/71) PR3B-3 | merged `e7cc0ed` |
 | [SAM_UI#131](https://github.com/SAM-BIM/SAM_UI/pull/131) test-only | merged `11d9078` |
-| [SAM_UI#132](https://github.com/SAM-BIM/SAM_UI/pull/132) gate harness + evidence | merged in this closeout (Codex P1/P2 fixed: legacy check read-only, TM59 completeness, path containment) |
-| [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) log file name | merged in this closeout |
-| SAM#162 (this record) | closeout docs + legacy re-acceptance evidence |
+| [SAM_UI#132](https://github.com/SAM-BIM/SAM_UI/pull/132) gate harness + evidence | merged `07077b7` (Codex findings fixed: legacy check read-only, TM59 completeness per room, path containment, product range, accepted-model snapshot, topology signature) |
+| [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) log file name | merged `9ddf8ff` |
+| [SAM#162](https://github.com/SAM-BIM/SAM/pull/162) closeout docs + legacy re-acceptance evidence | merged `3a998007`; gate-count corrections SAM#164 (`3e8670da`) and this final record |
 
-- Licensed mixed-cooling gate 38/38 (43/43 after review); legacy Iteration 3 B0 and MG re-accepted with DV = false from
+- Licensed mixed-cooling gate 38/38 (51/51 after review); legacy Iteration 3 B0 and MG re-accepted with DV = false from
   fresh Iteration 1a runs through the real UI; no SAM_Tas production physics change.
 - **Remaining limitation.** No fixture carries an accepted Optimised design inside the published 60-120 l/s cooling
   range, so a valid Optimised + cooled case has not been run on TAS (the 143 l/s case is correctly refused).
