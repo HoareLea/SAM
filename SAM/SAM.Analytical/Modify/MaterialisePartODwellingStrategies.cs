@@ -556,6 +556,8 @@ namespace SAM.Analytical
                     }
                 }
 
+                VentilationUnitCapacityDescriptor ventilationUnitCapacityDescriptor_Selected = null;
+
                 if (ventilationUnitCapacityDescriptors_Candidate is not null)
                 {
                     VentilationUnitSelection ventilationUnitSelection = adjacencyCluster.SelectVentilationUnit(airHandlingUnit, ventilationUnitCapacityDescriptors_Candidate, out List<string> notes_Unit, out List<string> refusals_Unit);
@@ -570,6 +572,7 @@ namespace SAM.Analytical
                     }
 
                     result.VentilationUnitSelections.Add(ventilationUnitSelection);
+                    ventilationUnitCapacityDescriptor_Selected = ventilationUnitSelection.Descriptor;
 
                     airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(airHandlingUnit.Guid) ?? airHandlingUnit;
                 }
@@ -582,7 +585,7 @@ namespace SAM.Analytical
 
                 if (partODwellingStrategy.ActiveCooling == PartOActiveCooling.SupplyAirCooling)
                 {
-                    PartOCooledDwelling partOCooledDwelling = CooledDwelling(zone, airHandlingUnit, supplyDuty_Lps, extractDuty_Lps, ventilationUnitTemplates, Refuse);
+                    PartOCooledDwelling partOCooledDwelling = CooledDwelling(zone, airHandlingUnit, ventilationUnitCapacityDescriptor_Selected, supplyDuty_Lps, extractDuty_Lps, ventilationUnitTemplates, Refuse);
                     if (partOCooledDwelling is null)
                     {
                         continue;
@@ -732,9 +735,11 @@ namespace SAM.Analytical
 
         /// <summary>
         /// The cooled dwelling its selected product's manufacturer guidance makes it, or null (refused) where the unit has
-        /// no product, the product states no guidance, or the cooling operating airflow falls outside it.
+        /// no product, the product states no guidance, or the cooling operating airflow falls outside it or beyond the
+        /// capacity of the catalogue entry that selected the unit (<paramref name="ventilationUnitCapacityDescriptor_Selected"/>) -
+        /// the template's own capacity is checked too, so where the two disagree the smaller governs.
         /// </summary>
-        private static PartOCooledDwelling CooledDwelling(Zone zone, AirHandlingUnit airHandlingUnit, double supplyDuty_Lps, double extractDuty_Lps, IEnumerable<VentilationUnitTemplate> ventilationUnitTemplates, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse)
+        private static PartOCooledDwelling CooledDwelling(Zone zone, AirHandlingUnit airHandlingUnit, VentilationUnitCapacityDescriptor ventilationUnitCapacityDescriptor_Selected, double supplyDuty_Lps, double extractDuty_Lps, IEnumerable<VentilationUnitTemplate> ventilationUnitTemplates, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse)
         {
             VentilationUnitReference ventilationUnitReference = airHandlingUnit?.SelectedVentilationUnitReference();
             if (ventilationUnitReference is null || !ventilationUnitReference.IsValid)
@@ -760,7 +765,18 @@ namespace SAM.Analytical
                 return null;
             }
 
-            return new PartOCooledDwelling(zone.Guid, airHandlingUnit.Guid, ventilationUnitReference, coolingOperatingAirFlow_Lps, ventilationUnitTemplate.PartOCoolingGuidanceFingerprint());
+            //The unit was selected by a catalogue entry in this call; a product that was not (a reused unit's authored
+            //selection) has no established capacity, and a cooling airflow beyond the selecting entry's is refused.
+            if (ventilationUnitCapacityDescriptor_Selected is null || !ventilationUnitCapacityDescriptor_Selected.IsSufficientFor(coolingOperatingAirFlow_Lps, coolingOperatingAirFlow_Lps))
+            {
+                refuse(PartOMaterialisationRefusalReason.CoolingAirFlowOutsideGuidance, ventilationUnitCapacityDescriptor_Selected is null
+                    ? string.Format("Dwelling '{0}' is selected with active cooling, but its product '{1}' was not selected against the catalogue offered, so the selected unit's capacity for its cooling airflow is not established.", zone.Name, ventilationUnitReference)
+                    : string.Format(System.Globalization.CultureInfo.InvariantCulture, "Dwelling '{0}' is selected with active cooling, but its product '{1}' would cool at {2:0.###} l/s, beyond the selected unit's {3:0.###} / {4:0.###} l/s supply / extract capacity in the catalogue.", zone.Name, ventilationUnitReference, coolingOperatingAirFlow_Lps, ventilationUnitCapacityDescriptor_Selected.MaximumSupplyFlowRate_Lps, ventilationUnitCapacityDescriptor_Selected.MaximumExtractFlowRate_Lps), zone, ventilationUnitReference.ToString());
+
+                return null;
+            }
+
+            return new PartOCooledDwelling(zone.Guid, airHandlingUnit.Guid, ventilationUnitReference, supplyDuty_Lps, extractDuty_Lps, coolingOperatingAirFlow_Lps, ventilationUnitTemplate.PartOCoolingGuidanceFingerprint());
         }
 
         /// <summary>

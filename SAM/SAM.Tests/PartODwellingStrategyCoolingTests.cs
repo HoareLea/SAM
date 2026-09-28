@@ -341,6 +341,63 @@ namespace SAM.Tests
             json_Unreadable["CooledDwellings"][0]["Fingerprint_Guidance"] = null;
             Assert.False(new PartOMaterialisationRecord(json_Unreadable).IsValid);
         }
+
+        [Fact]
+        public void InvalidCooledRecord_StaysInvalidWhenSavedAgain_NeverDowngradedToV1()
+        {
+            AnalyticalModel baseline = WithStrategies(Baseline(), Cooled(Flat1), Natural(Flat2), Mvhr(Flat3));
+            JsonObject json = MaterialiseCooled(baseline, [Cooling(Small)]).Record.ToJsonObject();
+
+            //A truncated v2 record (no cooled dwellings) and one stating the IZAM route: each is invalid, and so is
+            //every later save of it.
+            JsonObject json_NoCooled = JsonNode.Parse(json.ToJsonString()).AsObject();
+            json_NoCooled.Remove("CooledDwellings");
+
+            JsonObject json_Izam = JsonNode.Parse(json.ToJsonString()).AsObject();
+            json_Izam["Route"] = "Izam";
+
+            foreach (JsonObject json_Invalid in new[] { json_NoCooled, json_Izam })
+            {
+                PartOMaterialisationRecord record = new(json_Invalid);
+                Assert.False(record.IsValid);
+
+                JsonObject json_Saved = new PartOMaterialisationRecord(record).ToJsonObject();
+                Assert.Equal(PartOMaterialisationRecord.Schema_Cooled, json_Saved["Schema"].GetValue<string>());
+
+                PartOMaterialisationRecord reopened = new(JsonNode.Parse(json_Saved.ToJsonString()).AsObject());
+                Assert.False(reopened.IsValid);
+                Assert.False(reopened.IsCurrent(baseline, [Small], [Cooling(Small)], out _));
+            }
+        }
+
+        [Fact]
+        public void CooledRecord_WithAnAlteredCoolingAirFlow_IsNotCurrent()
+        {
+            AnalyticalModel baseline = WithStrategies(Baseline(), Cooled(Flat1), Natural(Flat2), Mvhr(Flat3));
+            JsonObject json = MaterialiseCooled(baseline, [Cooling(Small)]).Record.ToJsonObject();
+
+            double coolingOperatingAirFlow_Lps = json["CooledDwellings"][0]["CoolingOperatingAirFlow_Lps"].GetValue<double>();
+            json["CooledDwellings"][0]["CoolingOperatingAirFlow_Lps"] = coolingOperatingAirFlow_Lps + 20.0;
+
+            PartOMaterialisationRecord reopened = new(JsonNode.Parse(json.ToJsonString()).AsObject());
+            Assert.True(reopened.IsValid);
+            Assert.False(reopened.IsCurrent(baseline, [Small], [Cooling(Small)], out string reason));
+            Assert.Contains("cooling operating airflow", reason);
+        }
+
+        [Fact]
+        public void CoolingAirFlow_BeyondTheSelectedDescriptorsCapacity_IsRefused_WhateverTheTemplateStates()
+        {
+            AnalyticalModel baseline = WithStrategies(Baseline(), Cooled(Flat1), Natural(Flat2), Natural(Flat3));
+            double design_Lps = DesignTotal(Materialise(WithStrategies(Baseline(), Mvhr(Flat1), Natural(Flat2), Natural(Flat3))).AnalyticalModel, Flat1);
+
+            //The catalogue entry that selects the unit covers the design with 1 l/s to spare; its template states a far
+            //larger capacity and guidance 10 l/s above the design - more than the selected unit can move.
+            VentilationUnitCapacityDescriptor tight = new(Small.VentilationUnitReference, design_Lps + 1.0, design_Lps + 1.0);
+            VentilationUnitTemplate template = Cooling(tight, default_Lps: design_Lps + 10.0, minimum_Lps: 1.0, maximum_Lps: design_Lps + 100.0, capacity_Lps: design_Lps + 100.0);
+
+            AssertCoolingRefused(baseline, [template], PartOMaterialisationRefusalReason.CoolingAirFlowOutsideGuidance, "selected unit's", [tight]);
+        }
     }
 
 }

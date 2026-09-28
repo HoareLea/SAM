@@ -31,6 +31,9 @@ Branch `feature/parto-mixed-cooling-pr3b1-2026-09-27` from `sow/2026-Q3` `34fe03
 - **Status 28 Sep (handover).** PR = SAM#161 (CI green). PR3B-2 = SAM_Systems#31 (build red until #161 merges - calls
   `PartOCoolingOperatingAirFlow`). SAM_UI#131 test-only (green). PR3B-3 SAM_Tas: branch only. Full handover, merge
   order and gate recipe: `documentation/PartO-MixedDwellingStrategies-PR3B.md` §3-§5.
+- **Codex round 28 Sep.** 3 P1 findings fixed red-first (v2→v1 re-save laundering; cooling airflow vs the selecting
+  descriptor's capacity; `IsCurrent` re-derives the stored cooling airflow from the recorded design duty). `SAM.Tests`
+  2668/2668. Record §1 "Codex review round".
 - **Next step.** Implement PR3B-3 (§3), merge #161 → #31 (re-run CI) → PR3B-3, then the licensed gate (§4).
 
 ## Previous (reporting stream): reporting Phase 2 (Space Design Load Summary) COMPLETE (2026-09-27)

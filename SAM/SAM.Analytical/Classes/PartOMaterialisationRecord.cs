@@ -220,6 +220,16 @@ namespace SAM.Analytical
 
                     return false;
                 }
+
+                //The stored airflow is what the Systems route is configured with, so it must still be the one the
+                //guidance resolves the recorded design duty to - never a figure edited or corrupted since.
+                double coolingOperatingAirFlow_Lps = ventilationUnitTemplate.PartOCoolingOperatingAirFlow(partOCooledDwelling.DesignSupply_Lps, partOCooledDwelling.DesignExtract_Lps, out string refusal);
+                if (refusal is not null || System.Math.Abs(coolingOperatingAirFlow_Lps - partOCooledDwelling.CoolingOperatingAirFlow_Lps) > 1e-9)
+                {
+                    reason = string.Format(CultureInfo.InvariantCulture, "The recorded cooling operating airflow of '{0}' ({1:0.###} l/s) is not the one its manufacturer guidance resolves the recorded design duty to, so the record cannot be trusted. Materialise again.", partOCooledDwelling.VentilationUnitReference, partOCooledDwelling.CoolingOperatingAirFlow_Lps);
+
+                    return false;
+                }
             }
 
             if (SimulationResultProvenance.Fingerprint(analyticalModel_Baseline) != Fingerprint_Baseline)
@@ -286,9 +296,11 @@ namespace SAM.Analytical
             }
 
             //A known schema is written as the record's cooling states it; an unknown one is written back as read, so
-            //re-saving a record from a later build cannot turn it into one this build understands.
+            //re-saving a record from a later build cannot turn it into one this build understands. A record read as
+            //v2 stays v2 with the route it stated: a truncated or contradictory cooled record is never re-saved as a
+            //valid uncooled one.
             bool known = SchemaRead == Schema || SchemaRead == Schema_Cooled;
-            string schema = !known ? SchemaRead ?? Schema : CooledDwellings.Count == 0 ? Schema : Schema_Cooled;
+            string schema = !known ? SchemaRead ?? Schema : SchemaRead == Schema_Cooled || CooledDwellings.Count != 0 ? Schema_Cooled : Schema;
 
             JsonObject result = new()
             {
@@ -307,7 +319,7 @@ namespace SAM.Analytical
                 JsonArray jsonArray_Cooled = [];
                 CooledDwellings.ForEach(x => jsonArray_Cooled.Add(x?.ToJsonObject()));
 
-                result["Route"] = Route.ToString();
+                result["Route"] = (SchemaRead == Schema_Cooled ? route_Read : Route).ToString();
                 result["CooledDwellings"] = jsonArray_Cooled;
             }
 

@@ -31,7 +31,7 @@ SAM_Tas (§3). No SAM_UI cooling toggle (PR3C).
 | `Query.PartOCoolingOperatingAirFlow(template, designSupply, designExtract, out refusal)` | The binding rule. Guidance airflow = the strategy's resolved `ElevatedAirFlow_Lps`, else `DefaultElevatedAirFlow_Lps`; refused without guidance, without a stated default, without a published range, beyond the range ("no cooling data"), beyond capacity. The minimum cannot be undershot: `TemplateRefusal` holds the guidance figure inside the range. |
 | `Query.PartOCoolingGuidanceFingerprint(template)` | Product identity + capacity + the whole `OperatingStrategy` JSON (source included). |
 | `Query.PartOCoolingTemplate(templates, reference)` | Exactly one matching template, else null (ambiguous never guessed). |
-| `PartOCooledDwelling` (new) | Zone, materialised unit guid, product, `CoolingOperatingAirFlow_Lps`, `Fingerprint_Guidance`. A run artefact on the record only. |
+| `PartOCooledDwelling` (new) | Zone, materialised unit guid, product, the unit's design duty (`DesignSupply_Lps` / `DesignExtract_Lps`), `CoolingOperatingAirFlow_Lps`, `Fingerprint_Guidance`. A run artefact on the record only. |
 | `PartOMaterialisationRecord` | `CooledDwellings`, derived `Route` (`Izam` / `Systems`). **Uncooled records are written exactly as PR1 wrote them** (`PartOMaterialisation:v1`, no new keys, so PR2 sidecars never go stale); a record with a cooled dwelling is `PartOMaterialisation:v2` with `Route` and `CooledDwellings`. A v2 record with no cooled dwelling, a non-Systems route or an unreadable entry is invalid. New `IsCurrent(baseline, descriptors, templates, out reason)`: a cooled record is current only with each cooled product's guidance unchanged; the old overload (no templates) reports a cooled record not current. |
 | `PartOMaterialisation.Route`, `Enums.PartOSimulationRoute` (new) | `Undefined` / `Izam` / `Systems`. |
 | `PartOMaterialisationRefusalReason` | Appended `CoolingWithoutProductGuidance` (generic unit, project test unit, no or ambiguous template, template without strategy), `CoolingAirFlowOutsideGuidance`. `CoolingGated` kept (persisted values keep their meaning), no longer produced. |
@@ -53,6 +53,17 @@ no-IZAM source, not chosen to fill the key:
 
 New keys only: `ActiveTrimCooling` had never been persisted (it refused everywhere), so nothing is re-keyed.
 
+### Codex review round (28 Sep 2026)
+
+Three P1 findings, each confirmed red first (`evidence/parto-mixed-pr3b/pr3b1-codex-findings-red.txt`) and fixed:
+1. **v2 → v1 laundering.** A truncated v2 record (no `CooledDwellings`) re-saved as v1 and reopened valid. Now a record
+   read as v2 is always written v2 with the route it stated, so it stays invalid.
+2. **Descriptor capacity.** The cooling airflow was checked only against the template's capacity. Now also against the
+   catalogue entry that selected the unit (the smaller governs); a cooled product not selected against the catalogue in
+   this call is refused (`CoolingAirFlowOutsideGuidance`).
+3. **Stored airflow unverified.** `IsCurrent` accepted any positive stored airflow. The cooled dwelling now records the
+   design duty it was resolved from, and `IsCurrent` re-derives the airflow from that duty and the supplied guidance.
+
 ### Leakage
 
 - Authored air movement reaching a cooled (MVHR) dwelling: already refused by PR1 (`AuthoredAirMovementConflict`),
@@ -66,12 +77,12 @@ New keys only: `ActiveTrimCooling` had never been persisted (it refused everywhe
 
 ### Tests
 
-`SAM.Tests/PartODwellingStrategyCoolingTests.cs` (new: 14 facts + a 4-row theory) plus three updated pins
+`SAM.Tests/PartODwellingStrategyCoolingTests.cs` (new: 17 facts + a 4-row theory) plus three updated pins
 (`ActiveCooling_Persists_AndWithoutAProductIsRefused_NeverGated`; `PartOIterationSliceTests`
 `AnUnknownStage_IsRefusedRatherThanGuessedAt` / `AnUncharacterisedStage_ProducesNoScenarios` now use an undefined
 stage). **Red first:** with the PR1 gate and the `ActiveTrimCooling` refusal restored on top of this branch, 13 of the
 materialisation/identity tests fail (`evidence/parto-mixed-pr3b/pr3b1-red-on-pr1-gate.txt`); the pure airflow-rule tests
-are new API. Full `SAM.Tests` **2665/2665**; `SAM.sln` Release 0 errors.
+are new API. Full `SAM.Tests` **2668/2668** (after the Codex round); `SAM.sln` Release 0 errors.
 
 ### SAM_UI compatibility
 

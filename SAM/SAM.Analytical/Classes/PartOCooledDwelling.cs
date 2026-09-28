@@ -16,7 +16,8 @@ namespace SAM.Analytical
     /// <b>A run artefact, never design authority.</b> It lives on the materialisation record of a materialised model
     /// only - never on the baseline or the strategy. <see cref="CoolingOperatingAirFlow_Lps"/> is the operating
     /// airflow while the cooling-stat calls (<c>Query.PartOCoolingOperatingAirFlow</c>); the design airflow stays on
-    /// the terminals.
+    /// the terminals. The unit's design duty it was resolved from is kept beside it, so a record whose airflow no
+    /// longer follows from that duty and the product's guidance is not current.
     /// </para>
     /// </summary>
     public class PartOCooledDwelling : IJSAMObject, IAnalyticalObject
@@ -25,17 +26,19 @@ namespace SAM.Analytical
         {
         }
 
-        public PartOCooledDwelling(Guid guid_Zone, Guid guid_AirHandlingUnit, VentilationUnitReference ventilationUnitReference, double coolingOperatingAirFlow_Lps, string fingerprint_Guidance)
+        public PartOCooledDwelling(Guid guid_Zone, Guid guid_AirHandlingUnit, VentilationUnitReference ventilationUnitReference, double designSupply_Lps, double designExtract_Lps, double coolingOperatingAirFlow_Lps, string fingerprint_Guidance)
         {
             ZoneGuid = guid_Zone;
             AirHandlingUnitGuid = guid_AirHandlingUnit;
             VentilationUnitReference = ventilationUnitReference is null ? null : new VentilationUnitReference(ventilationUnitReference.Manufacturer, ventilationUnitReference.Model, ventilationUnitReference.Reference);
+            DesignSupply_Lps = designSupply_Lps;
+            DesignExtract_Lps = designExtract_Lps;
             CoolingOperatingAirFlow_Lps = coolingOperatingAirFlow_Lps;
             Fingerprint_Guidance = fingerprint_Guidance;
         }
 
         public PartOCooledDwelling(PartOCooledDwelling partOCooledDwelling)
-            : this(partOCooledDwelling?.ZoneGuid ?? Guid.Empty, partOCooledDwelling?.AirHandlingUnitGuid ?? Guid.Empty, partOCooledDwelling?.VentilationUnitReference, partOCooledDwelling?.CoolingOperatingAirFlow_Lps ?? double.NaN, partOCooledDwelling?.Fingerprint_Guidance)
+            : this(partOCooledDwelling?.ZoneGuid ?? Guid.Empty, partOCooledDwelling?.AirHandlingUnitGuid ?? Guid.Empty, partOCooledDwelling?.VentilationUnitReference, partOCooledDwelling?.DesignSupply_Lps ?? double.NaN, partOCooledDwelling?.DesignExtract_Lps ?? double.NaN, partOCooledDwelling?.CoolingOperatingAirFlow_Lps ?? double.NaN, partOCooledDwelling?.Fingerprint_Guidance)
         {
         }
 
@@ -53,6 +56,12 @@ namespace SAM.Analytical
         /// <summary>The product whose manufacturer guidance is the cooling.</summary>
         public VentilationUnitReference VentilationUnitReference { get; private set; }
 
+        /// <summary>The unit's design supply duty the cooling airflow was resolved from [l/s].</summary>
+        public double DesignSupply_Lps { get; private set; } = double.NaN;
+
+        /// <summary>The unit's design extract duty the cooling airflow was resolved from [l/s].</summary>
+        public double DesignExtract_Lps { get; private set; } = double.NaN;
+
         /// <summary>The airflow the unit moves while cooling [l/s] - an operating airflow.</summary>
         public double CoolingOperatingAirFlow_Lps { get; private set; } = double.NaN;
 
@@ -63,10 +72,12 @@ namespace SAM.Analytical
             && AirHandlingUnitGuid != Guid.Empty
             && VentilationUnitReference is not null
             && VentilationUnitReference.IsValid
-            && !double.IsNaN(CoolingOperatingAirFlow_Lps)
-            && !double.IsInfinity(CoolingOperatingAirFlow_Lps)
-            && CoolingOperatingAirFlow_Lps > 0
+            && Positive(DesignSupply_Lps)
+            && Positive(DesignExtract_Lps)
+            && Positive(CoolingOperatingAirFlow_Lps)
             && !string.IsNullOrEmpty(Fingerprint_Guidance);
+
+        private static bool Positive(double value) => !double.IsNaN(value) && !double.IsInfinity(value) && value > 0;
 
         public bool FromJsonObject(JsonObject jsonObject)
         {
@@ -80,7 +91,9 @@ namespace SAM.Analytical
             VentilationUnitReference = jsonObject["VentilationUnitReference"] is JsonObject jsonObject_Reference
                 ? new VentilationUnitReference(Text(jsonObject_Reference, "Manufacturer"), Text(jsonObject_Reference, "Model"), Text(jsonObject_Reference, "Reference"))
                 : null;
-            CoolingOperatingAirFlow_Lps = jsonObject["CoolingOperatingAirFlow_Lps"] is JsonValue jsonValue && jsonValue.TryGetValue(out double value) ? value : double.NaN;
+            DesignSupply_Lps = Number(jsonObject, "DesignSupply_Lps");
+            DesignExtract_Lps = Number(jsonObject, "DesignExtract_Lps");
+            CoolingOperatingAirFlow_Lps = Number(jsonObject, "CoolingOperatingAirFlow_Lps");
             Fingerprint_Guidance = Text(jsonObject, "Fingerprint_Guidance");
 
             return true;
@@ -113,12 +126,24 @@ namespace SAM.Analytical
                 ["Fingerprint_Guidance"] = Fingerprint_Guidance,
             };
 
-            if (!double.IsNaN(CoolingOperatingAirFlow_Lps) && !double.IsInfinity(CoolingOperatingAirFlow_Lps))
-            {
-                jsonObject["CoolingOperatingAirFlow_Lps"] = CoolingOperatingAirFlow_Lps;
-            }
+            WriteNumber(jsonObject, "DesignSupply_Lps", DesignSupply_Lps);
+            WriteNumber(jsonObject, "DesignExtract_Lps", DesignExtract_Lps);
+            WriteNumber(jsonObject, "CoolingOperatingAirFlow_Lps", CoolingOperatingAirFlow_Lps);
 
             return jsonObject;
+        }
+
+        private static double Number(JsonObject jsonObject, string name)
+        {
+            return jsonObject[name] is JsonValue jsonValue && jsonValue.TryGetValue(out double value) ? value : double.NaN;
+        }
+
+        private static void WriteNumber(JsonObject jsonObject, string name, double value)
+        {
+            if (!double.IsNaN(value) && !double.IsInfinity(value))
+            {
+                jsonObject[name] = value;
+            }
         }
 
         private static string Text(JsonObject jsonObject, string name)
