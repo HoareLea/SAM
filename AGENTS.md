@@ -11,7 +11,8 @@ Do not rely on previous conversation memory.
 Before making significant changes:
 
 1. Read this `AGENTS.md`.
-2. Read `PROJECT_PROGRESS.md`.
+2. Read `PROJECT_PROGRESS.md`, and the PR record document and
+   PR description of any open PR you are continuing.
 3. Understand the relevant existing code, architecture, tests, and conventions.
 4. Review the current Git branch and working tree.
 5. Continue from the documented current state.
@@ -21,16 +22,29 @@ Avoid unrelated refactoring unless it is required for the task.
 
 ## Project continuity
 
-After each meaningful implementation, debugging, research,
-testing, or validation checkpoint, update `PROJECT_PROGRESS.md`.
+`PROJECT_PROGRESS.md` is updated only after a PR has merged.
+During implementation, keep status/evidence on the PR branch in the
+PR record document and PR description. After merge, fetch the base
+branch and add the closeout entry, including the merge SHA, as a
+direct docs-only commit on the base branch. Do not modify unrelated
+stream entries.
 
-Do not update it for trivial actions such as opening files,
+The order of work is:
+
+code + tests + evidence → final PR CI → merge →
+`PROJECT_PROGRESS.md` closeout commit on the base branch.
+
+Never change `PROJECT_PROGRESS.md` on a PR branch.
+
+Do not record trivial actions such as opening files,
 searching the repository, or reading documentation.
 
-Keep `PROJECT_PROGRESS.md` concise and sufficient for another AI
-agent on another computer to continue without access to the current conversation.
+Keep the PR record document and `PROJECT_PROGRESS.md` concise and
+sufficient for another AI agent on another computer to continue
+without access to the current conversation.
 
-`PROJECT_PROGRESS.md` must contain:
+While a PR is open, its record document must contain, and after merge
+the `PROJECT_PROGRESS.md` closeout entry must contain:
 
 - current status;
 - work completed;
@@ -44,8 +58,9 @@ When updating `PROJECT_PROGRESS.md`, preserve still-relevant information
 from previous sessions. Remove or replace information only when it is
 obsolete, resolved, or superseded.
 
-Before ending meaningful work, verify that `PROJECT_PROGRESS.md`
-accurately represents the current repository state.
+Before ending meaningful work, verify that the PR record document and
+PR description (or, after merge, the `PROJECT_PROGRESS.md` closeout
+entry) accurately represent the current repository state.
 
 When appropriate, remind the user to commit and push changes before
 switching computers, accounts, sessions, or AI agents.
