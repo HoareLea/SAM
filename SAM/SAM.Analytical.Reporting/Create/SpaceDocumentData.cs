@@ -7,6 +7,7 @@ using SAM.Units;
 using SAM.Weather;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 
 namespace SAM.Analytical.Reporting
@@ -249,11 +250,13 @@ namespace SAM.Analytical.Reporting
                 // profile its upper limit (ticHUL; "no dehumidification" = 100 %), so they are reported as the
                 // humidification / dehumidification set points, not as heating / cooling RH. The SAM queries
                 // HeatingDesignRelativeHumidity / CoolingDesignRelativeHumidity are not used: their names do not match
-                // the profiles they read.
+                // the profiles they read. A thermostat held at SAM's "No Heating" / "No Cooling" value all year is off,
+                // not a set point: the heating value is the yearly maximum and the cooling one the yearly minimum, so
+                // any schedule that ever controls still prints its set point.
                 return new SpaceDesignCriteriaData()
                 {
-                    HeatingSetPoint = ProfileValue(profileLibrary, ProfileType.Heating, true, UnitType.Celsius, "No heating profile", null),
-                    CoolingSetPoint = ProfileValue(profileLibrary, ProfileType.Cooling, false, UnitType.Celsius, "No cooling profile", null),
+                    HeatingSetPoint = ProfileValue(profileLibrary, ProfileType.Heating, true, UnitType.Celsius, "No heating profile", x => Analytical.Query.IsHeatingOff(x) ? string.Format(CultureInfo.InvariantCulture, "No heating (thermostat at {0} °C all year)", Analytical.Query.NoHeatingSetPoint) : null),
+                    CoolingSetPoint = ProfileValue(profileLibrary, ProfileType.Cooling, false, UnitType.Celsius, "No cooling profile", x => Analytical.Query.IsCoolingOff(x) ? string.Format(CultureInfo.InvariantCulture, "No cooling (thermostat at {0} °C all year)", Analytical.Query.NoCoolingSetPoint) : null),
                     HumidificationSetPoint = ProfileValue(profileLibrary, ProfileType.Humidification, true, UnitType.Percent, "No humidification profile", x => x <= 0 ? "No humidification (lower RH limit 0 %)" : null),
                     DehumidificationSetPoint = ProfileValue(profileLibrary, ProfileType.Dehumidification, false, UnitType.Percent, "No dehumidification profile", x => x >= 100 ? "No dehumidification (upper RH limit 100 %)" : null),
                     OutdoorHeatingDryBulb = DesignDayExtreme(AnalyticalModelParameter.HeatingDesignDays, false, out ReportValue<Quantity> heatingRelativeHumidity),

@@ -603,9 +603,15 @@
           ]
         },
         {
+          "type": "NoticeBlock",
+          "id": "heating-components-zero",
+          "level": "Note",
+          "text": "Zero at both peaks (not listed): Solar, Lighting, Air movement (inter-zone), Air handling unit"
+        },
+        {
           "type": "TableBlock",
           "id": "heating-latent",
-          "title": "Latent components at peak",
+          "title": "Latent gains at the sensible peak hour",
           "repeatHeader": true,
           "columns": [
             {
@@ -648,9 +654,15 @@
         },
         {
           "type": "NoticeBlock",
-          "id": "heating-components-zero",
+          "id": "heating-latent-zero",
           "level": "Note",
-          "text": "Zero at both peaks (not listed): Solar, Lighting, Air movement (inter-zone), Air handling unit, Equipment (latent)"
+          "text": "Zero at both peaks (not listed): Equipment (latent)"
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "heating-latent-note",
+          "level": "Note",
+          "text": "Latent gains: internal gains only (occupancy, equipment) at the hour of the sensible peak. The room's latent load, which also includes moisture from infiltration and ventilation, is not in the results and is not derived."
         },
         {
           "type": "NoticeBlock",
@@ -1041,9 +1053,15 @@
           ]
         },
         {
+          "type": "NoticeBlock",
+          "id": "cooling-components-zero",
+          "level": "Note",
+          "text": "Zero at both peaks (not listed): Air movement (inter-zone), Air handling unit"
+        },
+        {
           "type": "TableBlock",
           "id": "cooling-latent",
-          "title": "Latent components at peak",
+          "title": "Latent gains at the sensible peak hour",
           "repeatHeader": true,
           "columns": [
             {
@@ -1086,9 +1104,15 @@
         },
         {
           "type": "NoticeBlock",
-          "id": "cooling-components-zero",
+          "id": "cooling-latent-zero",
           "level": "Note",
-          "text": "Zero at both peaks (not listed): Air movement (inter-zone), Air handling unit, Equipment (latent)"
+          "text": "Zero at both peaks (not listed): Equipment (latent)"
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "cooling-latent-note",
+          "level": "Note",
+          "text": "Latent gains: internal gains only (occupancy, equipment) at the hour of the sensible peak. The room's latent load, which also includes moisture from infiltration and ventilation, is not in the results and is not derived."
         },
         {
           "type": "NoticeBlock",

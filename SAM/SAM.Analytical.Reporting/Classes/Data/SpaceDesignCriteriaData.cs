@@ -13,12 +13,14 @@ namespace SAM.Analytical.Reporting
     public sealed class SpaceDesignCriteriaData
     {
         /// <summary>
-        /// Heating set point [°C]: yearly maximum of the heating profile.
+        /// Heating set point [°C]: yearly maximum of the heating profile. Not applicable when it is SAM's "No Heating"
+        /// value all year (<see cref="Query.NoHeatingSetPoint"/>).
         /// </summary>
         public ReportValue<Quantity> HeatingSetPoint { get; init; }
 
         /// <summary>
-        /// Cooling set point [°C]: yearly minimum of the cooling profile.
+        /// Cooling set point [°C]: yearly minimum of the cooling profile. Not applicable when it is SAM's "No Cooling"
+        /// value all year (<see cref="Query.NoCoolingSetPoint"/>).
         /// </summary>
         public ReportValue<Quantity> CoolingSetPoint { get; init; }
 

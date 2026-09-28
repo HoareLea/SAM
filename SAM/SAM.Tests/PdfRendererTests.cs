@@ -106,8 +106,8 @@ namespace SAM.Tests
             Document document = ReportingDesignGateFixture.Document("office_SI");
             List<string> paragraphs = Paragraphs(document);
 
-            // Humidification disabled (n/a), cooling multiplier set nowhere (not set), equipment latent authored 0.
-            Assert.Contains("n/a", paragraphs);
+            // Humidification disabled (none), cooling multiplier set nowhere (not set), equipment latent authored 0.
+            Assert.Contains(SpaceDesignCriteriaSectionBuilder.ControlOffText, paragraphs);
             Assert.Contains(SpaceSizingSectionBuilder.SizingMultiplierNotSetText, paragraphs);
             Assert.Contains("0", paragraphs);
             Assert.Contains("lower RH limit", paragraphs);

@@ -225,7 +225,133 @@ namespace SAM.Tests
 
             KeyValueBlock keyValueBlock = Build(WithProfiles(ReportingFixture.Full(out _), humidification, dehumidification), UnitStyle.SI, out _)
                 .Sections.Single(x => x.Id == "design-criteria").Blocks.OfType<KeyValueBlock>().Single(x => x.Id == "room-humidity");
-            Assert.Equal(new[] { "n/a", "n/a" }, keyValueBlock.Rows.Select(x => x.Value.Text));
+            // PR2F: a control that is off is a known state, shown as "none" with its reason, not the n/a marker.
+            Assert.Equal(new[] { "none", "none" }, keyValueBlock.Rows.Select(x => x.Value.Text));
+            Assert.All(keyValueBlock.Rows, x => Assert.Equal(Availability.NotApplicable, x.Value.Availability));
+            Assert.Equal(new[] { "No humidification (lower RH limit 0 %)", "No dehumidification (upper RH limit 100 %)" }, keyValueBlock.Rows.Select(x => x.Value.Note));
+        }
+
+        /// <summary>
+        /// PR2F A1: SAM's "No Heating" (−50 °C) and "No Cooling" (150 °C) thermostats held all year are off switches, not
+        /// set points, in SI and IP, and add no legend marker. A schedule that controls for even one hour still prints
+        /// its set point (the heating value is the yearly maximum, the cooling one the yearly minimum).
+        /// </summary>
+        [Theory]
+        [InlineData(UnitStyle.SI)]
+        [InlineData(UnitStyle.Imperial)]
+        public void ThermostatOffAllYear_IsNone_NotASetPoint(UnitStyle unitStyle)
+        {
+            Profile heating = new Profile("No Heating", ProfileType.Heating, Enumerable.Repeat(SAM.Analytical.Query.NoHeatingSetPoint, 24));
+            Profile cooling = new Profile("No Cooling", ProfileType.Cooling, Enumerable.Repeat(SAM.Analytical.Query.NoCoolingSetPoint, 24));
+
+            SpaceDocumentData data = Collect(WithProfiles(ReportingFixture.Full(out _), heating, cooling), unitStyle, out _);
+            Assert.Equal(Availability.NotApplicable, data.DesignCriteria.HeatingSetPoint.Availability);
+            Assert.Equal(Availability.NotApplicable, data.DesignCriteria.CoolingSetPoint.Availability);
+            Assert.Equal("No heating (thermostat at -50 °C all year)", data.DesignCriteria.HeatingSetPoint.Note);
+            Assert.Equal("No cooling (thermostat at 150 °C all year)", data.DesignCriteria.CoolingSetPoint.Note);
+
+            Document document = Build(WithProfiles(ReportingFixture.Full(out _), heating, cooling), unitStyle, out _);
+            TableRow setPoint = Table(document, "design-criteria", "design-criteria").Rows.Single(x => x.Cells[0].Text == "Room set point");
+            Assert.Equal(new[] { SpaceDesignCriteriaSectionBuilder.ControlOffText, SpaceDesignCriteriaSectionBuilder.ControlOffText }, setPoint.Cells.Skip(1).Select(x => x.Text));
+            Assert.All(setPoint.Cells.Skip(1), x => Assert.Null(x.Unit));
+            Assert.DoesNotContain(document.FormattedValues(), x => x.Text.Contains("-50") || x.Text.Contains("150.0") || x.Text.Contains("-58") || x.Text.Contains("302"));
+        }
+
+        /// <summary>
+        /// PR2F real-model regression: heating and cooling off all year, no humidity profile and no design days. The
+        /// thermostats are known to be off, so Design Criteria is still a table ("none"), never the "no set point
+        /// profiles" notice; with nothing known at all the notice stays.
+        /// </summary>
+        [Fact]
+        public void DesignCriteria_ControlsOff_NothingElseKnown_KeepsTheTable()
+        {
+            DocumentContext documentContext = ReportingCreate.DocumentContext(ReportingFixture.Full(out _), ReportingFixture.Options(UnitStyle.SI));
+            SpaceDesignCriteriaSectionBuilder sectionBuilder = new SpaceDesignCriteriaSectionBuilder();
+            ReportValue<Quantity> missing = ReportValue<Quantity>.NotAvailable("No design day in model");
+
+            SpaceDesignCriteriaData off = new SpaceDesignCriteriaData()
+            {
+                HeatingSetPoint = ReportValue<Quantity>.NotApplicable("No heating (thermostat at -50 °C all year)"),
+                CoolingSetPoint = ReportValue<Quantity>.NotApplicable("No cooling (thermostat at 150 °C all year)"),
+                HumidificationSetPoint = ReportValue<Quantity>.NotAvailable("No humidification profile"),
+                DehumidificationSetPoint = ReportValue<Quantity>.NotAvailable("No dehumidification profile"),
+                OutdoorHeatingDryBulb = missing,
+                OutdoorHeatingRelativeHumidity = missing,
+                OutdoorCoolingDryBulb = missing,
+                OutdoorCoolingRelativeHumidity = missing,
+            };
+
+            DocumentSection documentSection = sectionBuilder.Build(new SpaceDocumentData() { DesignCriteria = off }, documentContext);
+            Assert.DoesNotContain(documentSection.Blocks, x => x.Id == "design-criteria-missing");
+            TableRow setPoint = documentSection.Blocks.OfType<TableBlock>().Single(x => x.Id == "design-criteria").Rows.Single(x => x.Cells[0].Text == "Room set point");
+            Assert.Equal(new[] { "none", "none" }, setPoint.Cells.Skip(1).Select(x => x.Text));
+
+            SpaceDesignCriteriaData unknown = new SpaceDesignCriteriaData()
+            {
+                HeatingSetPoint = ReportValue<Quantity>.NotAvailable("No heating profile"),
+                CoolingSetPoint = ReportValue<Quantity>.NotAvailable("No cooling profile"),
+                HumidificationSetPoint = off.HumidificationSetPoint,
+                DehumidificationSetPoint = off.DehumidificationSetPoint,
+                OutdoorHeatingDryBulb = missing,
+                OutdoorHeatingRelativeHumidity = missing,
+                OutdoorCoolingDryBulb = missing,
+                OutdoorCoolingRelativeHumidity = missing,
+            };
+
+            documentSection = sectionBuilder.Build(new SpaceDocumentData() { DesignCriteria = unknown }, documentContext);
+            Assert.Contains(documentSection.Blocks, x => x.Id == "design-criteria-missing");
+        }
+
+        [Fact]
+        public void ThermostatOffForPartOfTheYear_StillPrintsTheSetPoint()
+        {
+            // Off overnight, controlling by day: the heating yearly maximum and cooling yearly minimum are real set points.
+            Profile heating = new Profile("Heat 21 day", ProfileType.Heating, Enumerable.Range(0, 24).Select(x => x >= 7 && x < 22 ? 21.0 : SAM.Analytical.Query.NoHeatingSetPoint));
+            Profile cooling = new Profile("Cool 24 day", ProfileType.Cooling, Enumerable.Range(0, 24).Select(x => x >= 7 && x < 22 ? 24.0 : SAM.Analytical.Query.NoCoolingSetPoint));
+
+            SpaceDocumentData data = Collect(WithProfiles(ReportingFixture.Full(out _), heating, cooling), UnitStyle.SI, out _);
+
+            AssertQuantity(data.DesignCriteria.HeatingSetPoint, 21, UnitCategory.Temperature, ReportValueSource.Derived);
+            AssertQuantity(data.DesignCriteria.CoolingSetPoint, 24, UnitCategory.Temperature, ReportValueSource.Derived);
+        }
+
+        /// <summary>
+        /// PR2F batch API: a context for the next document shares the model snapshot and everything read from it, but
+        /// starts an empty diagnostics log, and a document built with it is identical to one from a fresh context.
+        /// </summary>
+        [Fact]
+        public void DocumentContext_WithNewDiagnostics_SharesTheSnapshot_StartsAnEmptyLog()
+        {
+            AnalyticalModel analyticalModel = ReportingFixture.Minimal(out _);
+            Document first = Build(analyticalModel, UnitStyle.SI, out DocumentContext documentContext);
+            Assert.NotEmpty(documentContext.Diagnostics);
+
+            DocumentContext next = documentContext.WithNewDiagnostics();
+            Assert.Same(documentContext.AnalyticalModel, next.AnalyticalModel);
+            Assert.Same(documentContext.AdjacencyCluster, next.AdjacencyCluster);
+            Assert.Same(documentContext.ProfileLibrary, next.ProfileLibrary);
+            Assert.Same(documentContext.Options, next.Options);
+            Assert.Same(documentContext.Formatter, next.Formatter);
+            Assert.Same(documentContext.Provenance, next.Provenance);
+            Assert.NotSame(documentContext.Diagnostics, next.Diagnostics);
+            Assert.Empty(next.Diagnostics);
+
+            int count = documentContext.Diagnostics.Count();
+            Document second = ReportingCreate.SpaceAssumptions(next, ReportingFixture.Stored(analyticalModel));
+            Assert.Equal(first.ToJson(), second.ToJson());
+            Assert.Equal(count, next.Diagnostics.Count());
+            Assert.Equal(count, documentContext.Diagnostics.Count());
+        }
+
+        [Fact]
+        public void ThermostatOffLimits_AreSamsLibraryValues()
+        {
+            Assert.True(SAM.Analytical.Query.IsHeatingOff(-50));
+            Assert.True(SAM.Analytical.Query.IsHeatingOff(-60));
+            Assert.False(SAM.Analytical.Query.IsHeatingOff(-49.9));
+            Assert.True(SAM.Analytical.Query.IsCoolingOff(150));
+            Assert.True(SAM.Analytical.Query.IsCoolingOff(200));
+            Assert.False(SAM.Analytical.Query.IsCoolingOff(149.9));
         }
 
         [Fact]
@@ -256,7 +382,8 @@ namespace SAM.Tests
             {
                 profileLibrary.Add(profile);
 
-                InternalConditionParameter internalConditionParameter = profile.ProfileType == ProfileType.Cooling ? InternalConditionParameter.CoolingProfileName
+                InternalConditionParameter internalConditionParameter = profile.ProfileType == ProfileType.Heating ? InternalConditionParameter.HeatingProfileName
+                    : profile.ProfileType == ProfileType.Cooling ? InternalConditionParameter.CoolingProfileName
                     : profile.ProfileType == ProfileType.Humidification ? InternalConditionParameter.HumidificationProfileName
                     : InternalConditionParameter.DehumidificationProfileName;
 
