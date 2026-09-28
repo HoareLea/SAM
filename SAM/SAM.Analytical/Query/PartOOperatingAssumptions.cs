@@ -27,6 +27,16 @@ namespace SAM.Analytical
         /// <summary>Whether the mechanical system's summer bypass state is available. Identity-defining.</summary>
         public const string SummerBypassAvailable = "Summer Bypass Available";
 
+        /// <summary>The active cooling provision the dwelling is assessed with. Identity-defining.</summary>
+        public const string ActiveCooling = "Active Cooling";
+
+        /// <summary>
+        /// The <see cref="ActiveCooling"/> value of the one cooling provision Part O materialises: the selected MVHR
+        /// product's supply-air cooling, operated to its manufacturer's modelling guidance (cooling-stat, elevated
+        /// airflow while cooling, exchanger-then-coil supply law). Identity-defining.
+        /// </summary>
+        public const string ActiveCooling_SupplyAirManufacturerGuidance = "Supply Air - Manufacturer Guidance";
+
         /// <summary>
         /// The canonical operating assumptions for an Approved Document O mitigation stage.
         /// <para>
@@ -123,12 +133,22 @@ namespace SAM.Analytical
                     return result;
 
                 case PartOIteration.ActiveTrimCooling:
-                    //Deliberately not written. Active trim cooling adds a cooling provision, and what it assumes
-                    //about that provision - its capacity, its control, the hours it is available - is not settled.
-                    //Guessing here would put an unreviewed engineering assumption inside a permanent identity.
-                    refusal = "The operating assumptions for the ActiveTrimCooling iteration are not written yet, so a scenario cannot state that stage. Assess BasePassive, and AcousticRestricted where openings must be restricted for noise.";
+                    //An MVHR dwelling with the selected product's supply-air cooling (mixed strategies PR3, owner
+                    //decision 27 Sep 2026). Each value states what the manufacturer-guidance Systems route actually
+                    //simulates (SAM_Tas GroundGuidanceCooling), verified there rather than chosen to fill a key:
+                    //- openings are operated as authored - the route changes no aperture;
+                    //- the unit runs its design airflow continuously while the cooling-stat is satisfied, and the
+                    //  product's elevated airflow only while it calls - so "at design rate" is the background state,
+                    //  and the elevated airflow is part of the cooling provision, not a boost state of its own;
+                    //- the unit's own bypass decision is modelled, independent of the cooling-stat;
+                    //- the cooling provision is the product's manufacturer-guidance supply-air cooling.
+                    result.Set(OpeningsRestricted, false);
+                    result.Set(MechanicalVentilationAtDesignRate, true);
+                    result.Set(BoostAvailable, false);
+                    result.Set(SummerBypassAvailable, true);
+                    result.Set(ActiveCooling, ActiveCooling_SupplyAirManufacturerGuidance);
 
-                    return null;
+                    return result;
 
                 default:
                     refusal = string.Format("The operating assumptions for the '{0}' iteration are not known, so a scenario cannot state that stage.", partOIteration);

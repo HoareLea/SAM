@@ -96,9 +96,9 @@ namespace SAM.Tests
         /// has characterised, which is worse than failing.
         /// </summary>
         [Fact]
-        public void ActiveTrimCooling_IsRefusedRatherThanGuessedAt()
+        public void AnUnknownStage_IsRefusedRatherThanGuessedAt()
         {
-            OverheatingOperatingAssumptions overheatingOperatingAssumptions = PartOIteration.ActiveTrimCooling.PartOOperatingAssumptions(out string refusal);
+            OverheatingOperatingAssumptions overheatingOperatingAssumptions = ((PartOIteration)99).PartOOperatingAssumptions(out string refusal);
 
             Assert.Null(overheatingOperatingAssumptions);
             Assert.False(string.IsNullOrWhiteSpace(refusal));
@@ -197,7 +197,7 @@ namespace SAM.Tests
         {
             AnalyticalModel analyticalModel = Model_Design();
 
-            List<OverheatingScenario> overheatingScenarios = Analytical.Create.OverheatingScenarios(analyticalModel.GetZones(), PartOIteration.ActiveTrimCooling, Strategies(analyticalModel), out List<string> refusals);
+            List<OverheatingScenario> overheatingScenarios = Analytical.Create.OverheatingScenarios(analyticalModel.GetZones(), (PartOIteration)99, Strategies(analyticalModel), out List<string> refusals);
 
             Assert.Empty(overheatingScenarios);
             Assert.Single(refusals);

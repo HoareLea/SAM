@@ -31,6 +31,9 @@ namespace SAM.Analytical
         /// <summary>What the model was built from; also stamped on the model.</summary>
         public PartOMaterialisationRecord Record { get; internal set; }
 
+        /// <summary>How the materialised model is simulated - the Systems route when any dwelling is cooled.</summary>
+        public Enums.PartOSimulationRoute Route => Record?.Route ?? Enums.PartOSimulationRoute.Undefined;
+
         /// <summary>The MVHR systems materialised, one per MVHR dwelling, in dwelling order.</summary>
         public List<VentilationSystem> VentilationSystems { get; } = [];
 

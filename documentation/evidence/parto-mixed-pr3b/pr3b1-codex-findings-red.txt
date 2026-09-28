@@ -1,0 +1,9 @@
+PR3B-1 Codex review round (28 Sep 2026) - red first, before the fixes, on fbe6fe40:
+dotnet test SAM/SAM.Tests -c Release --filter PartODwellingStrategyMaterialisationTests
+  Failed InvalidCooledRecord_StaysInvalidWhenSavedAgain_NeverDowngradedToV1
+    Expected "PartOMaterialisation:v2", Actual "PartOMaterialisation:v1"   (finding 1: v2 -> v1 laundering)
+  Failed CoolingAirFlow_BeyondTheSelectedDescriptorsCapacity_IsRefused_WhateverTheTemplateStates
+    Assert.Null() Failure: a model was materialised                    (finding 2: descriptor capacity unchecked)
+  Failed CooledRecord_WithAnAlteredCoolingAirFlow_IsNotCurrent
+    Assert.False() Failure: IsCurrent was true                         (finding 3: stored airflow unverified)
+Failed: 3, Passed: 93, Total: 96
