@@ -272,6 +272,74 @@ namespace SAM.Tests
         }
 
         /// <summary>
+        /// The 2026-09-29 real project, as SAM sees it: a Prepare &amp; Run names only the three DWELLING zones, and the
+        /// communal corridor - its own zone, <c>IsDwelling = false</c>, assigned exactly the TM59 communal-corridor
+        /// condition, simulated in the whole building - reached no scenario. TM59 then refused it ("No overheating
+        /// scenario covers space") and the report said "COMMUNAL CORRIDOR RISK: -". With the iteration-neutral corridor
+        /// scenario the preparation now states beside the dwelling scenarios, the corridor gets a communal-corridor
+        /// result and the report files it under the corridor criterion, not as supplementary information.
+        /// </summary>
+        [Fact]
+        public void DwellingOnlyScenarios_PlusTheNeutralCorridorScenario_GiveTheCorridorACommunalCorridorResult()
+        {
+            AnalyticalModel analyticalModel_Design = Model_Design(corridorCondition: TM59InternalConditionResolver.CommunalCorridorInternalConditionName);
+            AnalyticalModel analyticalModel_TSD = Model_TSD();
+
+            List<Zone> zones_Dwelling = analyticalModel_Design.GetZones().FindAll(x => x.Name != "Corridor");
+            Zone zone_Corridor = analyticalModel_Design.GetZones().Find(x => x.Name == "Corridor");
+
+            List<OverheatingScenario> overheatingScenarios_Dwelling = Analytical.Create.OverheatingScenarios(zones_Dwelling, PartOIteration.BasePassive, Strategies(analyticalModel_Design), out List<string> refusals);
+            Assert.Empty(refusals);
+
+            //Before: the dwelling-only set leaves the corridor with no strategy at all.
+            TM59AssessmentResult tM59AssessmentResult_Before = Calculate(analyticalModel_Design, analyticalModel_TSD, overheatingScenarios_Dwelling, out TM59AssessmentReport tM59AssessmentReport_Before);
+            Assert.Empty(tM59AssessmentResult_Before.CorridorResults);
+            Assert.Contains(tM59AssessmentResult_Before.VentilationStrategyRefusals, x => x.Contains("No overheating scenario covers space 'Corridor'"));
+            Assert.Empty(tM59AssessmentReport_Before.CorridorChecks);
+
+            //After: the same set plus the corridor's neutral scenario.
+            List<OverheatingScenario> overheatingScenarios = [.. overheatingScenarios_Dwelling, Analytical.Create.PartOCommonSpaceOverheatingScenario(zone_Corridor)];
+
+            TM59AssessmentResult tM59AssessmentResult = Calculate(analyticalModel_Design, analyticalModel_TSD, overheatingScenarios, out TM59AssessmentReport tM59AssessmentReport);
+
+            Assert.Empty(tM59AssessmentResult.VentilationStrategyRefusals);
+            Assert.Single(tM59AssessmentResult.CorridorResults);
+            Assert.Equal(2, tM59AssessmentResult.MechanicalVentilationResults.Count);
+            Assert.Single(tM59AssessmentResult.NaturalVentilationResults);
+
+            TM59AssessmentReportCheck corridorCheck = Assert.Single(tM59AssessmentReport.CorridorChecks);
+            Assert.Equal("Corridor", corridorCheck.SpaceName);
+            Assert.Empty(tM59AssessmentReport.SupplementaryChecks);
+            Assert.NotEqual(TM59RiskStatus.Undefined, tM59AssessmentReport.CorridorRiskStatus);
+        }
+
+        private static TM59AssessmentResult Calculate(AnalyticalModel analyticalModel_Design, AnalyticalModel analyticalModel_TSD, List<OverheatingScenario> overheatingScenarios, out TM59AssessmentReport tM59AssessmentReport)
+        {
+            SimulationSpaceMap simulationSpaceMap = new(analyticalModel_Design.GetSpaces(), analyticalModel_TSD.GetSpaces(), StableKeyOf);
+
+            OverheatingScenarioMap overheatingScenarioMap = new(overheatingScenarios, analyticalModel_Design, simulationSpaceMap);
+
+            TM59AssessmentCalculator tM59AssessmentCalculator = new(analyticalModel_TSD, analyticalModel_Design, simulationSpaceMap)
+            {
+                ResultantTemperatureSeriesKey = key_Tas_ResultantTemperature,
+                OccupancySensibleGainSeriesKey = key_Tas_OccupantSensibleGain,
+                VentilationStrategyMap = overheatingScenarioMap.VentilationStrategyMap,
+            };
+
+            Assert.True(tM59AssessmentCalculator.RestoreDesignInternalConditions());
+
+            List<Space> spaces = tM59AssessmentCalculator.Spaces(null, null);
+            TM59AssessmentResult tM59AssessmentResult = tM59AssessmentCalculator.Calculate(spaces);
+
+            Assert.NotNull(tM59AssessmentResult);
+
+            //The report classifies by the DESIGN space's assigned condition, as the production review does.
+            tM59AssessmentReport = new TM59AssessmentReport(tM59AssessmentResult, "test");
+
+            return tM59AssessmentResult;
+        }
+
+        /// <summary>
         /// <b>The same fabric at two stages gives two separately attributable answers.</b> Which is the whole
         /// reason an iteration is part of the identity: a building is tested at base provision first, and the
         /// mitigated run has to be tellable apart from it.
@@ -343,7 +411,7 @@ namespace SAM.Tests
         /// dwellings and the corridor explicitly is not; internal conditions state the OPPOSITE ventilation
         /// strategy to the scenarios, so the criterion cannot be tracking the model's own data.
         /// </summary>
-        private static AnalyticalModel Model_Design(string unmarked = null)
+        private static AnalyticalModel Model_Design(string unmarked = null, string corridorCondition = null)
         {
             AdjacencyCluster adjacencyCluster = new();
 
@@ -351,7 +419,7 @@ namespace SAM.Tests
             {
                 Space space = new(name == "Corridor" ? "Corridor" : "Bedroom 2");
 
-                InternalCondition internalCondition = new(name + " IC");
+                InternalCondition internalCondition = new(name == "Corridor" && corridorCondition is not null ? corridorCondition : name + " IC");
                 internalCondition.SetValue(InternalConditionParameter.VentilationSystemTypeName, name == "Flat 2" ? "MVRE" : "NV");
 
                 space.InternalCondition = internalCondition;
