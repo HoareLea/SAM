@@ -152,7 +152,7 @@ namespace SAM.Analytical
 
             List<string[]> rows =
             [
-                ["Space", "Internal Condition", "TM59 Application", "Criterion 1", "Criterion 2", "Overall"],
+                ["Space", "Internal Condition", "TM59 Application", "C1 Actual", "C1 Limit", "C1 Margin", "C1 Status", "C2 Actual", "C2 Limit", "C2 Margin", "C2 Status", "Overall"],
             ];
 
             foreach (TM59AssessmentReportSpace space in spaces)
@@ -166,13 +166,13 @@ namespace SAM.Analytical
                     any.SpaceName ?? "-",
                     any.InternalCondition ?? "-",
                     any.Use ?? "-",
-                    CriterionCell(check_Criterion1),
-                    CriterionCell(check_Criterion2),
+                    .. CriterionCells(check_Criterion1),
+                    .. CriterionCells(check_Criterion2),
                     Display(space.ComplianceStatus),
                 ]);
             }
 
-            AppendTable(stringBuilder, rows, rightAligned: [false, false, false, true, true, false]);
+            AppendTable(stringBuilder, rows, rightAligned: [false, false, false, true, true, true, false, true, true, true, false, false]);
         }
 
         /// <summary>
@@ -322,14 +322,20 @@ namespace SAM.Analytical
             return [.. tM59AssessmentReport.OccupiedSpaces.Where(x => x.Checks.Exists(checks_Natural.Contains))];
         }
 
-        private static string CriterionCell(TM59AssessmentReportCheck check)
+        /// <summary>
+        /// One criterion's Actual | Limit | Margin | Status - the same four columns, in the same order, as the
+        /// mechanical-ventilation and &gt;28 C sections, so natural- and mechanical-ventilation results read with
+        /// one convention (Margin = Limit - Actual). A criterion not required of the space (Criterion 2 of a
+        /// non-bedroom) is "-" figures with an N/A status, never a blank or a FAIL.
+        /// </summary>
+        private static string[] CriterionCells(TM59AssessmentReportCheck check)
         {
             if (check == null || check.ComplianceStatus == TM59ComplianceStatus.NotApplicable)
             {
-                return "N/A";
+                return ["-", "-", "-", "N/A"];
             }
 
-            return string.Format(CultureInfo.InvariantCulture, "{0}/{1} ({2}) {3}", Number(check.Actual), Number(check.Limit), Margin(check.Margin), Display(check.ComplianceStatus));
+            return [Number(check.Actual), Number(check.Limit), Margin(check.Margin), Display(check.ComplianceStatus)];
         }
 
         private static void AppendHeading(StringBuilder stringBuilder, string heading)
@@ -422,6 +428,8 @@ namespace SAM.Analytical
                 "Criterion 2     Bedroom night-time overheating criterion. Applies to bedrooms only.\r\n" +
                 "                Assessed during 22:00-07:00 throughout the year against Annual Night\r\n" +
                 "                Occupied Hours.\r\n" +
+                "C1 / C2         Criterion 1 / Criterion 2 columns of the natural ventilation table, each\r\n" +
+                "                stated as Actual, Limit, Margin and Status.\r\n" +
                 ">26 C hours     Fixed-temperature criterion for applicable mechanically ventilated occupied\r\n" +
                 "                rooms, against Annual Occupied Hours.\r\n" +
                 ">28 C hours     Annual hours above 28 C.\r\n" +

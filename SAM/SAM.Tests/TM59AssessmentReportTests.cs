@@ -136,6 +136,17 @@ namespace SAM.Tests
         // ---------------------------------------------------------------------------------------------
 
         /// <summary>
+        /// Whether a natural-ventilation row states one criterion as Actual | Limit | Margin | Status - the
+        /// convention the mechanical-ventilation section already uses, with Margin = Limit - Actual.
+        /// </summary>
+        private static bool HasCriterion(string line, int actual, int limit, int margin)
+        {
+            return System.Text.RegularExpressions.Regex.IsMatch(
+                line,
+                string.Format(System.Globalization.CultureInfo.InvariantCulture, @"(^|\s){0}\s+{1}\s+{2}{3}\s+(PASS|FAIL)(\s|$)", actual, limit, margin > 0 ? "\\+" : string.Empty, margin));
+        }
+
+        /// <summary>
         /// The text presents Criterion 1 and Criterion 2 on the SAME line for a bedroom - not as two
         /// separate rows - and states the Overall verdict beside them.
         /// </summary>
@@ -150,8 +161,8 @@ namespace SAM.Tests
             Assert.Equal(1, naturalVentilationSection.Split('\n').Count(x => x.Contains("Studio 1_0")));
 
             string line = naturalVentilationSection.Split('\n').Single(x => x.Contains("Studio 1_0"));
-            Assert.Contains("37/110", line);
-            Assert.Contains("11/32", line);
+            Assert.True(HasCriterion(line, 37, 110, 73), line);
+            Assert.True(HasCriterion(line, 11, 32, 21), line);
             Assert.Contains("PASS", line);
         }
 
@@ -164,7 +175,7 @@ namespace SAM.Tests
             string line = Section(text, TM59AssessmentReportFormatter.Heading_NaturalVentilation, TM59AssessmentReportFormatter.Heading_AssessmentHours)
                 .Split('\n').Single(x => x.Contains("Living_1"));
 
-            Assert.Contains("21/105", line);
+            Assert.True(HasCriterion(line, 21, 105, 84), line);
             Assert.Contains("N/A", line);
             Assert.Contains("PASS", line);
         }
@@ -406,8 +417,8 @@ namespace SAM.Tests
             List<string> lines = [.. naturalVentilationSection.Split('\n').Where(x => x.Contains("Bedroom 2"))];
 
             Assert.Equal(2, lines.Count);
-            Assert.Contains(lines, x => x.Contains("37/110") && x.Contains("11/32"));
-            Assert.Contains(lines, x => x.Contains("60/110") && x.Contains("20/32"));
+            Assert.Contains(lines, x => HasCriterion(x, 37, 110, 73) && HasCriterion(x, 11, 32, 21));
+            Assert.Contains(lines, x => HasCriterion(x, 60, 110, 50) && HasCriterion(x, 20, 32, 12));
         }
 
         // ---------------------------------------------------------------------------------------------
