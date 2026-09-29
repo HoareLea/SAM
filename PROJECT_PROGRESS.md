@@ -12,6 +12,23 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): TM59 natural-ventilation report uses Actual | Limit | Margin | Status (29 Sep 2026) - MERGED as SAM#168 (`6d29803a`)
+
+**Status.** Merged into `sow/2026-Q3`: [SAM-BIM/SAM#168](https://github.com/SAM-BIM/SAM/pull/168), branch
+`feature/tm59-report-margin-columns-2026-09-29`, PR head `1fc635a3`, merge `6d29803a`. CI green (build, spdx, test).
+It is the SAM half of the Part O presentation polish. The companion is
+[SAM-BIM/SAM_UI#145](https://github.com/SAM-BIM/SAM_UI/pull/145) (`d46ca3a9`); SAM_UI `PROJECT_PROGRESS.md` holds the full
+closeout and the licensed presentation-route evidence.
+
+- **Change.** In `TM59AssessmentReportFormatter`, the natural-ventilation table now states each criterion as
+  `C1 Actual | C1 Limit | C1 Margin | C1 Status | C2 … | Overall`. This replaces one "37/110 (+73) PASS" cell. It is
+  the same convention as the mechanical and >28 C sections (Margin = Limit - Actual); the legend explains C1/C2.
+  No figure is recomputed, and no public API changed.
+- **Files.** `SAM.Analytical/Classes/TM59AssessmentReportFormatter.cs`, `SAM.Tests/TM59AssessmentReportTests.cs`.
+- **Evidence.** SAM TM59 tests 214/214. A real TAS Iteration 1b report was produced with the new table in the
+  SAM_UI#145 smoke.
+- **Next step.** None for this entry.
+
 ## Current (Part O stream): homogeneous Prepare states the communal corridor's TM59 scenario (29 Sep 2026) - MERGED as SAM#167 (`33a81b1b`)
 
 **Status.** Merged into `sow/2026-Q3`: [SAM-BIM/SAM#167](https://github.com/SAM-BIM/SAM/pull/167), branch
