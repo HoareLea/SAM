@@ -289,7 +289,136 @@ namespace SAM.Analytical
 
             result.Refusals.AddRange(refusals_Scenarios);
 
+            // ---- 7. The assessed communal corridors ------------------------------------------------------
+
+            AddCommonSpaceOverheatingScenarios(analyticalModel_Applied, zones_Scenario, result);
+
             return result;
+        }
+
+        /// <summary>
+        /// States the iteration-neutral TM59 corridor scenario (<see cref="Create.PartOCommonSpaceOverheatingScenario"/>)
+        /// for every assessed communal corridor in the model being simulated that the caller did not already name.
+        /// <para>
+        /// <b>Why here.</b> A Prepare &amp; Run names only the DWELLING zones it prepares, so a correctly classified
+        /// corridor - its own zone, <c>IsDwelling = false</c>, every space assigned
+        /// <c>TM59_Communal Corridor (including pipework gains)</c>, simulated in the whole building - reached no
+        /// scenario, and its TM59 result was refused as "no overheating scenario covers space". The mixed-strategy
+        /// materialisation already states these scenarios (PR1); this is the same identity and the same rule
+        /// (<see cref="Query.IsTM59CommunalCorridorZone"/>) on the homogeneous route. The corridor criterion asserts
+        /// nothing about any dwelling's ventilation, so it is the same scenario whichever base iteration the
+        /// dwellings are at.
+        /// </para>
+        /// <para>
+        /// <b>What is left alone.</b> A zone the caller already named (it has its own scenario above); a zone that
+        /// is not marked <c>IsDwelling = false</c>; a zone with no corridor space; a zone mixing corridor and other
+        /// spaces, which is stated as a warning rather than guessed (a scenario is zone-scoped); and a corridor
+        /// space already covered by another zone's scenario. An isolated model has had its corridor removed, so it
+        /// gets none. Never a refusal: a preparation that ran before this existed is not made to fail by it.
+        /// </para>
+        /// </summary>
+        private static void AddCommonSpaceOverheatingScenarios(AnalyticalModel analyticalModel_Applied, List<Zone> zones_Scenario, PartOIterationPreparation result)
+        {
+            AdjacencyCluster adjacencyCluster = analyticalModel_Applied?.AdjacencyCluster;
+            if (adjacencyCluster is null)
+            {
+                return;
+            }
+
+            List<Zone> zones_All = adjacencyCluster.GetZones() ?? [];
+            zones_All.PartFClassifyDwellingZones(out List<Zone> _, out List<Zone> zones_NotDwelling, out List<Zone> _);
+
+            HashSet<Guid> guids_Named = [];
+            HashSet<Guid> guids_Space_Covered = [];
+
+            foreach (Zone zone in zones_Scenario ?? [])
+            {
+                if (zone is null)
+                {
+                    continue;
+                }
+
+                guids_Named.Add(zone.Guid);
+
+                foreach (Space space in adjacencyCluster.GetRelatedObjects<Space>(zone) ?? [])
+                {
+                    if (space is not null)
+                    {
+                        guids_Space_Covered.Add(space.Guid);
+                    }
+                }
+            }
+
+            //Deterministic: the scenario set is fingerprinted, so its order must not depend on the cluster's.
+            zones_NotDwelling.Sort((x, y) =>
+            {
+                int compare = string.CompareOrdinal(x?.Name, y?.Name);
+                return compare != 0 ? compare : (x?.Guid ?? Guid.Empty).CompareTo(y?.Guid ?? Guid.Empty);
+            });
+
+            foreach (Zone zone in zones_NotDwelling)
+            {
+                if (zone is null || guids_Named.Contains(zone.Guid))
+                {
+                    continue;
+                }
+
+                List<Space> spaces = adjacencyCluster.GetRelatedObjects<Space>(zone) ?? [];
+
+                bool? corridor = Query.IsTM59CommunalCorridorZone(spaces);
+
+                if (corridor == false)
+                {
+                    continue;
+                }
+
+                if (corridor is null)
+                {
+                    string warning = string.Format(
+                        "Common-space zone '{0}' mixes space(s) assigned '{1}' with space(s) that are not, so its corridor is not assessed: a scenario states one TM59 criterion for a whole zone. Split the zone so the corridors are a zone of their own, or assign the corridor condition consistently.",
+                        zone.Name,
+                        TM59InternalConditionResolver.CommunalCorridorInternalConditionName);
+
+                    result.Notes.Add(warning);
+                    result.Warnings.Add(warning);
+                    continue;
+                }
+
+                Space space_Covered = spaces.Find(x => x is not null && guids_Space_Covered.Contains(x.Guid));
+                if (space_Covered is not null)
+                {
+                    string warning = string.Format(
+                        "Communal corridor zone '{0}' is not given its own TM59 corridor scenario: its space '{1}' is already covered by another zone's scenario, and one space cannot be assessed under two.",
+                        zone.Name,
+                        space_Covered.Name);
+
+                    result.Notes.Add(warning);
+                    result.Warnings.Add(warning);
+                    continue;
+                }
+
+                OverheatingScenario overheatingScenario = Create.PartOCommonSpaceOverheatingScenario(zone);
+                if (overheatingScenario is null)
+                {
+                    continue;
+                }
+
+                result.OverheatingScenarios.Add(overheatingScenario);
+
+                foreach (Space space in spaces)
+                {
+                    if (space is not null)
+                    {
+                        guids_Space_Covered.Add(space.Guid);
+                    }
+                }
+
+                result.Notes.Add(string.Format(
+                    "Communal corridor zone '{0}' ({1} space(s) assigned '{2}') is assessed against the TM59 communal-corridor criterion under its iteration-neutral scenario.",
+                    zone.Name,
+                    spaces.Count,
+                    TM59InternalConditionResolver.CommunalCorridorInternalConditionName));
+            }
         }
 
         /// <summary>

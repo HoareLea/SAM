@@ -306,13 +306,13 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                int count_Corridor = spaces.FindAll(Query.IsTM59CommunalCorridor).Count;
+                bool? corridor = Query.IsTM59CommunalCorridorZone(spaces);
 
-                if (count_Corridor == spaces.Count)
+                if (corridor == true)
                 {
                     zones_CommonSpace.Add(zone);
                 }
-                else if (count_Corridor != 0)
+                else if (corridor is null)
                 {
                     //An overheating scenario is zone-scoped: it states one criterion for every space of its zone, and
                     //nothing in the scenario architecture states one per space. Assessing the zone as a corridor would
