@@ -12,6 +12,37 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): homogeneous Prepare states the communal corridor's TM59 scenario (29 Sep 2026) - MERGED as SAM#167 (`33a81b1b`)
+
+**Status.** Merged into `sow/2026-Q3`: [SAM-BIM/SAM#167](https://github.com/SAM-BIM/SAM/pull/167), branch
+`fix/parto-homogeneous-corridor-scenario-2026-09-29`, PR head `951de33d`, merge `33a81b1b`. Final CI green (build, spdx,
+test), mergeable, no reviews, comments or threads. Part of the Iteration 3 validation stream (SAM_Tas#74/#75,
+SAM_Systems#33, SAM_UI#140-#142 - see their closeouts).
+
+- **Defect.** A Prepare & Run names only the dwelling zones, so a correctly classified communal corridor (own zone,
+  `IsDwelling = false`, spaces assigned `TM59_Communal Corridor (including pipework gains)`) reached no scenario and
+  its TM59 result was refused: "No overheating scenario covers space 'Corridor_1'".
+- **Fix.** `Modify.PreparePartOIteration` now states the iteration-neutral `Create.PartOCommonSpaceOverheatingScenario`
+  (scope `CommonSpace`, iteration `DwellingIndependent`, strategy `UV`) for each assessed corridor zone the caller did not
+  name, using the same rule as the mixed materialisation (`Query.IsTM59CommunalCorridorZone`). Skipped: named zones,
+  non-`IsDwelling = false` zones, mixed corridor/other zones (warning), spaces already covered (warning), isolated
+  models. Never a refusal. Files: `Modify/PreparePartOIteration.cs`, `Modify/MaterialisePartODwellingStrategies.cs`,
+  `Query/IsTM59CommunalCorridorZone.cs`, tests `PartOHomogeneousCorridorScenarioTests.cs`, `PartOIterationSliceTests.cs`.
+- **Licensed gate (fresh Prepare & Run, 29 Sep 2026, passed).** Harness-only `poi.exe fresh` (`C:\TasOut\partoi-2026-09-29\h`,
+  not in any repo) over the real 3-dwelling project's model only (no prepared or run artifacts), with the SAM build
+  containing the fix: `Analytical.Modify.PreparePartOIteration`, then `Modify.ConcludePartOReview(accepted)` (the
+  Accept & Run TAS adoption), `Modify.SimulatePartO` (real TAS, full year, 57 s), `PartOTM59Assessment.Assess`. Result:
+  zone `Corridor` (space `Corridor_1`) stays `IsDwelling = False`; preparation produced 4 scenarios (Flat 1/2/3
+  `BasePassive - MVHR` + exactly one `Corridor - DwellingIndependent - UV`, so no duplicate); simulation completed;
+  TM59 assessed; `Corridor_1` assessed against the communal-corridor criterion (8760 h, actual 115, limit 262,
+  ACCEPTABLE); the "No overheating scenario covers" refusal is gone; the five dwelling occupied-space results are
+  identical to the pre-fix report (MV PASS, occupied PASS; only the source path and the corridor rows differ).
+  Evidence (local, uncommitted): `C:\TasOut\partoi-2026-09-29\evidence\fresh-corridor-gate.log` and `...-TM59.txt`.
+- **Limits.** The gate ran the Iteration 1a route with no equipment table (`selectVentilationUnit = false`) and the
+  model's own weather (London TRY), re-preparing the supplied post-run `.sam` rather than the user's original file.
+- **Next step.** None for this entry. Remaining Iteration 3 follow-ups are separate future tasks (larger exchanger
+  representation, Part O progress UI, run history/resume, Design Condition cleanup).
+
 ## Current (Part O stream): mixed dwelling strategies PR3B - CLOSED (2026-09-28)
 
 - Merged: SAM#161 PR3B-1 (`85a13ec3`, incl. Codex round `2be58f1e`) -> SAM_Systems#31 PR3B-2 (`005c4fe`) -> SAM_Tas#71
