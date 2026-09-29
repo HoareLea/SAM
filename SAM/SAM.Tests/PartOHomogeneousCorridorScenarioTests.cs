@@ -54,8 +54,9 @@ namespace SAM.Tests
         {
             AnalyticalModel baseline = Baseline();
 
-            Dictionary<System.Guid, string> words = Words(baseline, "MVHR", Flat1, Flat2);
-            words[Zone(baseline, Corridor).Guid] = "UV";
+            //The caller names the corridor itself, stating the route every other named zone states (a homogeneous
+            //preparation refuses a zone that states none): it already has its scenario, and must not get a second.
+            Dictionary<System.Guid, string> words = Words(baseline, "MVHR", Flat1, Flat2, Corridor);
 
             PartOIterationPreparation preparation = baseline.PreparePartOIteration(PartOIteration.BasePassive, Zones(baseline, Flat1, Flat2, Corridor), words);
 
