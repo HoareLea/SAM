@@ -3,8 +3,8 @@
 
 # Part O PR-5 (SAM half): `PartOBaselineReference` - what a saved result was derived from
 
-**Status (1 Oct 2026): implemented and tested; the PR is open against `sow/2026-Q3` and is NOT merged. Merge it before
-[SAM-BIM/SAM_UI PR-5](https://github.com/SAM-BIM/SAM_UI/pulls) (same branch name), which stamps and reads it.** Cross-repo record, the
+**Status (1 Oct 2026): implemented and tested; [SAM-BIM/SAM#173](https://github.com/SAM-BIM/SAM/pull/173) is open against `sow/2026-Q3` and is NOT merged. Merge it before
+[SAM-BIM/SAM_UI#155](https://github.com/SAM-BIM/SAM_UI/pull/155) (same branch name), which stamps and reads it.** Cross-repo record, the
 investigation and the wiring: SAM_UI `documentation/PartO-BaselineReference-PR5.md`.
 
 - Branch `feature/parto-pr5-baseline-reference-2026-10-01`, from `sow/2026-Q3` `137c0bcf`. No SAM_Systems, SAM_Tas change.
