@@ -942,14 +942,18 @@ namespace SAM.Analytical
                 }
             }
 
-            Collect(airHandlingUnit);
+            if (airHandlingUnit != null)
+            {
+                Collect(airHandlingUnit);
+            }
 
             foreach (Space space in spaces ?? adjacencyCluster.GetRelatedObjects<Space>(ventilationSystem) ?? [])
             {
                 Collect(space);
             }
 
-            foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in adjacencyCluster.GetRelatedObjects<AirHandlingUnitAirMovement>(airHandlingUnit) ?? [])
+            //Null only from Modify.RemovePartORunState, for a Part O system whose unit is already gone.
+            foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in airHandlingUnit == null ? [] : adjacencyCluster.GetRelatedObjects<AirHandlingUnitAirMovement>(airHandlingUnit) ?? [])
             {
                 if (airHandlingUnitAirMovement != null && sAMObjects.Find(x => x.Guid == airHandlingUnitAirMovement.Guid) == null)
                 {
