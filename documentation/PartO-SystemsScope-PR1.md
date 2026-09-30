@@ -3,8 +3,8 @@
 
 # Part O PR-1 (SAM half): the shared Part O Systems materialisation scope
 
-**Status (30 Sep 2026): implemented and tested. The PR is open against `sow/2026-Q3` and is NOT merged. SAM_UI PR-1
-(same branch name) consumes the new public API, so merge this one first.**
+**Status (30 Sep 2026): implemented and tested. The PR is open (SAM-BIM/SAM#171) against `sow/2026-Q3` and is NOT merged. SAM_UI PR-1
+(SAM-BIM/SAM_UI#151) consumes the new public API, so merge this one first.**
 
 - Branch `feature/parto-systems-scope-2026-09-30`, from `sow/2026-Q3` `ffb61972` (after SAM#170 and its closeout).
 - Architecture authority: SAM_UI `documentation/PartO-ModelStateArchitecture.md` (approved 30 Sep 2026), step 2.
