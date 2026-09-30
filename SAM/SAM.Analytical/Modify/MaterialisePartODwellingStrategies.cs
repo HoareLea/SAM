@@ -906,7 +906,7 @@ namespace SAM.Analytical
         /// <para>
         /// Only duty-bearing plant is judged (PR-2, <see cref="Query.PartOAuthoredPlantDuty(AdjacencyCluster, VentilationSystem)"/>).
         /// A system whose terminals, movements and units state no duty - no finite non-zero design airflow, no air
-        /// movement, no unit supply condition, no selected product - is inert template metadata, whether or not it
+        /// movement, no selected product - is inert template metadata, whether or not it
         /// names a unit that exists: noted, left as authored, never refused. The unit-to-zones map is still recorded
         /// for every named unit, because the authored air-movement rule reads it.
         /// </para>

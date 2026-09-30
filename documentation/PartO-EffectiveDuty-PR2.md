@@ -33,7 +33,8 @@ treated an existing unit as plant (`AHU exists → active`), so the scaffold loo
 **Contradiction check.** The agreed rule's "finite stated AHU design airflow" has no representation in SAM. It does not
 contradict the rule, because every airflow a unit can have is derived from terminals or movements, and both are
 tested. No airflow parameter was invented: that would contradict SAM's documented "derived, never stored" design.
-**Owner to confirm** (see Open questions).
+**Owner confirmed (30 Sep 2026):** because SAM stores no AHU airflow, the derived terminal and movement airflow is the
+correct reading.
 
 ## What this PR adds (additive only)
 
@@ -46,8 +47,7 @@ public static PartOAuthoredPlantDuty Query.PartOAuthoredPlantDuty(this Adjacency
   `IsInert` (true when there is no evidence).
 - `PartOMechanicalDutyEvidence`: `Kind`, the stating object (`Guid`, `Name`), its owner (`Guid_Owner`, `Name_Owner`),
   `Value` (l/s, or NaN) and `Message`.
-- `Enums.PartOMechanicalDutyEvidenceKind`: `TerminalDesignAirFlow`, `SpaceAirMovement`, `UnitAirMovement`,
-  `SelectedProduct`.
+- `Enums.PartOMechanicalDutyEvidenceKind`: `TerminalDesignAirFlow`, `SpaceAirMovement`, `SelectedProduct`.
 - `internal Query.IsPartOEffectiveAirMovement(SpaceAirMovement)`.
 
 The public API is shaped for PR-6 ("Systems in this assessment") to list without parsing messages. No existing
@@ -60,12 +60,13 @@ A system is **active** when any of these holds on it, or on a unit it names (sup
    so there is one terminal definition);
 2. a `SpaceAirMovement` with a finite, non-zero `AirFlow`, related to the system, related to the unit, or naming the
    unit as `From`/`To`;
-3. an `AirHandlingUnitAirMovement` related to the unit (its authored plant-zone supply condition);
-4. a selected product on the unit (`VentilationUnitReference`);
-5. (1) or (2) on another system naming the same unit. A unit is one piece of plant, so a duty on one of its systems
+3. a selected product on the unit (`VentilationUnitReference`);
+4. (1) or (2) on another system naming the same unit. A unit is one piece of plant, so a duty on one of its systems
    makes the unit, and every system on it, active.
 
-Otherwise it is **inert**. The system type, names and unit supply temperatures are not read.
+Otherwise it is **inert**. The system type, names and unit supply temperatures are not read. A unit's supply condition
+(`AirHandlingUnitAirMovement`) is not duty on its own, because it states conditions, not an airflow. The airflow TAS
+gives it (`Query.AirFlow`) is summed from the unit's `SpaceAirMovement`s, which (2) already counts.
 
 ## How `AuthoredMechanicalSystems` changed
 
@@ -81,10 +82,11 @@ Otherwise it is **inert**. The system type, names and unit supply temperatures a
 
 ## Decisions and assumptions
 
-- **A unit's plant-zone condition counts as duty** (kind 3), even with no movement giving it a finite airflow. It is
-  what TAS builds the unit's plant zone from. Counting it keeps the old behaviour: such a unit already refused
-  `AuthoredAirMovementConflict` next to an MVHR dwelling. This is the conservative reading of "relevant air
-  movement". **Owner to confirm.**
+- **A unit's supply condition alone is not duty.** This is the owner's decision of 30 Sep 2026: the rule is about
+  effective duty, not about a condition object existing. The condition counts only through the finite, non-zero
+  movements its `Query.AirFlow` is summed from. Next to an MVHR dwelling, the unchanged movement rule still refuses the
+  condition itself (`AuthoredAirMovementConflict`), so no safety refusal is lost. It is just no longer
+  `SharedSystem`.
 - **A negative terminal airflow is duty.** This is PR-1 parity: a non-zero stated value is duty. The old materialiser
   test (`> 0`) did not count it.
 - **±∞ is not duty.** This is PR-1 parity. Such a model cannot be fingerprinted or saved anyway, because JSON cannot
@@ -117,7 +119,7 @@ Otherwise it is **inert**. The system type, names and unit supply temperatures a
   | 1 | Inert shared scaffold | passes, inert note, no `SharedSystem`, scaffold kept, PR-1 scope removes NV 1/UV 1/MV 1, baseline JSON unchanged |
   | 2 | Terminal duty | `SharedSystem` on `MV 1` and `AHU1` |
   | 3 | Air movement | refused, for each of: unit→room, unit exhaust, endpoint-only, and on the system |
-  | 4 | Unit airflow / supply condition | refused, with and without a finite `Query.AirFlow` |
+  | 4 | Unit airflow / supply condition | a finite `Query.AirFlow` (from a unit movement) refuses `SharedSystem`; a supply condition alone is inert (no `SharedSystem`, though the movement rule still refuses it next to an MVHR dwelling) |
   | 5 | Product | refused |
   | 6 | 0 / NaN / ±∞ / null terminal, and 0 / NaN movement | not duty; negative is duty |
   | 7 | One unit per flat | each unit carries its own product and duty; materialises; each flat reuses its own unit |
@@ -134,19 +136,20 @@ Otherwise it is **inert**. The system type, names and unit supply temperatures a
 
   | Mutation | Tests failed |
   |---|---|
-  | M1: AHU exists ⇒ active | 12 |
+  | M1: AHU exists ⇒ active | 13 |
   | M2: ignore terminal duty | 9 |
   | M3: ignore space movements | 6 |
   | M4: ignore product | 5 |
-  | M5: ignore the unit's airflow (its movements and supply condition) | 6 |
-  | M5b: ignore the supply condition only | 3 |
+  | M5: ignore the unit's airflow (its movements) | 5 |
+  | M10: a supply condition alone counts as duty | 3 |
   | M6a: NaN/zero terminal counts as duty | 5 |
   | M6b: NaN/zero movement counts as duty | 2 |
   | M7: genuine shared duty passes | 13 |
   | M8: a unit ignores its other systems | 6 |
   | M9: unit movements by relation only | 1 |
 
-  A clean rerun after the mutations gave 228/228.
+  A clean rerun after the mutations gave 228/228. M1, M5, M6b and M10 were rerun after the supply-condition change.
+  The others ran on the first head, and the code they mutate is unchanged.
 - **Real model, headless, no TAS, read-only** (`evidence/.../replay-output.txt`): `000000_SAM_AnalyticalModel-Cleaned.sam`,
   SHA256 `F561161F…0B78` before and after, folder listing identical, nothing written, nothing deleted.
   - Classification: `NV 1`, `UV 1`, `MV 1` and `AHU1` are all inert.
@@ -160,12 +163,11 @@ Otherwise it is **inert**. The system type, names and unit supply temperatures a
     refusal.
 - **SAM_Systems production code untouched** (`sow/2026-Q3` `aadb1b1`, clean).
 
-## Open questions for the owner
+## Owner decisions (30 Sep 2026, on review)
 
-1. SAM has no stated AHU design airflow. Is "derived from terminals or movements" the intended meaning? (This PR
-   assumes yes.)
-2. Should a unit's authored plant-zone condition (`AirHandlingUnitAirMovement`) alone make it active? (This PR says
-   yes, conservatively.)
+1. **Stated AHU airflow means the derived terminal and movement airflow**, since SAM stores none. No change needed.
+2. **A supply condition alone is not effective duty** unless it has a finite, non-zero airflow, that is, through its
+   movements. Applied: the standalone `UnitAirMovement` evidence kind was removed.
 
 ## Risks / not verified
 
@@ -178,6 +180,6 @@ Otherwise it is **inert**. The system type, names and unit supply temperatures a
 
 ## Next step
 
-Owner review, answering the two open questions. Then merge this PR (SAM CI green) and add the `PROJECT_PROGRESS.md`
+The owner review is done. Once SAM CI is green, merge this PR (SAM CI green) and add the `PROJECT_PROGRESS.md`
 closeout on `sow/2026-Q3`. Then PR-3 (SAM_Systems D2 scope), and the licensed Mixed acceptance on `-Cleaned.sam` with
 nothing deleted.

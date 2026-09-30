@@ -31,8 +31,6 @@ namespace SAM.Analytical
         /// (<see cref="IsPartOEffectiveMechanicalDuty(VentilationTerminal)"/>);</item>
         /// <item>a related <see cref="SpaceAirMovement"/> moving a finite, non-zero airflow. A unit's movement is found by
         /// relation or by an endpoint naming the unit, as <c>Modify.AddAirMovementObjects</c> writes it;</item>
-        /// <item>the unit's own authored supply condition (<see cref="AirHandlingUnitAirMovement"/>) - what TAS builds
-        /// the unit's plant zone from;</item>
         /// <item>a selected product on the unit (<see cref="AirHandlingUnitParameter.VentilationUnitReference"/>, read
         /// through <see cref="SelectedVentilationUnitReference"/>);</item>
         /// <item>any of the first two on another system that names the same unit. A unit is one piece of plant, so a
@@ -48,7 +46,9 @@ namespace SAM.Analytical
         /// An <see cref="AirHandlingUnit"/> stores no design airflow. Its duty is derived from the design terminals of
         /// its systems (<see cref="AirHandlingUnitDesignDuty"/>), and its intake from its space movements
         /// (<see cref="AirFlow(AdjacencyCluster, AirHandlingUnitAirMovement, out Profile)"/>). Both are covered by the
-        /// terminal and movement tests above, so there is no separate unit-airflow test to make.
+        /// terminal and movement tests above, so there is no separate unit-airflow test to make. The unit's supply
+        /// condition (<see cref="AirHandlingUnitAirMovement"/>) states no airflow of its own, so on its own it is not
+        /// duty: only the movements its airflow is summed from are.
         /// </para>
         ///
         /// <para>
@@ -94,7 +94,7 @@ namespace SAM.Analytical
         }
 
         /// <summary>
-        /// The same classification for one air handling unit: its own product, supply condition and movements, and the
+        /// The same classification for one air handling unit: its own product and movements, and the
         /// terminal and movement duty of every ventilation system that names it (supply or exhaust).
         /// </summary>
         /// <returns>Null where either argument is null.</returns>
@@ -152,7 +152,7 @@ namespace SAM.Analytical
         }
 
         /// <summary>
-        /// The unit's duty: its product, its supply condition, its effective air movements, then the own duty of every
+        /// The unit's duty: its product, its effective air movements, then the own duty of every
         /// other system that names it.
         /// </summary>
         private static void PartOUnitDutyEvidence(AdjacencyCluster adjacencyCluster, AirHandlingUnit airHandlingUnit, Guid guid_VentilationSystem_Asking, List<PartOMechanicalDutyEvidence> evidence, HashSet<Guid> guids_Seen)
@@ -172,25 +172,10 @@ namespace SAM.Analytical
                     string.Format("'{0}': selected product '{1}'", name_Owner, ventilationUnitReference)));
             }
 
-            List<AirHandlingUnitAirMovement> airHandlingUnitAirMovements = adjacencyCluster.GetRelatedObjects<AirHandlingUnitAirMovement>(airHandlingUnit) ?? [];
-            airHandlingUnitAirMovements.Sort(CompareByName);
-
-            foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in airHandlingUnitAirMovements)
-            {
-                if (airHandlingUnitAirMovement is null || !guids_Seen.Add(airHandlingUnitAirMovement.Guid))
-                {
-                    continue;
-                }
-
-                evidence.Add(new PartOMechanicalDutyEvidence(
-                    PartOMechanicalDutyEvidenceKind.UnitAirMovement,
-                    airHandlingUnitAirMovement.Guid,
-                    airHandlingUnitAirMovement.Name,
-                    airHandlingUnit.Guid,
-                    name_Owner,
-                    double.NaN,
-                    string.Format("'{0}': authored supply condition '{1}'", name_Owner, airHandlingUnitAirMovement.Name)));
-            }
+            //The unit's own supply condition (AirHandlingUnitAirMovement) is NOT evidence by itself (owner, PR-2): it
+            //states conditions, never an airflow. The airflow TAS gives it (Query.AirFlow) is summed from the unit's
+            //space movements below, so a condition with a finite airflow is duty-bearing through those, and one
+            //without is not.
 
             //By relation, and by an endpoint naming the unit - Modify.AddAirMovementObjects writes both, and the
             //materialiser's own movement rule reads both.

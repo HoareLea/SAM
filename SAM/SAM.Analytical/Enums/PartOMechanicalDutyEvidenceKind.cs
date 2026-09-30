@@ -21,9 +21,6 @@ namespace SAM.Analytical.Enums
         /// <summary>A <see cref="SpaceAirMovement"/> of the system or unit moves a finite, non-zero airflow.</summary>
         [Description("Space Air Movement")] SpaceAirMovement,
 
-        /// <summary>The unit carries its own authored supply condition (<see cref="AirHandlingUnitAirMovement"/>).</summary>
-        [Description("Unit Air Movement")] UnitAirMovement,
-
         /// <summary>The unit has a ventilation unit product selected (<see cref="AirHandlingUnitParameter.VentilationUnitReference"/>).</summary>
         [Description("Selected Product")] SelectedProduct,
     }

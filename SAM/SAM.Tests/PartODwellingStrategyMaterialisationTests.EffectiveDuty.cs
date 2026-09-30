@@ -278,14 +278,16 @@ namespace SAM.Tests
 
         /// <summary>
         /// The unit's airflow. SAM stores none on an <see cref="AirHandlingUnit"/>: it is derived - from the systems'
-        /// terminals (<c>AirHandlingUnitDesignDuty</c>, case 2) and from the unit's own movements
-        /// (<c>Query.AirFlow</c>, case 3). What the unit itself can carry is its authored supply condition, from which TAS
-        /// builds its plant zone. That makes it active on its own - even before any movement gives it a finite airflow.
+        /// terminals (<c>AirHandlingUnitDesignDuty</c>, case 2) and from the unit's own movements (<c>Query.AirFlow</c>).
+        /// The unit's supply condition (<see cref="AirHandlingUnitAirMovement"/>) states conditions, not an airflow, so
+        /// on its own it is NOT duty (owner, PR-2): the scaffold is not shared plant, though the unchanged movement rule
+        /// still refuses the condition itself beside an MVHR dwelling. Once a movement gives the unit a finite
+        /// <c>Query.AirFlow</c>, that movement is the duty, and the shared refusal stands.
         /// </summary>
         [Theory]
         [InlineData(false)]
         [InlineData(true)]
-        public void EffectiveDuty_UnitSupplyCondition_OnTheSharedScaffold_IsActive_AndRefused(bool withFlow)
+        public void EffectiveDuty_UnitSupplyCondition_IsDutyOnlyThroughAFiniteUnitAirflow(bool withFlow)
         {
             Guid guid_AirHandlingUnitAirMovement = Guid.Empty;
             AnalyticalModel baseline = Edited(LegacyScaffoldBaseline(), adjacencyCluster =>
@@ -312,10 +314,23 @@ namespace SAM.Tests
 
             PartOAuthoredPlantDuty partOAuthoredPlantDuty = adjacencyCluster_Baseline.PartOAuthoredPlantDuty(UnitNamed(adjacencyCluster_Baseline, Unit_Legacy));
             output.WriteLine(partOAuthoredPlantDuty.ToString());
-            Assert.Contains(partOAuthoredPlantDuty.Evidence, x => x.Kind == PartOMechanicalDutyEvidenceKind.UnitAirMovement && x.Guid == guid_AirHandlingUnitAirMovement);
-            Assert.Equal(withFlow, partOAuthoredPlantDuty.Evidence.Any(x => x.Kind == PartOMechanicalDutyEvidenceKind.SpaceAirMovement));
+            Assert.Equal(!withFlow, partOAuthoredPlantDuty.IsInert);
+            Assert.All(partOAuthoredPlantDuty.Evidence, x => Assert.Equal(PartOMechanicalDutyEvidenceKind.SpaceAirMovement, x.Kind));
+            if (withFlow)
+            {
+                Assert.Equal(airFlow * 1000.0, Assert.Single(partOAuthoredPlantDuty.Evidence).Value, 9);
+            }
 
-            AssertSharedLegacyPlantRefused(MaterialiseOwner(OwnerSelection(baseline)));
+            PartOMaterialisation materialisation = MaterialiseOwner(OwnerSelection(baseline));
+            if (withFlow)
+            {
+                AssertSharedLegacyPlantRefused(materialisation);
+            }
+            else
+            {
+                AssertNoSharedSystem(materialisation);
+                Assert.Contains(materialisation.Refusals, x => x.Reason == PartOMaterialisationRefusalReason.AuthoredAirMovementConflict && x.Subject == Unit_Legacy);
+            }
         }
 
         [Fact]
@@ -696,7 +711,7 @@ namespace SAM.Tests
             output.WriteLine(partOAuthoredPlantDuty.ToString());
 
             Assert.Equal(
-                [PartOMechanicalDutyEvidenceKind.TerminalDesignAirFlow, PartOMechanicalDutyEvidenceKind.TerminalDesignAirFlow, PartOMechanicalDutyEvidenceKind.SelectedProduct, PartOMechanicalDutyEvidenceKind.UnitAirMovement, PartOMechanicalDutyEvidenceKind.SpaceAirMovement],
+                [PartOMechanicalDutyEvidenceKind.TerminalDesignAirFlow, PartOMechanicalDutyEvidenceKind.TerminalDesignAirFlow, PartOMechanicalDutyEvidenceKind.SelectedProduct, PartOMechanicalDutyEvidenceKind.SpaceAirMovement],
                 partOAuthoredPlantDuty.Evidence.Select(x => x.Kind));
             Assert.Equal(["a terminal", "b terminal"], partOAuthoredPlantDuty.Evidence.Take(2).Select(x => x.Name));
             Assert.Equal(10.0, partOAuthoredPlantDuty.Evidence.Last().Value, 9);

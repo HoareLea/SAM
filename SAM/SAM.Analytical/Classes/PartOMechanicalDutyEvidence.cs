@@ -8,7 +8,7 @@ namespace SAM.Analytical
 {
     /// <summary>
     /// One fact that makes authored ventilation plant duty-bearing, found by <c>Query.PartOAuthoredPlantDuty</c>: a
-    /// design terminal airflow, an air movement, a unit's supply condition or a selected product.
+    /// design terminal airflow, an air movement or a selected product.
     /// </summary>
     public class PartOMechanicalDutyEvidence
     {
