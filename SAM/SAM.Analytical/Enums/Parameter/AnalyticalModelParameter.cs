@@ -67,5 +67,13 @@ namespace SAM.Analytical
         /// <see cref="Analytical.PartOMaterialisationRecord"/>.
         /// </summary>
         [ParameterProperties("Part O Materialisation Record", "Part O Materialisation Record"), SAMObjectParameterValue(typeof(PartOMaterialisationRecord))] PartOMaterialisationRecord,
+
+        /// <summary>
+        /// The ventilation unit product the engineer chose by hand for each dwelling - Part O design input on the
+        /// design model, applied by <c>Modify.PreparePartOIteration</c> under manual authority to the units it
+        /// builds. Absent means no hand-picked product, never an error. Never written from a preparation or a
+        /// result. <see cref="Analytical.PartOManualEquipmentSelection"/> sets that out in full.
+        /// </summary>
+        [ParameterProperties("Part O Manual Equipment Selection", "Part O Manual Equipment Selection"), SAMObjectParameterValue(typeof(PartOManualEquipmentSelection))] PartOManualEquipmentSelection,
     }
 }

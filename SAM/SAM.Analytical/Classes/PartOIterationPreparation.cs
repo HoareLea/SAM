@@ -103,6 +103,13 @@ namespace SAM.Analytical
         public List<AirHandlingUnit> AirHandlingUnits { get; } = [];
 
         /// <summary>
+        /// The dwelling zone each entry of <see cref="AirHandlingUnits"/> was built for, item for item -
+        /// <c>Guid.Empty</c> for the zone-less whole-model case. The identity a per-dwelling choice is keyed by
+        /// (<see cref="PartOManualEquipmentSelection"/>), so nothing has to recover a dwelling from a unit by name.
+        /// </summary>
+        public List<System.Guid> DwellingZoneGuids { get; } = [];
+
+        /// <summary>
         /// The reusable ventilation unit product each dwelling was fitted with, one entry per successful
         /// selection. Empty where no product catalogue was offered, which is Iteration 1a's state and not
         /// a failure.
