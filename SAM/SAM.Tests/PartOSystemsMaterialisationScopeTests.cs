@@ -414,6 +414,32 @@ namespace SAM.Tests
             Assert.Equal(PartOSystemsScopeRefusalReason.IdentityNotOnModel, Assert.Single(Query.PartOSystemsMaterialisationScope(fixture.AdjacencyCluster, [.. fixture.Guids_Built, guid_Cooling], fixture.Guids_Space_Dwelling).Refusals).Reason);
         }
 
+        /// <summary>
+        /// Fail closed, structurally: a result that carries a refusal never hands out a working copy or any identity, even
+        /// if a future caller builds it with one.
+        /// </summary>
+        [Fact]
+        public void A_refused_result_never_carries_a_working_copy()
+        {
+            Fixture fixture = Scaffolded();
+
+            PartOSystemsMaterialisationScope scope = new(
+                fixture.AdjacencyCluster,
+                fixture.Guids_Built,
+                [fixture.VentilationSystem_NV.Guid],
+                [new PartOSystemsScopeExclusion(fixture.VentilationSystem_NV, 0, "note")],
+                "summary",
+                [new PartOSystemsScopeRefusal(PartOSystemsScopeRefusalReason.NotRemovable, "refused")]);
+
+            Assert.False(scope.IsScoped);
+            Assert.Null(scope.AdjacencyCluster);
+            Assert.Empty(scope.Guids_Retained);
+            Assert.Empty(scope.Guids_Removed);
+            Assert.Empty(scope.Exclusions);
+            Assert.Empty(scope.Notes);
+            Assert.Equal("refused", scope.Refusal);
+        }
+
         /// <summary>The dwelling scope only words a refusal; it never changes what is kept or left out.</summary>
         [Fact]
         public void The_dwelling_scope_does_not_change_the_scope_taken()
