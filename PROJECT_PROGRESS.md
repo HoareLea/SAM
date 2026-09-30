@@ -12,6 +12,34 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): Modify.RemovePartORunState - a clean baseline from a Prepare & Run model (30 Sep 2026) - MERGED as SAM#169 (`19531bd9`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#169](https://github.com/SAM-BIM/SAM/pull/169), branch
+`feature/parto-remove-results-2026-09-30`, PR head `a66a1393`, merge `19531bd9`. CI green on the head (build (Release), spdx,
+test (Release)). SAM only; SAM_Tas unchanged. It is the library half of SAM_UI "Results > Part O > Remove Results...";
+companion [SAM-BIM/SAM_UI#149](https://github.com/SAM-BIM/SAM_UI/pull/149) (merged after this). Full record:
+`documentation/PartO-RemoveRunState-PR.md`.
+
+- **Work.** `Modify.RemovePartORunState(this AnalyticalModel, out removed, out kept)` returns a copy (input unmodified) with the
+  run output removed (scenarios, provenance, results, cluster design days, Part O MVHR systems + units + terminals + movements)
+  and per-space Part F conditions restored only on evidence. It never decides "clean"; the caller asks
+  `Query.PartOBaselineFindings`. Also: validator messages point at the cleaner; `RemoveBaseMVHRAirMovementObjects` accepts a null
+  unit.
+- **Decisions.** D1 amended for the provable case only (base held in model, states no airflow, clone agrees elsewhere).
+  Rules live in SAM beside the validator so SAM_UI duplicates nothing.
+- **Files.** `SAM.Analytical/Modify/RemovePartORunState.cs` (new), `Query/PartOBaselineFindings.cs`,
+  `Modify/PreparePartOIteration.cs`, `SAM.Tests/PartODwellingStrategyMaterialisationTests.RemoveRunState.cs` (new, 7 tests),
+  `documentation/PartO-RemoveRunState-PR.md`.
+- **Validation.** Full `SAM.Tests` 2695/2695 (incl. 7 new); 3 mutation checks each fail the intended tests; mixed
+  materialisation of the cleaned copy equals that of the original baseline; real owner model 6 findings -> 0, source SHA
+  unchanged; native SAM_UI smoke PASS.
+- **Risks.** A per-space airflow basis the held base did not state is not recoverable; models with no held base condition are
+  never restored (cleaned copy still FAILs, by design); terminals of non-assessed dwellings connected to no Part O system are
+  kept.
+- **Next step.** None required. Optional: the 30 Sep acceptance's licensed Mixed Design run (Flat 1 NV, Flat 2 MVHR, Flat 3
+  MVHR + cooling) on a cleaned copy. SAM_Deploy needs a pass to ship it.
+
+
 ## Current (Part O stream): TM59 natural-ventilation report uses Actual | Limit | Margin | Status (29 Sep 2026) - MERGED as SAM#168 (`6d29803a`)
 
 **Status.** Merged into `sow/2026-Q3`: [SAM-BIM/SAM#168](https://github.com/SAM-BIM/SAM/pull/168), branch
