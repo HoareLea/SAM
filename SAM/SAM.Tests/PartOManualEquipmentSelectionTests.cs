@@ -237,6 +237,78 @@ namespace SAM.Tests
             Assert.Contains(partOIterationPreparation.Warnings, x => x.Contains("format this build does not read", StringComparison.Ordinal));
         }
 
+        // ---- The original public API -------------------------------------------------------------------------
+
+        /// <summary>
+        /// Binary compatibility: the original six-parameter <c>PreparePartOIteration</c> still exists exactly - public,
+        /// static, an extension method, the same parameter types in the same order and the same two defaults - so a
+        /// caller compiled against the previous SAM still binds. The manual-aware overload is a separate method.
+        /// </summary>
+        [Fact]
+        public void The_original_PreparePartOIteration_signature_is_unchanged()
+        {
+            Type[] types = [typeof(AnalyticalModel), typeof(PartOIteration), typeof(IEnumerable<Zone>), typeof(Dictionary<Guid, string>), typeof(IEnumerable<VentilationUnitCapacityDescriptor>), typeof(bool)];
+
+            System.Reflection.MethodInfo methodInfo = typeof(Analytical.Modify).GetMethod(nameof(Analytical.Modify.PreparePartOIteration), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, null, types, null);
+
+            Assert.NotNull(methodInfo);
+            Assert.Equal(typeof(PartOIterationPreparation), methodInfo.ReturnType);
+            Assert.True(methodInfo.IsDefined(typeof(System.Runtime.CompilerServices.ExtensionAttribute), false));
+
+            System.Reflection.ParameterInfo[] parameterInfos = methodInfo.GetParameters();
+            Assert.Equal(["analyticalModel", "partOIteration", "zones", "dictionary_VentilationStrategy", "ventilationUnitCapacityDescriptors", "isolate"], parameterInfos.Select(x => x.Name));
+            Assert.All(parameterInfos.Take(4), x => Assert.False(x.HasDefaultValue));
+            Assert.True(parameterInfos[4].HasDefaultValue);
+            Assert.Null(parameterInfos[4].DefaultValue);
+            Assert.True(parameterInfos[5].HasDefaultValue);
+            Assert.Equal(false, parameterInfos[5].DefaultValue);
+
+            //The manual-aware overload is the only other one, and it is not a replacement of this one.
+            System.Reflection.MethodInfo methodInfo_Manual = typeof(Analytical.Modify).GetMethod(nameof(Analytical.Modify.PreparePartOIteration), System.Reflection.BindingFlags.Public | System.Reflection.BindingFlags.Static, null, [.. types, typeof(PartOManualEquipmentSelection)], null);
+            Assert.NotNull(methodInfo_Manual);
+            Assert.NotEqual(methodInfo, methodInfo_Manual);
+        }
+
+        /// <summary>
+        /// The original overload is the manual-aware one with no selection. It selects nothing without a catalogue
+        /// - even from a model that carries hand-picked products, since it never reads the model parameter - and with
+        /// a catalogue it chooses exactly what the new overload chooses. The short calls still compile and bind to it.
+        /// </summary>
+        [Fact]
+        public void The_original_overload_behaves_as_the_new_one_with_no_manual_selection()
+        {
+            AnalyticalModel analyticalModel = TwoDwellingModel(out Zone zone_1, out Zone zone_2);
+
+            PartOManualEquipmentSelection partOManualEquipmentSelection = new();
+            partOManualEquipmentSelection.Set(zone_1.Guid, product_A);
+            partOManualEquipmentSelection.Set(zone_2.Guid, product_B);
+            Assert.True(analyticalModel.SetValue(AnalyticalModelParameter.PartOManualEquipmentSelection, partOManualEquipmentSelection));
+
+            Dictionary<Guid, string> dictionary = analyticalModel.GetZones().ToDictionary(x => x.Guid, x => "MVRE");
+
+            //Four arguments, as the long-standing callers write it: no catalogue, no product.
+            PartOIterationPreparation partOIterationPreparation_Legacy = analyticalModel.PreparePartOIteration(PartOIteration.BasePassive, null, dictionary);
+            Assert.Null(partOIterationPreparation_Legacy.Refusal);
+            Assert.All(partOIterationPreparation_Legacy.AnalyticalModel.AdjacencyCluster.GetObjects<AirHandlingUnit>(), x => Assert.Null(x.SelectedVentilationUnitReference()));
+            Assert.Equal(2, partOIterationPreparation_Legacy.DwellingZoneGuids.Count);
+
+            //The same, through the new overload with no selection.
+            PartOIterationPreparation partOIterationPreparation_New = analyticalModel.PreparePartOIteration(PartOIteration.BasePassive, null, dictionary, null, false, null);
+            Assert.Equal(SelectedModels(partOIterationPreparation_New).Count, SelectedModels(partOIterationPreparation_Legacy).Count);
+            Assert.All(partOIterationPreparation_New.AnalyticalModel.AdjacencyCluster.GetObjects<AirHandlingUnit>(), x => Assert.Null(x.SelectedVentilationUnitReference()));
+
+            //Five and six arguments, with a catalogue: the automatic answer is the same either way.
+            List<VentilationUnitCapacityDescriptor> catalogue = [Descriptor("MVHR-50", 50, 50), Descriptor("MVHR-200", 200, 200)];
+
+            List<string> models_Five = SelectedModels(analyticalModel.PreparePartOIteration(PartOIteration.BasePassive, null, dictionary, catalogue));
+            List<string> models_Six = SelectedModels(analyticalModel.PreparePartOIteration(PartOIteration.BasePassive, null, dictionary, catalogue, false));
+            List<string> models_New = SelectedModels(analyticalModel.PreparePartOIteration(PartOIteration.BasePassive, null, dictionary, catalogue, false, null));
+
+            Assert.Equal(models_New, models_Five);
+            Assert.Equal(models_New, models_Six);
+            Assert.DoesNotContain(models_New, x => x.EndsWith(": -", StringComparison.Ordinal));
+        }
+
         // -----------------------------------------------------------------------------------------------------
 
         private static PartOIterationPreparation Prepare(AnalyticalModel analyticalModel, List<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, PartOManualEquipmentSelection partOManualEquipmentSelection)

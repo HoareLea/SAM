@@ -42,8 +42,14 @@ The new type follows that set's pattern (zone-guid keyed, canonical, schema-vers
 
 ## Preparation
 
-`Modify.PreparePartOIteration` gains a final optional parameter, `PartOManualEquipmentSelection`. Null keeps every
-existing behaviour exactly.
+`Modify.PreparePartOIteration` gains a **new overload** with a seventh parameter, `PartOManualEquipmentSelection`. All
+seven parameters are required. Null keeps every existing behaviour exactly.
+
+**Binary compatibility.** The original six-parameter signature is kept unchanged, as a public overload, defaults
+included (`ventilationUnitCapacityDescriptors = null`, `isolate = false`). It delegates to the new overload with no
+selection. So a caller compiled against the previous SAM still binds, and every existing source call (4, 5 or 6
+arguments) resolves to it. The new overload deliberately has no optional parameters: two overloads with optional
+tails would make those short calls ambiguous.
 
 - **Manual authority only**, meaning no catalogue was offered, and only on the MVHR route:
   - each dwelling's built or reused unit is assigned its chosen product through `Modify.AssignVentilationUnit`, the
@@ -61,14 +67,14 @@ existing behaviour exactly.
 
 - `SAM/SAM.Analytical/Classes/PartOManualEquipmentSelection.cs` (new)
 - `SAM/SAM.Analytical/Enums/Parameter/AnalyticalModelParameter.cs`: `PartOManualEquipmentSelection`, appended last
-- `SAM/SAM.Analytical/Modify/PreparePartOIteration.cs`: the optional parameter, and dwelling zones through `DwellingSpaceGroups`
+- `SAM/SAM.Analytical/Modify/PreparePartOIteration.cs`: the original overload kept, the manual-aware overload, and dwelling zones through `DwellingSpaceGroups`
 - `SAM/SAM.Analytical/Classes/PartOIterationPreparation.cs`: `DwellingZoneGuids`
-- `SAM/SAM.Tests/PartOManualEquipmentSelectionTests.cs` (new, 8 tests)
+- `SAM/SAM.Tests/PartOManualEquipmentSelectionTests.cs` (new, 10 tests)
 - `documentation/PartO-ManualEquipmentSelection-PR.md` (this record)
 
 ## Evidence
 
-- **`PartOManualEquipmentSelectionTests`: 8/8.**
+- **`PartOManualEquipmentSelectionTests`: 10/10.**
   - Set, replace, remove and copy-out semantics; nothing that identifies nothing is stored.
   - Canonical round trip through the model's own JSON, and `Matches`.
   - Absent means none, and an unknown schema is invalid.
@@ -79,10 +85,16 @@ existing behaviour exactly.
   - A dwelling with no choice gets no product.
   - 1a is unchanged, and an automatic run selects exactly what it selects without the selection (with a note).
   - An unreadable selection is not applied, with a warning.
-- **Full SAM.Tests: 2703/2703.**
+  - **The original signature is pinned by reflection**: public static extension method, the same six parameter types,
+    names, order and defaults, and it is a separate method from the new overload.
+  - **The original overload behaves as the new one with no selection.** With 4 arguments it selects nothing, even
+    from a model carrying hand-picked products (it never reads the parameter). With 5 or 6 arguments and a catalogue
+    it chooses exactly what the new overload chooses.
+- **Full SAM.Tests: 2705/2705.**
 - **Mutation checks.**
   - Assignment skipped: the two preparation tests fail, and three SAM_UI journey tests fail.
   - Manual applied under a catalogue: `Without_manual_authority_nothing_changes` fails.
+  - The legacy overload's `isolate` default changed: the signature pin fails.
 
 ## Risks
 

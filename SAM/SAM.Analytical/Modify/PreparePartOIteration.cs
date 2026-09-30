@@ -10,6 +10,16 @@ namespace SAM.Analytical
     public static partial class Modify
     {
         /// <summary>
+        /// Prepares an Approved Document O base iteration - the original public signature, kept exactly (defaults
+        /// included) so existing compiled callers still bind. Delegates to the full overload with no hand-picked
+        /// product selection, which is every existing behaviour unchanged. See that overload for the parameters.
+        /// </summary>
+        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, bool isolate = false)
+        {
+            return PreparePartOIteration(analyticalModel, partOIteration, zones, dictionary_VentilationStrategy, ventilationUnitCapacityDescriptors, isolate, null);
+        }
+
+        /// <summary>
         /// Prepares a model for one Approved Document O base iteration: settles the ventilation route the
         /// assessment is being made over, decides from that route whether the Approved Document F airflows
         /// belong on the model, carries them where they do, reports how the model's authored opening
@@ -92,8 +102,8 @@ namespace SAM.Analytical
         /// </param>
         /// <param name="partOManualEquipmentSelection">
         /// The products the engineer chose by hand, per dwelling zone - Part O design input read off the design
-        /// model (<c>AnalyticalModelParameter.PartOManualEquipmentSelection</c>). <b>Optional, and null keeps every
-        /// existing behaviour exactly.</b>
+        /// model (<c>AnalyticalModelParameter.PartOManualEquipmentSelection</c>). <b>Null keeps every existing behaviour
+        /// exactly</b> - which is what the original six-parameter overload passes.
         /// <para>
         /// Applied only under manual authority - no <paramref name="ventilationUnitCapacityDescriptors"/> - and
         /// only on the MVHR route: each dwelling's newly built or reused unit is assigned its chosen product
@@ -107,7 +117,7 @@ namespace SAM.Analytical
         /// here, and nothing here writes it.
         /// </para>
         /// </param>
-        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, bool isolate = false, PartOManualEquipmentSelection partOManualEquipmentSelection = null)
+        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, bool isolate, PartOManualEquipmentSelection partOManualEquipmentSelection)
         {
             PartOIterationPreparation result = new();
 
