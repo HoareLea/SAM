@@ -10,6 +10,16 @@ namespace SAM.Analytical
     public static partial class Modify
     {
         /// <summary>
+        /// Prepares an Approved Document O base iteration - the original public signature, kept exactly (defaults
+        /// included) so existing compiled callers still bind. Delegates to the full overload with no hand-picked
+        /// product selection, which is every existing behaviour unchanged. See that overload for the parameters.
+        /// </summary>
+        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, bool isolate = false)
+        {
+            return PreparePartOIteration(analyticalModel, partOIteration, zones, dictionary_VentilationStrategy, ventilationUnitCapacityDescriptors, isolate, null);
+        }
+
+        /// <summary>
         /// Prepares a model for one Approved Document O base iteration: settles the ventilation route the
         /// assessment is being made over, decides from that route whether the Approved Document F airflows
         /// belong on the model, carries them where they do, reports how the model's authored opening
@@ -90,7 +100,24 @@ namespace SAM.Analytical
         /// asking - the same boundary <c>Query.CapableSystems</c> draws for system templates.
         /// </para>
         /// </param>
-        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors = null, bool isolate = false)
+        /// <param name="partOManualEquipmentSelection">
+        /// The products the engineer chose by hand, per dwelling zone - Part O design input read off the design
+        /// model (<c>AnalyticalModelParameter.PartOManualEquipmentSelection</c>). <b>Null keeps every existing behaviour
+        /// exactly</b> - which is what the original six-parameter overload passes.
+        /// <para>
+        /// Applied only under manual authority - no <paramref name="ventilationUnitCapacityDescriptors"/> - and
+        /// only on the MVHR route: each dwelling's newly built or reused unit is assigned its chosen product
+        /// through <c>Modify.AssignVentilationUnit</c>, the same write the Review window's manual table commits.
+        /// A dwelling with no choice keeps the unit exactly as preparation leaves it. With a catalogue, an
+        /// automatic rule is the authority and the manual selection is not read (a note says so).
+        /// </para>
+        /// <para>
+        /// <b>The caller decides the iteration.</b> Iteration 1a is also prepared with no catalogue and must select
+        /// no product, so only a caller preparing a manual Iteration 2 passes this. It is never read off the model
+        /// here, and nothing here writes it.
+        /// </para>
+        /// </param>
+        public static PartOIterationPreparation PreparePartOIteration(this AnalyticalModel analyticalModel, PartOIteration partOIteration, IEnumerable<Zone> zones, Dictionary<Guid, string> dictionary_VentilationStrategy, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, bool isolate, PartOManualEquipmentSelection partOManualEquipmentSelection)
         {
             PartOIterationPreparation result = new();
 
@@ -222,7 +249,7 @@ namespace SAM.Analytical
                 //and a Grasshopper zones_ left unconnected all pass null here, and PrepareBaseMVHR keeps
                 //exactly its previous whole-model behaviour for them. A caller-named subset is carried
                 //through instead of discarded: see PrepareBaseMVHR for why a subset cannot be ignored.
-                analyticalModel_Applied = PrepareBaseMVHR(analyticalModel_Applied, zones == null ? null : zones_Assessed, ventilationUnitCapacityDescriptors, result);
+                analyticalModel_Applied = PrepareBaseMVHR(analyticalModel_Applied, zones == null ? null : zones_Assessed, ventilationUnitCapacityDescriptors, result, partOManualEquipmentSelection);
 
                 if (result.Refusal != null)
                 {
@@ -458,7 +485,7 @@ namespace SAM.Analytical
         /// <c>PartFCalculator</c>'s own whole-model sizing mode - see <c>Query.PartFTransferAirSpaces</c>.
         /// </para>
         /// </summary>
-        private static AnalyticalModel PrepareBaseMVHR(AnalyticalModel analyticalModel, List<Zone> zones_Assessed, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, PartOIterationPreparation result)
+        private static AnalyticalModel PrepareBaseMVHR(AnalyticalModel analyticalModel, List<Zone> zones_Assessed, IEnumerable<VentilationUnitCapacityDescriptor> ventilationUnitCapacityDescriptors, PartOIterationPreparation result, PartOManualEquipmentSelection partOManualEquipmentSelection = null)
         {
             //ONE cluster instance, taken once and put back once. AnalyticalModel.AdjacencyCluster returns a
             //fresh copy on every read, so reading it twice would silently discard the first half of this.
@@ -496,7 +523,7 @@ namespace SAM.Analytical
             //all", PartFCalculator's own single-dwelling whole-model mode, and is the ONLY case that still
             //builds one system for everything. Every other case - including an unconnected zones_ - is
             //partitioned dwelling by dwelling, never merged.
-            List<List<Space>> spaceGroups_Dwelling = DwellingSpaceGroups(adjacencyCluster, zones_Assessed, out List<string> notes_Partition);
+            List<List<Space>> spaceGroups_Dwelling = DwellingSpaceGroups(adjacencyCluster, zones_Assessed, out List<string> notes_Partition, out List<Guid> guids_Zone_Dwelling);
 
             result.Notes.AddRange(notes_Partition);
 
@@ -510,8 +537,32 @@ namespace SAM.Analytical
             double supplyDuty_Total = 0;
             double extractDuty_Total = 0;
 
-            foreach (List<Space> spaces_Dwelling_Assessed in spaceGroups_Dwelling)
+            //The hand-picked products apply under manual authority only. With a catalogue an automatic rule chooses,
+            //and a stored manual choice must not silently override it; a selection of an unknown schema is not read.
+            PartOManualEquipmentSelection partOManualEquipmentSelection_Applied = null;
+            if (partOManualEquipmentSelection is not null)
             {
+                if (ventilationUnitCapacityDescriptors is not null)
+                {
+                    result.Notes.Add("A hand-picked product selection was supplied, but a product catalogue was offered, so each dwelling's product was chosen by the automatic rule and the hand-picked products were not applied.");
+                }
+                else if (!partOManualEquipmentSelection.IsValid)
+                {
+                    string warning = string.Format("The hand-picked product selection stored on the model uses a format this build does not read ('{0}'), so no hand-picked product was applied. Choose the products again.", partOManualEquipmentSelection.SchemaRead ?? "?");
+                    result.Notes.Add(warning);
+                    result.Warnings.Add(warning);
+                }
+                else
+                {
+                    partOManualEquipmentSelection_Applied = partOManualEquipmentSelection;
+                }
+            }
+
+            for (int index_Dwelling = 0; index_Dwelling < spaceGroups_Dwelling.Count; index_Dwelling++)
+            {
+                List<Space> spaces_Dwelling_Assessed = spaceGroups_Dwelling[index_Dwelling];
+                Guid guid_Zone_Dwelling = guids_Zone_Dwelling[index_Dwelling];
+
                 //The system, the unit, the derived duty, the runtime movements, the transfer air and the
                 //balance of THIS dwelling - shared with Modify.MaterialisePartODwellingStrategies, which builds
                 //the same design per MVHR dwelling of a mixed model. See RealizeBaseMVHRDwelling.
@@ -557,8 +608,24 @@ namespace SAM.Analytical
                     airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(airHandlingUnit.Guid) ?? airHandlingUnit;
                 }
 
+                //Manual authority: the engineer's own choice for THIS dwelling, read from the design input and
+                //written onto the unit this preparation built - never taken from an earlier run's unit. The same
+                //write the Review window's manual table commits, so it moves no airflow of any kind.
+                VentilationUnitReference ventilationUnitReference_Manual = guid_Zone_Dwelling == Guid.Empty ? null : partOManualEquipmentSelection_Applied?.Product(guid_Zone_Dwelling);
+                if (ventilationUnitReference_Manual is not null)
+                {
+                    if (adjacencyCluster.AssignVentilationUnit(airHandlingUnit, ventilationUnitReference_Manual, out List<string> notes_Manual, out List<string> refusals_Manual))
+                    {
+                        airHandlingUnit = adjacencyCluster.GetObject<AirHandlingUnit>(airHandlingUnit.Guid) ?? airHandlingUnit;
+                    }
+
+                    result.Notes.AddRange(notes_Manual);
+                    result.Warnings.AddRange(refusals_Manual);
+                }
+
                 result.VentilationSystems.Add(ventilationSystem);
                 result.AirHandlingUnits.Add(airHandlingUnit);
+                result.DwellingZoneGuids.Add(guid_Zone_Dwelling);
                 supplyDuty_Total += supplyDuty_Lps;
                 extractDuty_Total += extractDuty_Lps;
             }
@@ -769,15 +836,20 @@ namespace SAM.Analytical
         /// reads as "every space in the cluster", exactly the previous unscoped behaviour.
         /// </para>
         /// </summary>
-        private static List<List<Space>> DwellingSpaceGroups(AdjacencyCluster adjacencyCluster, List<Zone> zones_Assessed, out List<string> notes)
+        private static List<List<Space>> DwellingSpaceGroups(AdjacencyCluster adjacencyCluster, List<Zone> zones_Assessed, out List<string> notes, out List<Guid> guids_Zone)
         {
             notes = [];
+
+            //Item for item with the groups: the dwelling zone each group is, or Guid.Empty for the zone-less case.
+            guids_Zone = [];
 
             List<Zone> zones_Cluster = adjacencyCluster.GetZones() ?? [];
 
             if (zones_Cluster.Count == 0)
             {
                 notes.Add("The model carries no zones, so it was treated as a single dwelling - the same whole-model mode Approved Document F sizes a zone-less model at - and one Base MVHR system was built for every space.");
+
+                guids_Zone.Add(Guid.Empty);
 
                 return [null];
             }
@@ -821,6 +893,7 @@ namespace SAM.Analytical
                 }
 
                 result.Add(spaces_Zone);
+                guids_Zone.Add(zone.Guid);
             }
 
             notes.Add(result.Count == 1
