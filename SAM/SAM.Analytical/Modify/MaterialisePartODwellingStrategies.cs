@@ -41,7 +41,9 @@ namespace SAM.Analytical
         /// whose cooling operating airflow falls outside that guidance's published range or the unit's capacity;</item>
         /// <item>a naturally ventilated dwelling served by authored mechanical duty or plant; an authored system or
         /// unit that straddles zones (shared plant is never split or mutated); authored plant in an MVHR dwelling
-        /// that is not connected to its design terminals; a reused authored unit that states a supply
+        /// that is not connected to its design terminals - duty-bearing plant only, since inert template scaffolding
+        /// (<see cref="Query.PartOAuthoredPlantDuty(AdjacencyCluster, VentilationSystem)"/>) is noted and left out
+        /// of the assessment; a reused authored unit that states a supply
         /// temperature (P12 - an authored setpoint is conditioning nobody selected, cooled dwelling or not);</item>
         /// <item>a retained design whose terminals no longer match its fingerprint, and a Part F requirement basis
         /// over terminals that differ from the requirement;</item>
@@ -900,8 +902,14 @@ namespace SAM.Analytical
         /// <summary>
         /// Refuses authored mechanical duty or plant the selected strategies contradict: a system or unit that
         /// straddles zones touching an assessed dwelling (shared plant), mechanical duty in a naturally
-        /// ventilated dwelling, and plant in an MVHR dwelling not connected to its design terminals. A system
-        /// with neither a positive design terminal nor a unit is template metadata: noted, never refused.
+        /// ventilated dwelling, and plant in an MVHR dwelling not connected to its design terminals.
+        /// <para>
+        /// Only duty-bearing plant is judged (PR-2, <see cref="Query.PartOAuthoredPlantDuty(AdjacencyCluster, VentilationSystem)"/>).
+        /// A system whose terminals, movements and units state no duty - no finite non-zero design airflow, no air
+        /// movement, no unit supply condition, no selected product - is inert template metadata, whether or not it
+        /// names a unit that exists: noted, left as authored, never refused. The unit-to-zones map is still recorded
+        /// for every named unit, because the authored air-movement rule reads it.
+        /// </para>
         /// </summary>
         private static void AuthoredMechanicalSystems(AdjacencyCluster adjacencyCluster, Dictionary<Guid, Zone> dictionary_ZoneOfSpace, HashSet<Guid> guids_Assessed, Dictionary<Guid, PartODwellingStrategy> dictionary_Strategy, PartOMaterialisation result, Action<PartOMaterialisationRefusalReason, string, Zone, string> refuse, out Dictionary<string, HashSet<Guid>> dictionary_ZonesOfUnit)
         {
@@ -994,11 +1002,14 @@ namespace SAM.Analytical
                     continue;
                 }
 
-                bool duty = ventilationTerminals.Exists(x => x is not null && (x.DesignFlowRate_Lps ?? 0) > 0);
-
-                if (!duty && names_Unit.Count == 0)
+                //PR-2: plant is judged by the duty it states, never by a unit merely existing. AddMechanicalSystems
+                //names and creates a unit on every mechanical template system (MV 1 -> AHU1) whether or not anyone
+                //designs it, and that scaffolding is not plant.
+                if (adjacencyCluster.PartOAuthoredPlantDuty(ventilationSystem).IsInert)
                 {
-                    result.Notes.Add(string.Format("Ventilation system '{0}' ({1}) is related to assessed spaces but carries no design duty and no unit, so it is template metadata: left exactly as authored.", ventilationSystem.FullName, ventilationSystem.Type?.Name ?? "-"));
+                    result.Notes.Add(names_Unit.Count == 0
+                        ? string.Format("Ventilation system '{0}' ({1}) is related to assessed spaces but carries no design duty and no unit, so it is template metadata: left exactly as authored.", ventilationSystem.FullName, ventilationSystem.Type?.Name ?? "-")
+                        : string.Format("Ventilation system '{0}' ({1}) is related to assessed spaces and names unit {2}, but neither states any duty - no design terminal airflow, no air movement, no selected product - so they are inert template metadata: left exactly as authored and not part of this assessment.", ventilationSystem.FullName, ventilationSystem.Type?.Name ?? "-", string.Join(", ", names_Unit.ConvertAll(x => string.Format("'{0}'", x)))));
 
                     continue;
                 }
@@ -1045,7 +1056,10 @@ namespace SAM.Analytical
                     assessed |= guids_Assessed.Contains(guid);
                 }
 
-                if (assessed && keyValuePair.Value.Count > 1)
+                //An inert unit is scaffolding, not plant, so it cannot be shared plant either (PR-2).
+                bool inert = !airHandlingUnits.Exists(x => x?.Name == keyValuePair.Key && !adjacencyCluster.PartOAuthoredPlantDuty(x).IsInert);
+
+                if (assessed && !inert && keyValuePair.Value.Count > 1)
                 {
                     List<string> names_Zone = [];
                     foreach (Guid guid in keyValuePair.Value)
