@@ -25,7 +25,10 @@ namespace SAM.Analytical
         /// <summary>
         /// Every reason <paramref name="analyticalModel"/> is <b>not</b> a clean pre-Part-O baseline. Empty means
         /// clean. Owner decision D1: mixed materialisation starts from a clean baseline, and nothing here
-        /// cleans, repairs or "adopts" a model - it only says why the model is refused.
+        /// cleans, repairs or "adopts" a model - it only says why the model is refused. Cleaning is
+        /// <c>Modify.RemovePartORunState</c> (owner decision, 30 Sep 2026): it removes what this query names as
+        /// run output or Part O preparation, restores a per-space Part F internal condition only where the model
+        /// proves what it replaced, and its copy is judged by this query afterwards, never by itself.
         ///
         /// <para><b>What a baseline IS</b></para>
         /// <para>
@@ -165,7 +168,7 @@ namespace SAM.Analytical
             {
                 names_System.Sort(StringComparer.Ordinal);
 
-                result.Add(Materialised(string.Format("The model already carries Part O MVHR system(s) {0}, so it has been prepared for a Part O run. Reopen the pre-Part-O source model; a materialised model is never cleaned back into a baseline.", string.Join(", ", names_System.ConvertAll(x => string.Format("'{0}'", x))))));
+                result.Add(Materialised(string.Format("The model already carries Part O MVHR system(s) {0}, so it has been prepared for a Part O run. Remove the Part O run state into a cleaned copy (Modify.RemovePartORunState), or reopen the pre-Part-O source model.", string.Join(", ", names_System.ConvertAll(x => string.Format("'{0}'", x))))));
             }
 
             //Air movements are NOT materialisation state by themselves. An engineer authors inter-zone air movements
@@ -214,7 +217,7 @@ namespace SAM.Analytical
             {
                 names_Space.Sort(StringComparer.Ordinal);
 
-                result.Add(Materialised(string.Format("{0} space(s) carry the per-space internal condition Modify.ApplyPartFVentilationRates writes (for example '{1}'), so the model's authored internal conditions have already been replaced by a Part O preparation. That rewrite is not reversible; reopen the pre-Part-O source model.", names_Space.Count, names_Space[0])));
+                result.Add(Materialised(string.Format("{0} space(s) carry the per-space internal condition Modify.ApplyPartFVentilationRates writes (for example '{1}'), so the model's authored internal conditions have already been replaced by a Part O preparation. Removing the Part O run state (Modify.RemovePartORunState) restores a condition only where the model proves what it replaced; otherwise reopen the pre-Part-O source model.", names_Space.Count, names_Space[0])));
             }
 
             return result;
@@ -226,7 +229,7 @@ namespace SAM.Analytical
         /// <c>" (n)"</c>) AND it carries a supply or extract airflow. Both, so an authored condition that merely
         /// carries an airflow, or merely has such a name, is not mistaken for one.
         /// </summary>
-        private static bool IsPartFAppliedInternalCondition(Space space)
+        internal static bool IsPartFAppliedInternalCondition(Space space)
         {
             InternalCondition internalCondition = space?.InternalCondition;
             if (internalCondition is null || string.IsNullOrWhiteSpace(space.Name) || !space.HasValue(SpaceParameter.PartFSpaceData))
@@ -252,6 +255,39 @@ namespace SAM.Analytical
             }
 
             return name.EndsWith(suffix, StringComparison.Ordinal) && name.Length > suffix.Length;
+        }
+
+        /// <summary>
+        /// The name of the condition a per-space Part F condition was cloned from: <paramref name="name_InternalCondition"/>
+        /// without the <c>" (n)"</c> disambiguation and every trailing <c>" - &lt;space&gt;"</c> suffix of this
+        /// space - the inverse of <c>Modify.ApplyPartFVentilationRates</c>' naming, which strips the same way
+        /// before it appends. Null where nothing is left.
+        /// </summary>
+        internal static string PartFAppliedInternalConditionBaseName(string name_InternalCondition, string name_Space)
+        {
+            if (string.IsNullOrWhiteSpace(name_InternalCondition) || string.IsNullOrWhiteSpace(name_Space))
+            {
+                return null;
+            }
+
+            string suffix = string.Format(" - {0}", name_Space);
+            string result = name_InternalCondition;
+
+            if (result.EndsWith(")", StringComparison.Ordinal))
+            {
+                int index = result.LastIndexOf(" (", StringComparison.Ordinal);
+                if (index > 0 && int.TryParse(result.Substring(index + 2, result.Length - index - 3), out int _) && result.Substring(0, index).EndsWith(suffix, StringComparison.Ordinal))
+                {
+                    result = result.Substring(0, index);
+                }
+            }
+
+            while (result.EndsWith(suffix, StringComparison.Ordinal))
+            {
+                result = result.Substring(0, result.Length - suffix.Length);
+            }
+
+            return string.IsNullOrWhiteSpace(result) ? null : result;
         }
 
         /// <summary>
@@ -284,27 +320,36 @@ namespace SAM.Analytical
             {
                 foreach (string name in parameterSet?.Names ?? [])
                 {
-                    object @object = parameterSet.ToObject(name);
-
-                    if (@object is IResult)
+                    if (IsResultValue(parameterSet.ToObject(name)))
                     {
                         return name;
-                    }
-
-                    if (@object is IEnumerable enumerable && @object is not string)
-                    {
-                        foreach (object item in enumerable)
-                        {
-                            if (item is IResult)
-                            {
-                                return name;
-                            }
-                        }
                     }
                 }
             }
 
             return null;
+        }
+
+        /// <summary>Whether a parameter value is, or holds, a simulation result.</summary>
+        internal static bool IsResultValue(object @object)
+        {
+            if (@object is IResult)
+            {
+                return true;
+            }
+
+            if (@object is IEnumerable enumerable && @object is not string)
+            {
+                foreach (object item in enumerable)
+                {
+                    if (item is IResult)
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
 
         private static PartOMaterialisationRefusal RunOutput(string message) => new(PartOMaterialisationRefusalReason.RunOutputBaseline, message);
