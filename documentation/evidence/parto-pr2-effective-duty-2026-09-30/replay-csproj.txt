@@ -1,0 +1,19 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWPF>true</UseWPF>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>disable</Nullable>
+    <LangVersion>12.0</LangVersion>
+    <ImplicitUsings>disable</ImplicitUsings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="SAM.Core"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Core.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SAM.Geometry"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Geometry.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SAM.Analytical"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Analytical.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SAM.Core.Systems"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Core.Systems.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SAM.Analytical.Systems"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Analytical.Systems.dll</HintPath><Private>false</Private></Reference>
+    <Reference Include="SAM.Analytical.UI.WPF"><HintPath><SAM-BIM>\SAM_UI\build\SAM.Analytical.UI.WPF.dll</HintPath><Private>false</Private></Reference>
+  </ItemGroup>
+</Project>

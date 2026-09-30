@@ -1,0 +1,91 @@
+SAM.Analytical: <SAM-BIM>\SAM_UI\build\SAM.Analytical.dll
+SAM_UI WPF:     <SAM-BIM>\SAM_UI\build\SAM.Analytical.UI.WPF.dll
+PR-2 query present: True
+Model: <SAM_daily>\2026-09-30 partOi\000000_SAM_AnalyticalModel-Cleaned.sam
+SHA256 before: F561161F756A02171637B821F35236E6FC33E259D9BB275E0D6CBE6669FD0B78
+
+== Ventilation systems on the design model, with the PR-2 classification
+  NV 1  d50c5c6a-9466-48d4-85b2-abd783154afb  supply='' exhaust=''  terminals=0  spaces=2  -> NV 1: inert
+  UV 1  7ad6dfcf-2eab-4953-b476-c7886860a1f8  supply='' exhaust=''  terminals=0  spaces=1  -> UV 1: inert
+  MV 1  22e38d0c-6322-4064-99be-c2622c15394f  supply='AHU1' exhaust='AHU1'  terminals=0  spaces=6  -> MV 1: inert
+  unit AHU1  e715cc07-6a33-40ee-8fd0-75eaa177fd72  product=(none)  summer=23 winter=NaN  related=0  -> AHU1: inert
+  VentilationTerminals=0  SpaceAirMovements=0  AirHandlingUnitAirMovements=0
+  Zones: Flat 1, Corridor, Flat 2, Flat 3
+
+Catalogue: Selectable (2 descriptors, 2 templates)
+
+== A. Owner's selection - the real Check design (SAM materialisation, then the Systems preflight)
+  Flat 2: Nuaire XBC15 (no cooling)   Flat 3: Nuaire MRXBOXAB-ECO5-AECV (MR-ECO-COOL-V) (supply-air cooling)
+  materialised: True  route: Systems  systems checked: True
+  SharedSystem refusals: 0
+  NOTE Ventilation system 'MV 1' (MV) is related to assessed spaces and names unit 'AHU1', but neither states any duty - no design terminal airflow, no air movement, no selected product - so they are inert template metadata: left exactly as authored and not part of this assessment.
+  NOTE Ventilation system 'NV 1' (NV) is related to assessed spaces but carries no design duty and no unit, so it is template metadata: left exactly as authored.
+  NOTE Space 'Bedroom 2_3': supply 0.063 m3/s (63 l/s), extract 0 m3/s (0 l/s) at the Continuous Design condition.
+  NOTE Space 'Kitchen_4': supply 0 m3/s (0 l/s), extract 0.055 m3/s (55 l/s) at the Continuous Design condition.
+  NOTE Space 'Ensuite_5': supply 0 m3/s (0 l/s), extract 0.008 m3/s (8 l/s) at the Continuous Design condition.
+  NOTE Space 'Bedroom 2_6': supply 0.063 m3/s (63 l/s), extract 0 m3/s (0 l/s) at the Continuous Design condition.
+  NOTE Space 'Kitchen_7': supply 0 m3/s (0 l/s), extract 0.055 m3/s (55 l/s) at the Continuous Design condition.
+  NOTE Space 'Ensuite_8': supply 0 m3/s (0 l/s), extract 0.008 m3/s (8 l/s) at the Continuous Design condition.
+  NOTE Space 'Bedroom 2_3': realized a Supply terminal of 63 l/s from the Supply requirement of Approved Document F.
+  NOTE Space 'Kitchen_4': realized a Extract terminal of 55 l/s from the Local Kitchen Extract requirement of Approved Document F.
+  NOTE Space 'Ensuite_5': realized a Extract terminal of 8 l/s from the General Extract requirement of Approved Document F.
+  NOTE Space 'Bedroom 2_6': realized a Supply terminal of 63 l/s from the Supply requirement of Approved Document F.
+  NOTE Space 'Kitchen_7': realized a Extract terminal of 55 l/s from the Local Kitchen Extract requirement of Approved Document F.
+  NOTE Space 'Ensuite_8': realized a Extract terminal of 8 l/s from the General Extract requirement of Approved Document F.
+  NOTE Created generic ventilation system 'MVHR Flat 2' and air handling unit 'MVHR Flat 2' for the Base MVHR configuration. No manufacturer unit is selected at this iteration.
+  NOTE Ventilation system 'MVHR Flat 2' serves 3 space(s) through 3 design terminal(s).
+  NOTE Space 'Bedroom 2_3' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Space 'Kitchen_4' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Space 'Ensuite_5' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Ventilation system 'MVHR Flat 2' design duty: supply 63 l/s, extract 63 l/s, summed from 3 design terminal(s) and meeting the Approved Document F requirement its spaces carry.
+  NOTE The dwelling transfer air is routed over the 3 space(s) the system serves. No further internal space belongs to the dwelling(s) they are in, so nothing was added to the network.
+  NOTE Realized 5 air movement object(s) for the Base MVHR design-rate operating state: supply into each space from 'MVHR Flat 2' and extract from each space back to it, each direction sized from that space's own design terminals.
+  NOTE Realized 2 internal transfer air movement(s) over 2 internal connection(s), routed by the Approved Document F airflow network from the spaces with air to pass on to the spaces that have to draw it in.
+  NOTE Every space and the air handling unit of 'MVHR Flat 2' balance: each passes on exactly what it receives, which is what TAS requires of a zone carrying inter-zone air movements.
+  NOTE Air handling unit 'MVHR Flat 2' selected as 'Nuaire XBC15' (supply 190 l/s, extract 190 l/s maximum), the smallest product offered that can move the dwelling's design duty of 63 l/s supply and 63 l/s extract. 127 l/s supply and 127 l/s extract remain as design headroom, and are deliberately NOT taken up: the design duty is unchanged.
+  NOTE Created generic ventilation system 'MVHR Flat 3' and air handling unit 'MVHR Flat 3' for the Base MVHR configuration. No manufacturer unit is selected at this iteration.
+  NOTE Ventilation system 'MVHR Flat 3' serves 3 space(s) through 3 design terminal(s).
+  NOTE Space 'Bedroom 2_6' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Space 'Kitchen_7' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Space 'Ensuite_8' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  NOTE Ventilation system 'MVHR Flat 3' design duty: supply 63 l/s, extract 63 l/s, summed from 3 design terminal(s) and meeting the Approved Document F requirement its spaces carry.
+  NOTE The dwelling transfer air is routed over the 3 space(s) the system serves. No further internal space belongs to the dwelling(s) they are in, so nothing was added to the network.
+  NOTE Realized 5 air movement object(s) for the Base MVHR design-rate operating state: supply into each space from 'MVHR Flat 3' and extract from each space back to it, each direction sized from that space's own design terminals.
+  NOTE Realized 2 internal transfer air movement(s) over 2 internal connection(s), routed by the Approved Document F airflow network from the spaces with air to pass on to the spaces that have to draw it in.
+  NOTE Every space and the air handling unit of 'MVHR Flat 3' balance: each passes on exactly what it receives, which is what TAS requires of a zone carrying inter-zone air movements.
+  NOTE Air handling unit 'MVHR Flat 3' selected as 'Nuaire MRXBOXAB-ECO5-AECV (MR-ECO-COOL-V)' (supply 150 l/s, extract 150 l/s maximum), the smallest product offered that can move the dwelling's design duty of 63 l/s supply and 63 l/s extract. 87 l/s supply and 87 l/s extract remain as design headroom, and are deliberately NOT taken up: the design duty is unchanged.
+  NOTE Materialised 3 dwelling(s) - 2 MVHR (1 cooled), 1 naturally ventilated - and 1 assessed communal corridor(s) into one model from the clean baseline; simulated on the Systems route.
+  WARNING Space 'Bedroom 2_3' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  WARNING Space 'Kitchen_4' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  WARNING Space 'Ensuite_5' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  WARNING Space 'Bedroom 2_6' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  WARNING Space 'Kitchen_7' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  WARNING Space 'Ensuite_8' is still related to ventilation system 'MV 1' of type 'MV', which this iteration did not build and has not changed. The Base MVHR design terminals and the air movements the simulation reads belong to the system built here; that relation is left as the model authored it.
+  systems refusal: (none)
+  SYSTEMS NOTE Ventilation system 'NV 1' (d50c5c6a-9466-48d4-85b2-abd783154afb) was left out of the TAS Systems materialisation input: Part O did not build it, and it carries no design ventilation terminal - so it states no mechanical duty the TAS Systems route has to recreate. It remains on the design and in the thermal model, where its authored behaviour is simulated as authored.
+  SYSTEMS NOTE Ventilation system 'UV 1' (7ad6dfcf-2eab-4953-b476-c7886860a1f8) was left out of the TAS Systems materialisation input: Part O did not build it, and it carries no design ventilation terminal - so it states no mechanical duty the TAS Systems route has to recreate. It remains on the design and in the thermal model, where its authored behaviour is simulated as authored.
+  SYSTEMS NOTE Ventilation system 'MV 1' (22e38d0c-6322-4064-99be-c2622c15394f) was left out of the TAS Systems materialisation input: Part O did not build it, and it carries no design ventilation terminal - so it states no mechanical duty the TAS Systems route has to recreate. It remains on the design and in the thermal model, where its authored behaviour is simulated as authored.
+  SYSTEMS NOTE 2 ventilation system(s) built by Part O are the design under assessment; 3 authored system(s) were left out of the materialisation input and none of them states mechanical duty.
+  record VentilationSystemGuids: Flat 2 -> 387faa6b-27b9-4892-854c-49c1bcd152e2 'MVHR Flat 2', Flat 3 -> 56e05e02-71c4-4630-9891-ce599d7ed8de 'MVHR Flat 3'
+  record cooled dwellings: Flat 3 Nuaire MRXBOXAB-ECO5-AECV (MR-ECO-COOL-V) 80 l/s
+  materialised model ventilation systems: NV 1, UV 1, MV 1, MVHR Flat 2, MVHR Flat 3
+  materialised model units: AHU1 [no product], MVHR Flat 2 [Nuaire XBC15], MVHR Flat 3 [Nuaire MRXBOXAB-ECO5-AECV (MR-ECO-COOL-V)]
+  kept NV 1: True  spaces 2 -> 2
+  kept UV 1: True  spaces 1 -> 1
+  kept MV 1: True  spaces 6 -> 6
+  kept AHU1: True
+
+== B. PR-1 Systems scope on the owner's materialisation
+  SCOPE: Part O Systems scope: 2 retained, 3 removed.
+  retained: 387faa6b-27b9-4892-854c-49c1bcd152e2 'MVHR Flat 2', 56e05e02-71c4-4630-9891-ce599d7ed8de 'MVHR Flat 3'
+  removed:  22e38d0c-6322-4064-99be-c2622c15394f 'MV 1', 7ad6dfcf-2eab-4953-b476-c7886860a1f8 'UV 1', d50c5c6a-9466-48d4-85b2-abd783154afb 'NV 1'
+  handed to SAM_Systems: MVHR Flat 2 (unit 'MVHR Flat 2', resolvable True), MVHR Flat 3 (unit 'MVHR Flat 3', resolvable True)
+  contains NV 1: False  UV 1: False  MV 1: False
+
+== C. Production Systems preflight (what Check and Build & Run both run), no TAS
+  SAM_Systems graph built: True  refusal: (none)
+  air systems: 2  guidance-cooled units: 1
+
+In-memory design model JSON unchanged: True
+SHA256 after:  F561161F756A02171637B821F35236E6FC33E259D9BB275E0D6CBE6669FD0B78
+Source model unchanged: True
