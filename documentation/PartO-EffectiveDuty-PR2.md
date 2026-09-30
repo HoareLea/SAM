@@ -3,7 +3,7 @@
 
 # Part O PR-2: effective-duty classification of authored ventilation plant
 
-**Status (30 Sep 2026): implemented and tested. The PR is open against `sow/2026-Q3` and is NOT merged. SAM only. SAM_UI
+**Status (30 Sep 2026): implemented and tested. The PR is open (SAM-BIM/SAM#172) against `sow/2026-Q3` and is NOT merged. SAM only. SAM_UI
 needs no production change.**
 
 - Branch `feature/parto-effective-duty-2026-09-30`, from `sow/2026-Q3` `525a9f3a` (after SAM#170, SAM#171 and their
