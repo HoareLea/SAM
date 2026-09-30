@@ -12,6 +12,65 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): PR-2 effective-duty classification of authored ventilation plant (30 Sep 2026) - MERGED as SAM#172 (`5ffe6a10`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#172](https://github.com/SAM-BIM/SAM/pull/172).
+- Branch `feature/parto-effective-duty-2026-09-30`, from `525a9f3a`. PR head `a7f88222`, merge `5ffe6a10`.
+- CI green on the head: Build (Windows), Test, SPDX.
+- SAM only. SAM_UI, SAM_Systems and SAM_Tas needed no change.
+- This is step 3 of the approved Part O model-state architecture (SAM_UI `documentation/PartO-ModelStateArchitecture.md`,
+  owner decision 1).
+- Full record: `documentation/PartO-EffectiveDuty-PR2.md`.
+
+- **Work.**
+  - New public, additive `Query.PartOAuthoredPlantDuty(cluster, VentilationSystem | AirHandlingUnit)`. It returns
+    `PartOAuthoredPlantDuty` (`IsInert`, `UnitNames`, `Evidence`), with evidence as `PartOMechanicalDutyEvidence` and
+    kinds from `Enums.PartOMechanicalDutyEvidenceKind`. The shape is ready for PR-6 to list.
+  - Plant is **active** when any of these holds on the system or on a unit it names (supply or exhaust):
+    - a finite, non-zero terminal airflow (PR-1's `IsPartOEffectiveMechanicalDuty`, reused);
+    - a finite, non-zero `SpaceAirMovement` of the system or unit (related, or naming the unit as an endpoint);
+    - a `VentilationUnitReference` product;
+    - terminal or movement duty on another system sharing the unit.
+  - Otherwise the plant is **inert**.
+  - `MaterialisePartODwellingStrategies.AuthoredMechanicalSystems` judges only active plant. It used to treat any
+    existing unit as plant. Inert systems and units are noted and left exactly as authored.
+  - Unchanged for active plant: `SharedSystem`, `NaturalOverMechanicalDuty` and `UnconnectedAuthoredPlant`, and their
+    messages. Also unchanged: the air-movement rule and the unit-to-zones map it reads.
+- **Decisions.**
+  - SAM stores no AHU airflow. It is derived by `AirHandlingUnitDesignDuty` / `Query.AirFlow`. The owner confirmed that
+    "stated AHU airflow" means this derived terminal and movement airflow. No parameter was invented.
+  - A unit's supply condition (`AirHandlingUnitAirMovement`) is not duty on its own. This is the owner's decision on
+    review, applied in `a7f88222`. It counts only through its finite movements. Next to an MVHR dwelling it is still
+    refused `AuthoredAirMovementConflict`.
+  - A negative terminal airflow is duty and ±∞ is not (PR-1 parity).
+  - Inert single-dwelling plant is noted, not refused.
+- **Files.**
+  - `SAM.Analytical/Query/PartOAuthoredPlantDuty.cs`; `Classes/PartOAuthoredPlantDuty.cs`,
+    `PartOMechanicalDutyEvidence.cs`; `Enums/PartOMechanicalDutyEvidenceKind.cs` (all new).
+  - `SAM.Analytical/Modify/MaterialisePartODwellingStrategies.cs` (changed).
+  - `SAM.Tests/PartODwellingStrategyMaterialisationTests.EffectiveDuty.cs` (new: 16 tests, 28 cases).
+  - `documentation/PartO-EffectiveDuty-PR2.md`.
+  - `documentation/evidence/parto-pr2-effective-duty-2026-09-30/` (paths redacted, because the repo is public).
+- **Validation.**
+  - Full `SAM.Tests` 2760/2760 (+28). SAM_UI WPF 1559/1559 against this SAM.
+  - Fixtures are production-shaped `Modify.AddMechanicalSystems` models: the inert shared `MV 1 → AHU1`; each duty kind;
+    NaN / 0 / ±∞ / null; one unit per flat; two flats on one unit; single-dwelling plant; NV/UV.
+  - All mutations killed: M1-M10, including "AHU exists ⇒ active", "a supply condition alone counts" and "genuine
+    shared duty passes".
+  - The owner's `-Cleaned.sam` was replayed headless, read-only, with no TAS.
+    - The selection was Flat 1 natural, Flat 2 XBC15, Flat 3 MRXBOXAB-ECO5-AECV + cooling.
+    - `MV 1`/`AHU1` are inert. Check passes on the Systems route with 0 `SharedSystem`.
+    - The PR-1 scope leaves out `NV 1`, `UV 1` and `MV 1`. The SAM_Systems preflight builds 2 air systems and 1
+      guidance-cooled unit.
+    - SHA256 `F561161F…0B78` and the folder are unchanged, and nothing was deleted.
+- **Risks.**
+  - No licensed TAS run yet.
+  - On the real model, Check shows 6 existing "still related to 'MV 1'" warnings. They are correct but noisy.
+  - The PR-1 scope still reads terminal duty only. That matters only for authored systems outside every assessed
+    dwelling, as before.
+- **Next step.** PR-3 (SAM_Systems: D2 unit resolution honours the caller's scope), then the licensed Mixed Design
+  acceptance on the existing `-Cleaned.sam` with nothing deleted. PR-5 and PR-6 follow.
+
 ## Current (Part O stream): PR-1 Part O Systems materialisation scope (30 Sep 2026) - MERGED as SAM#171 (`4ecea97a`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#171](https://github.com/SAM-BIM/SAM/pull/171), branch
@@ -46,7 +105,7 @@ architecture (SAM_UI `documentation/PartO-ModelStateArchitecture.md`); companion
     by name) all killed.
   - Iteration 3 equivalence (312 cases vs the frozen pre-move rule) and the owner's real-model replay: SAM_UI record.
 - **Risks.** SAM_Systems still scans every ventilation system it is handed (PR-3); callers must pass the scoped copy.
-  The owner's real Mixed Check still refuses `SharedSystem` on `MV 1`/`AHU1` until PR-2.
+  The owner's real Mixed Check refused `SharedSystem` on `MV 1`/`AHU1`, which is resolved by PR-2 (SAM#172, `5ffe6a10`).
 - **Next step.** SAM_UI#151 merges on top and gets its SAM_UI closeout. Then PR-2 (SAM: effective-duty classification
   in `AuthoredMechanicalSystems`) and PR-3 (SAM_Systems D2 scope), in fresh sessions.
 
