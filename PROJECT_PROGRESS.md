@@ -12,6 +12,44 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): PR-1 Part O Systems materialisation scope (30 Sep 2026) - MERGED as SAM#171 (`4ecea97a`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#171](https://github.com/SAM-BIM/SAM/pull/171), branch
+`feature/parto-systems-scope-2026-09-30`, PR head `6bd9943f`, merge `4ecea97a`. CI green on the head (build (Release),
+spdx, test (Release)). SAM only; SAM_Systems / SAM_Tas unchanged. It is step 2 (PR-1) of the approved Part O model-state
+architecture (SAM_UI `documentation/PartO-ModelStateArchitecture.md`); companion
+[SAM-BIM/SAM_UI#151](https://github.com/SAM-BIM/SAM_UI/pull/151) consumes it (merged after this). Full record:
+`documentation/PartO-SystemsScope-PR1.md`.
+
+- **Work.**
+  - New public, additive `Query.PartOSystemsMaterialisationScope(cluster, guids_VentilationSystem_Built,
+    guids_Space_Dwelling)` returning `PartOSystemsMaterialisationScope` (shallow working copy or null, retained/removed
+    guids in guid order, `Exclusions`, `Refusals`, `Notes`, `IsScoped`), plus `PartOSystemsScopeExclusion`,
+    `PartOSystemsScopeRefusal` and `Enums.PartOSystemsScopeRefusalReason`.
+  - It is the Iteration 3 system-scope rule moved unchanged from SAM_UI WPF: keep the systems Part O built (by guid,
+    never name); leave out authored ventilation systems with no effective duty (stated, finite, non-zero terminal
+    airflow), with a note; refuse where authored duty exists (inside / outside the dwellings / no room). Only
+    `VentilationSystem`s are read; the supplied cluster is never modified; any refusal yields no working copy.
+- **Decisions.**
+  - Structured refusals (not strings), so Iteration 3 keeps its exact wording and PR-6 can list systems.
+  - `Name` (type, `MV`) and `FullName` (`MV 1`) both carried; SAM's own messages use `FullName`, route-neutral.
+  - `AuthoredMechanicalSystems` is NOT changed: the `MV 1`/`AHU1` `SharedSystem` false positive is PR-2.
+- **Files.**
+  - `SAM.Analytical/Query/PartOSystemsMaterialisationScope.cs`; `Classes/PartOSystemsMaterialisationScope.cs`,
+    `PartOSystemsScopeExclusion.cs`, `PartOSystemsScopeRefusal.cs`; `Enums/PartOSystemsScopeRefusalReason.cs` (all new).
+  - `SAM.Tests/PartOSystemsMaterialisationScopeTests.cs`, `PartODwellingStrategyMaterialisationTests.SystemsScope.cs` (new).
+  - `documentation/PartO-SystemsScope-PR1.md`.
+- **Validation.**
+  - Full `SAM.Tests` 2732/2732 (+27). Fixture: a real `Modify.AddMechanicalSystems` scaffold (`NV 1`/`UV 1` no unit,
+    `MV 1` + `AHU1`, cooling `AHU 1`/`FCU 1`, heating `RAD 1`) beside a cooled Mixed dwelling on the Systems route.
+  - Mutations S1-S5 (retain by name, duty never refuses, infinite airflow counted, fail-closed removed, NV/UV filtered
+    by name) all killed.
+  - Iteration 3 equivalence (312 cases vs the frozen pre-move rule) and the owner's real-model replay: SAM_UI record.
+- **Risks.** SAM_Systems still scans every ventilation system it is handed (PR-3); callers must pass the scoped copy.
+  The owner's real Mixed Check still refuses `SharedSystem` on `MV 1`/`AHU1` until PR-2.
+- **Next step.** SAM_UI#151 merges on top and gets its SAM_UI closeout. Then PR-2 (SAM: effective-duty classification
+  in `AuthoredMechanicalSystems`) and PR-3 (SAM_Systems D2 scope), in fresh sessions.
+
 ## Current (Part O stream): PartOManualEquipmentSelection - hand-picked per-dwelling products as design input (30 Sep 2026) - MERGED as SAM#170 (`f4c317e0`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#170](https://github.com/SAM-BIM/SAM/pull/170), branch
