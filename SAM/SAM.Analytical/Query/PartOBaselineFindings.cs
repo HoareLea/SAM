@@ -96,6 +96,11 @@ namespace SAM.Analytical
                 result.Add(RunOutput("The model carries a simulation result provenance record, so it is the output of a simulation, not a baseline."));
             }
 
+            if (analyticalModel.HasValue(AnalyticalModelParameter.PartOBaselineReference))
+            {
+                result.Add(RunOutput("The model carries a Part O baseline reference, so it is a Part O result derived from another model, not a baseline."));
+            }
+
             if (ModelResults(analyticalModel) is string name_Result)
             {
                 result.Add(RunOutput(string.Format("The model carries simulation results as its own parameter '{0}', so it is the output of a simulation, not a baseline.", name_Result)));
