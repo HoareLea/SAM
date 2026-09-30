@@ -12,6 +12,51 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): PartOManualEquipmentSelection - hand-picked per-dwelling products as design input (30 Sep 2026) - MERGED as SAM#170 (`f4c317e0`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#170](https://github.com/SAM-BIM/SAM/pull/170), branch
+`feature/parto-manual-equipment-selection-2026-09-30`, PR head `5f04fb97`, merge `f4c317e0`. CI green on the head (build
+(Release), spdx, test (Release)). SAM only; SAM_Systems / SAM_Tas unchanged. It is the SAM half of finishing SAM_UI PR-4
+(protect the design model from Part O run output); companion [SAM-BIM/SAM_UI#150](https://github.com/SAM-BIM/SAM_UI/pull/150)
+(open, merged after this). Full record: `documentation/PartO-ManualEquipmentSelection-PR.md`.
+
+- **Work.**
+  - `PartOManualEquipmentSelection` is a new, additive `AnalyticalModelParameter.PartOManualEquipmentSelection`. It maps
+    a dwelling zone guid to a `VentilationUnitReference` identity. It is canonical, uses schema `v1` (an unknown schema
+    is not applied), and absent means no choice.
+  - A new `PreparePartOIteration` overload takes seven parameters, all explicit, the last being the manual selection.
+    Under manual authority (no catalogue) it assigns each dwelling's product to the unit it builds, through
+    `AssignVentilationUnit`. It never overrides an automatic rule.
+  - The **original six-parameter overload is kept unchanged**, defaults included, for binary compatibility. It
+    delegates to the new overload with no selection.
+  - `PartOIterationPreparation.DwellingZoneGuids` records the dwelling zone each built unit is for.
+- **Decisions.**
+  - Owner decision on PR-4: a hand-picked product is Part O design input. Preparation materialises it, and it is never
+    copied from a result unit.
+  - `PartOEquipmentSelection` was not extended. It is "a candidate constraint, never an assignment", and it drives
+    reuse.
+  - Mixed Design's `PartODwellingStrategySet` was not reused, because it is Mixed Design's authority.
+  - The caller decides the iteration: only a manual Iteration 2 passes the selection.
+- **Files.**
+  - `SAM.Analytical/Classes/PartOManualEquipmentSelection.cs` (new).
+  - `Enums/Parameter/AnalyticalModelParameter.cs` (member appended last).
+  - `Modify/PreparePartOIteration.cs`, `Classes/PartOIterationPreparation.cs`.
+  - `SAM.Tests/PartOManualEquipmentSelectionTests.cs` (new, 10 tests).
+  - `documentation/PartO-ManualEquipmentSelection-PR.md`.
+- **Validation.**
+  - Full `SAM.Tests` 2705/2705.
+  - The original signature is pinned by reflection, and the original overload behaves as the new one with no
+    selection.
+  - The mutation checks (assignment skipped, applied under a catalogue, legacy default changed) each fail the intended
+    tests.
+  - SAM_UI WPF 1549/1549 against this branch.
+- **Risks.**
+  - A zone-less model has no dwelling identity, so it gets no hand-picked product.
+  - A stored selection of an unknown schema is warned about and not applied. Confirming a Manual review replaces it
+    with a v1 that holds that review's dwellings.
+- **Next step.** Merge SAM-BIM/SAM_UI#150 (PR-4) when the owner asks, then do its SAM_UI closeout. PR-1 (Part O system
+  scope) follows in a fresh session.
+
 ## Current (Part O stream): Modify.RemovePartORunState - a clean baseline from a Prepare & Run model (30 Sep 2026) - MERGED as SAM#169 (`19531bd9`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#169](https://github.com/SAM-BIM/SAM/pull/169), branch
