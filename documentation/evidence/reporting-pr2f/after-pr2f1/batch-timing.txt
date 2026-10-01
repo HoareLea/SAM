@@ -1,3 +1,0 @@
-﻿load 2 ms, spaces 9, panels 50
-A per-space context x9: total 296 ms  ctx 2  doc 67  pdf 216  => 32.9 ms/space
-B shared context x9: total 152 ms  ctx 0  doc 26  pdf 103  => 16.9 ms/space; managed peak 35 MB; per-document diagnostics total 18, shared log 0

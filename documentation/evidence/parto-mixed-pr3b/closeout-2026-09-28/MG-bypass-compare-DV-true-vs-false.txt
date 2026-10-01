@@ -1,8 +1,0 @@
-DV=true  (nuaire-reply closeout 24 Sep)
-  MVHR-01: bypass rule true 4726 h, exchanger bypassed 4674 h (rule true & bypassed 4667); recovering 4086 h; DX 1610 h, 995 kWh sensible; extract max 37.8 C
-  MVHR-02: bypass rule true 4617 h, exchanger bypassed 4568 h (rule true & bypassed 4559); recovering 4192 h; DX 1293 h, 899 kWh sensible; extract max 37.1 C
-  MVHR-03: bypass rule true 4613 h, exchanger bypassed 4563 h (rule true & bypassed 4555); recovering 4197 h; DX 1282 h, 891 kWh sensible; extract max 37.0 C
-DV=false (PR3B closeout 28 Sep)
-  MVHR-01: bypass rule true 4479 h, exchanger bypassed 4468 h (rule true & bypassed 4411); recovering 4292 h; DX 1636 h, 1003 kWh sensible; extract max 37.9 C
-  MVHR-02: bypass rule true 4198 h, exchanger bypassed 4223 h (rule true & bypassed 4167); recovering 4537 h; DX 1306 h, 903 kWh sensible; extract max 37.2 C
-  MVHR-03: bypass rule true 4232 h, exchanger bypassed 4258 h (rule true & bypassed 4203); recovering 4502 h; DX 1304 h, 897 kWh sensible; extract max 37.1 C
