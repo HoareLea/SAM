@@ -12,6 +12,22 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current: `Query.WaitToUnlock` retry counter (1 Oct 2026) - MERGED as SAM#175 (`8135e011`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#175](https://github.com/SAM-BIM/SAM/pull/175), PR head `18c0e835`, merge `8135e011`. Final CI green (build, test, spdx). Independent of Part O and of the TPD `Loading TSD data` stall.
+
+**Work completed.** `WaitToUnlock(path, waitTime, count)` looped `while (i <= count)` but never incremented `i`, so a persistently locked file waited forever. Fixed with one line (`i++`). Contract unchanged: `true` when unlocked; `false` for blank/missing path; `false` when still locked after the attempts. The `<=` bound is untouched (count + 1 checks; `count = 0` still checks once).
+
+**Decisions.** Narrow fix, no refactor. All SAM-BIM callers audited by `git grep` (SAM_Tas `Simulate` x2, `ThermostatBridge`, `CalculateResultantTemperature`; SAM_UI `PrintAirHandlingUnitsByTemplate`): none depends on an infinite wait.
+
+**Files.** `SAM/SAM.Core/Query/WaitToUnlock.cs`; `SAM/SAM.Tests/QueryWaitToUnlockTests.cs` (new, 7 cases); `documentation/WaitToUnlock-RetryCounter.md`.
+
+**Validation.** Fail-first: before the fix the persistently-locked test failed (1 failed / 6 passed of 7); after, 7/7. Full `SAM.Tests` 2799/2799, 0 failed, 0 skipped. PR CI: build, test, spdx all pass.
+
+**Risks.** A TSD held locked for more than about 11 s after `simulate` now makes `WaitToUnlock` return `false` instead of blocking. Only `Simulate(TBDDocument, ...)` (returns it) and `CalculateResultantTemperature` (gates a `Save()`) act on the result; the others treat it as a wait. Not observed with real TAS.
+
+**Next step.** None required for this item. If a real TAS run shows a legitimately longer lock, pass a larger `count`/`waitTime` at that call site rather than restoring unbounded waiting.
+
 ## Current (Part O stream): `SimulationResultProvenance` persists a relative locator, not the absolute `Path_TSD` (1 Oct 2026) - MERGED as SAM#174 (`ab2b3be2`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#174](https://github.com/SAM-BIM/SAM/pull/174), PR head `5e9ba124`, merge `ab2b3be2`. Final CI green (build, test, spdx), mergeable and clean.
