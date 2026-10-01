@@ -12,6 +12,31 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): PR-5 `PartOBaselineReference` - a saved result says what it was derived from (1 Oct 2026) - MERGED as SAM#173 (`bce2c05d`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#173](https://github.com/SAM-BIM/SAM/pull/173), PR head `94cc658e`, merge `bce2c05d`. Final CI green
+(build, test, spdx), no review blockers. Its SAM_UI counterpart is [SAM-BIM/SAM_UI#155](https://github.com/SAM-BIM/SAM_UI/pull/155) (merges next; it stamps and reads this). Record:
+`documentation/PartO-BaselineReference-PR5.md`.
+
+- **Change.** Additive model parameter `AnalyticalModelParameter.PartOBaselineReference` (schema `v1`), on Part O **result** models only: the case (1a/1b/2/2B/3/Mixed), the `Design` the
+  lineage derives from and, for 2B and Iteration 3, the immediate `Source` result. Each `PartOModelReference` persists `Kind`, `Guid`, state `Fingerprint`, display `Name` and a
+  **relative** `Path_Relative` - **no absolute path is persisted**. `Query.PartOModelResolution` finds a model by identity (Resolved / Changed / NotFound / Ambiguous / Unknown),
+  never by name, with an optional runtime `path_Hint` that is never stored; a source result is judged by its recomputed content, not by the record it carries.
+  Carrying the reference marks a model as a result: `PartOBaselineFindings` refuses it as a baseline and `RemovePartORunState` removes it. `MaterialisePartODwellingStrategies` stamps the
+  Mixed reference from the fingerprint its record already takes. Stamped before `SimulationResultProvenance`, so the provenance and its fingerprint are untouched.
+- **Files.** `Enums/Parameter/AnalyticalModelParameter.cs`; new `Enums/PartODerivedCase.cs`, `PartOModelReferenceKind.cs`, `PartOBaselineResolutionStatus.cs`; new
+  `Classes/PartOModelReference.cs`, `PartOBaselineReference.cs`, `PartOBaselineResolution.cs`; new `Create/PartOBaselineReference.cs`, `Modify/PartOBaselineReference.cs`,
+  `Query/PartOModelResolution.cs`; changed `Modify/MaterialisePartODwellingStrategies.cs`, `Modify/RemovePartORunState.cs`, `Query/PartOBaselineFindings.cs`; tests
+  `SAM.Tests/PartOBaselineReferenceTests.cs` (23 tests) and `PartODwellingStrategyMaterialisationTests.BaselineReference.cs` (2).
+- **Decisions.** Identity (guid + state fingerprint) first, relative locator second, name for display only. No absolute path (a saved result can be shared as a fixture). Legacy results carry
+  nothing and are not guessed about. Iteration 3 has one authoritative source result (Reference A); 2B's source is the Iteration 2 result, not the previous round.
+- **Validation.** `SAM.Tests` 2787/2787 in two fresh processes. 11 SAM-side mutations killed (one survived at first - equal-depth folders in the tests - and was fixed). One earlier
+  isolated run with about ten unrelated failures did **not reproduce** on the same binaries or in any later fresh run; cause not identified. One later failure was a procedure error (`SAM.sln`
+  does not contain `SAM.Tests`, which kept a stale mutation build).
+- **Risks.** The neighbour scan opens up to 16 `.sam` files on the refusal path. How an older build reads a result carrying the new parameter was not verified. The existing
+  `SimulationResultProvenance.Path_TSD` is itself an absolute path and was not changed, so a shared result `.sam` still carries it.
+- **Next step.** Merge SAM_UI#155 (stamps every case; keeps Iteration 3 off a 2B round), then PR-6 only on the owner's go-ahead.
+
 ## Current (Part O stream): PR-2 effective-duty classification of authored ventilation plant (30 Sep 2026) - MERGED as SAM#172 (`5ffe6a10`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#172](https://github.com/SAM-BIM/SAM/pull/172).
