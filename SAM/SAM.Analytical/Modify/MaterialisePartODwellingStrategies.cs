@@ -712,6 +712,10 @@ namespace SAM.Analytical
             AnalyticalModel analyticalModel_Materialised = new(analyticalModel_Applied, adjacencyCluster);
             analyticalModel_Materialised.SetValue(AnalyticalModelParameter.PartOMaterialisationRecord, partOMaterialisationRecord);
 
+            //What this model was derived from: the baseline, by identity and by the state fingerprint already taken for the record. The
+            //baseline's relative locator is added by SAM_UI (Modify.LocatePartOBaselineReference), because SAM does not know its file or the result folder.
+            analyticalModel_Materialised.StampPartOBaselineReference(Create.PartOBaselineReferenceFromDesign(PartODerivedCase.MixedDesign, analyticalModel_Baseline, null, null, partOMaterialisationRecord.Fingerprint_Baseline));
+
             result.Record = new PartOMaterialisationRecord(partOMaterialisationRecord);
             result.AnalyticalModel = analyticalModel_Materialised;
 

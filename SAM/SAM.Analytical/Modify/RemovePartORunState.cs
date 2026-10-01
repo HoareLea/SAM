@@ -42,7 +42,7 @@ namespace SAM.Analytical
         ///
         /// <para><b>What is removed</b></para>
         /// <list type="bullet">
-        /// <item>Run output: the overheating scenarios, the <see cref="SimulationResultProvenance"/>, every
+        /// <item>Run output: the overheating scenarios, the <see cref="SimulationResultProvenance"/>, the <see cref="PartOBaselineReference"/>, every
         /// <see cref="IResult"/> in the cluster or held as a model parameter, and the design-day records the TAS
         /// workflow writes into the cluster. The model-level Heating/Cooling Design Days parameters are design
         /// inputs and are kept.</item>
@@ -109,6 +109,12 @@ namespace SAM.Analytical
             {
                 result.RemoveValue(AnalyticalModelParameter.SimulationResultProvenance);
                 removed.Add("Simulation result provenance (the link to the run's TAS results file; the file itself is not touched).");
+            }
+
+            if (result.HasValue(AnalyticalModelParameter.PartOBaselineReference))
+            {
+                result.RemoveValue(AnalyticalModelParameter.PartOBaselineReference);
+                removed.Add("Part O baseline reference (the link to the model the run was derived from; that model is not touched).");
             }
 
             foreach (ParameterSet parameterSet in result.GetParameterSets() ?? [])

@@ -75,5 +75,14 @@ namespace SAM.Analytical
         /// result. <see cref="Analytical.PartOManualEquipmentSelection"/> sets that out in full.
         /// </summary>
         [ParameterProperties("Part O Manual Equipment Selection", "Part O Manual Equipment Selection"), SAMObjectParameterValue(typeof(PartOManualEquipmentSelection))] PartOManualEquipmentSelection,
+
+        /// <summary>
+        /// What a saved Part O result was derived from: its case, the design model it came from and - for Iteration 2B
+        /// and Iteration 3 - the source result. Stamped on <b>result</b> models only, never on a design model (carrying it
+        /// is what marks a model as a result: <c>Query.PartOBaselineFindings</c> refuses it as a baseline and
+        /// <c>Modify.RemovePartORunState</c> removes it). Absent means unknown.
+        /// <see cref="Analytical.PartOBaselineReference"/> sets that out in full.
+        /// </summary>
+        [ParameterProperties("Part O Baseline Reference", "Part O Baseline Reference"), SAMObjectParameterValue(typeof(PartOBaselineReference))] PartOBaselineReference,
     }
 }
