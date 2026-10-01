@@ -12,6 +12,22 @@ deep-clone fix (`78a57466`), [SAM#140](https://github.com/SAM-BIM/SAM/pull/140) 
 TM59 per-space status (`7dbeb2e4`), PR1 [SAM#136](https://github.com/SAM-BIM/SAM/pull/136) (`7daf0d32`) and PR0
 [SAM#135](https://github.com/SAM-BIM/SAM/pull/135) (`4e027f55`).
 
+## Current (Part O stream): `SimulationResultProvenance` persists a relative locator, not the absolute `Path_TSD` (1 Oct 2026) - MERGED as SAM#174 (`ab2b3be2`)
+
+**Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#174](https://github.com/SAM-BIM/SAM/pull/174), PR head `5e9ba124`, merge `ab2b3be2`. Final CI green (build, test, spdx), mergeable and clean.
+No SAM_UI change was needed. Record: `documentation/SimulationResultProvenance-PathTSD.md`. This resolves the risk noted in the PR-5 entry below ("`Path_TSD` is itself absolute").
+
+- **Change.** `ToJsonObject` no longer writes `Path_TSD`. It writes `Locator_TSD`, the results file relative to the model's folder (forward slashes, never rooted; null where no relative form exists, which makes the
+  record incomplete and refused). `Path_TSD` is a runtime-only hint. `TryResolvePath_TSD` tries the hint if current, then the locator against the opened model's folder, both checked by recorded length and write
+  time (a name is never identity); a rooted locator is never followed; refusal messages are unchanged. Legacy `Path_TSD` is still read and resolves, its file name becomes the locator, the next save drops the path.
+  New overload `(model, path_TSD, path_Model)`; the two-argument constructor assumes the model is written beside its results, as all three producers do.
+- **Files.** `SAM.Analytical/Classes/SimulationResultProvenance.cs`; `SAM.Tests/SimulationResultProvenanceTests.cs` (+5); `documentation/SimulationResultProvenance-PathTSD.md`.
+- **Validation.** `SAM.Tests` 2792/2792. SAM_UI `SAM.Analytical.UI.WPF.Tests` 1569/1569 against this build. Diff scanned for local/user/OneDrive paths: none. One new test was flaky on file timestamps and was made deterministic.
+- **Risks.** A model Saved As into another folder without its results beside it is not locatable in a later session (safe "no longer at" refusal); the runtime hint still works in-session. Other Part O sidecars
+  (`PartORunResume`, Iteration 3 records, `.partomixed.json`) may still hold absolute paths. An older build reading a model without `Path_TSD` was not run (by its code it refuses safely). Locator resolution
+  uses `Uri` because the assembly also targets .NET Framework.
+- **Next step.** PR-6 ("Systems in this assessment") only on the owner's go-ahead.
+
 ## Current (Part O stream): PR-5 `PartOBaselineReference` - a saved result says what it was derived from (1 Oct 2026) - MERGED as SAM#173 (`bce2c05d`)
 
 **Status.** Merged into `sow/2026-Q3` with a merge commit: [SAM-BIM/SAM#173](https://github.com/SAM-BIM/SAM/pull/173), PR head `94cc658e`, merge `bce2c05d`. Final CI green
