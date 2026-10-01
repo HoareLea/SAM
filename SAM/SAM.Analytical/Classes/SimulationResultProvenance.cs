@@ -88,8 +88,20 @@ namespace SAM.Analytical
         /// </para>
         /// </summary>
         public SimulationResultProvenance(AnalyticalModel analyticalModel, string path_TSD)
+            : this(analyticalModel, path_TSD, null)
+        {
+        }
+
+        /// <summary>
+        /// As <see cref="SimulationResultProvenance(AnalyticalModel, string)"/>, for a model that will be written
+        /// at <paramref name="path_Model"/>: the saved locator is the results file's path relative to that
+        /// file's folder. Where <paramref name="path_Model"/> is not given the model is taken to be written
+        /// beside its results, which is the layout every Part O run writes.
+        /// </summary>
+        public SimulationResultProvenance(AnalyticalModel analyticalModel, string path_TSD, string path_Model)
         {
             Path_TSD = path_TSD;
+            Locator_TSD = Locator(path_TSD, path_Model);
             Fingerprint_Model = Fingerprint(analyticalModel);
             Fingerprint_OverheatingScenarios = Fingerprint_Scenarios(analyticalModel);
 
@@ -110,6 +122,7 @@ namespace SAM.Analytical
             if (simulationResultProvenance is not null)
             {
                 Path_TSD = simulationResultProvenance.Path_TSD;
+                Locator_TSD = simulationResultProvenance.Locator_TSD;
                 Length_TSD = simulationResultProvenance.Length_TSD;
                 Timestamp_TSD = simulationResultProvenance.Timestamp_TSD;
                 Fingerprint_Model = simulationResultProvenance.Fingerprint_Model;
@@ -122,8 +135,23 @@ namespace SAM.Analytical
         {
         }
 
-        /// <summary>The results file the model was produced from, as an absolute path when recorded. Required.</summary>
+        /// <summary>
+        /// The results file as an absolute path, <b>runtime only</b>: a hint held while the record is in memory,
+        /// never written by <see cref="ToJsonObject"/>, because a saved model must not carry a user, workstation or
+        /// OneDrive path. A record read back from a model saved by a build that did write it (key
+        /// <c>Path_TSD</c>) still carries it here, and keeps resolving through it; it is dropped the next time the
+        /// model is saved. See <see cref="Locator_TSD"/> for what is persisted.
+        /// </summary>
         public string Path_TSD { get; set; }
+
+        /// <summary>
+        /// Where the results file is, relative to the folder of the model file the record is saved in, with
+        /// forward slashes (typically just its file name, as the run writes both side by side). This is what is
+        /// persisted, so the model and its results can be moved or copied together. It locates the file and
+        /// nothing else: the recorded length and write time decide whether it is the right one. Never
+        /// absolute - see <see cref="Locator(string, string)"/>.
+        /// </summary>
+        public string Locator_TSD { get; set; }
 
         /// <summary>The results file's length in bytes when recorded. Required; negative means absent.</summary>
         public long Length_TSD { get; set; } = -1;
@@ -495,12 +523,57 @@ namespace SAM.Analytical
         }
 
         /// <summary>
+        /// The relative locator for <paramref name="path_TSD"/> from the folder of <paramref name="path_Model"/>
+        /// (or, where that is not given, from <paramref name="path_TSD"/>'s own folder, i.e. its file name).
+        /// Null where no relative path exists - a different drive, say - rather than an absolute one: a record
+        /// that cannot be located is then incomplete and refused, never persisted with a local path.
+        /// </summary>
+        public static string Locator(string path_TSD, string path_Model)
+        {
+            if (string.IsNullOrWhiteSpace(path_TSD))
+            {
+                return null;
+            }
+
+            if (string.IsNullOrWhiteSpace(path_Model))
+            {
+                string fileName = Path.GetFileName(path_TSD);
+
+                return string.IsNullOrWhiteSpace(fileName) ? null : fileName;
+            }
+
+            string directory = Path.GetDirectoryName(Path.GetFullPath(path_Model));
+            if (string.IsNullOrWhiteSpace(directory))
+            {
+                return null;
+            }
+
+            //Uri, not Path.GetRelativePath: this assembly also targets .NET Framework. A trailing separator makes the
+            //folder a folder; a result that is still absolute (another drive, say) has no relative form.
+            Uri uri_Directory = new(directory.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar) + Path.DirectorySeparatorChar);
+            Uri uri_Relative = uri_Directory.MakeRelativeUri(new Uri(Path.GetFullPath(path_TSD)));
+            if (uri_Relative.IsAbsoluteUri)
+            {
+                return null;
+            }
+
+            string result = Uri.UnescapeDataString(uri_Relative.ToString());
+            if (string.IsNullOrWhiteSpace(result) || Path.IsPathRooted(result))
+            {
+                return null;
+            }
+
+            //A Uri already uses forward slashes.
+            return result;
+        }
+
+        /// <summary>
         /// Whether this record states all of what it must - the results file's path, length and write time,
         /// the model fingerprint and the scenario fingerprint. A record missing any of them is refused
         /// wholesale rather than validated on the rest; see the type's remarks for why there is no partial
         /// form.
         /// </summary>
-        public bool IsComplete => !string.IsNullOrWhiteSpace(Path_TSD)
+        public bool IsComplete => (!string.IsNullOrWhiteSpace(Path_TSD) || !string.IsNullOrWhiteSpace(Locator_TSD))
             && Length_TSD >= 0
             && Timestamp_TSD >= 0
             && !string.IsNullOrWhiteSpace(Fingerprint_Model)
@@ -571,32 +644,44 @@ namespace SAM.Analytical
             path_TSD = null;
             refusal = null;
 
-            if (string.IsNullOrWhiteSpace(Path_TSD))
+            bool locator = !string.IsNullOrWhiteSpace(Locator_TSD) && !Path.IsPathRooted(Locator_TSD);
+
+            if (string.IsNullOrWhiteSpace(Path_TSD) && !locator)
             {
                 refusal = "The model records no simulation results file, so its results cannot be reviewed without running the simulation again.";
 
                 return false;
             }
 
+            //Where the results are expected, for the messages below: the runtime hint where there is one, else the
+            //locator against the opened model's folder, else the locator as recorded.
+            string path_Expected = Path_TSD;
+            if (string.IsNullOrWhiteSpace(path_Expected))
+            {
+                path_Expected = !string.IsNullOrWhiteSpace(path_Model) && !string.IsNullOrWhiteSpace(Path.GetDirectoryName(path_Model))
+                    ? Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path_Model), Locator_TSD))
+                    : Locator_TSD;
+            }
+
             //Fail closed on an incomplete record, before anything is stat'ed or hashed. A record that cannot
             //state the whole rule does not get to state part of it - see the type's remarks.
             if (Length_TSD < 0 || Timestamp_TSD < 0)
             {
-                refusal = string.Format("The model's record of the simulation results at '{0}' does not state their size and write time, so those results cannot be shown to be the ones it was produced from. Re-run the simulation to review results for this model.", Path_TSD);
+                refusal = string.Format("The model's record of the simulation results at '{0}' does not state their size and write time, so those results cannot be shown to be the ones it was produced from. Re-run the simulation to review results for this model.", path_Expected);
 
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(Fingerprint_Model))
             {
-                refusal = string.Format("The model's record of the simulation results at '{0}' does not state the design they were produced from, so the model cannot be shown to be unchanged since. Re-run the simulation to review results for this model.", Path_TSD);
+                refusal = string.Format("The model's record of the simulation results at '{0}' does not state the design they were produced from, so the model cannot be shown to be unchanged since. Re-run the simulation to review results for this model.", path_Expected);
 
                 return false;
             }
 
             if (string.IsNullOrWhiteSpace(Fingerprint_OverheatingScenarios))
             {
-                refusal = string.Format("The model's record of the simulation results at '{0}' does not state the overheating scenarios they were assessed under, so those results cannot be shown to belong to the scenarios this model now carries. Re-run the simulation to review results for this model.", Path_TSD);
+                refusal = string.Format("The model's record of the simulation results at '{0}' does not state the overheating scenarios they were assessed under, so those results cannot be shown to belong to the scenarios this model now carries. Re-run the simulation to review results for this model.", path_Expected);
 
                 return false;
             }
@@ -611,27 +696,23 @@ namespace SAM.Analytical
             {
                 path_Candidate = Path_TSD;
             }
-            else
+            else if (locator && !string.IsNullOrWhiteSpace(path_Model) && !string.IsNullOrWhiteSpace(Path.GetDirectoryName(path_Model)))
             {
-                //The folder the run wrote to may have moved wholesale; the model file and its results move
-                //together then. The same length/timestamp check applies to the fallback - the name locates the
-                //candidate, never validates it.
-                string fileName = Path.GetFileName(Path_TSD);
-                if (!string.IsNullOrWhiteSpace(path_Model) && !string.IsNullOrWhiteSpace(fileName))
+                //The recorded locator, against the folder of the model file as it is now: the folder the run wrote
+                //to may have moved or been copied wholesale, and the model file and its results move together then.
+                //The same length/timestamp check applies - the locator finds the candidate, never validates it.
+                string path_Located = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(path_Model), Locator_TSD));
+                if (!string.Equals(path_Located, Path_TSD, StringComparison.OrdinalIgnoreCase) && IsCurrent(path_Located))
                 {
-                    string path_BesideModel = Path.Combine(Path.GetDirectoryName(path_Model), fileName);
-                    if (!string.Equals(path_BesideModel, Path_TSD, StringComparison.OrdinalIgnoreCase) && IsCurrent(path_BesideModel))
-                    {
-                        path_Candidate = path_BesideModel;
-                    }
+                    path_Candidate = path_Located;
                 }
             }
 
             if (path_Candidate is null)
             {
-                refusal = File.Exists(Path_TSD)
-                    ? string.Format("The simulation results at '{0}' have been rewritten since this model was produced from them, so they are no longer the results that belong with it. Re-run the simulation to review the current results.", Path_TSD)
-                    : string.Format("The simulation results this model was produced from are no longer at '{0}'. Re-run the simulation to produce them again.", Path_TSD);
+                refusal = File.Exists(path_Expected)
+                    ? string.Format("The simulation results at '{0}' have been rewritten since this model was produced from them, so they are no longer the results that belong with it. Re-run the simulation to review the current results.", path_Expected)
+                    : string.Format("The simulation results this model was produced from are no longer at '{0}'. Re-run the simulation to produce them again.", path_Expected);
 
                 return false;
             }
@@ -640,7 +721,7 @@ namespace SAM.Analytical
             //design produced, however intact the file is.
             if (!string.Equals(Fingerprint_Model, Fingerprint(analyticalModel), StringComparison.Ordinal))
             {
-                refusal = string.Format("The model has changed since the simulation results at '{0}' were produced from it, so those results no longer describe it. Re-run the simulation to review results for the current model.", Path_TSD);
+                refusal = string.Format("The model has changed since the simulation results at '{0}' were produced from it, so those results no longer describe it. Re-run the simulation to review results for the current model.", path_Expected);
 
                 return false;
             }
@@ -650,7 +731,7 @@ namespace SAM.Analytical
             //unchanged results would reassess an old run against an assessment nobody ran.
             if (!string.Equals(Fingerprint_OverheatingScenarios, Fingerprint_Scenarios(analyticalModel), StringComparison.Ordinal))
             {
-                refusal = string.Format("The overheating scenarios on this model are not the ones the simulation results at '{0}' were assessed under, so those results cannot be reviewed against them. Prepare the iteration again and re-run the simulation.", Path_TSD);
+                refusal = string.Format("The overheating scenarios on this model are not the ones the simulation results at '{0}' were assessed under, so those results cannot be reviewed against them. Prepare the iteration again and re-run the simulation.", path_Expected);
 
                 return false;
             }
@@ -670,6 +751,19 @@ namespace SAM.Analytical
             if (jsonObject.ContainsKey("Path_TSD"))
             {
                 Path_TSD = jsonObject["Path_TSD"]?.GetValue<string>();
+            }
+
+            if (jsonObject.ContainsKey("Locator_TSD"))
+            {
+                Locator_TSD = jsonObject["Locator_TSD"]?.GetValue<string>();
+            }
+
+            //A record written before the locator existed carries only the absolute path. Its file name is the
+            //locator the old fallback already used (beside the model), so the record is portable from here on:
+            //saved again it writes the locator and not the path.
+            if (string.IsNullOrWhiteSpace(Locator_TSD) && !string.IsNullOrWhiteSpace(Path_TSD))
+            {
+                Locator_TSD = Locator(Path_TSD, null);
             }
 
             if (jsonObject.ContainsKey("Length_TSD"))
@@ -703,9 +797,10 @@ namespace SAM.Analytical
                 return result;
             }
 
-            if (Path_TSD is not null)
+            //Path_TSD (absolute) is deliberately never written: see its summary.
+            if (!string.IsNullOrWhiteSpace(Locator_TSD))
             {
-                result["Path_TSD"] = Path_TSD;
+                result["Locator_TSD"] = Locator_TSD;
             }
 
             result["Length_TSD"] = Length_TSD;

@@ -51,7 +51,9 @@ namespace SAM.Tests
 
                 SimulationResultProvenance read = new(provenance.ToJsonObject());
 
-                Assert.Equal(provenance.Path_TSD, read.Path_TSD);
+                //The absolute path is runtime only: what travels is the relative locator.
+                Assert.Null(read.Path_TSD);
+                Assert.Equal(Path.GetFileName(path_TSD), read.Locator_TSD);
                 Assert.Equal(provenance.Length_TSD, read.Length_TSD);
                 Assert.Equal(provenance.Timestamp_TSD, read.Timestamp_TSD);
                 Assert.Equal(provenance.Fingerprint_Model, read.Fingerprint_Model);
@@ -63,6 +65,194 @@ namespace SAM.Tests
             finally
             {
                 File.Delete(path_TSD);
+            }
+        }
+
+        /// <summary>No absolute or local path is emitted by the serialization.</summary>
+        [Fact]
+        public void ToJsonObject_NeverEmitsAnAbsoluteOrLocalPath()
+        {
+            string directory = NewDirectory();
+
+            try
+            {
+                string path_TSD = WriteResults(Path.Combine(directory, "run.tsd"));
+                SimulationResultProvenance provenance = new(Model("run"), path_TSD, Path.Combine(directory, "run.sam"));
+
+                string json = provenance.ToJsonObject().ToJsonString();
+
+                Assert.DoesNotContain("Path_TSD", json);
+                Assert.DoesNotContain(directory.Replace("\\", "\\\\"), json, StringComparison.OrdinalIgnoreCase);
+                Assert.DoesNotContain(Environment.UserName, json, StringComparison.OrdinalIgnoreCase);
+                Assert.False(Path.IsPathRooted(provenance.Locator_TSD));
+                Assert.Equal("run.tsd", provenance.Locator_TSD);
+
+                //A results file in a folder below and above the model is each a relative locator; none at all has none.
+                Assert.Equal("results/run.tsd", SimulationResultProvenance.Locator(Path.Combine(directory, "results", "run.tsd"), Path.Combine(directory, "run.sam")));
+                Assert.Equal("../run.tsd", SimulationResultProvenance.Locator(Path.Combine(directory, "run.tsd"), Path.Combine(directory, "m", "run.sam")));
+                Assert.Null(SimulationResultProvenance.Locator(null, null));
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        /// <summary>A model saved with the relative locator and reopened resolves its results, with no path hint and no absolute path in the file.</summary>
+        [Fact]
+        public void SaveAndReopen_ResolvesTheResultsByTheRelativeLocator()
+        {
+            string directory = NewDirectory();
+
+            try
+            {
+                string path_TSD = WriteResults(Path.Combine(directory, "run.tsd"));
+                string path_Model = Path.Combine(directory, "run.sam");
+
+                AnalyticalModel analyticalModel = Model("run");
+                analyticalModel.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(analyticalModel, path_TSD));
+
+                AnalyticalModel analyticalModel_Reopened = SaveAndReopen(analyticalModel, path_Model);
+
+                string text = File.ReadAllText(path_Model);
+                Assert.DoesNotContain("Path_TSD", text);
+                Assert.DoesNotContain(directory.Replace("\\", "\\\\"), text, StringComparison.OrdinalIgnoreCase);
+
+                Assert.True(analyticalModel_Reopened.TryGetValue(AnalyticalModelParameter.SimulationResultProvenance, out SimulationResultProvenance provenance));
+                Assert.Null(provenance.Path_TSD);
+                Assert.True(provenance.IsComplete);
+                Assert.True(provenance.TryResolvePath_TSD(analyticalModel_Reopened, path_Model, out string path_Resolved, out string refusal), refusal);
+                Assert.Equal(path_TSD, path_Resolved);
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        /// <summary>The model and its results copied to another folder still resolve - to the copy, since the locator is relative.</summary>
+        [Fact]
+        public void CopiedFolder_StillResolvesThroughTheRelativeLocator()
+        {
+            string directory = NewDirectory();
+
+            try
+            {
+                string directory_Run = Directory.CreateDirectory(Path.Combine(directory, "run")).FullName;
+                string path_TSD = WriteResults(Path.Combine(directory_Run, "run.tsd"));
+                string path_Model = Path.Combine(directory_Run, "run.sam");
+
+                AnalyticalModel analyticalModel = Model("run");
+                analyticalModel.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(analyticalModel, path_TSD, path_Model));
+                SaveAndReopen(analyticalModel, path_Model);
+
+                //Copied with its write time: the same results file in a new place.
+                string directory_Copy = Directory.CreateDirectory(Path.Combine(directory, "copy")).FullName;
+                string path_TSD_Copy = Path.Combine(directory_Copy, "run.tsd");
+                string path_Model_Copy = Path.Combine(directory_Copy, "run.sam");
+                File.Copy(path_TSD, path_TSD_Copy);
+                File.SetLastWriteTimeUtc(path_TSD_Copy, File.GetLastWriteTimeUtc(path_TSD));
+                File.Copy(path_Model, path_Model_Copy);
+
+                //The original is gone, as on another machine.
+                File.Delete(path_TSD);
+                File.Delete(path_Model);
+
+                AnalyticalModel analyticalModel_Copy = Core.Convert.ToSAM<AnalyticalModel>(path_Model_Copy).OfType<AnalyticalModel>().Single();
+                Assert.True(analyticalModel_Copy.TryGetValue(AnalyticalModelParameter.SimulationResultProvenance, out SimulationResultProvenance provenance));
+                Assert.True(provenance.TryResolvePath_TSD(analyticalModel_Copy, path_Model_Copy, out string path_Resolved, out string refusal), refusal);
+                Assert.Equal(path_TSD_Copy, path_Resolved);
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        /// <summary>
+        /// A model saved by an earlier build carries only the absolute <c>Path_TSD</c>. It still reads, still resolves
+        /// (at the recorded path, and beside the model when the folder moved), and written again it drops the path.
+        /// </summary>
+        [Fact]
+        public void LegacyAbsolutePath_StillReadsResolvesAndIsDroppedOnTheNextSave()
+        {
+            string directory = NewDirectory();
+
+            try
+            {
+                string path_TSD = WriteResults(Path.Combine(directory, "run.tsd"));
+                string path_Model = Path.Combine(directory, "run.sam");
+
+                AnalyticalModel analyticalModel = Model("run");
+                SimulationResultProvenance current = new(analyticalModel, path_TSD);
+
+                //What the earlier build wrote: the record's JSON with the absolute path and without the locator.
+                System.Text.Json.Nodes.JsonObject legacy = current.ToJsonObject();
+                legacy.Remove("Locator_TSD");
+                legacy["Path_TSD"] = path_TSD;
+
+                SimulationResultProvenance read = new(legacy);
+                Assert.Equal(path_TSD, read.Path_TSD);
+                Assert.Equal("run.tsd", read.Locator_TSD);
+                Assert.True(read.IsComplete);
+                Assert.True(read.TryResolvePath_TSD(analyticalModel, null, out string path_Resolved, out string refusal), refusal);
+                Assert.Equal(path_TSD, path_Resolved);
+
+                //The recorded path is stale (another machine) but the file sits beside the model: found by the derived locator.
+                legacy["Path_TSD"] = Path.Combine(directory, "gone", "run.tsd");
+                SimulationResultProvenance read_Moved = new(legacy);
+                Assert.True(read_Moved.TryResolvePath_TSD(analyticalModel, path_Model, out string path_Moved, out string refusal_Moved), refusal_Moved);
+                Assert.Equal(path_TSD, path_Moved);
+
+                //Saved again: the path is gone from the output.
+                Assert.DoesNotContain("Path_TSD", read.ToJsonObject().ToJsonString());
+                Assert.Equal("run.tsd", read.ToJsonObject()["Locator_TSD"]?.GetValue<string>());
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
+            }
+        }
+
+        /// <summary>Missing results refuse exactly as before - safe, named, and without running the model half.</summary>
+        [Fact]
+        public void MissingResults_RefuseWithTheSameSafeMessage_ForALocatorOnlyRecord()
+        {
+            string directory = NewDirectory();
+
+            try
+            {
+                string path_TSD = WriteResults(Path.Combine(directory, "run.tsd"));
+                string path_Model = Path.Combine(directory, "run.sam");
+
+                AnalyticalModel analyticalModel = Model("run");
+                SimulationResultProvenance saved = new(new SimulationResultProvenance(analyticalModel, path_TSD).ToJsonObject());
+                Assert.Null(saved.Path_TSD);
+
+                File.Delete(path_TSD);
+
+                Assert.False(saved.TryResolvePath_TSD(analyticalModel, path_Model, out string path_Resolved, out string refusal));
+                Assert.Null(path_Resolved);
+                Assert.Contains("are no longer at", refusal);
+                Assert.Contains(path_TSD, refusal, StringComparison.OrdinalIgnoreCase);
+
+                //Rewritten rather than missing is still told apart.
+                WriteResults(path_TSD);
+                File.SetLastWriteTimeUtc(path_TSD, DateTime.UtcNow.AddMinutes(5));
+                Assert.False(saved.TryResolvePath_TSD(analyticalModel, path_Model, out string _, out string refusal_Rewritten));
+                Assert.Contains("have been rewritten", refusal_Rewritten);
+
+                //No locator and no path at all: the record states no results file.
+                Assert.False(new SimulationResultProvenance().TryResolvePath_TSD(analyticalModel, path_Model, out string _, out string refusal_None));
+                Assert.Contains("records no simulation results file", refusal_None);
+
+                //A rooted locator is never followed.
+                SimulationResultProvenance rooted = new() { Locator_TSD = path_TSD, Length_TSD = 1, Timestamp_TSD = 1, Fingerprint_Model = "a", Fingerprint_OverheatingScenarios = "b" };
+                Assert.False(rooted.TryResolvePath_TSD(analyticalModel, path_Model, out string _, out string _));
+            }
+            finally
+            {
+                Directory.Delete(directory, true);
             }
         }
 
