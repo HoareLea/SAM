@@ -20,7 +20,8 @@ namespace SAM.Analytical
         /// <para><b>The order</b></para>
         /// <list type="number">
         /// <item>The recorded <see cref="PartOModelReference.Path_Relative"/>, from <paramref name="path_Result"/>'s folder.</item>
-        /// <item>The recorded <see cref="PartOModelReference.Path_Absolute"/>.</item>
+        /// <item>The caller's <paramref name="path_Hint"/>, if it gave one: a place it knows to look <b>now</b>. It is not persisted anywhere, and
+        /// a file there is accepted only by identity like any other.</item>
         /// <item>Only when neither holds the model: the other <c>.sam</c> files beside those two locations, so a design that
         /// was renamed is still found. At most <c>16</c> files are opened.</item>
         /// </list>
@@ -31,9 +32,10 @@ namespace SAM.Analytical
         /// referenced kind: a <b>design</b> carries no Part O result state (<c>SimulationResultProvenance</c> or
         /// overheating scenarios - a result shares its design's guid, so a result is never taken for the design), and a
         /// <b>result</b> carries a simulation provenance. Its state then decides <see cref="PartOBaselineResolutionStatus.Resolved"/>
-        /// (the fingerprint is the recorded one) or <see cref="PartOBaselineResolutionStatus.Changed"/> (it is not - the design
-        /// was edited, or the result was overwritten by a later run). A file with another guid is ignored whatever it is
-        /// called. A file name is never compared.
+        /// (the fingerprint of the model as it is now - <b>recomputed</b>, for a result as for a design - is the recorded one) or
+        /// <see cref="PartOBaselineResolutionStatus.Changed"/> (it is not - the design was edited, the result was overwritten by a
+        /// later run, or its content was edited after it was saved). A file with another guid is ignored whatever it is
+        /// called. A file name is never compared, and no absolute path takes part: none is persisted.
         /// </para>
         /// <para>
         /// More than one file beside the recorded location that is the model in the same state is
@@ -41,8 +43,9 @@ namespace SAM.Analytical
         /// </para>
         /// </summary>
         /// <param name="partOModelReference">The reference to resolve.</param>
-        /// <param name="path_Result">The result model's own file, from which the relative locator is resolved. May be null, then only the absolute locator is tried.</param>
-        public static PartOBaselineResolution PartOModelResolution(this PartOModelReference partOModelReference, string path_Result)
+        /// <param name="path_Result">The result model's own file, from which the relative locator is resolved. May be null, then only the hint is tried.</param>
+        /// <param name="path_Hint">A file the caller knows of now (the open model, say), tried after the relative locator. Never persisted; null for none.</param>
+        public static PartOBaselineResolution PartOModelResolution(this PartOModelReference partOModelReference, string path_Result, string path_Hint = null)
         {
             if (partOModelReference is null || !partOModelReference.IsValid)
             {
@@ -72,11 +75,11 @@ namespace SAM.Analytical
                 }
             }
 
-            if (!string.IsNullOrWhiteSpace(partOModelReference.Path_Absolute))
+            if (!string.IsNullOrWhiteSpace(path_Hint))
             {
                 try
                 {
-                    paths_Candidate.Add(Path.GetFullPath(partOModelReference.Path_Absolute));
+                    paths_Candidate.Add(Path.GetFullPath(path_Hint));
                 }
                 catch
                 {
@@ -183,6 +186,28 @@ namespace SAM.Analytical
         }
 
         /// <summary>
+        /// A relative locator re-expressed for another folder: <paramref name="path_Relative"/> is relative to <paramref name="directory_From"/>, and the
+        /// result is the same file relative to <paramref name="directory_To"/>. Null where any part is unknown or there is no relative form.
+        /// How a result derived from another result keeps pointing at the design the first one came from.
+        /// </summary>
+        public static string PartOBaselineRebasedPath(string path_Relative, string directory_From, string directory_To)
+        {
+            if (string.IsNullOrWhiteSpace(path_Relative) || string.IsNullOrWhiteSpace(directory_From) || string.IsNullOrWhiteSpace(directory_To))
+            {
+                return null;
+            }
+
+            try
+            {
+                return PartOBaselineRelativePath(directory_To, Path.GetFullPath(Path.Combine(directory_From, path_Relative)));
+            }
+            catch
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
         /// The path of <paramref name="path"/> relative to the folder <paramref name="directory"/>, or null where it has no relative form
         /// (another root) or either is not a usable path. Separators are the platform's.
         /// </summary>
@@ -243,7 +268,9 @@ namespace SAM.Analytical
 
             if (partOModelReference.Kind == PartOModelReferenceKind.Result)
             {
-                return hasProvenance ? string.Equals(simulationResultProvenance.Fingerprint_Model, partOModelReference.Fingerprint, StringComparison.Ordinal) : null;
+                //Recomputed from the model as it is now, never read from the record the file carries: that record is what the result said of itself
+                //when it was saved, and a result edited since still says it.
+                return hasProvenance ? string.Equals(SimulationResultProvenance.Fingerprint(analyticalModel), partOModelReference.Fingerprint, StringComparison.Ordinal) : null;
             }
 
             //A result shares its design's guid, so a model that is a Part O result is never the design.

@@ -17,9 +17,11 @@ namespace SAM.Analytical
     /// <item><see cref="Fingerprint"/> - the model's state: <c>SimulationResultProvenance.Fingerprint</c> of a design,
     /// or the <c>Fingerprint_Model</c> of a result's own provenance. It says whether the model is still the one the
     /// result was derived from, which the guid cannot.</item>
-    /// <item><see cref="Path_Relative"/> then <see cref="Path_Absolute"/> - <b>locators</b> only. They say where to look, and
-    /// a file found there is accepted only when its identity matches. The relative path is from the folder the result
-    /// model is written to, so a whole case tree that is moved or copied still finds its design.</item>
+    /// <item><see cref="Path_Relative"/> - a <b>locator</b> only: where to look, from the folder the result model is written to, so a whole
+    /// case tree that is moved or copied still finds its design. A file found there is accepted only when its identity
+    /// matches. <b>No absolute path is ever persisted</b>: a saved result can be shared as a fixture or as evidence, and a
+    /// workstation, user or OneDrive path in it would travel with it. Where a caller knows a place to look now, it hands it to
+    /// <c>Query.PartOModelResolution</c> for that call only.</item>
     /// <item><see cref="Name"/> - for display. It is never used to find or accept anything.</item>
     /// </list>
     /// </summary>
@@ -29,13 +31,13 @@ namespace SAM.Analytical
         {
         }
 
-        public PartOModelReference(PartOModelReferenceKind kind, Guid guid, string name, string fingerprint, string path_Absolute)
+        public PartOModelReference(PartOModelReferenceKind kind, Guid guid, string name, string fingerprint, string path_Relative)
         {
             Kind = kind;
             Guid = guid;
             Name = name;
             Fingerprint = fingerprint ?? string.Empty;
-            Path_Absolute = path_Absolute;
+            Path_Relative = path_Relative;
         }
 
         public PartOModelReference(PartOModelReference partOModelReference)
@@ -46,7 +48,6 @@ namespace SAM.Analytical
                 Guid = partOModelReference.Guid;
                 Name = partOModelReference.Name;
                 Fingerprint = partOModelReference.Fingerprint;
-                Path_Absolute = partOModelReference.Path_Absolute;
                 Path_Relative = partOModelReference.Path_Relative;
             }
         }
@@ -68,10 +69,10 @@ namespace SAM.Analytical
         /// <summary>The referenced model's state fingerprint when recorded. Required.</summary>
         public string Fingerprint { get; set; } = string.Empty;
 
-        /// <summary>Where the model was when the result was made, as an absolute path. A locator, may be null.</summary>
-        public string Path_Absolute { get; set; }
-
-        /// <summary>The same place relative to the folder the result model is written to. A locator, may be null.</summary>
+        /// <summary>
+        /// Where the model was when the result was made, relative to the folder the result model is written to. A locator, may be null; never
+        /// absolute, and the only path that is persisted.
+        /// </summary>
         public string Path_Relative { get; set; }
 
         /// <summary>A kind, a guid and a fingerprint: enough to recognise the model. A locator is optional.</summary>
@@ -88,7 +89,6 @@ namespace SAM.Analytical
             Guid = Guid.TryParse(Text(jsonObject, "Guid"), out Guid guid) ? guid : Guid.Empty;
             Name = Text(jsonObject, "Name");
             Fingerprint = Text(jsonObject, "Fingerprint") ?? string.Empty;
-            Path_Absolute = Text(jsonObject, "Path_Absolute");
             Path_Relative = Text(jsonObject, "Path_Relative");
 
             return true;
@@ -107,11 +107,6 @@ namespace SAM.Analytical
             if (Name is not null)
             {
                 result["Name"] = Name;
-            }
-
-            if (Path_Absolute is not null)
-            {
-                result["Path_Absolute"] = Path_Absolute;
             }
 
             if (Path_Relative is not null)

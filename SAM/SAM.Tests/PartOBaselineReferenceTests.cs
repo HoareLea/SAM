@@ -6,7 +6,10 @@ using SAM.Analytical.Enums;
 using SAM.Core;
 using System;
 using System.IO;
+using System.IO.Compression;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using Xunit;
 
 namespace SAM.Tests
@@ -14,9 +17,9 @@ namespace SAM.Tests
     /// <summary>
     /// <b>A saved Part O result says what it was derived from</b> (model-state architecture, PR-5).
     /// <para>
-    /// <see cref="PartOBaselineReference"/> is stamped on result models, carries identity (guid, state fingerprint) with
-    /// locators (relative then absolute path) and a display name, and is resolved by identity - never by file name.
-    /// Everything here is offline: real <c>.sam</c> files in a temporary folder, no TAS.
+    /// <see cref="PartOBaselineReference"/> is stamped on result models, carries identity (guid, state fingerprint) with a
+    /// <b>relative</b> locator and a display name, and is resolved by identity - never by file name, and never through an absolute
+    /// path, because none is persisted. Everything here is offline: real <c>.sam</c> files in a temporary folder, no TAS.
     /// </para>
     /// </summary>
     public class PartOBaselineReferenceTests : IDisposable
@@ -49,14 +52,13 @@ namespace SAM.Tests
             return new AnalyticalModel(name, null, null, null, adjacencyCluster, null, null);
         }
 
+        /// <summary>The folder a case's result is written to, in the layout a Part O run uses.</summary>
+        private string Directory_Result(string name_Case = "Iteration1a") => Path.Combine(directory, "PartO", name_Case, "tas");
+
         /// <summary>A result: a copy of the design (so it keeps the design's guid) that carries a provenance record, as a run's model does.</summary>
-        private static AnalyticalModel Result(AnalyticalModel design, PartOBaselineReference partOBaselineReference, string name = null)
+        private static AnalyticalModel Result(AnalyticalModel design, PartOBaselineReference partOBaselineReference)
         {
             AnalyticalModel result = new(design);
-            if (name is not null)
-            {
-                result.Name = name;
-            }
 
             Assert.True(result.StampPartOBaselineReference(partOBaselineReference));
             result.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(result, null));
@@ -78,12 +80,27 @@ namespace SAM.Tests
             return Core.Convert.ToSAM<AnalyticalModel>(path).OfType<AnalyticalModel>().Single();
         }
 
-        private PartOBaselineReference ReferenceTo(AnalyticalModel design, string path_Design, PartODerivedCase partODerivedCase = PartODerivedCase.Iteration1a)
+        private PartOBaselineReference ReferenceTo(AnalyticalModel design, string path_Design, PartODerivedCase partODerivedCase = PartODerivedCase.Iteration1a, string name_Case = "Iteration1a")
         {
-            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromDesign(partODerivedCase, design, path_Design);
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromDesign(partODerivedCase, design, path_Design, Directory_Result(name_Case));
             Assert.NotNull(partOBaselineReference);
 
             return partOBaselineReference;
+        }
+
+        /// <summary>The whole text a saved <c>.sam</c> holds, inflated.</summary>
+        private static string Payload(string path)
+        {
+            using ZipArchive zipArchive = ZipFile.OpenRead(path);
+
+            StringBuilder stringBuilder = new();
+            foreach (ZipArchiveEntry zipArchiveEntry in zipArchive.Entries)
+            {
+                using StreamReader streamReader = new(zipArchiveEntry.Open(), Encoding.UTF8);
+                stringBuilder.Append(streamReader.ReadToEnd());
+            }
+
+            return stringBuilder.ToString();
         }
 
         // ---- the representation ------------------------------------------------------------------------------
@@ -93,8 +110,7 @@ namespace SAM.Tests
         public void JsonRoundTrip_PreservesTheReference()
         {
             AnalyticalModel design = Design();
-            PartOBaselineReference partOBaselineReference = ReferenceTo(design, Path.Combine(directory, "Design.sam"), PartODerivedCase.Iteration2);
-            partOBaselineReference.Design.Path_Relative = Path.Combine("..", "..", "Design.sam");
+            PartOBaselineReference partOBaselineReference = ReferenceTo(design, Path.Combine(directory, "Design.sam"), PartODerivedCase.Iteration2, "Iteration2");
 
             PartOBaselineReference read = new(partOBaselineReference.ToJsonObject());
 
@@ -104,8 +120,7 @@ namespace SAM.Tests
             Assert.Equal(design.Guid, read.Design.Guid);
             Assert.Equal(design.Name, read.Design.Name);
             Assert.Equal(SimulationResultProvenance.Fingerprint(design), read.Design.Fingerprint);
-            Assert.Equal(partOBaselineReference.Design.Path_Absolute, read.Design.Path_Absolute);
-            Assert.Equal(partOBaselineReference.Design.Path_Relative, read.Design.Path_Relative);
+            Assert.Equal(Path.Combine("..", "..", "..", "Design.sam"), read.Design.Path_Relative);
             Assert.Null(read.Source);
             Assert.Equal(partOBaselineReference.ToJsonObject().ToJsonString(), read.ToJsonObject().ToJsonString());
         }
@@ -136,30 +151,104 @@ namespace SAM.Tests
             foreach (PartODerivedCase partODerivedCase in new[] { PartODerivedCase.Iteration1a, PartODerivedCase.Iteration1b, PartODerivedCase.Iteration2, PartODerivedCase.MixedDesign })
             {
                 Assert.True(ReferenceTo(design, null, partODerivedCase).IsValid);
-                Assert.Null(Analytical.Create.PartOBaselineReferenceFromResult(partODerivedCase, result, null));
+                Assert.Null(Analytical.Create.PartOBaselineReferenceFromResult(partODerivedCase, result, null, Directory_Result()));
             }
 
             foreach (PartODerivedCase partODerivedCase in new[] { PartODerivedCase.Iteration2B, PartODerivedCase.Iteration3 })
             {
-                Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(partODerivedCase, design, null));
-                Assert.True(Analytical.Create.PartOBaselineReferenceFromResult(partODerivedCase, result, null).IsValid);
+                Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(partODerivedCase, design, null, null));
+                Assert.True(Analytical.Create.PartOBaselineReferenceFromResult(partODerivedCase, result, null, Directory_Result()).IsValid);
             }
 
-            Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Undefined, design, null));
-            Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, null, null));
+            Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Undefined, design, null, null));
+            Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, null, null, null));
 
             //A reference of the wrong shape for its case is invalid even when each part is valid.
+            PartOModelReference partOModelReference_Source = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, result, null, null).Source;
             Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration2B, fromDesign.Design, null).IsValid);
-            Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration1a, fromDesign.Design, Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, result, null).Source).IsValid);
+            Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration1a, fromDesign.Design, partOModelReference_Source).IsValid);
             Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration1a, null, null).IsValid);
-            Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration3, new PartOModelReference(PartOModelReferenceKind.Result, design.Guid, "x", "f", null), Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, result, null).Source).IsValid);
+            Assert.False(new PartOBaselineReference(PartODerivedCase.Iteration3, new PartOModelReference(PartOModelReferenceKind.Result, design.Guid, "x", "f", null), partOModelReference_Source).IsValid);
         }
 
         /// <summary>A result with no provenance is not a proven result, so nothing is derived from it.</summary>
         [Fact]
         public void ASourceWithNoProvenance_IsNotASourceResult()
         {
-            Assert.Null(Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Design(), null));
+            Assert.Null(Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Design(), null, null));
+        }
+
+        // ---- no absolute path is persisted -------------------------------------------------------------------
+
+        /// <summary>
+        /// A saved result can be shared as a fixture or as evidence, so nothing in it may name a workstation, a user or a OneDrive folder. The
+        /// reference holds identity and a relative locator only; the absolute path a caller starts from is used to compute the locator and
+        /// is not kept.
+        /// </summary>
+        [Fact]
+        public void NoAbsolutePathIsEverPersisted()
+        {
+            AnalyticalModel design = Design();
+            string path_Design = Save(design, "Design.sam");
+
+            AnalyticalModel result = Result(design, ReferenceTo(design, path_Design));
+            string path_Result = Save(result, "PartO", "Iteration1a", "tas", "Design.sam");
+
+            //Neither the reference's JSON nor the saved file mentions the folder they were made in, or any absolute path or drive.
+            string json = result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).ToJsonObject().ToJsonString();
+            Assert.DoesNotContain("Path_Absolute", json);
+            Assert.DoesNotContain(directory, json, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain(directory.Replace("\\", "\\\\"), json, StringComparison.OrdinalIgnoreCase);
+
+            string payload = Payload(path_Result);
+            Assert.Contains("Path_Relative", payload);
+            Assert.DoesNotContain("Path_Absolute", payload);
+            Assert.DoesNotContain(Path.GetTempPath().TrimEnd(Path.DirectorySeparatorChar), payload, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain(directory.Replace("\\", "\\\\"), payload, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain(Environment.UserName, Regex.Match(payload, "\"Design\":\\{[^}]*\\}").Value, StringComparison.OrdinalIgnoreCase);
+
+            PartOBaselineReference read = Open(path_Result).GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
+            Assert.False(Path.IsPathRooted(read.Design.Path_Relative));
+
+            //A reference written by a build that did keep an absolute path is read without it and written back without it.
+            System.Text.Json.Nodes.JsonObject jsonObject = read.ToJsonObject();
+            ((System.Text.Json.Nodes.JsonObject)jsonObject["Design"])["Path_Absolute"] = path_Design;
+            PartOBaselineReference legacy = new(jsonObject);
+            Assert.True(legacy.IsValid);
+            Assert.DoesNotContain("Path_Absolute", legacy.ToJsonObject().ToJsonString());
+
+            //A design that was never saved, or a result folder not yet known, records no locator at all rather than an absolute one.
+            Assert.Null(ReferenceTo(design, null).Design.Path_Relative);
+            Assert.Null(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, design, path_Design, null).Design.Path_Relative);
+        }
+
+        /// <summary>A place the caller knows of now finds a design the relative locator cannot - for that call only, and nothing is recorded.</summary>
+        [Fact]
+        public void ARuntimeHint_FindsADesignTheLocatorCannot_AndIsNotPersisted()
+        {
+            AnalyticalModel design = Design();
+            string path_Design = Save(design, "Design.sam");
+            PartOBaselineReference partOBaselineReference = ReferenceTo(design, path_Design);
+            string json_Before = partOBaselineReference.ToJsonObject().ToJsonString();
+
+            //The design moves somewhere the relative locator and its neighbours do not reach.
+            string path_Moved = Path.Combine(directory, "elsewhere", "deeper", "Moved.sam");
+            Directory.CreateDirectory(Path.GetDirectoryName(path_Moved));
+            File.Move(path_Design, path_Moved);
+
+            string path_Result = Path.Combine(Directory_Result(), "Design.sam");
+
+            Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineReference.Design.PartOModelResolution(path_Result).Status);
+
+            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(path_Result, path_Moved);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineResolution.Status);
+            Assert.Equal(Path.GetFullPath(path_Moved), partOBaselineResolution.Path);
+
+            //A hint is held to the same identity rule as any other candidate: another model there is not the design.
+            string path_Other = Save(Design("Other"), "other", "Other.sam");
+            Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineReference.Design.PartOModelResolution(path_Result, path_Other).Status);
+
+            Assert.Equal(json_Before, partOBaselineReference.ToJsonObject().ToJsonString());
         }
 
         // ---- 1a / 1b / 2 / 2B / 3 ----------------------------------------------------------------------------
@@ -175,7 +264,7 @@ namespace SAM.Tests
             string path_Design = Save(design, "Design.sam");
 
             AnalyticalModel result = Result(design, ReferenceTo(design, path_Design, partODerivedCase));
-            string path_Result = Save(result, "PartO", "Case", "tas", "Design.sam");
+            string path_Result = Save(result, "PartO", "Iteration1a", "tas", "Design.sam");
 
             AnalyticalModel reopened = Open(path_Result);
 
@@ -194,25 +283,29 @@ namespace SAM.Tests
             Assert.Equal(Path.GetFullPath(path_Design), partOBaselineResolution.Path);
         }
 
-        /// <summary>2B names the Iteration 2 result it derives from, and still says which design that lineage came from.</summary>
+        /// <summary>2B names the Iteration 2 result it derives from, and still says which design that lineage came from - rebased to its own folder.</summary>
         [Fact]
         public void Iteration2B_ReferencesTheIteration2Result_AndInheritsTheDesign()
         {
             AnalyticalModel design = Design();
             string path_Design = Save(design, "Design.sam");
 
-            AnalyticalModel result_2 = Result(design, ReferenceTo(design, path_Design, PartODerivedCase.Iteration2));
+            AnalyticalModel result_2 = Result(design, ReferenceTo(design, path_Design, PartODerivedCase.Iteration2, "Iteration2"));
             string path_Result_2 = Save(result_2, "PartO", "Iteration2", "tas", "Design.sam");
 
-            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Open(path_Result_2), path_Result_2);
+            string directory_2B = Directory_Result("Iteration2B");
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Open(path_Result_2), path_Result_2, directory_2B);
 
             Assert.True(partOBaselineReference.IsValid);
             Assert.Equal(PartODerivedCase.Iteration2B, partOBaselineReference.Case);
             Assert.Equal(PartOModelReferenceKind.Result, partOBaselineReference.Source.Kind);
             Assert.Equal(PartOModelReferenceKind.Design, partOBaselineReference.Design.Kind);
             Assert.Equal(design.Guid, partOBaselineReference.Design.Guid);
-            Assert.Equal(Path.GetFullPath(path_Design), Path.GetFullPath(partOBaselineReference.Design.Path_Absolute));
             Assert.Equal(result_2.GetValue<SimulationResultProvenance>(AnalyticalModelParameter.SimulationResultProvenance).Fingerprint_Model, partOBaselineReference.Source.Fingerprint);
+
+            //Both locators are relative to the folder 2B writes to: the inherited design's was rebased from the Iteration 2 result's folder.
+            Assert.Equal(Path.Combine("..", "..", "Iteration2", "tas", "Design.sam"), partOBaselineReference.Source.Path_Relative);
+            Assert.Equal(Path.Combine("..", "..", "..", "Design.sam"), partOBaselineReference.Design.Path_Relative);
 
             //A 2B round copies its Iteration 2 result, so it carries that result's reference until 2B replaces it.
             AnalyticalModel round = new(result_2);
@@ -220,13 +313,12 @@ namespace SAM.Tests
             Assert.True(round.StampPartOBaselineReference(partOBaselineReference));
             Assert.Equal(PartODerivedCase.Iteration2B, round.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Case);
 
-            Assert.True(round.LocatePartOBaselineReference(Path.GetDirectoryName(Path.Combine(directory, "PartO", "Iteration2B", "tas", "x.sam"))));
-            PartOBaselineReference located = round.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
-            Assert.Equal(Path.Combine("..", "..", "Iteration2", "tas", "Design.sam").Replace(Path.DirectorySeparatorChar, '/'), located.Source.Path_Relative.Replace(Path.DirectorySeparatorChar, '/'));
-            Assert.Equal(Path.Combine("..", "..", "..", "Design.sam").Replace(Path.DirectorySeparatorChar, '/'), located.Design.Path_Relative.Replace(Path.DirectorySeparatorChar, '/'));
+            string path_Result_2B = Path.Combine(directory_2B, "Design-Opt01.sam");
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Source.PartOModelResolution(path_Result_2B).Status);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Design.PartOModelResolution(path_Result_2B).Status);
         }
 
-        /// <summary>Iteration 3 points at the 1a/2 result it is paired with, and at the design behind it.</summary>
+        /// <summary>Iteration 3 points at the one 1a/2 result it is paired with, and at the design behind it.</summary>
         [Fact]
         public void Iteration3_ReferencesItsSourceResult_AndTheDesignBehindIt()
         {
@@ -236,12 +328,18 @@ namespace SAM.Tests
             AnalyticalModel result_A = Result(design, ReferenceTo(design, path_Design, PartODerivedCase.Iteration1a));
             string path_Result_A = Save(result_A, "PartO", "Iteration1a", "tas", "Design.sam");
 
-            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, Open(path_Result_A), path_Result_A);
+            //A folder of another depth than Reference A's, so the inherited design locator has to be rebased to reach the design.
+            string directory_3 = Path.Combine(directory, "PartO", "Iteration3");
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, Open(path_Result_A), path_Result_A, directory_3);
+            string path_Result_B = Path.Combine(directory_3, "B.sam");
+
+            Assert.Equal(Path.Combine("..", "..", "Design.sam"), partOBaselineReference.Design.Path_Relative);
+            Assert.Equal(Path.Combine("..", "Iteration1a", "tas", "Design.sam"), partOBaselineReference.Source.Path_Relative);
 
             Assert.True(partOBaselineReference.IsValid);
             Assert.Equal(PartODerivedCase.Iteration3, partOBaselineReference.Case);
-            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Source.PartOModelResolution(Path.Combine(directory, "PartO", "Iteration3", "tas", "B.sam")).Status);
-            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Design.PartOModelResolution(Path.Combine(directory, "PartO", "Iteration3", "tas", "B.sam")).Status);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Source.PartOModelResolution(path_Result_B).Status);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Design.PartOModelResolution(path_Result_B).Status);
         }
 
         /// <summary>A result derived from a legacy result (no reference of its own) records its source and says nothing about a design.</summary>
@@ -251,7 +349,7 @@ namespace SAM.Tests
             AnalyticalModel legacy = new(Design());
             legacy.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(legacy, null));
 
-            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, legacy, null);
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration3, legacy, null, null);
 
             Assert.True(partOBaselineReference.IsValid);
             Assert.Null(partOBaselineReference.Design);
@@ -275,7 +373,7 @@ namespace SAM.Tests
             Assert.Equal(PartOBaselineResolutionStatus.Unknown, new PartOModelReference().PartOModelResolution(null).Status);
 
             Assert.False(legacy.StampPartOBaselineReference(new PartOBaselineReference()));
-            Assert.False(legacy.LocatePartOBaselineReference(directory));
+            Assert.False(legacy.LocatePartOBaselineReference(directory, Path.Combine(directory, "Design.sam")));
         }
 
         // ---- resolution: by identity, never by name ----------------------------------------------------------
@@ -286,10 +384,9 @@ namespace SAM.Tests
         {
             AnalyticalModel design = Design();
             string path_Design = Save(design, "project", "Design.sam");
-            AnalyticalModel result = Result(design, ReferenceTo(design, path_Design));
-            string path_Result = Path.Combine(directory, "project", "PartO", "Iteration1a", "tas", "Design.sam");
-            Assert.True(result.LocatePartOBaselineReference(Path.GetDirectoryName(path_Result)));
-            result.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(result, null));
+            string directory_Result = Path.Combine(directory, "project", "PartO", "Iteration1a", "tas");
+
+            AnalyticalModel result = Result(design, Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, design, path_Design, directory_Result));
             Save(result, "project", "PartO", "Iteration1a", "tas", "Design.sam");
 
             string directory_Copy = Path.Combine(directory, "copy");
@@ -299,7 +396,6 @@ namespace SAM.Tests
             string path_Result_Copy = Path.Combine(directory_Copy, "PartO", "Iteration1a", "tas", "Design.sam");
             PartOBaselineReference read = Open(path_Result_Copy).GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
 
-            Assert.False(File.Exists(read.Design.Path_Absolute));
             PartOBaselineResolution partOBaselineResolution = read.Design.PartOModelResolution(path_Result_Copy);
             Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineResolution.Status);
             Assert.Equal(Path.GetFullPath(Path.Combine(directory_Copy, "Design.sam")), partOBaselineResolution.Path);
@@ -312,7 +408,7 @@ namespace SAM.Tests
             AnalyticalModel design = Design();
             string path_Design = Save(design, "Design.sam");
             PartOBaselineReference partOBaselineReference = ReferenceTo(design, path_Design);
-            string path_Result = Path.Combine(directory, "PartO", "Case", "tas", "Design.sam");
+            string path_Result = Path.Combine(Directory_Result(), "Design.sam");
 
             string path_Renamed = Path.Combine(directory, "Renamed to something else.sam");
             File.Move(path_Design, path_Renamed);
@@ -330,18 +426,19 @@ namespace SAM.Tests
             AnalyticalModel design = Design();
             string path_Design = Save(design, "Design.sam");
             PartOBaselineReference partOBaselineReference = ReferenceTo(design, path_Design);
+            string path_Result = Path.Combine(Directory_Result(), "Design.sam");
             File.Delete(path_Design);
 
             //Same name, same content shape, different model (a new guid).
             Save(Design(), "Design.sam");
-            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(null);
+            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(path_Result);
             Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineResolution.Status);
             Assert.Null(partOBaselineResolution.Path);
 
             //A result keeps its design's guid, but it is a result: never taken for the design.
             AnalyticalModel result = Result(design, partOBaselineReference);
             Save(result, "Design.sam");
-            Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineReference.Design.PartOModelResolution(null).Status);
+            Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineReference.Design.PartOModelResolution(path_Result).Status);
         }
 
         /// <summary>The design moved on since the result was derived: found, and said to have changed.</summary>
@@ -357,7 +454,7 @@ namespace SAM.Tests
             adjacencyCluster.AddObject(new Space("Flat 2"));
             Save(new AnalyticalModel(edited, adjacencyCluster), "Design.sam");
 
-            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(Path.Combine(directory, "PartO", "Case", "tas", "x.sam"));
+            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(Path.Combine(Directory_Result(), "x.sam"));
 
             Assert.Equal(PartOBaselineResolutionStatus.Changed, partOBaselineResolution.Status);
             Assert.Equal(path_Design, partOBaselineResolution.Path);
@@ -376,7 +473,7 @@ namespace SAM.Tests
             Save(design, "Copy one.sam");
             Save(design, "Copy two.sam");
 
-            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(null);
+            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(Path.Combine(Directory_Result(), "x.sam"));
 
             Assert.Equal(PartOBaselineResolutionStatus.Ambiguous, partOBaselineResolution.Status);
             Assert.Null(partOBaselineResolution.Path);
@@ -391,7 +488,7 @@ namespace SAM.Tests
             PartOBaselineReference partOBaselineReference = ReferenceTo(design, path_Design);
             File.Delete(path_Design);
 
-            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(null);
+            PartOBaselineResolution partOBaselineResolution = partOBaselineReference.Design.PartOModelResolution(Path.Combine(Directory_Result(), "x.sam"));
 
             Assert.Equal(PartOBaselineResolutionStatus.NotFound, partOBaselineResolution.Status);
             Assert.Contains("Design", partOBaselineResolution.Description);
@@ -402,10 +499,11 @@ namespace SAM.Tests
         public void ASourceResultOverwrittenByALaterRun_IsChanged()
         {
             AnalyticalModel design = Design();
-            AnalyticalModel result = Result(design, ReferenceTo(design, null, PartODerivedCase.Iteration2));
+            AnalyticalModel result = Result(design, ReferenceTo(design, null, PartODerivedCase.Iteration2, "Iteration2"));
             string path_Result = Save(result, "PartO", "Iteration2", "tas", "Design.sam");
-            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Open(path_Result), path_Result);
-            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Source.PartOModelResolution(null).Status);
+            string path_Result_2B = Path.Combine(Directory_Result("Iteration2B"), "Design-Opt01.sam");
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Open(path_Result), path_Result, Directory_Result("Iteration2B"));
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, partOBaselineReference.Source.PartOModelResolution(path_Result_2B).Status);
 
             AdjacencyCluster adjacencyCluster = result.AdjacencyCluster;
             adjacencyCluster.AddObject(new Space("Another flat"));
@@ -413,40 +511,164 @@ namespace SAM.Tests
             later.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(later, null));
             Save(later, "PartO", "Iteration2", "tas", "Design.sam");
 
-            Assert.Equal(PartOBaselineResolutionStatus.Changed, partOBaselineReference.Source.PartOModelResolution(null).Status);
+            Assert.Equal(PartOBaselineResolutionStatus.Changed, partOBaselineReference.Source.PartOModelResolution(path_Result_2B).Status);
+        }
+
+        // ---- the fingerprint invariant -----------------------------------------------------------------------
+
+        /// <summary>
+        /// <b>The design fingerprint a reference records is the design's, as handed in, and stamping cannot move it.</b> It is captured from the
+        /// intended state; the reference goes on a different model (the result), so the design is untouched; the result's own fingerprint -
+        /// which now includes the reference - is a different value that the reference never holds; save and reopen keep it; an unchanged
+        /// design resolves, and a genuinely changed one reports Changed.
+        /// </summary>
+        [Fact]
+        public void TheDesignFingerprint_IsCapturedFromTheIntendedState_AndStampingCannotPerturbIt()
+        {
+            AnalyticalModel design = Design();
+            string path_Design = Save(design, "Design.sam");
+
+            string fingerprint_Intended = SimulationResultProvenance.Fingerprint(Open(path_Design));
+            Assert.Equal(fingerprint_Intended, SimulationResultProvenance.Fingerprint(design));
+
+            PartOBaselineReference partOBaselineReference = ReferenceTo(design, path_Design);
+            Assert.Equal(fingerprint_Intended, partOBaselineReference.Design.Fingerprint);
+
+            //Stamping goes on the result, and the design is the same model it was, bit for bit.
+            AnalyticalModel result = new(design);
+            Assert.True(result.StampPartOBaselineReference(partOBaselineReference));
+            Assert.Equal(fingerprint_Intended, SimulationResultProvenance.Fingerprint(design));
+            Assert.False(design.HasValue(AnalyticalModelParameter.PartOBaselineReference));
+            Assert.Equal(fingerprint_Intended, result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Design.Fingerprint);
+
+            //No recursion: the result's own fingerprint includes the reference, so it is another value, and the reference holds the design's.
+            Assert.NotEqual(fingerprint_Intended, SimulationResultProvenance.Fingerprint(result));
+
+            //Stamped a second time, over what it inherited, nothing about the recorded identity moves.
+            AnalyticalModel round = new(result);
+            Assert.True(round.StampPartOBaselineReference(partOBaselineReference));
+            Assert.Equal(fingerprint_Intended, round.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Design.Fingerprint);
+
+            result.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(result, null));
+            string path_Result = Save(result, "PartO", "Iteration1a", "tas", "Design.sam");
+
+            PartOBaselineReference read = Open(path_Result).GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
+            Assert.Equal(fingerprint_Intended, read.Design.Fingerprint);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, read.Design.PartOModelResolution(path_Result).Status);
+
+            //A genuine change to the design is reported as one.
+            AdjacencyCluster adjacencyCluster = design.AdjacencyCluster;
+            adjacencyCluster.AddObject(new Space("Flat 2"));
+            Save(new AnalyticalModel(design, adjacencyCluster), "Design.sam");
+            Assert.Equal(PartOBaselineResolutionStatus.Changed, read.Design.PartOModelResolution(path_Result).Status);
+        }
+
+        /// <summary>
+        /// <b>The source fingerprint a reference records is the source's own recorded state, and stamping a derived model cannot move it.</b>
+        /// It equals the source's provenance record and what the source fingerprints to now; the source is another model, so it is untouched;
+        /// save and reopen keep it; an unchanged source resolves, and a source whose content changed - even with its old provenance
+        /// record still on it - reports Changed.
+        /// </summary>
+        [Fact]
+        public void TheSourceFingerprint_IsCapturedFromTheSourcesRecordedState_AndStampingCannotPerturbIt()
+        {
+            AnalyticalModel design = Design();
+            string path_Design = Save(design, "Design.sam");
+
+            AnalyticalModel source = Result(design, ReferenceTo(design, path_Design, PartODerivedCase.Iteration2, "Iteration2"));
+            string path_Source = Save(source, "PartO", "Iteration2", "tas", "Design.sam");
+
+            string fingerprint_Recorded = source.GetValue<SimulationResultProvenance>(AnalyticalModelParameter.SimulationResultProvenance).Fingerprint_Model;
+            string fingerprint_Source_Before = SimulationResultProvenance.Fingerprint(source);
+            Assert.Equal(fingerprint_Recorded, fingerprint_Source_Before);
+
+            string directory_2B = Directory_Result("Iteration2B");
+            PartOBaselineReference partOBaselineReference = Analytical.Create.PartOBaselineReferenceFromResult(PartODerivedCase.Iteration2B, Open(path_Source), path_Source, directory_2B);
+            Assert.Equal(fingerprint_Recorded, partOBaselineReference.Source.Fingerprint);
+
+            //Stamping a derived model leaves the source - in memory and on disk - exactly as it was, and the recorded identity unchanged.
+            AnalyticalModel round = new(source);
+            Assert.True(round.StampPartOBaselineReference(partOBaselineReference));
+            Assert.Equal(fingerprint_Source_Before, SimulationResultProvenance.Fingerprint(source));
+            Assert.Equal(fingerprint_Recorded, source.GetValue<SimulationResultProvenance>(AnalyticalModelParameter.SimulationResultProvenance).Fingerprint_Model);
+            Assert.Equal(fingerprint_Recorded, SimulationResultProvenance.Fingerprint(Open(path_Source)));
+            Assert.Equal(fingerprint_Recorded, round.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Source.Fingerprint);
+
+            //No recursion: the derived model's own fingerprint is another value, and the reference holds the source's.
+            Assert.NotEqual(fingerprint_Recorded, SimulationResultProvenance.Fingerprint(round));
+
+            round.SetValue(AnalyticalModelParameter.SimulationResultProvenance, new SimulationResultProvenance(round, null));
+            string path_Round = Save(round, "PartO", "Iteration2B", "tas", "Design-Opt01.sam");
+
+            PartOBaselineReference read = Open(path_Round).GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
+            Assert.Equal(fingerprint_Recorded, read.Source.Fingerprint);
+            Assert.Equal(PartOBaselineResolutionStatus.Resolved, read.Source.PartOModelResolution(path_Round).Status);
+            Assert.Equal(Path.GetFullPath(path_Source), read.Source.PartOModelResolution(path_Round).Path);
+
+            //The source's content changes after it was saved, and it still carries its OLD provenance record: the record is what it said of
+            //itself, so it is not trusted - the model is fingerprinted as it is now.
+            AnalyticalModel reopened_Source = Open(path_Source);
+            AdjacencyCluster adjacencyCluster = reopened_Source.AdjacencyCluster;
+            adjacencyCluster.AddObject(new Space("Edited afterwards"));
+            AnalyticalModel edited = new(reopened_Source, adjacencyCluster);
+            Assert.Equal(fingerprint_Recorded, edited.GetValue<SimulationResultProvenance>(AnalyticalModelParameter.SimulationResultProvenance).Fingerprint_Model);
+            Save(edited, "PartO", "Iteration2", "tas", "Design.sam");
+
+            PartOBaselineResolution partOBaselineResolution = read.Source.PartOModelResolution(path_Round);
+            Assert.Equal(PartOBaselineResolutionStatus.Changed, partOBaselineResolution.Status);
+            Assert.Equal(Path.GetFullPath(path_Source), partOBaselineResolution.Path);
         }
 
         // ---- locators ----------------------------------------------------------------------------------------
 
-        /// <summary>Locating completes the relative path and the design file, and never touches identity.</summary>
+        /// <summary>Locating gives a design locator where there is none, never replaces one, and never touches identity.</summary>
         [Fact]
-        public void Locate_AddsLocatorsOnly()
+        public void Locate_AddsAMissingRelativeLocatorOnly()
         {
             AnalyticalModel design = Design();
             AnalyticalModel result = new(design);
-            Assert.True(result.StampPartOBaselineReference(ReferenceTo(design, null)));
+            Assert.True(result.StampPartOBaselineReference(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.MixedDesign, design, null, null)));
+            Assert.Null(result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Design.Path_Relative);
 
-            string directory_Result = Path.Combine(directory, "PartO", "Iteration1a", "tas");
             string path_Design = Path.Combine(directory, "Design.sam");
 
-            Assert.True(result.LocatePartOBaselineReference(directory_Result, path_Design));
+            Assert.True(result.LocatePartOBaselineReference(Directory_Result(), path_Design));
 
             PartOBaselineReference located = result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference);
-            Assert.Equal(path_Design, located.Design.Path_Absolute);
             Assert.Equal(Path.Combine("..", "..", "..", "Design.sam"), located.Design.Path_Relative);
             Assert.Equal(design.Guid, located.Design.Guid);
             Assert.Equal(SimulationResultProvenance.Fingerprint(design), located.Design.Fingerprint);
+            Assert.DoesNotContain("Path_Absolute", located.ToJsonObject().ToJsonString());
 
-            //A path the reference already holds is not replaced by the caller's.
-            Assert.True(result.LocatePartOBaselineReference(directory_Result, Path.Combine(directory, "Other.sam")));
-            Assert.Equal(path_Design, result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Design.Path_Absolute);
+            //A locator the reference already holds is not replaced by the caller's.
+            Assert.False(result.LocatePartOBaselineReference(Directory_Result(), Path.Combine(directory, "Other.sam")));
+            Assert.Equal(Path.Combine("..", "..", "..", "Design.sam"), result.GetValue<PartOBaselineReference>(AnalyticalModelParameter.PartOBaselineReference).Design.Path_Relative);
+        }
+
+        /// <summary>A locator re-expressed for another folder points at the same file; where any part is unknown there is none.</summary>
+        [Fact]
+        public void ARebasedLocator_PointsAtTheSameFile()
+        {
+            string directory_From = Path.Combine(directory, "PartO", "Iteration2", "tas");
+            string directory_To = Path.Combine(directory, "PartO", "Iteration3");
+
+            string path_Relative = Analytical.Query.PartOBaselineRelativePath(directory_From, Path.Combine(directory, "Design.sam"));
+            Assert.Equal(Path.Combine("..", "..", "..", "Design.sam"), path_Relative);
+
+            string path_Rebased = Analytical.Query.PartOBaselineRebasedPath(path_Relative, directory_From, directory_To);
+            Assert.Equal(Path.Combine("..", "..", "Design.sam"), path_Rebased);
+            Assert.Equal(Path.GetFullPath(Path.Combine(directory, "Design.sam")), Path.GetFullPath(Path.Combine(directory_To, path_Rebased)));
+
+            Assert.Null(Analytical.Query.PartOBaselineRebasedPath(null, directory_From, directory_To));
+            Assert.Null(Analytical.Query.PartOBaselineRebasedPath(path_Relative, null, directory_To));
+            Assert.Null(Analytical.Query.PartOBaselineRebasedPath(path_Relative, directory_From, null));
         }
 
         // ---- a result is never a baseline --------------------------------------------------------------------
 
         /// <summary>
         /// Carrying the reference marks a model as a result: the validator refuses it as a baseline, Remove Results removes it, and
-        /// opening the result resolves its design without making either one the other.
+        /// the design it was derived from is not marked or changed.
         /// </summary>
         [Fact]
         public void AResultWithTheReference_IsRefusedAsABaseline_AndDoesNotBecomeTheDesign()

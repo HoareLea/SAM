@@ -1,9 +1,6 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
-using System;
-using System.IO;
-
 namespace SAM.Analytical
 {
     public static partial class Modify
@@ -37,54 +34,44 @@ namespace SAM.Analytical
         }
 
         /// <summary>
-        /// Completes the <b>locators</b> of the reference a result model carries, once the folder the result model is
-        /// written to is known: the relative path of each referenced model from that folder, and - where the reference
-        /// records no file for its design - <paramref name="path_Design"/>. Identity is never touched.
+        /// Gives the reference a result model carries its <b>design</b> locator where it has none, once the folder the result is written to is
+        /// known: the relative path from that folder to <paramref name="path_Design"/>. For a case whose materialiser knows the design by identity
+        /// but not by file (Mixed Design). A locator already recorded is never replaced, and identity is never touched.
         ///
         /// <para>
-        /// A relative path is what lets a whole case tree that is copied or moved still find its design. It is written
-        /// only where both ends are on the same root (a path on another drive has no relative form) and is otherwise
-        /// left absent, so the absolute path alone is tried.
-        /// </para>
-        /// <para>
-        /// A model with no reference, or only an invalid one, is left exactly as it is. Like the stamp, call it before
-        /// the provenance record is constructed.
+        /// Only the relative path is recorded; <paramref name="path_Design"/> itself is not kept. A path with no relative form (another root) records
+        /// nothing. A model with no reference, or only an invalid one, is left exactly as it is. Like the stamp, call it before the provenance record
+        /// is constructed.
         /// </para>
         /// </summary>
-        /// <param name="analyticalModel">The result model. Its reference is replaced by the located copy.</param>
+        /// <param name="analyticalModel">The result model.</param>
         /// <param name="directory_Result">The folder the result model (<c>.sam</c>) will be written to.</param>
-        /// <param name="path_Design">The design model's file, used only where the reference names none. Null or empty adds nothing.</param>
+        /// <param name="path_Design">The design model's file. Null or empty adds nothing.</param>
         /// <returns>Whether the reference was updated.</returns>
-        public static bool LocatePartOBaselineReference(this AnalyticalModel analyticalModel, string directory_Result, string path_Design = null)
+        public static bool LocatePartOBaselineReference(this AnalyticalModel analyticalModel, string directory_Result, string path_Design)
         {
             if (analyticalModel is null || !analyticalModel.TryGetValue(AnalyticalModelParameter.PartOBaselineReference, out PartOBaselineReference partOBaselineReference) || partOBaselineReference is null || !partOBaselineReference.IsValid)
             {
                 return false;
             }
 
-            PartOBaselineReference result = new(partOBaselineReference);
-
-            if (result.Design is not null && string.IsNullOrWhiteSpace(result.Design.Path_Absolute) && !string.IsNullOrWhiteSpace(path_Design))
+            if (partOBaselineReference.Design is null || !string.IsNullOrWhiteSpace(partOBaselineReference.Design.Path_Relative))
             {
-                result.Design.Path_Absolute = path_Design;
+                return false;
             }
 
-            Locate(result.Design, directory_Result);
-            Locate(result.Source, directory_Result);
+            string path_Relative = Query.PartOBaselineRelativePath(directory_Result, path_Design);
+            if (string.IsNullOrEmpty(path_Relative))
+            {
+                return false;
+            }
+
+            PartOBaselineReference result = new(partOBaselineReference);
+            result.Design.Path_Relative = path_Relative;
 
             analyticalModel.SetValue(AnalyticalModelParameter.PartOBaselineReference, result);
 
             return true;
-        }
-
-        private static void Locate(PartOModelReference partOModelReference, string directory_Result)
-        {
-            if (partOModelReference is null || string.IsNullOrWhiteSpace(partOModelReference.Path_Absolute) || string.IsNullOrWhiteSpace(directory_Result))
-            {
-                return;
-            }
-
-            partOModelReference.Path_Relative = Query.PartOBaselineRelativePath(directory_Result, partOModelReference.Path_Absolute);
         }
     }
 }

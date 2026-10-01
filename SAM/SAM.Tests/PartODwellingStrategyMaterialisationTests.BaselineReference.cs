@@ -33,7 +33,7 @@ namespace SAM.Tests
             //The state is the record's own baseline fingerprint - one hash, two readers - and SAM does not know the baseline's file.
             Assert.Equal(partOMaterialisation.Record.Fingerprint_Baseline, partOBaselineReference.Design.Fingerprint);
             Assert.Equal(SimulationResultProvenance.Fingerprint(baseline), partOBaselineReference.Design.Fingerprint);
-            Assert.Null(partOBaselineReference.Design.Path_Absolute);
+            Assert.Null(partOBaselineReference.Design.Path_Relative);
 
             //The baseline is neither modified nor marked: it stays a clean baseline and carries no reference.
             Assert.Equal(json_Baseline, Core.Convert.ToString(baseline));
@@ -49,7 +49,7 @@ namespace SAM.Tests
         {
             AnalyticalModel baseline = WithHeldConditions(Baseline());
             AnalyticalModel run = PreparedAndRun(baseline);
-            Assert.True(run.StampPartOBaselineReference(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, baseline, null)));
+            Assert.True(run.StampPartOBaselineReference(Analytical.Create.PartOBaselineReferenceFromDesign(PartODerivedCase.Iteration1a, baseline, null, null)));
 
             Assert.Contains(run.PartOBaselineFindings(), x => x.Reason == PartOMaterialisationRefusalReason.RunOutputBaseline && x.Message.Contains("baseline reference"));
 
