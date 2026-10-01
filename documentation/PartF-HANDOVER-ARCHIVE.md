@@ -1301,7 +1301,7 @@ communal corridor appeared in the run's DomOv XML as an ordinary room.
 ### 11e. Real TAS validation assets (on this machine)
 
 - TAS **9.5.7.0** at `C:\Program Files\Environmental Design Solutions Ltd\Tas`.
-- Michal's run output: `…\OneDrive - Tetra Tech, Inc\Documents\SAM_daily\2027-08-03-HVAC\` —
+- Michal's run output: `<user>\Documents\SAM_daily\2027-08-03-HVAC\` —
   `000000_SAM_AnalyticalModel.{tbd,tsd,json}`, `.timing.csv` (78 s total), and
   `Report XMLs\…DomOv.xml`.
 - Model: `SAM_zoningAM_v2zonesisDomestic.sam` — **Zone Category `Flats` → Flat 1 / Flat 2 / Flat 3

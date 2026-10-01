@@ -2229,7 +2229,7 @@ here per the stop-condition this rerun was run under, as something to characteri
 
 **Harness provenance note.** The preserved read-only evidence-extraction harness
 (`C:\TasOut\parto-final-real-project\h\p0.csproj` and `tool\tool.csproj`) had three machine-specific paths
-hardcoded from the machine the 2026-09-15 acceptance ran on (`C:\Users\Virtual Machine\...`), plus a stale
+hardcoded from the machine the 2026-09-15 acceptance ran on (`<user>\...`), plus a stale
 prebuilt `p0.exe` whose `deps.json` predated the `SAM.Analytical.UI.WPF` reference in its own `Program.cs` /
 `Prod.cs`. Both were repaired in place (paths repointed to this machine, `p0.exe` rebuilt) — this is harness
 plumbing only, explicitly marked "NOT production code" in its own source, not a change to anything under
