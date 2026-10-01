@@ -6,8 +6,7 @@
 **This file is the durable record of the Approved Document O architecture.** It is not a progress log and
 not PR prose: it states the separation of concepts that the Part O code must keep, the algorithm for each
 iteration, and which parts are implemented. Implementation evidence lives in
-[`PartO-TAS-VALIDATION.md`](PartO-TAS-VALIDATION.md); repository state lives in
-[`PartF-HANDOVER.md`](PartF-HANDOVER.md).
+[`PartO-TAS-VALIDATION.md`](PartO-TAS-VALIDATION.md).
 
 ---
 

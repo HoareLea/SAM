@@ -17,8 +17,7 @@ namespace SAM.Tests.Helpers
 {
     /// <summary>
     /// The Space Design Load Summary cases (PR2C visual gate and tests). Results are typed <see cref="SpaceLoadPeak"/>s
-    /// with the values the production Tas conversion (SAM_Tas#69) wrote from real TSDs
-    /// (documentation/evidence/reporting-phase2-gate/pr2a/*_pr2a.out.txt): Bathroom_2 of final1b/open.tsd and
+    /// with the values the production Tas conversion (SAM_Tas#69) wrote from real TSDs: Bathroom_2 of final1b/open.tsd and
     /// Studio 1_0 of pr3/final/bridge.tsd, every stored term included, zeros too. Only the stress case is invented,
     /// and it says so in its space name. GUIDs, generation time and version are fixed, so documents are deterministic.
     /// </summary>

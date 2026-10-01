@@ -23,8 +23,7 @@ namespace SAM.Analytical
 
         /// <summary>
         /// Height [m] of an internal door this method creates. Approved Document F sets no door height;
-        /// 2.1m is the programme's documented default for a created transfer door (PartF-HANDOVER-ARCHIVE
-        /// &sect;6a: "a 760 x 2100 mm internal door"). Geometry only - nothing in the Part F assessment
+        /// 2.1m is the programme's documented default for a created transfer door ("a 760 x 2100 mm internal door"). Geometry only - nothing in the Part F assessment
         /// reads it.
         /// </summary>
         public const double DefaultTransferAirDoorHeight_M = 2.1;

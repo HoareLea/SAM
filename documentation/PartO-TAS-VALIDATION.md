@@ -4,12 +4,9 @@
 # Part O / TAS validation
 
 **This is an engineering validation record, not a diary.** It states what has been validated against real
-TAS output, what that validation proves, which defects it exposed, and what remains unvalidated. The
-chronological narratives it was consolidated from are preserved verbatim in
-[`PartF-HANDOVER-ARCHIVE.md`](PartF-HANDOVER-ARCHIVE.md) (archived §11e, §11o, §11t, §11u, §11v).
+TAS output, what that validation proves, which defects it exposed, and what remains unvalidated. The chronological session narratives it was consolidated from are not part of this repository.
 
-Companion documents: [`PartF-HANDOVER.md`](PartF-HANDOVER.md) for current repository state and next work;
-[`PartF-ADF-Volume1-2021-Traceability.md`](PartF-ADF-Volume1-2021-Traceability.md) for Approved Document F
+Companion document: [`PartF-ADF-Volume1-2021-Traceability.md`](PartF-ADF-Volume1-2021-Traceability.md) for Approved Document F
 regulatory and calculation traceability.
 
 ---
@@ -1511,7 +1508,7 @@ This section is the licensed A/B that established it, and the minimal correction
 ### The harness — rebuilt, because the recorded one is not on this machine
 
 `C:\TasOut\inv\Inv.exe` and `C:\TasOut\v40\A0.sam` do not exist here; `C:\TasOut` does not exist at all.
-`SAM_Tas/PROJECT_PROGRESS.md` anticipated this and says so: *"Both are outside the repo and will not exist
+The earlier SAM_Tas run notes anticipated this and said so: *"Both are outside the repo and will not exist
 on another machine — rebuild from the `run-tas` skill if the licensed chain needs re-running."* The
 harness below is that rebuild, against the same TAS **9.5.7.0** and the same
 `AnalyticalModel -> ToGbXML -> WorkflowCalculator` route, with the same one-document-cycle-per-process
@@ -2370,5 +2367,4 @@ reopen acceptance gate.
 the remaining manufacturer-ventilation behaviour (certified heat recovery, fan SFP/power, B1/B2,
 manufacturer bypass/B3 — blocked on external evidence, not on anything left to build here) to
 [SAM#123](https://github.com/SAM-BIM/SAM/issues/123), SAM#111's own closure rule is satisfied and the issue
-is closed. See `PROJECT_PROGRESS.md` § *SAM#111 final closeout* and `PartF-HANDOVER.md` §0 for the
-cross-repository reconciliation.
+is closed. SAM#111 closed after the cross-repository reconciliation.
