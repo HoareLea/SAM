@@ -11,5 +11,8 @@ PartODwellingStrategy, PartOCooledDwelling, PartOMaterialisationRecord, Material
 ## Validation
 Focused PartODwellingStrategy tests: 145 passed; broader PartO suite: 982 passed; PR Windows build, test and SPDX passed.
 
+## PR2 validation (2026-10-04)
+No SAM code changes were needed. Existing SimulationResultProvenance tests (23 passed) cover changed weather, changed model/scenarios, missing or rewritten results, and relative result resolution. PR2 diagnostics merged in SAM_Tas#81 and SAM_UI#192. No physics changed.
+
 ## Next step
-No unresolved PR1 issues. Stop after PR1; do not start PR2 without a new request.
+PR2 is complete. Next task, only when requested: real end-to-end acceptance through SAM_UI → Part O → Prepare & Run → Iteration 3 using the prepared Nuaire sample. Do not start PR3.
