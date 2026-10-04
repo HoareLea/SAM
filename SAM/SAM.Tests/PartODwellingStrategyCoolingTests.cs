@@ -49,6 +49,42 @@ namespace SAM.Tests
 
         private static (string Zone, PartODwellingStrategy Strategy) Cooled(string name_Zone, VentilationUnitReference ventilationUnitReference = null, PartODesignAirFlowBasis partODesignAirFlowBasis = PartODesignAirFlowBasis.PartFRequirement, string fingerprint = null) => (name_Zone, new PartODwellingStrategy(Guid.Empty, PartOVentilationMode.MVHR, ventilationUnitReference, PartOActiveCooling.SupplyAirCooling, partODesignAirFlowBasis, fingerprint));
 
+        [Fact]
+        public void CoolingControlRoom_PersistsThroughReopen_AndChangesStrategyIdentity()
+        {
+            AnalyticalModel baseline = Baseline();
+            Guid bedroom = Spaces(baseline, Flat1).First().Guid;
+            Guid other = Spaces(baseline, Flat1).Last().Guid;
+            PartODwellingStrategy selected = new(Zone(baseline, Flat1).Guid, PartOVentilationMode.MVHR, Small.VentilationUnitReference, PartOActiveCooling.SupplyAirCooling)
+            {
+                CoolingStatSpaceGuid = bedroom,
+            };
+            string canonical = selected.CanonicalText();
+            Assert.NotEqual(canonical, new PartODwellingStrategy(selected) { CoolingStatSpaceGuid = other }.CanonicalText());
+
+            PartODwellingStrategySet set = new([selected]);
+            AnalyticalModel reopened = new(WithSet(baseline, set).ToJsonObject());
+            Assert.Equal(bedroom, reopened.GetValue<PartODwellingStrategySet>(AnalyticalModelParameter.PartODwellingStrategies).Strategy(selected.ZoneGuid).CoolingStatSpaceGuid);
+        }
+
+        [Fact]
+        public void LegacyCoolingControlRoom_RequiresExplicitSelection_AndForeignRoomIsRefused()
+        {
+            AnalyticalModel baseline = Baseline();
+            Guid zone = Zone(baseline, Flat1).Guid;
+            PartODwellingStrategy legacy = new(zone, PartOVentilationMode.MVHR, Small.VentilationUnitReference, PartOActiveCooling.SupplyAirCooling);
+            PartODwellingStrategy loaded = new(legacy.ToJsonObject());
+            Assert.Equal(Guid.Empty, loaded.CoolingStatSpaceGuid);
+            Assert.False(loaded.ToJsonObject().ContainsKey("CoolingStatSpaceGuid"));
+
+            AnalyticalModel oldModel = WithSet(baseline, new PartODwellingStrategySet([loaded, new PartODwellingStrategy(Zone(baseline, Flat2).Guid, PartOVentilationMode.NaturalVentilation), new PartODwellingStrategy(Zone(baseline, Flat3).Guid, PartOVentilationMode.NaturalVentilation)]));
+            AssertCoolingRefused(oldModel, [Cooling(Small)], PartOMaterialisationRefusalReason.CoolingControlRoomSelection, "no confirmed cooling control room", [Small]);
+
+            loaded.CoolingStatSpaceGuid = Spaces(baseline, Flat2).First().Guid;
+            AnalyticalModel foreign = WithSet(baseline, new PartODwellingStrategySet([loaded, new PartODwellingStrategy(Zone(baseline, Flat2).Guid, PartOVentilationMode.NaturalVentilation), new PartODwellingStrategy(Zone(baseline, Flat3).Guid, PartOVentilationMode.NaturalVentilation)]));
+            AssertCoolingRefused(foreign, [Cooling(Small)], PartOMaterialisationRefusalReason.CoolingControlRoomSelection, "not one of its spaces", [Small]);
+        }
+
         private PartOMaterialisation MaterialiseCooled(AnalyticalModel analyticalModel, IEnumerable<VentilationUnitTemplate> templates, IEnumerable<VentilationUnitCapacityDescriptor> descriptors = null)
         {
             PartOMaterialisation result = analyticalModel.MaterialisePartODwellingStrategies(descriptors ?? [Small], null, templates);

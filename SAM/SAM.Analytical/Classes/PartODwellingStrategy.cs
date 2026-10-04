@@ -84,6 +84,7 @@ namespace SAM.Analytical
                 ActiveCooling = partODwellingStrategy.ActiveCooling;
                 DesignAirFlowBasis = partODwellingStrategy.DesignAirFlowBasis;
                 DesignFingerprint = partODwellingStrategy.DesignFingerprint;
+                CoolingStatSpaceGuid = partODwellingStrategy.CoolingStatSpaceGuid;
                 ventilationUnitReference_Unreadable = partODwellingStrategy.ventilationUnitReference_Unreadable;
             }
         }
@@ -131,6 +132,9 @@ namespace SAM.Analytical
         /// </summary>
         public string DesignFingerprint { get; set; }
 
+        /// <summary>The engineer-selected room sensed by supply-air cooling. Empty means selection is still required.</summary>
+        public Guid CoolingStatSpaceGuid { get; set; } = Guid.Empty;
+
         /// <summary>
         /// Every property is stated. Contradictions (natural ventilation with a product, cooling or a retained
         /// design) are NOT invalid here - they are refused by the materialisation with their own reasons.
@@ -155,13 +159,16 @@ namespace SAM.Analytical
         /// </summary>
         public string CanonicalText()
         {
-            return string.Join("|",
+            string text = string.Join("|",
                 ZoneGuid.ToString("D", CultureInfo.InvariantCulture),
                 VentilationMode.ToString(),
                 ventilationUnitReference_Unreadable ? "unreadable" : ventilationUnitReference is null ? "-" : string.Join("/", Text(ventilationUnitReference.Manufacturer), Text(ventilationUnitReference.Model), Text(ventilationUnitReference.Reference)),
                 ActiveCooling.ToString(),
                 DesignAirFlowBasis.ToString(),
                 DesignAirFlowBasis == PartODesignAirFlowBasis.RetainedDesign ? Text(DesignFingerprint) : "-");
+            return ActiveCooling == PartOActiveCooling.SupplyAirCooling
+                ? text + "|" + CoolingStatSpaceGuid.ToString("D", CultureInfo.InvariantCulture)
+                : text;
         }
 
         public override string ToString()
@@ -201,6 +208,7 @@ namespace SAM.Analytical
             ActiveCooling = Parse(Text(jsonObject, "ActiveCooling"), PartOActiveCooling.Undefined);
             DesignAirFlowBasis = Parse(Text(jsonObject, "DesignAirFlowBasis"), PartODesignAirFlowBasis.Undefined);
             DesignFingerprint = Text(jsonObject, "DesignFingerprint");
+            CoolingStatSpaceGuid = Guid.TryParse(Text(jsonObject, "CoolingStatSpaceGuid"), out Guid guid_Stat) ? guid_Stat : Guid.Empty;
 
             ventilationUnitReference = null;
             ventilationUnitReference_Unreadable = false;
@@ -259,6 +267,11 @@ namespace SAM.Analytical
             if (DesignFingerprint is not null)
             {
                 jsonObject["DesignFingerprint"] = DesignFingerprint;
+            }
+
+            if (CoolingStatSpaceGuid != Guid.Empty)
+            {
+                jsonObject["CoolingStatSpaceGuid"] = CoolingStatSpaceGuid.ToString("D", CultureInfo.InvariantCulture);
             }
 
             return jsonObject;

@@ -212,6 +212,16 @@ namespace SAM.Analytical
 
             foreach (PartOCooledDwelling partOCooledDwelling in CooledDwellings)
             {
+                PartODwellingStrategy strategy = partODwellingStrategySet?.Strategy(partOCooledDwelling.ZoneGuid);
+                Zone zone = analyticalModel_Baseline.AdjacencyCluster?.GetObject<Zone>(partOCooledDwelling.ZoneGuid);
+                if (strategy?.CoolingStatSpaceGuid != partOCooledDwelling.CoolingStatSpaceGuid
+                    || zone is null
+                    || !(analyticalModel_Baseline.AdjacencyCluster.GetRelatedObjects<Space>(zone)?.Exists(x => x.Guid == partOCooledDwelling.CoolingStatSpaceGuid) ?? false))
+                {
+                    reason = "The recorded cooling control room is not the selected room of its dwelling. Materialise again.";
+                    return false;
+                }
+
                 VentilationUnitTemplate ventilationUnitTemplate = Query.PartOCoolingTemplate(ventilationUnitTemplates, partOCooledDwelling.VentilationUnitReference);
 
                 if (ventilationUnitTemplate is null || ventilationUnitTemplate.PartOCoolingGuidanceFingerprint() != partOCooledDwelling.Fingerprint_Guidance)

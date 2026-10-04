@@ -138,5 +138,8 @@ namespace SAM.Analytical.Enums
         /// range or the selected unit's capacity.
         /// </summary>
         [Description("Cooling Airflow Outside Guidance")] CoolingAirFlowOutsideGuidance,
+
+        /// <summary>The cooling stat room has not been confirmed or is not a space of its dwelling.</summary>
+        [Description("Cooling Control Room Selection")] CoolingControlRoomSelection,
     }
 }
