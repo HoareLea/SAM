@@ -12,4 +12,4 @@ PartODwellingStrategy, PartOCooledDwelling, PartOMaterialisationRecord, Material
 Focused PartODwellingStrategy tests: 145 passed. Broader PartO suite: 982 passed.
 
 ## Next step
-Review final diff, commit and open PR.
+PR opened: SAM-BIM/SAM#176. Wait for CI and review gates on SAM-BIM/SAM#176; fix only PR1 issues, then merge first and update local base.
