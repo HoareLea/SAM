@@ -1223,7 +1223,13 @@ namespace SAM.Tests
 
             foreach ((string name_Zone, PartODwellingStrategy partODwellingStrategy) in strategies)
             {
-                partODwellingStrategySet.Set(new PartODwellingStrategy(partODwellingStrategy) { ZoneGuid = Zone(analyticalModel, name_Zone).Guid });
+                PartODwellingStrategy selected = new(partODwellingStrategy) { ZoneGuid = Zone(analyticalModel, name_Zone).Guid };
+                if (selected.ActiveCooling == PartOActiveCooling.SupplyAirCooling && selected.VentilationMode == PartOVentilationMode.MVHR && selected.CoolingStatSpaceGuid == Guid.Empty)
+                {
+                    //Existing success fixtures state their deliberate control choice explicitly. Legacy tests use WithSet.
+                    selected.CoolingStatSpaceGuid = Spaces(analyticalModel, name_Zone).First().Guid;
+                }
+                partODwellingStrategySet.Set(selected);
             }
 
             return WithSet(analyticalModel, partODwellingStrategySet);

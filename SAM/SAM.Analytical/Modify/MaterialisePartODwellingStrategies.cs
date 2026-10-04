@@ -297,6 +297,23 @@ namespace SAM.Analytical
 
             List<Space> SpacesOf(Zone zone) => zone is not null && dictionary_Spaces.TryGetValue(zone.Guid, out List<Space> spaces) ? spaces : [];
 
+            foreach (Zone zone in zones_Assessed)
+            {
+                if (!dictionary_Strategy.TryGetValue(zone.Guid, out PartODwellingStrategy strategy) || strategy.ActiveCooling != PartOActiveCooling.SupplyAirCooling)
+                {
+                    continue;
+                }
+
+                if (strategy.CoolingStatSpaceGuid == Guid.Empty)
+                {
+                    Refuse(PartOMaterialisationRefusalReason.CoolingControlRoomSelection, string.Format("Dwelling '{0}' has active cooling but no confirmed cooling control room. Select its room before building or simulating; older saved strategies are not assigned one automatically.", zone.Name), zone);
+                }
+                else if (!SpacesOf(zone).Exists(x => x.Guid == strategy.CoolingStatSpaceGuid))
+                {
+                    Refuse(PartOMaterialisationRefusalReason.CoolingControlRoomSelection, string.Format("Dwelling '{0}' selects cooling control room {1}, which is not one of its spaces. Select a room belonging to this dwelling.", zone.Name, strategy.CoolingStatSpaceGuid), zone);
+                }
+            }
+
             // ---- 5. The assessed common spaces, from assigned state and never from names --------------------
 
             List<Zone> zones_CommonSpace = [];
@@ -593,6 +610,7 @@ namespace SAM.Analytical
                         continue;
                     }
 
+                    partOCooledDwelling.CoolingStatSpaceGuid = partODwellingStrategy.CoolingStatSpaceGuid;
                     partOMaterialisationRecord.CooledDwellings.Add(partOCooledDwelling);
                 }
 

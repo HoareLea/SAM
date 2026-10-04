@@ -40,6 +40,7 @@ namespace SAM.Analytical
         public PartOCooledDwelling(PartOCooledDwelling partOCooledDwelling)
             : this(partOCooledDwelling?.ZoneGuid ?? Guid.Empty, partOCooledDwelling?.AirHandlingUnitGuid ?? Guid.Empty, partOCooledDwelling?.VentilationUnitReference, partOCooledDwelling?.DesignSupply_Lps ?? double.NaN, partOCooledDwelling?.DesignExtract_Lps ?? double.NaN, partOCooledDwelling?.CoolingOperatingAirFlow_Lps ?? double.NaN, partOCooledDwelling?.Fingerprint_Guidance)
         {
+            CoolingStatSpaceGuid = partOCooledDwelling?.CoolingStatSpaceGuid ?? Guid.Empty;
         }
 
         public PartOCooledDwelling(JsonObject jsonObject)
@@ -68,7 +69,11 @@ namespace SAM.Analytical
         /// <summary><c>Query.PartOCoolingGuidanceFingerprint</c> of the product when the model was materialised.</summary>
         public string Fingerprint_Guidance { get; private set; }
 
+        /// <summary>The explicitly selected analytical space sensed by all cooling controllers.</summary>
+        public Guid CoolingStatSpaceGuid { get; set; } = Guid.Empty;
+
         public bool IsValid => ZoneGuid != Guid.Empty
+            && CoolingStatSpaceGuid != Guid.Empty
             && AirHandlingUnitGuid != Guid.Empty
             && VentilationUnitReference is not null
             && VentilationUnitReference.IsValid
@@ -95,6 +100,7 @@ namespace SAM.Analytical
             DesignExtract_Lps = Number(jsonObject, "DesignExtract_Lps");
             CoolingOperatingAirFlow_Lps = Number(jsonObject, "CoolingOperatingAirFlow_Lps");
             Fingerprint_Guidance = Text(jsonObject, "Fingerprint_Guidance");
+            CoolingStatSpaceGuid = Guid.TryParse(Text(jsonObject, "CoolingStatSpaceGuid"), out Guid guid_Stat) ? guid_Stat : Guid.Empty;
 
             return true;
         }
@@ -124,6 +130,7 @@ namespace SAM.Analytical
                 ["AirHandlingUnitGuid"] = AirHandlingUnitGuid.ToString("D", CultureInfo.InvariantCulture),
                 ["VentilationUnitReference"] = jsonObject_Reference,
                 ["Fingerprint_Guidance"] = Fingerprint_Guidance,
+                ["CoolingStatSpaceGuid"] = CoolingStatSpaceGuid.ToString("D", CultureInfo.InvariantCulture),
             };
 
             WriteNumber(jsonObject, "DesignSupply_Lps", DesignSupply_Lps);
