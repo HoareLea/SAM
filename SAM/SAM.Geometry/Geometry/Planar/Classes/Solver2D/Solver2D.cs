@@ -695,8 +695,8 @@ namespace SAM.Geometry.Planar
                 originY = origin.Y;
                 width = rectangle2D.Width;
                 height = rectangle2D.Height;
-                heightDirectionX = heightDirection.X;
-                heightDirectionY = heightDirection.Y;
+                heightDirectionX = heightDirection == null ? double.NaN : heightDirection.X;
+                heightDirectionY = heightDirection == null ? double.NaN : heightDirection.Y;
                 startingDistance = solver2DSettings.StartingDistance;
                 shiftDistance = solver2DSettings.ShiftDistance;
                 limitArea = solver2DSettings.LimitArea;
