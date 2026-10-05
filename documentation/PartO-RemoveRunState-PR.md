@@ -118,7 +118,3 @@ If the Part O air movements are left behind, materialisation refuses the MVHR dw
   only a movement added to them AFTER preparation is lost. It is counted in the removed line.
 - Terminals realised whole-model for dwellings outside the assessed set, and connected to no Part O system, are kept
   (they cannot be told apart from an accepted design). The validator accepts them.
-
-## Next step
-
-Owner review and merge. Then merge the SAM_UI PR, then the `PROJECT_PROGRESS.md` closeouts in both repos.

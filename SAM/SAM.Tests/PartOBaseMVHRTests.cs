@@ -956,11 +956,11 @@ namespace SAM.Tests
         }
 
         // =================================================================================================
-        // I. Reuse reconciles to the current scope - second-round Codex P2
+        // I. Reuse reconciles to the current scope
         // =================================================================================================
 
         /// <summary>
-        /// <b>Reproduces Codex's literal sequence: prepare a wider scope, then re-prepare a narrower one
+        /// <b>Reproduces the reported sequence: prepare a wider scope, then re-prepare a narrower one
         /// over the same system.</b>
         /// <para>
         /// <c>AddPartOBaseMVHRSystem</c> recognises an existing system by relation to the design terminals

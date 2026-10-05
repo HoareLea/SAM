@@ -53,7 +53,7 @@ no-IZAM source, not chosen to fill the key:
 
 New keys only: `ActiveTrimCooling` had never been persisted (it refused everywhere), so nothing is re-keyed.
 
-### Codex review round (28 Sep 2026)
+### Review round (28 Sep 2026)
 
 Three P1 findings, each confirmed red first (`evidence/parto-mixed-pr3b/pr3b1-codex-findings-red.txt`) and fixed:
 1. **v2 → v1 laundering.** A truncated v2 record (no `CooledDwellings`) re-saved as v1 and reopened valid. Now a record
@@ -82,7 +82,7 @@ Three P1 findings, each confirmed red first (`evidence/parto-mixed-pr3b/pr3b1-co
 `AnUnknownStage_IsRefusedRatherThanGuessedAt` / `AnUncharacterisedStage_ProducesNoScenarios` now use an undefined
 stage). **Red first:** with the PR1 gate and the `ActiveTrimCooling` refusal restored on top of this branch, 13 of the
 materialisation/identity tests fail (`evidence/parto-mixed-pr3b/pr3b1-red-on-pr1-gate.txt`); the pure airflow-rule tests
-are new API. Full `SAM.Tests` **2668/2668** (after the Codex round); `SAM.sln` Release 0 errors.
+are new API. Full `SAM.Tests` **2668/2668** (after the review round); `SAM.sln` Release 0 errors.
 
 ### SAM_UI compatibility
 
@@ -93,7 +93,7 @@ CI is green against SAM before and after this merge.
 ## 2. PR3B-2 — SAM_Systems ([SAM-BIM/SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31), merged `005c4fe`)
 
 Branch `feature/parto-mixed-cooling-pr3b2-2026-09-27` (head `56fcb8a6`). CI was red only until SAM#161 merged (it builds
-against the SAM integration tip); re-run green after `85a13ec3`, Codex no findings, 268/268 locally against the merge.
+against the SAM integration tip); re-run green after `85a13ec3`, no review findings, 268/268 locally against the merge.
 
 - `MechanicalVentilationSettings.GuidanceTemplate` (the MVRE topology). Stated → `GuidanceSettings` may be partial: a
   named unit = the product's arrangement (MVRE exchanger + supply DX coil) cloned from the MVRE prototype, which is
@@ -125,7 +125,7 @@ against the SAM integration tip); re-run green after `85a13ec3`, Codex no findin
   and the grounding leaves it untouched; ventilation intent identical to the uncooled document; 25 l/s design -> 80 l/s.
 - Red first (SAM_Tas `Documentation/evidence/parto-mixed-pr3b/pr3b3-red-first.txt`): 2 diagnostic tests fail on the old
   line; the TPD tests pass on unchanged production and 2 of 4 fail under a building-wide mutation of `GuidanceCooling`.
-- TM59 970/970, benchmark 16/16; CI green after SAM_Systems#31; Codex no findings.
+- TM59 970/970, benchmark 16/16; CI green after SAM_Systems#31; no review findings.
 - Grasshopper twin: [SAM-BIM/SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) - the log file
   name uses `RunPartOIteration` instead of `overheatingScenarios[0]`.
 
@@ -216,15 +216,15 @@ Run system case. App DLLs byte-identical to the merged-tip builds (SAM `85a13ec3
 - Minor, cosmetic (not fixed here): the SAM_Tas conversion note still says displacement ventilation is "inherited from the
   template prototype, not decided by this route"; since PR3B-2 SAM_Systems states it explicitly (`false`).
 
-## 5. Handover (28 Sep 2026) - PR3B CLOSED
+## 5. Closeout (28 Sep 2026) - PR3B CLOSED
 
 | PR | State |
 |---|---|
-| [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) PR3B-1 | merged `85a13ec3` (incl. the Codex round `2be58f1e`) |
+| [SAM#161](https://github.com/SAM-BIM/SAM/pull/161) PR3B-1 | merged `85a13ec3` (incl. the review round `2be58f1e`) |
 | [SAM_Systems#31](https://github.com/SAM-BIM/SAM_Systems/pull/31) PR3B-2 | merged `005c4fe` |
 | [SAM_Tas#71](https://github.com/SAM-BIM/SAM_Tas/pull/71) PR3B-3 | merged `e7cc0ed` |
 | [SAM_UI#131](https://github.com/SAM-BIM/SAM_UI/pull/131) test-only | merged `11d9078` |
-| [SAM_UI#132](https://github.com/SAM-BIM/SAM_UI/pull/132) gate harness + evidence | merged `07077b7` (Codex findings fixed: legacy check read-only, TM59 completeness per room, path containment, product range, accepted-model snapshot, topology signature) |
+| [SAM_UI#132](https://github.com/SAM-BIM/SAM_UI/pull/132) gate harness + evidence | merged `07077b7` (review findings fixed: legacy check read-only, TM59 completeness per room, path containment, product range, accepted-model snapshot, topology signature) |
 | [SAM_Tas_Grasshopper#7](https://github.com/SAM-BIM/SAM_Tas_Grasshopper/pull/7) log file name | merged `9ddf8ff` |
 | [SAM#162](https://github.com/SAM-BIM/SAM/pull/162) closeout docs + legacy re-acceptance evidence | merged `3a998007`; gate-count corrections SAM#164 (`3e8670da`) and this final record |
 

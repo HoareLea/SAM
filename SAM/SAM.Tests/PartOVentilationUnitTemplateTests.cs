@@ -864,7 +864,7 @@ namespace SAM.Tests
 
         /// <summary>
         /// Many constant (singleton) dimensions around one real value answer with that value, however many
-        /// of them there are. This is the shape Codex's corner-enumeration finding was about: the OLD code
+        /// of them there are. This is the shape the corner-enumeration finding was about: the OLD code
         /// still allocated and evaluated a nominal corner per singleton axis - <c>2^dimensions</c> of them,
         /// all but one immediately zero-weighted and discarded - rather than recognising that a singleton
         /// axis contributes no corner at all.
@@ -1072,7 +1072,7 @@ namespace SAM.Tests
         // =================================================================================================
 
         /// <summary>
-        /// <b>Pins the Codex cache/generation race, deterministically - no threads, no sleeps.</b>
+        /// <b>Pins the cache/generation race, deterministically - no threads, no sleeps.</b>
         /// <para>
         /// <see cref="VentilationUnitPerformanceTable.OnInterpolationSnapshotCaptured"/> is a test-only seam
         /// that fires at the exact point a concurrent <c>FromJsonObject</c> reload used to be able to land:
@@ -1121,7 +1121,7 @@ namespace SAM.Tests
         }
 
         /// <summary>
-        /// <b>Pins the Codex atomic-replacement finding, deterministically.</b>
+        /// <b>Pins the atomic-replacement finding, deterministically.</b>
         /// <para>
         /// <see cref="VentilationUnitPerformanceTable.OnReplacementLocalsPrepared"/> fires after
         /// <c>FromJsonObject</c> has parsed the incoming axes/outputs into locals but before it publishes
@@ -1170,9 +1170,9 @@ namespace SAM.Tests
         }
 
         /// <summary>
-        /// <b>Pins the Codex "new axes + old outputs" finding, deterministically.</b>
+        /// <b>Pins the "new axes + old outputs" finding, deterministically.</b>
         /// <para>
-        /// Codex's point: moving the axes/outputs swap under a lock made it atomic to a reader that ALSO
+        /// The point: moving the axes/outputs swap under a lock made it atomic to a reader that ALSO
         /// takes that lock, but <c>PublishedValue</c>, <c>ToJsonObject</c>, <c>IsValid</c> and the
         /// <c>Axis</c>/<c>Output</c> accessors never did - so two sequential field assignments were not
         /// atomic to any of them, and a reader landing between the two could see the NEW axes' shape
@@ -1225,7 +1225,7 @@ namespace SAM.Tests
                 ventilationUnitPerformanceTable.OnReplacementLocalsPrepared = null;
 
                 //PublishedValue and ToJsonObject are both unsynchronized, both touch axes AND outputs, and
-                //are exactly the two Codex named - exercised from the one window a two-step field swap
+                //are exactly the two the finding named - exercised from the one window a two-step field swap
                 //could have torn.
                 value_SeenMidReload = ventilationUnitPerformanceTable.PublishedValue(name_Supply, 1, 1);
                 table_SeenMidReload = new VentilationUnitPerformanceTable(ventilationUnitPerformanceTable.ToJsonObject());

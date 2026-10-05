@@ -28,7 +28,7 @@ namespace SAM.Analytical
         /// Table 1.2 high rate is a materially different - and much more favourable - engineering claim than
         /// making boost available to a control strategy. Choosing between them is an engineering decision, not a
         /// mapping, and guessing it would quietly turn a compliance answer in the building's favour. It needs
-        /// Michal's confirmation before it is written.
+        /// explicit confirmation by the engineer before it is written.
         /// </para>
         /// </summary>
         /// <param name="partOIteration">The mitigation stage.</param>

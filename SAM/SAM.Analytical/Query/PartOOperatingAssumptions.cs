@@ -56,10 +56,10 @@ namespace SAM.Analytical
         /// unwritten work. <b>Do not read a stage's presence here as a claim that the simulation enforced it.</b>
         /// </para>
         /// <para>
-        /// <b>Declared policy, and it needs Michal's confirmation.</b> The values below are read off
+        /// <b>Declared policy, and it needs the engineer's confirmation.</b> The values below are read off
         /// <see cref="PartOIteration"/>'s own definitions of the stages; nothing in Approved Document O was
-        /// parsed to produce them, and no shipped system template marks boost or summer bypass (see the
-        /// handover's deferred list). <see cref="PartOIteration.AcousticRestricted"/> may therefore state a
+        /// parsed to produce them, and no shipped system template marks boost or summer bypass (a known,
+        /// deferred gap). <see cref="PartOIteration.AcousticRestricted"/> may therefore state a
         /// summer bypass that no template can satisfy - that refusal belongs to capability selection, not here,
         /// because what a scenario <i>assumes</i> and what a system can <i>do</i> are two different statements
         /// and conflating them would hide the mismatch.

@@ -41,6 +41,3 @@ Implemented and tested; open for review, not merged.
   Before this change it resolved on the same machine through the absolute path. Within the session the runtime hint still works.
 - Other Part O sidecars (`PartORunResume`, Iteration 3 records, `.partomixed.json`) may still hold absolute paths; out of scope here.
 - How an older build reads a model written by this one (no `Path_TSD`) was not run: it would treat the record as having no results file and refuse safely.
-
-## Next step
-Owner review and merge into `sow/2026-Q3`, then the `PROJECT_PROGRESS.md` closeout.

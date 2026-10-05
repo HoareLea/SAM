@@ -91,7 +91,7 @@ namespace SAM.Analytical
         /// <para>
         /// <b>The preference is read, never invented.</b> An earlier revision of this chose the system with
         /// the fewest capabilities, on the reasoning that anything more implies plant nobody required.
-        /// Michal rejected it, and rightly: that is a policy about a particular library of templates rather
+        /// That was rejected, and rightly: it is a policy about a particular library of templates rather
         /// than something that follows from Approved Document F, and a capability a system happens to have
         /// may cost nothing to specify. The order now comes from
         /// <see cref="SystemCapabilityDescriptor.Rank"/>, which the catalogue supplies.

@@ -75,7 +75,7 @@ namespace SAM.Analytical
         /// <para>
         /// <b>Supplied, never inferred.</b> An earlier revision ranked systems by counting their
         /// capabilities, on the reasoning that a system able to do more than was asked implies plant nobody
-        /// required. Michal was right to reject it: that is a policy about a particular set of shipped
+        /// required. That reasoning was rightly rejected: it is a policy about a particular set of shipped
         /// templates, and <c>SAM.Analytical</c> has no business holding it. Whether heat recovery makes a
         /// system a heavier answer than one without is a judgement about equipment - a capability a system
         /// happens to have may cost nothing to specify - and the assembly that ships the templates is the

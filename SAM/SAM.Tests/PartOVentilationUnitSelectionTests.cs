@@ -761,7 +761,7 @@ namespace SAM.Tests
         /// design headroom - and the operation must find it.
         /// </para>
         /// <para>
-        /// <b>This is the defect Codex found, and it was a real one.</b> An earlier revision shared a
+        /// <b>This is a real defect that was found in review.</b> An earlier revision shared a
         /// reduction in proportion to each room's total duty, which handed a share to the living room
         /// sitting exactly on its own floor, saw that share breach it, and refused the whole reversal as
         /// impossible. A reduction can only come out of headroom that is there to remove, so it is now
@@ -863,7 +863,7 @@ namespace SAM.Tests
         /// <summary>
         /// <b>A targeted change never reaches across into another ventilation system.</b>
         /// <para>
-        /// <b>The second defect Codex found.</b> A duty is summed per room and per direction, and
+        /// <b>A second defect found in review.</b> A duty is summed per room and per direction, and
         /// <c>Modify.SetSpaceDesignFlowRate</c> writes every terminal of that room and direction - so a
         /// room holding terminals from this Part O system and from another one would have had both
         /// rewritten, silently moving the other system's design duty while the result claimed the change
@@ -2976,7 +2976,7 @@ namespace SAM.Tests
         /// <b>A request far larger than the bracket a fixed halving budget could close still clamps to the
         /// unit's rating</b> - it does not quietly give up and answer "no change possible".
         /// <para>
-        /// Codex found this on PR #86. Bisection needs about <c>log2(width / tolerance)</c> halvings, so a
+        /// Bisection needs about <c>log2(width / tolerance)</c> halvings, so a
         /// request 1e18 l/s above the existing design needs roughly seventy against a 0.001 l/s tolerance.
         /// A fixed budget of sixty exits with the feasible bound still sitting on the anchor - the search
         /// returns the unchanged design, reports it as the closest feasible value, and claims it was

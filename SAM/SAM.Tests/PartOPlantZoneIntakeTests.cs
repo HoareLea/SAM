@@ -102,7 +102,7 @@ namespace SAM.Tests
         /// the rule asks whether the model says the unit delivers, and only then whether an intake can be
         /// sized.
         /// </para>
-        /// <para>Raised by Codex on SAM #92 (P2). It would have refused a real system.</para>
+        /// <para>An earlier revision would have refused a real system.</para>
         /// </summary>
         [Fact]
         public void AnExtractOnlyUnit_ReportsNothing()

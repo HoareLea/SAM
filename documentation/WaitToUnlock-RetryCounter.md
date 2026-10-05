@@ -28,6 +28,3 @@ No caller depends on an infinite wait; the default 10 x 1 s budget now applies.
 
 ## Risks
 - A TSD file that TAS holds locked for longer than about 11 s after `simulate` returns now yields `false` / proceeds instead of blocking. The Tas callers already treat it as a wait only, except `Simulate(TBDDocument, ...)` and `CalculateResultantTemperature`, which would report not-finished / skip the `Save()`. Not observed with real TAS in this PR.
-
-## Next step
-Merge into `sow/2026-Q3` after CI, then the `PROJECT_PROGRESS.md` closeout.

@@ -401,7 +401,7 @@ namespace SAM.Tests
         }
 
         /// <summary>
-        /// <b>Previous-round Codex P1: a legacy Ventilation profile that actually resolves would activate
+        /// <b>Review finding: a legacy Ventilation profile that actually resolves would activate
         /// TBD's own mechanical ventilation (ticV) alongside this iteration's directional inter-zone air
         /// movements - the same space's design airflow reaching the simulation twice.</b>
         /// <para>
@@ -1066,7 +1066,7 @@ namespace SAM.Tests
         }
 
         // -------------------------------------------------------------------------------------------------
-        // I.5. One Base MVHR system per assessed dwelling - second-round Codex P1
+        // I.5. One Base MVHR system per assessed dwelling
         //
         // PartFCalculator sizes each dwelling zone independently, so combining two assessed dwellings onto
         // one shared generic AHU would route separate flats through plant neither dwelling's Part F sizing

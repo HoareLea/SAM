@@ -11,7 +11,7 @@ namespace SAM.Tests
     /// <summary>
     /// TM59Manager deliberately reuses one TM59InternalConditionResolver instance across many Resolve
     /// calls over a live, mutable model - these lock that its per-Space and per-Zone caching does not
-    /// go stale when the model changes between two calls on the same resolver (Codex review finding).
+    /// go stale when the model changes between two calls on the same resolver.
     /// </summary>
     public class TM59ResolverCachingTests
     {

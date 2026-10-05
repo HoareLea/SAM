@@ -93,12 +93,12 @@ the unique-name fallback structurally cannot serve, so "the fallback was succeed
    `zoneGuidProvenance: "assignedDuringWorkflow"`. A `zoneGuid` identity mode is real — both sides match
    on the key by the time anything reads it — but it does not prove the chain one layer up was ever free
    of a name match. Whether to preserve the guid through the strip or refuse an ambiguous name match is an
-   open decision, recorded in the active handover.
+   open decision.
 2. **This is TSD evidence only.** Nothing here says anything about the TPD route's identity.
 
 ### SAM vs native TAS TM59 comparison
 
-Michal reran Flat1 BasePassive in TAS itself and pulled the native "Domestic Overheating (CIBSE TM59)"
+The engineer reran Flat1 BasePassive in TAS itself and pulled the native "Domestic Overheating (CIBSE TM59)"
 report for the same `.tsd` the SAM diagnostic run was built from. Compared space by space.
 
 **8 of 9 spaces agree with TAS on every number that governs pass/fail.** The 9th, `Corridor_1`, disagrees
@@ -1942,7 +1942,7 @@ correction.
 
 ## `A0.sam` retired as the Base MVHR whole-model acceptance fixture (2026-08-28)
 
-**Second-round Codex review on SAM#77** found that `PrepareBaseMVHR` combined every assessed dwelling onto
+**A second-round review of SAM#77** found that `PrepareBaseMVHR` combined every assessed dwelling onto
 one shared generic system/AHU, even though `PartFCalculator` sizes each dwelling zone independently. Fixed:
 `Modify.PrepareBaseMVHR` now partitions the assessed scope into one group per dwelling zone
 (`Query.PartFDwellingZones` + the zone→space relation) and builds or reuses one system per dwelling, never

@@ -220,7 +220,7 @@ namespace SAM.Tests
         // --- Explicit "twin" bedroom-size keyword (requirement 4). ---
 
         // --- A bare bedroom-size modifier (single/double/twin/master/...) must not beat a genuine
-        // non-habitable noun of equal or greater specificity - Codex review finding on the PR that
+        // non-habitable noun of equal or greater specificity - review finding on the PR that
         // introduced the 3-tier precedence above. ---
 
         [Fact]

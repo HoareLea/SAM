@@ -180,6 +180,4 @@ gives it (`Query.AirFlow`) is summed from the unit's `SpaceAirMovement`s, which 
 
 ## Next step
 
-The owner review is done. Once SAM CI is green, merge this PR (SAM CI green) and add the `PROJECT_PROGRESS.md`
-closeout on `sow/2026-Q3`. Then PR-3 (SAM_Systems D2 scope), and the licensed Mixed acceptance on `-Cleaned.sam` with
-nothing deleted.
+Then PR-3 (SAM_Systems D2 scope), and the licensed Mixed acceptance on `-Cleaned.sam` with nothing deleted.
