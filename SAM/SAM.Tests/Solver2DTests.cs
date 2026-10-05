@@ -378,27 +378,32 @@ namespace SAM.Tests
         }
 
         /// <summary>
-        /// The degenerate layout the budget exists for: every anchor collapsed onto one point, so each
-        /// label places only after spiralling past the growing pile of the ones before it. The work grows
-        /// as the square of the count, which is what has to be stopped - and the items it stops are
-        /// reported as Fallback rather than passed off as placed.
+        /// An expensive layout is still stopped by the budget, and the items it stops are reported as
+        /// Fallback rather than passed off as placed. The budget is the backstop for whatever input costs
+        /// more than foreseen, so it has to keep working even though the layouts it was calibrated on no
+        /// longer reach it.
+        /// <para>
+        /// This used to be 400 labels sharing one anchor, which cost 620 263 units and was the reason the
+        /// budget existed. Since SAM_UI #58 that input costs 1 336 units (see
+        /// <see cref="Solve_CoincidentAnchors_SolveWithoutTheBudget"/>) and would never reach a budget of
+        /// 20 000, so the test would have stopped testing the budget. A tight cluster of mixed-width labels
+        /// is still the most expensive input there is - its cost grows with the square of the labels that
+        /// find room in it - so it is what exercises the mechanism now.
+        /// </para>
         /// </summary>
         [Fact]
         public void Solve_DegenerateLayout_IsStoppedByTheBudgetAndSaysSo()
         {
-            Solver2D solver2D = new Solver2D(Area(), new List<IClosed2D>());
+            Solver2D solver2D = new Solver2D(Infinite(), new List<IClosed2D>());
 
             //A small explicit budget so the test measures the mechanism rather than spending the default.
             solver2D.WorkBudget = 20000;
 
-            for (int i = 0; i < 400; i++)
-            {
-                solver2D.Add(Data(new Point2D(0, 0), i));
-            }
+            solver2D.AddRange(Labels_Cluster(400, 2));
 
             List<Solver2DResult> solver2DResults = solver2D.Solve();
 
-            testOutputHelper.WriteLine(string.Format("400 collapsed labels: {0} work units", solver2D.WorkUnits));
+            testOutputHelper.WriteLine(string.Format("400 clustered labels: {0} work units", solver2D.WorkUnits));
 
             Assert.Contains(Solver2DResultType.Fallback, solver2DResults.ConvertAll(x => x.ResultType));
 
@@ -420,11 +425,690 @@ namespace SAM.Tests
             AssertSamePlacement(solver2DResults_1, solver2DResults_2);
         }
 
+        // --- Clustered anchors (SAM_UI #58) ------------------------------------------------------------
+        //
+        // The search skips candidates whose rejection it already knows, and the spatial index returns only
+        // the placed rectangles that can overlap. Both are meant to change nothing but the cost. The oracle
+        // test proves that against an independent transcription of the search; the others lock the cost.
+
+        /// <summary>
+        /// Every input solves to exactly what the plain search - every candidate tested, every placed
+        /// rectangle scanned, nothing skipped - places. The reference is a transcription of the search as it
+        /// stood before the clustered-anchor work, kept deliberately naive, and both sides run without a
+        /// budget so the comparison is of the search itself.
+        /// <para>
+        /// The inputs are the ones the skips were built for and the ones that could trip them up: a pile of
+        /// identical labels, a pile of mixed widths, anchors a hair apart, a tight cluster, identical labels
+        /// whose limit areas are equal but separate objects, a run of unplaceable labels long enough to switch
+        /// the search to its single-ring mode, an outlier label far larger than the grid's cells, labels
+        /// turned off the axes, and the Mollier chart's points, curve labels and obstacles.
+        /// </para>
+        /// </summary>
+        [Theory]
+        [InlineData("pile")]
+        [InlineData("mixed pile")]
+        [InlineData("near-coincident")]
+        [InlineData("cluster")]
+        [InlineData("equal limit areas")]
+        [InlineData("unplaceable run")]
+        [InlineData("outlier")]
+        [InlineData("rotated")]
+        [InlineData("mollier")]
+        [InlineData("priorities")]
+        [InlineData("no grid")]
+        public void Solve_PlacesExactlyWhatThePlainSearchPlaces(string name)
+        {
+            List<IClosed2D> obstacle2Ds = new List<IClosed2D>();
+            IClosed2D area = Infinite();
+            List<Solver2DData> solver2DDatas = Labels_Oracle(name, ref area, obstacle2Ds);
+
+            Solver2D solver2D = new Solver2D(area, obstacle2Ds);
+            solver2D.WorkBudget = 0;
+            solver2D.AddRange(solver2DDatas);
+
+            List<Solver2DResult> solver2DResults = solver2D.Solve();
+            List<Solver2DResult> solver2DResults_Reference = new ReferenceSolver2D(area, obstacle2Ds).Solve(solver2DDatas);
+
+            testOutputHelper.WriteLine(string.Format("{0}: {1} items, {2} work units", name, solver2DDatas.Count, solver2D.WorkUnits));
+
+            AssertSamePlacement(solver2DResults_Reference, solver2DResults);
+        }
+
+        /// <summary>
+        /// Identical labels sharing one anchor - the calibration case the budget was set by, at the floor
+        /// plan's IterationCount of 100 - solve within the default budget, with nothing falling back. It cost
+        /// 620 263 units before SAM_UI #58, past the budget, and the last 164 of the 400 labels were dropped at
+        /// the anchor; it costs 1 336 now. The cost also stops growing with the label count once the search
+        /// has filled its reach: 1 600 labels cost what 400 do.
+        /// </summary>
+        [Fact]
+        public void Solve_CoincidentAnchors_SolveWithoutTheBudget()
+        {
+            Solver2D solver2D_400 = Solver2D_Coincident(400);
+            List<Solver2DResult> solver2DResults_400 = solver2D_400.Solve();
+
+            Solver2D solver2D_1600 = Solver2D_Coincident(1600);
+            List<Solver2DResult> solver2DResults_1600 = solver2D_1600.Solve();
+
+            testOutputHelper.WriteLine(string.Format("400 coincident labels: {0} work units; 1600: {1}", solver2D_400.WorkUnits, solver2D_1600.WorkUnits));
+
+            Assert.DoesNotContain(Solver2DResultType.Fallback, solver2DResults_400.ConvertAll(x => x.ResultType));
+            Assert.DoesNotContain(Solver2DResultType.Fallback, solver2DResults_1600.ConvertAll(x => x.ResultType));
+
+            //1 336 measured; the bound leaves room for a change of grid, not for the square coming back.
+            Assert.True(solver2D_400.WorkUnits < 5000, string.Format("{0} work units for 400 coincident labels", solver2D_400.WorkUnits));
+            Assert.True(solver2D_1600.WorkUnits < 2 * solver2D_400.WorkUnits, string.Format("{0} work units for 1600 coincident labels against {1} for 400", solver2D_1600.WorkUnits, solver2D_400.WorkUnits));
+
+            //The first 400 of the 1 600 are the same labels in the same order, so they land in the same places.
+            AssertSamePlacement(solver2DResults_400, solver2DResults_1600.GetRange(0, 400));
+        }
+
+        /// <summary>
+        /// The floor plan's own shape of pile - labels of mixed widths, each with its room as limit area - on
+        /// anchors that coincide, nearly coincide, or crowd a 4 m cluster, all solve within the default budget
+        /// with nothing falling back. Before SAM_UI #58 each of them spent the whole budget and dropped most of
+        /// its labels at their anchors; uncapped they cost 0.8 to 6.2 million units.
+        /// </summary>
+        [Theory]
+        [InlineData("own rooms", 400, 30000)]
+        [InlineData("near-coincident", 400, 150000)]
+        [InlineData("cluster", 400, 150000)]
+        public void Solve_ClusteredFloorPlanLabels_SolveWithoutTheBudget(string name, int count, long workUnits_Max)
+        {
+            Solver2D solver2D = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D.AddRange(Labels_Clustered(name, count));
+
+            List<Solver2DResult> solver2DResults = solver2D.Solve();
+
+            testOutputHelper.WriteLine(string.Format("{0} x{1}: {2} work units, {3} solved, {4} unplaced", name, count, solver2D.WorkUnits, solver2DResults.FindAll(x => x.ResultType == Solver2DResultType.Solved).Count, solver2DResults.FindAll(x => x.ResultType == Solver2DResultType.Unplaced).Count));
+
+            Assert.DoesNotContain(Solver2DResultType.Fallback, solver2DResults.ConvertAll(x => x.ResultType));
+            Assert.True(solver2D.WorkUnits < workUnits_Max, string.Format("{0} work units against a bound of {1}", solver2D.WorkUnits, workUnits_Max));
+        }
+
+        /// <summary>
+        /// Four times the labels in the same near-coincident pile cost barely more: once the search has filled
+        /// its reach, a further label fails within its first ring and the cost stops growing.
+        /// </summary>
+        [Fact]
+        public void Solve_NearCoincidentAnchors_CostStopsGrowingWithTheLabelCount()
+        {
+            Solver2D solver2D_400 = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D_400.AddRange(Labels_Clustered("near-coincident", 400));
+            solver2D_400.Solve();
+
+            Solver2D solver2D_1600 = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D_1600.AddRange(Labels_Clustered("near-coincident", 1600));
+            List<Solver2DResult> solver2DResults_1600 = solver2D_1600.Solve();
+
+            testOutputHelper.WriteLine(string.Format("near-coincident: 400 labels {0} work units, 1600 labels {1}", solver2D_400.WorkUnits, solver2D_1600.WorkUnits));
+
+            Assert.DoesNotContain(Solver2DResultType.Fallback, solver2DResults_1600.ConvertAll(x => x.ResultType));
+            Assert.True(solver2D_1600.WorkUnits < 1.5 * solver2D_400.WorkUnits, string.Format("{0} work units for 1600 labels against {1} for 400", solver2D_1600.WorkUnits, solver2D_400.WorkUnits));
+        }
+
+        /// <summary>
+        /// A clustered solve repeats exactly - positions, result types and the work it took - both from a
+        /// fresh instance and from a second call on the same one. The second call matters here: the solve
+        /// keeps state across items (what each search has already ruled out), and none of it may leak into
+        /// the next call.
+        /// </summary>
+        [Fact]
+        public void Solve_ClusteredInput_IsDeterministic()
+        {
+            Solver2D solver2D_1 = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D_1.AddRange(Labels_Clustered("near-coincident", 300));
+            List<Solver2DResult> solver2DResults_1 = solver2D_1.Solve();
+            long workUnits_1 = solver2D_1.WorkUnits;
+
+            Solver2D solver2D_2 = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D_2.AddRange(Labels_Clustered("near-coincident", 300));
+            List<Solver2DResult> solver2DResults_2 = solver2D_2.Solve();
+            List<Solver2DResult> solver2DResults_3 = solver2D_2.Solve();
+
+            AssertSamePlacement(solver2DResults_1, solver2DResults_2);
+            AssertSamePlacement(solver2DResults_1, solver2DResults_3);
+            Assert.Equal(workUnits_1, solver2D_2.WorkUnits);
+        }
+
+        /// <summary>
+        /// A healthy floor plan's labels land exactly where they did before the clustered-anchor work: every
+        /// position of a 2 000-label plan, built the way the floor plan builds its labels (mixed widths, a room
+        /// as each label's limit area, ShiftDistance a hundredth of the room's reach), hashes to the value
+        /// recorded from the solver as it was. The same for the 5 000-label plan the budget is calibrated on.
+        /// </summary>
+        [Fact]
+        public void Solve_HealthyPlans_PlaceExactlyAsBefore()
+        {
+            Solver2D solver2D_FloorPlan = new Solver2D(Infinite(), new List<IClosed2D>());
+            solver2D_FloorPlan.AddRange(Labels_HealthyFloorPlan());
+            List<Solver2DResult> solver2DResults_FloorPlan = solver2D_FloorPlan.Solve();
+
+            Solver2D solver2D_Grid = Solver2D_HealthyGrid();
+            List<Solver2DResult> solver2DResults_Grid = solver2D_Grid.Solve();
+
+            testOutputHelper.WriteLine(string.Format("2000-label floor plan: {0} work units; 5000-label grid: {1}", solver2D_FloorPlan.WorkUnits, solver2D_Grid.WorkUnits));
+
+            Assert.All(solver2DResults_FloorPlan, x => Assert.Equal(Solver2DResultType.Solved, x.ResultType));
+            Assert.All(solver2DResults_Grid, x => Assert.Equal(Solver2DResultType.Solved, x.ResultType));
+
+            //Recorded from Solver2D at sow/2026-Q3 64a735f2, before SAM_UI #58.
+            Assert.Equal("D3695E2C874C3279", Fingerprint(solver2DResults_FloorPlan));
+            Assert.Equal("8C81DF1132F81649", Fingerprint(solver2DResults_Grid));
+        }
+
         // --- Helpers ---------------------------------------------------------------------------------
 
         private static Rectangle2D Area(double size = 100)
         {
             return new Rectangle2D(new Point2D(-size, -size), size * 3, size * 3);
+        }
+
+        /// <summary>The floor plan's own area: unbounded, so labels may extend beyond the rooms.</summary>
+        private static Rectangle2D Infinite()
+        {
+            return new Rectangle2D(new Point2D(double.MinValue / 2, double.MinValue / 2), double.MaxValue, double.MaxValue);
+        }
+
+        private static Face2D Room(double x, double y, double width, double height)
+        {
+            return new Face2D(new Polygon2D(new List<Point2D>()
+            {
+                new Point2D(x - (width / 2), y - (height / 2)),
+                new Point2D(x + (width / 2), y - (height / 2)),
+                new Point2D(x + (width / 2), y + (height / 2)),
+                new Point2D(x - (width / 2), y + (height / 2)),
+            }));
+        }
+
+        /// <summary>
+        /// A space label as the floor plan builds it (GeometryObjectModel): the rectangle off-centre from its
+        /// anchor (Solve re-centres it), the room as limit area, and ShiftDistance a hundredth of the room's
+        /// reach from the anchor.
+        /// </summary>
+        private static Solver2DData Label(Point2D point2D, double width, double height, Face2D face2D, object tag, int iterationCount = 100)
+        {
+            double distance_Farthest = 0;
+            foreach (Point2D point2D_Room in ((Polygon2D)face2D.ExternalEdge2D).Points)
+            {
+                distance_Farthest = System.Math.Max(distance_Farthest, point2D_Room.Distance(point2D));
+            }
+
+            Solver2DData result = new Solver2DData(new Rectangle2D(new Point2D(point2D.X + (width / 2), point2D.Y + (height / 2)), width, height), point2D);
+            result.Tag = tag;
+            result.Solver2DSettings = new Solver2DSettings()
+            {
+                StartingDistance = 0,
+                IterationCount = iterationCount,
+                ShiftDistance = distance_Farthest / iterationCount,
+                LimitArea = face2D,
+            };
+
+            return result;
+        }
+
+        /// <summary>Label widths of 1.2 m to 6 m, as room names come out at 0.4 m text height.</summary>
+        private static double LabelWidth(int index)
+        {
+            return 0.4 * 0.6 * (5 + ((index * 13) % 21));
+        }
+
+        /// <summary>A deterministic spread in [-1, 1].</summary>
+        private static double Spread(int index, double factor)
+        {
+            double value = index * factor;
+            return (2 * (value - System.Math.Floor(value))) - 1;
+        }
+
+        /// <summary>Identical labels on one anchor at the floor plan's IterationCount of 100.</summary>
+        private static Solver2D Solver2D_Coincident(int count)
+        {
+            Solver2D result = new Solver2D(Area(), new List<IClosed2D>());
+
+            for (int i = 0; i < count; i++)
+            {
+                Solver2DData solver2DData = Data(new Point2D(0, 0), i);
+                solver2DData.Solver2DSettings.IterationCount = 100;
+
+                result.Add(solver2DData);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Mixed-width floor-plan labels piled on one point: "own rooms" each with a 10 m room of its own,
+        /// "near-coincident" jittered by 4 mm inside one shared 40 m room, "cluster" spread over a 4 m square.
+        /// </summary>
+        private static List<Solver2DData> Labels_Clustered(string name, int count)
+        {
+            List<Solver2DData> result = new List<Solver2DData>();
+
+            Face2D face2D_Shared = Room(0, 0, 40, 40);
+            for (int i = 0; i < count; i++)
+            {
+                switch (name)
+                {
+                    case "own rooms":
+                        result.Add(Label(new Point2D(0, 0), LabelWidth(i), 0.4, Room(0, 0, 10, 10), i));
+                        break;
+
+                    case "near-coincident":
+                        result.Add(Label(new Point2D(0.004 * Spread(i, 0.6180339887), 0.004 * Spread(i, 0.7548776662)), LabelWidth(i), 0.4, face2D_Shared, i));
+                        break;
+
+                    case "cluster":
+                        result.Add(Label(new Point2D(2 * Spread(i, 0.6180339887), 2 * Spread(i, 0.7548776662)), LabelWidth(i), 0.4, face2D_Shared, i));
+                        break;
+
+                    default:
+                        throw new System.ArgumentException(name);
+                }
+            }
+
+            return result;
+        }
+
+        private static List<Solver2DData> Labels_Cluster(int count, double halfSize)
+        {
+            List<Solver2DData> result = new List<Solver2DData>();
+
+            Face2D face2D = Room(0, 0, 40, 40);
+            for (int i = 0; i < count; i++)
+            {
+                result.Add(Label(new Point2D(halfSize * Spread(i, 0.6180339887), halfSize * Spread(i, 0.7548776662)), LabelWidth(i), 0.4, face2D, i));
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// A healthy floor plan: 2 000 rooms of 3 m to 8 m on a 9 m grid, each labelled at its centre.
+        /// </summary>
+        private static List<Solver2DData> Labels_HealthyFloorPlan()
+        {
+            List<Solver2DData> result = new List<Solver2DData>();
+
+            for (int i = 0; i < 2000; i++)
+            {
+                double x = (i % 40) * 9;
+                double y = (i / 40) * 9;
+
+                result.Add(Label(new Point2D(x, y), LabelWidth(i), 0.4, Room(x, y, 3 + ((i * 7) % 6), 3 + ((i * 5) % 6)), i));
+            }
+
+            return result;
+        }
+
+        /// <summary>The 5 000-label plan the default budget is calibrated on.</summary>
+        private static Solver2D Solver2D_HealthyGrid()
+        {
+            Solver2D result = new Solver2D(Area(2000), new List<IClosed2D>());
+
+            for (int i = 0; i < 5000; i++)
+            {
+                Point2D point2D = new Point2D((i % 50) * 5, (i / 50) * 5);
+
+                Solver2DData solver2DData = new Solver2DData(new Rectangle2D(new Point2D(point2D.X - 1, point2D.Y - 0.15), 2, 0.3), point2D);
+                solver2DData.Tag = i;
+                solver2DData.Solver2DSettings = new Solver2DSettings()
+                {
+                    StartingDistance = 0,
+                    ShiftDistance = 0.04,
+                    IterationCount = 100,
+                    LimitArea = new Rectangle2D(new Point2D(point2D.X - 2, point2D.Y - 2), 4, 4),
+                };
+
+                result.Add(solver2DData);
+            }
+
+            return result;
+        }
+
+        /// <summary>The inputs of <see cref="Solve_PlacesExactlyWhatThePlainSearchPlaces"/>, kept small enough for the plain search.</summary>
+        private static List<Solver2DData> Labels_Oracle(string name, ref IClosed2D area, List<IClosed2D> obstacle2Ds)
+        {
+            List<Solver2DData> result = new List<Solver2DData>();
+
+            switch (name)
+            {
+                case "pile":
+                    area = Area();
+                    for (int i = 0; i < 80; i++)
+                    {
+                        Solver2DData solver2DData = Data(new Point2D(0, 0), i);
+                        solver2DData.Solver2DSettings.IterationCount = 40;
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                case "mixed pile":
+                    Face2D face2D_Pile = Room(0, 0, 16, 16);
+                    for (int i = 0; i < 80; i++)
+                    {
+                        result.Add(Label(new Point2D(0, 0), LabelWidth(i), 0.4, face2D_Pile, i, 40));
+                    }
+                    break;
+
+                case "near-coincident":
+                    Face2D face2D_Near = Room(0, 0, 16, 16);
+                    for (int i = 0; i < 80; i++)
+                    {
+                        result.Add(Label(new Point2D(0.004 * Spread(i, 0.6180339887), 0.004 * Spread(i, 0.7548776662)), LabelWidth(i), 0.4, face2D_Near, i, 40));
+                    }
+                    break;
+
+                case "cluster":
+                    Face2D face2D_Cluster = Room(0, 0, 16, 16);
+                    for (int i = 0; i < 80; i++)
+                    {
+                        result.Add(Label(new Point2D(2 * Spread(i, 0.6180339887), 2 * Spread(i, 0.7548776662)), LabelWidth(i), 0.4, face2D_Cluster, i, 40));
+                    }
+                    break;
+
+                case "equal limit areas":
+                    //Equal geometry, separate objects: the searches must not be treated as one.
+                    for (int i = 0; i < 60; i++)
+                    {
+                        result.Add(Label(new Point2D(0, 0), 2, 0.4, Room(0, 0, 12, 12), i, 40));
+                    }
+                    break;
+
+                case "unplaceable run":
+                    //Forty labels whose rooms lie out of reach, then forty that can place: the run switches
+                    //the search to a single ring, and a success switches it back.
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Solver2DData solver2DData = Data(new Point2D(0, 0), i);
+                        solver2DData.Solver2DSettings.LimitArea = new Rectangle2D(new Point2D(40, 40), 1, 1);
+                        result.Add(solver2DData);
+                    }
+
+                    for (int i = 40; i < 80; i++)
+                    {
+                        result.Add(Data(new Point2D(0, 0), i));
+                    }
+
+                    for (int i = 80; i < 120; i++)
+                    {
+                        Solver2DData solver2DData = Data(new Point2D(0, 0), i);
+                        solver2DData.Solver2DSettings.LimitArea = new Rectangle2D(new Point2D(40, 40), 1, 1);
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                case "outlier":
+                    //One label hundreds of times the size of the rest: far more cells than the grid spreads one
+                    //rectangle over.
+                    Face2D face2D_Outlier = Room(0, 0, 16, 16);
+                    for (int i = 0; i < 60; i++)
+                    {
+                        double width = i == 10 ? 400 : LabelWidth(i);
+                        result.Add(Label(new Point2D(Spread(i, 0.6180339887), Spread(i, 0.7548776662)), width, i == 10 ? 30 : 0.4, face2D_Outlier, i, 40));
+                    }
+                    break;
+
+                case "rotated":
+                    //Every third label turned off the axes, where a bounding box is not the rectangle.
+                    area = Area();
+                    for (int i = 0; i < 60; i++)
+                    {
+                        Point2D point2D = new Point2D(0.5 * Spread(i, 0.6180339887), 0.5 * Spread(i, 0.7548776662));
+                        Vector2D heightDirection = i % 3 == 0 ? new Vector2D(0.6, 0.8) : new Vector2D(0, 1);
+
+                        Solver2DData solver2DData = new Solver2DData(new Rectangle2D(point2D, 1.5, 0.5, heightDirection), point2D);
+                        solver2DData.Tag = i;
+                        solver2DData.Solver2DSettings = new Solver2DSettings()
+                        {
+                            StartingDistance = 0,
+                            ShiftDistance = 0.2,
+                            IterationCount = 30,
+                        };
+
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                case "mollier":
+                    Solver2D_Mollier(out List<IClosed2D> obstacle2Ds_Mollier, out List<Solver2DData> solver2DDatas_Mollier, out area);
+                    obstacle2Ds.AddRange(obstacle2Ds_Mollier);
+                    result.AddRange(solver2DDatas_Mollier);
+                    break;
+
+                case "priorities":
+                    //Priorities out of insertion order, with ties, around one anchor and against obstacles.
+                    area = Area();
+                    obstacle2Ds.Add(new Circle2D(new Point2D(1.5, 0), 0.5));
+                    obstacle2Ds.Add(new Rectangle2D(new Point2D(-3, -0.5), 1, 1));
+                    for (int i = 0; i < 60; i++)
+                    {
+                        Solver2DData solver2DData = Data(new Point2D(0, 0), i);
+                        solver2DData.Priority = (i * 7) % 5;
+                        solver2DData.Solver2DSettings.IterationCount = 30;
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                case "no grid":
+                    //Labels too small to size the spatial index by - under the distance tolerance - so the
+                    //solve takes the linear scan it keeps for exactly this input.
+                    area = Area();
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Point2D point2D = new Point2D(1e-7 * (i % 3), 0);
+
+                        Solver2DData solver2DData = new Solver2DData(new Rectangle2D(point2D, 4e-7, 2e-7), point2D);
+                        solver2DData.Tag = i;
+                        solver2DData.Solver2DSettings = new Solver2DSettings()
+                        {
+                            StartingDistance = 0,
+                            ShiftDistance = 1e-7,
+                            IterationCount = 20,
+                        };
+
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                default:
+                    throw new System.ArgumentException(name);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// A hash of every result's tag, type and rectangle (to 1e-9), so a test can lock a large layout to
+        /// the exact positions it had.
+        /// </summary>
+        private static string Fingerprint(List<Solver2DResult> solver2DResults)
+        {
+            System.Text.StringBuilder stringBuilder = new System.Text.StringBuilder();
+            foreach (Solver2DResult solver2DResult in solver2DResults)
+            {
+                Rectangle2D rectangle2D = solver2DResult.Closed2D<Rectangle2D>();
+
+                stringBuilder.Append(solver2DResult.Tag).Append(';').Append(solver2DResult.ResultType).Append(';');
+                if (rectangle2D != null)
+                {
+                    stringBuilder.Append(Round(rectangle2D.Origin.X)).Append(',').Append(Round(rectangle2D.Origin.Y)).Append(',').Append(Round(rectangle2D.Width)).Append(',').Append(Round(rectangle2D.Height));
+                }
+
+                stringBuilder.Append('\n');
+            }
+
+            byte[] hash = System.Security.Cryptography.SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(stringBuilder.ToString()));
+
+            return System.Convert.ToHexString(hash).Substring(0, 16);
+        }
+
+        private static string Round(double value)
+        {
+            return System.Math.Round(value, 9).ToString("R", System.Globalization.CultureInfo.InvariantCulture);
+        }
+
+        /// <summary>
+        /// The search with nothing clever in it: every candidate tested, every placed rectangle scanned, no
+        /// budget. A transcription of Solver2D.Solve as it stood at sow/2026-Q3 64a735f2, before SAM_UI #58,
+        /// minus the budget and the spatial index (which only ever narrowed the same scan). It is the oracle
+        /// the optimised search must agree with, so it must stay this plain.
+        /// </summary>
+        private sealed class ReferenceSolver2D
+        {
+            private readonly IClosed2D area;
+            private readonly List<IClosed2D> obstacle2Ds;
+
+            public ReferenceSolver2D(IClosed2D area, List<IClosed2D> obstacle2Ds)
+            {
+                this.area = area;
+                this.obstacle2Ds = obstacle2Ds;
+            }
+
+            public List<Solver2DResult> Solve(List<Solver2DData> solver2DDatas)
+            {
+                List<int> indexes = Enumerable.Range(0, solver2DDatas.Count).ToList();
+                indexes.Sort((x, y) =>
+                {
+                    int compare = solver2DDatas[x].Priority.CompareTo(solver2DDatas[y].Priority);
+                    return compare != 0 ? compare : x.CompareTo(y);
+                });
+
+                List<Vector2D> offsets = new List<Vector2D>();
+                foreach (double angle in new double[] { 0, 90, 180, 270, 45, 135, 225, 315 })
+                {
+                    double radians = System.Math.PI * angle / 180;
+                    offsets.Add(new Vector2D(System.Math.Sin(radians), System.Math.Cos(radians)));
+                }
+
+                List<Solver2DResult> result = new List<Solver2DResult>();
+                List<Rectangle2D> placed = new List<Rectangle2D>();
+                int consecutiveUnplaced = 0;
+
+                foreach (int index in indexes)
+                {
+                    Solver2DData solver2DData = solver2DDatas[index];
+                    Rectangle2D rectangle2D = solver2DData.Closed2D<Rectangle2D>();
+                    Solver2DSettings solver2DSettings = solver2DData.Solver2DSettings;
+
+                    double iterationCount = solver2DSettings.ShiftDistance > 0 ? solver2DSettings.IterationCount : 1;
+                    if (consecutiveUnplaced >= 32)
+                    {
+                        iterationCount = 1;
+                    }
+
+                    Rectangle2D? rectangle2D_Result = null;
+                    if (solver2DData.Geometry2D<ISAMGeometry2D>() is Point2D point2D)
+                    {
+                        Rectangle2D rectangle2D_Centred = rectangle2D.GetMoved(new Vector2D(rectangle2D.GetCentroid(), point2D));
+                        for (int i = 0; i < iterationCount && rectangle2D_Result == null; i++)
+                        {
+                            foreach (Vector2D offset in offsets)
+                            {
+                                Rectangle2D rectangle2D_Candidate = rectangle2D_Centred.GetMoved(offset * (solver2DSettings.StartingDistance + (i * solver2DSettings.ShiftDistance)));
+                                if (Accepts(rectangle2D_Candidate, solver2DSettings, placed))
+                                {
+                                    rectangle2D_Result = rectangle2D_Candidate;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Polyline2D polyline2D = solver2DData.Geometry2D<Polyline2D>();
+                        Point2D point2D_Closest = polyline2D.Closest(rectangle2D.GetCentroid());
+                        double distanceToCenter = point2D_Closest.Distance(rectangle2D.GetCentroid());
+
+                        for (int i = 0; i < iterationCount && rectangle2D_Result == null; i++)
+                        {
+                            for (int j = -1; j <= 1; j += 2)
+                            {
+                                double x = point2D_Closest.X + i * j * solver2DSettings.ShiftDistance;
+                                double y = Y(polyline2D, x);
+                                if (double.IsNaN(y))
+                                {
+                                    continue;
+                                }
+
+                                Point2D point2D_New = new Point2D(x, y);
+                                List<Segment2D> segment2Ds = polyline2D.ClosestSegment2Ds(point2D_New);
+                                if (segment2Ds == null)
+                                {
+                                    continue;
+                                }
+
+                                Segment2D segment2D = segment2Ds[0];
+                                bool clockwise = segment2D.Direction.GetPerpendicular().Y < 0;
+
+                                Rectangle2D rectangle2D_Candidate = Query.MoveToSegment2D(rectangle2D, segment2D, point2D_New, distanceToCenter, clockwise);
+                                if (rectangle2D_Candidate != null && System.Math.Abs(rectangle2D.Width - rectangle2D_Candidate.Width) >= SAM.Core.Tolerance.MacroDistance)
+                                {
+                                    rectangle2D_Candidate = new Rectangle2D(rectangle2D_Candidate.Origin, -rectangle2D_Candidate.Height, rectangle2D_Candidate.Width, rectangle2D_Candidate.WidthDirection);
+                                }
+
+                                if (rectangle2D_Candidate != null && Accepts(rectangle2D_Candidate, solver2DSettings, placed))
+                                {
+                                    rectangle2D_Result = rectangle2D_Candidate;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+
+                    result.Add(new Solver2DResult(solver2DData, rectangle2D_Result, rectangle2D_Result == null ? Solver2DResultType.Unplaced : Solver2DResultType.Solved));
+
+                    if (rectangle2D_Result == null)
+                    {
+                        consecutiveUnplaced++;
+                    }
+                    else
+                    {
+                        consecutiveUnplaced = 0;
+                        placed.Add(rectangle2D_Result);
+                    }
+                }
+
+                return result;
+            }
+
+            private bool Accepts(Rectangle2D rectangle2D, Solver2DSettings solver2DSettings, List<Rectangle2D> placed)
+            {
+                if (!area.Inside(rectangle2D))
+                {
+                    return false;
+                }
+
+                if (obstacle2Ds != null && obstacle2Ds.Exists(x => x.InRange(rectangle2D)))
+                {
+                    return false;
+                }
+
+                if (placed.Exists(x => x.InRange(rectangle2D) || rectangle2D.InRange(x)))
+                {
+                    return false;
+                }
+
+                return solver2DSettings.LimitArea == null || solver2DSettings.LimitArea.Inside(rectangle2D.GetCentroid());
+            }
+
+            private static double Y(Polyline2D polyline2D, double x)
+            {
+                Segment2D? segment2D = polyline2D.Segment2Ds().Find(s => s.Min.X <= x && x <= s.Max.X);
+                if (segment2D == null)
+                {
+                    return double.NaN;
+                }
+
+                List<Point2D> point2Ds = segment2D.GetPoints();
+                if (point2Ds == null || point2Ds.Count < 2)
+                {
+                    return double.NaN;
+                }
+
+                SAM.Math.LinearEquation linearEquation = SAM.Math.Create.LinearEquation(point2Ds[0].X, point2Ds[0].Y, point2Ds[1].X, point2Ds[1].Y);
+
+                return linearEquation == null ? double.NaN : linearEquation.Evaluate(x);
+            }
         }
 
         private static Solver2DData Data(Point2D point2D, object tag)
@@ -461,9 +1145,19 @@ namespace SAM.Tests
         /// </summary>
         private static Solver2D Solver2D_Mollier(out List<IClosed2D> obstacle2Ds)
         {
+            Solver2D_Mollier(out obstacle2Ds, out List<Solver2DData> solver2DDatas, out IClosed2D area);
+
+            Solver2D result = new Solver2D(area, obstacle2Ds);
+            result.AddRange(solver2DDatas);
+
+            return result;
+        }
+
+        private static void Solver2D_Mollier(out List<IClosed2D> obstacle2Ds, out List<Solver2DData> solver2DDatas, out IClosed2D area)
+        {
             obstacle2Ds = new List<IClosed2D>();
 
-            List<Solver2DData> solver2DDatas = new List<Solver2DData>();
+            solver2DDatas = new List<Solver2DData>();
 
             for (int i = 0; i < 20; i++)
             {
@@ -504,10 +1198,7 @@ namespace SAM.Tests
                 solver2DDatas.Add(solver2DData);
             }
 
-            Solver2D result = new Solver2D(new Rectangle2D(new BoundingBox2D(new Point2D(-10, -10), new Point2D(60, 20))), obstacle2Ds);
-            result.AddRange(solver2DDatas);
-
-            return result;
+            area = new Rectangle2D(new BoundingBox2D(new Point2D(-10, -10), new Point2D(60, 20)));
         }
 
         /// <summary>Three hundred items, which is over the threshold where the spatial index is built.</summary>
