@@ -162,8 +162,9 @@ namespace SAM.Geometry.Planar
             // the up-to IterationCount*8 candidate positions per label linearly scans every previously
             // placed label (see intersect), which is ~150 s on a ~10k-label floor plan. The grid returns
             // a superset of potential overlaps - all placed rectangles sharing a cell with the candidate's
-            // tolerance-expanded bounding box - and the exact InRange test in intersect is unchanged, so
-            // placement results are identical to the linear scan.
+            // bounding box expanded by MacroDistance, far beyond the InRange tolerance (see RectangleGrid) -
+            // and the exact InRange test in intersect is unchanged, so placement results are identical to
+            // the linear scan.
             //
             // Built for every input size. It used to be built only above 256 items, on the reasoning that
             // small inputs should keep the original path; but the results do not depend on the path, and

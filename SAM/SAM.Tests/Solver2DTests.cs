@@ -455,6 +455,7 @@ namespace SAM.Tests
         [InlineData("rotated")]
         [InlineData("mollier")]
         [InlineData("priorities")]
+        [InlineData("no grid")]
         public void Solve_PlacesExactlyWhatThePlainSearchPlaces(string name)
         {
             List<IClosed2D> obstacle2Ds = new List<IClosed2D>();
@@ -884,6 +885,27 @@ namespace SAM.Tests
                         Solver2DData solver2DData = Data(new Point2D(0, 0), i);
                         solver2DData.Priority = (i * 7) % 5;
                         solver2DData.Solver2DSettings.IterationCount = 30;
+                        result.Add(solver2DData);
+                    }
+                    break;
+
+                case "no grid":
+                    //Labels too small to size the spatial index by - under the distance tolerance - so the
+                    //solve takes the linear scan it keeps for exactly this input.
+                    area = Area();
+                    for (int i = 0; i < 40; i++)
+                    {
+                        Point2D point2D = new Point2D(1e-7 * (i % 3), 0);
+
+                        Solver2DData solver2DData = new Solver2DData(new Rectangle2D(point2D, 4e-7, 2e-7), point2D);
+                        solver2DData.Tag = i;
+                        solver2DData.Solver2DSettings = new Solver2DSettings()
+                        {
+                            StartingDistance = 0,
+                            ShiftDistance = 1e-7,
+                            IterationCount = 20,
+                        };
+
                         result.Add(solver2DData);
                     }
                     break;
