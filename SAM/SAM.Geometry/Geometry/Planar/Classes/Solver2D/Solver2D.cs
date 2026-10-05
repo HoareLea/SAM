@@ -37,8 +37,24 @@ namespace SAM.Geometry.Planar
         /// by construction; that is the price of the layout not depending on the machine, and it is worth
         /// paying.
         /// </para>
+        /// <para>
+        /// The degenerate collapse no longer reaches it (SAM_UI #58). The search now skips the candidates it
+        /// already knows are blocked and the grid returns only the rectangles that can overlap, without
+        /// changing a single position, and the same inputs measure: the 400 labels sharing one anchor
+        /// <b>1 336</b> units; 400 labels of mixed widths sharing one anchor <b>16 607</b>; 400 and 1 600
+        /// labels jittered around one anchor about <b>90 000</b> to <b>107 000</b>; 1 600 labels in a 4 m
+        /// cluster <b>191 951</b>; the healthy plan of 5 000 <b>5 000</b>. What remains in a pile grows with
+        /// the square of the number of labels that actually find room in it - each still has to get past
+        /// every label already there once - and that number is capped by how far the search reaches, not by
+        /// how many labels there are. The budget stays where it is, as the backstop for whatever input is
+        /// not foreseen here.
+        /// </para>
         /// </summary>
         public const long DefaultWorkBudget = 500000;
+
+        // How far two axis-aligned boxes must overlap on both axes before isKnownBlocked treats them as
+        // certainly InRange: a thousand times the InRange tolerance, so rounding never decides it.
+        private const double knownBlockedMargin = Core.Tolerance.MacroDistance;
 
         private List<Solver2DData> solver2DDatas;
         private List<IClosed2D> obstacles2D;
@@ -79,6 +95,12 @@ namespace SAM.Geometry.Planar
         /// Geometric comparisons the last <see cref="Solve"/> made. Deterministic for a given input, which
         /// is what makes <see cref="WorkBudget"/> testable and lets a consumer log how close a real model
         /// comes to it.
+        /// <para>
+        /// One unit per candidate position tested and one per obstacle or placed rectangle it is compared
+        /// with. A candidate whose rejection is already known - from a rectangle that blocked this item a ring
+        /// earlier, or from an earlier item with the identical search - is not tested and costs no unit; the
+        /// check that knows it is a handful of arithmetic comparisons, at most 8 per candidate.
+        /// </para>
         /// </summary>
         public long WorkUnits
         {
@@ -139,11 +161,32 @@ namespace SAM.Geometry.Planar
             // Spatial index over already-placed rectangles. Without it Solve() is ~O(N^2): every one of
             // the up-to IterationCount*8 candidate positions per label linearly scans every previously
             // placed label (see intersect), which is ~150 s on a ~10k-label floor plan. The grid returns
-            // a superset of potential overlaps - all placed rectangles whose cells the candidate's
-            // bounding box touches, plus a one-cell halo - and the exact InRange test in intersect is
-            // unchanged, so placement results are identical to the linear scan. Built only above a size
-            // threshold so small inputs (e.g. Mollier chart labels) keep the original path byte-for-byte.
-            RectangleGrid grid = solver2DDatas_Ordered.Count > 256 ? RectangleGrid.Create(solver2DDatas_Ordered) : null;
+            // a superset of potential overlaps - all placed rectangles sharing a cell with the candidate's
+            // tolerance-expanded bounding box - and the exact InRange test in intersect is unchanged, so
+            // placement results are identical to the linear scan.
+            //
+            // Built for every input size. It used to be built only above 256 items, on the reasoning that
+            // small inputs should keep the original path; but the results do not depend on the path, and
+            // the linear scan is exactly what made a SMALL pile slow - 200 labels sharing one anchor cost
+            // 4.4 million comparisons (41 s) below the threshold, against 620 000 for 400 labels above it
+            // (SAM_UI #58). The linear scan is kept only for the input the grid cannot be sized for.
+            RectangleGrid grid = RectangleGrid.Create(solver2DDatas_Ordered);
+            List<PlacedRectangle2D> placedRectangle2Ds = grid == null ? new List<PlacedRectangle2D>() : null;
+
+            // Candidates already known to be rejected, keyed by everything that decides a candidate
+            // sequence - see CandidateSequence. Two items with identical geometry and search settings
+            // test the identical sequence of rectangles; everything that rejected one for the first item
+            // (the area, the obstacles, the limit area, the rectangles placed so far) still rejects it
+            // for the second, because none of them changes during a solve except the set of placed
+            // rectangles, which only grows. The first item's ACCEPTED candidate is rejected too - it is
+            // now occupied by the first item. So the second item can start where the first one stopped,
+            // with an identical result. Without this, N labels sharing one anchor re-walk the same pile
+            // N times: 620 263 comparisons for 400 of them, 1 336 with it (SAM_UI #58).
+            Dictionary<CandidateSequence, int> rejectedCandidateCounts = new Dictionary<CandidateSequence, int>();
+
+            // Per item: the placed rectangle that last blocked each of the 8 search directions - see
+            // isKnownBlocked. Reused across items; cleared for each.
+            PlacedRectangle2D[] blockers = new PlacedRectangle2D[8];
 
             // Degenerate-layout backstop. Each label that cannot be placed first runs its full
             // IterationCount * 8 candidate sweep before giving up; when a whole batch is unplaceable (e.g. a
@@ -205,25 +248,56 @@ namespace SAM.Geometry.Planar
                     }
                     else
                     {
+                        // Candidates are numbered in the order they are tested, ring by ring and direction by
+                        // direction, so a count of them is a position in the sequence; see
+                        // rejectedCandidateCounts for why an item may start part-way through it.
+                        CandidateSequence candidateSequence = new CandidateSequence(rectangle2DWithGivenPointInCenter, solver2DSettings);
+                        rejectedCandidateCounts.TryGetValue(candidateSequence, out int candidateIndex_Start);
+
+                        int rejectedCandidateCount = candidateIndex_Start;
+                        PlacedRectangle2D placedRectangle2D_Candidate = new PlacedRectangle2D(rectangle2DWithGivenPointInCenter);
+                        System.Array.Clear(blockers, 0, blockers.Length);
+
+                        int candidateIndex = 0;
                         for (int i = 0; i < iterationCount; i++)
                         {
                             if (resultRectangle2D != null) break;
 
-                            foreach (Vector2D offset in offsets)
+                            for (int j = 0; j < offsets.Count; j++, candidateIndex++)
                             {
-                                Vector2D scaledOffset = offset * (solver2DSettings.StartingDistance + (i * solver2DSettings.ShiftDistance));
+                                if (candidateIndex < candidateIndex_Start)
+                                {
+                                    continue;
+                                }
+
+                                Vector2D scaledOffset = offsets[j] * (solver2DSettings.StartingDistance + (i * solver2DSettings.ShiftDistance));
+
+                                if (isKnownBlocked(placedRectangle2D_Candidate, scaledOffset, j, blockers))
+                                {
+                                    rejectedCandidateCount = candidateIndex + 1;
+                                    continue;
+                                }
+
                                 Rectangle2D rectangleTemp = rectangle2DWithGivenPointInCenter.GetMoved(scaledOffset);
 
                                 workUnits++;
 
-                                if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, result, grid))
+                                PlacedRectangle2D blocker = null;
+                                if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, placedRectangle2Ds, grid, out blocker))
                                 {
+                                    rejectedCandidateCount = candidateIndex + 1;
                                     if (solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
                                     {
                                         continue;
                                     }
                                     resultRectangle2D = rectangleTemp;
                                     break;
+                                }
+
+                                rejectedCandidateCount = candidateIndex + 1;
+                                if (blocker != null)
+                                {
+                                    blockers[j] = blocker;
                                 }
 
                                 // Re-checked WITHIN this label's own sweep, not only before it started. The
@@ -243,6 +317,13 @@ namespace SAM.Geometry.Planar
                                     break;
                                 }
                             }
+                        }
+
+                        // Only a sweep that ran its course records what it learned. One cut short by the budget
+                        // falls back without having tested what it skipped, so it proves nothing about it.
+                        if (!overBudget)
+                        {
+                            rejectedCandidateCounts[candidateSequence] = rejectedCandidateCount;
                         }
                     }
                 }
@@ -284,7 +365,7 @@ namespace SAM.Geometry.Planar
 
                             workUnits++;
 
-                            if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, result, grid))
+                            if (area.Inside(rectangleTemp) && !intersect(rectangleTemp, placedRectangle2Ds, grid, out _))
                             {
                                 if (solver2DSettings.LimitArea != null && !solver2DSettings.LimitArea.Inside(rectangleTemp.GetCentroid()))
                                 {
@@ -331,11 +412,14 @@ namespace SAM.Geometry.Planar
                     consecutiveUnplaced = 0;
                 }
 
-                // Mirror the placed rectangle into the spatial index for subsequent labels' overlap
-                // tests. Unplaced labels (null) carry no footprint, exactly as the linear scan treats them.
-                if (grid != null && resultRectangle2D != null)
+                // Mirror the placed rectangle into the spatial index (or the linear list) for subsequent
+                // labels' overlap tests. Unplaced labels (null) carry no footprint, so they are not added.
+                if (resultRectangle2D != null)
                 {
-                    grid.Add(resultRectangle2D);
+                    PlacedRectangle2D placedRectangle2D = new PlacedRectangle2D(resultRectangle2D);
+
+                    grid?.Add(placedRectangle2D);
+                    placedRectangle2Ds?.Add(placedRectangle2D);
                 }
             }
 
@@ -447,8 +531,71 @@ namespace SAM.Geometry.Planar
             return workBudget > 0 && workUnits > workBudget;
         }
 
-        private bool intersect(Rectangle2D rectangle2D, List<Solver2DResult> solver2DResults, RectangleGrid grid)
+        /// <summary>
+        /// Whether the candidate - the item's rectangle centred on its anchor, moved by offset - is certainly
+        /// rejected because it deeply overlaps a placed rectangle that already blocked this item in one of the
+        /// 8 directions. When it is, the candidate is skipped without being built or tested, and without a
+        /// work unit: its outcome is already known.
+        /// <para>
+        /// This is what takes the square out of a pile of labels (SAM_UI #58). The candidates walk outward
+        /// along 8 rays in steps of ShiftDistance, which is usually much shorter than a label, so a ray that
+        /// runs into a placed label keeps running into the SAME label for several rings before it clears it.
+        /// Every one of those rings used to be a full test. Now the label that blocked the previous ring is
+        /// checked first, by arithmetic on two boxes, and only a candidate that may have cleared it is tested.
+        /// The other 7 directions' blockers are checked too - with StartingDistance 0, ring 0 is the same
+        /// position in every direction, and the rays of a pile cross the same labels. Bounded at 8 box
+        /// comparisons per candidate, so it cannot become hidden work of its own.
+        /// </para>
+        /// <para>
+        /// Exact, never an approximation: two axis-aligned rectangles that overlap by more than a margin on
+        /// both axes are InRange - either a corner of one lies inside the other, or they cross and their edges
+        /// intersect - so intersect would have returned true for this candidate, and skipping it rejects
+        /// exactly what testing it would have rejected. The margin (well above the InRange tolerance and any
+        /// rounding in moving a rectangle) keeps the near-touching cases on the full test. Only axis-aligned
+        /// rectangles qualify, because only for those is the bounding box the rectangle; all three consumers
+        /// place axis-aligned labels, and anything else is simply tested as before.
+        /// </para>
+        /// </summary>
+        private static bool isKnownBlocked(PlacedRectangle2D placedRectangle2D_Candidate, Vector2D offset, int direction, PlacedRectangle2D[] blockers)
         {
+            if (!placedRectangle2D_Candidate.AxisAligned)
+            {
+                return false;
+            }
+
+            double minX = placedRectangle2D_Candidate.MinX + offset.X;
+            double minY = placedRectangle2D_Candidate.MinY + offset.Y;
+            double maxX = placedRectangle2D_Candidate.MaxX + offset.X;
+            double maxY = placedRectangle2D_Candidate.MaxY + offset.Y;
+
+            for (int i = 0; i < blockers.Length; i++)
+            {
+                // This direction's own blocker first: along a ray it is by far the most likely one.
+                int index = (direction + i) % blockers.Length;
+
+                PlacedRectangle2D blocker = blockers[index];
+                if (blocker == null || !blocker.AxisAligned)
+                {
+                    continue;
+                }
+
+                if (System.Math.Min(maxX, blocker.MaxX) - System.Math.Max(minX, blocker.MinX) > knownBlockedMargin &&
+                    System.Math.Min(maxY, blocker.MaxY) - System.Math.Max(minY, blocker.MinY) > knownBlockedMargin)
+                {
+                    blockers[direction] = blocker;
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
+        private bool intersect(Rectangle2D rectangle2D, List<PlacedRectangle2D> placedRectangle2Ds, RectangleGrid grid, out PlacedRectangle2D blocker)
+        {
+            // The placed rectangle that rejected rectangle2D, for isKnownBlocked; null when nothing did, or
+            // when an obstacle did - obstacles are not necessarily rectangles.
+            blocker = null;
+
             // A null obstacle list is a legitimate "nothing to avoid" - Solver2D's own constructor accepts
             // one, and the caller that has no obstacles has no reason to allocate an empty list to say so.
             // It used to throw here.
@@ -465,42 +612,19 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            if (grid != null)
+            // Only the placed rectangles near rectangle2D can overlap it; the grid yields that set. Without a
+            // grid every placed rectangle is tested. Either way the InRange test is the same, so the outcome
+            // is identical. Items the solver could not place carry no footprint and are in neither.
+            IEnumerable<PlacedRectangle2D> placedRectangle2Ds_Near = grid != null ? grid.Query(rectangle2D) : placedRectangle2Ds;
+
+            foreach (PlacedRectangle2D placedRectangle2D in placedRectangle2Ds_Near)
             {
-                // Only the placed rectangles near rectangle2D can overlap it; the grid yields that set
-                // and the InRange test below is the same as the linear path, so the outcome is identical.
-                foreach (Rectangle2D placed in grid.Query(rectangle2D))
-                {
-                    workUnits++;
-
-                    if (placed.InRange(rectangle2D) == true || rectangle2D.InRange(placed) == true)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
-            // An item the solver could not place carries NO footprint - it is not drawn - so it is skipped
-            // here, exactly as the grid path skips it. This used to be two List.Find calls that dereferenced
-            // Closed2D<Rectangle2D>() unguarded, so a single earlier unplaceable item made every subsequent
-            // item throw a NullReferenceException. It could only happen on this path, which is the one taken
-            // for 256 items or fewer: a Mollier chart, or a small floor plan. Testing both directions per
-            // rectangle in one pass rather than in two consecutive Find calls is the same predicate over the
-            // same set, so which candidate positions are accepted is unchanged.
-            foreach (Solver2DResult solver2DResult in solver2DResults)
-            {
-                Rectangle2D placed = solver2DResult?.Closed2D<Rectangle2D>();
-                if (placed == null)
-                {
-                    continue;
-                }
-
                 workUnits++;
 
+                Rectangle2D placed = placedRectangle2D.Rectangle2D;
                 if (placed.InRange(rectangle2D) == true || rectangle2D.InRange(placed) == true)
                 {
+                    blocker = placedRectangle2D;
                     return true;
                 }
             }
@@ -508,30 +632,154 @@ namespace SAM.Geometry.Planar
             return false;
         }
 
-        // Uniform-grid spatial index over placed label rectangles, keyed by their (tolerance-expanded)
-        // bounding-box cells. A rectangle is inserted into every cell its box overlaps; a query returns
-        // every rectangle in the cells the query box overlaps plus a one-cell halo. Two rectangles can
-        // only be InRange if their boxes overlap (within tolerance), so an overlapping pair always shares
-        // a queried cell - the index never drops a real overlap, only skips the far-apart ones the linear
+        /// <summary>
+        /// A placed rectangle together with its bounding box and whether it is axis-aligned, worked out once
+        /// when it is placed rather than on every comparison. Compared by reference.
+        /// </summary>
+        private sealed class PlacedRectangle2D
+        {
+            public PlacedRectangle2D(Rectangle2D rectangle2D)
+            {
+                Rectangle2D = rectangle2D;
+
+                BoundingBox2D boundingBox2D = rectangle2D.GetBoundingBox();
+                MinX = boundingBox2D.Min.X;
+                MinY = boundingBox2D.Min.Y;
+                MaxX = boundingBox2D.Max.X;
+                MaxY = boundingBox2D.Max.Y;
+
+                // Exactly axis-aligned only; a rectangle turned by any angle at all is left to the full test.
+                Vector2D heightDirection = rectangle2D.HeightDirection;
+                AxisAligned = heightDirection != null && (heightDirection.X == 0 || heightDirection.Y == 0);
+            }
+
+            public Rectangle2D Rectangle2D { get; }
+
+            public double MinX { get; }
+
+            public double MinY { get; }
+
+            public double MaxX { get; }
+
+            public double MaxY { get; }
+
+            public bool AxisAligned { get; }
+        }
+
+        /// <summary>
+        /// Everything that decides the sequence of candidate rectangles a Point2D item tests: its rectangle
+        /// centred on its anchor, the search distances and the limit area, which is compared by reference.
+        /// The area, the obstacles and the 8 directions are the same for every item of a solve. Two items with
+        /// equal values test identical candidates in identical order - see rejectedCandidateCounts in Solve.
+        /// IterationCount is deliberately left out: it only decides how far along the sequence an item goes,
+        /// not what the sequence is.
+        /// </summary>
+        private struct CandidateSequence : System.IEquatable<CandidateSequence>
+        {
+            private readonly double originX;
+            private readonly double originY;
+            private readonly double width;
+            private readonly double height;
+            private readonly double heightDirectionX;
+            private readonly double heightDirectionY;
+            private readonly double startingDistance;
+            private readonly double shiftDistance;
+            private readonly IClosed2D limitArea;
+
+            public CandidateSequence(Rectangle2D rectangle2D, Solver2DSettings solver2DSettings)
+            {
+                Point2D origin = rectangle2D.Origin;
+                Vector2D heightDirection = rectangle2D.HeightDirection;
+
+                originX = origin.X;
+                originY = origin.Y;
+                width = rectangle2D.Width;
+                height = rectangle2D.Height;
+                heightDirectionX = heightDirection.X;
+                heightDirectionY = heightDirection.Y;
+                startingDistance = solver2DSettings.StartingDistance;
+                shiftDistance = solver2DSettings.ShiftDistance;
+                limitArea = solver2DSettings.LimitArea;
+            }
+
+            public bool Equals(CandidateSequence other)
+            {
+                return originX.Equals(other.originX) &&
+                    originY.Equals(other.originY) &&
+                    width.Equals(other.width) &&
+                    height.Equals(other.height) &&
+                    heightDirectionX.Equals(other.heightDirectionX) &&
+                    heightDirectionY.Equals(other.heightDirectionY) &&
+                    startingDistance.Equals(other.startingDistance) &&
+                    shiftDistance.Equals(other.shiftDistance) &&
+                    ReferenceEquals(limitArea, other.limitArea);
+            }
+
+            public override bool Equals(object obj)
+            {
+                return obj is CandidateSequence candidateSequence && Equals(candidateSequence);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    int result = originX.GetHashCode();
+                    result = (result * 397) ^ originY.GetHashCode();
+                    result = (result * 397) ^ width.GetHashCode();
+                    result = (result * 397) ^ height.GetHashCode();
+                    result = (result * 397) ^ heightDirectionX.GetHashCode();
+                    result = (result * 397) ^ heightDirectionY.GetHashCode();
+                    result = (result * 397) ^ startingDistance.GetHashCode();
+                    result = (result * 397) ^ shiftDistance.GetHashCode();
+                    result = (result * 397) ^ (limitArea == null ? 0 : System.Runtime.CompilerServices.RuntimeHelpers.GetHashCode(limitArea));
+                    return result;
+                }
+            }
+        }
+
+        // Uniform-grid spatial index over placed label rectangles, keyed by the cells their bounding boxes
+        // cover. A placed rectangle is inserted into every cell its box, expanded by the InRange tolerance,
+        // overlaps; a query returns every rectangle in the cells the query box, expanded by the much larger
+        // MacroDistance, overlaps. Two rectangles can only be InRange if their boxes come within the InRange
+        // tolerance of each other, so the two expanded boxes of such a pair overlap and therefore share at
+        // least one cell - the index never drops a real overlap, only skips the far-apart ones the linear
         // scan would have tested and rejected. Cell size only affects speed, not correctness.
+        //
+        // There used to be a one-cell halo around every query as well. The expanded boxes already make it
+        // redundant, and with cells as large as the largest label it multiplied what every query returned:
+        // in a pile of labels it was ~45 rectangles per query, each one a full InRange test (SAM_UI #58).
         private sealed class RectangleGrid
         {
+            private const long maxCellsPerRectangle = 1024;
+
             private readonly double cellSize;
-            private readonly Dictionary<long, List<Rectangle2D>> cells = new Dictionary<long, List<Rectangle2D>>();
+            private readonly Dictionary<long, List<PlacedRectangle2D>> cells = new Dictionary<long, List<PlacedRectangle2D>>();
+
+            // Every placed rectangle, and the outliers too large to spread over cells - see Add and Query.
+            private readonly List<PlacedRectangle2D> all = new List<PlacedRectangle2D>();
+            private readonly List<PlacedRectangle2D> large = new List<PlacedRectangle2D>();
 
             // Reused across Query calls to de-duplicate the rectangles a query box's cells share, without
             // allocating a HashSet on every call. Query is enumerated fully and sequentially by the solver
             // (one query finishes before the next starts), so a single shared scratch set is safe here.
-            private readonly HashSet<Rectangle2D> querySeen = new HashSet<Rectangle2D>();
+            private readonly HashSet<PlacedRectangle2D> querySeen = new HashSet<PlacedRectangle2D>();
 
             private RectangleGrid(double cellSize)
             {
                 this.cellSize = cellSize;
             }
 
+            /// <summary>
+            /// Sized by the labels' SHORT side: the median short side, but no smaller than a sixteenth of the
+            /// median long side, so a typical label covers a few cells and never thousands. It used to be the
+            /// LONGEST side of the largest label. Labels are long and thin - a 6 m name at 0.4 m text height -
+            /// so a cell that size held a stack of fifteen labels, all of which every nearby query returned.
+            /// </summary>
             public static RectangleGrid Create(List<Solver2DData> solver2DDatas)
             {
-                double maxDimension = 0;
+                List<double> shortSides = new List<double>();
+                List<double> longSides = new List<double>();
                 foreach (Solver2DData solver2DData in solver2DDatas)
                 {
                     Rectangle2D rectangle2D = solver2DData?.Closed2D<Rectangle2D>();
@@ -541,17 +789,38 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
-                    maxDimension = System.Math.Max(maxDimension, System.Math.Max(boundingBox2D.Width, boundingBox2D.Height));
+                    shortSides.Add(System.Math.Min(boundingBox2D.Width, boundingBox2D.Height));
+                    longSides.Add(System.Math.Max(boundingBox2D.Width, boundingBox2D.Height));
                 }
 
+                if (shortSides.Count == 0)
+                {
+                    return null;
+                }
+
+                shortSides.Sort();
+                longSides.Sort();
+
+                double cellSize = System.Math.Max(shortSides[shortSides.Count / 2], longSides[longSides.Count / 2] / 16);
+
                 // No usable footprint to size the grid by - let the caller fall back to the linear scan.
-                return maxDimension > Core.Tolerance.Distance ? new RectangleGrid(maxDimension) : null;
+                return cellSize > Core.Tolerance.Distance ? new RectangleGrid(cellSize) : null;
             }
 
-            public void Add(Rectangle2D rectangle2D)
+            public void Add(PlacedRectangle2D placedRectangle2D)
             {
-                if (!range(rectangle2D, out long minX, out long minY, out long maxX, out long maxY))
+                if (!range(placedRectangle2D.Rectangle2D, Core.Tolerance.Distance, out long minX, out long minY, out long maxX, out long maxY))
                 {
+                    return;
+                }
+
+                all.Add(placedRectangle2D);
+
+                // A rectangle far larger than the cells - an outlier the median did not size for - is not
+                // spread over thousands of cells; it is kept aside and returned by every query instead.
+                if (isLarge(minX, minY, maxX, maxY))
+                {
+                    large.Add(placedRectangle2D);
                     return;
                 }
 
@@ -560,34 +829,51 @@ namespace SAM.Geometry.Planar
                     for (long y = minY; y <= maxY; y++)
                     {
                         long key = (x << 32) ^ (y & 0xffffffffL);
-                        if (!cells.TryGetValue(key, out List<Rectangle2D> list))
+                        if (!cells.TryGetValue(key, out List<PlacedRectangle2D> list))
                         {
-                            list = new List<Rectangle2D>();
+                            list = new List<PlacedRectangle2D>();
                             cells[key] = list;
                         }
 
-                        list.Add(rectangle2D);
+                        list.Add(placedRectangle2D);
                     }
                 }
             }
 
-            public IEnumerable<Rectangle2D> Query(Rectangle2D rectangle2D)
+            public IEnumerable<PlacedRectangle2D> Query(Rectangle2D rectangle2D)
             {
-                if (!range(rectangle2D, out long minX, out long minY, out long maxX, out long maxY))
+                if (!range(rectangle2D, Core.Tolerance.MacroDistance, out long minX, out long minY, out long maxX, out long maxY))
                 {
+                    yield break;
+                }
+
+                // A query box far larger than the cells would visit thousands of them; every placed
+                // rectangle is a smaller and still complete answer.
+                if (isLarge(minX, minY, maxX, maxY))
+                {
+                    foreach (PlacedRectangle2D placed in all)
+                    {
+                        yield return placed;
+                    }
+
                     yield break;
                 }
 
                 querySeen.Clear();
 
-                // One-cell halo: absorbs the InRange tolerance and any box that straddles a cell border.
-                for (long x = minX - 1; x <= maxX + 1; x++)
+                foreach (PlacedRectangle2D placed in large)
                 {
-                    for (long y = minY - 1; y <= maxY + 1; y++)
+                    querySeen.Add(placed);
+                    yield return placed;
+                }
+
+                for (long x = minX; x <= maxX; x++)
+                {
+                    for (long y = minY; y <= maxY; y++)
                     {
-                        if (cells.TryGetValue((x << 32) ^ (y & 0xffffffffL), out List<Rectangle2D> list))
+                        if (cells.TryGetValue((x << 32) ^ (y & 0xffffffffL), out List<PlacedRectangle2D> list))
                         {
-                            foreach (Rectangle2D placed in list)
+                            foreach (PlacedRectangle2D placed in list)
                             {
                                 if (querySeen.Add(placed))
                                 {
@@ -599,11 +885,17 @@ namespace SAM.Geometry.Planar
                 }
             }
 
-            private bool range(Rectangle2D rectangle2D, out long minX, out long minY, out long maxX, out long maxY)
+            private static bool isLarge(long minX, long minY, long maxX, long maxY)
+            {
+                // In double, so an absurd extent cannot overflow into a small count.
+                return ((double)maxX - minX + 1) * ((double)maxY - minY + 1) > maxCellsPerRectangle;
+            }
+
+            private bool range(Rectangle2D rectangle2D, double offset, out long minX, out long minY, out long maxX, out long maxY)
             {
                 minX = minY = maxX = maxY = 0;
 
-                BoundingBox2D boundingBox2D = rectangle2D?.GetBoundingBox(Core.Tolerance.Distance);
+                BoundingBox2D boundingBox2D = rectangle2D?.GetBoundingBox(offset);
                 if (boundingBox2D == null)
                 {
                     return false;
