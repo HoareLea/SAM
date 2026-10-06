@@ -33,10 +33,47 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalModifyZonesCategoryName()
           : base("SAMAnalytical.ModifyZone", "SAMAnalytical.ModifyZone",
-              "Modify Zone (Group) in Analytical Object",
+              DescriptionLong,
               "SAM", "Analytical02")
         {
         }
+
+        private const string DescriptionLong =
+@"Assign a custom Zone Category name to selected zones, such as Bedroom, Office or Corridor.
+
+SUMMARY
+Assigns a user-defined category name to zones within an AdjacencyCluster or AnalyticalModel.
+Makes a copy of the supplied object; the original stays unchanged.
+
+INPUTS
+_analytical  (AdjacencyCluster | AnalyticalModel, required)
+AnalyticalModel or AdjacencyCluster containing the zones to classify.
+
+_zones  (Zone[], optional)
+Zones to classify. When omitted, all zones in the analytical object are selected.
+Zones not found in the object are ignored.
+
+zoneCategoryName_  (String, optional)
+Custom Zone Category name to assign, e.g. ""Bedroom"", ""Office"" or ""Corridor"".
+The name does not need to exist beforehand. When omitted, no zones are changed.
+
+OUTPUTS
+analytical  (AdjacencyCluster | AnalyticalModel)
+Copy of the supplied analytical object with the assigned zone categories.
+
+zones  (Zone[])
+Zones selected from the copied object. When a category name is supplied,
+these contain the newly assigned Zone Category.
+
+NOTES
+Only zones already present in the analytical object are processed.
+The component stores the text value on each zone; no new SAM objects are created.
+
+EXAMPLE
+AnalyticalModel → _analytical
+Selected zones → _zones
+""Office"" → zoneCategoryName_
+analytical → next SAM component";
 
         /// <summary>
         /// Registers all the input parameters for this component.
@@ -46,12 +83,12 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "_zones", NickName = "_zones", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "_analytical", NickName = "_analytical", Description = "AnalyticalModel or AdjacencyCluster containing the zones to classify.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "_zones", NickName = "_zones", Description = "Zones to classify. When omitted, all zones in the analytical object are selected.", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_String param_String = null;
 
-                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name", Access = GH_ParamAccess.item, Optional = true };
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Custom Zone Category name to assign, such as 'Bedroom' or 'Office'. The name does not need to exist beforehand.", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
 
                 return result.ToArray();
@@ -66,8 +103,8 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
-                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "zones", NickName = "zones", Description = "SAM GuidCollection representing Zones", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "Copy of the supplied analytical object with the assigned zone categories. The original stays unchanged.", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooGroupParam() { Name = "zones", NickName = "zones", Description = "Selected Zone objects. When a category name is supplied, these contain the assigned Zone Category.", Access = GH_ParamAccess.list }, ParamVisibility.Voluntary));
                 return result.ToArray();
             }
         }

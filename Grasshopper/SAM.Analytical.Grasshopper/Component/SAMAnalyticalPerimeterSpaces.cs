@@ -50,11 +50,11 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_apertureCheck_", NickName = "_apertureCheck_", Description = "If True, only Periemeter Spaces will be selected that have Panels exposed to Sun AND containing aperture.", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_apertureCheck_", NickName = "_apertureCheck_", Description = "If True, only Perimeter Spaces will be selected that have Panels exposed to Sun AND containing aperture.", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
-                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_wallsOnly_", NickName = "_apertureCheck_", Description = "If True, only Periemeter Spaces will be selected that have Panels Wall exposed to Sun. If False also spaces with Roof, ExposedFloor will be selected", Access = GH_ParamAccess.item, Optional = true };
+                boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_wallsOnly_", NickName = "_apertureCheck_", Description = "If True, only Perimeter Spaces will be selected that have Panels Wall exposed to Sun. If False also spaces with Roof, ExposedFloor will be selected", Access = GH_ParamAccess.item, Optional = true };
                 boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 

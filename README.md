@@ -4,13 +4,14 @@
 # SAM
 
 <a href="https://github.com/SAM-BIM/SAM">
-  <img src="https://github.com/SAM-BIM/SAM/blob/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png"
+  <img src="https://raw.githubusercontent.com/SAM-BIM/SAM/master/Grasshopper/SAM.Core.Grasshopper/Resources/SAM_Small.png"
        align="left" hspace="10" vspace="6">
 </a>
 
 **SAM (Sustainable Analytical Model)** is the core of the **SAM Toolkit** —  
-an open-source platform designed to help engineers create, manage,
-and analyse analytical building models for energy and environmental performance.
+an open-source analytical-model and computational-engineering platform that
+connects BIM, building physics, HVAC engineering and simulation through
+deterministic, tested and traceable workflows.
 
 SAM provides a structured analytical representation of buildings,
 supporting workflows for energy modelling, systems analysis,
@@ -19,7 +20,24 @@ environmental simulation, and performance-driven design.
 It is designed as a **modular and extensible platform**:
 core analytical concepts are implemented in this repository,
 with additional functionality provided through specialised SAM modules
-and integrations.
+and integrations. SAM is **not a Grasshopper plugin** — Grasshopper,
+Rhino and Revit are hosts and adapters on top of the analytical model,
+not its foundation.
+
+**Website:** https://sambim.xyz ·
+**Installer:** [SAM_Deploy releases](https://github.com/SAM-BIM/SAM_Deploy/releases/latest) ·
+**Documentation:** [SAM Wiki](https://github.com/SAM-BIM/SAM/wiki)
+
+<!--
+Screenshot strip (pending evidence captures — do not uncomment until the
+files exist in the website repository; see assets/evidence/README.md in
+SAM-BIM/sam-bim.github.io):
+<p>
+  <img src="https://sambim.xyz/assets/evidence/E06_SAM_Analytical_Model_Context.png" alt="SAM analytical model in context" width="32%">
+  <img src="https://sambim.xyz/assets/evidence/E01_SAM_PartF_Design_Airflow_Overlay.png" alt="Part F design airflow overlay" width="32%">
+  <img src="https://sambim.xyz/assets/evidence/E04_SAM_PartO_TM59_Result.png" alt="TM59 assessment result" width="32%">
+</p>
+-->
 
 ---
 

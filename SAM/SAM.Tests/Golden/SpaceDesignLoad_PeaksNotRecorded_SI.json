@@ -1,0 +1,397 @@
+{
+  "id": "space-design-load-summary",
+  "metadata": {
+    "title": "Space Design Load Summary",
+    "subject": "Studio 1_0",
+    "projectName": "Test Project",
+    "projectNumber": "P-001",
+    "preparedBy": "SAM Tests",
+    "date": "2026-09-25"
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": "Space",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "identity",
+          "rows": [
+            {
+              "label": "Space",
+              "value": {
+                "text": "Studio 1_0",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Level",
+              "value": {
+                "text": "Level 0",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Internal condition",
+              "value": {
+                "text": "TM59_Bathroom",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-criteria",
+      "title": "Design Criteria",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "design-criteria",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "",
+              "alignment": "Left"
+            },
+            {
+              "header": "Heating",
+              "alignment": "Right"
+            },
+            {
+              "header": "Cooling",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Room set point",
+                "availability": "Available"
+              },
+              {
+                "text": "16.0",
+                "unit": "°C",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Maximum of profile Heat 16"
+              },
+              {
+                "text": "26.0",
+                "unit": "°C",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Minimum of profile Cool 26"
+              }
+            ],
+            [
+              {
+                "text": "Outdoor dry bulb",
+                "availability": "Available"
+              },
+              {
+                "text": "-4.9",
+                "unit": "°C",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Minimum of design day Leeds_TRY ANN HTG 100% CONDS DB"
+              },
+              {
+                "text": "28.4",
+                "unit": "°C",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Maximum of design day Leeds_TRY ANN CLG 0% CONDS DB=>GRad"
+              }
+            ],
+            [
+              {
+                "text": "Outdoor RH (coincident)",
+                "availability": "Available"
+              },
+              {
+                "text": "90",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Coincident with the dry bulb"
+              },
+              {
+                "text": "40",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Coincident with the dry bulb"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "KeyValueBlock",
+          "id": "room-humidity",
+          "title": "Room humidity",
+          "rows": [
+            {
+              "label": "Humidification set point",
+              "subLabel": "lower RH limit",
+              "value": {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No humidification profile"
+              }
+            },
+            {
+              "label": "Dehumidification set point",
+              "subLabel": "upper RH limit",
+              "value": {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No dehumidification profile"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sizing",
+      "title": "Sizing (Tas design loads)",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "sizing",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "",
+              "alignment": "Left"
+            },
+            {
+              "header": "Heating",
+              "alignment": "Right"
+            },
+            {
+              "header": "Cooling",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Design load",
+                "availability": "Available"
+              },
+              {
+                "text": "1,368",
+                "unit": "W",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "TBD",
+                "note": "Tas sizing - date/currency not recorded"
+              },
+              {
+                "text": "0",
+                "unit": "W",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "TBD",
+                "note": "Tas sizing - date/currency not recorded"
+              }
+            ],
+            [
+              {
+                "text": "Design load per area",
+                "availability": "Available"
+              },
+              {
+                "text": "263.1",
+                "unit": "W/m²",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "Derived",
+                "note": "Design load ÷ floor area"
+              },
+              {
+                "text": "0.0",
+                "unit": "W/m²",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "Derived",
+                "note": "Design load ÷ floor area"
+              }
+            ],
+            [
+              {
+                "text": "Sizing multiplier",
+                "availability": "Available"
+              },
+              {
+                "text": "not set",
+                "availability": "NotApplicable",
+                "note": "Not set: SAM_Tas applies no sizing multiplier"
+              },
+              {
+                "text": "not set",
+                "availability": "NotApplicable",
+                "note": "Not set: SAM_Tas applies no sizing multiplier"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "sizing-status",
+          "level": "Information",
+          "text": "Design loads: from Tas sizing — date/currency not recorded"
+        }
+      ]
+    },
+    {
+      "id": "heating",
+      "title": "Heating",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "heating-status",
+          "level": "Warning",
+          "text": "Peaks not recorded: the heating results pre-date the design-day and full-year peak record. Re-run the simulation to report the heating peaks."
+        }
+      ]
+    },
+    {
+      "id": "cooling",
+      "title": "Cooling",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "cooling-status",
+          "level": "Warning",
+          "text": "Peaks not recorded: the cooling results pre-date the design-day and full-year peak record. Re-run the simulation to report the cooling peaks."
+        }
+      ]
+    },
+    {
+      "id": "results",
+      "title": "Results",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "results",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "",
+              "alignment": "Left"
+            },
+            {
+              "header": "Heating",
+              "alignment": "Left"
+            },
+            {
+              "header": "Cooling",
+              "alignment": "Left"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Status",
+                "availability": "Available"
+              },
+              {
+                "text": "Peaks not recorded",
+                "availability": "Available"
+              },
+              {
+                "text": "Peaks not recorded",
+                "availability": "Available"
+              }
+            ],
+            [
+              {
+                "text": "Result source",
+                "availability": "Available"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The heating results record no design-day or annual peak: re-run the simulation"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The cooling results record no design-day or annual peak: re-run the simulation"
+              }
+            ],
+            [
+              {
+                "text": "Read into model",
+                "availability": "Available"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The heating results record no design-day or annual peak: re-run the simulation"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The cooling results record no design-day or annual peak: re-run the simulation"
+              }
+            ],
+            [
+              {
+                "text": "Matches current model",
+                "availability": "Available"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The heating results record no design-day or annual peak: re-run the simulation"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "The cooling results record no design-day or annual peak: re-run the simulation"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "results-comparison-note",
+          "level": "Note",
+          "text": "Design loads (sizing) and simulated peaks are shown side by side for information; no acceptance rule is applied."
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "lines": [
+      "Model: 000000_SAM_AnalyticalModel · SAM 2026.3.0-test · Design loads: from Tas sizing — date/currency not recorded",
+      "Generated 25 Sep 2026 14:02 · Space e2c8a683-410d-42fd-92cb-bcf1e87e5a3a"
+    ],
+    "legend": [
+      "— not available"
+    ]
+  }
+}

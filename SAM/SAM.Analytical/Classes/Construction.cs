@@ -113,7 +113,7 @@ namespace SAM.Analytical
 
         public double GetThickness(bool includeSoil)
         {
-            return includeSoil ? GetThickness() : constructionLayers.FindAll(x => !x.IsSoil).ConvertAll(x => x.Thickness).Sum();
+            return includeSoil ? GetThickness() : constructionLayers?.FindAll(x => !x.IsSoil)?.ConvertAll(x => x.Thickness)?.Sum() ?? double.NaN;
         }
 
         public override bool FromJsonObject(JsonObject jsonObject)

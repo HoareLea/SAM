@@ -170,9 +170,8 @@ namespace SAM.Geometry.Planar
                 return base.GetHashCode();
 
             int hash = 13;
-            if (points != null)
-                foreach (Point2D point2D in points)
-                    hash = (hash * 7) + point2D.GetHashCode();
+            foreach (Point2D point2D in points)
+                hash = (hash * 7) + point2D.GetHashCode();
 
             return hash;
         }
@@ -184,7 +183,20 @@ namespace SAM.Geometry.Planar
 
         public double GetLength()
         {
-            return GetSegments().ConvertAll(x => x.GetLength()).Sum();
+            if (points == null || points.Count < 2)
+                return 0;
+
+            double length = 0;
+            for (int i = 0; i < points.Count; i++)
+            {
+                Point2D p1 = points[i];
+                Point2D p2 = points[(i + 1) % points.Count];
+                double dx = p2.X - p1.X;
+                double dy = p2.Y - p1.Y;
+                length += System.Math.Sqrt(dx * dx + dy * dy);
+            }
+
+            return length;
         }
 
         public Orientation GetOrientation()
@@ -263,25 +275,30 @@ namespace SAM.Geometry.Planar
             }
 
             IClosed2D closed2D_Temp = closed2D;
-            if (closed2D_Temp is Face2D)
+            if (closed2D_Temp is Face2D face2D)
             {
-                closed2D_Temp = ((Face2D)closed2D_Temp).ExternalEdge2D;
+                closed2D_Temp = face2D.ExternalEdge2D;
             }
 
-            if (!(closed2D_Temp is ISegmentable2D))
+            if (!(closed2D_Temp is ISegmentable2D segmentable2D))
             {
                 throw new NotImplementedException();
             }
 
-            bool result = ((ISegmentable2D)closed2D_Temp).GetPoints().TrueForAll(x => Inside(x, tolerance) || On(x, tolerance));
-            if (!result)
+            List<Point2D> otherPoints = segmentable2D.GetPoints();
+            for (int i = 0; i < otherPoints.Count; i++)
             {
-                return result;
+                if (!Inside(otherPoints[i], tolerance) && !On(otherPoints[i], tolerance))
+                    return false;
             }
 
-            result = points.Find(x => closed2D_Temp.Inside(x, tolerance) && !closed2D_Temp.On(x, tolerance)) == null;
+            for (int i = 0; i < points.Count; i++)
+            {
+                if (closed2D_Temp.Inside(points[i], tolerance) && !closed2D_Temp.On(points[i], tolerance))
+                    return false;
+            }
 
-            return result;
+            return true;
         }
 
         public List<Point2D> Intersections(ISegmentable2D segmentable2D)
@@ -302,7 +319,48 @@ namespace SAM.Geometry.Planar
 
         public bool On(Point2D point2D, double tolerance = Core.Tolerance.Distance)
         {
-            return Query.On(GetSegments(), point2D, tolerance);
+            if (point2D == null || points == null || points.Count < 2 || tolerance <= 0)
+                return false;
+
+            double tolSq = tolerance * tolerance;
+            for (int i = 0; i < points.Count; i++)
+            {
+                Point2D p1 = points[i];
+                Point2D p2 = points[(i + 1) % points.Count];
+
+                double ax = point2D.X - p1.X;
+                double ay = point2D.Y - p1.Y;
+                double bx = p2.X - p1.X;
+                double by = p2.Y - p1.Y;
+
+                double dot = ax * bx + ay * by;
+                double lenSq = bx * bx + by * by;
+                double t = lenSq > 0 ? dot / lenSq : -1;
+
+                double closestX, closestY;
+                if (t < 0)
+                {
+                    closestX = p1.X;
+                    closestY = p1.Y;
+                }
+                else if (t > 1)
+                {
+                    closestX = p2.X;
+                    closestY = p2.Y;
+                }
+                else
+                {
+                    closestX = p1.X + t * bx;
+                    closestY = p1.Y + t * by;
+                }
+
+                double dx = point2D.X - closestX;
+                double dy = point2D.Y - closestY;
+                if (dx * dx + dy * dy < tolSq)
+                    return true;
+            }
+
+            return false;
         }
 
         public bool Reorder(int startIndex)

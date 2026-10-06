@@ -33,6 +33,9 @@ namespace SAM.Analytical
 
         }
 
+        //GetAnnualHours() is now on the TMExtendedResult base - every TM59 extended result shares the same
+        //operative-temperature series, not only the corridor check.
+
         public int GetHoursNumberExceeding28()
         {
             IndexedDoubles operativeTemperatures = OperativeTemperatures;

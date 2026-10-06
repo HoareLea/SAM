@@ -34,8 +34,8 @@ namespace SAM.Analytical
             }
 
             name = name.Trim().ToUpper();
-
-            if (name != "UU" && name != "NV")
+            
+            if (name != "UV" && name != "NV")
             {
                 return true;
             }

@@ -81,7 +81,7 @@ namespace SAM.Analytical.Grasshopper
 
             List<IAirMovementObject> airMovementObjects = analyticalModel.AddAirMovementObjects();
 
-            index = Params.IndexOfOutputParam("analyticalModel");
+            index = Params.IndexOfOutputParam("_analyticalModel");
             if (index != -1)
             {
                 dataAccess.SetData(index, analyticalModel);

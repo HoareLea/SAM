@@ -38,12 +38,48 @@ namespace SAM.Analytical
                             result.AreaRate_LpsPerM2 = value_Temp;
                             continue;
                         }
+                        else if (name == "SetbackFlowRateFactor" || name == "BackgroundFlowRateFactor")
+                        {
+                            //Assigned through the property, which rejects zero, a negative factor, a
+                            //factor above 1, NaN and infinity and substitutes the documented default
+                            //rather than letting a bad data file produce a setback rate above the
+                            //continuous design rate or a rate that is not a number.
+                            //
+                            //BackgroundFlowRateFactor is still accepted so a rule set written by the
+                            //interim build that used that name keeps working.
+                            result.SetbackFlowRateFactor = value_Temp;
+                            continue;
+                        }
+                        else if (name == "OneHabitableRoomRate_Lps" && !double.IsNaN(value_Temp))
+                        {
+                            result.OneHabitableRoomRate_Lps = value_Temp;
+                            continue;
+                        }
+                        else if (name == "IntermittentKitchenRateWithCookerHood_Lps" && !double.IsNaN(value_Temp))
+                        {
+                            result.IntermittentKitchenRateWithCookerHood_Lps = value_Temp;
+                            continue;
+                        }
+                        else if (name == "IntermittentKitchenRateWithoutCookerHood_Lps" && !double.IsNaN(value_Temp))
+                        {
+                            result.IntermittentKitchenRateWithoutCookerHood_Lps = value_Temp;
+                            continue;
+                        }
                         else if(Core.Query.TryConvert<int>(name, out int @int) && !double.IsNaN(value_Temp))
                         {
                             result.WholeDwellingRates_Lps[@int] = value_Temp;
                         }
 
                     }
+                }
+
+                //A top level key rather than a member of WholeDwellingRates_Lps, which only carries
+                //numbers. An unrecognised name resolves to the documented default rather than throwing,
+                //so an edited rule set cannot stop the calculation running.
+                string extractAllocationStrategy = jsonObject?["ExtractAllocationStrategy"]?.GetValue<string>();
+                if (!string.IsNullOrWhiteSpace(extractAllocationStrategy))
+                {
+                    result.ExtractAllocationStrategy = Core.Query.Enum<Enums.PartFExtractAllocationStrategy>(extractAllocationStrategy);
                 }
 
                 if(jsonObject != null && jsonObject["Categories"] is JsonArray categoriesArray)
@@ -86,6 +122,11 @@ namespace SAM.Analytical
 
                             double? minFlowRate_Lps = jsonObject_Category["MinFlowRate_Lps"]?.GetValue<double?>();
 
+                            //Table 1.1 (page 8), the intermittent extract system rate. Absent for a
+                            //kitchen, whose Table 1.1 rate depends on whether a cooker hood extracts to
+                            //the outside and so cannot be a property of the room category.
+                            double? intermittentExtractRate_Lps = jsonObject_Category["IntermittentExtractRate_Lps"]?.GetValue<double?>();
+
                             bool includeInFloorAreaCheck = false;
                             if (jsonObject_Category["IncludeInFloorAreaCheck"] != null)
                             {
@@ -108,6 +149,22 @@ namespace SAM.Analytical
                             if (jsonObject_Category["ScaleExtractAboveMinimum"] != null)
                             {
                                 scaleExtractAboveMinimum = jsonObject_Category["ScaleExtractAboveMinimum"].GetValue<bool>();
+                            }
+
+                            bool isCookingSpace = false;
+                            if (jsonObject_Category["IsCookingSpace"] != null)
+                            {
+                                isCookingSpace = jsonObject_Category["IsCookingSpace"].GetValue<bool>();
+                            }
+
+                            //Links the category to the shared semantic vocabulary. Absent in a rule set
+                            //written before that vocabulary existed, in which case the category is
+                            //matched by its Synonyms alone.
+                            SpaceUse spaceUse = SpaceUse.Undefined;
+                            string spaceUseName = jsonObject_Category["SpaceUse"]?.GetValue<string>();
+                            if (!string.IsNullOrWhiteSpace(spaceUseName))
+                            {
+                                spaceUse = Core.Query.Enum<SpaceUse>(spaceUseName);
                             }
 
                             string defaultFlowWeightBasis = jsonObject_Category["DefaultFlowWeightBasis"]?.GetValue<string>();
@@ -136,7 +193,10 @@ namespace SAM.Analytical
                                 scaleSupplyWithVolume,
                                 scaleExtractAboveMinimum,
                                 defaultFlowWeightBasis,
-                                synonyms);
+                                synonyms,
+                                isCookingSpace,
+                                spaceUse,
+                                intermittentExtractRate_Lps);
 
                             result.PartFCategories[partFCategory.Name] = partFCategory;
                         }

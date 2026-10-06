@@ -223,6 +223,139 @@ namespace SAM.Analytical
             //return result;
         }
 
+        public static List<Aperture> AddAperturesByApertures(this AdjacencyCluster adjacencyCluster, IEnumerable<Aperture> apertures, bool trimGeometry = true, double minArea = Core.Tolerance.MacroDistance, double maxDistance = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
+        {
+            if (adjacencyCluster == null || apertures == null)
+                return null;
+
+            List<Panel> panels = adjacencyCluster.GetPanels();
+            if (panels == null || panels.Count == 0)
+                return null;
+
+            double max = System.Math.Max(maxDistance, tolerance);
+
+            List<Tuple<ApertureConstruction, Face3D, double[]>> tuples_Aperture = new List<Tuple<ApertureConstruction, Face3D, double[]>>();
+            foreach (Aperture aperture in apertures)
+            {
+                if (aperture == null)
+                    continue;
+
+                ApertureConstruction apertureConstruction = aperture.ApertureConstruction;
+                Face3D face3D = aperture.GetFace3D();
+                if (apertureConstruction == null || face3D == null)
+                    continue;
+
+                BoundingBox3D boundingBox3D = face3D.GetBoundingBox(max);
+                if (boundingBox3D == null)
+                    continue;
+
+                Point3D point3D_Min = boundingBox3D.Min;
+                Point3D point3D_Max = boundingBox3D.Max;
+                tuples_Aperture.Add(new Tuple<ApertureConstruction, Face3D, double[]>(apertureConstruction, face3D, new double[] { point3D_Min.X, point3D_Min.Y, point3D_Min.Z, point3D_Max.X, point3D_Max.Y, point3D_Max.Z }));
+            }
+
+            List<Aperture> result = new List<Aperture>();
+            if (tuples_Aperture.Count == 0)
+                return result;
+
+            //Phase 1 (sequential): cheap zero-alloc AABB pre-filter -> candidate panels + their surviving aperture indexes
+            List<Tuple<Panel, List<int>>> candidates = new List<Tuple<Panel, List<int>>>();
+            foreach (Panel panel in panels)
+            {
+                if (panel == null || panel.PanelType == PanelType.Air)
+                    continue;
+
+                BoundingBox3D boundingBox3D_Panel = panel.GetBoundingBox(max);
+                if (boundingBox3D_Panel == null)
+                    continue;
+
+                Point3D point3D_Min = boundingBox3D_Panel.Min;
+                Point3D point3D_Max = boundingBox3D_Panel.Max;
+                double min_X = point3D_Min.X;
+                double min_Y = point3D_Min.Y;
+                double min_Z = point3D_Min.Z;
+                double max_X = point3D_Max.X;
+                double max_Y = point3D_Max.Y;
+                double max_Z = point3D_Max.Z;
+
+                List<int> indexes = null;
+                for (int i = 0; i < tuples_Aperture.Count; i++)
+                {
+                    double[] values = tuples_Aperture[i].Item3;
+
+                    if (values[3] + Core.Tolerance.Distance < min_X || values[0] - Core.Tolerance.Distance > max_X ||
+                        values[4] + Core.Tolerance.Distance < min_Y || values[1] - Core.Tolerance.Distance > max_Y ||
+                        values[5] + Core.Tolerance.Distance < min_Z || values[2] - Core.Tolerance.Distance > max_Z)
+                        continue;
+
+                    if (indexes == null)
+                        indexes = new List<int>();
+
+                    indexes.Add(i);
+                }
+
+                if (indexes != null)
+                    candidates.Add(new Tuple<Panel, List<int>>(panel, indexes));
+            }
+
+            if (candidates.Count == 0)
+                return result;
+
+            //Phase 2: process each candidate panel (its own clone, apertures tried in input order) -
+            //parallel across panels once the candidate count justifies it (repo convention: > 30, cf. NormalDictionary.cs),
+            //otherwise sequential. Each task only reads shared state (panel, precomputed aperture Face3D/ApertureConstruction)
+            //and writes into its own pre-sized slot - no shared mutation during the parallel region.
+            Panel[] panels_New = new Panel[candidates.Count];
+            List<Aperture>[] apertures_New_ByPanel = new List<Aperture>[candidates.Count];
+
+            void ProcessCandidate(int i)
+            {
+                Tuple<Panel, List<int>> candidate = candidates[i];
+                Panel panel_New = Create.Panel(candidate.Item1);
+
+                List<Aperture> apertures_New_Panel = null;
+                foreach (int j in candidate.Item2)
+                {
+                    Tuple<ApertureConstruction, Face3D, double[]> tuple_Aperture = tuples_Aperture[j];
+
+                    List<Aperture> apertures_New = AddApertures(panel_New, tuple_Aperture.Item1, tuple_Aperture.Item2, trimGeometry, minArea, maxDistance, tolerance);
+                    if (apertures_New != null && apertures_New.Count > 0)
+                    {
+                        if (apertures_New_Panel == null)
+                            apertures_New_Panel = new List<Aperture>();
+
+                        apertures_New_Panel.AddRange(apertures_New);
+                    }
+                }
+
+                panels_New[i] = panel_New;
+                apertures_New_ByPanel[i] = apertures_New_Panel;
+            }
+
+            if (candidates.Count > 30)
+            {
+                System.Threading.Tasks.Parallel.For(0, candidates.Count, ProcessCandidate);
+            }
+            else
+            {
+                for (int i = 0; i < candidates.Count; i++)
+                    ProcessCandidate(i);
+            }
+
+            //Phase 3 (sequential): assemble in original panel order and mutate the cluster
+            for (int i = 0; i < candidates.Count; i++)
+            {
+                List<Aperture> apertures_New_Panel = apertures_New_ByPanel[i];
+                if (apertures_New_Panel == null || apertures_New_Panel.Count == 0)
+                    continue;
+
+                result.AddRange(apertures_New_Panel);
+                adjacencyCluster.AddObject(panels_New[i]);
+            }
+
+            return result;
+        }
+
         public static List<Aperture> AddApertures(this IEnumerable<Panel> panels, ApertureConstruction apertureConstruction, double ratio, double azimuth_Start, double azimuth_End, double tolerance_Area = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)
         {
             if (panels == null || apertureConstruction == null)
@@ -667,15 +800,20 @@ namespace SAM.Analytical
             if (apertureConstruction == null || closedPlanar3D == null || panel == null)
                 return null;
 
-            if (!Query.ApertureHost(panel, closedPlanar3D, minArea, maxDistance, tolerance))
-                return null;
-
             Face3D face3D = panel.GetFace3D();
             if (face3D == null)
                 return null;
 
             Plane plane = face3D.GetPlane();
             if (plane == null)
+                return null;
+
+            BoundingBox3D boundingBox3D_Panel = face3D.GetBoundingBox(System.Math.Max(maxDistance, tolerance));
+            if (boundingBox3D_Panel == null)
+                return null;
+
+            //NOTE: must be called with the UNFLIPPED plane (below) - ApertureHost expects the panel's own plane orientation
+            if (!Query.ApertureHost(panel, closedPlanar3D, plane, boundingBox3D_Panel, minArea, maxDistance, tolerance))
                 return null;
 
             Plane plane_Aperture = closedPlanar3D.GetPlane();
@@ -720,9 +858,9 @@ namespace SAM.Analytical
                 Point3D point3D_Location = Query.OpeningLocation(face3D_Aperture_New, tolerance);
 
                 Aperture aperture = new Aperture(apertureConstruction, face3D_Aperture_New, point3D_Location);
-                if (!Query.IsValid(panel, aperture))
-                    continue;
 
+                //NOTE: Query.IsValid is not called here - panel.AddAperture performs the identical
+                //check (same default tolerances) and returns false on failure, so the result is unchanged.
                 if (panel.AddAperture(aperture))
                     result.Add(aperture);
             }

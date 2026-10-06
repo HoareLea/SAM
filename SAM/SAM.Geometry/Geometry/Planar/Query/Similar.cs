@@ -58,7 +58,7 @@ namespace SAM.Geometry.Planar
             }
 
             List<IClosed2D> internalEdge2Ds_1 = face2D_1.InternalEdge2Ds;
-            List<IClosed2D> internalEdge2Ds_2 = face2D_1.InternalEdge2Ds;
+            List<IClosed2D> internalEdge2Ds_2 = face2D_2.InternalEdge2Ds;
             if (internalEdge2Ds_1 == internalEdge2Ds_2)
             {
                 return true;
@@ -74,15 +74,16 @@ namespace SAM.Geometry.Planar
                 return false;
             }
 
+            List<IClosed2D> remaining_2 = new List<IClosed2D>(internalEdge2Ds_2);
             foreach (IClosed2D internalEdge2D_1 in internalEdge2Ds_1)
             {
-                int index = internalEdge2Ds_2.FindIndex(x => Similar(internalEdge2D_1, x, tolerance));
+                int index = remaining_2.FindIndex(x => Similar(internalEdge2D_1, x, tolerance));
                 if (index == -1)
                 {
                     return false;
                 }
 
-                internalEdge2Ds_2.RemoveAt(index);
+                remaining_2.RemoveAt(index);
             }
 
             return true;
@@ -106,6 +107,16 @@ namespace SAM.Geometry.Planar
                 throw new System.NotImplementedException();
             }
 
+            double area1 = closed2D_1.GetArea();
+            double area2 = closed2D_2.GetArea();
+            if (double.IsNaN(area1) || double.IsNaN(area2) || System.Math.Abs(area1 - area2) > tolerance)
+                return false;
+
+            BoundingBox2D bbox1 = closed2D_1.GetBoundingBox();
+            BoundingBox2D bbox2 = closed2D_2.GetBoundingBox();
+            if (bbox1 != null && bbox2 != null && !bbox1.InRange(bbox2, tolerance))
+                return false;
+
             ISegmentable2D segmentable2D_1 = closed2D_1 as ISegmentable2D;
             if (segmentable2D_1 == null)
             {
@@ -123,13 +134,12 @@ namespace SAM.Geometry.Planar
                 if (!segmentable2D_2.On(point2D, tolerance))
                     return false;
 
-
             point2Ds = segmentable2D_2.GetPoints();
             foreach (Point2D point2D in point2Ds)
                 if (!segmentable2D_1.On(point2D, tolerance))
                     return false;
 
-            return System.Math.Abs(closed2D_1.GetArea() - closed2D_2.GetArea()) <= tolerance;
+            return true;
         }
     }
 }

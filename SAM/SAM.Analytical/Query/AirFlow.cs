@@ -35,6 +35,16 @@ namespace SAM.Analytical
                     continue;
                 }
 
+                //What the unit draws in is what it DELIVERS somewhere. A movement out of the unit with no
+                //destination is its exhaust - the extract air leaving the building - and counting that as
+                //intake too would have the unit take in its own duty twice over, which is a zone TAS
+                //refuses to simulate. Every movement this method has ever been given names a destination,
+                //so no model that predates the unit exhaust reaches this.
+                if (string.IsNullOrWhiteSpace(spaceAirMovement.To))
+                {
+                    continue;
+                }
+
                 ObjectReference objectReference_From = Core.Convert.ComplexReference<ObjectReference>(from);
                 if (objectReference != objectReference_From)
                 {

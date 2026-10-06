@@ -61,7 +61,9 @@ namespace SAM.Analytical
 
             result.SetValue(AnalyticalSettingParameter.DefaultMergeSettings, "SAM_MergeSettings.JSON");
 
-            result.SetValue(AnalyticalSettingParameter.DefaultPartFFileName, "SAM_PartFSpaceRulesUKDwellingsMVHR.JSON");
+            result.SetValue(AnalyticalSettingParameter.DefaultPartFFileName, "SAM_PartFSpaceRulesUKDwellingsMVHR.json");
+
+            result.SetValue(AnalyticalSettingParameter.DefaultSpaceUseTextMapFileName, "SAM_SpaceUseTextMap.JSON");
 
 
             string path = null;
@@ -130,6 +132,13 @@ namespace SAM.Analytical
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.DefaultMergeSettings, Core.Create.IJSAMObject<MergeSettings>(System.IO.File.ReadAllText(path)));
 
+            path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultSpaceUseTextMapFileName);
+            if (System.IO.File.Exists(path))
+                result.SetValue(AnalyticalSettingParameter.SpaceUseTextMap, Core.Create.IJSAMObject<TextMap>(System.IO.File.ReadAllText(path)));
+
+            //Loaded after the SpaceUse TextMap so the two are set in dependency order. PartFData
+            //resolves its space use vocabulary lazily on first classification, not here, which is what
+            //keeps this from re-entering ActiveSetting.Setting while that Setting is still being built.
             path = Query.DefaultPath(result, AnalyticalSettingParameter.DefaultPartFFileName);
             if (System.IO.File.Exists(path))
                 result.SetValue(AnalyticalSettingParameter.PartFData, Create.PartFData(path));

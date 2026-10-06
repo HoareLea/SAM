@@ -12,12 +12,12 @@ namespace SAM.Geometry.Spatial
             if (plane == null || vector3D == null)
                 return null;
 
-            Vector3D normal = plane.Normal;
+            Vector3D normal = plane.InternalNormal;
+            if (normal == null)
+                return null;
 
-            return vector3D - vector3D.DotProduct(normal) * normal;
-
-            //double factor = vector3D.DotProduct(normal) - K;
-            //return new Vector3D(vector3D.X - (normal.X * factor), vector3D.Y - (normal.Y * factor), vector3D.Z - (normal.Z * factor));
+            double dot = vector3D.X * normal.X + vector3D.Y * normal.Y + vector3D.Z * normal.Z;
+            return new Vector3D(vector3D.X - dot * normal.X, vector3D.Y - dot * normal.Y, vector3D.Z - dot * normal.Z);
         }
 
         public static Point3D Project(this Plane plane, Point3D point3D)

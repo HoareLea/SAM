@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalModifyMechanicalSystems : GH_SAMComponent
+    public class SAMAnalyticalModifyMechanicalSystems : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,44 +41,44 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooAnalyticalObjectParam(), "_analytical", "_analytical", "SAM Analytical", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            GooSystemTypeLibraryParam gooSystemTypeLibraryParam = new GooSystemTypeLibraryParam();
-            gooSystemTypeLibraryParam.Optional = true;
-            inputParamManager.AddParameter(gooSystemTypeLibraryParam, "_systemTypeLibrary_", "_systemTypeLibrary_", "SAM SystemTypeLibrary", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            GooSpaceParam gooSpaceParam = new GooSpaceParam();
-            gooSpaceParam.Optional = true;
-            inputParamManager.AddParameter(gooSpaceParam, "_spaces_", "_spaces_", "SAM Analytical Spaces", GH_ParamAccess.list);
+                result.Add(new GH_SAMParam(new GooSystemTypeLibraryParam() { Name = "_systemTypeLibrary_", NickName = "_systemTypeLibrary_", Description = "SAM SystemTypeLibrary", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            int index = -1;
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces_", NickName = "_spaces_", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddTextParameter("supplyUnitName_", "_upplyUnitName", "Supply Unit Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "supplyUnitName_", NickName = "_upplyUnitName", Description = "Supply Unit Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddTextParameter("exhaustUnitName_", "exhaustUnitName_", "Exhaust Unit Name", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "exhaustUnitName_", NickName = "exhaustUnitName_", Description = "Exhaust Unit Name", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooSystemTypeParam(), "coolingSystemType_", "coolingSystemType_", "Cooling System Type", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooSystemTypeParam() { Name = "coolingSystemType_", NickName = "coolingSystemType_", Description = "Cooling System Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooSystemTypeParam(), "heatingSystemType_", "heatingSystemType_", "Heating System Type", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooSystemTypeParam() { Name = "heatingSystemType_", NickName = "heatingSystemType_", Description = "Heating System Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooSystemTypeParam(), "ventilationSystemType_", "ventilationSystemType_", "Ventilation System Type", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooSystemTypeParam() { Name = "ventilationSystemType_", NickName = "ventilationSystemType_", Description = "Ventilation System Type", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalObjectParam(), "analytical", "analytical", "SAM Analytical", GH_ParamAccess.item);
-            outputParamManager.AddParameter(new GooSystemParam(), "mechanicalSystems", "mechanicalSystems", "mechanicalSystems", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam() { Name = "analytical", NickName = "analytical", Description = "SAM Analytical", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooSystemParam() { Name = "mechanicalSystems", NickName = "mechanicalSystems", Description = "mechanicalSystems", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -89,37 +89,65 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_analytical");
             IAnalyticalObject analyticalObject = null;
-            if (!dataAccess.GetData(0, ref analyticalObject) || analyticalObject == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalObject) || analyticalObject == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_systemTypeLibrary_");
             SystemTypeLibrary systemTypeLibrary = null;
-            dataAccess.GetData(1, ref systemTypeLibrary);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref systemTypeLibrary);
+            }
 
             if (systemTypeLibrary == null)
                 systemTypeLibrary = ActiveSetting.Setting.GetValue<SystemTypeLibrary>(AnalyticalSettingParameter.DefaultSystemTypeLibrary);
 
+            index = Params.IndexOfInputParam("_spaces_");
             List<Space> spaces = new List<Space>();
-            if (!dataAccess.GetDataList(2, spaces))
+            if (index != -1 && !dataAccess.GetDataList(index, spaces))
                 spaces = null;
 
+            index = Params.IndexOfInputParam("supplyUnitName_");
             string supplyUnitName = null;
-            dataAccess.GetData(3, ref supplyUnitName);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref supplyUnitName);
+            }
 
+            index = Params.IndexOfInputParam("exhaustUnitName_");
             string exhaustUnitName = null;
-            dataAccess.GetData(4, ref exhaustUnitName);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref exhaustUnitName);
+            }
 
+            index = Params.IndexOfInputParam("coolingSystemType_");
             ISystemType coolingSystemType = null;
-            dataAccess.GetData(5, ref coolingSystemType);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref coolingSystemType);
+            }
 
+            index = Params.IndexOfInputParam("heatingSystemType_");
             ISystemType heatingSystemType = null;
-            dataAccess.GetData(6, ref heatingSystemType);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref heatingSystemType);
+            }
 
+            index = Params.IndexOfInputParam("ventilationSystemType_");
             ISystemType ventilationSystemType = null;
-            dataAccess.GetData(7, ref ventilationSystemType);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref ventilationSystemType);
+            }
 
             List<MechanicalSystem> mechanicalSystems = new List<MechanicalSystem>();
 
@@ -223,8 +251,17 @@ namespace SAM.Analytical.Grasshopper
                 analyticalObject = new AnalyticalModel((AnalyticalModel)analyticalObject, adjacencyCluster);
             }
 
-            dataAccess.SetData(0, analyticalObject);
-            dataAccess.SetDataList(1, mechanicalSystems);
+            index = Params.IndexOfOutputParam("analytical");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, analyticalObject);
+            }
+
+            index = Params.IndexOfOutputParam("mechanicalSystems");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, mechanicalSystems);
+            }
         }
     }
 }

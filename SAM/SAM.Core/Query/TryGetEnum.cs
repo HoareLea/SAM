@@ -47,10 +47,13 @@ namespace SAM.Core
 
             }
 
-            text_Temp = text.ToUpper().Replace(" ", string.Empty);
+            //Case-insensitive matching is deliberately CULTURE-INVARIANT: the current culture's casing
+            //rules (Turkish is the classic case) would otherwise map a lowercase input to different
+            //uppercase characters than the enum names and reject a value that is perfectly valid.
+            text_Temp = text.ToUpperInvariant().Replace(" ", string.Empty);
             for (int i = 0; i < array.Length; i++)
             {
-                if (texts[i].ToUpper().Replace(" ", string.Empty).Equals(text_Temp))
+                if (texts[i].ToUpperInvariant().Replace(" ", string.Empty).Equals(text_Temp))
                 {
                     @enum = (Enum)array.GetValue(i);
                     return true;

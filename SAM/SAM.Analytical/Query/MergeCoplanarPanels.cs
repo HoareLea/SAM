@@ -2,6 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Index.Strtree;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -160,7 +161,7 @@ namespace SAM.Analytical
                 panels_Offset.Add(panel);
 
                 List<Tuple<Polygon, Panel>> tuples_Polygon = new List<Tuple<Polygon, Panel>>();
-                List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
+                List<Point2D> point2Ds_All = new List<Point2D>(); //Snap Points, before de-duplication
                 foreach (Panel panel_Temp in panels_Offset)
                 {
                     Face3D face3D = panel_Temp.GetFace3D();
@@ -170,7 +171,7 @@ namespace SAM.Analytical
                         if (segmentable3D == null)
                             continue;
 
-                        segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                        segmentable3D.GetPoints()?.ForEach(x => point2Ds_All.Add(plane.Convert(x)));
                     }
 
                     Face2D face2D = plane.Convert(plane.Project(face3D));
@@ -179,8 +180,14 @@ namespace SAM.Analytical
                     tuples_Polygon.Add(new Tuple<Polygon, Panel>(face2D.ToNTS(tolerance), panel_Temp));
                 }
 
+                // The snap-point dedup grid and the STRtree envelope index are exact - see
+                // Point2DGrid and FindAll in MergeOverlapPanels.
+                Point2DGrid grid_Snap = Point2DGrid.Create(point2Ds_All, tolerance);
+
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
                 Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
+
+                STRtree<int> index = Index(tuples_Polygon);
 
                 polygons_Temp = Geometry.Planar.Query.Union(polygons_Temp);
                 foreach (Polygon polygon in polygons_Temp)
@@ -188,7 +195,7 @@ namespace SAM.Analytical
                     if (polygon.Area < minArea)
                         continue;
 
-                    List<Tuple<Polygon, Panel>> tuples_Panel = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
+                    List<Tuple<Polygon, Panel>> tuples_Panel = FindAll(index, tuples_Polygon, polygon.EnvelopeInternal, x => polygon.Contains(x.Item1.InteriorPoint));
                     if (tuples_Panel == null || tuples_Panel.Count == 0)
                         continue;
 
@@ -210,7 +217,13 @@ namespace SAM.Analytical
                     Polygon polygon_Temp = Geometry.Planar.Query.SimplifyBySnapper(polygon, tolerance);
                     polygon_Temp = Geometry.Planar.Query.SimplifyByTopologyPreservingSimplifier(polygon_Temp, tolerance);
 
-                    Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance)?.Snap(point2Ds, tolerance);
+                    Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance);
+                    // The snap set was deduplicated using the same tolerance. Retained
+                    // points are pairwise farther apart than tolerance, so greedy Snap can
+                    // make at most one hop. Any effective candidate must therefore lie
+                    // within tolerance of the original face and is contained by
+                    // bbox + tolerance.
+                    face2D = face2D?.Snap(grid_Snap.Candidates(face2D.GetBoundingBox()), tolerance);
                     if (face2D == null)
                         continue;
 

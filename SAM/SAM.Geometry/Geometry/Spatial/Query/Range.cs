@@ -14,7 +14,17 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Range<double>(boundingBox3D.Min[dimensionIndex], boundingBox3D.Max[dimensionIndex]);
+            switch (dimensionIndex)
+            {
+                case 0:
+                    return new Range<double>(boundingBox3D.MinX, boundingBox3D.MaxX);
+                case 1:
+                    return new Range<double>(boundingBox3D.MinY, boundingBox3D.MaxY);
+                case 2:
+                    return new Range<double>(boundingBox3D.MinZ, boundingBox3D.MaxZ);
+                default:
+                    throw new System.IndexOutOfRangeException($"Index was outside the bounds of the 3D bounding box (index: {dimensionIndex}).");
+            }
         }
     }
 }

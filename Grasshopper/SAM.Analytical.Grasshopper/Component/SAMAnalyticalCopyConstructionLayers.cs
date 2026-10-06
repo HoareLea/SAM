@@ -3,12 +3,14 @@
 
 using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCopyConstructionLayers : GH_SAMComponent
+    public class SAMAnalyticalCopyConstructionLayers : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +40,31 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooConstructionParam(), "constructionSource", "constructionSource", "Source SAM Analytical Construction", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooConstructionParam(), "constructionDestination", "constructionDestination", "Destination SAM Analytical Construction", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "constructionSource", NickName = "constructionSource", Description = "Source SAM Analytical Construction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "constructionDestination", NickName = "constructionDestination", Description = "Destination SAM Analytical Construction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooConstructionParam(), "construction", "construction", "SAM Analytical Construction", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooConstructionParam() { Name = "construction", NickName = "construction", Description = "SAM Analytical Construction", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,15 +75,19 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             Construction construction_Source = null;
-            if (!dataAccess.GetData(0, ref construction_Source))
+            index = Params.IndexOfInputParam("constructionSource");
+            if (index == -1 || !dataAccess.GetData(index, ref construction_Source))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
             }
 
             Construction construction_Destination = null;
-            if (!dataAccess.GetData(1, ref construction_Destination))
+            index = Params.IndexOfInputParam("constructionDestination");
+            if (index == -1 || !dataAccess.GetData(index, ref construction_Destination))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Invalid Data");
                 return;
@@ -76,7 +95,11 @@ namespace SAM.Analytical.Grasshopper
 
             Construction result = new Construction(construction_Destination, construction_Source.ConstructionLayers);
 
-            dataAccess.SetData(0, new GooConstruction(result));
+            index = Params.IndexOfOutputParam("construction");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooConstruction(result));
+            }
         }
     }
 }

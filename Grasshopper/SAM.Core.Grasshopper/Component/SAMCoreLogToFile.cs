@@ -4,10 +4,11 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreLogToFile : GH_SAMComponent
+    public class SAMCoreLogToFile : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -17,7 +18,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -37,19 +38,29 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooLogParam(), "_log", "_log", "SAM Log", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_path", "_path", "Save Log File Path", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLogParam() { Name = "_log", NickName = "_log", Description = "SAM Log", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_path", NickName = "_path", Description = "Save Log File Path", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooLogParam(), "Log", "Log", "SAM Log", GH_ParamAccess.item);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly saved?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooLogParam() { Name = "Log", NickName = "Log", Description = "SAM Log", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly saved?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,18 +71,30 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            dataAccess.SetData(0, null);
-            dataAccess.SetData(1, false);
+            int index;
+            int index_Log = Params.IndexOfOutputParam("Log");
+            int index_Successful = Params.IndexOfOutputParam("Successful");
 
+            if (index_Log != -1)
+            {
+                dataAccess.SetData(index_Log, null);
+            }
+            if (index_Successful != -1)
+            {
+                dataAccess.SetData(index_Successful, false);
+            }
+
+            index = Params.IndexOfInputParam("_log");
             Log log = null;
-            if (!dataAccess.GetData(0, ref log) || log == null)
+            if (index == -1 || !dataAccess.GetData(index, ref log) || log == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_path");
             string path = null;
-            if (!dataAccess.GetData(1, ref path) || string.IsNullOrWhiteSpace(path))
+            if (index == -1 || !dataAccess.GetData(index, ref path) || string.IsNullOrWhiteSpace(path))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -79,8 +102,14 @@ namespace SAM.Core.Grasshopper
 
             if (log.Write(path))
             {
-                dataAccess.SetData(0, log);
-                dataAccess.SetData(1, true);
+                if (index_Log != -1)
+                {
+                    dataAccess.SetData(index_Log, log);
+                }
+                if (index_Successful != -1)
+                {
+                    dataAccess.SetData(index_Successful, true);
+                }
             }
         }
     }

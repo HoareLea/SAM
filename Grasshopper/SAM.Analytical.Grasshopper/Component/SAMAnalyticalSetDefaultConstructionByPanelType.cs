@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSetDefaultConstructionByPanelType()
           : base("SAMAnalytical.SetDefaultConstructionByPanelType", "SAMAnalytical.SetDefaultConstructionByPanelType",
-              "Sets Default Constructions By PanelType for Adjacency Cluster only if currect construction does not follow naming convenction ",
+              "Sets Default Constructions By PanelType for Adjacency Cluster only if current construction does not follow naming convention ",
               "SAM", "Analytical03")
         {
         }

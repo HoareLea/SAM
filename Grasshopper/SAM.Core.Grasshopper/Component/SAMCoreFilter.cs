@@ -9,7 +9,7 @@ using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreFilter : GH_SAMComponent
+    public class SAMCoreFilter : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,14 +19,12 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
         protected override System.Drawing.Bitmap Icon => Resources.SAM_Filter3;
-
-        private GH_OutputParamManager outputParamManager;
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -41,27 +39,39 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddGenericParameter("_objects", "_objects", "Objects", GH_ParamAccess.list);
-            inputParamManager.AddTextParameter("_name", "_name", "Name", GH_ParamAccess.item, "Name");
-            inputParamManager.AddGenericParameter("_value", "_value", "Value to Filter elements", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_objects", NickName = "_objects", Description = "Objects", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("_comparisonType_", "_comparisonType_", "SAM ComparisonType (TextComparisonType or NumberComparisonType)", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "Name", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("Name");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_value", NickName = "_value", Description = "Value to Filter elements", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_comparisonType_", NickName = "_comparisonType_", Description = "SAM ComparisonType (TextComparisonType or NumberComparisonType)", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            this.outputParamManager = outputParamManager;
-            outputParamManager.AddGenericParameter("In", "In", "Objects In", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("Out", "Out", "Objects Out", GH_ParamAccess.list);
-            //outputParamManager.AddGenericParameter("Points", "Pts", "Snap points", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "In", NickName = "In", Description = "Objects In", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Out", NickName = "Out", Description = "Objects Out", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -72,15 +82,19 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_name");
             string name = null;
-            if (!dataAccess.GetData(1, ref name) || string.IsNullOrWhiteSpace(name))
+            if (index == -1 || !dataAccess.GetData(index, ref name) || string.IsNullOrWhiteSpace(name))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_objects");
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(0, objectWrappers))
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -107,14 +121,9 @@ namespace SAM.Core.Grasshopper
                     objects.Add(@object);
             }
 
-            //if (@objects == null || @objects.Count == 0)
-            //{
-            //    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-            //    return;
-            //}
-
+            index = Params.IndexOfInputParam("_value");
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -125,8 +134,13 @@ namespace SAM.Core.Grasshopper
                 value = (objectWrapper.Value as dynamic).Value;
 
 
+            index = Params.IndexOfInputParam("_comparisonType_");
             objectWrapper = null;
-            dataAccess.GetData(3, ref objectWrapper);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref objectWrapper);
+            }
+
             object object_ComparisonType = null;
             if (objectWrapper?.Value == null)
             {
@@ -182,8 +196,17 @@ namespace SAM.Core.Grasshopper
                 }
             }
 
-            dataAccess.SetDataList(0, result_in);
-            dataAccess.SetDataList(1, result_out);
+            index = Params.IndexOfOutputParam("In");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result_in);
+            }
+
+            index = Params.IndexOfOutputParam("Out");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result_out);
+            }
         }
     }
 }

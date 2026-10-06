@@ -56,7 +56,7 @@ namespace SAM.Analytical.Grasshopper
                     Name = "_dischargeCoefficients",
                     NickName = "_dischargeCoefficients",
                     Description = @"Discharge Coefficients (dimensionless)
-                DefaulDefault  discharge coefficient: 0.62 (typical for a sharp-edged rectangular opening).
+                Default discharge coefficient: 0.62 (typical for a sharp-edged rectangular opening).
                 Discharge coefficients account for the ‘friction’ of an opening; the lower the coefficient, the more the aperture resists flow.
 
                 Guidance values:

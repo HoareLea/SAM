@@ -451,6 +451,45 @@
             1.0
           ]
         ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "HTG_1to24_16",
+        "Guid": "6a24b6f1-35b2-4c72-8d0b-99d15895a301",
+        "Category": "Heating",
+        "Values": [
+          [
+            0,
+            23,
+            16.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "Constant",
+        "Guid": "72e154d7-6d4d-4ca0-8c7e-51769aeb31b0",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            23,
+            1.0
+          ]
+        ]
+      },
+      {
+        "_type": "SAM.Analytical.Profile,SAM.Analytical",
+        "Name": "OFF",
+        "Guid": "5a6bcf27-6daa-42d1-a4e4-746992cb915d",
+        "Category": "Gain",
+        "Values": [
+          [
+            0,
+            23,
+            0.0
+          ]
+        ]
       }
     ]
   }

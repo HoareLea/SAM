@@ -22,5 +22,24 @@ namespace SAM.Analytical
         [ParameterProperties("Pilkington Shading Long Wavelength Coefficient", "Pilkington Shading Long Wavelength Coefficient [0-1]"), DoubleParameterValue(0, 1)] PilkingtonShadingLongWavelengthCoefficient,
         [ParameterProperties("Adiabatic", "Adiabatic"), ParameterValue(Core.ParameterType.Boolean)] Adiabatic,
         [ParameterProperties("FeatureShade", "FeatureShade"), SAMObjectParameterValue(typeof(FeatureShade))] FeatureShade,
+
+        /// <summary>
+        /// <b>This panel is adiabatic because a filter cut it off from the space on its other side</b> -
+        /// written by <see cref="AdjacencyCluster.Filter(System.Collections.Generic.IEnumerable{Space}, bool)"/>
+        /// at the moment it makes the cut, and by nothing else.
+        /// <para>
+        /// It is what separates a cut from an adiabatic surface somebody authored. <see cref="Adiabatic"/>
+        /// cannot: a TBD or a gbXML import sets that flag, and so does a person, so a model arriving with
+        /// adiabatic walls is indistinguishable from one that has been isolated once already. Reading the
+        /// two apart is the whole of what lets an isolation run on an already-isolated model still state
+        /// the cut it is carrying rather than reporting none.
+        /// </para>
+        /// <para>
+        /// It travels with the panel - through the derived cluster, the json and the run's .sam - so the
+        /// statement survives a reopened model. It is never a reason to skip work: the cut is still
+        /// decided by the two adjacency states, and this only records the answer.
+        /// </para>
+        /// </summary>
+        [ParameterProperties("Isolation Cut", "Adiabatic because an isolation cut it off from the space on its other side"), ParameterValue(Core.ParameterType.Boolean)] IsolationCut,
     }
 }

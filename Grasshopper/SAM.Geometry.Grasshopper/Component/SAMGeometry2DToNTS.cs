@@ -14,9 +14,9 @@ namespace SAM.Geometry.Grasshopper
 {
     /// <summary>
     /// The SAMGeometry2DToNTS class is a component that converts SAM 2D geometries to NetTopologySuite (NTS) geometries.
-    /// It inherits from the GH_SAMComponent base class.
+    /// It inherits from the GH_SAMVariableOutputParameterComponent base class.
     /// </summary>
-    public class SAMGeometry2DToNTS : GH_SAMComponent
+    public class SAMGeometry2DToNTS : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -26,7 +26,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,19 +46,29 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_geometry", "Geo", "Geometry", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometry", NickName = "Geo", Description = "Geometry", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("nTSGeometries", "nTSGeometries", "NTS Geometries", GH_ParamAccess.list);
-            outputParamManager.AddGenericParameter("nTS Text", "nTS Text", "Text", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("successful", "successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "nTSGeometries", NickName = "nTSGeometries", Description = "NTS Geometries", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "nTS Text", NickName = "nTS Text", Description = "Text", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "successful", NickName = "successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -69,11 +79,18 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
+            index = Params.IndexOfInputParam("_geometry");
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("nTS Text");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
@@ -141,11 +158,23 @@ namespace SAM.Geometry.Grasshopper
 
             List<NetTopologySuite.Geometries.Geometry> geometries = sAMGeometry2Ds.ConvertAll(x => x.ToNTS());
 
-            dataAccess.SetDataList(0, geometries);
-            dataAccess.SetDataList(1, geometries.ConvertAll(x => x.ToString()));
-            dataAccess.SetData(2, true);
+            index = Params.IndexOfOutputParam("nTSGeometries");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, geometries);
+            }
 
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Cannot split segments");
+            index = Params.IndexOfOutputParam("nTS Text");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, geometries.ConvertAll(x => x.ToString()));
+            }
+
+            index = Params.IndexOfOutputParam("successful");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, true);
+            }
         }
     }
 }

@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class NTSSAMGeometry2D : GH_SAMComponent
+    public class NTSSAMGeometry2D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,17 +40,27 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddTextParameter("_NTS", "NTS", "NTS Text", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_NTS", NickName = "NTS", Description = "NTS Text", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Geometry2Ds", "Geometry2Ds", "SAM Geometry 2D", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Geometry2Ds", NickName = "Geometry2Ds", Description = "SAM Geometry 2D", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -61,20 +71,24 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_NTS");
             List<string> lines_NTS = new List<string>();
-            if (!dataAccess.GetDataList(0, lines_NTS))
+            if (index == -1 || !dataAccess.GetDataList(index, lines_NTS))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             List<ISAMGeometry2D> geometry2Ds = Planar.Convert.ToSAM<ISAMGeometry2D>(lines_NTS);
-            if (geometry2Ds == null)
-                dataAccess.SetDataList(0, null);
-            else
-                dataAccess.SetDataList(0, geometry2Ds.ConvertAll(x => new GooSAMGeometry(x)));
 
-
+            index = Params.IndexOfOutputParam("Geometry2Ds");
+            if (index != -1)
+            {
+                if (geometry2Ds == null)
+                    dataAccess.SetDataList(index, null);
+                else
+                    dataAccess.SetDataList(index, geometry2Ds.ConvertAll(x => new GooSAMGeometry(x)));
+            }
         }
     }
 }

@@ -8,10 +8,11 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalHeatTransferCoefficientByDefaultGasType : GH_SAMComponent
+    public class SAMAnalyticalHeatTransferCoefficientByDefaultGasType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,27 +42,50 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_defaultGasType_", "_defaultGasType_", "DefaultGasType", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_ObjectWrapper(DefaultGasType.Argon.ToString()));
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject;
+                param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_defaultGasType_", NickName = "_defaultGasType_", Description = "DefaultGasType", Access = GH_ParamAccess.item, Optional = true };
+                param_GenericObject.PersistentData.Append(new GH_ObjectWrapper(DefaultGasType.Argon.ToString()));
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
 
-            inputParamManager.AddNumberParameter("_width_", "_width_", "Cavity width [m]", GH_ParamAccess.item, 0.012);
-            inputParamManager.AddNumberParameter("_meanTemperature_", "_meanTemperature_", "Mean Temperature [K]", GH_ParamAccess.item, 283);
-            inputParamManager.AddNumberParameter("_temperatureDifference_", "_temperatureDifference_", "Mean temperature difference across the cavity [K]", GH_ParamAccess.item, 15);
-            inputParamManager.AddNumberParameter("_angle_", "_angle_", "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", GH_ParamAccess.item, System.Math.PI / 2);
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_width_", NickName = "_width_", Description = "Cavity width [m]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(0.012);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_meanTemperature_", NickName = "_meanTemperature_", Description = "Mean Temperature [K]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(283);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_temperatureDifference_", NickName = "_temperatureDifference_", Description = "Mean temperature difference across the cavity [K]", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(15);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_angle_", NickName = "_angle_", Description = "Angle in radians (measured in 2D from Upward direction (0, 1) Vector2D.SignedAngle(Vector2D)), angle less than 0 considered as downward direction", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(System.Math.PI / 2);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddNumberParameter("HeatTransferCoefficient", "HeatTransferCoefficient", "Heat Transfer Coefficient [W/m2K]", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "HeatTransferCoefficient", NickName = "HeatTransferCoefficient", Description = "Heat Transfer Coefficient [W/m2K]", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -72,8 +96,11 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper))
+            index = Params.IndexOfInputParam("_defaultGasType_");
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -87,28 +114,32 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double width = double.NaN;
-            if (!dataAccess.GetData(1, ref width) || double.IsNaN(width))
+            index = Params.IndexOfInputParam("_width_");
+            if (index == -1 || !dataAccess.GetData(index, ref width) || double.IsNaN(width))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double meanTemperature = double.NaN;
-            if (!dataAccess.GetData(2, ref meanTemperature) || double.IsNaN(meanTemperature))
+            index = Params.IndexOfInputParam("_meanTemperature_");
+            if (index == -1 || !dataAccess.GetData(index, ref meanTemperature) || double.IsNaN(meanTemperature))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double temperatureDifference = double.NaN;
-            if (!dataAccess.GetData(3, ref temperatureDifference) || double.IsNaN(temperatureDifference))
+            index = Params.IndexOfInputParam("_temperatureDifference_");
+            if (index == -1 || !dataAccess.GetData(index, ref temperatureDifference) || double.IsNaN(temperatureDifference))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             double angle = double.NaN;
-            if (!dataAccess.GetData(4, ref angle) || double.IsNaN(angle))
+            index = Params.IndexOfInputParam("_angle_");
+            if (index == -1 || !dataAccess.GetData(index, ref angle) || double.IsNaN(angle))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -118,7 +149,9 @@ namespace SAM.Analytical.Grasshopper
 
             double HeatTransferCoefficient = Analytical.Query.HeatTransferCoefficient(gasMaterial, temperatureDifference, width, meanTemperature, angle);
 
-            dataAccess.SetData(0, HeatTransferCoefficient);
+            index = Params.IndexOfOutputParam("HeatTransferCoefficient");
+            if (index != -1)
+                dataAccess.SetData(index, HeatTransferCoefficient);
         }
     }
 }

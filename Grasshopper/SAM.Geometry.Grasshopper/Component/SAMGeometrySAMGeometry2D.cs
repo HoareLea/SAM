@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometrySAMGeometry2D : GH_SAMComponent
+    public class SAMGeometrySAMGeometry2D : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -23,7 +23,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -38,25 +38,39 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
-            Param_GenericObject genericObjectParameter = null;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject genericObjectParameter;
 
-            inputParamManager.AddGenericParameter("_SAMGeometry3D", "_SAMGeometry3D", "SAM Geometry 3D", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_ownPlane", "_ownPlane", "Projection on own plane if possible", GH_ParamAccess.item, true);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_SAMGeometry3D", NickName = "_SAMGeometry3D", Description = "SAM Geometry 3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddGenericParameter("Plane", "Plane", "SAM Plane", GH_ParamAccess.item);
-            genericObjectParameter = (Param_GenericObject)inputParamManager[index];
-            genericObjectParameter.PersistentData.Append(new GH_Plane(new global::Rhino.Geometry.Plane(new global::Rhino.Geometry.Point3d(0, 0, 0), new global::Rhino.Geometry.Vector3d(0, 0, 1))));
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_ownPlane", NickName = "_ownPlane", Description = "Projection on own plane if possible", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                genericObjectParameter = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Plane", NickName = "Plane", Description = "SAM Plane", Access = GH_ParamAccess.item, Optional = true };
+                genericObjectParameter.SetPersistentData(new GH_Plane(new global::Rhino.Geometry.Plane(new global::Rhino.Geometry.Point3d(0, 0, 0), new global::Rhino.Geometry.Vector3d(0, 0, 1))));
+                result.Add(new GH_SAMParam(genericObjectParameter, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("sAMGeometry2D", "sAMgeo2D", "SAM Geometry 2D", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "sAMGeometry2D", NickName = "sAMgeo2D", Description = "SAM Geometry 2D", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -67,9 +81,12 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
             GH_ObjectWrapper objectWrapper = null;
 
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper.Value == null)
+            index = Params.IndexOfInputParam("_SAMGeometry3D");
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper.Value == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -119,7 +136,8 @@ namespace SAM.Geometry.Grasshopper
             }
 
             bool ownPlane = true;
-            if (!dataAccess.GetData(1, ref ownPlane))
+            index = Params.IndexOfInputParam("_ownPlane");
+            if (index == -1 || !dataAccess.GetData(index, ref ownPlane))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -129,7 +147,8 @@ namespace SAM.Geometry.Grasshopper
 
             if (!ownPlane)
             {
-                if (!dataAccess.GetData(2, ref objectWrapper) || objectWrapper.Value == null)
+                index = Params.IndexOfInputParam("Plane");
+                if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper.Value == null)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                     return;
@@ -178,7 +197,11 @@ namespace SAM.Geometry.Grasshopper
                 sAMGeometry2Ds.Add(plane_Boundable3D.Convert(boundable3D));
             }
 
-            dataAccess.SetDataList(0, sAMGeometry2Ds);
+            index = Params.IndexOfOutputParam("sAMGeometry2D");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, sAMGeometry2Ds);
+            }
         }
 
         /// <summary>
@@ -188,8 +211,6 @@ namespace SAM.Geometry.Grasshopper
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return Resources.SAM_Geometry;
             }
         }

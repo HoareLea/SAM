@@ -78,14 +78,13 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D axisX = plane.AxisX;
-            Vector3D axisY = plane.AxisY;
+            Vector3D axisY = plane.InternalAxisY;
+            Point3D origin = plane.InternalOrigin;
 
-            Vector3D u = new Vector3D(axisY.X * point2D.Y, axisY.Y * point2D.Y, axisY.Z * point2D.Y);
-            Vector3D v = new Vector3D(axisX.X * point2D.X, axisX.Y * point2D.X, axisX.Z * point2D.X);
+            double px = point2D.X;
+            double py = point2D.Y;
 
-            Point3D origin = plane.Origin;
-
-            return new Point3D(origin.X + u.X + v.X, origin.Y + u.Y + v.Y, origin.Z + u.Z + v.Z);
+            return new Point3D(origin.X + axisX.X * px + axisY.X * py, origin.Y + axisX.Y * px + axisY.Y * py, origin.Z + axisX.Z * px + axisY.Z * py);
         }
 
         public static Point2D Convert(this Plane plane, Point3D point3D)
@@ -94,11 +93,14 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D axisX = plane.AxisX;
-            Vector3D axisY = plane.AxisY;
-            Point3D origin = plane.Origin;
+            Vector3D axisY = plane.InternalAxisY;
+            Point3D origin = plane.InternalOrigin;
 
-            Vector3D vector3D = new Vector3D(point3D.X - origin.X, point3D.Y - origin.Y, point3D.Z - origin.Z);
-            return new Point2D(axisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
+            double dx = point3D.X - origin.X;
+            double dy = point3D.Y - origin.Y;
+            double dz = point3D.Z - origin.Z;
+
+            return new Point2D(axisX.X * dx + axisX.Y * dy + axisX.Z * dz, axisY.X * dx + axisY.Y * dy + axisY.Z * dz);
         }
 
         public static Vector2D Convert(this Plane plane, Vector3D vector3D)
@@ -107,10 +109,13 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D axisX = plane.AxisX;
-            Vector3D axisY = plane.AxisY;
+            Vector3D axisY = plane.InternalAxisY;
 
-            //Vector3D vector3D_Result = new Vector3D(vector3D.X - origin.X, vector3D.Y - origin.Y, vector3D.Z - origin.Z);
-            return new Vector2D(axisX.DotProduct(vector3D), axisY.DotProduct(vector3D));
+            double vx = vector3D.X;
+            double vy = vector3D.Y;
+            double vz = vector3D.Z;
+
+            return new Vector2D(axisX.X * vx + axisX.Y * vy + axisX.Z * vz, axisY.X * vx + axisY.Y * vy + axisY.Z * vz);
         }
 
         public static Vector3D Convert(this Plane plane, Vector2D vector2D)
@@ -119,12 +124,12 @@ namespace SAM.Geometry.Spatial
                 return null;
 
             Vector3D axisX = plane.AxisX;
-            Vector3D axisY = plane.AxisY;
+            Vector3D axisY = plane.InternalAxisY;
 
-            Vector3D u = new Vector3D(axisY.X * vector2D.Y, axisY.Y * vector2D.Y, axisY.Z * vector2D.Y);
-            Vector3D v = new Vector3D(axisX.X * vector2D.X, axisX.Y * vector2D.X, axisX.Z * vector2D.X);
+            double vx = vector2D.X;
+            double vy = vector2D.Y;
 
-            return new Vector3D(u.X + v.X, u.Y + v.Y, u.Z + v.Z);
+            return new Vector3D(axisX.X * vx + axisY.X * vy, axisX.Y * vx + axisY.Y * vy, axisX.Z * vx + axisY.Z * vy);
         }
 
         public static Polygon3D Convert(this Plane plane, Polygon2D polygon2D)
@@ -326,9 +331,32 @@ namespace SAM.Geometry.Spatial
             if (plane == null || point3Ds == null)
                 return null;
 
+            Vector3D axisX = plane.AxisX;
+            Vector3D axisY = plane.InternalAxisY;
+            Point3D origin = plane.InternalOrigin;
+
+            if (axisX == null || axisY == null || origin == null)
+                return null;
+
+            double ox = origin.X, oy = origin.Y, oz = origin.Z;
+            double xx = axisX.X, xy = axisX.Y, xz = axisX.Z;
+            double yx = axisY.X, yy = axisY.Y, yz = axisY.Z;
+
             List<Point2D> point2Ds = new List<Point2D>();
             foreach (Point3D point3D in point3Ds)
-                point2Ds.Add(Convert(plane, point3D));
+            {
+                if (point3D == null)
+                {
+                    point2Ds.Add(null);
+                    continue;
+                }
+
+                double dx = point3D.X - ox;
+                double dy = point3D.Y - oy;
+                double dz = point3D.Z - oz;
+
+                point2Ds.Add(new Point2D(xx * dx + xy * dy + xz * dz, yx * dx + yy * dy + yz * dz));
+            }
 
             return point2Ds;
         }
@@ -338,9 +366,31 @@ namespace SAM.Geometry.Spatial
             if (plane == null || point2Ds == null)
                 return null;
 
+            Vector3D axisX = plane.AxisX;
+            Vector3D axisY = plane.InternalAxisY;
+            Point3D origin = plane.InternalOrigin;
+
+            if (axisX == null || axisY == null || origin == null)
+                return null;
+
+            double ox = origin.X, oy = origin.Y, oz = origin.Z;
+            double xx = axisX.X, xy = axisX.Y, xz = axisX.Z;
+            double yx = axisY.X, yy = axisY.Y, yz = axisY.Z;
+
             List<Point3D> point3Ds = new List<Point3D>();
             foreach (Point2D point2D in point2Ds)
-                point3Ds.Add(Convert(plane, point2D));
+            {
+                if (point2D == null)
+                {
+                    point3Ds.Add(null);
+                    continue;
+                }
+
+                double px = point2D.X;
+                double py = point2D.Y;
+
+                point3Ds.Add(new Point3D(ox + xx * px + yx * py, oy + xy * px + yy * py, oz + xz * px + yz * py));
+            }
 
             return point3Ds;
         }

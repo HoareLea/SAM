@@ -21,5 +21,17 @@ namespace SAM.Analytical
         [ParameterProperties("Opening Properties", "Opening Properties"), SAMObjectParameterValue(typeof(IOpeningProperties))] OpeningProperties,
         [ParameterProperties("Color", "Color"), ParameterValue(Core.ParameterType.Color)] Color,
         [ParameterProperties("FeatureShade", "FeatureShade"), SAMObjectParameterValue(typeof(FeatureShade))] FeatureShade,
+
+        /// <summary>
+        /// The Approved Document F paragraph 1.25 transfer air requirement for this door, and what the
+        /// model can say about whether the door provides it.
+        /// <para>
+        /// Carries both the derived requirement, which is rewritten on every calculation, and the
+        /// engineering inputs a person supplied - the provided undercut, the provided free area, the
+        /// transfer device type and any transfer flow override. Those inputs are read back and preserved
+        /// by the next calculation, because SAM cannot see a gap under a door leaf in an analytical model.
+        /// </para>
+        /// </summary>
+        [ParameterProperties("PartF Door Transfer Data", "PartF Door Transfer Data"), SAMObjectParameterValue(typeof(PartFDoorTransferData))] PartFDoorTransferData,
     }
 }

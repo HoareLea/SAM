@@ -4,11 +4,12 @@
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreColorToUint : GH_SAMComponent
+    public class SAMCoreColorToUint : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +39,34 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddColourParameter("_color", "_color", "_Color", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_includeAlpha_", "_IncludeAplha_", "Include Alpha", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Colour() { Name = "_color", NickName = "_color", Description = "_Color", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_includeAlpha_", NickName = "_IncludeAplha_", Description = "Include Alpha", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddIntegerParameter("Uint", "Uint", "Uint", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "Uint", NickName = "Uint", Description = "Uint", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -60,15 +77,19 @@ namespace SAM.Core.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_color");
             Color color = Color.Empty;
-            if (!dataAccess.GetData(0, ref color))
+            if (index == -1 || !dataAccess.GetData(index, ref color))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_includeAlpha_");
             bool includeAlpha = false;
-            if (!dataAccess.GetData(1, ref includeAlpha))
+            if (index == -1 || !dataAccess.GetData(index, ref includeAlpha))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,7 +97,11 @@ namespace SAM.Core.Grasshopper
 
             uint @uint = Core.Convert.ToUint(color, includeAlpha);
 
-            dataAccess.SetData(0, System.Convert.ToInt32(@uint));
+            index = Params.IndexOfOutputParam("Uint");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, System.Convert.ToInt32(@uint));
+            }
         }
     }
 }

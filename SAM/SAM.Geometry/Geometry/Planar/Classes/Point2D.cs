@@ -210,6 +210,11 @@ namespace SAM.Geometry.Planar
 
         public Point2D GetMoved(Vector2D vector2D)
         {
+            if(vector2D is null)
+            {
+                return null;
+            }
+
             return new Point2D(vector2D[0] + coordinates[0], vector2D[1] + coordinates[1]);
         }
 

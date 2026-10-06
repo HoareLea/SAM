@@ -32,13 +32,33 @@ namespace SAM.Analytical
 
             List<Tuple<BoundingBox3D, Face3D, Panel>> tuples = new List<Tuple<BoundingBox3D, Face3D, Panel>>();
 
+            // The face lookup below is a nearest-in-insertion-order search over every face
+            // created so far, which is O(total faces^2) across the model. Indexing it on a
+            // uniform grid sized from the shells keeps it near-linear.
+            Face3DIndex face3DIndex = new Face3DIndex(shells_Temp, tolerance_Distance);
+
+            // The generated-name probe only ever consults the supplied spaces, so the set of
+            // names to avoid is fixed - no need to rescan the list for each candidate index.
+            HashSet<string> names = new HashSet<string>();
+            foreach (Space space_Temp in spaces_Temp)
+            {
+                if (space_Temp?.Name != null)
+                {
+                    names.Add(space_Temp.Name);
+                }
+            }
+
             int index = 1;
             foreach (Shell shell in shells_Temp)
             {
-                Space space = spaces_Temp.Find(x => shell.GetBoundingBox().InRange(x.Location, tolerance_Distance) && shell.Inside(x.Location, silverSpacing, tolerance_Distance));
+                // Shell.GetBoundingBox() allocates a copy per call and this used to sit inside
+                // the predicate, so it ran once per candidate space rather than once per shell.
+                BoundingBox3D boundingBox3D_Shell = shell.GetBoundingBox();
+
+                Space space = spaces_Temp.Find(x => boundingBox3D_Shell.InRange(x.Location, tolerance_Distance) && shell.Inside(x.Location, silverSpacing, tolerance_Distance));
                 if (space == null)
                 {
-                    while (spaces_Temp.Find(x => x.Name == string.Format("{0} {1}", "Space", index)) != null)
+                    while (names.Contains(string.Format("{0} {1}", "Space", index)))
                     {
                         index++;
                     }
@@ -46,28 +66,9 @@ namespace SAM.Analytical
                     space = new Space(string.Format("{0} {1}", "Space", index), shell.InternalPoint3D(silverSpacing, tolerance_Distance));
                 }
 
-                List<Face3D> face3Ds = shell.Section();
-                if (face3Ds != null && face3Ds.Count != 0)
-                {
-                    double area = 0;
-                    foreach (Face3D face3D in face3Ds)
-                    {
-                        if (face3D == null)
-                        {
-                            continue;
-                        }
-
-                        double area_Temp = face3D.GetArea();
-                        if (!double.IsNaN(area_Temp) && area_Temp > 0)
-                        {
-                            area += area_Temp;
-                        }
-
-                    }
-
-                    space.SetValue(SpaceParameter.Area, area);
-                }
-
+                // SpaceParameter.Area is deliberately NOT set from a shell section here: the canonical floor
+                // area is the actual floor surface area and is applied by Modify.UpdateFloorAreas below, once
+                // the panels, relations and panel types this cluster's floors are identified from are final.
                 double volume = shell.Volume(silverSpacing, tolerance_Distance);
                 if (!double.IsNaN(volume))
                 {
@@ -80,7 +81,9 @@ namespace SAM.Analytical
                 {
                     Point3D point3D = face3D.GetInternalPoint3D(tolerance_Distance);
 
-                    Tuple<BoundingBox3D, Face3D, Panel> tuple = tuples.Find(x => x.Item1.InRange(point3D, tolerance_Distance) && x.Item2.InRange(point3D, tolerance_Distance));
+                    int index_Tuple = face3DIndex.Find(point3D, tuples, tolerance_Distance);
+
+                    Tuple<BoundingBox3D, Face3D, Panel> tuple = index_Tuple == -1 ? null : tuples[index_Tuple];
                     if (tuple == null)
                     {
                         PanelType panelType = Query.PanelType(face3D.GetPlane().Normal, tolerance_Angle);
@@ -92,6 +95,7 @@ namespace SAM.Analytical
                         result.AddObject(panel);
 
                         tuple = new Tuple<BoundingBox3D, Face3D, Panel>(face3D.GetBoundingBox(), face3D, panel);
+                        face3DIndex.Add(tuples.Count, tuple.Item1);
                         tuples.Add(tuple);
                     }
 
@@ -105,6 +109,8 @@ namespace SAM.Analytical
             result.Normalize(false);
             result.UpdatePanelTypes(elevation_Ground);
             result.SetDefaultConstructionByPanelType();
+
+            result.UpdateFloorAreas(silverSpacing: silverSpacing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance);
 
             return result;
         }
@@ -209,6 +215,10 @@ namespace SAM.Analytical
             adjacencyCluster.Normalize(false);
             adjacencyCluster.UpdatePanelTypes(elevation_Ground);
             adjacencyCluster.SetDefaultConstructionByPanelType();
+
+            // The plan area seeded per cell above is correct for these prismatic extrusions, but it is still
+            // reconciled through the shared calculation so this path cannot drift from the others.
+            adjacencyCluster.UpdateFloorAreas(tolerance_Distance: tolerance);
 
             return adjacencyCluster;
         }
@@ -319,6 +329,8 @@ namespace SAM.Analytical
 
             result = result.UpdateNormals(false, true, false, Tolerance.MacroDistance, tolerance);
             result.Normalize(false);
+
+            result.UpdateFloorAreas(tolerance_Distance: tolerance);
 
             return result;
         }
@@ -533,18 +545,17 @@ namespace SAM.Analytical
 
                 BoundingBox3D boundingBox3D = shell_Temp.GetBoundingBox();
 
-                double min = boundingBox3D.Min.Z;
-                double max = boundingBox3D.Max.Z;
-
-                double elevation = min;
+                double elevation = boundingBox3D.Min.Z;
 
                 List<Tuple<double, Architectural.Level>> tuples_Level = levels.ConvertAll(x => new Tuple<double, Architectural.Level>(System.Math.Abs(x.Elevation - elevation), x));
                 tuples_Level.Sort((x, y) => x.Item1.CompareTo(y.Item1));
                 Architectural.Level level = tuples_Level.FirstOrDefault()?.Item2;
 
                 double volume_Shell = shell_Temp.Volume(silverSpacing, tolerance_Distance);
-                double area_Shell = shell_Temp.Area((max - min) / 2, tolerance_Angle, tolerance_Distance, silverSpacing);
 
+                // SpaceParameter.Area is deliberately NOT set from a mid-height shell section here: that is a
+                // plan area, which is wrong for a ramped or tilted floor. Modify.UpdateFloorAreas applies the
+                // canonical floor surface area at the end of this method, after invalid spaces are dropped.
                 foreach (Space space in spaces_Shell)
                 {
                     if (result.GetObject<Space>(space.Guid) != null)
@@ -554,11 +565,6 @@ namespace SAM.Analytical
                     if (!double.IsNaN(volume_Shell))
                     {
                         space_Temp.SetValue(SpaceParameter.Volume, volume_Shell);
-                    }
-
-                    if (!double.IsNaN(area_Shell))
-                    {
-                        space_Temp.SetValue(SpaceParameter.Area, area_Shell);
                     }
 
                     if (level != null)
@@ -906,6 +912,8 @@ namespace SAM.Analytical
 
             result.Normalize(false);
 
+            result.UpdateFloorAreas(silverSpacing: silverSpacing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance);
+
             return result;
         }
 
@@ -934,6 +942,11 @@ namespace SAM.Analytical
                 result.Cut(elevationGround, null, tolerance_Distance);
                 result.UpdatePanelTypes(elevationGround);
                 result.SetDefaultConstructionByPanelType();
+
+                // The delegated call already applied floor areas, but Cut and UpdatePanelTypes have since
+                // changed the very geometry and panel types those areas are derived from, so they are
+                // recalculated here rather than left stale.
+                result.UpdateFloorAreas(silverSpacing: silverSpacing, tolerance_Angle: tolerance_Angle, tolerance_Distance: tolerance_Distance);
             }
 
             return result;
@@ -1179,6 +1192,212 @@ namespace SAM.Analytical
             result.SetDefaultConstructionByPanelType();
 
             return result;
+        }
+
+        /// <summary>
+        /// Uniform 3D hash over the bounding boxes of the faces promoted to panels while a
+        /// cluster is built. Cell size comes from the shells being processed, so a cell holds a
+        /// handful of faces for a typical model.
+        /// <para>
+        /// <see cref="Find"/> returns the lowest index whose bounding box and face are both in
+        /// range of the point - the same tuple the List.Find it replaces would have returned,
+        /// since that scanned in insertion order and stopped at the first hit. The bounding box
+        /// test comes first here exactly as it did in the original predicate, so the expensive
+        /// Face3D test still only runs on boxes that already accepted the point.
+        /// </para>
+        /// </summary>
+        private sealed class Face3DIndex
+        {
+            private const int MaxCellsPerItem = 4096;
+
+            private readonly double cellSize;
+            private readonly double tolerance;
+            private readonly Dictionary<Tuple<long, long, long>, List<int>> dictionary;
+            private readonly List<int> oversized;
+
+            public Face3DIndex(IEnumerable<Shell> shells, double tolerance)
+            {
+                this.tolerance = tolerance > 0 ? tolerance : Tolerance.Distance;
+
+                dictionary = new Dictionary<Tuple<long, long, long>, List<int>>();
+                oversized = new List<int>();
+
+                List<double> extents = new List<double>();
+                foreach (Shell shell in shells)
+                {
+                    BoundingBox3D boundingBox3D = shell?.GetBoundingBox();
+                    if (!IsFinite(boundingBox3D))
+                    {
+                        continue;
+                    }
+
+                    Point3D min = boundingBox3D.Min;
+                    Point3D max = boundingBox3D.Max;
+
+                    extents.Add(System.Math.Max(max.X - min.X, System.Math.Max(max.Y - min.Y, max.Z - min.Z)));
+                }
+
+                extents.Sort();
+
+                cellSize = extents.Count == 0
+                    ? System.Math.Max(this.tolerance, Tolerance.MacroDistance)
+                    : System.Math.Max(extents[extents.Count / 2], System.Math.Max(this.tolerance, Tolerance.MacroDistance));
+            }
+
+            public void Add(int index, BoundingBox3D boundingBox3D)
+            {
+                if (!IsFinite(boundingBox3D))
+                {
+                    // Null, NaN or infinite bounds cannot be quantised into cells - hold the entry
+                    // aside so the exact predicate still sees it, exactly as an oversized entry.
+                    oversized.Add(index);
+                    return;
+                }
+
+                Cells(boundingBox3D.Min, boundingBox3D.Max, out long kx1, out long kx2, out long ky1, out long ky2, out long kz1, out long kz2);
+
+                if (!IsValid(kx1, kx2, ky1, ky2, kz1, kz2) || CellCount(kx1, kx2, ky1, ky2, kz1, kz2) > MaxCellsPerItem)
+                {
+                    oversized.Add(index);
+                    return;
+                }
+
+                for (long kx = kx1; kx <= kx2; kx++)
+                {
+                    for (long ky = ky1; ky <= ky2; ky++)
+                    {
+                        for (long kz = kz1; kz <= kz2; kz++)
+                        {
+                            Tuple<long, long, long> key = new Tuple<long, long, long>(kx, ky, kz);
+                            if (!dictionary.TryGetValue(key, out List<int> list))
+                            {
+                                list = new List<int>();
+                                dictionary[key] = list;
+                            }
+
+                            list.Add(index);
+                        }
+                    }
+                }
+            }
+
+            public int Find(Point3D point3D, List<Tuple<BoundingBox3D, Face3D, Panel>> tuples, double tolerance_Distance)
+            {
+                if (point3D == null)
+                {
+                    return -1;
+                }
+
+                List<int> candidates = new List<int>(oversized);
+
+                if (!IsFinite(point3D))
+                {
+                    // The probe point cannot be quantised - examine every entry.
+                    for (int i = 0; i < tuples.Count; i++)
+                    {
+                        candidates.Add(i);
+                    }
+                }
+                else
+                {
+                    Cells(point3D, point3D, out long kx1, out long kx2, out long ky1, out long ky2, out long kz1, out long kz2);
+
+                    if (!IsValid(kx1, kx2, ky1, ky2, kz1, kz2))
+                    {
+                        // The probe point produced no usable cell range - examine every entry.
+                        for (int i = 0; i < tuples.Count; i++)
+                        {
+                            candidates.Add(i);
+                        }
+                    }
+                    else
+                    {
+                        for (long kx = kx1; kx <= kx2; kx++)
+                        {
+                            for (long ky = ky1; ky <= ky2; ky++)
+                            {
+                                for (long kz = kz1; kz <= kz2; kz++)
+                                {
+                                    if (dictionary.TryGetValue(new Tuple<long, long, long>(kx, ky, kz), out List<int> list))
+                                    {
+                                        candidates.AddRange(list);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                candidates.Sort();
+
+                int previous = -1;
+                foreach (int index in candidates)
+                {
+                    if (index == previous)
+                    {
+                        continue;
+                    }
+
+                    previous = index;
+
+                    Tuple<BoundingBox3D, Face3D, Panel> tuple = tuples[index];
+                    if (tuple.Item1.InRange(point3D, tolerance_Distance) && tuple.Item2.InRange(point3D, tolerance_Distance))
+                    {
+                        return index;
+                    }
+                }
+
+                return -1;
+            }
+
+            private void Cells(Point3D min, Point3D max, out long kx1, out long kx2, out long ky1, out long ky2, out long kz1, out long kz2)
+            {
+                kx1 = (long)System.Math.Floor((min.X - tolerance) / cellSize);
+                kx2 = (long)System.Math.Floor((max.X + tolerance) / cellSize);
+                ky1 = (long)System.Math.Floor((min.Y - tolerance) / cellSize);
+                ky2 = (long)System.Math.Floor((max.Y + tolerance) / cellSize);
+                kz1 = (long)System.Math.Floor((min.Z - tolerance) / cellSize);
+                kz2 = (long)System.Math.Floor((max.Z + tolerance) / cellSize);
+            }
+
+            private static bool IsFinite(BoundingBox3D boundingBox3D)
+            {
+                Point3D min = boundingBox3D?.Min;
+                Point3D max = boundingBox3D?.Max;
+
+                if (min == null || max == null)
+                {
+                    return false;
+                }
+
+                return IsFinite(min.X) && IsFinite(min.Y) && IsFinite(min.Z) && IsFinite(max.X) && IsFinite(max.Y) && IsFinite(max.Z);
+            }
+
+            private static bool IsFinite(Point3D point3D)
+            {
+                if (point3D == null)
+                {
+                    return false;
+                }
+
+                return IsFinite(point3D.X) && IsFinite(point3D.Y) && IsFinite(point3D.Z);
+            }
+
+            private static bool IsFinite(double value)
+            {
+                return !double.IsNaN(value) && !double.IsInfinity(value);
+            }
+
+            private static bool IsValid(long kx1, long kx2, long ky1, long ky2, long kz1, long kz2)
+            {
+                return kx2 >= kx1 && ky2 >= ky1 && kz2 >= kz1;
+            }
+
+            private static double CellCount(long kx1, long kx2, long ky1, long ky2, long kz1, long kz2)
+            {
+                // Double arithmetic on purpose: the long product can overflow before the guard sees it.
+                return ((double)kx2 - kx1 + 1.0) * ((double)ky2 - ky1 + 1.0) * ((double)kz2 - kz1 + 1.0);
+            }
         }
     }
 }

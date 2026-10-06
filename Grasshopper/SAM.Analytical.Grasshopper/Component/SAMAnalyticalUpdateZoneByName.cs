@@ -15,12 +15,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("99eb209d-d128-42da-9d34-f7dcd935cb8e");
+        public override Guid ComponentGuid => new ("99eb209d-d128-42da-9d34-f7dcd935cb8e");
 
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -46,7 +46,7 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new GooSpaceParam { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String { Name = "_name", NickName = "_name", Description = "Zone Name", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
@@ -59,7 +59,10 @@ namespace SAM.Analytical.Grasshopper
                 param_String = new global::Grasshopper.Kernel.Parameters.Param_String { Name = "zoneCategoryName_", NickName = "zoneCategoryName_", Description = "Zone Category Name. ZoneType parameter will be ignored when zoneCategory name applied", Access = GH_ParamAccess.item, Optional = true };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Voluntary));
 
-                return result.ToArray();
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new () { Name = "isDwelling_", NickName = "isDwelling_", Description = "Indicates if the zone is a dwelling", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return [.. result];
             }
         }
 
@@ -73,7 +76,7 @@ namespace SAM.Analytical.Grasshopper
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Analytical", NickName = "Analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Zone", NickName = "Zone", Description = "SAM GuidCollection representing Zone", Access = GH_ParamAccess.item }, ParamVisibility.Voluntary));
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -136,6 +139,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("isDwelling_");
+            bool? isDwelling = null;
+            if (index == -1 || !dataAccess.GetData(index, ref isDwelling))
+            {
+                isDwelling = null;
+            }
+
             Zone zone = null;
             if (sAMObject is AnalyticalModel)
             {
@@ -146,11 +156,17 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster = new AdjacencyCluster(adjacencyCluster);
                     if (zoneCategory != null)
                     {
-                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, spaces.ToArray());
+                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, [.. spaces]);
                     }
                     else
                     {
-                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                        zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, [.. spaces]);
+                    }
+
+                    if (zone is not null && isDwelling.HasValue)
+                    {
+                        zone.SetValue(ZoneParameter.IsDwelling, isDwelling.Value);
+                        adjacencyCluster.AddObject(zone);
                     }
 
                     sAMObject = new AnalyticalModel(analyticalModel, adjacencyCluster);
@@ -161,12 +177,19 @@ namespace SAM.Analytical.Grasshopper
                 AdjacencyCluster adjacencyCluster = new AdjacencyCluster((AdjacencyCluster)sAMObject);
                 if (zoneCategory != null)
                 {
-                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, spaces.ToArray());
+                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneCategory, [.. spaces]);
                 }
                 else
                 {
-                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, spaces.ToArray());
+                    zone = Analytical.Modify.UpdateZone(adjacencyCluster, name, zoneType, [.. spaces]);
                 }
+
+                if (zone is not null && isDwelling.HasValue)
+                {
+                    zone.SetValue(ZoneParameter.IsDwelling, isDwelling.Value);
+                    adjacencyCluster.AddObject(zone);
+                }
+
                 sAMObject = adjacencyCluster;
             }
 

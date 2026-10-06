@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryModifyDifference : GH_SAMComponent
+    public class GeometryModifyDifference : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -20,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -40,21 +40,35 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_polygon1", "_polygon1", "Polygon 1", GH_ParamAccess.list);
-            inputParamManager.AddGenericParameter("_polygon2", "_polygon2", "Polygon 2", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddNumberParameter("_tolerance_", "_tolerance", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_polygon1", NickName = "_polygon1", Description = "Polygon 1", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_polygon2", NickName = "_polygon2", Description = "Polygon 2", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item, Optional = true };
+                param_Number.SetPersistentData(Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "Polygon", "Polygon", "Polygon", GH_ParamAccess.list);
-            //outputParamManager.AddParameter( string, "Normal", "Normal", "Normal", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "Polygon", NickName = "Polygon", Description = "Polygon", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -65,16 +79,19 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_tolerance_");
             double tolerance = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(2, ref tolerance))
+            if (index == -1 || !dataAccess.GetData(index, ref tolerance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_polygon1");
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
-
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -91,8 +108,9 @@ namespace SAM.Geometry.Grasshopper
                 }
             }
 
+            index = Params.IndexOfInputParam("_polygon2");
             objectWrapperList = new List<GH_ObjectWrapper>();
-            if (!dataAccess.GetDataList(1, objectWrapperList) || objectWrapperList == null)
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -112,9 +130,11 @@ namespace SAM.Geometry.Grasshopper
             List<Planar.Polygon2D> polygon2Ds_Difference = new List<Planar.Polygon2D>();
             polygon2Ds_Difference = Planar.Query.Difference(polygon2Ds_1, polygon2Ds_2, tolerance);
 
-            dataAccess.SetDataList(0, polygon2Ds_Difference.ConvertAll(x => new GooSAMGeometry(x)));
-
-            //AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "Run No#");
+            index = Params.IndexOfOutputParam("Polygon");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, polygon2Ds_Difference.ConvertAll(x => new GooSAMGeometry(x)));
+            }
         }
     }
 }

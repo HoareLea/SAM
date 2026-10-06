@@ -10,7 +10,7 @@ namespace SAM.Geometry.Spatial
             if (plane == null)
                 return false;
 
-            return System.Math.Abs(System.Math.Abs(plane.Normal.DotProduct(Plane.WorldXY.AxisZ)) - 1) < tolerance;
+            return System.Math.Abs(System.Math.Abs(plane.C) - 1.0) < tolerance;
         }
 
         public static bool Horizontal(this IClosedPlanar3D closedPlanar3D, double tolerance = Core.Tolerance.Distance)

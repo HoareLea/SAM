@@ -38,7 +38,7 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_GenericObject gerenricObject;
 
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM ANalytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
                 gerenricObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_plane", NickName = "_plane", Description = "SAM Geometry Plane", Access = GH_ParamAccess.item };
                 result.Add(new GH_SAMParam(gerenricObject, ParamVisibility.Binding));
@@ -68,7 +68,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreatePanelsByPlane()
           : base("SAMAnalytical.CreatePanelsByPlane", "SAMAnalytical.CreatePanelsByPlane",
-              "Create Panels By Adjacency cluster or ANalyticalModel and Plane",
+              "Create Panels By Adjacency cluster or AnalyticalModel and Plane",
               "SAM", "Analytical01")
         {
         }

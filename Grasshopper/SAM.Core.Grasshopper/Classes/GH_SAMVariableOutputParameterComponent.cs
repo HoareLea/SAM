@@ -1,6 +1,7 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using System.Linq;
 
@@ -16,6 +17,34 @@ namespace SAM.Core.Grasshopper
             : base(name, nickname, description, category, subCategory)
         {
 
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            bool result = base.Read(reader);
+            bool legacyParameterDataRead = this.ReadLegacyParameterData(reader, Inputs, Outputs);
+            return result || legacyParameterDataRead;
+        }
+
+        /// <summary>
+        /// <b>The declared parameter set for one side, in the order it is declared.</b>
+        /// <para>
+        /// <see cref="Inputs"/> and <see cref="Outputs"/> ARE the identity authority for this component's
+        /// parameters - every one of <see cref="CanInsertParameter"/>, <see cref="CreateParameter"/> and
+        /// <see cref="CanRemoveParameter"/> already answers by looking a name up in them. A fresh instance
+        /// registers only the ones marked <see cref="ParamVisibility.Default"/>, so anything a person
+        /// inserted afterwards exists on their component and not on a new one, and only this list can say
+        /// what it was and where it belongs.
+        /// </para>
+        /// <para>
+        /// Exposed so <c>Modify.ExpandVariableParameters</c> can bring a replacement component to the same
+        /// parameter set as the component it replaces before the wires are restored to it. It is a read of
+        /// the declaration and never a mutation.
+        /// </para>
+        /// </summary>
+        internal GH_SAMParam[] TemplateParams(GH_ParameterSide side)
+        {
+            return side == GH_ParameterSide.Input ? Inputs : Outputs;
         }
 
         public bool CanInsertParameter(GH_ParameterSide side, int index)

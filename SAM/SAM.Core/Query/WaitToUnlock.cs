@@ -25,6 +25,7 @@ namespace SAM.Core
                     break;
                 }
                 System.Threading.Thread.Sleep(waitTime);
+                i++;
             }
 
             return result;

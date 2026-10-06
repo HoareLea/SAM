@@ -1,10 +1,21 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
+using System.Collections.Generic;
+
 namespace SAM.Core
 {
     public static partial class Query
     {
+        public static int CountOrDefault<T>(this IEnumerable<T> source, int fallback = 0)
+        {
+            if (source is IReadOnlyCollection<T> readOnlyCol)
+                return readOnlyCol.Count;
+            if (source is ICollection<T> col)
+                return col.Count;
+            return fallback;
+        }
+
         public static int Count(this Range<int> range)
         {
             if (range == null)

@@ -94,12 +94,7 @@ namespace SAM.Geometry.Spatial
                 return false;
 
             List<Segment3D> segment3Ds = Query.NakedSegment3Ds(this, 1, tolerance);
-            if (segment3Ds == null || segment3Ds.Count == 0)
-            {
-                return true;
-            }
-
-            return segment3Ds.TrueForAll(x => x.GetLength() <= tolerance);
+            return segment3Ds == null || segment3Ds.Count == 0;
         }
 
         public bool Inside(Point3D point3D, double silverSpacing = Core.Tolerance.MacroDistance, double tolerance = Core.Tolerance.Distance)

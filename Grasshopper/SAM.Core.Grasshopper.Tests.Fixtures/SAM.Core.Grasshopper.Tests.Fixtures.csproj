@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <UseWindowsForms>true</UseWindowsForms>
+    <!-- Separate assembly on purpose: these classes derive from Grasshopper base types, and
+         NUnit's test discovery enumerates every type in SAM.Core.Grasshopper.Tests.dll before
+         Rhino.Testing gets a chance to host Rhino - so if these lived there, the CLR would need
+         Grasshopper.dll resolvable just to discover tests, which fails. Kept in their own
+         assembly, they're only touched from inside a [Test] body, i.e. after Rhino is hosted. -->
+    <ShouldRemoveRhinoReferences>True</ShouldRemoveRhinoReferences>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Grasshopper" Version="8.21.25188.17001" Private="False" PrivateAssets="all" ExcludeAssets="runtime" />
+    <PackageReference Include="RhinoCommon" Version="8.21.25188.17001" Private="False" PrivateAssets="all" ExcludeAssets="runtime" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SAM.Core.Grasshopper\SAM.Core.Grasshopper.csproj" />
+  </ItemGroup>
+
+</Project>

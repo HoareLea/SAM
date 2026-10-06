@@ -189,17 +189,14 @@ namespace SAM.Weather
             if (jsonObject == null)
                 return false;
 
-            if (jsonObject.ContainsKey("Depth"))
-                depth = jsonObject["Depth"]?.GetValue<double>() ?? double.NaN;
-
-            if (jsonObject.ContainsKey("Conductivity"))
-                conductivity = jsonObject["Conductivity"]?.GetValue<double>() ?? double.NaN;
-
-            if (jsonObject.ContainsKey("Density"))
-                density = jsonObject["Density"]?.GetValue<double>() ?? double.NaN;
-
-            if (jsonObject.ContainsKey("SpecificHeat"))
-                specificHeat = jsonObject["SpecificHeat"]?.GetValue<double>() ?? double.NaN;
+            //Absent reads back as NaN - not stated - because NaN is exactly what ToJsonObject omits. Left at
+            //the field default instead, every save and reopen turned an unstated soil property into a stated 0:
+            //TAS weather states none of them, so a model simulated on it came back from its own .sam as a
+            //different model, and its simulation-result provenance refused it.
+            depth = jsonObject["Depth"]?.GetValue<double>() ?? double.NaN;
+            conductivity = jsonObject["Conductivity"]?.GetValue<double>() ?? double.NaN;
+            density = jsonObject["Density"]?.GetValue<double>() ?? double.NaN;
+            specificHeat = jsonObject["SpecificHeat"]?.GetValue<double>() ?? double.NaN;
 
             if (jsonObject["Temperatures"] is JsonArray temperaturesArray)
             {

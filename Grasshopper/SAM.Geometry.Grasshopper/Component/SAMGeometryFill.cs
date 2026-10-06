@@ -12,7 +12,7 @@ using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryFill : GH_SAMComponent
+    public class SAMGeometryFill : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +22,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,19 +42,29 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_face3D", "_face3D", "SAM Geometry Face3D bo be filled", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_face3Ds", "_face3Ds", "Filling SAM Geometry Face3Ds", GH_ParamAccess.list);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_face3D", NickName = "_face3D", Description = "SAM Geometry Face3D bo be filled", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_face3Ds", NickName = "_face3Ds", Description = "Filling SAM Geometry Face3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "face3Ds", "face3Ds", "SAM Geometry Face3Ds", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Successful", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "face3Ds", NickName = "face3Ds", Description = "SAM Geometry Face3Ds", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Successful", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -65,11 +75,18 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_face3D");
             GH_ObjectWrapper objectWrapper = null;
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
@@ -84,16 +101,25 @@ namespace SAM.Geometry.Grasshopper
             if (face3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
             List<GH_ObjectWrapper> objectWrappers = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(1, objectWrappers) || objectWrappers == null)
+            index = Params.IndexOfInputParam("_face3Ds");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrappers) || objectWrappers == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
@@ -111,14 +137,27 @@ namespace SAM.Geometry.Grasshopper
             if (face3Ds != null && face3Ds.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
             List<Face3D> result = face3D.Fill(face3Ds, 0.1, Core.Tolerance.MacroDistance, Core.Tolerance.Distance);
 
-            dataAccess.SetDataList(0, result.ConvertAll(x => new GooSAMGeometry(x)));
-            dataAccess.SetData(1, true);
+            index = Params.IndexOfOutputParam("face3Ds");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, result.ConvertAll(x => new GooSAMGeometry(x)));
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, true);
+            }
         }
     }
 }

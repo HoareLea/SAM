@@ -300,9 +300,78 @@ namespace SAM.Geometry.Spatial
         public static BoundingBox3D Transform(this BoundingBox3D boundingBox3D, Matrix4D matrix4D)
         {
             if (boundingBox3D == null || matrix4D == null)
+            {
                 return null;
+            }
 
-            return new BoundingBox3D(boundingBox3D.Min.Transform(matrix4D), boundingBox3D.Max.Transform(matrix4D));
+            double minX = boundingBox3D.MinX;
+            double minY = boundingBox3D.MinY;
+            double minZ = boundingBox3D.MinZ;
+            double maxX = boundingBox3D.MaxX;
+            double maxY = boundingBox3D.MaxY;
+            double maxZ = boundingBox3D.MaxZ;
+
+            if (double.IsNaN(minX) || double.IsNaN(maxX) || double.IsNaN(minY) || double.IsNaN(maxY) || double.IsNaN(minZ) || double.IsNaN(maxZ))
+            {
+                return null;
+            }
+
+            double newMinX = matrix4D[0, 3];
+            double newMaxX = matrix4D[0, 3];
+            double newMinY = matrix4D[1, 3];
+            double newMaxY = matrix4D[1, 3];
+            double newMinZ = matrix4D[2, 3];
+            double newMaxZ = matrix4D[2, 3];
+
+            // X row
+            double a0 = matrix4D[0, 0] * minX;
+            double b0 = matrix4D[0, 0] * maxX;
+            newMinX += System.Math.Min(a0, b0);
+            newMaxX += System.Math.Max(a0, b0);
+
+            double a1 = matrix4D[0, 1] * minY;
+            double b1 = matrix4D[0, 1] * maxY;
+            newMinX += System.Math.Min(a1, b1);
+            newMaxX += System.Math.Max(a1, b1);
+
+            double a2 = matrix4D[0, 2] * minZ;
+            double b2 = matrix4D[0, 2] * maxZ;
+            newMinX += System.Math.Min(a2, b2);
+            newMaxX += System.Math.Max(a2, b2);
+
+            // Y row
+            a0 = matrix4D[1, 0] * minX;
+            b0 = matrix4D[1, 0] * maxX;
+            newMinY += System.Math.Min(a0, b0);
+            newMaxY += System.Math.Max(a0, b0);
+
+            a1 = matrix4D[1, 1] * minY;
+            b1 = matrix4D[1, 1] * maxY;
+            newMinY += System.Math.Min(a1, b1);
+            newMaxY += System.Math.Max(a1, b1);
+
+            a2 = matrix4D[1, 2] * minZ;
+            b2 = matrix4D[1, 2] * maxZ;
+            newMinY += System.Math.Min(a2, b2);
+            newMaxY += System.Math.Max(a2, b2);
+
+            // Z row
+            a0 = matrix4D[2, 0] * minX;
+            b0 = matrix4D[2, 0] * maxX;
+            newMinZ += System.Math.Min(a0, b0);
+            newMaxZ += System.Math.Max(a0, b0);
+
+            a1 = matrix4D[2, 1] * minY;
+            b1 = matrix4D[2, 1] * maxY;
+            newMinZ += System.Math.Min(a1, b1);
+            newMaxZ += System.Math.Max(a1, b1);
+
+            a2 = matrix4D[2, 2] * minZ;
+            b2 = matrix4D[2, 2] * maxZ;
+            newMinZ += System.Math.Min(a2, b2);
+            newMaxZ += System.Math.Max(a2, b2);
+
+            return new BoundingBox3D(new Point3D(newMinX, newMinY, newMinZ), new Point3D(newMaxX, newMaxY, newMaxZ));
         }
 
         public static Point3D Transform(this Point3D point3D, Matrix4D matrix4D)

@@ -25,9 +25,24 @@ namespace SAM.Weather
 
             List<string> values = new List<string>();
             foreach (int year in years)
-                values.Add(DataString(year, weatherData[year]));
+                values.Add(DataString(year, weatherData[year], weatherData.Elevtion));
 
             return string.Join("\n", values);
+        }
+
+        /// <summary>
+        /// Standard-atmosphere pressure [Pa] at the given elevation (ISA troposphere lapse,
+        /// valid 0–11000 m); NaN elevation falls back to sea level (101325 Pa).
+        /// </summary>
+        private static double StandardAtmosphericPressure(double elevation)
+        {
+            if (double.IsNaN(elevation) || elevation <= 0)
+                return 101325.0;
+
+            if (elevation > 11000)
+                elevation = 11000;
+
+            return 101325.0 * Math.Pow(1.0 - 2.25577e-5 * elevation, 5.25588);
         }
 
         /// <summary>
@@ -36,7 +51,7 @@ namespace SAM.Weather
         /// <param name="year">The year to generate data for.</param>
         /// <param name="weatherYear">The WeatherYear object to generate data from.</param>
         /// <returns>A string of data for the given year and WeatherYear object.</returns>
-        public static string DataString(int year, WeatherYear weatherYear)
+        public static string DataString(int year, WeatherYear weatherYear, double elevation = double.NaN)
         {
             if (weatherYear == null)
                 return null;
@@ -51,7 +66,7 @@ namespace SAM.Weather
                 DateTime dateTime = new DateTime(year, 1, 1);
                 dateTime = dateTime.AddDays(i);
 
-                values[i] = DataString(year, dateTime.Month, dateTime.Day, weatherDay);
+                values[i] = DataString(year, dateTime.Month, dateTime.Day, weatherDay, elevation);
             }
 
             return string.Join("\n", values);
@@ -65,7 +80,7 @@ namespace SAM.Weather
         /// <param name="day">The day of the data.</param>
         /// <param name="weatherDay">The weatherDay of the data.</param>
         /// <returns>A string of data for the given day and weatherDay.</returns>
-        public static string DataString(int year, int month, int day, WeatherDay weatherDay)
+        public static string DataString(int year, int month, int day, WeatherDay weatherDay, double elevation = double.NaN)
         {
             if (weatherDay == null)
                 return null;
@@ -73,7 +88,7 @@ namespace SAM.Weather
             List<string> values = new List<string>();
             for (int i = 0; i < 24; i++)
             {
-                string value = DataString(year, month, day, i, weatherDay);
+                string value = DataString(year, month, day, i, weatherDay, elevation);
                 values.Add(value == null ? string.Empty : value);
             }
 
@@ -88,8 +103,9 @@ namespace SAM.Weather
         /// <param name="day">The day.</param>
         /// <param name="hour">The hour.</param>
         /// <param name="weatherDay">The WeatherDay object.</param>
+        /// <param name="elevation">Site elevation [m] used for the standard-atmosphere pressure fallback; NaN falls back to sea level.</param>
         /// <returns>A data string.</returns>
-        public static string DataString(int year, int month, int day, int hour, WeatherDay weatherDay)
+        public static string DataString(int year, int month, int day, int hour, WeatherDay weatherDay, double elevation = double.NaN)
         {
             if (weatherDay == null)
                 return null;
@@ -131,7 +147,11 @@ namespace SAM.Weather
             values.Add(double.IsNaN(dryBulbTemperature) ? 0.ToString() : dryBulbTemperature.ToString()); //Dry Bulb Temperature
             values.Add(double.IsNaN(wetBulbTemperature) ? 0.ToString() : wetBulbTemperature.ToString()); //Wet Bulb Temperature
             values.Add(double.IsNaN(relativeHumidity) ? 0.ToString() : relativeHumidity.ToString()); //Relative Humidity
-            values.Add(double.IsNaN(atmosphericPressure) ? 0.ToString() : atmosphericPressure.ToString()); //Atmospheric Pressure
+            // EnergyPlus rejects station pressure outside [31000, 120000] Pa with a severe
+            // ReadEPlusWeatherForDay error — a missing value must never be written as 0.
+            // Fall back to the standard-atmosphere pressure at the site elevation (invariant
+            // culture: a decimal-comma locale would corrupt the comma-separated row).
+            values.Add(double.IsNaN(atmosphericPressure) ? StandardAtmosphericPressure(elevation).ToString(System.Globalization.CultureInfo.InvariantCulture) : atmosphericPressure.ToString()); //Atmospheric Pressure
             values.Add(string.Join(",", Enumerable.Repeat(0.ToString(), 4))); // Solar
             values.Add(double.IsNaN(directSolarRadiation) ? 0.ToString() : directSolarRadiation.ToString()); //Direct Solar Radiation
             values.Add(double.IsNaN(diffuseSolarRadiation) ? 0.ToString() : diffuseSolarRadiation.ToString()); //Diffuse Solar Radiation

@@ -6,10 +6,11 @@ using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalSetConstructionLayersByPanelType : GH_SAMComponent
+    public class SAMAnalyticalSetConstructionLayersByPanelType : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,31 +40,40 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooConstructionLibraryParam(), "_constructionLibrary_", "_constructionLibrary_", "SAM Analytical Contruction Library", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooConstructionLibraryParam() { Name = "_constructionLibrary_", NickName = "_constructionLibrary_", Description = "SAM Analytical Contruction Library", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooApertureConstructionLibraryParam(), "_apertureConstructionLibrary_", "_apertureConstructionLibrary_", "SAM Analytical Aperture Contruction Library", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooApertureConstructionLibraryParam() { Name = "_apertureConstructionLibrary_", NickName = "_apertureConstructionLibrary_", Description = "SAM Analytical Aperture Contruction Library", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooMaterialLibraryParam(), "_materialLibrary_", "_materialLibrary_", "SAM Material Library", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                result.Add(new GH_SAMParam(new GooMaterialLibraryParam() { Name = "_materialLibrary_", NickName = "_materialLibrary_", Description = "SAM Material Library", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddBooleanParameter("_emptyOnly_", "_emptyOnly_", "Only Null or Constructions without ConctructionLayers", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_emptyOnly_", NickName = "_emptyOnly_", Description = "Only Null or Constructions without ConctructionLayers", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalModelParam(), "AnalyticalModel", "AnalyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -74,37 +84,60 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analyticalModel");
             AnalyticalModel analyticalModel = null;
-            if (!dataAccess.GetData(0, ref analyticalModel))
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalModel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_constructionLibrary_");
             ConstructionLibrary constructionLibrary = null;
-            dataAccess.GetData(1, ref constructionLibrary);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref constructionLibrary);
+            }
 
             if (constructionLibrary == null)
                 constructionLibrary = ActiveSetting.Setting.GetValue<ConstructionLibrary>(AnalyticalSettingParameter.DefaultConstructionLibrary);
 
+            index = Params.IndexOfInputParam("_apertureConstructionLibrary_");
             ApertureConstructionLibrary apertureConstructionLibrary = null;
-            dataAccess.GetData(2, ref apertureConstructionLibrary);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref apertureConstructionLibrary);
+            }
 
             if (apertureConstructionLibrary == null)
                 apertureConstructionLibrary = ActiveSetting.Setting.GetValue<ApertureConstructionLibrary>(AnalyticalSettingParameter.DefaultApertureConstructionLibrary);
 
+            index = Params.IndexOfInputParam("_materialLibrary_");
             MaterialLibrary materialLibrary = null;
-            dataAccess.GetData(3, ref apertureConstructionLibrary);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref materialLibrary);
+            }
 
             if (materialLibrary == null)
                 materialLibrary = ActiveSetting.Setting.GetValue<MaterialLibrary>(AnalyticalSettingParameter.DefaultMaterialLibrary);
 
+            index = Params.IndexOfInputParam("_emptyOnly_");
             bool emptyOnly = true;
-            dataAccess.GetData(4, ref emptyOnly);
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref emptyOnly);
+            }
 
             AnalyticalModel analyticalModel_Result = analyticalModel?.UpdateConstructionLayersByPanelType(constructionLibrary, apertureConstructionLibrary, materialLibrary, emptyOnly);
 
-            dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel_Result));
+            index = Params.IndexOfOutputParam("AnalyticalModel");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel_Result));
+            }
         }
     }
 }

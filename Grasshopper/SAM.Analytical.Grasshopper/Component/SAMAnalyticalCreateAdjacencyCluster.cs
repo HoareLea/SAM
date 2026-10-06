@@ -4,6 +4,7 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using SAM.Analytical.Grasshopper.Properties;
+using SAM.Core;
 using SAM.Core.Grasshopper;
 using SAM.Geometry;
 using SAM.Geometry.Grasshopper;
@@ -16,7 +17,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateAdjacencyCluster : GH_SAMComponent
+    public class SAMAnalyticalCreateAdjacencyCluster : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -26,7 +27,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -47,24 +48,39 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddGenericParameter("_geometry", "_geometry", "SAM or Rhino Geometry, Use only Top Floors or Roof shape ONLY", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
+                global::Grasshopper.Kernel.Parameters.Param_GenericObject param_GenericObject = new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_geometry", NickName = "_geometry", Description = "SAM or Rhino Geometry, Use only Top Floors or Roof shape ONLY", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten };
+                result.Add(new GH_SAMParam(param_GenericObject, ParamVisibility.Binding));
 
-            inputParamManager.AddNumberParameter("elevation_Ground_", "elevation_Ground_", "Ground Elevation, Number", GH_ParamAccess.item, 0);
-            inputParamManager.AddNumberParameter("tolerance_", "tolerance_", "Tolerance", GH_ParamAccess.item, Core.Tolerance.Distance);
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "elevation_Ground_", NickName = "elevation_Ground_", Description = "Ground Elevation, Number", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(0);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
 
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "tolerance_", NickName = "tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
+                param_Number.SetPersistentData(Core.Tolerance.Distance);
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAdjacencyClusterParam(), "AdjacencyCluster", "AdjacencyCluster", "SAM Analytical AdjacencyCluster", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAdjacencyClusterParam() { Name = "AdjacencyCluster", NickName = "AdjacencyCluster", Description = "SAM Analytical AdjacencyCluster", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,9 +91,12 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             List<GH_ObjectWrapper> objectWrapperList = new List<GH_ObjectWrapper>();
 
-            if (!dataAccess.GetDataList(0, objectWrapperList) || objectWrapperList == null)
+            index = Params.IndexOfInputParam("_geometry");
+            if (index == -1 || !dataAccess.GetDataList(index, objectWrapperList) || objectWrapperList == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -114,10 +133,14 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double tolerance = Core.Tolerance.Distance;
-            if (!dataAccess.GetData(2, ref tolerance))
+            index = Params.IndexOfInputParam("tolerance_");
+            if (index != -1)
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                return;
+                if (!dataAccess.GetData(index, ref tolerance))
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                    return;
+                }
             }
 
             List<Face3D> face3Ds = new List<Face3D>();
@@ -231,7 +254,8 @@ namespace SAM.Analytical.Grasshopper
             }
 
             double elevation_Ground = double.NaN;
-            if (!dataAccess.GetData(1, ref elevation_Ground))
+            index = Params.IndexOfInputParam("elevation_Ground_");
+            if (index == -1 || !dataAccess.GetData(index, ref elevation_Ground))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -239,7 +263,11 @@ namespace SAM.Analytical.Grasshopper
 
             AdjacencyCluster adjacencyCluster = Create.AdjacencyCluster(face3Ds, elevation_Ground, tolerance);
 
-            dataAccess.SetData(0, new GooAdjacencyCluster(adjacencyCluster));
+            index = Params.IndexOfOutputParam("AdjacencyCluster");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAdjacencyCluster(adjacencyCluster));
+            }
         }
     }
 }

@@ -2,6 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using NetTopologySuite.Geometries;
+using NetTopologySuite.Index.Strtree;
 using SAM.Geometry.Planar;
 using SAM.Geometry.Spatial;
 using System;
@@ -89,7 +90,7 @@ namespace SAM.Analytical
                 partitions_Offset.Add(partition);
 
                 List<Tuple<Polygon, IPartition>> tuples_Polygon = new List<Tuple<Polygon, IPartition>>();
-                List<Point2D> point2Ds = new List<Point2D>(); //Snap Points
+                List<Point2D> point2Ds_All = new List<Point2D>(); //Snap Points, before de-duplication
                 foreach (IPartition partition_Temp in partitions_Offset)
                 {
                     Face3D face3D = partition_Temp.Face3D;
@@ -99,7 +100,7 @@ namespace SAM.Analytical
                         if (segmentable3D == null)
                             continue;
 
-                        segmentable3D.GetPoints()?.ForEach(x => Geometry.Planar.Modify.Add(point2Ds, plane.Convert(x), tolerance));
+                        segmentable3D.GetPoints()?.ForEach(x => point2Ds_All.Add(plane.Convert(x)));
                     }
 
                     Face2D face2D = plane.Convert(plane.Project(face3D));
@@ -108,8 +109,15 @@ namespace SAM.Analytical
                     tuples_Polygon.Add(new Tuple<Polygon, IPartition>(face2D.ToNTS(tolerance), partition_Temp));
                 }
 
+                // Same snap points as the repeated Geometry.Planar.Modify.Add calls produced -
+                // same acceptance rule, same order - resolved through the shared grid.
+                Point2DGrid grid_Snap = Point2DGrid.Create(point2Ds_All, tolerance);
+                List<Point2D> point2Ds = grid_Snap.Points;
+
                 List<Polygon> polygons_Temp = tuples_Polygon.ConvertAll(x => x.Item1);
                 Geometry.Planar.Modify.RemoveAlmostSimilar_NTS(polygons_Temp, tolerance);
+
+                STRtree<int> index = Index(tuples_Polygon);
 
                 polygons_Temp = Geometry.Planar.Query.Union(polygons_Temp);
                 foreach (Polygon polygon in polygons_Temp)
@@ -117,7 +125,7 @@ namespace SAM.Analytical
                     if (polygon.Area < minArea)
                         continue;
 
-                    List<Tuple<Polygon, IPartition>> tuples_Partition = tuples_Polygon.FindAll(x => polygon.Contains(x.Item1.InteriorPoint));
+                    List<Tuple<Polygon, IPartition>> tuples_Partition = FindAll(index, tuples_Polygon, polygon.EnvelopeInternal, x => polygon.Contains(x.Item1.InteriorPoint));
                     if (tuples_Partition == null || tuples_Partition.Count == 0)
                         continue;
 
@@ -139,6 +147,10 @@ namespace SAM.Analytical
                     Polygon polygon_Temp = Geometry.Planar.Query.SimplifyBySnapper(polygon, tolerance);
                     polygon_Temp = Geometry.Planar.Query.SimplifyByTopologyPreservingSimplifier(polygon_Temp, tolerance);
 
+                    // Snap deliberately receives the full snap set, not a bbox-filtered subset:
+                    // the point Snap walks greedily from each latest position, so a snap point
+                    // beyond face-bbox + tolerance can still be reached through an intermediate
+                    // point, and filtering would change the result.
                     Face2D face2D = polygon_Temp.ToSAM(minArea, Core.Tolerance.MicroDistance)?.Snap(point2Ds, tolerance);
                     if (face2D == null)
                         continue;

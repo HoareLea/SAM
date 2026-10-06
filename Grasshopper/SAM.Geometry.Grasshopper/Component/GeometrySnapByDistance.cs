@@ -7,11 +7,12 @@ using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using SAM.Geometry.Spatial;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometrySnapByDistance : GH_SAMComponent
+    public class GeometrySnapByDistance : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +22,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,21 +42,37 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddGenericParameter("_Face3D_1", "F_1", "SAM Geometry Face3D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_Face3D_2", "F_2", "SAM Geometry Face3D", GH_ParamAccess.item);
-            inputParamManager.AddGenericParameter("_snapDistance", "SnDist", "Snapping Distance", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_run", "_run", "Run", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_Face3D_1", NickName = "F_1", Description = "SAM Geometry Face3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_Face3D_2", NickName = "F_2", Description = "SAM Geometry Face3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_snapDistance", NickName = "SnDist", Description = "Snapping Distance", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_run", NickName = "_run", Description = "Run", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddGenericParameter("Geometry", "Geo", "modified SAM Geometry", GH_ParamAccess.list);
-            outputParamManager.AddBooleanParameter("Successful", "Successful", "Correctly imported?", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "Geometry", NickName = "Geo", Description = "modified SAM Geometry", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "Successful", NickName = "Successful", Description = "Correctly imported?", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -66,30 +83,46 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_run");
             bool run = false;
-            if (!dataAccess.GetData(3, ref run))
+            if (index == -1 || !dataAccess.GetData(index, ref run))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
             if (!run)
                 return;
 
+            index = Params.IndexOfInputParam("_snapDistance");
             double snapDistance = double.NaN;
-            if (!dataAccess.GetData(2, ref snapDistance))
+            if (index == -1 || !dataAccess.GetData(index, ref snapDistance))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
+            index = Params.IndexOfInputParam("_Face3D_1");
             GH_ObjectWrapper objectWrapper = null;
-
-            if (!dataAccess.GetData(0, ref objectWrapper) || objectWrapper == null)
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(0, false);
+                index = Params.IndexOfOutputParam("Geometry");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
@@ -102,14 +135,23 @@ namespace SAM.Geometry.Grasshopper
             if (face3D_1 == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
-            if (!dataAccess.GetData(1, ref objectWrapper) || objectWrapper == null)
+            index = Params.IndexOfInputParam("_Face3D_2");
+            if (index == -1 || !dataAccess.GetData(index, ref objectWrapper) || objectWrapper == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
@@ -122,15 +164,28 @@ namespace SAM.Geometry.Grasshopper
             if (face3D_2 == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
-                dataAccess.SetData(1, false);
+                index = Params.IndexOfOutputParam("Successful");
+                if (index != -1)
+                {
+                    dataAccess.SetData(index, false);
+                }
                 return;
             }
 
             face3D_1 = Spatial.Query.Snap(face3D_1, face3D_2, snapDistance);
             face3D_2 = Spatial.Query.Snap(face3D_2, face3D_1, snapDistance);
 
-            dataAccess.SetDataList(0, new Face3D[] { face3D_1, face3D_2 });
-            dataAccess.SetData(1, true);
+            index = Params.IndexOfOutputParam("Geometry");
+            if (index != -1)
+            {
+                dataAccess.SetDataList(index, new Face3D[] { face3D_1, face3D_2 });
+            }
+
+            index = Params.IndexOfOutputParam("Successful");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, true);
+            }
         }
     }
 }

@@ -33,7 +33,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalCreateFeatureShade()
           : base("SAMAnalytical.CreateFeatureShade", "SAMAnalytical.CreateFeatureShade",
-              "Create create FeatureShade",
+              "Create FeatureShade",
               "SAM", "Analytical")
         {
         }

@@ -699,6 +699,412 @@
         ],
         "Name": "Single Bedroom",
         "Guid": "ce77cf8a-f280-4d1a-9559-c38e1810badf"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "HTG_1to24_16"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "TM59 Default Lighting Schedule"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 2.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Equipment Sensible Gain",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Bathroom",
+        "Guid": "58d254b0-4022-4439-ba22-0150712bd651"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "HTG_1to24_16"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "TM59 Default Lighting Schedule"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 2.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Equipment Sensible Gain",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Internal Corridor",
+        "Guid": "7359934f-4328-4774-8ed8-598920af712d"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "No Heating"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "Constant"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 2.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "Constant"
+              },
+              {
+                "Name": "Equipment Sensible Gain Per Area",
+                "Value": 15.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Communal Corridor (including pipework gains)",
+        "Guid": "90127ab1-c8af-46e9-ba54-dcf5c2c01f74"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "No Heating"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "Constant"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 2.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Equipment Sensible Gain",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Stairs",
+        "Guid": "c824d945-457d-4efb-935b-4e1e79b0cf4a"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "No Heating"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 0.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Equipment Sensible Gain",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Cupboard/riser/lift/void",
+        "Guid": "452cfa7f-1fd6-47a4-b3ff-737d87c4f222"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "No Heating"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 0.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "Constant"
+              },
+              {
+                "Name": "Equipment Sensible Gain",
+                "Value": 78.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Cupboard with HIU",
+        "Guid": "977f4f64-76eb-41d5-a98c-6db4119165df"
+      },
+      {
+        "_type": "SAM.Analytical.InternalCondition,SAM.Analytical",
+        "ParameterSets": [
+          {
+            "_type": "SAM.Core.ParameterSet",
+            "Name": "SAM.Analytical",
+            "Guid": "fbbd5ce9-757a-428f-bdde-a709200fe79a",
+            "Parameters": [
+              {
+                "Name": "Heating Profile Name",
+                "Value": "No Heating"
+              },
+              {
+                "Name": "Cooling Profile Name",
+                "Value": "No Cooling"
+              },
+              {
+                "Name": "Lighting Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Lighting Gain Per Area",
+                "Value": 0.0
+              },
+              {
+                "Name": "Equipment Sensible Profile Name",
+                "Value": "Constant"
+              },
+              {
+                "Name": "Equipment Sensible Gain Per Area",
+                "Value": 15.0
+              },
+              {
+                "Name": "Occupancy Profile Name",
+                "Value": "OFF"
+              },
+              {
+                "Name": "Occupancy Sensible Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Occupancy Latent Gain Per Person",
+                "Value": 0.0
+              },
+              {
+                "Name": "Infiltration Profile Name",
+                "Value": "Infiltration"
+              },
+              {
+                "Name": "Infiltration Air Changes Per Hour",
+                "Value": 0.15
+              }
+            ]
+          }
+        ],
+        "Name": "TM59_Riser Communal pipework",
+        "Guid": "0b5bbc51-875d-426b-83ba-b40f7721422c"
       }
     ]
   }

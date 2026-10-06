@@ -63,5 +63,56 @@ namespace SAM.Analytical
             return System.Convert.ToInt32(System.Math.Truncate(GetSummerOccupiedHours() * 0.03));
         }
 
+        public HashSet<int> GetSummerOccupiedHourIndicesExceedingComfortRange()
+        {
+            HashSet<int> occupiedHourIndicesExceedingComfortRange = GetOccupiedHourIndicesExceedingComfortRange();
+            HashSet<int> summerOccupiedHourIndices = GetSummerOccupiedHourIndices();
+            if (occupiedHourIndicesExceedingComfortRange == null || summerOccupiedHourIndices == null)
+            {
+                return null;
+            }
+
+            occupiedHourIndicesExceedingComfortRange.IntersectWith(summerOccupiedHourIndices);
+            return occupiedHourIndicesExceedingComfortRange;
+        }
+
+        public int GetSummerOccupiedHoursExceedingComfortRange()
+        {
+            HashSet<int> summerOccupiedHourIndicesExceedingComfortRange = GetSummerOccupiedHourIndicesExceedingComfortRange();
+            if (summerOccupiedHourIndicesExceedingComfortRange == null)
+            {
+                return -1;
+            }
+
+            return summerOccupiedHourIndicesExceedingComfortRange.Count;
+        }
+
+        /// <summary>
+        /// TM59:2017 Criterion 1 is a May-September test for naturally-ventilated spaces - both the exceedance
+        /// count and the 3% limit it is measured against are counted over summer occupied hours only, not the
+        /// whole year <see cref="TMExtendedResult.Criterion1"/> uses. Mirrors that base implementation exactly,
+        /// on the summer-restricted figures <see cref="TM59AssessmentReport"/> already displays instead.
+        /// </summary>
+        public override bool Criterion1
+        {
+            get
+            {
+                int maxExceedableHours = GetSummerMaxExceedableHours();
+
+                int hoursExceedingComfortRange = GetSummerOccupiedHoursExceedingComfortRange();
+                if (hoursExceedingComfortRange == -1)
+                {
+                    return false;
+                }
+
+                if (hoursExceedingComfortRange == 0)
+                {
+                    return true;
+                }
+
+                return hoursExceedingComfortRange < maxExceedableHours;
+            }
+        }
+
     }
 }

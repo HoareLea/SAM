@@ -1,0 +1,43 @@
+name: Test
+
+on:
+  pull_request:
+  push:
+    branches: [ "master", "main", "sow/**" ]
+  workflow_dispatch:
+
+jobs:
+  test:
+    # Runs only on SAM-BIM repos (won't break forks/upstream if merged elsewhere).
+    if: github.repository_owner == 'SAM-BIM'
+    # Windows runner: the dependency chain pulls System.Drawing.Common (>= 6.0 is
+    # Windows-only at runtime on .NET), matching the existing Build (Windows) workflow.
+    runs-on: windows-2022
+
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [ "Release" ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: false
+
+      - name: Setup .NET 8
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.x"
+
+      # Restoring/building the test project pulls in its ProjectReferences
+      # (SAM.Core, SAM.Analytical, SAM.Architectural and, transitively, the rest of
+      # the geometry stack), so this both builds the libraries and runs the tests.
+      - name: Restore
+        run: dotnet restore SAM/SAM.Tests/SAM.Tests.csproj
+
+      - name: Build
+        run: dotnet build SAM/SAM.Tests/SAM.Tests.csproj --configuration ${{ matrix.configuration }} --no-restore
+
+      - name: Test
+        run: dotnet test SAM/SAM.Tests/SAM.Tests.csproj --configuration ${{ matrix.configuration }} --no-build --verbosity normal

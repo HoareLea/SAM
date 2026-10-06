@@ -55,6 +55,33 @@ namespace SAM.Analytical
             }
         }
 
+        /// <summary>
+        /// The number of hours in the full annual series this result was evaluated over - read from the
+        /// actual operative-temperature series every TM59 extended result carries (all three collect
+        /// candidate hours across the whole year, occupancy included or not), not assumed to be 8760.
+        /// <c>-1</c> where no series was ever set; <c>0</c> where it was set but is empty.
+        /// </summary>
+        public int GetAnnualHours()
+        {
+            IndexedDoubles operativeTemperatures = OperativeTemperatures;
+            if (operativeTemperatures == null)
+            {
+                return -1;
+            }
+
+            if (operativeTemperatures.Count <= 0)
+            {
+                return 0;
+            }
+
+            if (operativeTemperatures.GetMaxIndex() is not int maxIndex || operativeTemperatures.GetMinIndex() is not int minIndex)
+            {
+                return 0;
+            }
+
+            return maxIndex - minIndex + 1;
+        }
+
         public HashSet<int> GetOccupiedHourIndicesExceedingComfortRange()
         {
             IndexedDoubles occupiedTemperatureDifferences = GetOccupiedTemperatureDifferences();

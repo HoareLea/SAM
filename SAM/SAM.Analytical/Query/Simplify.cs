@@ -2,6 +2,7 @@
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SAM.Analytical
 {
@@ -45,7 +46,8 @@ namespace SAM.Analytical
                     tM59CorridorExtendedResult.OccupiedHours,
                     tM59CorridorExtendedResult.MaxExceedableHours,
                     tM59CorridorExtendedResult.GetHoursNumberExceeding28(),
-                    tM59CorridorExtendedResult.Pass);
+                    tM59CorridorExtendedResult.Pass,
+                    tM59CorridorExtendedResult.GetAnnualHours());
             }
 
             if (tMExtendedResult is TM59NaturalVentilationBedroomExtendedResult)
@@ -59,7 +61,7 @@ namespace SAM.Analytical
                     tM59NaturalVentilationBedroomExtendedResult.TM52BuildingCategory,
                     tM59NaturalVentilationBedroomExtendedResult.OccupiedHours,
                     tM59NaturalVentilationBedroomExtendedResult.MaxExceedableHours,
-                    tM59NaturalVentilationBedroomExtendedResult.GetOccupiedHoursExceedingComfortRange(),
+                    tM59NaturalVentilationBedroomExtendedResult.GetSummerOccupiedHoursExceedingComfortRange(),
                     tM59NaturalVentilationBedroomExtendedResult.GetAnnualNightOccupiedHours(),
                     tM59NaturalVentilationBedroomExtendedResult.GetSummerOccupiedHours(),
                     tM59NaturalVentilationBedroomExtendedResult.GetSummerMaxExceedableHours(),
@@ -72,23 +74,42 @@ namespace SAM.Analytical
             {
                 TM59NaturalVentilationExtendedResult tM59NaturalVentilationExtendedResult = (TM59NaturalVentilationExtendedResult)tMExtendedResult;
 
+                //Constructor order is (occupiedHours, maxExceedableHours, summerOccupiedHours,
+                //maxExceedableSummerHours, hoursExceedingComfortRange, pass) - the three middle values were
+                //previously passed rotated by one position, so a simplified (non-extended) plain natural-
+                //ventilation result reported SummerOccupiedHours/MaxExceedableSummerHours that were not what
+                //their names said (Pass/Fail was unaffected, since it is read from Pass directly). Found while
+                //building the TM59 verification report, which reads these two fields for its Criterion 1 rows.
+                //
+                //The TM59 space applications are carried through: the extended result was classified from the
+                //internal condition, and dropping that here is what left the report's TM59 Application column
+                //"-" on every simplified row.
+                //
+                //hoursExceedingComfortRange is the SUMMER-restricted count (GetSummerOccupiedHoursExceedingComfortRange),
+                //matching SummerOccupiedHours/MaxExceedableSummerHours beside it and the Criterion1 verdict
+                //(Pass) baked in below - not the base type's annual GetOccupiedHoursExceedingComfortRange,
+                //which would leave this field disagreeing with the other three once flattened.
                 return new TM59NaturalVentilationResult(
                     tM59NaturalVentilationExtendedResult.Name,
                     tM59NaturalVentilationExtendedResult.Source,
                     tM59NaturalVentilationExtendedResult.Reference,
                     tM59NaturalVentilationExtendedResult.TM52BuildingCategory,
                     tM59NaturalVentilationExtendedResult.OccupiedHours,
+                    tM59NaturalVentilationExtendedResult.MaxExceedableHours,
                     tM59NaturalVentilationExtendedResult.GetSummerOccupiedHours(),
                     tM59NaturalVentilationExtendedResult.GetSummerMaxExceedableHours(),
-                    tM59NaturalVentilationExtendedResult.MaxExceedableHours,
-                    tM59NaturalVentilationExtendedResult.GetOccupiedHoursExceedingComfortRange(),
-                    tM59NaturalVentilationExtendedResult.Pass);
+                    tM59NaturalVentilationExtendedResult.GetSummerOccupiedHoursExceedingComfortRange(),
+                    tM59NaturalVentilationExtendedResult.Pass,
+                    tM59NaturalVentilationExtendedResult.TM59SpaceApplications?.ToArray());
             }
 
             if (tMExtendedResult is TM59MechanicalVentilationExtendedResult)
             {
                 TM59MechanicalVentilationExtendedResult tM59MechanicalVentilationExtendedResult = (TM59MechanicalVentilationExtendedResult)tMExtendedResult;
 
+                //TM59SpaceApplications carried through, as above: the mechanical criterion does not vary by
+                //application, but the classification is still what the space was assessed as, and the report's
+                //TM59 Application column reads it.
                 return new TM59MechanicalVentilationResult(
                     tM59MechanicalVentilationExtendedResult.Name,
                     tM59MechanicalVentilationExtendedResult.Source,
@@ -97,7 +118,8 @@ namespace SAM.Analytical
                     tM59MechanicalVentilationExtendedResult.OccupiedHours,
                     tM59MechanicalVentilationExtendedResult.MaxExceedableHours,
                     tM59MechanicalVentilationExtendedResult.GetHoursNumberExceeding26(),
-                    tM59MechanicalVentilationExtendedResult.Pass);
+                    tM59MechanicalVentilationExtendedResult.Pass,
+                    tM59MechanicalVentilationExtendedResult.TM59SpaceApplications?.ToArray());
             }
 
             throw new System.NotImplementedException();

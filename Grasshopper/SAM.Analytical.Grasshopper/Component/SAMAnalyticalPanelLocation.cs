@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Analytical.Grasshopper.Properties;
 using SAM.Core.Grasshopper;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalPanelLocation : GH_SAMComponent
+    public class SAMAnalyticalPanelLocation : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,21 +39,33 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panel", NickName = "_panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddPointParameter("Origin", "Origin", "Origin Point", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Tilt", "Tilt", "Tilt of SAM Analytical Panel", GH_ParamAccess.item);
-            outputParamManager.AddNumberParameter("Azimuth", "Azimuth", "Azimuth of SAM Analytical Panel", GH_ParamAccess.item);
-            outputParamManager.AddVectorParameter("Normal", "Normal", "Normal of SAM Analytical Panel", GH_ParamAccess.item);
-            outputParamManager.AddPointParameter("InternalPoint", "InternalPoint", "InternalPoint of SAM Analytical Panel", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "Origin", NickName = "Origin", Description = "Origin Point", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Tilt", NickName = "Tilt", Description = "Tilt of SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "Azimuth", NickName = "Azimuth", Description = "Azimuth of SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Vector() { Name = "Normal", NickName = "Normal", Description = "Normal of SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Point() { Name = "InternalPoint", NickName = "InternalPoint", Description = "InternalPoint of SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -63,8 +76,9 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = Params.IndexOfInputParam("_panel");
             Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel) || panel == null)
+            if (index == -1 || !dataAccess.GetData(index, ref panel) || panel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -77,11 +91,35 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, Geometry.Rhino.Convert.ToRhino(plane.Origin));
-            dataAccess.SetData(1, panel.Tilt());
-            dataAccess.SetData(2, panel.Azimuth());
-            dataAccess.SetData(3, Geometry.Rhino.Convert.ToRhino(plane.Normal));
-            dataAccess.SetData(4, Geometry.Rhino.Convert.ToRhino(panel.GetInternalPoint3D()));
+            int index_Origin = Params.IndexOfOutputParam("Origin");
+            if (index_Origin != -1)
+            {
+                dataAccess.SetData(index_Origin, Geometry.Rhino.Convert.ToRhino(plane.Origin));
+            }
+
+            int index_Tilt = Params.IndexOfOutputParam("Tilt");
+            if (index_Tilt != -1)
+            {
+                dataAccess.SetData(index_Tilt, panel.Tilt());
+            }
+
+            int index_Azimuth = Params.IndexOfOutputParam("Azimuth");
+            if (index_Azimuth != -1)
+            {
+                dataAccess.SetData(index_Azimuth, panel.Azimuth());
+            }
+
+            int index_Normal = Params.IndexOfOutputParam("Normal");
+            if (index_Normal != -1)
+            {
+                dataAccess.SetData(index_Normal, Geometry.Rhino.Convert.ToRhino(plane.Normal));
+            }
+
+            int index_InternalPoint = Params.IndexOfOutputParam("InternalPoint");
+            if (index_InternalPoint != -1)
+            {
+                dataAccess.SetData(index_InternalPoint, Geometry.Rhino.Convert.ToRhino(panel.GetInternalPoint3D()));
+            }
         }
     }
 }

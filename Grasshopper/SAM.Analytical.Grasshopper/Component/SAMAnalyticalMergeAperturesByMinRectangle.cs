@@ -36,7 +36,7 @@ namespace SAM.Analytical.Grasshopper
           : base(
               "SAMAnalytical.MergeAperturesByMinRectangle",
               "SAMAnalytical.MergeAperturesByMinRectangle",
-              "For each panel..",
+              "Merge apertures on each panel by minimum bounding rectangle proximity",
               "SAM",
               "Analytical02")
         {

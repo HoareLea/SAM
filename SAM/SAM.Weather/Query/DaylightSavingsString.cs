@@ -19,10 +19,16 @@ namespace SAM.Weather
             if (weatherData == null)
                 return null;
 
-            // Define the values for the comma-separated string
+            // Define the values for the comma-separated string. EPW field order:
+            // leap year observed, daylight saving start day, daylight saving end day,
+            // number of holidays. 0 means "not observed" - an empty field is not a valid
+            // date and EnergyPlus rejects it with a Severe ProcessEPWHeader error.
             string[] values = new string[] {
                 "HOLIDAYS/DAYLIGHT SAVINGS",
-                ",No,0,0,0"
+                "No",
+                "0",
+                "0",
+                "0"
             };
 
             // Join the values array into a single string separated by commas

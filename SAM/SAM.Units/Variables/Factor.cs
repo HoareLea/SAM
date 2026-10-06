@@ -18,5 +18,29 @@ namespace SAM.Units
 
         public const double PoundsPerInchToPascal = 6894.75728;
         public const double PascalToPoundsPerInch = 1 / PoundsPerInchToPascal;
+
+        public const double SquareMetersToSquareFeet = MetersToFeet * MetersToFeet;
+        public const double SquareFeetToSquareMeters = 1 / SquareMetersToSquareFeet;
+
+        public const double CubicMetersToCubicFeet = SquareMetersToSquareFeet * MetersToFeet;
+        public const double CubicFeetToCubicMeters = 1 / CubicMetersToCubicFeet;
+
+        public const double CubicMetersPerSecondToCubicFeetPerMinute = 2118.880003;
+        public const double CubicFeetPerMinuteToCubicMetersPerSecond = 1 / CubicMetersPerSecondToCubicFeetPerMinute;
+
+        public const double WattsToBtuPerHour = 3.412141633;
+        public const double BtuPerHourToWatts = 1 / WattsToBtuPerHour;
+
+        public const double WattsPerSquareMeterToBtuPerHourSquareFoot = 0.316998331;
+        public const double BtuPerHourSquareFootToWattsPerSquareMeter = 1 / WattsPerSquareMeterToBtuPerHourSquareFoot;
+
+        public const double LuxToFootCandles = 0.09290304;
+        public const double FootCandlesToLux = 1 / LuxToFootCandles;
+
+        public const double WattsPerSquareMeterKelvinToBtuPerHourSquareFootFahrenheit = 0.176110184;
+        public const double BtuPerHourSquareFootFahrenheitToWattsPerSquareMeterKelvin = 1 / WattsPerSquareMeterKelvinToBtuPerHourSquareFootFahrenheit;
+
+        public const double KelvinDifferenceToFahrenheitDifference = 1.8;
+        public const double FahrenheitDifferenceToKelvinDifference = 1 / KelvinDifferenceToFahrenheitDifference;
     }
 }

@@ -37,5 +37,38 @@ namespace SAM.Analytical
         [ParameterProperties("Daylight Factor", "Daylight Factor [-]"), DoubleParameterValue(0)] DaylightFactor,
 
         [ParameterProperties("PartF Space Data", "PartF Space Data"), SAMObjectParameterValue(typeof(PartFSpaceData))] PartFSpaceData,
+
+        /// <summary>
+        /// Shared semantic classification of the space - what the space is, and the independent
+        /// semantic roles that follow from it. Written by the space use mapping and read by Approved
+        /// Document F, Approved Document O and CIBSE TM59, so a space is classified once and reused.
+        /// </summary>
+        [ParameterProperties("Space Semantics", "Space Semantics"), SAMObjectParameterValue(typeof(SpaceSemantics))] SpaceSemantics,
+
+        /// <summary>
+        /// Explicit user override of the semantic classification, holding a <see cref="SpaceUse"/>
+        /// name. Highest authority: when set, no name matching is attempted. An unrecognised value is
+        /// reported rather than ignored.
+        /// </summary>
+        [ParameterProperties("Space Use Override", "Space Use Override"), ParameterValue(Core.ParameterType.String)] SpaceUseOverride,
+
+        /// <summary>
+        /// How the local kitchen or cooker extract required by Approved Document F, Volume 1 (2021
+        /// edition) paragraph 1.17a is actually provided in this cooking space, holding a
+        /// <see cref="Enums.PartFExtractMethod"/> name.
+        /// <para>
+        /// An engineering input, because it cannot be derived from the room: a studio with a mechanical
+        /// ventilation with heat recovery extract terminal over the hob, a studio with a cooker hood
+        /// ducted outside, and a studio with a recirculating hood are three different designs with three
+        /// different requirements, and the analytical model looks identical in all three.
+        /// </para>
+        /// <para>
+        /// Absent means the design has not said, in which case the mechanical ventilation with heat
+        /// recovery terminal of paragraph 1.70 is assumed, since that is the arrangement the rest of the
+        /// system implies, and the assumption is reported as needing confirmation rather than passed
+        /// silently.
+        /// </para>
+        /// </summary>
+        [ParameterProperties("PartF Local Extract Method", "PartF Local Extract Method"), ParameterValue(Core.ParameterType.String)] PartFLocalExtractMethod,
     }
 }

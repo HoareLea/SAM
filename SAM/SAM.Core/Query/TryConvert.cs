@@ -4,6 +4,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 
@@ -572,6 +573,13 @@ namespace SAM.Core
 
             if (jsonValueKind == JsonValueKind.Number)
             {
+                //A double is read straight off the node, so the commonest case never becomes text at all.
+                if (type == typeof(double) && TryGetDouble(jsonNode, out double value_Double))
+                {
+                    result = value_Double;
+                    return true;
+                }
+
                 return TryConvertJsonNumber(jsonNode.ToJsonString(), out result, type);
             }
 
@@ -660,6 +668,14 @@ namespace SAM.Core
             return null;
         }
 
+        /// <remarks>
+        /// Every caller passes a JSON number token, and a JSON number is invariant by definition: '.' is
+        /// its decimal separator and it has no group separator at all. So it is parsed invariantly here
+        /// rather than with <see cref="TryParseDouble(string, out double)"/>, whose job is the opposite
+        /// one - guessing the convention behind a number a human typed somewhere unknown. That guess is
+        /// wrong on text this precise: for "-1.000" it also reads "-1,000", takes both as whole numbers,
+        /// and settles the tie with the smaller - minus one thousand rather than minus one.
+        /// </remarks>
         private static bool TryConvertJsonNumber(string value, out object? result, Type type)
         {
             result = default;
@@ -668,7 +684,7 @@ namespace SAM.Core
             {
                 if (type == typeof(bool))
                 {
-                    if (TryParseDouble(value, out double @double))
+                    if (TryParseJsonDouble(value, out double @double))
                     {
                         result = System.Convert.ToInt64(@double) == 1;
                         return true;
@@ -676,13 +692,13 @@ namespace SAM.Core
                 }
                 else if (type == typeof(int))
                 {
-                    if (int.TryParse(value, out int @int))
+                    if (int.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out int @int))
                     {
                         result = @int;
                         return true;
                     }
 
-                    if (TryParseDouble(value, out double @double))
+                    if (TryParseJsonDouble(value, out double @double))
                     {
                         result = System.Convert.ToInt32(@double);
                         return true;
@@ -690,7 +706,7 @@ namespace SAM.Core
                 }
                 else if (type == typeof(double))
                 {
-                    if (TryParseDouble(value, out double @double))
+                    if (TryParseJsonDouble(value, out double @double))
                     {
                         result = @double;
                         return true;
@@ -698,7 +714,7 @@ namespace SAM.Core
                 }
                 else if (type == typeof(uint))
                 {
-                    if (uint.TryParse(value, out uint @uint))
+                    if (uint.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out uint @uint))
                     {
                         result = @uint;
                         return true;
@@ -706,7 +722,7 @@ namespace SAM.Core
                 }
                 else if (type == typeof(short))
                 {
-                    if (short.TryParse(value, out short @short))
+                    if (short.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out short @short))
                     {
                         result = @short;
                         return true;
@@ -714,7 +730,7 @@ namespace SAM.Core
                 }
                 else if (type == typeof(byte))
                 {
-                    if (byte.TryParse(value, out byte @byte))
+                    if (byte.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out byte @byte))
                     {
                         result = @byte;
                         return true;
@@ -722,7 +738,7 @@ namespace SAM.Core
                 }
                 else if (type == typeof(long))
                 {
-                    if (long.TryParse(value, out long @long))
+                    if (long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long @long))
                     {
                         result = @long;
                         return true;
@@ -730,13 +746,13 @@ namespace SAM.Core
                 }
                 else if (type == typeof(DateTime))
                 {
-                    if (long.TryParse(value, out long @long))
+                    if (long.TryParse(value, NumberStyles.Integer, CultureInfo.InvariantCulture, out long @long))
                     {
                         result = new DateTime(@long);
                         return true;
                     }
 
-                    if (TryParseDouble(value, out double @double))
+                    if (TryParseJsonDouble(value, out double @double))
                     {
                         result = DateTime.FromOADate(@double);
                         return true;
@@ -749,6 +765,11 @@ namespace SAM.Core
             }
 
             return false;
+        }
+
+        private static bool TryParseJsonDouble(string value, out double result)
+        {
+            return double.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out result);
         }
     }
 }

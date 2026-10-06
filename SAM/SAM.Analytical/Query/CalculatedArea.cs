@@ -1,13 +1,20 @@
 // SPDX-License-Identifier: LGPL-3.0-or-later
 // Copyright (c) 2020–2026 Michal Dengusiak & Jakub Ziolkowski and contributors
 
-using SAM.Geometry.Spatial;
-using System.Collections.Generic;
-
 namespace SAM.Analytical
 {
     public static partial class Query
     {
+        /// <summary>
+        /// The space's stored <see cref="SpaceParameter.Area"/> when it has one, otherwise the canonical floor
+        /// area derived from the cluster.
+        /// </summary>
+        /// <remarks>
+        /// The derivation is delegated to
+        /// <see cref="FloorArea(AdjacencyCluster, Space, out FloorAreaCalculationMethod, double, double, double, double)"/>
+        /// so this query cannot disagree with creation time. It used to prefer a horizontal shell section over
+        /// the floor panels, which reported a ramp's plan area instead of its walking surface.
+        /// </remarks>
         public static double CalculatedArea(this Space space, AdjacencyCluster adjacencyCluster = null)
         {
             if (space == null)
@@ -15,78 +22,19 @@ namespace SAM.Analytical
                 return double.NaN;
             }
 
+            // An already-stored value still wins here: callers use this as a cheap read of what the model says,
+            // not as a recalculation. Modify.UpdateAreaAndVolume removes the parameter first when it wants one.
             if (space.TryGetValue(SpaceParameter.Area, out double result) && !double.IsNaN(result))
             {
                 return result;
             }
 
-            result = double.NaN;
-
-            if (adjacencyCluster != null)
+            if (adjacencyCluster == null)
             {
-                Shell shell = adjacencyCluster.Shell(space);
-                if (shell != null)
-                {
-                    List<Face3D> face3Ds = shell.Section();
-                    if (face3Ds != null && face3Ds.Count != 0)
-                    {
-                        result = 0;
-                        foreach (Face3D face3D in face3Ds)
-                        {
-                            if (face3D == null)
-                            {
-                                continue;
-                            }
-
-                            double area = face3D.GetArea();
-                            if (double.IsNaN(area))
-                            {
-                                continue;
-                            }
-                            result += area;
-                        }
-
-                        if (result == 0)
-                        {
-                            result = double.NaN;
-                        }
-                    }
-                }
-
-                if (double.IsNaN(result))
-                {
-                    List<Panel> panels = GeomericalFloorPanels(adjacencyCluster, space);
-                    if (panels != null && panels.Count != 0)
-                    {
-                        List<Face3D> face3Ds = panels?.ConvertAll(x => x.GetFace3D());
-                        if (face3Ds != null && face3Ds.Count != 0)
-                        {
-                            result = 0;
-                            foreach (Face3D face3D in face3Ds)
-                            {
-                                if (face3D == null)
-                                {
-                                    continue;
-                                }
-
-                                double area = face3D.GetArea();
-                                if (double.IsNaN(area))
-                                {
-                                    continue;
-                                }
-                                result += area;
-                            }
-
-                            if (result == 0)
-                            {
-                                result = double.NaN;
-                            }
-                        }
-                    }
-                }
+                return double.NaN;
             }
 
-            return result;
+            return FloorArea(adjacencyCluster, space, out FloorAreaCalculationMethod floorAreaCalculationMethod);
         }
     }
 }

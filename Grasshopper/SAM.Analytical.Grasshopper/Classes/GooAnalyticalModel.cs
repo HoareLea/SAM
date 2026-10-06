@@ -17,6 +17,8 @@ namespace SAM.Analytical.Grasshopper
 {
     public class GooAnalyticalModel : GooJSAMObject<AnalyticalModel>, IGH_PreviewData, IGH_BakeAwareData
     {
+        private GooAdjacencyCluster previewDelegate;
+
         public GooAnalyticalModel()
             : base()
         {
@@ -27,14 +29,41 @@ namespace SAM.Analytical.Grasshopper
         {
         }
 
+        /// <summary>
+        /// Persistent preview delegate. AnalyticalModel.AdjacencyCluster returns a
+        /// new shallow-copy wrapper on every access, so reference equality can never
+        /// provide reuse; instead the delegate is kept for the lifetime of this goo
+        /// and its Value is refreshed with the latest wrapper before every preview
+        /// operation. Clipping bounds and wires are always live; the delegate's mesh
+        /// cache survives wrapper replacement because it is validated by logical
+        /// fingerprint, not by wrapper reference.
+        /// </summary>
+        private GooAdjacencyCluster EnsureDelegate()
+        {
+            AdjacencyCluster adjacencyCluster = Value?.AdjacencyCluster;
+            if (adjacencyCluster == null)
+                return null;
+
+            GooAdjacencyCluster result = previewDelegate;
+            if (result == null)
+            {
+                result = new GooAdjacencyCluster(adjacencyCluster);
+                previewDelegate = result;
+            }
+            else
+            {
+                result.Value = adjacencyCluster;
+            }
+
+            return result;
+        }
+
         public BoundingBox ClippingBox
         {
             get
             {
-                if (Value?.AdjacencyCluster == null)
-                    return BoundingBox.Unset;
-
-                return new GooAdjacencyCluster(Value.AdjacencyCluster).ClippingBox;
+                GooAdjacencyCluster goo = EnsureDelegate();
+                return goo?.ClippingBox ?? BoundingBox.Unset;
             }
         }
 
@@ -42,26 +71,23 @@ namespace SAM.Analytical.Grasshopper
         {
             obj_guid = Guid.Empty;
 
-            if (Value?.AdjacencyCluster == null)
+            GooAdjacencyCluster goo = EnsureDelegate();
+            if (goo == null)
                 return false;
 
-            return new GooAdjacencyCluster(Value.AdjacencyCluster).BakeGeometry(doc, att, out obj_guid);
+            return goo.BakeGeometry(doc, att, out obj_guid);
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            if (Value?.AdjacencyCluster == null)
-                return;
-
-            new GooAdjacencyCluster(Value.AdjacencyCluster).DrawViewportMeshes(args);
+            GooAdjacencyCluster goo = EnsureDelegate();
+            goo?.DrawViewportMeshes(args);
         }
 
         public void DrawViewportWires(GH_PreviewWireArgs args)
         {
-            if (Value?.AdjacencyCluster == null)
-                return;
-
-            new GooAdjacencyCluster(Value.AdjacencyCluster).DrawViewportWires(args);
+            GooAdjacencyCluster goo = EnsureDelegate();
+            goo?.DrawViewportWires(args);
         }
 
         public override IGH_Goo Duplicate()

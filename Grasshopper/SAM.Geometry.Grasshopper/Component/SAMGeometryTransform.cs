@@ -5,10 +5,11 @@ using Grasshopper.Kernel;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class SAMGeometryTransform : GH_SAMComponent
+    public class SAMGeometryTransform : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Initializes a new instance of the SAM_point3D class.
@@ -33,18 +34,28 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooSAMGeometryParam(), "_SAMGeometry", "_SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
-            inputParamManager.AddParameter(new GooTransform3DParam(), "_transform3D", "_transform3D", "SAM Transform 3D", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "_SAMGeometry", NickName = "_SAMGeometry", Description = "SAM Geometry", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooTransform3DParam() { Name = "_transform3D", NickName = "_transform3D", Description = "SAM Transform 3D", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooSAMGeometryParam(), "SAMGeometry", "SAMGeometry", "SAM Geometry", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooSAMGeometryParam() { Name = "SAMGeometry", NickName = "SAMGeometry", Description = "SAM Geometry", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -55,15 +66,19 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index = -1;
+
+            index = Params.IndexOfInputParam("_SAMGeometry");
             ISAMGeometry geometry = null;
-            if (!dataAccess.GetData(0, ref geometry) || geometry == null)
+            if (index == -1 || !dataAccess.GetData(index, ref geometry) || geometry == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_transform3D");
             Spatial.Transform3D transform3D = null;
-            if (!dataAccess.GetData(1, ref transform3D) || transform3D == null)
+            if (index == -1 || !dataAccess.GetData(index, ref transform3D) || transform3D == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -76,7 +91,11 @@ namespace SAM.Geometry.Grasshopper
                 return;
             }
 
-            dataAccess.SetData(0, new GooSAMGeometry(geometry));
+            index = Params.IndexOfOutputParam("SAMGeometry");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooSAMGeometry(geometry));
+            }
         }
 
         /// <summary>
@@ -86,11 +105,8 @@ namespace SAM.Geometry.Grasshopper
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return Resources.SAM_Geometry;
             }
         }
-
     }
 }

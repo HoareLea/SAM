@@ -234,7 +234,7 @@ namespace SAM.Analytical
 
         public bool Coplanar(Plane plane, double tolerance = Tolerance.Angle)
         {
-            return plane.Coplanar(plane, tolerance);
+            return this.plane.Coplanar(plane, tolerance);
         }
 
         public Face3D GetFace3D()

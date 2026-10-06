@@ -5,10 +5,11 @@ using Grasshopper;
 using Grasshopper.Kernel;
 using SAM.Core.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Core.Grasshopper
 {
-    public class SAMCoreToList : GH_SAMComponent
+    public class SAMCoreToList : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -18,7 +19,7 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -38,18 +39,33 @@ namespace SAM.Core.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddTextParameter("_text", "_text", "Text as single string", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_separator", "_separator", "Separator", GH_ParamAccess.item, Core.Query.Separator(DelimitedFileType.Csv).ToString());
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_text", NickName = "_text", Description = "Text as single string", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_String param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_separator", NickName = "_separator", Description = "Separator", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData(Core.Query.Separator(DelimitedFileType.Csv).ToString());
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddTextParameter("List", "List", "List", GH_ParamAccess.tree);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "List", NickName = "List", Description = "List", Access = GH_ParamAccess.tree }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -64,18 +80,25 @@ namespace SAM.Core.Grasshopper
 
             char separator = Core.Query.Separator(DelimitedFileType.Csv);
 
-            string separatorString = null;
-            if (dataAccess.GetData(1, ref separatorString) && !string.IsNullOrEmpty(separatorString))
-                separator = separatorString[0];
+            int index = Params.IndexOfInputParam("_separator");
+            if (index != -1)
+            {
+                string separatorString = null;
+                if (dataAccess.GetData(index, ref separatorString) && !string.IsNullOrEmpty(separatorString))
+                    separator = separatorString[0];
+            }
 
+            index = Params.IndexOfInputParam("_text");
             string text = null;
-            if (dataAccess.GetData(0, ref text))
+            if (index != -1 && dataAccess.GetData(index, ref text))
                 result = Query.DataTree(text, separator);
 
             if (result == null)
                 result = new DataTree<string>();
 
-            dataAccess.SetDataTree(0, result);
+            index = Params.IndexOfOutputParam("List");
+            if (index != -1)
+                dataAccess.SetDataTree(index, result);
         }
     }
 }

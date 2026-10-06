@@ -11,7 +11,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalUpdateLibraries : GH_SAMComponent
+    public class SAMAnalyticalUpdateLibraries : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,24 +41,35 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            index = inputParamManager.AddParameter(new GooAnalyticalModelParam(), "_analyticalModel", "_analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "_analyticalModel", NickName = "_analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new global::Grasshopper.Kernel.Parameters.Param_GenericObject(), "_libraries", "_libraries", "SAM Libraries (MaterialLibraries or/and ProfileLibraries)", GH_ParamAccess.list);
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject() { Name = "_libraries", NickName = "_libraries", Description = "SAM Libraries (MaterialLibraries or/and ProfileLibraries)", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddBooleanParameter("_missingOnly", "_missingOnly", "Copy only missing objects from library", GH_ParamAccess.item, true);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_missingOnly", NickName = "_missingOnly", Description = "Copy only missing objects from library", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalModelParam(), "analyticalModel", "analyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "analyticalModel", NickName = "analyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -69,15 +80,19 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
+            index = Params.IndexOfInputParam("_analyticalModel");
             AnalyticalModel analyticalModel = null;
-            if (!dataAccess.GetData(0, ref analyticalModel) || analyticalModel == null)
+            if (index == -1 || !dataAccess.GetData(index, ref analyticalModel) || analyticalModel == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
+            index = Params.IndexOfInputParam("_libraries");
             List<IJSAMObject> jSAMObjects = new List<IJSAMObject>();
-            if (!dataAccess.GetDataList(1, jSAMObjects) || jSAMObjects == null)
+            if (index == -1 || !dataAccess.GetDataList(index, jSAMObjects) || jSAMObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
@@ -85,10 +100,14 @@ namespace SAM.Analytical.Grasshopper
 
             List<ISAMLibrary> sAMLibraries = jSAMObjects.FindAll(x => x is ISAMLibrary).ConvertAll(x => (ISAMLibrary)x);
 
+            index = Params.IndexOfInputParam("_missingOnly");
             bool missingOnly = true;
-            if (!dataAccess.GetData(2, ref missingOnly))
+            if (index != -1)
             {
+                if (!dataAccess.GetData(index, ref missingOnly))
+                {
 
+                }
             }
 
             foreach (ISAMLibrary sAMLibrary in sAMLibraries)
@@ -126,7 +145,11 @@ namespace SAM.Analytical.Grasshopper
 
 
 
-            dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
+            index = Params.IndexOfOutputParam("analyticalModel");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
+            }
         }
     }
 }

@@ -33,14 +33,18 @@ namespace SAM.Core
 
                 for (int j = 0; j < jsonArray_Temp.Count; j++)
                 {
-                    object @object = jsonArray_Temp[j]?.GetValue<object>();
-                    if (@object == null)
+                    //The JsonNode is handed to TryConvert whole rather than unwrapped with
+                    //GetValue<object>() first. Unwrapping a node that came out of JsonNode.Parse yields a
+                    //boxed JsonElement, which no CLR type test recognises, so every element of every saved
+                    //file converted to default - a matrix of zeros rather than the stored numbers.
+                    JsonNode jsonNode = jsonArray_Temp[j];
+                    if (jsonNode == null)
                     {
                         values_Temp_Temp[j] = default;
                         continue;
                     }
 
-                    if (!TryConvert(@object, out T t))
+                    if (!TryConvert(jsonNode, out T t))
                     {
                         values_Temp_Temp[j] = default;
                         continue;

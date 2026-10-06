@@ -136,6 +136,18 @@ namespace SAM.Analytical
                             continue;
                         }
 
+                        // A panel is made adiabatic here for ONE reason: the filter has just cut it off from
+                        // a space on its other side. That is a property of the two adjacency states, and of
+                        // nothing else - External and Internal below count adjacent SPACES, they do not
+                        // classify the envelope:
+                        //
+                        //   source > 1 space, derived 1 space  -> the cut. Adiabatic.
+                        //   source 1 space,   derived 1 space  -> already a boundary to the outside. Not.
+                        //   source > 1 space, derived > 1 space -> both sides retained. Not.
+                        //
+                        // The derived cluster alone cannot tell the first case from the second, because both
+                        // leave one adjacent space; the source adjacency is what separates them.
+
                         PanelType panelType = panel.PanelType;
                         if (panelType == PanelType.Air)
                         {
@@ -144,47 +156,111 @@ namespace SAM.Analytical
                                 continue;
                             }
 
-                            if (Internal(panel))
-                            {
-                                continue;
-                            }
+                            // Derived-external, so this is row ONE or row TWO of the table, and the source
+                            // adjacency is the only thing that separates them. Both rows have to be handled
+                            // here, because an air boundary cannot be simulated as one when there is no
+                            // second space: it is re-typed from its normal and given that type's real
+                            // construction - an upward-facing one becomes a Roof, a downward-facing one a
+                            // floor - and only the adiabatic flag differs between the two.
+                            //
+                            // Row two must NOT be marked adiabatic. It once fell through to the assignment
+                            // below and did exactly that, which is how a genuine roof reached TAS as an
+                            // adiabatic surface: no solar gain, no heat loss, and a construction statement
+                            // contradicting its own flag. It keeps its external boundary.
+                            //
+                            // Row one - the cut - used to leave this branch having done NOTHING AT ALL, and
+                            // that was the worse of the two. The panel stayed PanelType.Air with a single
+                            // adjacent space, which Query.Adiabatic reports as not adiabatic whatever the
+                            // flag says, so SAM_Tas never nulled its link: an open interface onto an omitted
+                            // corridor reached the simulation as a hole. Worse, it did not survive being
+                            // isolated a second time. On the next pass the panel is external in the model
+                            // being filtered as well, so nothing can tell row one from row two any more, and
+                            // it was silently re-typed into a genuine external wall with a solid default
+                            // construction - the flat gaining an outside wall where the corridor opening
+                            // used to be, on the second run and not the first.
+                            bool cut_Air = Internal(panel);
 
                             panelType = Query.PanelType(panel.Normal);
-                            if (panelType == PanelType.Undefined)
+                            if (panelType != PanelType.Undefined)
                             {
+                                // The default library is a SETTING, and Query.DefaultConstruction answers
+                                // null wherever it is not configured - a test host, a CI runner, a fresh
+                                // machine. Assigning that null replaced the panel's own construction with
+                                // nothing at all, so the surface reached the simulation with no fabric to
+                                // read: worse than the air boundary it started as, and silently dependent
+                                // on which machine ran it. Only a real construction replaces one.
+                                Construction construction = Query.DefaultConstruction(panelType);
+                                if (construction is not null)
+                                {
+                                    PanelType panelType_Construction = construction.PanelType();
+                                    if (panelType_Construction != PanelType.Undefined)
+                                    {
+                                        panelType = panelType_Construction;
+                                    }
+
+                                    panel = new Panel(panel, construction);
+                                }
+
+                                panel = new Panel(panel, panelType);
+                            }
+                            else if (!cut_Air)
+                            {
+                                // Nothing can be said about which way it faces and it was already a boundary
+                                // to the outside, so it is left exactly as it was, as before.
                                 continue;
                             }
 
-                            Construction construction = Query.DefaultConstruction(panelType);
-                            PanelType panelType_Construction = construction.PanelType();
-                            if (panelType_Construction != PanelType.Undefined)
+                            if (cut_Air)
                             {
-                                panelType = panelType_Construction;
+                                // Flagged even where the normal gave no type to re-type it to: the panel
+                                // stands for an omitted conditioned neighbour either way, and a cut that
+                                // cannot be described is still a cut.
+                                SetCut(panel);
                             }
 
-                            panel = new Panel(panel, construction);
-                            panel = new Panel(panel, panelType);
+                            result.AddObject(panel);
+                            continue;
                         }
-                        else
+
+                        if (!result.External(panel))
                         {
-                            if (!result.External(panel))
-                            {
-                                continue;
-                            }
-
-                            if (!Internal(panel))
-                            {
-                                continue;
-                            }
+                            continue;
                         }
 
-                        panel.SetValue(PanelParameter.Adiabatic, true);
+                        if (!Internal(panel))
+                        {
+                            continue;
+                        }
+
+                        SetCut(panel);
                         result.AddObject(panel);
                     }
                 }
             }
 
             return result;
+        }
+
+        /// <summary>
+        /// Marks a panel as the adiabatic isolation cut: adiabatic, <b>and</b> a record of why it is.
+        /// <para>
+        /// Both statements are needed and they are not the same one.
+        /// <see cref="PanelParameter.Adiabatic"/> is what the simulation reads, and it is written by a TBD
+        /// import, by a gbXML import and by a person as well, so on its own it cannot say whether a wall is
+        /// adiabatic because a filter cut it off or because somebody drew it that way.
+        /// <see cref="PanelParameter.IsolationCut"/> says which, and it is set here and nowhere else.
+        /// </para>
+        /// <para>
+        /// It is written to the DERIVED panel, so the model being filtered is untouched, and it travels with
+        /// the panel from there: a second filter of an already filtered model can read it and still state the
+        /// cut the model carries, where by then no adjacency comparison can find it - both sides of that
+        /// question look external.
+        /// </para>
+        /// </summary>
+        private static void SetCut(Panel panel)
+        {
+            panel.SetValue(PanelParameter.Adiabatic, true);
+            panel.SetValue(PanelParameter.IsolationCut, true);
         }
 
         public Aperture GetAperture(Guid guid)

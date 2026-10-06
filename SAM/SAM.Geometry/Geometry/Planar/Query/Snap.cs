@@ -266,6 +266,45 @@ namespace SAM.Geometry.Planar
             }
 
             HashSet<Point2D> point2Ds_Unique = new HashSet<Point2D>();
+
+            // Endpoint proximity index: 2*j is the start of result[j], 2*j+1 its end. The old
+            // scan below visited every segment for every unique endpoint, which made snapping
+            // O(unique endpoints x segments); the grid narrows that to the endpoints that could
+            // lie within tolerance. It is kept live with Replace as endpoints are averaged, the
+            // exact distance comparison still decides every candidate, and candidates arrive in
+            // the same (segment, endpoint) order the full scan used. Small inputs skip the grid
+            // and offer every endpoint - identical order, identical exact tests.
+            bool useGrid = result.Count >= 32;
+
+            Point2DGrid grid = null;
+            if (useGrid)
+            {
+                grid = new Point2DGrid(tolerance);
+                for (int j = 0; j < result.Count; j++)
+                {
+                    Segment2D segment2D = result[j];
+                    if (segment2D == null)
+                    {
+                        grid.Add(null);
+                        grid.Add(null);
+                        continue;
+                    }
+
+                    grid.Add(segment2D[0]);
+                    grid.Add(segment2D[1]);
+                }
+            }
+
+            List<int> indexes_All = null;
+            if (!useGrid)
+            {
+                indexes_All = new List<int>(result.Count * 2);
+                for (int j = 0; j < result.Count * 2; j++)
+                {
+                    indexes_All.Add(j);
+                }
+            }
+
             for (int i = 0; i < result.Count; i++)
             {
                 List<Point2D> point2Ds_Segment2D = result[i].GetPoints();
@@ -278,27 +317,26 @@ namespace SAM.Geometry.Planar
 
                     Dictionary<int, List<int>> dictionary = new Dictionary<int, List<int>>();
                     List<Point2D> point2Ds = new List<Point2D>();
-                    for (int j = 0; j < result.Count; j++)
+                    foreach (int index in useGrid ? grid.Candidates(point2D_Segment2D) : indexes_All)
                     {
-                        List<int> indexes = new List<int>();
+                        int j = index / 2;
+                        int endpoint = index - j * 2;
 
-                        if (result[j][0].Distance(point2D_Segment2D) <= tolerance)
+                        // Keep the original `<= tolerance` acceptance form: negating it to
+                        // `> tolerance` would invert the NaN-tolerance behaviour.
+                        if (!(result[j][endpoint].Distance(point2D_Segment2D) <= tolerance))
                         {
-                            indexes.Add(0);
-                            point2Ds.Add(result[j][0]);
-                        }
-
-                        if (result[j][1].Distance(point2D_Segment2D) <= tolerance)
-                        {
-                            indexes.Add(1);
-                            point2Ds.Add(result[j][1]);
-                        }
-
-                        if (indexes.Count == 0)
                             continue;
+                        }
 
-                        dictionary[j] = indexes;
+                        if (!dictionary.TryGetValue(j, out List<int> indexes))
+                        {
+                            indexes = new List<int>();
+                            dictionary[j] = indexes;
+                        }
 
+                        indexes.Add(endpoint);
+                        point2Ds.Add(result[j][endpoint]);
                     }
 
                     Point2D point2D_New = null;
@@ -320,10 +358,16 @@ namespace SAM.Geometry.Planar
                     foreach (KeyValuePair<int, List<int>> keyValuePair in dictionary)
                     {
                         if (keyValuePair.Value.Contains(0))
+                        {
                             result[keyValuePair.Key] = new Segment2D(point2D_New, result[keyValuePair.Key][1]);
+                            grid?.Replace(keyValuePair.Key * 2, point2D_New);
+                        }
 
                         if (keyValuePair.Value.Contains(1))
+                        {
                             result[keyValuePair.Key] = new Segment2D(result[keyValuePair.Key][0], point2D_New);
+                            grid?.Replace(keyValuePair.Key * 2 + 1, point2D_New);
+                        }
                     }
                 }
             }

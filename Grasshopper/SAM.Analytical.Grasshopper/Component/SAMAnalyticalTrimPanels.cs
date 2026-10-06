@@ -58,7 +58,7 @@ namespace SAM.Analytical.Grasshopper
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 
-                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minLength_", NickName = "maxDistance_", Description = "Max Distance", Access = GH_ParamAccess.item };
+                paramNumber = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "minLength_", NickName = "maxDistance_", Description = "Minimum edge length", Access = GH_ParamAccess.item };
                 paramNumber.SetPersistentData(0.2);
                 result.Add(new GH_SAMParam(paramNumber, ParamVisibility.Binding));
 

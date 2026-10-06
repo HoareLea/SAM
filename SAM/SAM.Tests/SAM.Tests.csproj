@@ -19,6 +19,63 @@
     <ProjectReference Include="..\SAM.Core\SAM.Core.csproj" />
     <ProjectReference Include="..\SAM.Analytical\SAM.Analytical.csproj" />
     <ProjectReference Include="..\SAM.Architectural\SAM.Architectural.csproj" />
+    <ProjectReference Include="..\SAM.Units\SAM.Units.csproj" />
+    <ProjectReference Include="..\SAM.Core.Reporting\SAM.Core.Reporting.csproj" />
+    <ProjectReference Include="..\SAM.Analytical.Reporting\SAM.Analytical.Reporting.csproj" />
+    <ProjectReference Include="..\SAM.Core.Reporting.Pdf\SAM.Core.Reporting.Pdf.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- This repository's own resource files, copied into the test output so the suite does not depend on a SAM
+         install existing on the machine. SAMResourcesModuleInitializer seeds ActiveSetting from them at process
+         start.
+
+         Needed because the libraries these carry reach the tests through ActiveSetting, whose GetDefault() finds
+         its resources via Core.Query.ResourcesDirectory -> Assembly.CodeBase, which is obsolete since .NET 5 and
+         unusable under the dotnet test host. A machine with a real SAM install has every library; a clean CI
+         runner has none of them, and that difference hid two defects until PR #73 ran on CI.
+
+         Adding a test that needs another ActiveSetting default? Copy its resource here AND seed it in
+         SAMResourcesModuleInitializer. -->
+    <None Include="..\..\files\resources\Analytical\SAM_InternalConditionTextMap_TM59.JSON">
+      <Link>Resources\SAM_InternalConditionTextMap_TM59.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_InternalConditionTextMap.JSON">
+      <Link>Resources\SAM_InternalConditionTextMap.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_SpaceUseTextMap.JSON">
+      <Link>Resources\SAM_SpaceUseTextMap.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_SystemTypeLibrary.JSON">
+      <Link>Resources\SAM_SystemTypeLibrary.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_InternalConditionLibrary_TM59.JSON">
+      <Link>Resources\SAM_InternalConditionLibrary_TM59.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_ProfileLibrary_TM59.JSON">
+      <Link>Resources\SAM_ProfileLibrary_TM59.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_PartFSpaceRulesUKDwellingsMVHR.json">
+      <Link>Resources\SAM_PartFSpaceRulesUKDwellingsMVHR.json</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\..\files\resources\Analytical\SAM_ApertureConstructionLibrary.JSON">
+      <Link>Resources\SAM_ApertureConstructionLibrary.JSON</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Golden JSON snapshots of the reporting documents; see Helpers/Golden.cs to update them. -->
+    <None Include="Golden\**\*.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 </Project>

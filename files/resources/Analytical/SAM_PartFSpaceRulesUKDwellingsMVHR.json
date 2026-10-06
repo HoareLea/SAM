@@ -1,30 +1,68 @@
 {
   "_type": "SAM.Core.PartFSpaceRules,SAM.Core",
   "Name": "PartFSpaceRules_UK_Dwellings_MVHR",
-  "Version": "2.0",
+  "Version": "4.0",
+  "Source": "Approved Document F, Volume 1: Dwellings, 2021 edition, for use in England, in effect from 15 June 2022. Whole dwelling rates from Table 1.3 and paragraph 1.24 (page 10); continuous-system minimum extract high rates from Table 1.2 (page 10); intermittent-system extract rates from Table 1.1 (page 8); supply distribution from paragraph 1.67 (page 16); internal door transfer air from paragraph 1.25 (page 10); purge ventilation from paragraphs 1.26 to 1.31 and Table 1.4 (page 11); commissioning from Section 4 and Appendix C.",
+  "ExtractAllocationStrategy": "MinimumFirstCookingPriority",
   "Notes": [
-    "For domestic MVHR under Approved Document F, use the whole-dwelling ventilation rate as the greater of the bedroom-based rate and 0.3 l/s per m2 internal floor area.",
-    "Supply is assigned to habitable rooms.",
-    "Extract is assigned to wet rooms.",
-    "Transfer spaces normally have no terminal.",
+    "TERMINALS, NOT ROOMS. The unit of the calculation is the ventilation terminal, and a room can require more than one. Appendix A (page 36) makes a Studio and an open-plan LivingKitchen habitable rooms, because neither is SOLELY a kitchen, so paragraph 1.67 requires mechanical supply to them; and both contain the cooking function, so paragraph 1.17a and Table 1.2 require kitchen extract from them as well. Both terminals are established and sized. VentilationType below describes the PRIMARY terminal only, which is what the legacy scalar flow rate reports.",
+    "LOCAL KITCHEN EXTRACT. Every cooking space (Studio, LivingKitchen, Cooking) receives a LocalKitchenExtract terminal. How that extract is actually provided is an engineering input, held on the space as the PartF Local Extract Method parameter, because the analytical model looks identical whether the hob has an MVHR extract terminal over it, a cooker hood ducted outside, or a recirculating hood. Recognised values: MVHRContinuousTerminal (Table 1.2, in the balanced continuous flow), CookerHoodExtractingOutside (Table 1.1 at 30 l/s intermittent, outside the balanced flow), SeparateIntermittentExtract (Table 1.1 at 60 l/s, outside the balanced flow), OtherExplicitExternalExtract (engineering review), RecirculatingCookerHood (Diagram 1.2 note 1: does not comply on its own, so it satisfies nothing), NotRepresented (reported as a failure with the missing provision named). With nothing recorded, MVHRContinuousTerminal is assumed and reported as needing confirmation, because that is the arrangement the rest of the system implies.",
+    "EXTRACT ALLOCATION STRATEGY. Approved Document F prescribes only two things about extract totals: each wet room reaches at least its Table 1.2 minimum high rate (paragraph 1.70), and the sum of all extract on its continuous rate is at least the whole dwelling ventilation rate (Table 1.2 continuous rate column). The split of the surplus above those minimums is an ENGINEERING STRATEGY, not a regulatory value. MinimumFirstCookingPriority (the default) gives every terminal its Table 1.2 minimum and then sends all remaining continuous extract to the local kitchen extract, because the cooking function is the dwelling's largest single source of moisture and cooking pollutants and requirement F1(1)(a) is about removing them closest to source. VolumeWeighted reproduces the pre-terminal SAM behaviour, sharing the surplus between extract terminals in proportion to room volume.",
+    "HIGH RATE. Table 1.2 note 1 (page 10): where the continuous rate provided in a room is equal to or higher than the minimum high rate in the table, no extra ventilation is needed. Each terminal's high rate is therefore the greater of its continuous rate and its Table 1.2 minimum, and the terminals that actually have to boost are reported.",
+    "TRANSFER AIR. Paragraph 1.25 (page 10) requires internal doors to allow air to flow through the dwelling, with a minimum free area equivalent to a 10mm undercut in a 760mm wide door, i.e. 7,600mm2, achieved as 10mm above a fitted floor finish or 20mm above an unfinished floor surface. The transfer network is built from the dwelling's internal separating elements, not from its doors, because a model frequently carries the partition without carrying a door aperture in it. Routes to a communal corridor, a neighbouring flat or an excluded zone are never edges, so transfer air cannot cross a dwelling boundary.",
+    "PURGE VENTILATION. Paragraphs 1.26 to 1.31 and Table 1.4 (page 11). The requirement is calculated from the room volume and floor area; the openable area is an engineering input, because Table 1.4 is about the area of the OPENING and a fixed light adds window area while opening nothing. Paragraph 0.21 (page 4): Approved Document O may require a higher purge standard, and where it does the higher applies.",
+    "ASSESSMENT, NOT CERTIFICATION. Requirements that no analytical model contains - that the system is designed to minimise noise, that filters are reachable, that the occupier was given operating instructions - are recorded as structured checks that wait for a person to confirm them. They are never quietly passed. A dwelling cannot reach an overall pass while any mandatory check is failed or unresolved.",
+    "This rule set describes mechanical ventilation with heat recovery (paragraphs 1.67 to 1.73) only. It does not describe natural ventilation with intermittent extract (Table 1.1) or continuous mechanical extract ventilation (paragraphs 1.60 to 1.66).",
+    "MinFlowRate_Lps values are the Table 1.2 minimum high rates: kitchen 13, utility room 8, bathroom 8, sanitary accommodation 6 l/s.",
+    "For domestic MVHR under Approved Document F, the whole-dwelling ventilation rate is the greater of the rate set by the rooms (Table 1.3 by bedroom count, or Table 1.3 note 1 where the dwelling has exactly one habitable room) and 0.3 l/s per m2 internal floor area.",
+    "Each category carries a SpaceUse, which is the shared semantic classification used by Approved Document F, Approved Document O, CIBSE TM59 and the SAM_UI internal condition mapping. Room recognition is driven by that shared vocabulary (SAM_SpaceUseTextMap.JSON); the Synonyms below are merged into it so a project-specific rule set can still add its own names.",
+    "Supply is assigned to habitable rooms. Approved Document F, Volume 1, Appendix A defines a habitable room as a room used for dwelling purposes but not solely a kitchen, utility room, bathroom, cellar or sanitary accommodation.",
+    "Extract is assigned to wet rooms. Appendix A defines a wet room as a room used for domestic activities producing significant airborne moisture, with sanitary accommodation also regarded as a wet room for the purposes of Part F.",
+    "A Studio and an open-plan LivingKitchen are habitable rooms, because neither is solely a kitchen, so both take a supply terminal. Both are also flagged IsCookingSpace, so both ALSO take a LocalKitchenExtract terminal carrying the Table 1.2 kitchen high rate of 13 l/s. Earlier versions of this rule set could assign only one terminal role per space and reported the missing local kitchen extract as an ENGINEERING CHECK REQUIRED warning instead; that limitation no longer applies.",
+    "General extract from a Bathroom, Ensuite, Utility or WC is held separately from local kitchen extract and is never evidence of it. The two are different terminal roles with different source paragraphs, and a dwelling can have plenty of the first and none of the second.",
+    "A Studio is one habitable room and counts as one bedroom (see BedroomCountRules.StudioCountsAs). Table 1.3 note 1 is a REGULATORY requirement and IS applied: where the dwelling has exactly one habitable room the whole-dwelling rate set by the rooms is OneHabitableRoomRate_Lps (13 l/s), which replaces the Table 1.3 bedroom rate. A studio with a separate bathroom is therefore sized at 13 l/s, not the one-bedroom figure of 19 l/s. Adding any second habitable room, such as a separate living room or a study, takes the dwelling back onto Table 1.3.",
+    "The habitable-room count follows Appendix A (page 36): a habitable room is used for dwelling purposes but is not SOLELY a kitchen, utility room, bathroom, cellar or sanitary accommodation. A bathroom, ensuite, utility room, sanitary accommodation, circulation space, store, plant room or void therefore never increases the habitable-room count.",
+    "Transfer, storage, plant and circulation spaces normally have no terminal.",
     "Void/open-to-below spaces should normally be excluded from the floor area check.",
-    "Living rooms should not automatically be treated as kitchens. Only classify as LivingKitchen where the room is clearly open-plan and contains the cooking function, or when a higher-level dwelling rule determines that the main living space includes the kitchen.",
-    "If the final whole-dwelling rate is greater than the sum of wet-room minimums, recalculate the final supply and extract terminal flow rates so that total supply and total extract both match the final system rate.",
-    "Wet-room minimum extract rates are minimum values only. Final calculated extract rates may be higher."
+    "CommunalCirculation is shared between dwellings and is not part of any one dwelling. It is given no terminal and is excluded from the dwelling floor area; size it to Approved Document F, Volume 2 instead.",
+    "Living rooms should not automatically be treated as kitchens. Only classify as LivingKitchen where the room is clearly open-plan and contains the cooking function.",
+    "The governing whole-dwelling continuous design rate is the greater of the bedroom-based rate OR the one-habitable-room rate, and 0.3 l/s per m2 of internal floor area. The Table 1.2 per-room figures are minimum HIGH rates, assessed room by room at the high condition, and their sum does NOT raise this continuous rate.",
+    "Wet-room minimum extract rates are minimum values only. Final calculated extract rates may be higher.",
+    "SetbackFlowRateFactor is a reduced-operation factor applied AFTER every regulatory minimum has been established at the continuous design condition. The default 0.3 makes the setback rate 30% of the continuous design rate, i.e. a 70% reduction. It never reduces or replaces the continuous design calculation, and setback rates are not checked against the Table 1.2 minimums.",
+    "Neither the 2021 edition nor the 2026 edition of Approved Document F, Volume 1 specifies a reduced operating rate for mechanical ventilation with heat recovery, so SetbackFlowRateFactor is a SAM reduced-operation convention and not a regulatory value. It is called a setback rate rather than a background rate because in Approved Document F a background ventilator is a trickle ventilator and whole dwelling (general) ventilation is the continuous requirement.",
+    "Rates and paragraph references here follow the 2021 edition, which is the edition in force. The 2026 edition (in effect 24 March 2027, or 24 September 2027 for higher-risk building work) keeps Table 1.2, Table 1.3, the 0.3 l/s per m2 rate and MVHR paragraphs 1.67, 1.69 and 1.70 unchanged; it renumbers the extract-provision paragraph from 1.17 to 1.13 and adds explicit cooker hood guidance at paragraphs 1.16 and 1.17."
+  ],
+  "MigrationNotes": [
+    "LivingKitchen spaces are now treated as habitable supply spaces rather than extract spaces in the Part F workflow. Existing workflows that relied on LivingKitchen as an extract terminal should be reviewed.",
+    "Approved Document F Table 1.3 note 1 is now applied: a dwelling with exactly one habitable room uses OneHabitableRoomRate_Lps (13 l/s) instead of the Table 1.3 bedroom rate. The previous SAM convention of a fixed 19 l/s minimum for a studio has been removed, so studio flats may now size lower than before unless the floor-area rate or the wet-room minimums govern.",
+    "The reduced-operation rate is now called the SETBACK rate (SetbackFlowRateFactor, SetbackFlowRate_Lps) rather than a background rate, to avoid confusion with Approved Document F background ventilators and whole dwelling (general) ventilation. The earlier BackgroundFlowRateFactor key is still read for backward compatibility.",
+    "PartFSpaceData now exposes ContinuousDesignFlowRate_Lps and SetbackFlowRate_Lps. CalculatedFlowRate_Lps is retained, unchanged in meaning, as the continuous design rate, and is still written to file so older SAM builds can read new models.",
+    "The cooking-space diagnostic now reports the absence of an explicitly modelled LOCAL kitchen or cooker extract. It is raised for every Studio and LivingKitchen regardless of whether the dwelling has wet-room extract, because wet-room extract balances the dwelling airflow but is not local kitchen extract. It no longer claims the dwelling has no extract terminal.",
+    "TERMINAL COLLECTION. PartFSpaceData now carries a Terminals collection, and that collection is authoritative. A Studio or LivingKitchen now holds TWO terminals: a supply terminal under paragraph 1.67 and a local kitchen extract terminal under paragraph 1.17a. CalculatedFlowRate_Lps, ContinuousDesignFlowRate_Lps, SetbackFlowRate_Lps and PartFVentilationType are unchanged in meaning and continue to describe the PRIMARY terminal - supply for a habitable room, extract for a wet room - so a consumer written before this change reads exactly the number it always read. Such a consumer will not see the secondary local kitchen extract terminal of a multi-terminal space; it is never discarded, being serialised in Terminals and exposed as LocalKitchenExtractFlowRate_Lps, but downstream applications should migrate to the terminal collection to see it.",
+    "RATES CHANGE FOR EXISTING MODELS. Two changes move numbers. First, a Studio or LivingKitchen now contributes its Table 1.2 kitchen minimum of 13 l/s to the dwelling's extract minimum total - a reported total of HIGH-rate minimums that does NOT raise the continuous design rate, which remains the greater of the bedroom-or-habitable rate and the area rate. Second, the default extract allocation strategy is MinimumFirstCookingPriority rather than volume weighting, so extract above the Table 1.2 minimums now goes to the cooking space rather than being shared by volume. Set ExtractAllocationStrategy to VolumeWeighted to reproduce the previous split exactly. Neither change alters the whole-dwelling rate formula itself.",
+    "A model serialised before this version carries no Terminals array. It is deliberately left empty on read rather than reconstructed from the scalar rate: the scalar cannot say whether a studio's flow was supply with a separate local kitchen extract or supply alone, and inventing a terminal the original calculation never established would be worse than having none. Recalculate to populate it.",
+    "New engineering inputs the calculation reads and never overwrites: the PartF Local Extract Method parameter on a cooking space; the PartF Door Transfer Data parameter on a door aperture, whose provided undercut, provided free area, transfer device type and transfer flow override are carried forward; the purge record on each habitable room, whose opening type, opening angle, openable area and mechanical purge capacity are carried forward; and the PartF Commissioning Data parameter on a dwelling zone."
   ],
   "WholeDwellingRates_Lps": {
-    "Studio": 19,
     "1": 19,
     "2": 25,
     "3": 31,
     "4": 37,
     "5": 43,
     "IncrementAbove5": 6,
-    "AreaRate_LpsPerM2": 0.3
+    "AreaRate_LpsPerM2": 0.3,
+    "OneHabitableRoomRate_Lps": 13,
+    "SetbackFlowRateFactor": 0.3,
+    "IntermittentKitchenRateWithCookerHood_Lps": 30,
+    "IntermittentKitchenRateWithoutCookerHood_Lps": 60
   },
   "DataFields": [
     {
       "Name": "Category",
+      "Type": "string"
+    },
+    {
+      "Name": "SpaceUse",
       "Type": "string"
     },
     {
@@ -60,8 +98,20 @@
       "Type": "boolean"
     },
     {
+      "Name": "IsCookingSpace",
+      "Type": "boolean"
+    },
+    {
       "Name": "DefaultFlowWeightBasis",
       "Type": "string"
+    },
+    {
+      "Name": "ContinuousDesignFlowRate_Lps",
+      "Type": "number|null"
+    },
+    {
+      "Name": "SetbackFlowRate_Lps",
+      "Type": "number|null"
     },
     {
       "Name": "CalculatedFlowRate_Lps",
@@ -71,31 +121,54 @@
   "PostProcessingRules": [
     {
       "Name": "MissingCookingSpace",
-      "Condition": "No space classified as Cooking or LivingKitchen exists in the dwelling",
+      "Condition": "No space in the dwelling is flagged IsCookingSpace",
       "Action": "RaiseWarning"
     },
     {
-      "Name": "PromoteLivingToLivingKitchen",
-      "Condition": "No Cooking space exists and dwelling is marked as Studio or OpenPlanKitchenLiving",
-      "Action": "ReclassifyMainLivingSpaceToLivingKitchen"
+      "Name": "CookingSpaceWithoutExplicitLocalKitchenExtract",
+      "Condition": "A space is flagged IsCookingSpace but does not itself take an extract terminal, i.e. no explicit local kitchen or cooker extract is represented for it (Studio, LivingKitchen). Extract from a bathroom, ensuite, utility room or sanitary accommodation does NOT satisfy this condition and does not suppress the warning.",
+      "Action": "RaiseWarning prefixed ENGINEERING CHECK REQUIRED, stating that no explicit local kitchen or cooker extract is represented and that wet-room extract may balance the dwelling airflow but does not demonstrate compliance with the local kitchen-extract requirement"
     },
     {
-      "Name": "PlantroomAsUtility",
-      "Condition": "Plantroom contains laundry or domestic utility function",
-      "Action": "ReclassifyToUtility"
+      "Name": "NonDwellingSpaceInsideDwelling",
+      "Condition": "A space classified as CommunalCirculation or NonDwelling is inside a dwelling being sized",
+      "Action": "ExcludeFromDwellingAndRaiseWarning"
     }
   ],
   "Categories": [
     {
-      "Category": "LivingKitchen",
-      "VentilationType": "extract",
-      "IsBedroom": false,
-      "MinFlowRate_Lps": 13,
+      "Category": "Studio",
+      "SpaceUse": "Studio",
+      "VentilationType": "supply",
+      "IsBedroom": true,
+      "MinFlowRate_Lps": null,
       "IncludeInFloorAreaCheck": true,
-      "PartFCategory": "WetRoom",
+      "PartFCategory": "Habitable",
       "IsTerminalSpace": true,
-      "ScaleSupplyWithVolume": false,
-      "ScaleExtractAboveMinimum": true,
+      "ScaleSupplyWithVolume": true,
+      "ScaleExtractAboveMinimum": false,
+      "IsCookingSpace": true,
+      "DefaultFlowWeightBasis": "RoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "studio",
+        "studio flat",
+        "studio apartment",
+        "bedsit"
+      ]
+    },
+    {
+      "Category": "LivingKitchen",
+      "SpaceUse": "LivingRoomKitchen",
+      "VentilationType": "supply",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": null,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Habitable",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": true,
+      "ScaleExtractAboveMinimum": false,
+      "IsCookingSpace": true,
       "DefaultFlowWeightBasis": "RoomVolume",
       "CalculatedFlowRate_Lps": null,
       "Synonyms": [
@@ -113,6 +186,7 @@
     },
     {
       "Category": "Living",
+      "SpaceUse": "LivingRoom",
       "VentilationType": "supply",
       "IsBedroom": false,
       "MinFlowRate_Lps": null,
@@ -133,11 +207,13 @@
         "lvng",
         "liv",
         "dining",
-        "dining room"
+        "dining room",
+        "study"
       ]
     },
     {
       "Category": "Sleeping",
+      "SpaceUse": "Bedroom",
       "VentilationType": "supply",
       "IsBedroom": true,
       "MinFlowRate_Lps": null,
@@ -163,6 +239,7 @@
     },
     {
       "Category": "Cooking",
+      "SpaceUse": "Kitchen",
       "VentilationType": "extract",
       "IsBedroom": false,
       "MinFlowRate_Lps": 13,
@@ -171,6 +248,7 @@
       "IsTerminalSpace": true,
       "ScaleSupplyWithVolume": false,
       "ScaleExtractAboveMinimum": true,
+      "IsCookingSpace": true,
       "DefaultFlowWeightBasis": "RoomVolume",
       "CalculatedFlowRate_Lps": null,
       "Synonyms": [
@@ -184,9 +262,11 @@
     },
     {
       "Category": "Bathroom",
+      "SpaceUse": "Bathroom",
       "VentilationType": "extract",
       "IsBedroom": false,
       "MinFlowRate_Lps": 8,
+      "IntermittentExtractRate_Lps": 15,
       "IncludeInFloorAreaCheck": true,
       "PartFCategory": "WetRoom",
       "IsTerminalSpace": true,
@@ -199,16 +279,36 @@
         "bath",
         "shower",
         "shower room",
-        "ensuite",
-        "en suite",
         "family bathroom"
       ]
     },
     {
+      "Category": "Ensuite",
+      "SpaceUse": "Ensuite",
+      "VentilationType": "extract",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 8,
+      "IntermittentExtractRate_Lps": 15,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "WetRoom",
+      "IsTerminalSpace": true,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": true,
+      "DefaultFlowWeightBasis": "RoomVolume",
+      "CalculatedFlowRate_Lps": null,
+      "Synonyms": [
+        "ensuite",
+        "en suite",
+        "en-suite"
+      ]
+    },
+    {
       "Category": "WC",
+      "SpaceUse": "SanitaryAccommodation",
       "VentilationType": "extract",
       "IsBedroom": false,
       "MinFlowRate_Lps": 6,
+      "IntermittentExtractRate_Lps": 6,
       "IncludeInFloorAreaCheck": true,
       "PartFCategory": "WetRoom",
       "IsTerminalSpace": true,
@@ -226,9 +326,11 @@
     },
     {
       "Category": "Utility",
+      "SpaceUse": "UtilityRoom",
       "VentilationType": "extract",
       "IsBedroom": false,
       "MinFlowRate_Lps": 8,
+      "IntermittentExtractRate_Lps": 30,
       "IncludeInFloorAreaCheck": true,
       "PartFCategory": "WetRoom",
       "IsTerminalSpace": true,
@@ -246,6 +348,7 @@
     },
     {
       "Category": "Transfer",
+      "SpaceUse": "Circulation",
       "VentilationType": "transfer",
       "IsBedroom": false,
       "MinFlowRate_Lps": 0,
@@ -264,16 +367,74 @@
         "stairs",
         "stair",
         "landing",
-        "gallery",
+        "gallery"
+      ]
+    },
+    {
+      "Category": "Storage",
+      "SpaceUse": "Storage",
+      "VentilationType": "transfer",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 0,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Transfer",
+      "IsTerminalSpace": false,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "None",
+      "CalculatedFlowRate_Lps": 0,
+      "Synonyms": [
         "closet",
         "store",
         "storage",
-        "cupboard",
-        "plantroom"
+        "cupboard"
+      ]
+    },
+    {
+      "Category": "PlantRoom",
+      "SpaceUse": "PlantRoom",
+      "VentilationType": "transfer",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 0,
+      "IncludeInFloorAreaCheck": true,
+      "PartFCategory": "Transfer",
+      "IsTerminalSpace": false,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "None",
+      "CalculatedFlowRate_Lps": 0,
+      "Synonyms": [
+        "plantroom",
+        "plant room",
+        "riser"
+      ]
+    },
+    {
+      "Category": "CommunalCirculation",
+      "SpaceUse": "CommunalCirculation",
+      "VentilationType": "transfer",
+      "IsBedroom": false,
+      "MinFlowRate_Lps": 0,
+      "IncludeInFloorAreaCheck": false,
+      "PartFCategory": "Transfer",
+      "IsTerminalSpace": false,
+      "ScaleSupplyWithVolume": false,
+      "ScaleExtractAboveMinimum": false,
+      "DefaultFlowWeightBasis": "None",
+      "CalculatedFlowRate_Lps": 0,
+      "Synonyms": [
+        "communal corridor",
+        "common corridor",
+        "shared corridor",
+        "communal circulation",
+        "lift lobby",
+        "communal lobby",
+        "entrance lobby"
       ]
     },
     {
       "Category": "Void",
+      "SpaceUse": "Void",
       "VentilationType": "transfer",
       "IsBedroom": false,
       "MinFlowRate_Lps": 0,
@@ -294,7 +455,8 @@
   ],
   "BedroomCountRules": {
     "CountCategoriesAsBedroom": [
-      "Sleeping"
+      "Sleeping",
+      "Studio"
     ],
     "StudioCountsAs": 1,
     "DoNotCountCategories": [
@@ -302,81 +464,101 @@
       "LivingKitchen",
       "Cooking",
       "Bathroom",
+      "Ensuite",
       "WC",
       "Utility",
       "Transfer",
+      "Storage",
+      "PlantRoom",
+      "CommunalCirculation",
       "Void"
     ]
   },
   "CalculationRules": {
-    "BedroomBasedRateFormula": "19 for Studio or 1 bedroom; 25 for 2; 31 for 3; 37 for 4; 43 for 5; add 6 for each bedroom above 5",
+    "BedroomBasedRateFormula": "19 for 1 bedroom; 25 for 2; 31 for 3; 37 for 4; 43 for 5; add 6 for each bedroom above 5",
+    "OneHabitableRoomRuleFormula": "13 where the dwelling has exactly one habitable room (Table 1.3 note 1), replacing the bedroom-based rate",
     "AreaBasedRateFormula": "0.3 * sum(space area where IncludeInFloorAreaCheck = true)",
     "WholeDwellingRateFormula": "max(BedroomBasedRate, AreaBasedRate)",
     "ExtractMinimumTotalFormula": "sum(MinFlowRate_Lps for all spaces where VentilationType = extract)",
-    "FinalSystemRateFormula": "max(WholeDwellingRate, ExtractMinimumTotal)",
-    "BalancingRule": "TotalSupply = FinalSystemRate and TotalExtract = FinalSystemRate"
+    "BedroomOrHabitableRateFormula": "HabitableRoomCount == 1 ? OneHabitableRoomRate_Lps : Table1_3Rate(BedroomCount)",
+    "ContinuousDesignSystemRateFormula": "max(BedroomOrHabitableRate, AreaRate)",
+    "SetbackSystemRateFormula": "ContinuousDesignSystemRate * SetbackFlowRateFactor",
+    "BalancingRule": "TotalSupply = TotalExtract = ContinuousDesignSystemRate at the continuous design condition, and = SetbackSystemRate at the setback condition"
   },
   "FlowRecalculationRules": {
-    "WhenToRecalculate": [
-      "AreaBasedRate > BedroomBasedRate",
-      "ExtractMinimumTotal > WholeDwellingRate",
-      "User requests final terminal flow rates"
-    ],
     "SupplyRecalculation": {
       "ApplyToCategories": [
+        "Studio",
+        "LivingKitchen",
         "Living",
         "Sleeping"
       ],
-      "RequiredTotalFormula": "sum(CalculatedFlowRate_Lps for supply spaces) = FinalSystemRate",
+      "RequiredTotalFormula": "sum(ContinuousDesignFlowRate_Lps for supply spaces) = ContinuousDesignSystemRate",
       "WeightBasisPriority": [
         "RoomVolume",
         "RoomArea"
       ],
-      "Formula": "CalculatedFlowRate_Lps = FinalSystemRate * (SpaceWeight / SumOfAllSupplySpaceWeights)",
-      "RoundFlowsTo": 0.01,
+      "Formula": "ContinuousDesignFlowRate_Lps = ContinuousDesignSystemRate * (SpaceWeight / SumOfAllSupplySpaceWeights)",
       "PreserveMinimumFlow": false
     },
     "ExtractRecalculation": {
       "ApplyToCategories": [
-        "LivingKitchen",
         "Cooking",
         "Bathroom",
+        "Ensuite",
         "WC",
         "Utility"
       ],
-      "Step1": "Assign each extract space its MinFlowRate_Lps",
-      "Step2": "ExtraExtractNeeded = FinalSystemRate - ExtractMinimumTotal",
-      "Step3": "If ExtraExtractNeeded > 0, distribute extra extract across extract spaces by selected weight basis",
-      "RequiredTotalFormula": "sum(CalculatedFlowRate_Lps for extract spaces) = FinalSystemRate",
+      "AppliesTo": "Every extract TERMINAL in the balanced continuous flow, which includes the LocalKitchenExtract terminal of a Studio or LivingKitchen. A terminal whose extract method is intermittent - a cooker hood, a separate intermittent extract fan, a recirculating hood - is excluded from every step here and assessed against Table 1.1 instead.",
+      "Step1": "Assign each extract terminal its MinFlowRate_Lps (Table 1.2 high rate column)",
+      "Step2": "ExtraExtractNeeded = ContinuousDesignSystemRate - ExtractMinimumTotal",
+      "Step3": "If ExtraExtractNeeded > 0, distribute it by ExtractAllocationStrategy. MinimumFirstCookingPriority sends it all to the LocalKitchenExtract terminals, in proportion to their own minimums where there is more than one, and falls back to volume weighting where the dwelling has no local kitchen extract in the balanced flow. VolumeWeighted shares it between the extract terminals in proportion to room volume.",
+      "Step4": "HighFlowRate_Lps = max(ContinuousDesignFlowRate_Lps, MinFlowRate_Lps), per Table 1.2 note 1",
+      "RequiredTotalFormula": "sum(ContinuousDesignFlowRate_Lps for balanced extract terminals) = ContinuousDesignSystemRate",
       "WeightBasisPriority": [
         "WetRoomVolume",
         "RoomVolume",
         "RoomArea"
       ],
-      "Formula": "CalculatedFlowRate_Lps = MinFlowRate_Lps + ExtraExtractNeeded * (SpaceWeight / SumOfAllExtractSpaceWeights)",
-      "RoundFlowsTo": 0.01,
-      "NeverBelowMinimum": true
+      "Formula": "ContinuousDesignFlowRate_Lps = MinFlowRate_Lps + ExtraExtractNeeded * AllocationShare",
+      "NeverBelowMinimum": true,
+      "Note": "Approved Document F fixes only that each room reaches its Table 1.2 minimum and that the total reaches the whole dwelling rate. The split of the surplus is an engineering strategy, not a regulatory value, and is recorded on every result."
+    },
+    "SetbackRecalculation": {
+      "AppliesTo": "Every supply and extract terminal",
+      "Formula": "SetbackFlowRate_Lps = ContinuousDesignFlowRate_Lps * SetbackFlowRateFactor",
+      "Note": "Applied only after every continuous-design-condition minimum has been satisfied. Setback rates are a reduced-operation mode and are not checked against the Table 1.2 minimums."
     },
     "TransferAndVoidRule": {
       "ApplyToCategories": [
         "Transfer",
+        "Storage",
+        "PlantRoom",
+        "CommunalCirculation",
         "Void"
       ],
-      "Formula": "CalculatedFlowRate_Lps = 0"
+      "Formula": "ContinuousDesignFlowRate_Lps = SetbackFlowRate_Lps = 0"
     }
   },
   "DefaultDwellingAlgorithm": [
-    "Classify each space using Categories and Synonyms.",
-    "Apply PostProcessingRules.",
-    "BedroomCount = count of spaces where IsBedroom = true, except Studio dwelling counts as 1.",
+    "Classify each space using the shared space use vocabulary, then map that SpaceUse to a Category.",
+    "HabitableRoomCount = count of spaces where PartFCategory = Habitable.",
+    "BedroomCount = count of spaces where IsBedroom = true; a Studio counts as 1.",
+    "BedroomOrHabitableRate = HabitableRoomCount == 1 ? OneHabitableRoomRate_Lps : Table1_3Rate(BedroomCount).",
     "InternalFloorArea = sum(area of spaces where IncludeInFloorAreaCheck = true).",
     "BedroomBasedRate = rate from WholeDwellingRates_Lps using BedroomCount.",
     "AreaBasedRate = AreaRate_LpsPerM2 * InternalFloorArea.",
     "WholeDwellingRate = max(BedroomBasedRate, AreaBasedRate).",
-    "ExtractMinimumTotal = sum(MinFlowRate_Lps for all extract spaces).",
-    "FinalSystemRate = max(WholeDwellingRate, ExtractMinimumTotal).",
-    "Recalculate supply room CalculatedFlowRate_Lps so total supply equals FinalSystemRate.",
-    "Recalculate extract room CalculatedFlowRate_Lps so total extract equals FinalSystemRate and no extract space is below MinFlowRate_Lps.",
-    "Set transfer and void spaces CalculatedFlowRate_Lps = 0."
+    "Build the terminals: a Supply terminal for every habitable room (paragraph 1.67); a LocalKitchenExtract terminal for every cooking space (paragraph 1.17a), with its extract method taken from the space's PartF Local Extract Method parameter; a GeneralExtract terminal for every other wet room (paragraph 1.17).",
+    "ExtractMinimumTotal = sum(MinFlowRate_Lps for extract terminals in the BALANCED continuous flow). An intermittent device is excluded, because it does not run at the continuous design condition.",
+    "ContinuousDesignSystemRate = max(BedroomOrHabitableRate, AreaRate). The Table 1.2 per-room figures are minimum HIGH rates and never raise this continuous rate.",
+    "Recalculate supply terminal ContinuousDesignFlowRate_Lps so total supply equals ContinuousDesignSystemRate, distributed in proportion to habitable room volume.",
+    "Recalculate extract terminal ContinuousDesignFlowRate_Lps so total balanced extract equals ContinuousDesignSystemRate and no terminal is below MinFlowRate_Lps, sharing the surplus by ExtractAllocationStrategy.",
+    "HighFlowRate_Lps = max(ContinuousDesignFlowRate_Lps, MinFlowRate_Lps) for every balanced extract terminal, and the Table 1.1 rate for an intermittent one. High supply matches total balanced high extract, distributed by habitable room volume.",
+    "Transfer, storage, plant, communal circulation and void spaces take no terminal, so they carry no flow rate. They remain part of the internal transfer air network, which is what circulation spaces are for.",
+    "SetbackFlowRate_Lps = ContinuousDesignFlowRate_Lps * SetbackFlowRateFactor for every terminal that runs continuously.",
+    "Build the internal airflow network from the dwelling's internal separating elements, solve the transfer flows, and assess every internal route against the paragraph 1.25 free area.",
+    "Assess purge ventilation in every habitable room against paragraphs 1.26 to 1.31 and Table 1.4.",
+    "Build the clause-level checks, adopt any recorded user confirmations, and resolve the overall Part F conformance assessment status."
   ]
 }

@@ -59,7 +59,7 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Name = "_adjacencyCluster_Destination",
                     NickName = "_adjacencyCluster_Destination",
-                    Description = "Source SAM Analytical AdjacencyCluster",
+                    Description = "Destination SAM Analytical AdjacencyCluster",
                     Access = GH_ParamAccess.item
                 }, ParamVisibility.Binding));
 

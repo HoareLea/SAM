@@ -22,7 +22,8 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            return new Plane((new Point3D[] { point3D_1, point3D_2, point3D_3 }).Average(), normal);
+            Point3D centroid = new Point3D((point3D_1.X + point3D_2.X + point3D_3.X) / 3.0, (point3D_1.Y + point3D_2.Y + point3D_3.Y) / 3.0, (point3D_1.Z + point3D_2.Z + point3D_3.Z) / 3.0);
+            return new Plane(centroid, normal);
         }
 
         public static Plane Plane(this IEnumerable<Point3D> point3Ds, double tolerance = Core.Tolerance.Distance)
@@ -44,7 +45,7 @@ namespace SAM.Geometry.Spatial
 
         public static Plane Plane(double elevation)
         {
-            return Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, elevation)) as Plane;
+            return new Plane(new Point3D(0, 0, elevation), Spatial.Vector3D.WorldZ);
         }
 
         public static Plane Plane(double value, int dimensionIndex)
@@ -52,11 +53,11 @@ namespace SAM.Geometry.Spatial
             switch (dimensionIndex)
             {
                 case 0:
-                    return Spatial.Plane.WorldYZ.GetMoved(new Vector3D(value, 0, 0)) as Plane;
+                    return new Plane(new Point3D(value, 0, 0), Spatial.Vector3D.WorldX);
                 case 1:
-                    return Spatial.Plane.WorldXZ.GetMoved(new Vector3D(0, value, 0)) as Plane;
+                    return new Plane(new Point3D(0, value, 0), Spatial.Vector3D.WorldY);
                 case 2:
-                    return Spatial.Plane.WorldXY.GetMoved(new Vector3D(0, 0, value)) as Plane;
+                    return new Plane(new Point3D(0, 0, value), Spatial.Vector3D.WorldZ);
             }
 
             return null;

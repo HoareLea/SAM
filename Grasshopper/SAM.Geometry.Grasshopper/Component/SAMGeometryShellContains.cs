@@ -153,7 +153,7 @@ namespace SAM.Geometry.Grasshopper
                     silverSpacing = silverSpacing_Temp;
             }
 
-            index = Params.IndexOfInputParam("silverSpacing_");
+            index = Params.IndexOfInputParam("allowOnBoundary_");
             bool allowOnBoundary = true;
             if (index != -1)
             {

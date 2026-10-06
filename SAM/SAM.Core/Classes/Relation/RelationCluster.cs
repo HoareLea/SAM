@@ -83,6 +83,38 @@ namespace SAM.Core
         {
         }
 
+        /// <summary>
+        /// Replaces every stored object with <paramref name="replace"/> of itself, <b>in the slot it already
+        /// occupies</b> - same type bucket, same key - so the relations, which are keyed by that Guid, still
+        /// point at it.
+        /// <para>
+        /// Not <c>AddObject</c>: that re-derives the key from the object, and an object with no Guid of its
+        /// own (a <c>DesignDay</c> is a <c>WeatherDay</c>, not a <c>SAMObject</c>) is found again only by
+        /// <c>Equals</c>, which a fresh clone does not satisfy. The clone was then stored under a NEW key
+        /// beside the original, so every deep copy doubled such objects and still shared the originals.
+        /// </para>
+        /// </summary>
+        protected void ReplaceObjects(Func<X, X> replace)
+        {
+            if (replace == null || dictionary_Objects == null)
+            {
+                return;
+            }
+
+            foreach (Dictionary<Guid, X> dictionary in dictionary_Objects.Values)
+            {
+                if (dictionary == null)
+                {
+                    continue;
+                }
+
+                foreach (Guid guid in dictionary.Keys.ToList())
+                {
+                    dictionary[guid] = replace(dictionary[guid]);
+                }
+            }
+        }
+
         public HashSet<Guid> Guids
         {
             get

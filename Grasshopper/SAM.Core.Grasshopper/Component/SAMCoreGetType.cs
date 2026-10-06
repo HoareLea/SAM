@@ -34,7 +34,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreGetType()
           : base("SAMCore.GetType", "SAMCore.GetType",
-              "Get Type form objects to find out all Parameter, \n *to be used with Node: SAMCore.ParameterByType",
+              "Get Type from objects to find out all Parameter, \n *to be used with Node: SAMCore.ParameterByType",
               "SAM", "Core")
         {
         }

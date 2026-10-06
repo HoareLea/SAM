@@ -23,7 +23,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.6";
+        public override string LatestComponentVersion => "1.0.7";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -34,32 +34,80 @@ namespace SAM.Analytical.Grasshopper
 
 
         private const string Bb101Description = @"
-BB101 / DfE Discharge Coefficient (hinged windows) + Opening Properties
+SUMMARY
+BB101/DfE discharge-coefficient (hinged windows) opening properties, plus the SAM Part O opening
+RESTRICTION policy - whether, and when, an opening may be used for overheating ventilation.
 
-What it does
-• Computes Cd(α) per the DfE BB101 spreadsheet using:
-  Cd(α) = CdMax · (1 − exp(−k · αdeg)), with {k, CdMax} selected by aspect-ratio (w/h).
-• Adds opening properties (including Cd) to apertures.
+What it computes
+• Cd(α) per the DfE BB101 spreadsheet: Cd(α) = CdMax · (1 − exp(−k · αdeg)), {k, CdMax} by aspect-ratio (w/h).
+• Adds opening properties (including Cd, and the restriction policy below) to apertures.
 
 Geometry source & scope
-• Dimensions are taken from the APERTURE PANE only (width = pane width, height = pane height).
+• Dimensions are taken from the APERTURE PANE only (width = pane width, height = pane height), unless
+  '_sizePaneOnly_' is set to false.
 • If 'apertures_' is connected → only those apertures are processed.
 • If 'apertures_' is NOT connected → ALL apertures found in the supplied Analytical/AdjacencyCluster are processed.
+• The supplied Analytical object/AdjacencyCluster is NOT modified - an updated copy is returned on 'analytical'.
 
-Areas & outputs
-• A_free = w·h  (DfE convention)
-• A_eff  = Cd · A_free
-• A_eq   = A_eff / 0.62  (orifice Cd0 used in DfE tool)
+Areas (DfE convention)
+• A_free = w·h ; A_eff = Cd · A_free ; A_eq = A_eff / 0.62 (orifice Cd0 used in DfE tool).
 
-Assumptions & caveats (DfE/BB101)
-• Façade-normal flow; no reveal corrections.
-• α < 10° is extrapolated (use with caution).
-• For bottom-hung (hinge at bottom, top tilts out), a conservative 10–15% reduction in Cd may be appropriate.
+OPENING RESTRICTIONS ('restriction_')
+This states SAM.Analytical POLICY only. TAS schedule/profile creation happens later, when the model is
+converted/prepared for TAS - this component never creates a TBD schedule, a TAS profile, or references
+SAM.Analytical.Tas.
 
-Sources
+• Unrestricted (default) - normal operation. The opening may be used for overheating ventilation at any
+  hour, exactly as before this input existed. Unconnected = Unrestricted, so existing saved GH definitions
+  behave exactly as they did before this input was added.
+• NightClosed - the opening remains physically openable (width, height, opening angle, discharge
+  coefficient and the existing 'zdwno' Function are all retained), but is unavailable for overheating
+  ventilation outside the configured daytime period. Governed by 'openingHour_'/'closingHour_', a SAM/project
+  MODELLING PRESET (default 08:00-23:00) - NOT a universal Approved Document O or TM59 regulatory hour.
+  Reusable for any 'closed at night' case (acoustic, security, an internal door kept shut overnight, or
+  otherwise) - this component records only THAT an opening is restricted, never WHY.
+• AlwaysClosed - the aperture remains geometrically present (for physical/Part F purposes, and its discharge
+  coefficient stays available), but contributes zero effective overheating-ventilation opening downstream in
+  TAS. No 24-hour zero schedule is generated for this - TAS represents it as a zero opening factor instead.
+
+'openingHour_' / 'closingHour_' (NightClosed only, default 8 / 23)
+Hour (0-23) the opening becomes available / unavailable. Wraps overnight if closingHour_ < openingHour_
+(e.g. 23→8). Equal values produce an always-unavailable (all-zero) schedule and are flagged. These are SAM
+modelling defaults, not statutory hours.
+
+'profiles_' precedence
+'profiles_' is explicit, user-authored control - an advanced override that has existed on this component
+since before 'restriction_'. If 'profiles_' is connected for an aperture, IT WINS: the aperture gets a
+ProfileOpeningProperties built from your profile, and 'restriction_' has no effect for that aperture (a
+warning is raised if 'restriction_' was left at something other than Unrestricted, so the conflict is never
+silent). Leave 'profiles_' unconnected to let 'restriction_' govern the aperture instead.
+
+TAS BEHAVIOUR
+Downstream, SAM_Tas's aperture-control write reads the restriction/profile carried here and writes it into
+the TBD's aperture-control profile: NightClosed's availability profile is created once by name and reused on
+repeated preparation (no duplicate schedules); the Function ('zdwno,...') is never discarded by the
+schedule, and vice versa. None of that happens in this component - it only states the policy.
+
+A TM59/overheating result produced downstream is never a statement of full Part O compliance on its own.
+
+Sources (BB101 discharge coefficient only)
 • DfE “BB101 Calculation Tools – Discharge coefficient calculator.xlsx”
 • BB101 (2018): Ventilation, thermal comfort & IAQ in schools
 • ESFA Output Specification (GDB + Annex 2F)
+
+EXAMPLE
+Aperture -> SAMAnalytical.AddOpeningPropertiesByPartO (restriction_ = NightClosed, openingHour_ = 8,
+closingHour_ = 23) -> SAMAnalytical.PreparePartOIteration -> To gbXML -> SAMAnalytical.WorkflowgbXML
+(Simulation = true) -> open the exported TBD in TAS and inspect the aperture's Opening profile for the
+'PartO_DayOpen_08_23' schedule.
+
+A RESTRICTION AUTHORED HERE SURVIVES PREPARATION
+SAMAnalytical.PreparePartOIteration never rewrites opening data to fit the stage it is asked to state - it
+once reset restrictions to Unrestricted, which silently deleted this schedule from the model that reached
+TAS. It now reports the comparison and changes nothing. Where the stage's 'Openings Restricted' assumption
+disagrees with what you authored here, you get a WARNING naming the aperture, not a refusal: a restriction
+records a fact about the building (noise, security, an internal door) and is orthogonal to which mitigation
+stage is being assessed.
 ";
 
 
@@ -100,12 +148,24 @@ Sources
                 number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "factors_", NickName = "factors_", Description = "Factors", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(number, ParamVisibility.Voluntary));
 
-                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Profiles", Access = GH_ParamAccess.list, Optional = true };
+                GooProfileParam gooProfileParam = new GooProfileParam() { Name = "profiles_", NickName = "profiles_", Description = "Advanced: an explicit, user-authored availability profile per aperture. When connected for an aperture, it WINS over restriction_ - the aperture gets a ProfileOpeningProperties built from this profile, and restriction_ has no effect for it (a warning is raised if restriction_ was left non-Unrestricted). Leave unconnected to let restriction_ govern the aperture.", Access = GH_ParamAccess.list, Optional = true };
                 result.Add(new GH_SAMParam(gooProfileParam, ParamVisibility.Voluntary));
 
                 global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new() { Name = "_sizePaneOnly_", NickName = "_sizePaneOnly_", Description = "Size Pane Only", Access = GH_ParamAccess.item, Optional = true };
                 param_Boolean.SetPersistentData(true);
                 result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Voluntary));
+
+                @string = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "restriction_", NickName = "restriction_", Description = "Part O opening restriction: Unrestricted, NightClosed or AlwaysClosed. Unconnected = Unrestricted (existing behaviour is unchanged). States SAM.Analytical policy only - TAS schedule/profile creation happens later, during TAS conversion.", Access = GH_ParamAccess.list, Optional = true };
+                @string.SetPersistentData(OpeningRestriction.Unrestricted.ToString());
+                result.Add(new GH_SAMParam(@string, ParamVisibility.Voluntary));
+
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer = new() { Name = "openingHour_", NickName = "openingHour_", Description = "NightClosed only. Hour (0-23) from which the opening becomes available. A SAM/project modelling default, not a universal Approved Document O or TM59 regulatory hour. Default 8 (08:00).", Access = GH_ParamAccess.list, Optional = true };
+                param_Integer.SetPersistentData(8);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Voluntary));
+
+                param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "closingHour_", NickName = "closingHour_", Description = "NightClosed only. Hour (0-23) from which the opening becomes unavailable. A SAM/project modelling default, not a universal Approved Document O or TM59 regulatory hour. Default 23 (23:00).", Access = GH_ParamAccess.list, Optional = true };
+                param_Integer.SetPersistentData(23);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Voluntary));
 
                 return [.. result];
             }
@@ -216,6 +276,27 @@ Sources
                 dataAccess.GetData(index, ref paneSizeOnly);
             }
 
+            index = Params.IndexOfInputParam("restriction_");
+            List<string> restrictionTexts = [];
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, restrictionTexts);
+            }
+
+            index = Params.IndexOfInputParam("openingHour_");
+            List<int> openingHours = [];
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, openingHours);
+            }
+
+            index = Params.IndexOfInputParam("closingHour_");
+            List<int> closingHours = [];
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, closingHours);
+            }
+
             List<Aperture> apertures_Result = null;
             List<double> dischargeCoefficients_Result = null;
             List<IOpeningProperties> openingProperties_Result = null;
@@ -251,13 +332,37 @@ Sources
 
                     double factor = factors != null && factors.Count != 0 ? factors.Count > i ? factors[i] : factors.Last() : double.NaN;
 
-                    PartOOpeningProperties partOOpeningProperties = new(width, height, openingAngle);
+                    OpeningRestriction restriction = OpeningRestriction.Unrestricted;
+                    if (restrictionTexts != null && restrictionTexts.Count != 0)
+                    {
+                        string restrictionText = restrictionTexts.Count > i ? restrictionTexts[i] : restrictionTexts.Last();
+                        if (!string.IsNullOrWhiteSpace(restrictionText) && !Core.Query.TryGetEnum(restrictionText, out restriction))
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("'{0}' is not a valid Opening Restriction (use Unrestricted, NightClosed or AlwaysClosed) for aperture '{1}' - treated as Unrestricted.", restrictionText, aperture_Temp.Name));
+                            restriction = OpeningRestriction.Unrestricted;
+                        }
+                    }
+
+                    int openingHour = openingHours != null && openingHours.Count != 0 ? (openingHours.Count > i ? openingHours[i] : openingHours.Last()) : 8;
+                    int closingHour = closingHours != null && closingHours.Count != 0 ? (closingHours.Count > i ? closingHours[i] : closingHours.Last()) : 23;
+
+                    if (restriction == OpeningRestriction.NightClosed && ((openingHour % 24) + 24) % 24 == ((closingHour % 24) + 24) % 24)
+                    {
+                        AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Aperture '{0}': openingHour_ and closingHour_ resolve to the same hour, so the NightClosed availability profile is never available (all-zero). Supply different hours if that is not intended.", aperture_Temp.Name));
+                    }
+
+                    PartOOpeningProperties partOOpeningProperties = new(width, height, openingAngle, restriction, openingHour, closingHour);
 
                     double dischargeCoefficient = partOOpeningProperties.GetDischargeCoefficient();
 
                     ISingleOpeningProperties singleOpeningProperties = null;
                     if (profiles != null && profiles.Count != 0)
                     {
+                        if (restriction != OpeningRestriction.Unrestricted)
+                        {
+                            AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Aperture '{0}': profiles_ is connected, so the explicit custom profile is used and restriction_ ('{1}') has no effect. Disconnect profiles_, or leave restriction_ at Unrestricted, to avoid this ambiguity.", aperture_Temp.Name, restriction));
+                        }
+
                         Profile profile = profiles.Count > i ? profiles[i] : profiles.Last();
                         ProfileOpeningProperties profileOpeningProperties = new(partOOpeningProperties.GetDischargeCoefficient(), profile);
                         if (!double.IsNaN(factor))

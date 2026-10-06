@@ -122,7 +122,7 @@ namespace SAM.Analytical.Grasshopper
                 if (profile is null || profile.ProfileType == ProfileType.Undefined)
                 {
                     AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, string.Format("Invalid ProfileType: {0}", profile?.Name ?? "???"));
-                    return;
+                    continue;
                 }
 
                 profileLibrary.Add(profile);

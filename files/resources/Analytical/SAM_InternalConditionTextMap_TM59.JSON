@@ -62,6 +62,93 @@
         "3",
         "3-bed",
         "3 bed"
+      ],
+      [
+        "TM59_Bathroom",
+        "bathroom",
+        "bath",
+        "ensuite",
+        "en-suite",
+        "en suite",
+        "shower room",
+        "wet room",
+        "toilet",
+        "wc",
+        "w.c.",
+        "cloakroom"
+      ],
+      [
+        "TM59_Internal Corridor",
+        "internal corridor",
+        "hall",
+        "hallway",
+        "internal landing",
+        "entrance hall"
+      ],
+      [
+        "TM59_Communal Corridor (including pipework gains)",
+        "corridor",
+        "communal corridor",
+        "common corridor",
+        "circulation",
+        "lift lobby",
+        "lobby",
+        "communal lobby",
+        "common lobby"
+      ],
+      [
+        "TM59_Stairs",
+        "stair",
+        "stairs",
+        "staircase",
+        "stairwell",
+        "escape stair",
+        "stair landing"
+      ],
+      [
+        "TM59_Cupboard/riser/lift/void",
+        "cupboard",
+        "store",
+        "riser",
+        "shaft",
+        "duct",
+        "lift",
+        "void",
+        "unconditioned"
+      ],
+      [
+        "TM59_Cupboard with HIU",
+        "hiu",
+        "cupboard hiu",
+        "hiu cupboard",
+        "heat interface unit"
+      ],
+      [
+        "TM59_Riser Communal pipework",
+        "communal riser",
+        "riser pipework",
+        "communal pipework"
+      ],
+      [
+        "Single Bedroom",
+        "single",
+        "single bedroom",
+        "sgl",
+        "single bed",
+        "twin",
+        "twin bedroom",
+        "twin bed"
+      ],
+      [
+        "Double Bedroom",
+        "double",
+        "double bedroom",
+        "double bed",
+        "dbl",
+        "master",
+        "master bedroom",
+        "king",
+        "queen"
       ]
     ]
   }

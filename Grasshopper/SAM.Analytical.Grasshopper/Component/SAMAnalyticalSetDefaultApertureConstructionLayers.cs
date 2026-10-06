@@ -57,7 +57,7 @@ namespace SAM.Analytical.Grasshopper
         /// </summary>
         public SAMAnalyticalSetDefaultApertureConstructionLayers()
           : base("SAMAdjacencyCluster.SetDefaultApertureConstructionLayers", "SAMAdjacencyCluster.SetDefaultApertureConstructionLayers",
-              "Sets Default ApertureConstruction Layers By PanelType and ApertureType for Adjacency Cluster only if currect ApertureConstruction does not follow naming convenction ",
+              "Sets Default ApertureConstruction Layers By PanelType and ApertureType for Adjacency Cluster only if current ApertureConstruction does not follow naming convention ",
               "SAM", "Analytical03")
         {
         }
@@ -74,7 +74,7 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            index = Params.IndexOfInputParam("apertures_");
+            index = Params.IndexOfInputParam("_apertures_");
             List<Aperture> apertures = new List<Aperture>();
             if (index != -1)
                 dataAccess.GetDataList(index, apertures);

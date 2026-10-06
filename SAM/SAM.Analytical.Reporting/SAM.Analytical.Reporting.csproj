@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <!--
+    Analytical reporting: typed per-space engineering data collected from a saved AnalyticalModel, section
+    builders that format it through SAM.Core.Reporting, and the document definitions (Space Assumptions).
+    No renderer code and no third-party dependencies.
+  -->
+  <PropertyGroup>
+    <TargetFramework>netstandard2.0</TargetFramework>
+    <OutputType>Library</OutputType>
+    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
+    <AppendRuntimeIdentifierToOutputPath>false</AppendRuntimeIdentifierToOutputPath>
+    <LangVersion>12.0</LangVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <OutputPath>..\..\build\</OutputPath>
+    <DocumentationFile>..\..\build\SAM.Analytical.Reporting.xml</DocumentationFile>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <OutputPath>..\..\build\</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SAM.Analytical\SAM.Analytical.csproj" />
+    <ProjectReference Include="..\SAM.Core\SAM.Core.csproj" />
+    <ProjectReference Include="..\SAM.Core.Reporting\SAM.Core.Reporting.csproj" />
+    <ProjectReference Include="..\SAM.Units\SAM.Units.csproj" />
+    <ProjectReference Include="..\SAM.Weather\SAM.Weather.csproj" />
+  </ItemGroup>
+</Project>

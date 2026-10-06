@@ -14,6 +14,7 @@ using SAM.Geometry.Grasshopper;
 using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
 using System;
+using System.Buffers.Binary;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -23,6 +24,32 @@ namespace SAM.Analytical.Grasshopper
 {
     public class GooPanel : GooJSAMObject<IPanel>, IGH_PreviewData, IGH_BakeAwareData
     {
+        private sealed class PreviewSnapshot
+        {
+            public IPanel Source;
+            public double UnitScale;
+            public long Fingerprint;
+            public BoundingBox ClippingBox;
+            public Face3D Face3D;
+            public Brep Brep;
+            public List<WireLoop> PanelLoops;
+            public List<ApertureLoop> ApertureLoops;
+        }
+
+        private struct WireLoop
+        {
+            public List<Point3d> Points;
+            public bool Internal;
+        }
+
+        private struct ApertureLoop
+        {
+            public List<Point3d> Points;
+            public System.Drawing.Color Color;
+        }
+
+        private PreviewSnapshot previewSnapshot;
+
         public BoundaryType? BoundaryType { get; } = null;
 
         public bool ShowAll { get; set; } = true;
@@ -43,14 +70,341 @@ namespace SAM.Analytical.Grasshopper
             BoundaryType = boundaryType;
         }
 
+        private static long Combine(long hash, long value)
+        {
+            unchecked
+            {
+                return (hash * 31) ^ value;
+            }
+        }
+
+        private static long CombineDouble(long hash, double value)
+        {
+            return Combine(hash, BitConverter.DoubleToInt64Bits(value));
+        }
+
+        private static long CombinePoint3D(long hash, Point3D point3D)
+        {
+            if (point3D == null)
+            {
+                return Combine(hash, long.MinValue);
+            }
+
+            hash = CombineDouble(hash, point3D.X);
+            hash = CombineDouble(hash, point3D.Y);
+            hash = CombineDouble(hash, point3D.Z);
+            return hash;
+        }
+
+        private static long CombineVector3D(long hash, Vector3D vector3D)
+        {
+            if (vector3D == null)
+            {
+                return Combine(hash, long.MaxValue);
+            }
+
+            hash = CombineDouble(hash, vector3D.X);
+            hash = CombineDouble(hash, vector3D.Y);
+            hash = CombineDouble(hash, vector3D.Z);
+            return hash;
+        }
+
+        private static long CombineGuid(long hash, Guid guid)
+        {
+            Span<byte> bytes = stackalloc byte[16];
+            guid.TryWriteBytes(bytes);
+            hash = Combine(hash, BinaryPrimitives.ReadInt64LittleEndian(bytes));
+            hash = Combine(hash, BinaryPrimitives.ReadInt64LittleEndian(bytes.Slice(8)));
+            return hash;
+        }
+
+        private static long CombinePlane(long hash, Geometry.Spatial.Plane plane)
+        {
+            if (plane == null)
+            {
+                return Combine(hash, 0);
+            }
+
+            // Origin + normal + axisY fully capture position and orientation,
+            // including flips (FlipNormal reverses normal and winding) without
+            // being affected by re-derivation of the redundant axisX.
+            hash = CombinePoint3D(hash, plane.Origin);
+            hash = CombineVector3D(hash, plane.Normal);
+            hash = CombineVector3D(hash, plane.AxisY);
+            return hash;
+        }
+
+        private static long CombineClosedPlanar3D(long hash, IClosedPlanar3D closedPlanar3D)
+        {
+            if (closedPlanar3D is ISegmentable3D segmentable3D)
+            {
+                List<Point3D> point3Ds = segmentable3D.GetPoints();
+                if (point3Ds == null)
+                {
+                    return Combine(hash, -1);
+                }
+
+                hash = Combine(hash, point3Ds.Count);
+                for (int i = 0; i < point3Ds.Count; i++)
+                {
+                    hash = CombinePoint3D(hash, point3Ds[i]);
+                }
+
+                return hash;
+            }
+
+            return Combine(hash, -2);
+        }
+
+        private static long CombineFace3D(long hash, Face3D face3D)
+        {
+            if (face3D == null)
+            {
+                return Combine(hash, 0);
+            }
+
+            hash = CombinePlane(hash, face3D.GetPlane());
+            hash = CombineClosedPlanar3D(hash, face3D.GetExternalEdge3D());
+
+            List<IClosedPlanar3D> internalEdge3Ds = face3D.GetInternalEdge3Ds();
+            hash = Combine(hash, internalEdge3Ds == null ? 0 : internalEdge3Ds.Count);
+            if (internalEdge3Ds != null)
+            {
+                for (int i = 0; i < internalEdge3Ds.Count; i++)
+                {
+                    hash = CombineClosedPlanar3D(hash, internalEdge3Ds[i]);
+                }
+            }
+
+            return hash;
+        }
+
+        /// <summary>
+        /// Deterministic, ordered geometry fingerprint used to detect in-place
+        /// mutation of the same <see cref="IPanel"/> reference (e.g. FlipNormal,
+        /// boundary edits, aperture add/remove/replace or aperture geometry change)
+        /// that a reference or bounding-box check alone would miss. Uses exact
+        /// double bit patterns and ordered hash combination (no XOR-only, no
+        /// process-dependent GetHashCode, no temporary arrays or strings beyond the
+        /// point lists the public geometry API itself returns).
+        /// </summary>
+        private static long ComputeFingerprint(IPanel panel)
+        {
+            long hash = 17;
+            if (panel == null)
+            {
+                return hash;
+            }
+
+            hash = CombineFace3D(hash, panel.Face3D);
+
+            if (panel is Panel panel_Temp && panel_Temp.HasApertures)
+            {
+                List<Aperture> apertures = panel_Temp.Apertures;
+                hash = Combine(hash, apertures == null ? 0 : apertures.Count);
+                if (apertures != null)
+                {
+                    for (int i = 0; i < apertures.Count; i++)
+                    {
+                        Aperture aperture = apertures[i];
+                        if (aperture == null)
+                        {
+                            hash = Combine(hash, 0);
+                            continue;
+                        }
+
+                        hash = CombineGuid(hash, aperture.Guid);
+                        hash = CombineGuid(hash, aperture.TypeGuid);
+                        hash = CombineFace3D(hash, aperture.GetFace3D());
+
+                        // Wire geometry is drawn from GetFrameFace3D/GetPaneFace3Ds,
+                        // not the outer GetFace3D. Hash the drawn faces so construction
+                        // edits (frame width, layers) with the same TypeGuid invalidate.
+                        Face3D frame3D = aperture.GetFrameFace3D();
+                        if (frame3D != null)
+                        {
+                            hash = CombineFace3D(hash, frame3D);
+                        }
+                        else
+                        {
+                            List<Face3D> pane3Ds = aperture.GetPaneFace3Ds();
+                            hash = Combine(hash, pane3Ds == null ? 0 : pane3Ds.Count);
+                            if (pane3Ds != null)
+                            {
+                                for (int iPane = 0; iPane < pane3Ds.Count; iPane++)
+                                    hash = CombineFace3D(hash, pane3Ds[iPane]);
+                            }
+                        }
+                    }
+                }
+            }
+            else
+            {
+                hash = Combine(hash, 0);
+            }
+
+            return hash;
+        }
+
+        private static void AddWireLoops(PlanarBoundary3D planarBoundary3D, Action<List<Point3d>, bool> add)
+        {
+            if (planarBoundary3D == null)
+                return;
+
+            BoundaryEdge3DLoop externalLoop = planarBoundary3D.GetExternalEdge3DLoop();
+            if (externalLoop != null)
+            {
+                List<BoundaryEdge3D> edge3Ds = externalLoop.BoundaryEdge3Ds;
+                if (edge3Ds != null && edge3Ds.Count != 0)
+                {
+                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x.Curve3D.GetStart()));
+                    if (point3ds.Count != 0)
+                    {
+                        point3ds.Add(point3ds[0]);
+                        add(point3ds, false);
+                    }
+                }
+            }
+
+            List<BoundaryEdge3DLoop> internalLoops = planarBoundary3D.GetInternalEdge3DLoops();
+            if (internalLoops != null)
+            {
+                foreach (BoundaryEdge3DLoop internalLoop in internalLoops)
+                {
+                    List<BoundaryEdge3D> edge3Ds = internalLoop?.BoundaryEdge3Ds;
+                    if (edge3Ds == null || edge3Ds.Count == 0)
+                        continue;
+
+                    List<Point3d> point3ds = edge3Ds.ConvertAll(x => Geometry.Rhino.Convert.ToRhino(x.Curve3D.GetStart()));
+                    if (point3ds.Count == 0)
+                        continue;
+
+                    point3ds.Add(point3ds[0]);
+                    add(point3ds, true);
+                }
+            }
+        }
+
+        private static PreviewSnapshot BuildPreviewSnapshot(IPanel panel, double unitScale)
+        {
+            PreviewSnapshot result = new PreviewSnapshot()
+            {
+                Source = panel,
+                UnitScale = unitScale,
+                PanelLoops = new List<WireLoop>(),
+                ApertureLoops = new List<ApertureLoop>()
+            };
+
+            Face3D face3D = panel.Face3D;
+            Geometry.Spatial.BoundingBox3D boundingBox3D = face3D?.GetBoundingBox();
+
+            result.Face3D = face3D;
+            result.Fingerprint = ComputeFingerprint(panel);
+            result.ClippingBox = Geometry.Rhino.Convert.ToRhino(boundingBox3D);
+
+            if (face3D != null)
+            {
+                result.Brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
+            }
+
+            if (panel is ExternalPanel)
+            {
+                if (face3D != null)
+                {
+                    AddWireLoops(new PlanarBoundary3D(face3D), (points, @internal) => result.PanelLoops.Add(new WireLoop() { Points = points, Internal = @internal }));
+                }
+
+                return result;
+            }
+
+            Panel panel_Temp = panel as Panel;
+            if (panel_Temp == null)
+            {
+                return result;
+            }
+
+            AddWireLoops(panel_Temp.PlanarBoundary3D, (points, @internal) => result.PanelLoops.Add(new WireLoop() { Points = points, Internal = @internal }));
+
+            List<Aperture> apertures = panel_Temp.Apertures;
+            if (apertures != null)
+            {
+                foreach (Aperture aperture in apertures)
+                {
+                    if (aperture == null)
+                        continue;
+
+                    System.Drawing.Color color_ExternalEdge = System.Drawing.Color.Empty;
+                    System.Drawing.Color color_InternalEdges = System.Drawing.Color.Empty;
+
+                    if (aperture.ApertureConstruction != null)
+                    {
+                        color_ExternalEdge = Analytical.Query.Color(aperture.ApertureConstruction.ApertureType, false);
+                        color_InternalEdges = Analytical.Query.Color(aperture.ApertureConstruction.ApertureType, true);
+                    }
+
+                    if (color_ExternalEdge == System.Drawing.Color.Empty)
+                        color_ExternalEdge = System.Drawing.Color.DarkRed;
+
+                    if (color_InternalEdges == System.Drawing.Color.Empty)
+                        color_InternalEdges = System.Drawing.Color.BlueViolet;
+
+                    List<Face3D> face3Ds = new List<Face3D>();
+
+                    Face3D face3D_Frame = aperture.GetFrameFace3D();
+                    if (face3D_Frame != null)
+                    {
+                        face3Ds.Add(face3D_Frame);
+                    }
+                    else
+                    {
+                        List<Face3D> face3Ds_Pane = aperture.GetPaneFace3Ds();
+                        if (face3Ds_Pane == null)
+                            continue;
+
+                        face3Ds.AddRange(face3Ds_Pane);
+                    }
+
+                    foreach (Face3D face3D_Temp in face3Ds)
+                    {
+                        AddWireLoops(new PlanarBoundary3D(face3D_Temp), (points, @internal) => result.ApertureLoops.Add(new ApertureLoop() { Points = points, Color = @internal ? color_InternalEdges : color_ExternalEdge }));
+                    }
+                }
+            }
+
+            return result;
+        }
+
+        private PreviewSnapshot EnsurePreviewSnapshot()
+        {
+            IPanel panel = Value;
+            if (panel == null)
+                return null;
+
+            double unitScale = Geometry.Rhino.Query.UnitScale();
+
+            PreviewSnapshot result = previewSnapshot;
+            if (result != null && ReferenceEquals(result.Source, panel) && result.UnitScale.Equals(unitScale))
+            {
+                if (result.Fingerprint == ComputeFingerprint(panel))
+                {
+                    return result;
+                }
+            }
+
+            result = BuildPreviewSnapshot(panel, unitScale);
+            previewSnapshot = result;
+            return result;
+        }
+
         public BoundingBox ClippingBox
         {
             get
             {
-                if (Value == null)
+                PreviewSnapshot snapshot = EnsurePreviewSnapshot();
+                if (snapshot == null)
                     return BoundingBox.Empty;
 
-                return Geometry.Rhino.Convert.ToRhino(Value?.Face3D?.GetBoundingBox());
+                return snapshot.ClippingBox;
             }
         }
 
@@ -69,53 +423,57 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
-            GooPlanarBoundary3D gooPlanarBoundary3D = null;
+            PreviewSnapshot snapshot = EnsurePreviewSnapshot();
+            if (snapshot == null)
+            {
+                return;
+            }
+
+            System.Drawing.Color color_ExternalEdge;
+            System.Drawing.Color color_InternalEdges;
 
             if (Value is ExternalPanel)
             {
                 System.Drawing.Color color = Analytical.Query.Color((ExternalPanel)Value);
-
-                gooPlanarBoundary3D = new GooPlanarBoundary3D(new PlanarBoundary3D(Value.Face3D));
-                gooPlanarBoundary3D.DrawViewportWires(args, color, color);
-                return;
+                color_ExternalEdge = color;
+                color_InternalEdges = color;
             }
+            else if (Value is Panel panel)
+            {
+                color_ExternalEdge = Analytical.Query.Color(panel.PanelType, false);
+                color_InternalEdges = Analytical.Query.Color(panel.PanelType, true);
 
-            Panel panel = Value as Panel;
-            if (panel == null)
+                if (color_ExternalEdge == System.Drawing.Color.Empty)
+                    color_ExternalEdge = args.Color;
+
+                if (color_InternalEdges == System.Drawing.Color.Empty)
+                    color_InternalEdges = args.Color;
+            }
+            else
             {
                 return;
             }
 
-            System.Drawing.Color color_ExternalEdge = Analytical.Query.Color(panel.PanelType, false);
-            System.Drawing.Color color_InternalEdges = Analytical.Query.Color(panel.PanelType, true);
-
-            if (color_ExternalEdge == System.Drawing.Color.Empty)
-                color_ExternalEdge = args.Color;
-
-            if (color_InternalEdges == System.Drawing.Color.Empty)
-                color_InternalEdges = args.Color;
-
-            gooPlanarBoundary3D = new GooPlanarBoundary3D(panel.PlanarBoundary3D);
-            gooPlanarBoundary3D.DrawViewportWires(args, color_ExternalEdge, color_InternalEdges);
-
-            List<Aperture> apertures = panel.Apertures;
-            if (apertures != null)
+            foreach (WireLoop wireLoop in snapshot.PanelLoops)
             {
-                foreach (Aperture aperture in apertures)
-                {
-                    if (aperture == null)
-                        continue;
+                args.Pipeline.DrawPolyline(wireLoop.Points, wireLoop.Internal ? color_InternalEdges : color_ExternalEdge);
+            }
 
-                    GooAperture gooAperture = new GooAperture(aperture);
-                    gooAperture.DrawViewportWires(args);
-                }
+            foreach (ApertureLoop apertureLoop in snapshot.ApertureLoops)
+            {
+                args.Pipeline.DrawPolyline(apertureLoop.Points, apertureLoop.Color);
             }
         }
 
         public void DrawViewportMeshes(GH_PreviewMeshArgs args)
         {
-            Face3D face3D = Value?.Face3D;
-            if (face3D == null)
+            if (Value == null)
+            {
+                return;
+            }
+
+            PreviewSnapshot snapshot = EnsurePreviewSnapshot();
+            if (snapshot == null || snapshot.Face3D == null)
             {
                 return;
             }
@@ -128,7 +486,7 @@ namespace SAM.Analytical.Grasshopper
                     return;
                 }
 
-                double distance = face3D.Distance(point3D_CameraLocation);
+                double distance = snapshot.Face3D.Distance(point3D_CameraLocation);
                 if (distance < 8 || distance > 15)
                 {
                     return;
@@ -141,35 +499,18 @@ namespace SAM.Analytical.Grasshopper
                 displayMaterial = args.Material;
             }
 
-            Brep brep = Geometry.Rhino.Convert.ToRhino_Brep(face3D);
-            if (brep == null)
+            if (snapshot.Brep == null)
             {
                 return;
             }
 
-            args.Pipeline.DrawBrepShaded(brep, displayMaterial);
+            args.Pipeline.DrawBrepShaded(snapshot.Brep, displayMaterial);
 
-            if (Value is Panel)
-            {
-                List<Aperture> apertures = ((Panel)Value).Apertures;
-                if (apertures != null)
-                {
-                    foreach (Aperture aperture in apertures)
-                    {
-                        foreach (IClosedPlanar3D closedPlanar3D in aperture.GetFace3D().GetEdge3Ds())
-                        {
-                            global::Rhino.Display.DisplayMaterial displayMaterial_Aperture = Query.DisplayMaterial(aperture.ApertureConstruction.ApertureType);
-                            if (displayMaterial_Aperture == null)
-                            {
-                                displayMaterial_Aperture = args.Material;
-                            }
-
-                            GooSAMGeometry gooSAMGeometry_Aperture = new GooSAMGeometry(closedPlanar3D);
-                            gooSAMGeometry_Aperture.DrawViewportMeshes(args, displayMaterial_Aperture);
-                        }
-                    }
-                }
-            }
+            // Note: the pre-snapshot implementation iterated aperture edge loops and
+            // passed them to Geometry.Grasshopper.Modify.DrawViewportMeshes via
+            // GooSAMGeometry. IClosedPlanar3D matches no branch in that method, so no
+            // geometry was ever drawn for apertures in the mesh pass. The traversal is
+            // intentionally not replicated here; visual output is unchanged.
         }
 
         public bool BakeGeometry(RhinoDoc doc, ObjectAttributes att, out Guid obj_guid)

@@ -25,7 +25,10 @@ namespace SAM.Analytical
                     }
 
                     Space space_Filtered = spaces_Temp.Find(x => x.Guid == space.Guid);
-                    if (spaces_Filtered == null)
+                    //space_Filtered, not spaces_Filtered. The list is constructed just above and is never
+                    //null, so this guard never fired and a space that is not in the cluster was added to
+                    //the filtered list as null instead of being skipped.
+                    if (space_Filtered == null)
                     {
                         continue;
                     }

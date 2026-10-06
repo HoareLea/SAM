@@ -17,12 +17,12 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid => new Guid("619aff3e-54e2-4a72-a809-62cb029e1e00");
+        public override Guid ComponentGuid => new ("619aff3e-54e2-4a72-a809-62cb029e1e00");
 
         /// <summary>
         /// The latest version of this component.
         /// </summary>
-        public override string LatestComponentVersion => "1.0.2";
+        public override string LatestComponentVersion => "1.0.3";
 
         /// <summary>
         /// Provides an icon for the component.
@@ -48,7 +48,7 @@ namespace SAM.Analytical.Grasshopper
         {
             get
             {
-                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                List<GH_SAMParam> result = [];
 
                 result.Add(new GH_SAMParam(
                     new global::Grasshopper.Kernel.Parameters.Param_GenericObject()
@@ -102,6 +102,16 @@ namespace SAM.Analytical.Grasshopper
                 };
                 result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new ()
+                {
+                    Name = "isDwelling_",
+                    NickName = "isDwelling_",
+                    Description = "Is Dwelling",
+                    Access = GH_ParamAccess.item,
+                    Optional = true
+                };
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
                 global::Grasshopper.Kernel.Parameters.Param_Boolean boolean = null;
                 boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean
                 {
@@ -115,7 +125,7 @@ namespace SAM.Analytical.Grasshopper
 
                 result.Add(new GH_SAMParam(boolean, ParamVisibility.Binding));
 
-                return result.ToArray();
+                return [.. result];
             }
         }
 
@@ -226,6 +236,13 @@ namespace SAM.Analytical.Grasshopper
                 return;
             }
 
+            index = Params.IndexOfInputParam("isDwelling_");
+            bool? isDwelling = null;
+            if (index == -1 || !dataAccess.GetData(index, ref isDwelling))
+            {
+                isDwelling = null;
+            }
+
             AdjacencyCluster adjacencyCluster = null;
             if (sAMObject is AnalyticalModel)
             {
@@ -270,6 +287,12 @@ namespace SAM.Analytical.Grasshopper
                 Zone zone = Analytical.Modify.UpdateZone(adjacencyCluster, name_Temp, zoneCategory, spaces_Temp.ToArray());
                 if (zone != null)
                 {
+                    if (isDwelling.HasValue)
+                    {
+                        zone.SetValue(ZoneParameter.IsDwelling, isDwelling.Value);
+                        adjacencyCluster.AddObject(zone);
+                    }
+
                     zones_Result.Add(zone);
                 }
             }

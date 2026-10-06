@@ -162,7 +162,9 @@ namespace SAM.Geometry.Planar
                 return polygon2Ds_1.ToList().ConvertAll(x => new Polygon2D(x));
             }
 
-            int count = polygon2Ds_1.Count();
+            List<Polygon2D> polygon2Ds_1_List = polygon2Ds_1 as List<Polygon2D> ?? polygon2Ds_1.ToList();
+
+            int count = polygon2Ds_1_List.Count;
 
             if (count == 0)
             {
@@ -171,14 +173,14 @@ namespace SAM.Geometry.Planar
 
             if (count == 1)
             {
-                return Difference(polygon2Ds_1.ElementAt(0), polygon2Ds_2, tolerance);
+                return Difference(polygon2Ds_1_List[0], polygon2Ds_2, tolerance);
             }
 
             List<Polygon2D> result = new List<Polygon2D>();
 
             if (count < 10 && polygon2Ds_2.Count() < 10)
             {
-                foreach (Polygon2D polygon2D in polygon2Ds_1)
+                foreach (Polygon2D polygon2D in polygon2Ds_1_List)
                 {
                     List<Polygon2D> polygon2Ds = polygon2D?.Difference(polygon2Ds_2, tolerance);
                     if (polygon2Ds != null)
@@ -193,7 +195,7 @@ namespace SAM.Geometry.Planar
 
                 Parallel.For(0, count, (int i) =>
                 {
-                    polygon2DsList[i] = polygon2Ds_1.ElementAt(0)?.Difference(polygon2Ds_2, tolerance);
+                    polygon2DsList[i] = polygon2Ds_1_List[i]?.Difference(polygon2Ds_2, tolerance);
                 });
 
                 foreach (List<Polygon2D> polygon2Ds in polygon2DsList)

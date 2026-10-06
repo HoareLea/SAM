@@ -183,24 +183,13 @@ namespace SAM.Math
                     {
                         if (jsonArray.Count >= 2)
                         {
-                            object object_Temp;
-
-                            double key = double.NaN;
-
-                            object_Temp = jsonArray[0]?.GetValue<object>();
-                            if (Core.Query.IsNumeric(object_Temp))
-                                key = System.Convert.ToDouble(object_Temp);
-
-                            if (double.IsNaN(key))
+                            //Core.Query.TryGetDouble rather than a CLR type test on GetValue<object>():
+                            //a parsed JsonValue holds a JsonElement, which no such test recognises, so
+                            //every pair was skipped and any saved file read back with no values at all.
+                            if (jsonArray[0] == null || !jsonArray[0].TryGetDouble(out double key) || double.IsNaN(key))
                                 continue;
 
-                            double value = double.NaN;
-
-                            object_Temp = jsonArray[1]?.GetValue<object>();
-                            if (Core.Query.IsNumeric(object_Temp))
-                                value = System.Convert.ToDouble(object_Temp);
-
-                            if (double.IsNaN(value))
+                            if (jsonArray[1] == null || !jsonArray[1].TryGetDouble(out double value) || double.IsNaN(value))
                                 continue;
 
                             values.Add(new KeyValuePair<double, double>(key, value));

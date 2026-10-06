@@ -10,5 +10,9 @@ namespace SAM.Core.Grasshopper
         string SAMVersion { get; }
 
         string LatestComponentVersion { get; }
+
+        string MinCompatibleVersion { get; }
+
+        ObsoleteSeverity ObsoleteSeverity { get; }
     }
 }

@@ -31,6 +31,9 @@ namespace SAM.Core
                 case -9.5:
                     return Core.UTC.Minus0930;
 
+                case -9.0:
+                    return Core.UTC.Minus0900;
+
                 case -8.0:
                     return Core.UTC.Minus0800;
 

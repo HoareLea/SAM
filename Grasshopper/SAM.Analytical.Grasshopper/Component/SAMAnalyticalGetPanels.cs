@@ -24,7 +24,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.1.0";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -51,7 +51,7 @@ namespace SAM.Analytical.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object such as AdjacencyCluster or AnalyticalModel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(new GooAnalyticalObjectParam { Name = "_analyticals", NickName = "_analyticals", Description = "SAM Analytical Object such as AdjacencyCluster, AnalyticalModel or Panel", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
                 result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_GenericObject { Name = "_objects", NickName = "_objects", Description = "Objects such as Point, SAM Analytical Construction, Aperture etc.", Access = GH_ParamAccess.list }, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_tolerance_", NickName = "_tolerance_", Description = "Tolerance", Access = GH_ParamAccess.item };
@@ -85,37 +85,67 @@ namespace SAM.Analytical.Grasshopper
         {
             int index = -1;
 
-            index = Params.IndexOfInputParam("_analytical");
+            index = Params.IndexOfInputParam("_analyticals");
             if (index == -1)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-            IAnalyticalObject analyticalObject_Temp = null;
-            if (!dataAccess.GetData(index, ref analyticalObject_Temp) || analyticalObject_Temp == null)
+            List<IAnalyticalObject> analyticalObjects = new List<IAnalyticalObject>();
+            if (!dataAccess.GetDataList(index, analyticalObjects) || analyticalObjects == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
-
-            AdjacencyCluster adjacencyCluster = null;
-            AnalyticalModel analyticalModel = null;
-            if (analyticalObject_Temp is AdjacencyCluster)
-            {
-                adjacencyCluster = (AdjacencyCluster)analyticalObject_Temp;
-            }
-            else if (analyticalObject_Temp is AnalyticalModel)
-            {
-                analyticalModel = (AnalyticalModel)analyticalObject_Temp;
-                adjacencyCluster = analyticalModel.AdjacencyCluster;
-            }
-
-
-            if (adjacencyCluster == null)
+            analyticalObjects.RemoveAll(x => x == null);
+            if (analyticalObjects.Count == 0)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
+                return;
+            }
+
+            List<Panel> panels_Source = new List<Panel>();
+            List<AdjacencyCluster> adjacencyClusters = new List<AdjacencyCluster>();
+            List<AnalyticalModel> analyticalModels = new List<AnalyticalModel>();
+
+            foreach (IAnalyticalObject analyticalObject in analyticalObjects)
+            {
+                if (analyticalObject is Panel)
+                {
+                    panels_Source.Add((Panel)analyticalObject);
+                }
+                else if (analyticalObject is AdjacencyCluster)
+                {
+                    adjacencyClusters.Add((AdjacencyCluster)analyticalObject);
+                }
+                else if (analyticalObject is AnalyticalModel)
+                {
+                    analyticalModels.Add((AnalyticalModel)analyticalObject);
+                }
+            }
+
+            List<Panel> panels_Pool = new List<Panel>();
+            panels_Pool.AddRange(panels_Source);
+
+            foreach (AnalyticalModel analyticalModel in analyticalModels)
+            {
+                List<Panel> panels = analyticalModel?.AdjacencyCluster?.GetPanels();
+                if (panels != null && panels.Count > 0)
+                    panels_Pool.AddRange(panels);
+            }
+
+            foreach (AdjacencyCluster adjacencyCluster in adjacencyClusters)
+            {
+                List<Panel> panels = adjacencyCluster?.GetPanels();
+                if (panels != null && panels.Count > 0)
+                    panels_Pool.AddRange(panels);
+            }
+
+            if (panels_Pool.Count == 0)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "No panels found");
                 return;
             }
 
@@ -145,6 +175,7 @@ namespace SAM.Analytical.Grasshopper
 
             DataTree<GooPanel> dataTree = new DataTree<GooPanel>();
             List<Tuple<GH_Path, ISAMGeometry3D>> tuples = new List<Tuple<GH_Path, ISAMGeometry3D>>();
+            bool hasGeometry = false;
 
             for (int i = 0; i < objectWrappers.Count; i++)
             {
@@ -160,28 +191,49 @@ namespace SAM.Analytical.Grasshopper
 
                 if (@object is Aperture)
                 {
-                    Panel panel = adjacencyCluster.GetPanel((Aperture)@object);
-                    if (panel != null)
+                    Aperture aperture = (Aperture)@object;
+                    foreach (Panel panel in panels_Pool)
                     {
-                        dataTree.Add(new GooPanel(Create.Panel(panel)), path);
+                        if (panel != null && panel.HasAperture(aperture.Guid))
+                        {
+                            dataTree.Add(new GooPanel(Create.Panel(panel)), path);
+                            break;
+                        }
                     }
                 }
                 else if (@object is ApertureConstruction)
                 {
-                    List<Panel> panels = adjacencyCluster.GetPanels((ApertureConstruction)@object);
-                    panels?.ForEach(x => dataTree.Add(new GooPanel(Create.Panel(x)), path));
+                    ApertureConstruction apertureConstruction = (ApertureConstruction)@object;
+                    foreach (Panel panel in panels_Pool)
+                    {
+                        if (panel == null)
+                            continue;
+
+                        List<Aperture> apertures = panel.Apertures;
+                        if (apertures == null || apertures.Count == 0)
+                            continue;
+
+                        if (apertures.Exists(x => x != null && x.TypeGuid == apertureConstruction.Guid))
+                            dataTree.Add(new GooPanel(Create.Panel(panel)), path);
+                    }
                 }
                 else if (@object is Construction)
                 {
-                    List<Panel> panels = adjacencyCluster.GetPanels((Construction)@object);
-                    panels?.ForEach(x => dataTree.Add(new GooPanel(Create.Panel(x)), path));
+                    Construction construction = (Construction)@object;
+                    foreach (Panel panel in panels_Pool)
+                    {
+                        if (panel != null && panel.TypeGuid == construction.Guid)
+                            dataTree.Add(new GooPanel(Create.Panel(panel)), path);
+                    }
                 }
                 else if (@object is Point3D)
                 {
+                    hasGeometry = true;
                     tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, (Point3D)@object));
                 }
                 else if (@object is Geometry.Planar.Point2D)
                 {
+                    hasGeometry = true;
                     Geometry.Planar.Point2D point2D = (Geometry.Planar.Point2D)@object;
                     tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, new Point3D(point2D.X, point2D.Y, 0)));
                 }
@@ -189,33 +241,51 @@ namespace SAM.Analytical.Grasshopper
                 {
                     Point3D point3D = Geometry.Grasshopper.Convert.ToSAM((GH_Point)@object);
                     if (point3D != null)
+                    {
+                        hasGeometry = true;
                         tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, point3D));
+                    }
                 }
                 else if (@object is global::Rhino.Geometry.Point3d)
                 {
                     Point3D point3D = Geometry.Rhino.Convert.ToSAM((global::Rhino.Geometry.Point3d)@object);
                     if (point3D != null)
+                    {
+                        hasGeometry = true;
                         tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, point3D));
+                    }
                 }
                 else
                 {
-                    if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds) && face3Ds != null)
+                    if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Face3D> face3Ds) && face3Ds != null && face3Ds.Count > 0)
                     {
+                        hasGeometry = true;
                         face3Ds.ForEach(x => tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, x)));
                     }
-                    else if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Plane> planes) && planes != null)
+                    else if (Geometry.Grasshopper.Query.TryGetSAMGeometries(objectWrapper, out List<Plane> planes) && planes != null && planes.Count > 0)
                     {
+                        hasGeometry = true;
                         planes.ForEach(x => tuples.Add(new Tuple<GH_Path, ISAMGeometry3D>(path, x)));
                     }
                 }
             }
 
-            if (tuples != null && tuples.Count != 0)
+            if (hasGeometry && tuples.Count > 0)
             {
-                List<Tuple<Panel, Face3D>> tuples_Temp = adjacencyCluster.GetPanels()?.ConvertAll(x => new Tuple<Panel, Face3D>(x, x?.Face3D));
-                tuples_Temp.RemoveAll(x => x.Item2 == null || x.Item1 == null);
+                List<Tuple<Panel, Face3D>> tuples_Temp = new List<Tuple<Panel, Face3D>>();
+                foreach (Panel panel in panels_Pool)
+                {
+                    if (panel == null)
+                        continue;
 
-                if (tuples_Temp != null && tuples_Temp.Count > 0)
+                    Face3D face3D = panel.Face3D;
+                    if (face3D == null)
+                        continue;
+
+                    tuples_Temp.Add(new Tuple<Panel, Face3D>(panel, face3D));
+                }
+
+                if (tuples_Temp.Count > 0)
                 {
                     foreach (Tuple<GH_Path, ISAMGeometry3D> tuple_Geometry in tuples)
                     {
@@ -232,14 +302,10 @@ namespace SAM.Analytical.Grasshopper
                             foreach (Tuple<Panel, Face3D> tuple_Panel in tuples_Temp)
                             {
                                 Face3D face3D = tuple_Panel.Item2;
-                                if (face3D == null)
-                                {
-                                    continue;
-                                }
 
                                 if (face3D.InRange(point3D, tolerance) || face3D.Inside(point3D, tolerance))
                                 {
-                                    dataTree.Add(new GooPanel(tuple_Panel.Item1), tuple_Geometry.Item1);
+                                    dataTree.Add(new GooPanel(Create.Panel(tuple_Panel.Item1)), tuple_Geometry.Item1);
                                 }
                             }
                         }
@@ -250,10 +316,6 @@ namespace SAM.Analytical.Grasshopper
                             foreach (Tuple<Panel, Face3D> tuple_Panel in tuples_Temp)
                             {
                                 Face3D face3D_Panel = tuple_Panel.Item2;
-                                if (face3D_Panel == null)
-                                {
-                                    continue;
-                                }
 
                                 if (face3D.Inside(face3D_Panel))
                                 {
@@ -268,10 +330,6 @@ namespace SAM.Analytical.Grasshopper
                             foreach (Tuple<Panel, Face3D> tuple_Panel in tuples_Temp)
                             {
                                 Face3D face3D_Panel = tuple_Panel.Item2;
-                                if (face3D_Panel == null)
-                                {
-                                    continue;
-                                }
 
                                 if (plane.On(face3D_Panel, tolerance))
                                 {
@@ -282,6 +340,7 @@ namespace SAM.Analytical.Grasshopper
                     }
                 }
             }
+
             index = Params.IndexOfOutputParam("panels");
             if (index != -1)
                 dataAccess.SetDataTree(index, dataTree);

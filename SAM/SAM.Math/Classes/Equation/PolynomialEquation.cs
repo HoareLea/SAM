@@ -137,17 +137,13 @@ namespace SAM.Math
                 coefficients = new double[jsonArray.Count];
                 for (int i = 0; i < jsonArray.Count; i++)
                 {
-                    object @object = jsonArray[i]?.GetValue<object>();
-                    if (@object is double)
-                    {
-                        coefficients[i] = (double)@object;
-                        continue;
-                    }
-
-                    if (!Core.Query.IsNumeric(@object))
+                    //Core.Query.TryGetDouble rather than a CLR type test on GetValue<object>(): a parsed
+                    //JsonValue holds a JsonElement, which no such test recognises, so reading a saved file
+                    //bailed out on the first coefficient and left the whole polynomial at zero.
+                    if (jsonArray[i] == null || !jsonArray[i].TryGetDouble(out double coefficient))
                         return false;
 
-                    coefficients[i] = System.Convert.ToDouble(@object);
+                    coefficients[i] = coefficient;
                 }
             }
 

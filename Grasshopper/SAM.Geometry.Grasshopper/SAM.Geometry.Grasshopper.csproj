@@ -24,9 +24,6 @@
     <OutputPath>..\..\build\</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System.IO.Compression" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\..\Rhino\SAM.Geometry.Rhino\SAM.Geometry.Rhino.csproj" />
     <ProjectReference Include="..\..\Rhino\SAM.Math.Rhino\SAM.Math.Rhino.csproj" />
     <ProjectReference Include="..\..\SAM\SAM.Core\SAM.Core.csproj" />
@@ -43,7 +40,6 @@
     </PackageReference>
     <PackageReference Include="System.Drawing.Common" Version="7.0.0" />
     <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.1.2" />
-    <PackageReference Include="System.ValueTuple" Version="4.6.2" />
   </ItemGroup>
   <PropertyGroup />
   <PropertyGroup>

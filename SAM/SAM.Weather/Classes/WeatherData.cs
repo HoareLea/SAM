@@ -386,6 +386,15 @@ namespace SAM.Weather
         {
             get
             {
+                //Null rather than a NullReferenceException on a WeatherData built without years - the same
+                //guard WeatherYear.WeatherDays already has for the same shape of field. Every caller in the
+                //repository already reads this as `WeatherYears?.FirstOrDefault()`, so they were all written
+                //expecting null and were getting a throw instead.
+                if (weatherYears == null)
+                {
+                    return null;
+                }
+
                 return weatherYears.ConvertAll(x => x == null ? null : new WeatherYear(x));
             }
         }

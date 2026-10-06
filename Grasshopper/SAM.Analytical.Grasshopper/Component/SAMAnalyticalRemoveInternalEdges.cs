@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalRemoveInternalEdges : GH_SAMComponent
+    public class SAMAnalyticalRemoveInternalEdges : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -21,7 +21,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -41,32 +41,49 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooJSAMObjectParam<SAMObject>(), "_analytical", "_analytical", "SAM Analytical Object", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooJSAMObjectParam<SAMObject>() { Name = "_analytical", NickName = "_analytical", Description = "SAM Analytical Object", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
 
+            index = Params.IndexOfInputParam("_analytical");
             SAMObject sAMObject = null;
-            if (!dataAccess.GetData(0, ref sAMObject))
+            if (index == -1 || !dataAccess.GetData(index, ref sAMObject))
                 return;
+
+            int index_Output = Params.IndexOfOutputParam("_analytical");
 
             if (sAMObject is Panel)
             {
                 Panel panel = Create.Panel((Panel)sAMObject);
                 panel = Create.Panel(panel.Guid, panel, new Face3D(panel.GetFace3D().GetExternalEdge3D()), null, false);
 
-                dataAccess.SetData(0, panel);
+                if (index_Output != -1)
+                {
+                    dataAccess.SetData(index_Output, panel);
+                }
                 return;
             }
 
@@ -98,9 +115,12 @@ namespace SAM.Analytical.Grasshopper
                     adjacencyCluster.AddObject(panel);
             }
 
+            if (index_Output == -1)
+                return;
+
             if (analyticalModel == null && adjacencyCluster == null)
             {
-                dataAccess.SetData(0, sAMObject);
+                dataAccess.SetData(index_Output, sAMObject);
                 return;
             }
 
@@ -108,16 +128,16 @@ namespace SAM.Analytical.Grasshopper
             {
                 if (adjacencyCluster == null)
                 {
-                    dataAccess.SetData(0, sAMObject);
+                    dataAccess.SetData(index_Output, sAMObject);
                     return;
                 }
 
-                dataAccess.SetData(0, new AnalyticalModel(analyticalModel, adjacencyCluster));
+                dataAccess.SetData(index_Output, new AnalyticalModel(analyticalModel, adjacencyCluster));
                 return;
             }
 
             if (adjacencyCluster != null)
-                dataAccess.SetData(0, adjacencyCluster);
+                dataAccess.SetData(index_Output, adjacencyCluster);
         }
     }
 }

@@ -6,10 +6,11 @@ using Rhino.Geometry;
 using SAM.Core.Grasshopper;
 using SAM.Geometry.Grasshopper.Properties;
 using System;
+using System.Collections.Generic;
 
 namespace SAM.Geometry.Grasshopper
 {
-    public class GeometryMeshReduce : GH_SAMComponent
+    public class GeometryMeshReduce : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -19,7 +20,7 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -39,23 +40,49 @@ namespace SAM.Geometry.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            inputParamManager.AddMeshParameter("_mesh", "_mesh", "Rhino Mesh", GH_ParamAccess.item);
-            inputParamManager.AddBooleanParameter("_distortion_", "_distortion_", "Allow Distortion towards desire count", GH_ParamAccess.item, true);
-            inputParamManager.AddIntegerParameter("_count_", "_count_", "Desired Polygon Count", GH_ParamAccess.item, 44);
-            inputParamManager.AddIntegerParameter("_accuracy_", "_accuracy_", "Accuracy lowest 1 to 10 highest", GH_ParamAccess.item, 10);
-            inputParamManager.AddBooleanParameter("_normalizedSize_", "_normalizedSize", "Normalized Face Size", GH_ParamAccess.item, false);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "_mesh", NickName = "_mesh", Description = "Rhino Mesh", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean;
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_distortion_", NickName = "_distortion_", Description = "Allow Distortion towards desire count", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(true);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Integer param_Integer;
+
+                param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_count_", NickName = "_count_", Description = "Desired Polygon Count", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.SetPersistentData(44);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
+
+                param_Integer = new global::Grasshopper.Kernel.Parameters.Param_Integer() { Name = "_accuracy_", NickName = "_accuracy_", Description = "Accuracy lowest 1 to 10 highest", Access = GH_ParamAccess.item, Optional = true };
+                param_Integer.SetPersistentData(10);
+                result.Add(new GH_SAMParam(param_Integer, ParamVisibility.Binding));
+
+                param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_normalizedSize_", NickName = "_normalizedSize_", Description = "Normalized Face Size", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddMeshParameter("Mesh", "Mesh", "Mesh", GH_ParamAccess.item);
-            //outputParamManager.AddParameter( string, "Normal", "Normal", "Normal", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_Mesh() { Name = "Mesh", NickName = "Mesh", Description = "Mesh", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -66,29 +93,51 @@ namespace SAM.Geometry.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
-            Mesh mesh = new Mesh();
-            if (!dataAccess.GetData(0, ref mesh))
+            int index;
+
+            index = Params.IndexOfInputParam("_mesh");
+            Mesh mesh = null;
+            if (index == -1 || !dataAccess.GetData(index, ref mesh) || mesh == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             bool allowDistortion = true;
-            dataAccess.GetData(1, ref allowDistortion);
+            index = Params.IndexOfInputParam("_distortion_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref allowDistortion);
+            }
 
-            int deisredPolygonCount = 0;
-            dataAccess.GetData(2, ref deisredPolygonCount);
+            int desiredPolygonCount = 0;
+            index = Params.IndexOfInputParam("_count_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref desiredPolygonCount);
+            }
 
             int accuracy = 0;
-            dataAccess.GetData(3, ref accuracy);
+            index = Params.IndexOfInputParam("_accuracy_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref accuracy);
+            }
 
             bool normalizedSize = true;
-            dataAccess.GetData(4, ref normalizedSize);
+            index = Params.IndexOfInputParam("_normalizedSize_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref normalizedSize);
+            }
 
-            //Mesh result = mesh.DuplicateMesh();
-            Modify.Reduce(mesh, allowDistortion, deisredPolygonCount, accuracy, normalizedSize);
+            Modify.Reduce(mesh, allowDistortion, desiredPolygonCount, accuracy, normalizedSize);
 
-            dataAccess.SetData(0, mesh);
+            index = Params.IndexOfOutputParam("Mesh");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, mesh);
+            }
         }
     }
 }

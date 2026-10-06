@@ -236,7 +236,7 @@ namespace SAM.Geometry.Grasshopper
 
             List<Shell> shells = Spatial.Create.Shells_ByTopAndBottom(face3Ds, tolerance);
 
-            index = Params.IndexOfInputParam("shells");
+            index = Params.IndexOfOutputParam("shells");
             if (index != -1)
                 dataAccess.SetDataList(index, shells?.ConvertAll(x => new GooSAMGeometry(x)));
         }

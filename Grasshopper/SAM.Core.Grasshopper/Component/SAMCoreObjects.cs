@@ -32,7 +32,7 @@ namespace SAM.Core.Grasshopper
         /// </summary>
         public SAMCoreObjects()
           : base("RelationCluster.Objects", "RelationCluster.Objects",
-              "Gets Objects form RelationCluster",
+              "Gets Objects from RelationCluster",
               "SAM", "Core")
         {
         }

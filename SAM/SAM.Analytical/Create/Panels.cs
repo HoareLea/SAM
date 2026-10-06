@@ -433,8 +433,16 @@ namespace SAM.Analytical
                     }
 
                     Vector2D vector2D_Base = Geometry.Planar.Query.TraceFirst(centroid, direction_Base, rectangle2D);
+                    if(vector2D_Base is null)
+                    {
+                        continue;
+                    }
 
                     Vector2D vector2D_Auxiliary = direction_Auxiliary * (length_Auxiliary / 2);
+                    if(vector2D_Auxiliary is null)
+                    {
+                        continue;
+                    }
 
                     if (overhangDepth > 0)
                     {

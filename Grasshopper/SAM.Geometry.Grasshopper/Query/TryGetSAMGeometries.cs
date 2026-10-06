@@ -4,292 +4,49 @@
 using Grasshopper.Kernel.Types;
 using SAM.Geometry.Object.Spatial;
 using SAM.Geometry.Spatial;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Grasshopper
 {
     public static partial class Query
     {
+        /// <summary>
+        /// Tries to extract or convert SAM geometries of type <typeparamref name="T"/> from a Grasshopper object wrapper.
+        /// </summary>
+        /// <typeparam name="T">The requested SAM geometry type.</typeparam>
+        /// <param name="objectWrapper">The Grasshopper object wrapper containing the geometry input.</param>
+        /// <param name="sAMGeometries">When this method returns, contains the converted SAM geometries if found; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if one or more valid SAM geometries were retrieved or converted; otherwise, <see langword="false"/>.</returns>
         public static bool TryGetSAMGeometries<T>(this GH_ObjectWrapper objectWrapper, out List<T> sAMGeometries) where T : ISAMGeometry
         {
             sAMGeometries = null;
 
             if (objectWrapper == null || objectWrapper.Value == null)
+            {
                 return false;
+            }
 
-            if (objectWrapper.Value is T)
+            List<T> result = new List<T>();
+            ProcessValue(objectWrapper.Value, result);
+
+            if (result.Count > 0)
             {
-                sAMGeometries = new List<T>() { (T)objectWrapper.Value };
+                sAMGeometries = result;
                 return true;
-            }
-
-            if (objectWrapper.Value is GooSAMGeometry)
-            {
-                ISAMGeometry sAMGeometry = ((GooSAMGeometry)objectWrapper.Value).Value;
-                if (sAMGeometry is T)
-                {
-                    sAMGeometries = new List<T>() { (T)sAMGeometry };
-                    return true;
-                }
-                else if (typeof(T) == typeof(Face3D))
-                {
-                    if (sAMGeometry is IFace3DObject)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)sAMGeometry).Face3D };
-                        return true;
-                    }
-                    else if (sAMGeometry is Shell)
-                    {
-                        List<Face3D> face3Ds = ((Shell)sAMGeometry).Face3Ds;
-                        if (face3Ds != null)
-                        {
-                            sAMGeometries = new List<T>(face3Ds.ConvertAll(x => (T)(object)x));
-                        }
-
-                        return true;
-                    }
-                    else if (sAMGeometry is IClosedPlanar3D)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry) };
-                        return true;
-                    }
-                    else if (sAMGeometry is IFace3DObject)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)sAMGeometry).Face3D };
-                        return true;
-                    }
-                    else if (sAMGeometry is Mesh3D)
-                    {
-                        sAMGeometries = ((Mesh3D)sAMGeometry).GetTriangles()?.ConvertAll(x => (T)(object)(new Face3D(x)));
-                        return true;
-                    }
-                }
-                else if (typeof(T) == typeof(Point3D))
-                {
-                    if (sAMGeometry is Point3D)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((Point3D)sAMGeometry) };
-                        return true;
-                    }
-                }
-                else if (typeof(T) == typeof(Plane))
-                {
-                    if (sAMGeometry is Plane)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((Plane)sAMGeometry) };
-                        return true;
-                    }
-                }
-            }
-
-            object @object = null;
-
-            if (objectWrapper.Value is IGH_GeometricGoo)
-            {
-                @object = Convert.ToSAM(objectWrapper.Value as dynamic);
-
-                if (typeof(T) == typeof(Face3D))
-                {
-                    if (@object is Shell)
-                    {
-                        @object = ((Shell)@object).Face3Ds;
-                    }
-                    else if (@object is Mesh3D)
-                    {
-                        @object = ((Mesh3D)@object).GetTriangles().ConvertAll(x => new Face3D(x));
-                    }
-                    else if (@object is IClosedPlanar3D)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D((IClosedPlanar3D)@object) };
-                        return true;
-                    }
-                    else if (@object is IFace3DObject)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)@object).Face3D };
-                        return true;
-                    }
-                    else if (@object is Mesh3D)
-                    {
-                        sAMGeometries = ((Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Face3D(x)));
-                        return true;
-                    }
-                    else if (@object is Polycurve3D)
-                    {
-                        if (Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D))
-                        {
-                            sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D(polyline3D?.ToPolygon3D()) };
-                            return true;
-                        }
-
-                        //sAMGeometries = ((Spatial.Mesh3D)@object).GetTriangles()?.ConvertAll(x => (T)(object)(new Spatial.Face3D(x)));
-                        //return true;
-                    }
-                    else if (@object is Polyline3D)
-                    {
-                        Polyline3D polyline3D = (Polyline3D)@object;
-                        if (polyline3D.IsClosed())
-                        {
-                            List<Point3D> point3Ds = polyline3D.Points;
-                            sAMGeometries = new List<T>() { (T)(object)Spatial.Create.Face3D(new Polygon3D(point3Ds)) };
-                            return true;
-                        }
-                    }
-
-                }
-                else if (typeof(T) == typeof(Point3D))
-                {
-                    if (@object is Point3D)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)(Point3D)@object };
-                        return true;
-                    }
-                }
-                else if (typeof(T) == typeof(Plane))
-                {
-                    if (@object is Plane)
-                    {
-                        sAMGeometries = new List<T>() { (T)(object)(Plane)@object };
-                        return true;
-                    }
-                }
-                else if (typeof(T) == typeof(ISegmentable3D))
-                {
-                    if (@object is Polycurve3D)
-                    {
-                        if (Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D) && polyline3D != null)
-                        {
-                            sAMGeometries = new List<T>() { (T)(object)polyline3D };
-                            return true;
-                        }
-                    }
-                }
-
-                if (@object is IEnumerable)
-                {
-
-                    IEnumerable<ISAMGeometry> sAMGeometries_Temp = ((IEnumerable)@object).Cast<ISAMGeometry>();
-                    if (sAMGeometries_Temp != null && sAMGeometries_Temp.Count() > 0)
-                    {
-                        if (typeof(T) == typeof(Face3D))
-                        {
-                            sAMGeometries = new List<T>();
-                            foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
-                            {
-                                if (sAMGeometry is T)
-                                {
-                                    sAMGeometries.Add((T)sAMGeometry);
-                                }
-                                else
-                                {
-                                    if (sAMGeometry is Shell)
-                                    {
-                                        sAMGeometries.AddRange(((Shell)sAMGeometry).Face3Ds?.Cast<T>());
-                                    }
-                                    else if (sAMGeometry is Mesh3D)
-                                    {
-                                        sAMGeometries.AddRange(((Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Face3D(x)).Cast<T>());
-                                    }
-                                    else if (sAMGeometry is IClosedPlanar3D)
-                                    {
-                                        sAMGeometries.Add((T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry));
-                                        return true;
-                                    }
-                                    else if (sAMGeometry is IFace3DObject)
-                                    {
-                                        sAMGeometries.Add((T)(object)((IFace3DObject)sAMGeometry).Face3D);
-                                        return true;
-                                    }
-                                }
-                            }
-                        }
-                        else if (typeof(T) == typeof(ISegmentable3D))
-                        {
-                            sAMGeometries = new List<T>();
-                            foreach (ISAMGeometry sAMGeometry in sAMGeometries_Temp)
-                            {
-                                if (sAMGeometry is T)
-                                {
-                                    sAMGeometries.Add((T)sAMGeometry);
-                                }
-                                else
-                                {
-                                    if (sAMGeometry is Shell)
-                                    {
-                                        //sAMGeometries.AddRange(((Shell)sAMGeometry).Face3Ds?.Cast<T>());
-                                    }
-                                    else if (sAMGeometry is Mesh3D)
-                                    {
-                                        //sAMGeometries.AddRange(((Mesh3D)sAMGeometry).GetTriangles().ConvertAll(x => new Face3D(x)).Cast<T>());
-                                    }
-                                    else if (sAMGeometry is Face3D face3D)
-                                    {
-                                        if(face3D.GetEdge3Ds() is List<IClosedPlanar3D> closedPlanar3Ds)
-                                        {
-                                            foreach(IClosedPlanar3D closedPlanar3D in closedPlanar3Ds)
-                                            {
-                                                sAMGeometries.Add((T)(object)closedPlanar3D);
-                                            }
-                                        }
-
-                                        return true;
-                                    }
-                                    else if (sAMGeometry is IClosedPlanar3D)
-                                    {
-                                        //sAMGeometries.Add((T)(object)Spatial.Create.Face3D((IClosedPlanar3D)sAMGeometry));
-                                        //return true;
-                                    }
-                                    else if (sAMGeometry is IFace3DObject)
-                                    {
-                                        //sAMGeometries.Add((T)(object)((IFace3DObject)sAMGeometry).Face3D);
-                                        //return true;
-                                    }
-
-                                    return false;
-                                }
-                            }
-                        }
-                        else
-                        {
-                            sAMGeometries = sAMGeometries_Temp.ToList().FindAll(x => x is T).Cast<T>().ToList();
-                        }
-
-                        return sAMGeometries.Count > 0;
-                    }
-                }
-                else if (@object is T)
-                {
-                    sAMGeometries = new List<T>() { (T)@object };
-                    return true;
-                }
-            }
-
-            @object = objectWrapper.Value;
-            if (@object is IGH_Goo)
-            {
-                @object = (@object as dynamic).Value;
-            }
-
-            if (@object is IFace3DObject && typeof(T) == typeof(Face3D))
-            {
-                sAMGeometries = new List<T>() { (T)(object)((IFace3DObject)@object).Face3D };
-                return true;
-            }
-
-            if (@object is Polycurve3D && typeof(T) == typeof(ISegmentable3D))
-            {
-                if (Polycurve3D.TryGetPolyline3D((Polycurve3D)@object, out Polyline3D polyline3D) && polyline3D != null)
-                {
-                    sAMGeometries = new List<T>() { (T)(object)polyline3D };
-                    return true;
-                }
             }
 
             return false;
-
         }
 
+        /// <summary>
+        /// Tries to extract or convert SAM geometries of type <typeparamref name="T"/> from a collection of Grasshopper object wrappers.
+        /// </summary>
+        /// <typeparam name="T">The requested SAM geometry type.</typeparam>
+        /// <param name="objectWrappers">The collection of Grasshopper object wrappers containing geometry inputs.</param>
+        /// <param name="sAMGeometries">When this method returns, contains the converted SAM geometries if found; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if one or more valid SAM geometries were retrieved or converted; otherwise, <see langword="false"/>.</returns>
         public static bool TryGetSAMGeometries<T>(this IEnumerable<GH_ObjectWrapper> objectWrappers, out List<T> sAMGeometries) where T : ISAMGeometry
         {
             sAMGeometries = null;
@@ -299,21 +56,624 @@ namespace SAM.Geometry.Grasshopper
                 return false;
             }
 
-            sAMGeometries = new List<T>();
+            List<T> result = new List<T>();
             foreach (GH_ObjectWrapper objectWrapper in objectWrappers)
             {
-                if (!TryGetSAMGeometries(objectWrapper, out List<T> sAMGeometries_Temp) || sAMGeometries_Temp == null || sAMGeometries_Temp.Count == 0)
+                if (objectWrapper == null || objectWrapper.Value == null)
                 {
                     continue;
                 }
 
-                foreach (T sAMGeometry in sAMGeometries_Temp)
+                ProcessValue(objectWrapper.Value, result);
+            }
+
+            if (result.Count > 0)
+            {
+                sAMGeometries = result;
+                return true;
+            }
+
+            return false;
+        }
+
+        private static void ProcessValue<T>(object value, List<T> result) where T : ISAMGeometry
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            if (value is GooSAMGeometry gooSAMGeometry)
+            {
+                value = gooSAMGeometry.Value;
+                if (value == null)
                 {
-                    sAMGeometries.Add(sAMGeometry);
+                    return;
                 }
             }
 
-            return sAMGeometries != null && sAMGeometries.Count > 0;
+            if (value is T directValue)
+            {
+                result.Add(directValue);
+                return;
+            }
+
+            if (value is IGH_GeometricGoo geometricGoo)
+            {
+                object convertedGoo = ConvertGeometricGooToSAM(geometricGoo);
+                if (convertedGoo != null)
+                {
+                    ProcessValue(convertedGoo, result);
+                    return;
+                }
+            }
+
+            if (value is IGH_Goo ghGoo)
+            {
+                object scriptVar = ghGoo.ScriptVariable();
+                if (scriptVar != null && scriptVar != value)
+                {
+                    ProcessValue(scriptVar, result);
+                    return;
+                }
+            }
+
+            object rhinoConverted = ConvertRhinoGeometryToSAM(value);
+            if (rhinoConverted != null)
+            {
+                ProcessValue(rhinoConverted, result);
+                return;
+            }
+
+            Type targetType = typeof(T);
+
+            // Special handling when T is Shell and value is a collection of faces (e.g. from an open Brep conversion)
+            if (typeof(Shell).IsAssignableFrom(targetType) && value is IEnumerable faceCollection && !(value is string))
+            {
+                List<Face3D> faces = new List<Face3D>();
+                foreach (object item in faceCollection)
+                {
+                    if (item is Face3D f)
+                    {
+                        faces.Add(f);
+                    }
+                    else if (item is IFace3DObject fObj && fObj.Face3D != null)
+                    {
+                        faces.Add(fObj.Face3D);
+                    }
+                }
+
+                if (faces.Count > 0)
+                {
+                    Shell shell = new Shell(faces);
+                    if (shell is T tShell)
+                    {
+                        result.Add(tShell);
+                        return;
+                    }
+                }
+            }
+
+            // Note: SAM geometry objects do not implement IEnumerable.
+            // The IEnumerable branch below processes collection inputs (e.g. List<ISAMGeometry>, GH_Structure, etc.).
+            if (value is IEnumerable enumerable && !(value is string))
+            {
+                foreach (object item in enumerable)
+                {
+                    ProcessValue(item, result);
+                }
+                return;
+            }
+
+            ProcessSAMGeometryConversion(value, result);
+        }
+
+        private static object ConvertGeometricGooToSAM(IGH_GeometricGoo geometricGoo)
+        {
+            if (geometricGoo == null)
+            {
+                return null;
+            }
+
+            if (geometricGoo is GH_Curve ghCurve)
+            {
+                return ghCurve.ToSAM(true);
+            }
+
+            if (geometricGoo is GH_Surface ghSurface)
+            {
+                return ghSurface.ToSAM(true);
+            }
+
+            if (geometricGoo is GH_Brep ghBrep)
+            {
+                return ghBrep.ToSAM(true);
+            }
+
+            if (geometricGoo is GH_Mesh ghMesh)
+            {
+                return ghMesh.ToSAM();
+            }
+
+            if (geometricGoo is GH_Extrusion ghExtrusion)
+            {
+                return ghExtrusion.ToSAM_Shell();
+            }
+
+            if (geometricGoo is GH_Point ghPoint)
+            {
+                return ghPoint.ToSAM();
+            }
+
+            if (geometricGoo is GH_Plane ghPlane)
+            {
+                return ghPlane.ToSAM();
+            }
+
+            if (geometricGoo is GH_Vector ghVector)
+            {
+                return ghVector.ToSAM();
+            }
+
+            if (geometricGoo is GH_Line ghLine)
+            {
+                return ghLine.ToSAM();
+            }
+
+            if (geometricGoo is GH_Rectangle ghRectangle)
+            {
+                return ghRectangle.ToSAM();
+            }
+
+            if (geometricGoo is GH_Circle ghCircle)
+            {
+                return ghCircle.ToSAM();
+            }
+
+            return geometricGoo.ToSAM(true);
+        }
+
+        private static object ConvertRhinoGeometryToSAM(object value)
+        {
+            if (value == null)
+            {
+                return null;
+            }
+
+            if (value is global::Rhino.Geometry.Point3d pt)
+            {
+                return Rhino.Convert.ToSAM(pt);
+            }
+
+            if (value is global::Rhino.Geometry.Plane plane)
+            {
+                return Rhino.Convert.ToSAM(plane);
+            }
+
+            if (value is global::Rhino.Geometry.Vector3d vector)
+            {
+                return Rhino.Convert.ToSAM(vector);
+            }
+
+            if (value is global::Rhino.Geometry.Line line)
+            {
+                return Rhino.Convert.ToSAM(line);
+            }
+
+            if (value is global::Rhino.Geometry.Polyline polyline)
+            {
+                return Rhino.Convert.ToSAM(polyline);
+            }
+
+            if (value is global::Rhino.Geometry.Rectangle3d rect)
+            {
+                return Rhino.Convert.ToSAM(rect);
+            }
+
+            if (value is global::Rhino.Geometry.Curve curve)
+            {
+                return Rhino.Convert.ToSAM(curve);
+            }
+
+            if (value is global::Rhino.Geometry.Brep brep)
+            {
+                return Rhino.Convert.ToSAM(brep);
+            }
+
+            if (value is global::Rhino.Geometry.Mesh mesh)
+            {
+                return Rhino.Convert.ToSAM(mesh);
+            }
+
+            if (value is global::Rhino.Geometry.Extrusion extrusion)
+            {
+                global::Rhino.Geometry.Brep extBrep = extrusion.ToBrep(true);
+                if (extBrep != null)
+                {
+                    return Rhino.Convert.ToSAM(extBrep);
+                }
+            }
+
+            return null;
+        }
+
+        private static List<IClosedPlanar3D> GetEdges(object value)
+        {
+            if (value is Face3D face3D)
+            {
+                return face3D.GetEdge3Ds();
+            }
+
+            if (value is IFace3DObject face3DObject && face3DObject.Face3D != null)
+            {
+                return face3DObject.Face3D.GetEdge3Ds();
+            }
+
+            if (value is Shell shell && shell.Face3Ds != null)
+            {
+                List<IClosedPlanar3D> result = new List<IClosedPlanar3D>();
+                foreach (Face3D face in shell.Face3Ds)
+                {
+                    if (face != null)
+                    {
+                        List<IClosedPlanar3D> edges = face.GetEdge3Ds();
+                        if (edges != null)
+                        {
+                            result.AddRange(edges);
+                        }
+                    }
+                }
+                return result;
+            }
+
+            if (value is IClosedPlanar3D closedPlanar)
+            {
+                return new List<IClosedPlanar3D> { closedPlanar };
+            }
+
+            return null;
+        }
+
+        private static void ProcessSAMGeometryConversion<T>(object value, List<T> result) where T : ISAMGeometry
+        {
+            if (value == null)
+            {
+                return;
+            }
+
+            Type targetType = typeof(T);
+
+            // 1. Face3D
+            if (typeof(Face3D).IsAssignableFrom(targetType))
+            {
+                if (value is IFace3DObject face3DObject && face3DObject.Face3D is T faceFromObj)
+                {
+                    result.Add(faceFromObj);
+                    return;
+                }
+
+                if (value is Shell shell && shell.Face3Ds != null)
+                {
+                    foreach (Face3D face in shell.Face3Ds)
+                    {
+                        if (face is T tFace)
+                        {
+                            result.Add(tFace);
+                        }
+                    }
+                    return;
+                }
+
+                if (value is Mesh3D mesh3D)
+                {
+                    List<Triangle3D> triangles = mesh3D.GetTriangles();
+                    if (triangles != null)
+                    {
+                        foreach (Triangle3D triangle in triangles)
+                        {
+                            Face3D triFace = new Face3D(triangle);
+                            if (triFace is T tFace)
+                            {
+                                result.Add(tFace);
+                            }
+                        }
+                    }
+                    return;
+                }
+
+                if (value is IClosedPlanar3D closedPlanar3D)
+                {
+                    Face3D face3D = Spatial.Create.Face3D(closedPlanar3D);
+                    if (face3D is T tFace)
+                    {
+                        result.Add(tFace);
+                    }
+                    return;
+                }
+
+                if (value is Polycurve3D polycurve3D)
+                {
+                    if (Polycurve3D.TryGetPolyline3D(polycurve3D, out Polyline3D polyline3D) && polyline3D != null && polyline3D.IsClosed())
+                    {
+                        Face3D face3D = Spatial.Create.Face3D(polyline3D.ToPolygon3D());
+                        if (face3D is T tFace)
+                        {
+                            result.Add(tFace);
+                        }
+                    }
+                    return;
+                }
+
+                if (value is Polyline3D polyline && polyline.IsClosed())
+                {
+                    Face3D face3D = Spatial.Create.Face3D(polyline.ToPolygon3D());
+                    if (face3D is T tFace)
+                    {
+                        result.Add(tFace);
+                    }
+                    return;
+                }
+            }
+
+            // 2. Polyline3D
+            if (typeof(Polyline3D).IsAssignableFrom(targetType))
+            {
+                if (value is Polycurve3D polycurve3D)
+                {
+                    if (Polycurve3D.TryGetPolyline3D(polycurve3D, out Polyline3D polyline3D) && polyline3D is T tPolyline)
+                    {
+                        result.Add(tPolyline);
+                        return;
+                    }
+                }
+
+                if (value is Polygon3D polygon3D)
+                {
+                    List<Point3D> points = polygon3D.GetPoints();
+                    if (points != null && points.Count > 0)
+                    {
+                        Polyline3D polyline = new Polyline3D(points, true);
+                        if (polyline is T tPolyline)
+                        {
+                            result.Add(tPolyline);
+                        }
+                    }
+                    return;
+                }
+
+                List<IClosedPlanar3D> edge3Ds = GetEdges(value);
+                if (edge3Ds != null)
+                {
+                    foreach (IClosedPlanar3D edge in edge3Ds)
+                    {
+                        if (edge is Polygon3D poly3D)
+                        {
+                            List<Point3D> points = poly3D.GetPoints();
+                            if (points != null && points.Count > 0)
+                            {
+                                Polyline3D polyline = new Polyline3D(points, true);
+                                if (polyline is T tPolyline)
+                                {
+                                    result.Add(tPolyline);
+                                }
+                            }
+                        }
+                        else if (edge is Polyline3D polyline3D && polyline3D is T tPolyline)
+                        {
+                            result.Add(tPolyline);
+                        }
+                    }
+                    return;
+                }
+            }
+
+            // 3. Polygon3D
+            if (typeof(Polygon3D).IsAssignableFrom(targetType))
+            {
+                if (value is Polyline3D polyline3D && polyline3D.IsClosed())
+                {
+                    Polygon3D polygon3D = polyline3D.ToPolygon3D();
+                    if (polygon3D is T tPolygon)
+                    {
+                        result.Add(tPolygon);
+                        return;
+                    }
+                }
+
+                if (value is Polycurve3D polycurve3D)
+                {
+                    if (Polycurve3D.TryGetPolyline3D(polycurve3D, out Polyline3D polyline) && polyline != null && polyline.IsClosed())
+                    {
+                        Polygon3D polygon3D = polyline.ToPolygon3D();
+                        if (polygon3D is T tPolygon)
+                        {
+                            result.Add(tPolygon);
+                            return;
+                        }
+                    }
+                }
+
+                if (value is Face3D face3D)
+                {
+                    if (face3D.GetExternalEdge3D() is Polygon3D extPolygon && extPolygon is T tPolygon)
+                    {
+                        result.Add(tPolygon);
+                        return;
+                    }
+                }
+
+                if (value is IFace3DObject face3DObject && face3DObject.Face3D != null)
+                {
+                    if (face3DObject.Face3D.GetExternalEdge3D() is Polygon3D extPolygon && extPolygon is T tPolygon)
+                    {
+                        result.Add(tPolygon);
+                        return;
+                    }
+                }
+            }
+
+            // 4. Segment3D
+            if (typeof(Segment3D).IsAssignableFrom(targetType))
+            {
+                if (value is ISegmentable3D segmentable3D)
+                {
+                    List<Segment3D> segments = segmentable3D.GetSegments();
+                    if (segments != null)
+                    {
+                        foreach (Segment3D segment in segments)
+                        {
+                            if (segment is T tSegment)
+                            {
+                                result.Add(tSegment);
+                            }
+                        }
+                    }
+                    return;
+                }
+
+                List<IClosedPlanar3D> edge3Ds = GetEdges(value);
+                if (edge3Ds != null)
+                {
+                    foreach (IClosedPlanar3D edge in edge3Ds)
+                    {
+                        if (edge is ISegmentable3D segable)
+                        {
+                            List<Segment3D> segments = segable.GetSegments();
+                            if (segments != null)
+                            {
+                                foreach (Segment3D segment in segments)
+                                {
+                                    if (segment is T tSegment)
+                                    {
+                                        result.Add(tSegment);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    return;
+                }
+            }
+
+            // 5. Shell
+            if (typeof(Shell).IsAssignableFrom(targetType))
+            {
+                if (value is Face3D face3D)
+                {
+                    Shell shell = new Shell(new List<Face3D> { face3D });
+                    if (shell is T tShell)
+                    {
+                        result.Add(tShell);
+                        return;
+                    }
+                }
+
+                if (value is IFace3DObject face3DObject && face3DObject.Face3D != null)
+                {
+                    Shell shell = new Shell(new List<Face3D> { face3DObject.Face3D });
+                    if (shell is T tShell)
+                    {
+                        result.Add(tShell);
+                        return;
+                    }
+                }
+            }
+
+            // 6. Plane
+            if (typeof(Plane).IsAssignableFrom(targetType))
+            {
+                if (value is Face3D face3D)
+                {
+                    Plane plane = face3D.GetPlane();
+                    if (plane is T tPlane)
+                    {
+                        result.Add(tPlane);
+                        return;
+                    }
+                }
+
+                if (value is IPlanar3D planar3D)
+                {
+                    Plane plane = planar3D.GetPlane();
+                    if (plane is T tPlane)
+                    {
+                        result.Add(tPlane);
+                        return;
+                    }
+                }
+
+                if (value is IFace3DObject face3DObject && face3DObject.Face3D != null)
+                {
+                    Plane plane = face3DObject.Face3D.GetPlane();
+                    if (plane is T tPlane)
+                    {
+                        result.Add(tPlane);
+                        return;
+                    }
+                }
+            }
+
+            // 7. Point3D
+            if (typeof(Point3D).IsAssignableFrom(targetType))
+            {
+                if (value is Spatial.Plane plane)
+                {
+                    Point3D origin = plane.Origin;
+                    if (origin is T tPoint)
+                    {
+                        result.Add(tPoint);
+                        return;
+                    }
+                }
+            }
+
+            // 8. ISegmentable3D (Interface target)
+            if (typeof(ISegmentable3D).IsAssignableFrom(targetType))
+            {
+                if (value is Polycurve3D polycurve3D)
+                {
+                    if (Polycurve3D.TryGetPolyline3D(polycurve3D, out Polyline3D polyline3D) && polyline3D is T tPolyline)
+                    {
+                        result.Add(tPolyline);
+                        return;
+                    }
+                }
+
+                List<IClosedPlanar3D> edge3Ds = GetEdges(value);
+                if (edge3Ds != null)
+                {
+                    foreach (IClosedPlanar3D edge in edge3Ds)
+                    {
+                        if (edge is ISegmentable3D segmentable3D && segmentable3D is T tSegEdge)
+                        {
+                            result.Add(tSegEdge);
+                        }
+                    }
+                    return;
+                }
+            }
+
+            // 9. IClosedPlanar3D (Interface target)
+            if (typeof(IClosedPlanar3D).IsAssignableFrom(targetType))
+            {
+                if (value is Face3D face3D)
+                {
+                    if (face3D.GetExternalEdge3D() is IClosedPlanar3D edge && edge is T tEdge)
+                    {
+                        result.Add(tEdge);
+                        return;
+                    }
+                }
+
+                if (value is IFace3DObject face3DObject && face3DObject.Face3D != null)
+                {
+                    if (face3DObject.Face3D.GetExternalEdge3D() is IClosedPlanar3D edge && edge is T tEdge)
+                    {
+                        result.Add(tEdge);
+                        return;
+                    }
+                }
+            }
         }
     }
 }

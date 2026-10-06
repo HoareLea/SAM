@@ -1,0 +1,151 @@
+{
+  "id": "space-assumptions",
+  "metadata": {
+    "title": "Space Assumptions",
+    "subject": "00_011 Office",
+    "projectName": "Test Project",
+    "projectNumber": "P-001",
+    "preparedBy": "SAM Tests",
+    "date": "2026-09-25"
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": "Space",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "identity",
+          "rows": [
+            {
+              "label": "Space",
+              "value": {
+                "text": "00_011 Office",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Level",
+              "value": {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No level assigned"
+              }
+            },
+            {
+              "label": "Internal condition",
+              "value": {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No internal condition assigned"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Geometry",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "geometry-missing",
+          "level": "Warning",
+          "text": "No floor area or volume in model"
+        }
+      ]
+    },
+    {
+      "id": "design-criteria",
+      "title": "Design Criteria",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "design-criteria-missing",
+          "level": "Warning",
+          "text": "No set point profiles and no design days in model"
+        }
+      ]
+    },
+    {
+      "id": "internal-condition",
+      "title": "Internal Condition",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "internal-condition-missing",
+          "level": "Warning",
+          "text": "No internal condition assigned"
+        }
+      ]
+    },
+    {
+      "id": "ventilation",
+      "title": "Ventilation",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "ventilation-missing",
+          "level": "Information",
+          "text": "No ventilation air flows and no ventilation system assigned"
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "title": "Systems",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "systems-missing",
+          "level": "Information",
+          "text": "No heating or cooling system assigned"
+        }
+      ]
+    },
+    {
+      "id": "fabric",
+      "title": "Fabric / Exposure",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "fabric-missing",
+          "level": "Warning",
+          "text": "No panels bound this space"
+        }
+      ]
+    },
+    {
+      "id": "sizing",
+      "title": "Sizing (Tas design loads)",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "NoticeBlock",
+          "id": "sizing-status",
+          "level": "Information",
+          "text": "No Tas design loads in model"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "lines": [
+      "Model: Empty · SAM 2026.3.0-test · Design loads: none in model",
+      "Generated 25 Sep 2026 14:02 · Space 3f2504e0-4f89-11d3-9a0c-0305e82c3301"
+    ],
+    "legend": [
+      "— not available"
+    ]
+  }
+}

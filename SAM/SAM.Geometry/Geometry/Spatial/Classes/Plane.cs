@@ -15,12 +15,17 @@ namespace SAM.Geometry.Spatial
         private Point3D origin;
         private Vector3D axisY;
 
+        internal Vector3D InternalNormal => normal;
+        internal Point3D InternalOrigin => origin;
+        internal Vector3D InternalAxisY => axisY;
+
         public Plane()
         {
-            normal = Vector3D.WorldZ; //new Vector3D(0, 0, 1);
+            normal = Vector3D.WorldZ;
             origin = Point3D.Zero;
             axisY = normal.AxisY();
         }
+
         public Plane(JsonObject jsonObject)
             : base(jsonObject)
         {
@@ -28,6 +33,9 @@ namespace SAM.Geometry.Spatial
 
         public Plane(Plane plane)
         {
+            if (plane == null)
+                throw new ArgumentNullException(nameof(plane));
+
             normal = new Vector3D(plane.normal);
             origin = new Point3D(plane.origin);
             axisY = new Vector3D(plane.axisY);
@@ -35,15 +43,18 @@ namespace SAM.Geometry.Spatial
 
         public Plane(Plane plane, Point3D origin)
         {
+            if (plane == null)
+                throw new ArgumentNullException(nameof(plane));
+
             normal = new Vector3D(plane.normal);
-            this.origin = new Point3D(origin);
+            this.origin = origin != null ? new Point3D(origin) : Point3D.Zero;
             axisY = new Vector3D(plane.axisY);
         }
 
         public Plane(Point3D point3D_1, Point3D point3D_2, Point3D point3D_3)
         {
             origin = new Point3D(point3D_1);
-            normal = Query.Normal(point3D_1, point3D_2, point3D_3); //new Vector3D(point3D_1, point3D_2).CrossProduct(new Vector3D(point3D_1, point3D_3)).Unit;
+            normal = Query.Normal(point3D_1, point3D_2, point3D_3);
             axisY = normal.AxisY();
         }
 
@@ -58,7 +69,7 @@ namespace SAM.Geometry.Spatial
         {
             this.origin = new Point3D(origin);
             this.axisY = axisY.Unit;
-            normal = Query.Normal(axisX.Unit, this.axisY); //this.axisY.CrossProduct(axisX).Unit;
+            normal = Query.Normal(axisX.Unit, this.axisY);
         }
 
         public Vector3D Normal
@@ -85,8 +96,6 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                //return axisY.CrossProduct(normal);
-                //return normal.CrossProduct(axisY);
                 return Query.AxisX(normal, axisY);
             }
         }
@@ -162,25 +171,35 @@ namespace SAM.Geometry.Spatial
         {
             get
             {
-                return normal.DotProduct(origin.ToVector3D());
+                return normal.X * origin.X + normal.Y * origin.Y + normal.Z * origin.Z;
             }
         }
 
         public double Distance(Point3D point3D)
         {
-            return Closest(point3D).Distance(point3D);
+            if (point3D == null)
+                return double.NaN;
+
+            return System.Math.Abs((normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z)));
         }
 
         public double Distance(Segment3D segment3D)
         {
-            PlanarIntersectionResult planarIntersectionResult = Create.PlanarIntersectionResult(this, segment3D);
-            if (planarIntersectionResult == null)
+            if (segment3D == null)
                 return double.NaN;
 
-            if (!planarIntersectionResult.Intersecting)
-                return System.Math.Min(Distance(segment3D[0]), Distance(segment3D[1]));
+            Point3D p0 = segment3D[0];
+            Point3D p1 = segment3D[1];
+            if (p0 == null || p1 == null)
+                return double.NaN;
 
-            return 0;
+            double d0 = (normal.X * (p0.X - origin.X)) + (normal.Y * (p0.Y - origin.Y)) + (normal.Z * (p0.Z - origin.Z));
+            double d1 = (normal.X * (p1.X - origin.X)) + (normal.Y * (p1.Y - origin.Y)) + (normal.Z * (p1.Z - origin.Z));
+
+            if (d0 * d1 <= 0)
+                return 0;
+
+            return System.Math.Min(System.Math.Abs(d0), System.Math.Abs(d1));
         }
 
         public double Distance(ISegmentable3D segmentable3D)
@@ -202,6 +221,9 @@ namespace SAM.Geometry.Spatial
 
         public double Distance(Plane plane, double tolerance = Tolerance.Distance)
         {
+            if (plane == null)
+                return double.NaN;
+
             if (!Coplanar(plane, tolerance))
                 return 0;
 
@@ -225,7 +247,7 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
-            double factor = point3D.ToVector3D().DotProduct(normal) - K;
+            double factor = (normal.X * (point3D.X - origin.X)) + (normal.Y * (point3D.Y - origin.Y)) + (normal.Z * (point3D.Z - origin.Z));
             return new Point3D(point3D.X - (normal.X * factor), point3D.Y - (normal.Y * factor), point3D.Z - (normal.Z * factor));
         }
 
@@ -257,12 +279,14 @@ namespace SAM.Geometry.Spatial
                 axisY = Query.AxisY(normal, axisX);
         }
 
-
-
         public ISAMGeometry3D GetMoved(Vector3D vector3D)
         {
-            Plane plane = new Plane((Point3D)origin.GetMoved(vector3D), (Vector3D)normal.Clone());
-            plane.axisY = axisY;
+            if (vector3D == null)
+                return new Plane(this);
+
+            Point3D movedOrigin = new Point3D(origin.X + vector3D.X, origin.Y + vector3D.Y, origin.Z + vector3D.Z);
+            Plane plane = new Plane(movedOrigin, normal);
+            plane.axisY = new Vector3D(axisY);
 
             return plane;
         }
@@ -297,6 +321,9 @@ namespace SAM.Geometry.Spatial
 
         public bool Coplanar(Plane plane, double tolerance = Tolerance.Distance)
         {
+            if (plane == null)
+                return false;
+
             return normal.AlmostEqual(plane.normal, tolerance) || normal.AlmostEqual(-plane.normal, tolerance);
         }
 
@@ -380,7 +407,14 @@ namespace SAM.Geometry.Spatial
 
         public override int GetHashCode()
         {
-            return new Tuple<Vector3D, Point3D, Vector3D>(normal, origin, axisY).GetHashCode();
+            unchecked
+            {
+                int hash = 17;
+                hash = (hash * 23) + (normal != null ? normal.GetHashCode() : 0);
+                hash = (hash * 23) + (origin != null ? origin.GetHashCode() : 0);
+                hash = (hash * 23) + (axisY != null ? axisY.GetHashCode() : 0);
+                return hash;
+            }
         }
 
         public static bool operator ==(Plane plane_1, Plane plane_2)

@@ -65,6 +65,96 @@ namespace SAM.Units
 
                 case UnitType.Jule:
                     return value;
+
+                case UnitType.GramPerGram:
+                    return ByUnitType(value, from, UnitType.KilogramPerKilogram);
+
+                case UnitType.KilogramPerCubicMeter:
+                    return value;
+
+                case UnitType.NewtonPerSquereMeter:
+                    return ByUnitType(value, from, UnitType.Pascal);
+
+                case UnitType.KilojulePerKilogram:
+                    return ByUnitType(value, from, UnitType.JulePerKilogram);
+
+                case UnitType.JulePerKilogram:
+                    return value;
+
+                case UnitType.LitersPerSecond:
+                case UnitType.CubicFootPerMinute:
+                    return ByUnitType(value, from, UnitType.CubicMeterPerSecond);
+
+                case UnitType.Watt:
+                    return value;
+
+                case UnitType.Kilowatt:
+                case UnitType.BtuPerHour:
+                case UnitType.KiloBtuPerHour:
+                    return ByUnitType(value, from, UnitType.Watt);
+
+                case UnitType.SquareMeter:
+                    return value;
+
+                case UnitType.SquareFoot:
+                    return ByUnitType(value, from, UnitType.SquareMeter);
+
+                case UnitType.CubicMeter:
+                    return value;
+
+                case UnitType.CubicFoot:
+                    return ByUnitType(value, from, UnitType.CubicMeter);
+
+                case UnitType.WattPerSquareMeter:
+                    return value;
+
+                case UnitType.BtuPerHourSquareFoot:
+                    return ByUnitType(value, from, UnitType.WattPerSquareMeter);
+
+                case UnitType.KelvinDifference:
+                    return value;
+
+                case UnitType.FahrenheitDifference:
+                    return ByUnitType(value, from, UnitType.KelvinDifference);
+
+                case UnitType.WattPerPerson:
+                    return value;
+
+                case UnitType.BtuPerHourPerPerson:
+                    return ByUnitType(value, from, UnitType.WattPerPerson);
+
+                case UnitType.SquareMeterPerPerson:
+                    return value;
+
+                case UnitType.SquareFootPerPerson:
+                    return ByUnitType(value, from, UnitType.SquareMeterPerPerson);
+
+                case UnitType.AirChangesPerHour:
+                    return value;
+
+                case UnitType.Lux:
+                    return value;
+
+                case UnitType.FootCandle:
+                    return ByUnitType(value, from, UnitType.Lux);
+
+                case UnitType.WattPerSquareMeterKelvin:
+                    return value;
+
+                case UnitType.BtuPerHourSquareFootFahrenheit:
+                    return ByUnitType(value, from, UnitType.WattPerSquareMeterKelvin);
+
+                case UnitType.Person:
+                    return value;
+
+                case UnitType.Hour:
+                    return value;
+
+                case UnitType.Radian:
+                    return value;
+
+                case UnitType.Degree:
+                    return ByUnitType(value, from, UnitType.Radian);
             }
 
             return double.NaN;

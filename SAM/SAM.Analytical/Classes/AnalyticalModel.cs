@@ -93,6 +93,104 @@ namespace SAM.Analytical
                 profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
         }
 
+        /// <summary>
+        /// A copy that <b>owns its objects</b> - the working copy a mutating boundary has to take.
+        ///
+        /// <para><b>Why the ordinary copy constructor is not this</b></para>
+        /// <para>
+        /// <c>new AnalyticalModel(analyticalModel)</c> rebuilds the cluster's dictionaries but stores the
+        /// same <see cref="Space"/>, <see cref="Panel"/> and other relation-cluster instances - see
+        /// <c>RelationCluster(RelationCluster&lt;X&gt;)</c>, and <see cref="AdjacencyCluster"/>'s own getter,
+        /// which does the same. That is the right default and it is what makes both cheap: every operation
+        /// in this assembly writes by <b>same-guid replacement</b> - the object is copied, the copy is
+        /// changed, and <c>AddObject</c> puts it back over the original - so the shallow copy is genuinely
+        /// isolated. <c>Modify.EvaluateTargetedDesignAirFlows</c> states that rule at its own boundary and
+        /// relies on it.
+        /// </para>
+        /// <para>
+        /// An operation that mutates an object <b>in place</b> breaks it. The TAS conversion does:
+        /// <c>SAM.Analytical.Tas.Modify.UpdateIds</c> reads the live spaces and panels out of the cluster,
+        /// stamps zone and building-element identity straight onto their parameter sets, and puts the same
+        /// instances back. Against a shallow copy every one of those writes is visible through the model the
+        /// copy was taken from.
+        /// </para>
+        ///
+        /// <para><b>The ownership rule</b></para>
+        /// <para>
+        /// <i>A simulation or optimisation working model may be mutated freely, but no caller, retained
+        /// last-valid model or previously completed run sharing ancestry with it can observe those mutations
+        /// unless that working model is explicitly adopted.</i>
+        /// </para>
+        /// <para>
+        /// This constructor is the only thing that establishes it, so a boundary that intends to mutate -
+        /// and the two that do say so in their own comments - must take its copy with
+        /// <c>deepClone: true</c>. Everything else keeps the shallow copy: making the default deep would put
+        /// a whole-model clone behind every getter, which is a cost the replacement discipline exists to
+        /// avoid.
+        /// </para>
+        ///
+        /// <para><b>What "deep" reaches, and what it does not need to</b></para>
+        /// <para>
+        /// The cluster is cloned through <c>new AdjacencyCluster(adjacencyCluster, true)</c>, which replaces
+        /// every stored object with <c>IJSAMObject.Clone()</c> of itself. A clone carries the same
+        /// <see cref="Core.SAMObject.Guid"/>, and relations are held in their own guid-keyed dictionary, so
+        /// the relations survive intact - the clone steps into the original's place rather than beside it.
+        /// Each clone's parameter sets are its own (<c>ParameterizedSAMObject</c>'s copy constructor clones
+        /// every set), which is what makes an in-place parameter write containable, and
+        /// <c>Panel(Panel)</c> copies its apertures rather than sharing the list, so an aperture held inside
+        /// a panel is isolated too.
+        /// </para>
+        /// <para>
+        /// A cloned instance's own definitions come with it, because the accessors the clone is built
+        /// through already copy: <c>SAMInstance.Type</c> returns <c>type?.Clone()</c>, so a cloned
+        /// <see cref="Panel"/> carries its own <see cref="Construction"/> and each of its apertures its own
+        /// <see cref="ApertureConstruction"/>; <c>Space.InternalCondition</c> likewise returns a new
+        /// <see cref="InternalCondition"/>. So the isolation is not limited to the objects the cluster holds
+        /// directly, and it is paid for in memory - see the note on cost below.
+        /// </para>
+        /// <para>
+        /// The libraries and the model's own state are copied exactly as the shallow constructor copies them
+        /// - they already were copies.
+        /// </para>
+        ///
+        /// <para><b>What it costs, and where that is acceptable</b></para>
+        /// <para>
+        /// A five thousand space, thirty thousand panel model takes roughly 250 ms and 137 MB to clone,
+        /// against roughly 37 ms and 14 MB for the shallow copy (Release). That is affordable exactly once
+        /// per TAS run - a run that then spends minutes in COM - and nowhere else. It is why the shallow
+        /// copy stays the default: a getter or a UI refresh must never reach this constructor, and the Part
+        /// O path takes exactly ONE of these, in <c>Modify.RunPartOSimulation</c>.
+        /// </para>
+        /// </summary>
+        /// <param name="analyticalModel">The model to copy.</param>
+        /// <param name="deepClone">
+        /// True to take ownership of every cluster object, for a caller that is going to mutate them in
+        /// place. False is exactly <c>new AnalyticalModel(analyticalModel)</c>.
+        /// </param>
+        public AnalyticalModel(AnalyticalModel analyticalModel, bool deepClone)
+            : base(analyticalModel)
+        {
+            if (analyticalModel == null)
+                return;
+
+            description = analyticalModel.description;
+
+            if (analyticalModel.location != null)
+                location = new Location(analyticalModel.location);
+
+            if (analyticalModel.address != null)
+                address = new Address(analyticalModel.address);
+
+            if (analyticalModel.adjacencyCluster != null)
+                adjacencyCluster = new AdjacencyCluster(analyticalModel.adjacencyCluster, deepClone);
+
+            if (analyticalModel.materialLibrary != null)
+                materialLibrary = new MaterialLibrary(analyticalModel.materialLibrary);
+
+            if (analyticalModel.profileLibrary != null)
+                profileLibrary = new ProfileLibrary(analyticalModel.profileLibrary);
+        }
+
         public AnalyticalModel(AnalyticalModel analyticalModel, Location location)
             : base(analyticalModel)
         {

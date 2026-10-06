@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalCreateAnalyticalModelBySpaces : GH_SAMComponent
+    public class SAMAnalyticalCreateAnalyticalModelBySpaces : GH_SAMVariableOutputParameterComponent
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -22,7 +22,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.1";
+        public override string LatestComponentVersion => "1.0.2";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -42,34 +42,46 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index = -1;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddTextParameter("_name_", "_name_", "Analytical Model Name", GH_ParamAccess.item, "000000_SAM_AnalyticalModel");
-            inputParamManager.AddTextParameter("_description_", "_description_", "SAM Description", GH_ParamAccess.item, string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", DateTime.Now.ToString("yyyy/MM/dd")));
-            index = inputParamManager.AddParameter(new GooWeatherDataParam(), "weatherData_", "weatherData_", "SAM WeatherData", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Analytical Model Name", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData("000000_SAM_AnalyticalModel");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-            global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean();
-            param_Boolean.SetPersistentData(false);
-            index = inputParamManager.AddParameter(param_Boolean, "_saveWeatherData_", "_saveWeatherData_", "Save WeatherData", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_description_", NickName = "_description_", Description = "SAM Description", Access = GH_ParamAccess.item };
+                param_String.SetPersistentData(string.Format("Delivered by SAM https://github.com/HoareLea/SAM [{0}]", DateTime.Now.ToString("yyyy/MM/dd")));
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooSpaceParam(), "_spaces", "_spaces", "SAM Analytical Spaces", GH_ParamAccess.list);
-            inputParamManager[index].DataMapping = GH_DataMapping.Flatten;
-            inputParamManager[index].Optional = false;
+                result.Add(new GH_SAMParam(new GooWeatherDataParam() { Name = "weatherData_", NickName = "weatherData_", Description = "SAM WeatherData", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddParameter(new GooProfileLibraryParam(), "profileLibrary_", "profileLibrary_", "SAM Profile Library", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_Boolean param_Boolean = new global::Grasshopper.Kernel.Parameters.Param_Boolean() { Name = "_saveWeatherData_", NickName = "_saveWeatherData_", Description = "Save WeatherData", Access = GH_ParamAccess.item, Optional = true };
+                param_Boolean.SetPersistentData(false);
+                result.Add(new GH_SAMParam(param_Boolean, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooSpaceParam() { Name = "_spaces", NickName = "_spaces", Description = "SAM Analytical Spaces", Access = GH_ParamAccess.list, DataMapping = GH_DataMapping.Flatten }, ParamVisibility.Binding));
+
+                result.Add(new GH_SAMParam(new GooProfileLibraryParam() { Name = "profileLibrary_", NickName = "profileLibrary_", Description = "SAM Profile Library", Access = GH_ParamAccess.item, Optional = true }, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            outputParamManager.AddParameter(new GooAnalyticalModelParam(), "AnalyticalModel", "AnalyticalModel", "SAM Analytical Model", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new GooAnalyticalModelParam() { Name = "AnalyticalModel", NickName = "AnalyticalModel", Description = "SAM Analytical Model", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -80,24 +92,32 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             string name = null;
-            if (!dataAccess.GetData(0, ref name) || name == null)
+            index = Params.IndexOfInputParam("_name_");
+            if (index == -1 || !dataAccess.GetData(index, ref name) || name == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string description = null;
-            if (!dataAccess.GetData(1, ref description) || description == null)
+            index = Params.IndexOfInputParam("_description_");
+            if (index == -1 || !dataAccess.GetData(index, ref description) || description == null)
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             WeatherData weatherData = null;
-            if (!dataAccess.GetData(2, ref weatherData))
+            index = Params.IndexOfInputParam("weatherData_");
+            if (index != -1)
             {
-                weatherData = null;
+                if (!dataAccess.GetData(index, ref weatherData))
+                {
+                    weatherData = null;
+                }
             }
 
             Location location = weatherData?.Location;
@@ -107,13 +127,21 @@ namespace SAM.Analytical.Grasshopper
             }
 
             bool saveWeatherData = false;
-            if (!dataAccess.GetData(3, ref saveWeatherData))
+            index = Params.IndexOfInputParam("_saveWeatherData_");
+            if (index != -1)
             {
-                saveWeatherData = false;
+                if (!dataAccess.GetData(index, ref saveWeatherData))
+                {
+                    saveWeatherData = false;
+                }
             }
 
             List<Space> spaces = new List<Space>();
-            dataAccess.GetDataList(4, spaces);
+            index = Params.IndexOfInputParam("_spaces");
+            if (index != -1)
+            {
+                dataAccess.GetDataList(index, spaces);
+            }
 
             AdjacencyCluster adjacencyCluster = new AdjacencyCluster();
             if (spaces != null)
@@ -122,7 +150,11 @@ namespace SAM.Analytical.Grasshopper
             }
 
             ProfileLibrary profileLibrary = null;
-            dataAccess.GetData(5, ref profileLibrary);
+            index = Params.IndexOfInputParam("profileLibrary_");
+            if (index != -1)
+            {
+                dataAccess.GetData(index, ref profileLibrary);
+            }
 
             if (profileLibrary == null)
                 profileLibrary = ActiveSetting.Setting.GetValue<ProfileLibrary>(AnalyticalSettingParameter.DefaultProfileLibrary);
@@ -136,7 +168,11 @@ namespace SAM.Analytical.Grasshopper
                 analyticalModel.SetValue(AnalyticalModelParameter.WeatherData, new WeatherData(weatherData));
             }
 
-            dataAccess.SetData(0, new GooAnalyticalModel(analyticalModel));
+            index = Params.IndexOfOutputParam("AnalyticalModel");
+            if (index != -1)
+            {
+                dataAccess.SetData(index, new GooAnalyticalModel(analyticalModel));
+            }
         }
     }
 }

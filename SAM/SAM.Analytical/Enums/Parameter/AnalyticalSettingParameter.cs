@@ -52,5 +52,8 @@ namespace SAM.Analytical
 
         [ParameterProperties("Default PartF File Name", "Default PartF File Name"), ParameterValue(ParameterType.String)] DefaultPartFFileName,
         [ParameterProperties("Default PartFData", "Default PartFData"), SAMObjectParameterValue(typeof(PartFData))] PartFData,
+
+        [ParameterProperties("Default SpaceUse TextMap File Name", "Default SpaceUse TextMap File Name"), ParameterValue(ParameterType.String)] DefaultSpaceUseTextMapFileName,
+        [ParameterProperties("SpaceUse TextMap", "SpaceUse TextMap"), SAMObjectParameterValue(typeof(TextMap))] SpaceUseTextMap,
     }
 }

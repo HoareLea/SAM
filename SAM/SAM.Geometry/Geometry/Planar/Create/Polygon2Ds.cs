@@ -3,7 +3,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace SAM.Geometry.Planar
 {
@@ -17,7 +16,8 @@ namespace SAM.Geometry.Planar
                 return null;
             }
 
-            List<Tuple<Polygon2D, BoundingBox2D, double>> tuples = new List<Tuple<Polygon2D, BoundingBox2D, double>>();
+            List<(Polygon2D Polygon, BoundingBox2D BoundingBox, double Area, Point2D Centroid)> entries = new(face2Ds.Count);
+
             foreach (Face2D face2D in face2Ds)
             {
                 Polygon2D polygon2D = face2D?.ExternalEdge2D as Polygon2D;
@@ -26,7 +26,7 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                BoundingBox2D boundingBox2D = polygon2D?.GetBoundingBox();
+                BoundingBox2D boundingBox2D = polygon2D.GetBoundingBox();
                 if (boundingBox2D == null)
                 {
                     continue;
@@ -38,34 +38,45 @@ namespace SAM.Geometry.Planar
                     continue;
                 }
 
-                List<Tuple<Polygon2D, BoundingBox2D, double>> tuples_Similar = tuples.FindAll(x => System.Math.Abs(x.Item3 - area) <= tolerance);
-                if (tuples_Similar != null && tuples_Similar.Count != 0)
+                bool isSimilar = false;
+                for (int i = 0; i < entries.Count; i++)
                 {
-                    tuples_Similar = tuples_Similar.FindAll(x => boundingBox2D.InRange(x.Item2, tolerance));
-                    if (tuples_Similar != null && tuples_Similar.Count != 0)
+                    var (Polygon, BoundingBox, Area, Centroid) = entries[i];
+                    if (System.Math.Abs(Area - area) <= tolerance &&
+                        boundingBox2D.InRange(BoundingBox, tolerance) &&
+                        Polygon.Similar(polygon2D, tolerance))
                     {
-                        Tuple<Polygon2D, BoundingBox2D, double> tuple = tuples_Similar.Find(x => x.Item1.Similar(polygon2D, tolerance));
-                        if (tuple != null)
-                        {
-                            continue;
-                        }
+                        isSimilar = true;
+                        break;
                     }
                 }
 
-                tuples.Add(new Tuple<Polygon2D, BoundingBox2D, double>(polygon2D, boundingBox2D, area));
-            }
-
-            foreach (Face2D face2D in face2Ds)
-            {
-                IEnumerable<Polygon2D> polygon2Ds = face2D?.InternalEdge2Ds?.Cast<Polygon2D>();
-                if (polygon2Ds == null || polygon2Ds.Count() == 0)
+                if (isSimilar)
                 {
                     continue;
                 }
 
-                foreach (Polygon2D polygon2D in polygon2Ds)
+                entries.Add((polygon2D, boundingBox2D, area, boundingBox2D.GetCentroid()));
+            }
+
+            List<Polygon2D> internalCandidates = null;
+
+            foreach (Face2D face2D in face2Ds)
+            {
+                List<IClosed2D> internalEdge2Ds = face2D?.InternalEdge2Ds;
+                if (internalEdge2Ds == null || internalEdge2Ds.Count == 0)
                 {
-                    BoundingBox2D boundingBox2D = polygon2D?.GetBoundingBox();
+                    continue;
+                }
+
+                foreach (IClosed2D internalEdge2D in internalEdge2Ds)
+                {
+                    if (internalEdge2D is not Polygon2D polygon2D)
+                    {
+                        continue;
+                    }
+
+                    BoundingBox2D boundingBox2D = polygon2D.GetBoundingBox();
                     if (boundingBox2D == null)
                     {
                         continue;
@@ -77,16 +88,26 @@ namespace SAM.Geometry.Planar
                         continue;
                     }
 
-                    List<Polygon2D> polygon2Ds_Temp = new List<Polygon2D>() { polygon2D };
+                    if (internalCandidates == null)
+                        internalCandidates = [];
+                    else
+                        internalCandidates.Clear();
 
-                    List<Tuple<Polygon2D, BoundingBox2D, double>> tuples_Internal = tuples.FindAll(x => area + tolerance > x.Item3);
-                    if (tuples_Internal != null && tuples_Internal.Count != 0)
+                    double areaThreshold = area + tolerance;
+                    for (int i = 0; i < entries.Count; i++)
                     {
-                        tuples_Internal = tuples_Internal.FindAll(x => boundingBox2D.Inside(x.Item2.GetCentroid(), tolerance));
-                        if (tuples_Internal != null && tuples_Internal.Count != 0)
+                        var (Polygon, BoundingBox, Area, Centroid) = entries[i];
+                        if (areaThreshold > Area && Centroid != null && boundingBox2D.Inside(Centroid, tolerance))
                         {
-                            polygon2Ds_Temp = Query.Difference(polygon2D, tuples_Internal.ConvertAll(x => x.Item1));
+                            internalCandidates.Add(Polygon);
                         }
+                    }
+
+                    List<Polygon2D> polygon2Ds_Temp = [polygon2D];
+
+                    if (internalCandidates.Count != 0)
+                    {
+                        polygon2Ds_Temp = Query.Difference(polygon2D, internalCandidates);
                     }
 
                     if (polygon2Ds_Temp == null || polygon2Ds_Temp.Count == 0)
@@ -96,28 +117,34 @@ namespace SAM.Geometry.Planar
 
                     foreach (Polygon2D polygon2D_Temp in polygon2Ds_Temp)
                     {
+                        BoundingBox2D bboxTemp = boundingBox2D;
+                        double areaTemp = area;
                         if (polygon2D_Temp != polygon2D)
                         {
-                            boundingBox2D = polygon2D_Temp?.GetBoundingBox();
-                            if (boundingBox2D == null)
+                            bboxTemp = polygon2D_Temp?.GetBoundingBox();
+                            if (bboxTemp == null)
                             {
                                 continue;
                             }
 
-                            area = polygon2D_Temp.GetArea();
-                            if (double.IsNaN(area) || area < tolerance)
+                            areaTemp = polygon2D_Temp.GetArea();
+                            if (double.IsNaN(areaTemp) || areaTemp < tolerance)
                             {
                                 continue;
                             }
                         }
 
-                        tuples.Add(new Tuple<Polygon2D, BoundingBox2D, double>(polygon2D_Temp, boundingBox2D, area));
+                        entries.Add((polygon2D_Temp, bboxTemp, areaTemp, bboxTemp.GetCentroid()));
                     }
                 }
-
             }
 
-            return tuples.ConvertAll(x => x.Item1);
+            List<Polygon2D> result = new(entries.Count);
+            for (int i = 0; i < entries.Count; i++)
+            {
+                result.Add(entries[i].Polygon);
+            }
+            return result;
         }
 
         public static List<Polygon2D> Polygon2Ds(this IEnumerable<ISegmentable2D> segmentable2Ds, bool split, double tolerance = Core.Tolerance.MicroDistance)

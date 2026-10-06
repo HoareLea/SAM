@@ -31,7 +31,7 @@ namespace SAM.Core
                 this.parameterSets = new List<ParameterSet>();
                 foreach (ParameterSet parameterSet in parameterSets)
                 {
-                    this.parameterSets.Add(parameterSet.Clone());
+                    Modify.Add(this.parameterSets, parameterSet.Clone());
                 }
             }
         }
@@ -314,12 +314,15 @@ namespace SAM.Core
 
             if (jsonObject["ParameterSets"] is JsonArray parameterSetsArray)
             {
+                // Modify.Add collapses legacy same-name sets (one per build of an assembly without a stable GUID,
+                // SAM#146) into the first, in stored order: a later set was appended by a later run and then written
+                // by it, so its values override the earlier ones. A file with no duplicates loads unchanged.
                 parameterSets = new List<ParameterSet>();
                 foreach (JsonNode? node in parameterSetsArray)
                 {
                     if (node is JsonObject parameterSetObject)
                     {
-                        parameterSets.Add(new ParameterSet((JsonObject)parameterSetObject.DeepClone()));
+                        Modify.Add(parameterSets, new ParameterSet((JsonObject)parameterSetObject.DeepClone()));
                     }
                 }
             }

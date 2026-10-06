@@ -1,0 +1,844 @@
+{
+  "id": "space-assumptions",
+  "metadata": {
+    "title": "Space Assumptions",
+    "subject": "00_011 Office",
+    "projectName": "Test Project",
+    "projectNumber": "P-001",
+    "preparedBy": "SAM Tests",
+    "date": "2026-09-25"
+  },
+  "sections": [
+    {
+      "id": "identity",
+      "title": "Space",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "identity",
+          "rows": [
+            {
+              "label": "Space",
+              "value": {
+                "text": "00_011 Office",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Level",
+              "value": {
+                "text": "Level 00",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Internal condition",
+              "value": {
+                "text": "S39_OfficeOpen",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "geometry",
+      "title": "Geometry",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "geometry",
+          "rows": [
+            {
+              "label": "Floor area",
+              "value": {
+                "text": "323",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Volume",
+              "value": {
+                "text": "3,178",
+                "unit": "ft³",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Average height",
+              "value": {
+                "text": "9.8",
+                "unit": "ft",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Average: volume ÷ floor area"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "design-criteria",
+      "title": "Design Criteria",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "design-criteria",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "",
+              "alignment": "Left"
+            },
+            {
+              "header": "Heating",
+              "alignment": "Right"
+            },
+            {
+              "header": "Cooling",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Room set point",
+                "availability": "Available"
+              },
+              {
+                "text": "69.8",
+                "unit": "°F",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Maximum of profile Heat 21"
+              },
+              {
+                "text": "75.2",
+                "unit": "°F",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Minimum of profile Cool 24"
+              }
+            ],
+            [
+              {
+                "text": "Outdoor dry bulb",
+                "availability": "Available"
+              },
+              {
+                "text": "26.6",
+                "unit": "°F",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Minimum of design day Winter DD"
+              },
+              {
+                "text": "89.8",
+                "unit": "°F",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Maximum of design day Summer DD"
+              }
+            ],
+            [
+              {
+                "text": "Outdoor RH (coincident)",
+                "availability": "Available"
+              },
+              {
+                "text": "87",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Coincident with the dry bulb"
+              },
+              {
+                "text": "36",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Coincident with the dry bulb"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "KeyValueBlock",
+          "id": "room-humidity",
+          "title": "Room humidity",
+          "rows": [
+            {
+              "label": "Humidification set point",
+              "subLabel": "lower RH limit",
+              "value": {
+                "text": "40",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Maximum of profile Hum 40"
+              }
+            },
+            {
+              "label": "Dehumidification set point",
+              "subLabel": "upper RH limit",
+              "value": {
+                "text": "60",
+                "unit": "%",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Minimum of profile Dehum 60"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "internal-condition",
+      "title": "Internal Condition",
+      "width": "Full",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "gains",
+          "title": "Internal gains",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "Gain",
+              "alignment": "Left"
+            },
+            {
+              "header": "Profile",
+              "alignment": "Left"
+            },
+            {
+              "header": "Specific",
+              "alignment": "Right"
+            },
+            {
+              "header": "Total",
+              "unit": "Btu/h",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Occupancy sensible",
+                "availability": "Available"
+              },
+              {
+                "text": "Occ 8to19",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "256",
+                "unit": "Btu/h/person",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "768",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Occupancy latent",
+                "availability": "Available"
+              },
+              {
+                "text": "Occ 8to19",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "188",
+                "unit": "Btu/h/person",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "563",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Lighting",
+                "availability": "Available"
+              },
+              {
+                "text": "Light 8to19",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "2.54",
+                "unit": "Btu/h·ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "819",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Equipment sensible",
+                "availability": "Available"
+              },
+              {
+                "text": "Equip 8to19",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "7.92",
+                "unit": "Btu/h·ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "2,559",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Equipment latent",
+                "availability": "Available"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No profile"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No equipment latent gain per area"
+              },
+              {
+                "text": "—",
+                "availability": "NotAvailable",
+                "note": "No equipment latent gain authored"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "KeyValueBlock",
+          "id": "occupancy",
+          "title": "Occupancy",
+          "rows": [
+            {
+              "label": "People",
+              "value": {
+                "text": "3.0",
+                "unit": "persons",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            },
+            {
+              "label": "Area per person",
+              "value": {
+                "text": "108",
+                "unit": "ft²/person",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Occupied hours per year",
+              "value": {
+                "text": "4,015",
+                "unit": "h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Hours with non-zero occupancy"
+              }
+            }
+          ]
+        },
+        {
+          "type": "KeyValueBlock",
+          "id": "lighting",
+          "title": "Lighting",
+          "rows": [
+            {
+              "label": "Design illuminance",
+              "value": {
+                "text": "46.5",
+                "unit": "fc",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        },
+        {
+          "type": "KeyValueBlock",
+          "id": "infiltration",
+          "title": "Infiltration",
+          "rows": [
+            {
+              "label": "Air change rate",
+              "value": {
+                "text": "0.20",
+                "unit": "ac/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Air flow",
+              "value": {
+                "text": "11",
+                "unit": "cfm",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            },
+            {
+              "label": "Profile",
+              "value": {
+                "text": "Inf Const",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ventilation",
+      "title": "Ventilation",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "ventilation",
+          "rows": [
+            {
+              "label": "Supply air",
+              "value": {
+                "text": "420",
+                "unit": "cfm",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Extract air",
+              "value": {
+                "text": "381",
+                "unit": "cfm",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Outside air",
+              "value": {
+                "text": "85",
+                "unit": "cfm",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Supply air changes",
+              "value": {
+                "text": "7.92",
+                "unit": "ac/h",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived",
+                "note": "Supply air flow ÷ volume"
+              }
+            },
+            {
+              "label": "System",
+              "value": {
+                "text": "VAV",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Supply unit",
+              "value": {
+                "text": "AHU1S",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Extract unit",
+              "value": {
+                "text": "AHU1E",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "systems",
+      "title": "Systems",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "KeyValueBlock",
+          "id": "systems",
+          "rows": [
+            {
+              "label": "Heating system",
+              "value": {
+                "text": "UFH",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Cooling system",
+              "value": {
+                "text": "FCU",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Ventilation riser",
+              "value": {
+                "text": "V R1",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            },
+            {
+              "label": "Heating riser",
+              "value": {
+                "text": "H R2",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "fabric",
+      "title": "Fabric / Exposure",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "fabric",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "Element",
+              "alignment": "Left"
+            },
+            {
+              "header": "External",
+              "unit": "ft²",
+              "alignment": "Right"
+            },
+            {
+              "header": "Internal",
+              "unit": "ft²",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Walls",
+                "availability": "Available"
+              },
+              {
+                "text": "103",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              },
+              {
+                "text": "110",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Windows (pane)",
+                "availability": "Available"
+              },
+              {
+                "text": "26",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              },
+              {
+                "text": "0",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Doors (pane)",
+                "availability": "Available"
+              },
+              {
+                "text": "0",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              },
+              {
+                "text": "19",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Roofs / ceilings",
+                "availability": "Available"
+              },
+              {
+                "text": "323",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              },
+              {
+                "text": "0",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ],
+            [
+              {
+                "text": "Ground floors",
+                "availability": "Available"
+              },
+              {
+                "text": "323",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              },
+              {
+                "text": "0",
+                "unit": "ft²",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "Derived"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "fabric-not-present",
+          "level": "Note",
+          "text": "Not present (zero area): Windows (frame), Doors (frame), Other floors"
+        }
+      ]
+    },
+    {
+      "id": "sizing",
+      "title": "Sizing (Tas design loads)",
+      "width": "Half",
+      "blocks": [
+        {
+          "type": "TableBlock",
+          "id": "sizing",
+          "repeatHeader": true,
+          "columns": [
+            {
+              "header": "",
+              "alignment": "Left"
+            },
+            {
+              "header": "Heating",
+              "alignment": "Right"
+            },
+            {
+              "header": "Cooling",
+              "alignment": "Right"
+            }
+          ],
+          "rows": [
+            [
+              {
+                "text": "Design load",
+                "availability": "Available"
+              },
+              {
+                "text": "2,658",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "TBD",
+                "note": "Tas sizing - date/currency not recorded"
+              },
+              {
+                "text": "42,311",
+                "unit": "Btu/h",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "TBD",
+                "note": "Tas sizing - date/currency not recorded"
+              }
+            ],
+            [
+              {
+                "text": "Design load per area",
+                "availability": "Available"
+              },
+              {
+                "text": "8.23",
+                "unit": "Btu/h·ft²",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "Derived",
+                "note": "Design load ÷ floor area"
+              },
+              {
+                "text": "131.03",
+                "unit": "Btu/h·ft²",
+                "availability": "Available",
+                "freshness": "Unknown",
+                "source": "Derived",
+                "note": "Design load ÷ floor area"
+              }
+            ],
+            [
+              {
+                "text": "Sizing multiplier",
+                "availability": "Available"
+              },
+              {
+                "text": "1.20",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM"
+              },
+              {
+                "text": "1.10",
+                "availability": "Available",
+                "freshness": "Current",
+                "source": "SAM",
+                "note": "Model default"
+              }
+            ]
+          ]
+        },
+        {
+          "type": "NoticeBlock",
+          "id": "sizing-status",
+          "level": "Information",
+          "text": "Design loads: from Tas sizing — date/currency not recorded; whether they include the Sizing multiplier is not recorded"
+        }
+      ]
+    }
+  ],
+  "footer": {
+    "lines": [
+      "Model: Office · SAM 2026.3.0-test · Design loads: from Tas sizing — date/currency not recorded",
+      "Generated 25 Sep 2026 14:02 · Space 3f2504e0-4f89-11d3-9a0c-0305e82c3301"
+    ],
+    "legend": [
+      "— not available"
+    ]
+  }
+}

@@ -21,8 +21,10 @@ namespace SAM.Geometry.Spatial
 
         public static double Azimuth(this Plane plane, Vector3D referenceDirection)
         {
+            if (plane == null || referenceDirection == null)
+                return double.NaN;
 
-            Vector3D normal = plane?.Normal;
+            Vector3D normal = plane.InternalNormal;
             if (normal == null)
                 return double.NaN;
 
@@ -32,8 +34,8 @@ namespace SAM.Geometry.Spatial
             if (normal.Z == -1)
                 return 180;
 
-            Vector3D vector3D_Project_Normal = Plane.WorldXY.Project(normal);
-            Vector3D vector3D_Project_ReferenceDirection = Plane.WorldXY.Project(referenceDirection);
+            Vector3D vector3D_Project_Normal = new Vector3D(normal.X, normal.Y, 0);
+            Vector3D vector3D_Project_ReferenceDirection = new Vector3D(referenceDirection.X, referenceDirection.Y, 0);
 
             double azimuth = SignedAngle(vector3D_Project_Normal, vector3D_Project_ReferenceDirection, Vector3D.WorldZ) * (180 / System.Math.PI);
             if (azimuth < 0)

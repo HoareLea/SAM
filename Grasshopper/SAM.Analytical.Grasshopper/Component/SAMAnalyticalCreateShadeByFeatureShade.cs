@@ -19,7 +19,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -56,10 +56,10 @@ namespace SAM.Analytical.Grasshopper
                 global::Grasshopper.Kernel.Parameters.Param_String param_String;
 
                 param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name", NickName = "_name", Description = "SAM Name", Optional = true, Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(gooFeatureShadeParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_description", NickName = "_description", Description = "SAM Description", Optional = true, Access = GH_ParamAccess.item };
-                result.Add(new GH_SAMParam(gooFeatureShadeParam, ParamVisibility.Binding));
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
 
                 global::Grasshopper.Kernel.Parameters.Param_Number paramNumber;
 

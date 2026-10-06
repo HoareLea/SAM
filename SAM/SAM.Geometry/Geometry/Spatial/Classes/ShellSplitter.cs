@@ -54,12 +54,20 @@ namespace SAM.Geometry.Spatial
 
             public bool HasOverlay(Segment3DData segment3DData, double tolerance = Core.Tolerance.Distance)
             {
-                if (segment3DData == null)
+                if (segment3DData == null || segment3DDatas == null)
                 {
                     return false;
                 }
 
-                return segment3DDatas?.FindAll(x => x != null && Core.Query.Round(x.Segment3D.GetLength(), tolerance) > tolerance).Find(x => segment3DData.Overlay(x, tolerance)) != null;
+                foreach (Segment3DData x in segment3DDatas)
+                {
+                    if (x != null && Core.Query.Round(x.Segment3D.GetLength(), tolerance) > tolerance && segment3DData.Overlay(x, tolerance))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
             }
 
             public List<Segment3DData> Segment3DDatas
@@ -87,13 +95,10 @@ namespace SAM.Geometry.Spatial
 
                 List<Segment3D> result = new List<Segment3D>();
 
-                ISegmentable3D segmentable3D = face3D.GetExternalEdge3D() as ISegmentable3D;
-                if (segmentable3D == null)
+                if (face3D.GetExternalEdge3D() is ISegmentable3D segmentable3D)
                 {
-                    throw new NotImplementedException();
+                    result.AddRange(segmentable3D.GetSegments());
                 }
-
-                result.AddRange(segmentable3D.GetSegments());
 
                 List<IClosedPlanar3D> internalEdges = face3D.GetInternalEdge3Ds();
                 if (internalEdges == null || internalEdges.Count == 0)
@@ -103,18 +108,10 @@ namespace SAM.Geometry.Spatial
 
                 foreach (IClosedPlanar3D internalEdge in internalEdges)
                 {
-                    if (internalEdge == null)
+                    if (internalEdge is ISegmentable3D internalSegmentable)
                     {
-                        continue;
+                        result.AddRange(internalSegmentable.GetSegments());
                     }
-
-                    segmentable3D = internalEdge as ISegmentable3D;
-                    if (segmentable3D == null)
-                    {
-                        throw new NotImplementedException();
-                    }
-
-                    result.AddRange(segmentable3D.GetSegments());
                 }
 
                 return result;
@@ -127,7 +124,7 @@ namespace SAM.Geometry.Spatial
                     return null;
                 }
 
-                return new Face3D(face3D);
+                return new Face3DData(face3D);
             }
         }
 
@@ -203,23 +200,47 @@ namespace SAM.Geometry.Spatial
 
         }
 
+        /// <summary>
+        /// Gets or sets the distance tolerance used for geometric equality and snapping operations.
+        /// </summary>
         public double Tolerance_Distance { get; set; } = Core.Tolerance.Distance;
+
+        /// <summary>
+        /// Gets or sets the angular tolerance used for vector and coplanar comparisons.
+        /// </summary>
         public double Tolerance_Angle { get; set; } = Core.Tolerance.Angle;
+
+        /// <summary>
+        /// Gets or sets the snapping tolerance used for vertex and edge snapping.
+        /// </summary>
         public double Tolerance_Snap { get; set; } = Core.Tolerance.MacroDistance;
 
         private List<Shell> shells;
         private List<Face3D> face3Ds;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShellSplitter"/> class.
+        /// </summary>
         public ShellSplitter()
         {
         }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ShellSplitter"/> class with target shells and cutting faces.
+        /// </summary>
+        /// <param name="shells">The collection of shells to be split.</param>
+        /// <param name="face3Ds">The collection of 3D cutting faces.</param>
         public ShellSplitter(IEnumerable<Shell> shells, IEnumerable<Face3D> face3Ds)
         {
             this.shells = shells?.ToList().FindAll(x => x != null).ConvertAll(x => new Shell(x));
             this.face3Ds = face3Ds?.ToList().FindAll(x => x != null).ConvertAll(x => new Face3D(x));
         }
 
+        /// <summary>
+        /// Adds a shell to be split.
+        /// </summary>
+        /// <param name="shell">The shell instance to add.</param>
+        /// <returns><c>true</c> if the shell was added successfully; otherwise, <c>false</c>.</returns>
         public bool Add(Shell shell)
         {
             if (shell == null)
@@ -236,6 +257,11 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        /// <summary>
+        /// Adds a 3D face to be used as a cutting plane/boundary.
+        /// </summary>
+        /// <param name="face3D">The 3D face instance to add.</param>
+        /// <returns><c>true</c> if the face was added successfully; otherwise, <c>false</c>.</returns>
         public bool Add(Face3D face3D)
         {
             if (face3D == null)
@@ -252,14 +278,16 @@ namespace SAM.Geometry.Spatial
             return true;
         }
 
+        /// <summary>
+        /// Splits all added shells using all added cutting 3D faces.
+        /// </summary>
+        /// <returns>A list of resulting sub-shells, or <c>null</c> if input collections are missing.</returns>
         public List<Shell> Split()
         {
             if (shells == null || face3Ds == null)
             {
                 return null;
             }
-
-            //List<Face3D> face3D_Temp = Query.Union(face3Ds, Tolerance_Snap);
 
             List<Face3D> face3Ds_Cut = Query.Cut(face3Ds);
             if (face3Ds_Cut == null)
@@ -547,63 +575,49 @@ namespace SAM.Geometry.Spatial
                 return null;
             }
 
+            List<Face3DData> result = new List<Face3DData>();
+            Queue<Face3DData> queue = new Queue<Face3DData>();
+
             if (face3DDatas.Contains(face3DData))
             {
                 face3DDatas.Remove(face3DData);
             }
 
-            List<Face3DData> result = new List<Face3DData>();
+            queue.Enqueue(face3DData);
 
-            List<Segment3DData> segment3DDatas = face3DData.Segment3DDatas;
-            if (segment3DDatas == null)
+            while (queue.Count > 0)
             {
-                return result;
-            }
-
-            foreach (Segment3DData segment3DData in segment3DDatas)
-            {
-                if (segment3DDatas_ToBeExcluded != null && segment3DDatas_ToBeExcluded.Find(x => segment3DData.Overlay(x, tolerance)) != null)
+                Face3DData current = queue.Dequeue();
+                List<Segment3DData> segment3DDatas = current.Segment3DDatas;
+                if (segment3DDatas == null)
                 {
                     continue;
                 }
 
-                List<Face3DData> face3DDatas_Adjacent = segment3DData.GetFace3DDatas(face3DDatas, tolerance);
-                if (face3DDatas_Adjacent == null || face3DDatas_Adjacent.Count == 0)
+                foreach (Segment3DData segment3DData in segment3DDatas)
                 {
-                    continue;
-                }
-
-                foreach (Face3DData face3DData_Adjacent in face3DDatas_Adjacent)
-                {
-                    if (!result.Contains(face3DData_Adjacent))
-                    {
-                        result.Add(face3DData_Adjacent);
-                    }
-
-                    if (face3DDatas.Contains(face3DData_Adjacent))
-                    {
-                        face3DDatas.Remove(face3DData_Adjacent);
-                    }
-                }
-
-                foreach (Face3DData face3DData_Adjacent in face3DDatas_Adjacent)
-                {
-                    List<Face3DData> face3DDatas_Temp = GetFace3DDatas(face3DData_Adjacent, face3DDatas, segment3DDatas_ToBeExcluded, tolerance);
-                    if (face3DDatas_Temp == null || face3DDatas_Temp.Count == 0)
+                    if (segment3DDatas_ToBeExcluded != null && segment3DDatas_ToBeExcluded.Exists(x => segment3DData.Overlay(x, tolerance)))
                     {
                         continue;
                     }
 
-                    foreach (Face3DData face3DData_Temp in face3DDatas_Temp)
+                    List<Face3DData> face3DDatas_Adjacent = segment3DData.GetFace3DDatas(face3DDatas, tolerance);
+                    if (face3DDatas_Adjacent == null || face3DDatas_Adjacent.Count == 0)
                     {
-                        if (!result.Contains(face3DData_Temp))
+                        continue;
+                    }
+
+                    foreach (Face3DData face3DData_Adjacent in face3DDatas_Adjacent)
+                    {
+                        if (!result.Contains(face3DData_Adjacent))
                         {
-                            result.Add(face3DData_Temp);
+                            result.Add(face3DData_Adjacent);
+                            queue.Enqueue(face3DData_Adjacent);
                         }
 
-                        if (face3DDatas.Contains(face3DData_Temp))
+                        if (face3DDatas.Contains(face3DData_Adjacent))
                         {
-                            face3DDatas.Remove(face3DData_Temp);
+                            face3DDatas.Remove(face3DData_Adjacent);
                         }
                     }
                 }

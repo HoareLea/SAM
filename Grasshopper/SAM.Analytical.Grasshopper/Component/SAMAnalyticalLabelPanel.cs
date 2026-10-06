@@ -18,7 +18,7 @@ using System.Linq;
 
 namespace SAM.Analytical.Grasshopper
 {
-    public class SAMAnalyticalLabelPanel : GH_SAMComponent, IGH_PreviewObject, IGH_BakeAwareObject
+    public class SAMAnalyticalLabelPanel : GH_SAMVariableOutputParameterComponent, IGH_PreviewObject, IGH_BakeAwareObject
     {
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
@@ -28,7 +28,7 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// The latest version of this component
         /// </summary>
-        public override string LatestComponentVersion => "1.0.0";
+        public override string LatestComponentVersion => "1.0.1";
 
         /// <summary>
         /// Provides an Icon for the component.
@@ -48,23 +48,38 @@ namespace SAM.Analytical.Grasshopper
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
-        protected override void RegisterInputParams(GH_InputParamManager inputParamManager)
+        protected override GH_SAMParam[] Inputs
         {
-            int index;
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
 
-            inputParamManager.AddParameter(new GooPanelParam(), "_panel", "_panel", "SAM Analytical Panel", GH_ParamAccess.item);
-            inputParamManager.AddTextParameter("_name_", "_name_", "Parameter Name", GH_ParamAccess.item, "Name");
+                result.Add(new GH_SAMParam(new GooPanelParam() { Name = "_panel", NickName = "_panel", Description = "SAM Analytical Panel", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
 
-            index = inputParamManager.AddNumberParameter("_height_", "_height_", "Text Height", GH_ParamAccess.item);
-            inputParamManager[index].Optional = true;
+                global::Grasshopper.Kernel.Parameters.Param_String param_String;
+                param_String = new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "_name_", NickName = "_name_", Description = "Parameter Name", Access = GH_ParamAccess.item, Optional = true };
+                param_String.SetPersistentData("Name");
+                result.Add(new GH_SAMParam(param_String, ParamVisibility.Binding));
+
+                global::Grasshopper.Kernel.Parameters.Param_Number param_Number;
+                param_Number = new global::Grasshopper.Kernel.Parameters.Param_Number() { Name = "_height_", NickName = "_height_", Description = "Text Height", Access = GH_ParamAccess.item, Optional = true };
+                result.Add(new GH_SAMParam(param_Number, ParamVisibility.Binding));
+
+                return result.ToArray();
+            }
         }
 
         /// <summary>
         /// Registers all the output parameters for this component.
         /// </summary>
-        protected override void RegisterOutputParams(GH_OutputParamManager outputParamManager)
+        protected override GH_SAMParam[] Outputs
         {
-            int index = outputParamManager.AddTextParameter("Value", "Value", "Value", GH_ParamAccess.item);
+            get
+            {
+                List<GH_SAMParam> result = new List<GH_SAMParam>();
+                result.Add(new GH_SAMParam(new global::Grasshopper.Kernel.Parameters.Param_String() { Name = "Value", NickName = "Value", Description = "Value", Access = GH_ParamAccess.item }, ParamVisibility.Binding));
+                return result.ToArray();
+            }
         }
 
         /// <summary>
@@ -75,15 +90,20 @@ namespace SAM.Analytical.Grasshopper
         /// </param>
         protected override void SolveInstance(IGH_DataAccess dataAccess)
         {
+            int index;
+
             Panel panel = null;
-            if (!dataAccess.GetData(0, ref panel))
+            index = Params.IndexOfInputParam("_panel");
+            if (index == -1 || !dataAccess.GetData(index, ref panel))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Invalid data");
                 return;
             }
 
             string name = null;
-            dataAccess.GetData(1, ref name);
+            index = Params.IndexOfInputParam("_name_");
+            if (index != -1)
+                dataAccess.GetData(index, ref name);
             if (string.IsNullOrEmpty(name))
                 name = "Name";
 
@@ -95,7 +115,9 @@ namespace SAM.Analytical.Grasshopper
             if (double.TryParse(text, out value))
                 text = value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
 
-            dataAccess.SetData(0, text);
+            index = Params.IndexOfOutputParam("Value");
+            if (index != -1)
+                dataAccess.SetData(index, text);
         }
 
         public override BoundingBox ClippingBox
@@ -123,19 +145,26 @@ namespace SAM.Analytical.Grasshopper
 
         private List<Text3d> GetText3ds()
         {
+            int index;
+
             string name = null;
-            global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[1].VolatileData.AllData(true)?.First();
-            if (goo != null)
-                name = (goo as dynamic).Value;
+            index = Params.IndexOfInputParam("_name_");
+            if (index != -1)
+            {
+                global::Grasshopper.Kernel.Types.IGH_Goo goo = Params.Input[index].VolatileData.AllData(true)?.First();
+                if (goo != null)
+                    name = (goo as dynamic).Value;
+            }
 
             double height = double.NaN;
 
-            if (Params.Input.Count > 2)
+            index = Params.IndexOfInputParam("_height_");
+            if (index != -1)
             {
-                IGH_StructureEnumerator structureEnumerator = Params.Input[2].VolatileData.AllData(true);
+                IGH_StructureEnumerator structureEnumerator = Params.Input[index].VolatileData.AllData(true);
                 if (structureEnumerator != null && structureEnumerator.Count() > 0)
                 {
-                    goo = structureEnumerator.First();
+                    global::Grasshopper.Kernel.Types.IGH_Goo goo = structureEnumerator.First();
                     if (goo != null)
                         height = (goo as dynamic).Value;
                 }
@@ -143,65 +172,69 @@ namespace SAM.Analytical.Grasshopper
 
             List<Text3d> result = new List<Text3d>();
 
-            foreach (GooPanel gooPanel in Params.Input[0].VolatileData.AllData(true))
+            index = Params.IndexOfInputParam("_panel");
+            if (index != -1)
             {
-                IPanel panel = gooPanel.Value;
-                if (panel == null)
+                foreach (GooPanel gooPanel in Params.Input[index].VolatileData.AllData(true))
                 {
-                    continue;
+                    IPanel panel = gooPanel.Value;
+                    if (panel == null)
+                    {
+                        continue;
+                    }
+
+                    string text;
+                    if (!panel.TryGetValue(name, out text, true))
+                        text = "???";
+
+                    double value = double.NaN;
+                    if (double.TryParse(text, out value))
+                        text = value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
+
+                    Vector3D normal = panel.Face3D?.GetPlane()?.Normal;
+                    normal.Round(Tolerance.Distance);
+
+                    Point3D point3D = panel.Face3D?.GetInternalPoint3D();
+
+                    // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
+
+                    global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
+                    Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
+                    if (normal.Z >= 0)
+                    {
+                        if (normal.Z != 1)
+                            plane.Rotate(System.Math.PI, normal_Rhino);
+                    }
+                    else
+                    {
+                        plane.Flip();
+                        plane.Rotate(-System.Math.PI / 2, normal_Rhino);
+                    }
+
+                    double height_Temp = height;
+                    if (double.IsNaN(height_Temp))
+                    {
+                        int length = text.Length;
+                        if (length < 10)
+                            length = 10;
+
+                        BoundingBox2D boundingBox2D = panel.Face3D.ExternalEdge2D.GetBoundingBox();
+                        double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
+
+                        height_Temp = max / (length * 2);
+                    }
+
+                    TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
+                    TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
+                    Text3d text3d = new Text3d("\n" + text, plane, height_Temp);  // TODO: add enter in front of Panel Data
+                    text3d.HorizontalAlignment = textHorizontalAlignment;
+                    text3d.VerticalAlignment = textVerticalAlignment;
+                    //text3d.FontFace = "RhSS"; //this was reason text not to display
+                    text3d.Italic = true;
+                    text3d.Bold = false;
+
+                    result.Add(text3d);
                 }
-
-                string text;
-                if (!panel.TryGetValue(name, out text, true))
-                    text = "???";
-
-                double value = double.NaN;
-                if (double.TryParse(text, out value))
-                    text = value.Round(RhinoDoc.ActiveDoc.ModelAbsoluteTolerance).ToString();
-
-                Vector3D normal = panel.Face3D?.GetPlane()?.Normal;
-                normal.Round(Tolerance.Distance);
-
-                Point3D point3D = panel.Face3D?.GetInternalPoint3D();
-
-                // point3D = point3D.GetMoved(normal * 0.1) as Point3D; //TEMP SOLUTION FOR TESTING
-
-                global::Rhino.Geometry.Plane plane = Geometry.Rhino.Convert.ToRhino(new Geometry.Spatial.Plane(point3D, normal));
-                Vector3d normal_Rhino = Geometry.Rhino.Convert.ToRhino(normal);
-                if (normal.Z >= 0)
-                {
-                    if (normal.Z != 1)
-                        plane.Rotate(System.Math.PI, normal_Rhino);
-                }
-                else
-                {
-                    plane.Flip();
-                    plane.Rotate(-System.Math.PI / 2, normal_Rhino);
-                }
-
-                double height_Temp = height;
-                if (double.IsNaN(height_Temp))
-                {
-                    int length = text.Length;
-                    if (length < 10)
-                        length = 10;
-
-                    BoundingBox2D boundingBox2D = panel.Face3D.ExternalEdge2D.GetBoundingBox();
-                    double max = System.Math.Max(boundingBox2D.Width, boundingBox2D.Height);
-
-                    height_Temp = max / (length * 2);
-                }
-
-                TextHorizontalAlignment textHorizontalAlignment = TextHorizontalAlignment.Center;
-                TextVerticalAlignment textVerticalAlignment = TextVerticalAlignment.MiddleOfBottom;
-                Text3d text3d = new Text3d("\n" + text, plane, height_Temp);  // TODO: add enter in front of Panel Data
-                text3d.HorizontalAlignment = textHorizontalAlignment;
-                text3d.VerticalAlignment = textVerticalAlignment;
-                //text3d.FontFace = "RhSS"; //this was reason text not to display
-                text3d.Italic = true;
-                text3d.Bold = false;
-
-                result.Add(text3d);
             }
 
             return result;

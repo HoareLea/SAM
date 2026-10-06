@@ -59,7 +59,7 @@ namespace SAM.Core.Grasshopper
             get
             {
                 List<GH_SAMParam> result = new List<GH_SAMParam>();
-                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "results", NickName = "results", Description = "Results (IndexedDoubles) \nInspec to get values", Access = GH_ParamAccess.item }, ParamVisibility.Binding)); ;
+                result.Add(new GH_SAMParam(new GooIndexedObjectsParam() { Name = "results", NickName = "results", Description = "Results (IndexedDoubles) \nInspect to get values", Access = GH_ParamAccess.item }, ParamVisibility.Binding)); ;
                 return result.ToArray();
             }
         }

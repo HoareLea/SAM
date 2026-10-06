@@ -18,6 +18,16 @@ namespace SAM.Analytical
 
             Log result = new Log();
 
+            //Before the space and panel checks, because both of those give up and return early on a model
+            //that has none, and an air handling unit's air movement is neither: it is related to the unit,
+            //not to a space, and a plant object that would refuse in TAS still has to be reported.
+            List<AirHandlingUnitAirMovement> airHandlingUnitAirMovements = adjacencyCluster.GetObjects<AirHandlingUnitAirMovement>();
+            if (airHandlingUnitAirMovements != null)
+            {
+                foreach (AirHandlingUnitAirMovement airHandlingUnitAirMovement in airHandlingUnitAirMovements)
+                    Core.Modify.AddRange(result, airHandlingUnitAirMovement?.Log(adjacencyCluster));
+            }
+
             List<Space> spaces = adjacencyCluster.GetSpaces();
             if (spaces == null || spaces.Count == 0)
             {
@@ -1034,7 +1044,195 @@ namespace SAM.Analytical
                 }
             }
 
+            //The two humidity limits read against EACH OTHER, which no per-profile-type case above can do.
+            //
+            //A humidistat is a pair - Humidification is the lower limit, Dehumidification the upper - and
+            //either one alone is valid at any value. Only the pair can be wrong, and it is wrong in exactly
+            //one way: a lower limit above the upper limit asks for air that is simultaneously wetter than
+            //X% and drier than a smaller Y%. TAS detects this in its own pre-simulation check and refuses
+            //the model outright ("Internal Condition '...' humidistat has overlapping limits"), so it is an
+            //Error here - the model cannot be simulated as it stands.
+            if (TryGetOverlappingHumidityLimits(
+                internalCondition.GetProfile(ProfileType.Humidification, profileLibrary),
+                internalCondition.GetProfile(ProfileType.Dehumidification, profileLibrary),
+                out int index_HumidityLimits,
+                out double lowerLimit_Humidity,
+                out double upperLimit_Humidity))
+            {
+                result.Add(
+                    "{0} InternalCondition (Guid: {1}) has overlapping humidistat limits: the {2} (humidity LOWER) limit is {3} and the {4} (humidity UPPER) limit is {5} at hour {6}. The lower limit cannot be above the upper limit - TAS refuses to simulate a model whose humidistat limits overlap.",
+                    LogRecordType.Error,
+                    name,
+                    internalCondition.Guid,
+                    ProfileType.Humidification.Text(),
+                    lowerLimit_Humidity,
+                    ProfileType.Dehumidification.Text(),
+                    upperLimit_Humidity,
+                    index_HumidityLimits);
+            }
+
             return result;
+        }
+
+        /// <summary>
+        /// An air handling unit's air movement, checked as the thing it becomes.
+        /// <para>
+        /// This object is not a schedule on a room. <c>SAM.Analytical.Tas.Modify.UpdateIZAMs</c> builds one
+        /// small TAS zone per air handling unit that carries one of these - the unit's own plant zone, named
+        /// after the unit ("MVHR-01" and so on) - and writes THESE FOUR PROFILES onto that zone's internal
+        /// condition: Heating to the temperature lower limit, Cooling to the upper, Humidification to the
+        /// humidity lower limit and Dehumidification to the humidity upper. So a limit pair that is invalid
+        /// here is an internal condition that is invalid in the file, on a zone no space in the model
+        /// names, which is why nothing that walks the spaces can find it.
+        /// </para>
+        /// </summary>
+        public static Log Log(this AirHandlingUnitAirMovement airHandlingUnitAirMovement, AdjacencyCluster adjacencyCluster = null)
+        {
+            if (airHandlingUnitAirMovement == null)
+                return null;
+
+            Log result = new Log();
+
+            string name = airHandlingUnitAirMovement.Name;
+            if (string.IsNullOrWhiteSpace(name))
+                name = "???";
+
+            //The unit's generated TAS zone has to balance, and one specific way of breaking it is visible
+            //here.
+            //
+            //UpdateIZAMs writes the plant zone one air movement per room the unit SUPPLIES, and one
+            //"IZAM <unit> FROM OUTSIDE" that brings in what it therefore has to draw - sized by
+            //Query.AirFlow, which reads the deliveries RELATED to the unit. Where that answers nothing the
+            //intake is simply not written; if the unit delivers anyway, its zone loses the dwelling's whole
+            //supply and gains nothing, and TAS refuses to simulate a zone whose air movements do not
+            //balance - saying only "Simulation Failed" when it does.
+            //
+            //So the deterministic fault is a DISAGREEMENT, not an absence: the model holds a movement that
+            //names this unit as its source and names a destination, and that movement is not related to the
+            //unit. Whether it delivers is asked of the WHOLE cluster, because the missing relation is
+            //exactly what is wrong; whether an intake will be sized is asked of Query.AirFlow, which can
+            //only see the relations.
+            //
+            //Asking it that way round is what keeps a legitimate EXTRACT-ONLY unit valid. Such a unit
+            //delivers to no room at all: its zone gains each room's extract and loses it again through the
+            //unit's own exhaust, so it balances with no outside intake, and Query.AirFlow correctly answers
+            //nothing. "No intake" is only a fault where something is being delivered.
+            if (adjacencyCluster != null)
+            {
+                AirHandlingUnit airHandlingUnit = adjacencyCluster.GetRelatedObjects<AirHandlingUnit>(airHandlingUnitAirMovement)?.Find(x => x != null);
+                if (airHandlingUnit == null)
+                {
+                    //A Warning, not an Error. Nothing pairs this movement with a unit, so UpdateIZAMs
+                    //generates no plant zone from it and it is inert - the unit's supply condition is
+                    //simply never applied. Worth saying; not a reason a model cannot be simulated.
+                    result.Add(
+                        "{0} AirHandlingUnitAirMovement (Guid: {1}) is related to no AirHandlingUnit, so nothing states which unit's supply condition it carries and no TAS plant zone will be generated from it.",
+                        LogRecordType.Warning,
+                        name,
+                        airHandlingUnitAirMovement.Guid);
+                }
+                else
+                {
+                    SpaceAirMovement spaceAirMovement_Delivered = Query.SpaceAirMovement_Delivered(adjacencyCluster, airHandlingUnit);
+
+                    if (spaceAirMovement_Delivered != null
+                        && (double.IsNaN(Query.AirFlow(adjacencyCluster, airHandlingUnitAirMovement, out Profile profile_Intake)) || profile_Intake == null))
+                    {
+                        result.Add(
+                            "{0} AirHandlingUnitAirMovement (Guid: {1}) resolves no intake air flow, although air handling unit '{2}' (Guid: {3}) supplies air movement '{4}' (Guid: {5}) - that movement is not RELATED to the unit, so the intake cannot be sized from it. The generated TAS plant zone would deliver supply air and take none in, and TAS refuses to simulate a zone whose air movements do not balance.",
+                            LogRecordType.Error,
+                            name,
+                            airHandlingUnitAirMovement.Guid,
+                            string.IsNullOrWhiteSpace(airHandlingUnit.Name) ? "???" : airHandlingUnit.Name,
+                            airHandlingUnit.Guid,
+                            string.IsNullOrWhiteSpace(spaceAirMovement_Delivered.Name) ? "???" : spaceAirMovement_Delivered.Name,
+                            spaceAirMovement_Delivered.Guid);
+                    }
+                }
+            }
+
+            if (TryGetOverlappingHumidityLimits(
+                airHandlingUnitAirMovement.Humidification,
+                airHandlingUnitAirMovement.Dehumidification,
+                out int index,
+                out double lowerLimit,
+                out double upperLimit))
+            {
+                result.Add(
+                    "{0} AirHandlingUnitAirMovement (Guid: {1}) has overlapping humidity limits: the {2} (humidity LOWER) limit is {3} and the {4} (humidity UPPER) limit is {5} at hour {6}. These become the humidistat on the unit's generated TAS plant zone, so the lower limit cannot be above the upper limit - TAS refuses to simulate a model whose humidistat limits overlap.",
+                    LogRecordType.Error,
+                    name,
+                    airHandlingUnitAirMovement.Guid,
+                    ProfileType.Humidification.Text(),
+                    lowerLimit,
+                    ProfileType.Dehumidification.Text(),
+                    upperLimit,
+                    index);
+            }
+
+            return result;
+        }
+
+        /// <summary>
+        /// Whether a humidistat's lower limit is above its upper limit at any index the two profiles share,
+        /// and where.
+        /// <para>
+        /// Read index by index rather than by comparing one profile's maximum against the other's minimum,
+        /// because two SCHEDULES that each move over the day can both be higher than the other at different
+        /// hours without ever overlapping, and a check that reported those as errors would be reporting
+        /// valid models. Every index in the union of the two ranges is read through the profile indexer,
+        /// which repeats a shorter profile over a longer one exactly as a schedule does - so a single value
+        /// against a 24-hour profile is compared against all 24 hours, which is the common case here.
+        /// </para>
+        /// <para>
+        /// An absent profile is not an overlap: a humidistat with no lower limit stated is not
+        /// deterministically invalid, and saying so would make "no humidity control" an error.
+        /// </para>
+        /// </summary>
+        private static bool TryGetOverlappingHumidityLimits(Profile profile_LowerLimit, Profile profile_UpperLimit, out int index, out double value_LowerLimit, out double value_UpperLimit)
+        {
+            index = -1;
+            value_LowerLimit = double.NaN;
+            value_UpperLimit = double.NaN;
+
+            if (profile_LowerLimit == null || profile_UpperLimit == null)
+                return false;
+
+            if (profile_LowerLimit.Count <= 0 || profile_UpperLimit.Count <= 0)
+                return false;
+
+            int min = System.Math.Min(profile_LowerLimit.Min, profile_UpperLimit.Min);
+            int max = System.Math.Max(profile_LowerLimit.Max, profile_UpperLimit.Max);
+
+            if (min == int.MinValue || max == int.MaxValue || max < min)
+                return false;
+
+            //The hours in a leap year. A yearly profile is read in full; a range beyond one is malformed,
+            //and this check does not become an unbounded loop over it.
+            if (max - min > 8783)
+                max = min + 8783;
+
+            for (int i = min; i <= max; i++)
+            {
+                double value_Lower = profile_LowerLimit[i];
+                double value_Upper = profile_UpperLimit[i];
+
+                //Not read as an overlap. A NaN is an unstated hour, not a limit above another limit, and
+                //this method answers one question only.
+                if (double.IsNaN(value_Lower) || double.IsNaN(value_Upper))
+                    continue;
+
+                if (value_Lower > value_Upper)
+                {
+                    index = i;
+                    value_LowerLimit = value_Lower;
+                    value_UpperLimit = value_Upper;
+
+                    return true;
+                }
+            }
+
+            return false;
         }
 
 
